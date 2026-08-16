@@ -17,7 +17,7 @@ module UCON
     # Plain assignment, NO defined? guard: a guard would keep the stale value
     # across reloads, which is precisely the bug this file exists to prevent.
     # Re-assignment warnings are silenced by the reload wrappers.
-    CORE_VERSION = '0.13.0'
+    CORE_VERSION = '0.14.0'
 
     def self.core_stamp
       dir = File.expand_path(File.join(File.dirname(__FILE__)))

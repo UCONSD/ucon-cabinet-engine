@@ -47,11 +47,10 @@ module UCON
         @picker&.close rescue nil
         @picker = UI::HtmlDialog.new(
           dialog_title: 'UCON — Build unit', preferences_key: 'UCONPicker',
-          style: UI::HtmlDialog::STYLE_UTILITY, width: 340, height: 300,
-          resizable: false
+          style: UI::HtmlDialog::STYLE_UTILITY, width: 360, height: 470,
+          resizable: true
         )
-        catalog = Registry.catalog
-        @picker.set_html(picker_html(catalog))
+        @picker.set_html(picker_html(Registry.catalog))
         @picker.add_action_callback('build') do |_, code|
           begin
             Generator.build(code)
@@ -62,49 +61,175 @@ module UCON
         @picker.show
       end
 
-      GROUP_LABELS = {
+      CLASS_LABELS = {
+        'base' => 'Base units', 'wall' => 'Wall units', 'tall' => 'Tall units'
+      }.freeze
+
+      TYPE_LABELS = {
         'base_door'          => 'Door units',
         'base_doors'         => 'Two-door units',
         'base_drawers_jumbo' => 'Drawer units (2 + jumbo)',
-        'base_jumbo_drawers'  => 'Jumbo drawer units (2 jumbo)',
-        'base_drawer_jumbo'   => 'Drawer + jumbo units'
+        'base_jumbo_drawers' => 'Jumbo drawer units (2 jumbo)',
+        'base_drawer_jumbo'  => 'Drawer + jumbo units'
       }.freeze
 
+      # Cascading picker: class > section > type > depth x width grid.
+      # The tree is derived entirely from the registry catalog, so a newly
+      # extracted section file appears here by itself. Levels with a single
+      # option auto-advance; the breadcrumb steps back. Search jumps straight
+      # to a code from any level.
       def picker_html(catalog)
         require 'json'
-        groups = catalog.group_by { |c| c['type_key'] }
-        options = groups.map do |key, rows|
-          items = rows.sort_by { |c| [c['depth_mm'], c['width_mm']] }.map do |c|
-            "<option value=\"#{c['code']}\">#{c['code']}  —  #{c['width_mm']}×#{c['height_mm']}×#{c['depth_mm']}</option>"
-          end.join
-          "<optgroup label=\"#{GROUP_LABELS[key] || key}\">#{items}</optgroup>"
-        end.join
         <<~HTML
           <!DOCTYPE html><html><head><meta charset="utf-8"><style>
-            body{font:13px -apple-system,Helvetica,Arial;margin:0;padding:14px;background:#f5f5f4;color:#222}
-            select{width:100%;font-size:13px;padding:4px}
-            #desc{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;margin:10px 0;
-                  font-size:12px;line-height:1.5;min-height:74px}
-            #desc b{font-size:13px} .src{color:#888;font-size:11px}
-            button{width:100%;padding:9px;border:0;border-radius:6px;background:#2563eb;color:#fff;
-                   font-size:13px;cursor:pointer}
+            body{font:13px -apple-system,Helvetica,Arial;margin:0;padding:12px;background:#f5f5f4;color:#222}
+            #crumb{font-size:11px;color:#666;margin-bottom:8px;min-height:14px}
+            #crumb a{color:#2563eb;cursor:pointer;text-decoration:none}
+            #search{width:100%;box-sizing:border-box;padding:5px 8px;margin-bottom:8px;
+                    border:1px solid #ccc;border-radius:6px;font-size:12px}
+            .item{display:block;width:100%;text-align:left;margin:0 0 6px;padding:8px 10px;
+                  border:1px solid #d4d4d4;border-radius:6px;background:#fff;font-size:13px;cursor:pointer}
+            .item:hover{background:#eef2ff;border-color:#93b4f5}
+            .item small{color:#888}
+            .drow{display:flex;align-items:center;gap:4px;margin-bottom:6px}
+            .dlab{width:44px;color:#555;font-size:12px}
+            .wbtn{flex:1;padding:6px 0;border:1px solid #d4d4d4;border-radius:5px;background:#fff;
+                  font-size:11px;cursor:pointer;text-align:center}
+            .wbtn:hover{background:#eef2ff}
+            .wbtn.sel{background:#2563eb;color:#fff;border-color:#2563eb}
+            #card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;margin:8px 0;
+                  font-size:12px;line-height:1.5;display:none}
+            #card b{font-size:13px} .src{color:#888;font-size:11px}
+            #buildBtn{width:100%;padding:9px;border:0;border-radius:6px;background:#2563eb;color:#fff;
+                      font-size:13px;cursor:pointer;display:none}
           </style></head><body>
-            <select id="code" size="1" onchange="upd()">#{options}</select>
-            <div id="desc"></div>
-            <button onclick="sketchup.build(document.getElementById('code').value)">Build</button>
+            <input id="search" placeholder="Search code or description…" oninput="doSearch()">
+            <div id="crumb"></div>
+            <div id="content"></div>
+            <div id="card"></div>
+            <button id="buildBtn" onclick="doBuild()">Build</button>
             <script>
               var CAT = #{catalog.to_json};
-              function upd(){
-                var code = document.getElementById('code').value;
-                var c = CAT.find(function(x){ return x.code === code; });
-                if(!c) return;
-                document.getElementById('desc').innerHTML =
-                  '<b>' + c.code + '</b> · ' + c.family + '<br>' +
-                  c.description + '<br>' +
-                  'W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm<br>' +
-                  '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
+              var CLS = #{CLASS_LABELS.to_json};
+              var TYP = #{TYPE_LABELS.to_json};
+              var st = { cls:null, sec:null, typ:null, code:null };
+
+              function uniq(a){ return a.filter(function(v,i){ return a.indexOf(v)===i; }); }
+              function rows(){ return CAT.filter(function(c){
+                return (!st.cls || c['class']===st.cls) && (!st.sec || c.section===st.sec) &&
+                       (!st.typ || c.type_key===st.typ); }); }
+
+              function setLevel(cls, sec, typ, code){
+                st = { cls:cls, sec:sec, typ:typ, code:code || null };
+                autoAdvance(); render();
               }
-              window.onload = upd;
+              function autoAdvance(){
+                if(!st.cls){ var cs = uniq(CAT.map(function(c){return c['class'];}));
+                             if(cs.length===1) st.cls = cs[0]; else return; }
+                if(!st.sec){ var ss = uniq(rows().map(function(c){return c.section;}));
+                             if(ss.length===1) st.sec = ss[0]; else return; }
+                if(!st.typ){ var ts = uniq(rows().map(function(c){return c.type_key;}));
+                             if(ts.length===1) st.typ = ts[0]; }
+              }
+
+              function crumb(){
+                var parts = [];
+                parts.push(st.cls ? link(CLS[st.cls]||st.cls, 'null,null,null') : '');
+                if(st.sec) parts.push(link(st.sec, JSON.stringify(st.cls)+',null,null'));
+                if(st.typ) parts.push(link(TYP[st.typ]||st.typ,
+                  JSON.stringify(st.cls)+','+JSON.stringify(st.sec)+',null'));
+                document.getElementById('crumb').innerHTML =
+                  parts.filter(Boolean).join(' › ') || 'Catalog';
+              }
+              function link(txt, args){ return '<a onclick="setLevel('+args+')">'+txt+'</a>'; }
+
+              function render(){
+                crumb();
+                var el = document.getElementById('content'); el.innerHTML='';
+                document.getElementById('card').style.display='none';
+                document.getElementById('buildBtn').style.display='none';
+                if(!st.cls){ list(uniq(CAT.map(function(c){return c['class'];})),
+                  function(v){return CLS[v]||v;}, function(v){ setLevel(v,null,null); }); return; }
+                if(!st.sec){ list(uniq(rows().map(function(c){return c.section;})),
+                  function(v){return v;}, function(v){ setLevel(st.cls,v,null); }); return; }
+                if(!st.typ){
+                  var ts = uniq(rows().map(function(c){return c.type_key;}));
+                  ts.forEach(function(t){
+                    var n = CAT.filter(function(c){return c.section===st.sec && c.type_key===t;}).length;
+                    var d = CAT.find(function(c){return c.type_key===t;});
+                    var b = document.createElement('button'); b.className='item';
+                    b.innerHTML = (TYP[t]||t) + ' <small>· ' + n + ' codes</small><br><small>' +
+                                  d.description + '</small>';
+                    b.onclick = function(){ setLevel(st.cls, st.sec, t); };
+                    el.appendChild(b);
+                  });
+                  return;
+                }
+                sizeGrid(el);
+              }
+              function list(vals, lab, go){
+                var el = document.getElementById('content');
+                vals.forEach(function(v){
+                  var b = document.createElement('button'); b.className='item';
+                  b.textContent = lab(v);
+                  b.onclick = function(){ go(v); };
+                  el.appendChild(b);
+                });
+              }
+              function sizeGrid(el){
+                var rs = rows();
+                var depths = uniq(rs.map(function(c){return c.depth_mm;})).sort(function(a,b){return a-b;});
+                depths.forEach(function(d){
+                  var row = document.createElement('div'); row.className='drow';
+                  var lab = document.createElement('div'); lab.className='dlab';
+                  lab.textContent = 'd. ' + (d/10);
+                  row.appendChild(lab);
+                  rs.filter(function(c){return c.depth_mm===d;})
+                    .sort(function(a,b){return a.width_mm-b.width_mm;})
+                    .forEach(function(c){
+                      var b = document.createElement('button'); b.className='wbtn';
+                      if(st.code===c.code) b.className += ' sel';
+                      b.textContent = c.width_mm;
+                      b.onclick = function(){ st.code = c.code; render(); };
+                      row.appendChild(b);
+                    });
+                  el.appendChild(row);
+                });
+                if(st.code) showCard(CAT.find(function(c){return c.code===st.code;}));
+              }
+              function showCard(c){
+                if(!c) return;
+                var el = document.getElementById('card');
+                el.innerHTML = '<b>' + c.code + '</b> · ' + c.family + '<br>' + c.description +
+                  '<br>W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm<br>' +
+                  '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
+                el.style.display='block';
+                document.getElementById('buildBtn').style.display='block';
+              }
+              function doSearch(){
+                var q = document.getElementById('search').value.trim().toUpperCase();
+                if(q.length < 2){ render(); return; }
+                var el = document.getElementById('content'); el.innerHTML='';
+                document.getElementById('crumb').innerHTML = 'Search results';
+                document.getElementById('card').style.display='none';
+                document.getElementById('buildBtn').style.display='none';
+                CAT.filter(function(c){
+                  return c.code.indexOf(q) >= 0 ||
+                         c.description.toUpperCase().indexOf(q) >= 0;
+                }).slice(0, 20).forEach(function(c){
+                  var b = document.createElement('button'); b.className='item';
+                  b.innerHTML = c.code + ' <small>— ' + c.width_mm + '×' + c.height_mm + '×' +
+                                c.depth_mm + ' · ' + c.description + '</small>';
+                  b.onclick = function(){
+                    document.getElementById('search').value='';
+                    st = { cls:c['class'], sec:c.section, typ:c.type_key, code:c.code };
+                    render();
+                  };
+                  el.appendChild(b);
+                });
+              }
+              function doBuild(){ if(st.code) sketchup.build(st.code); }
+              window.onload = function(){ setLevel(null, null, null); };
             </script>
           </body></html>
         HTML
