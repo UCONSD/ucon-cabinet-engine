@@ -324,22 +324,30 @@
       {
         "code": "GOL001",
         "name": "L-shaped grip recess - undercounter horizontal",
-        "source_ref": "printed p.615 / PDF 617"
+        "source_ref": "printed p.615 / PDF 617",
+        "position": "undercounter",
+        "system": "L-shaped"
       },
       {
         "code": "GOL002",
         "name": "L-shaped grip recess - intermediate horizontal",
-        "source_ref": "printed p.615 / PDF 617"
+        "source_ref": "printed p.615 / PDF 617",
+        "position": "intermediate",
+        "system": "L-shaped"
       },
       {
         "code": "GOL005",
         "name": "Straight grip recess - undercounter horizontal",
-        "source_ref": "printed p.620 / PDF 622"
+        "source_ref": "printed p.620 / PDF 622",
+        "position": "undercounter",
+        "system": "straight"
       },
       {
         "code": "GOL006",
         "name": "Straight grip recess - intermediate horizontal",
-        "source_ref": "printed p.620 / PDF 622"
+        "source_ref": "printed p.620 / PDF 622",
+        "position": "intermediate",
+        "system": "straight"
       }
     ],
     "handles": [
@@ -407,6 +415,13 @@
     "push_pull_device": {
       "code": null,
       "note": "Device exists (printed p.613) but no article code found in source; P3 - needs Elda confirmation. Selecting push_to_open leaves hardware_ref empty with hardware_source=factory."
+    },
+    "gola_note": "position=undercounter profiles (GOL001 L-shaped / GOL005 straight) are the valid choice for a base-unit front under the worktop; intermediate profiles join stacked front zones and are NOT offered for single-door base units. Source: 'Do not add 57 to carcass height' - the profile lives in the 30 mm gola zone, the carcass does not grow. Cross-restriction: handle Lume M00014 pairs with the straight system only.",
+    "gola_profile_body": {
+      "upper_dim_mm": 30,
+      "zone_height_mm": 57,
+      "profile_depth_mm": 27,
+      "note": "Cross-section from the extract (printed p.615/620): upper dimension 30 fills the gola zone above the 750 door; full grip zone 57 below worktop, profile depth 27. Preliminary drawing shows the visible 30 mm strip at the front plane with front thickness; true section stays recorded here. Do not add to carcass height."
     }
   },
   "external_specs": {

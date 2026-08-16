@@ -334,5 +334,21 @@ check('internal depth math uses UCON standards (620 - 20 - 4 = 596 < 603)') do
   raise 'NL600 must NOT fit d.62' if row['nl_mm'] == 600
 end
 
+puts "\ngola profile filtering (base unit front = undercounter only)"
+check('panel offers exactly GOL001 and GOL005') do
+  codes = Panel.gola_options.map { |r| r['code'] }.sort
+  raise codes.inspect unless codes == %w[GOL001 GOL005]
+end
+check('registry rows carry position and system') do
+  rows = Registry.data['hardware']['gola_profiles']
+  raise 'missing keys' unless rows.all? { |r| r['position'] && r['system'] }
+end
+
+check('gola profile body recorded in registry: 30 / 57 / 27') do
+  b = Registry.data['hardware']['gola_profile_body']
+  raise b.inspect unless b['upper_dim_mm'] == 30 && b['zone_height_mm'] == 57 &&
+                         b['profile_depth_mm'] == 27
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

@@ -76,6 +76,15 @@ module UCON
         patch
       end
 
+      # Gola profiles valid for this unit. A base-unit front sits under the
+      # worktop, so only position=undercounter profiles apply (GOL001 L-shaped,
+      # GOL005 straight); intermediate profiles join stacked front zones and
+      # offering them here would invite a wrong order line.
+      def gola_options(unit = nil)
+        rows = (Registry.data['hardware'] || {})['gola_profiles'] || []
+        rows.select { |row| row['position'] == 'undercounter' }
+      end
+
       # Effective slab list for a door version (gola shortens door slabs by 30,
       # leaving the grip zone empty at the top; horizontal drawer stacks keep
       # catalog heights until the gola stack is verified).
@@ -133,7 +142,7 @@ module UCON
             {}
           end
         hw = Registry.data['hardware'] || {}
-        state['gola_profiles'] = hw['gola_profiles'] || []
+        state['gola_profiles'] = gola_options
         state['handles']       = hw['handles'] || []
         @dialog.execute_script("render(#{state.to_json})")
       end
@@ -173,6 +182,23 @@ module UCON
           Geometry.box(defn.entities, slab[:name],
                        slab[:x_mm], front_y, s::PLINTH_H_MM + slab[:z_mm],
                        slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat)
+        end
+
+        # Gola: the profile body occupies the 30 mm zone above the shortened
+        # door, so the elevation reads 750 + 30 = 780 like the catalog page.
+        # Drawn as the visible strip at the front plane, front thickness; the
+        # true cross-section (57 zone / 27 depth) is recorded in the registry
+        # (hardware.gola_profile_body) and stays out of the drawing until the
+        # system is confirmed. Named FRONT_* so the rebuild wipe catches it.
+        kind = (unit['front_layout'] || {})['kind'] || 'single'
+        if gola && %w[single vertical_split].include?(kind)
+          body = (Registry.data['hardware'] || {})['gola_profile_body'] || {}
+          bh = body['upper_dim_mm'] || 30
+          gola_mat = Geometry.material(model, 'UCON_Gola_Aluminium', [168, 168, 168])
+          Geometry.box(defn.entities, 'FRONT_GOLA_PROFILE',
+                       0, front_y,
+                       s::PLINTH_H_MM + unit['height_mm'] - bh,
+                       unit['width_mm'], s::FRONT_T_MM, bh, gola_mat)
         end
       end
 
