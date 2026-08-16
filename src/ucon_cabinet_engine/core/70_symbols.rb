@@ -21,6 +21,12 @@ module UCON
       TAG_FRONT = 'UCON — Opening (front)'
       TAG_PLAN  = 'UCON — Opening (plan)'
 
+      # Plan symbol: drawer runner lines drawn inset from the unit sides.
+      RUNNER_INSET_MM = 25
+
+      # Plan symbol: doors drawn open at this angle, not fully at 90.
+      DOOR_OPEN_ANGLE_DEG = 85
+
       module_function
 
       # Palette-driven visibility: plan views want only the plan tag,
@@ -110,7 +116,8 @@ module UCON
             # No dashed line along the facade (UCON convention): two box sides
             # up to the back of the extended front, then the front panel
             # itself as a 22 mm dashed slab.
-            [[[0, y0], [0, yb]], [[w, y0], [w, yb]]].each do |a, b|
+            xi = RUNNER_INSET_MM
+            [[[xi, y0], [xi, yb]], [[w - xi, y0], [w - xi, yb]]].each do |a, b|
               ed = g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
               ed.layer = plan_tag if ed
             end
@@ -150,15 +157,28 @@ module UCON
           z_plan  = (z0 + h + 1).mm
           center  = [hinge_x.mm, y_face.mm, z_plan]
           r       = leaf[:w].mm
-          # Open leaf drawn as the actual 22 mm front slab, dashed. Thickness
-          # points into the swing region (toward where the arc comes from).
-          t   = s::FRONT_T_MM
-          xin = leaf[:hinge] == 'lh' ? hinge_x + t : hinge_x - t
+          # Open leaf drawn as the actual 22 mm front slab, dashed, at
+          # DOOR_OPEN_ANGLE_DEG from closed. Thickness points into the swing
+          # region (toward where the arc comes from).
+          t = s::FRONT_T_MM
+          open_rad = DOOR_OPEN_ANGLE_DEG * Math::PI / 180
+          if leaf[:hinge] == 'lh'
+            u_ang = -open_rad                      # closed along +x, swings to -y
+            a1, a2 = -open_rad, 0
+          else
+            u_ang = Math::PI + open_rad            # closed along -x
+            a1, a2 = Math::PI, Math::PI + open_rad
+          end
+          ux, uy = Math.cos(u_ang), Math.sin(u_ang)
+          v_ang = leaf[:hinge] == 'lh' ? u_ang + Math::PI / 2 : u_ang - Math::PI / 2
+          vx, vy = Math.cos(v_ang), Math.sin(v_ang)
+          l = leaf[:w]
           dashed_rect(g, plan_tag,
-                      [[hinge_x, y_face], [xin, y_face],
-                       [xin, y_face - leaf[:w]], [hinge_x, y_face - leaf[:w]]],
+                      [[hinge_x, y_face],
+                       [hinge_x + t * vx, y_face + t * vy],
+                       [hinge_x + t * vx + l * ux, y_face + t * vy + l * uy],
+                       [hinge_x + l * ux, y_face + l * uy]],
                       z_plan)
-          a1, a2 = leaf[:hinge] == 'lh' ? [-Math::PI / 2, 0] : [Math::PI, Math::PI * 1.5]
           arc = g.entities.add_arc(Geom::Point3d.new(*center), Geom::Vector3d.new(1, 0, 0),
                                    Geom::Vector3d.new(0, 0, 1), r, a1, a2, 12)
           Array(arc).compact.each { |ed| ed.layer = plan_tag }
