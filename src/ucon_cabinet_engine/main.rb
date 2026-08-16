@@ -18,7 +18,7 @@ require 'sketchup.rb'
 module UCON
   module CabinetEngine
     PLUGIN_NAME = 'UCON Cabinet Engine' unless defined?(PLUGIN_NAME)
-    VERSION     = '0.3.0'               unless defined?(VERSION)
+    VERSION     = '0.4.0'               unless defined?(VERSION)
 
     # expand_path, not bare dirname: if SketchUp ever loads this file through a
     # relative path, the glob below silently finds nothing and the engine
@@ -76,6 +76,14 @@ module UCON
           Units::B80601.build
         rescue StandardError => e
           UI.messagebox("Build failed:\n\n#{e.class}: #{e.message}")
+        end
+      end
+
+      menu.add_item('Unit Properties panel…') do
+        begin
+          Panel.show
+        rescue StandardError => e
+          UI.messagebox("Panel failed:\n\n#{e.message}")
         end
       end
 

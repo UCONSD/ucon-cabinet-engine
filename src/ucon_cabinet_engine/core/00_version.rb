@@ -14,7 +14,7 @@
 
 module UCON
   module CabinetEngine
-    CORE_VERSION = '0.4.1' unless defined?(CORE_VERSION)
+    CORE_VERSION = '0.5.0' unless defined?(CORE_VERSION)
 
     def self.core_stamp
       dir = File.expand_path(File.join(File.dirname(__FILE__)))

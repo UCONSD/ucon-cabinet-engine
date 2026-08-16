@@ -317,5 +317,96 @@
         }
       }
     }
+  },
+  "hardware": {
+    "status_note": "CONTROL level: taken from Plinths_Handles_Grip_Recess_Source_Extract_v0.1 (rows marked 'confirmed from source'); page refs are to the source PDF. Not yet re-verified against the PDF by the engine. All PRELIMINARY.",
+    "gola_profiles": [
+      {
+        "code": "GOL001",
+        "name": "L-shaped grip recess - undercounter horizontal",
+        "source_ref": "printed p.615 / PDF 617"
+      },
+      {
+        "code": "GOL002",
+        "name": "L-shaped grip recess - intermediate horizontal",
+        "source_ref": "printed p.615 / PDF 617"
+      },
+      {
+        "code": "GOL005",
+        "name": "Straight grip recess - undercounter horizontal",
+        "source_ref": "printed p.620 / PDF 622"
+      },
+      {
+        "code": "GOL006",
+        "name": "Straight grip recess - intermediate horizontal",
+        "source_ref": "printed p.620 / PDF 622"
+      }
+    ],
+    "handles": [
+      {
+        "code": "M00001",
+        "name": "Eero",
+        "source_ref": "printed p.584"
+      },
+      {
+        "code": "M00003",
+        "name": "Filo",
+        "source_ref": "printed p.590"
+      },
+      {
+        "code": "M00004",
+        "name": "Line",
+        "source_ref": "printed p.600"
+      },
+      {
+        "code": "M00005",
+        "name": "Ouverture",
+        "source_ref": "printed p.592"
+      },
+      {
+        "code": "M00007",
+        "name": "Knurled Pipe",
+        "source_ref": "printed p.594"
+      },
+      {
+        "code": "M00008",
+        "name": "Shell",
+        "source_ref": "printed p.588"
+      },
+      {
+        "code": "M00009",
+        "name": "Titanium",
+        "source_ref": "printed p.597"
+      },
+      {
+        "code": "M00014",
+        "name": "Lume - with straight grip recess system only",
+        "source_ref": "printed p.587"
+      }
+    ],
+    "handles_excluded": [
+      {
+        "code": "M00010",
+        "name": "Tratto",
+        "reason": "Source: not available for hinged-door base fronts",
+        "source_ref": "printed p.603"
+      },
+      {
+        "code": "M00015",
+        "name": "Oi / Cloe",
+        "reason": "Extract shows the same code on two different handles - conflict, verify before offering",
+        "source_ref": "printed p.578 / p.612"
+      },
+      {
+        "code": "M00016",
+        "name": "Accento / Barchetta",
+        "reason": "Same-code conflict in extract - verify before offering",
+        "source_ref": "printed p.581 / p.612"
+      }
+    ],
+    "push_pull_device": {
+      "code": null,
+      "note": "Device exists (printed p.613) but no article code found in source; P3 - needs Elda confirmation. Selecting push_to_open leaves hardware_ref empty with hardware_source=factory."
+    }
   }
 }

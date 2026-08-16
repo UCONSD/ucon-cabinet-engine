@@ -16,6 +16,7 @@ require_relative '../src/ucon_cabinet_engine/core/20_contract'
 require_relative '../src/ucon_cabinet_engine/core/40_unit_b80601'
 require_relative '../src/ucon_cabinet_engine/core/50_registry'
 require_relative '../src/ucon_cabinet_engine/core/60_generator'
+require_relative '../src/ucon_cabinet_engine/core/80_panel' rescue nil
 
 Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
@@ -247,6 +248,73 @@ end
 check('interior confirmed by source is recorded in notes, not drawn') do
   attrs = Generator.attributes_for(Registry.lookup('B80601'))
   raise attrs['notes'] unless attrs['notes'].include?('1 shelf')
+end
+
+puts "\npanel logic (door version / opening / hardware rules)"
+Panel = UCON::CabinetEngine::Panel
+U = Registry.lookup('B80601')
+
+check('door 75 -> gola, front 750, GOL profile required and recorded') do
+  p = Panel.attributes_patch(U, { 'door_version' => '75', 'hardware_ref' => 'GOL001' })
+  raise p.inspect unless p['opening_method'] == 'gola' && p['front_height_mm'] == 750 &&
+                         p['hardware_ref'] == 'GOL001' && p['hardware_source'] == 'factory'
+end
+check('door 75 without a GOL profile is refused') do
+  begin
+    Panel.attributes_patch(U, { 'door_version' => '75', 'hardware_ref' => '' })
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('GOL')
+  end
+end
+check('door 78 + factory handle -> M-code recorded') do
+  p = Panel.attributes_patch(U, { 'door_version' => '78', 'opening_method' => 'handle',
+                                  'hardware_mode' => 'factory', 'hardware_ref' => 'M00001' })
+  raise p.inspect unless p['front_height_mm'] == 780 && p['hardware_ref'] == 'M00001'
+end
+check('door 78 + client handle -> empty ref, source=client') do
+  p = Panel.attributes_patch(U, { 'door_version' => '78', 'opening_method' => 'handle',
+                                  'hardware_mode' => 'client' })
+  raise p.inspect unless p['hardware_ref'] == '' && p['hardware_source'] == 'client'
+end
+check('push_to_open -> empty ref (device code pending Elda)') do
+  p = Panel.attributes_patch(U, { 'door_version' => '78', 'opening_method' => 'push_to_open' })
+  raise p.inspect unless p['hardware_ref'] == '' && p['hardware_source'] == 'factory'
+end
+check('hinge_side accepted on handed unit, refused on two-door') do
+  p = Panel.attributes_patch(U, { 'door_version' => '78', 'opening_method' => 'push_to_open',
+                                  'hinge_side' => 'lh' })
+  raise p.inspect unless p['hinge_side'] == 'lh'
+  begin
+    Panel.attributes_patch(Registry.lookup('B80900'),
+                           { 'door_version' => '78', 'opening_method' => 'push_to_open',
+                             'hinge_side' => 'lh' })
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('handed')
+  end
+end
+check('every patched attribute set stays contract-valid') do
+  base = Generator.attributes_for(U)
+  [
+    { 'door_version' => '75', 'hardware_ref' => 'GOL001' },
+    { 'door_version' => '78', 'opening_method' => 'handle', 'hardware_mode' => 'client', 'hinge_side' => 'rh' },
+    { 'door_version' => '78', 'opening_method' => 'push_to_open' }
+  ].each do |payload|
+    Contract.validate!(base.merge(Panel.attributes_patch(U, payload)))
+  end
+end
+check('gola shortens door slabs by 30, drawer stack unchanged') do
+  slabs = Panel.effective_slabs(U, true)
+  raise slabs.inspect unless slabs[0][:h_mm] == 750
+  dr = Panel.effective_slabs(Registry.lookup('B81253'), true)
+  raise dr.inspect unless dr.map { |x| x[:h_mm] } == [390.0, 195.0, 195.0]
+end
+check('registry hardware: 4 gola profiles, 8 handles, Tratto excluded') do
+  hw = Registry.data['hardware']
+  raise 'gola' unless hw['gola_profiles'].length == 4
+  raise 'handles' unless hw['handles'].length == 8
+  raise 'tratto' unless hw['handles_excluded'].any? { |x| x['code'] == 'M00010' }
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
