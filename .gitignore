@@ -1,0 +1,18 @@
+# --- macOS ---
+.DS_Store
+
+# --- Heavy source material (sources/) ---
+# The manufacturer PDFs and the .xlsx halves of the source-extract registers
+# live in the working tree but stay out of git: factory/ alone is ~438 MB.
+# The .md halves of every register ARE tracked - they are the readable,
+# diffable version of the same data.
+#
+# Anyone cloning this repo gets sources/ as a near-empty skeleton and must
+# obtain the catalog PDFs separately. Per the Object Contract, the source PDF
+# is the authority, so it must never be reconstructed from git.
+sources/**/*.pdf
+sources/**/*.xlsx
+sources/**/*.xls
+
+# --- SketchUp scratch ---
+*.skb
