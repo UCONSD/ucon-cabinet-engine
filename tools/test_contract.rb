@@ -189,9 +189,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 38 codes') do
+check('registry loads and holds 74 codes') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 38
+  raise "got #{n}" unless n == 74
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -348,9 +348,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 38 rows, each with code/dims/description/source') do
+check('registry catalog: 74 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 38
+  raise cat.length.to_s unless cat.length == 74
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
     c['description'] && c['source_ref'] && c['type_key']
@@ -381,6 +381,32 @@ check('a broken stack that does not sum to 780 raises') do
     raise 'accepted'
   rescue RuntimeError => e
     raise e.message unless e.message.include?('does not sum')
+  end
+end
+
+puts "\np.40 unit types (B..57 jumbo drawers, B..50 drawer+jumbo)"
+check('B71257: 1200x780x350, 2 jumbo drawers, slabs 390/390') do
+  u = Registry.lookup('B71257')
+  raise u.inspect unless u['width_mm'] == 1200 && u['depth_mm'] == 350 &&
+                         u['unit_type'] == 'base_jumbo_drawers'
+  hs = Generator.front_slabs(u).map { |x| x[:h_mm] }
+  raise hs.inspect unless hs == [390.0, 390.0]
+end
+check('B71257 gola stack: 360 at 0? no - 360 at 0 and 360 at 390') do
+  slabs = Panel.effective_slabs(Registry.lookup('B71257'), true)
+  got = slabs.map { |sl| [sl[:h_mm], sl[:z_mm]] }
+  raise got.inspect unless got == [[360.0, 0.0], [360.0, 390.0]]
+end
+check('B80650 drawer+jumbo: slabs 585 bottom / 195 top; gola 555/165') do
+  u = Registry.lookup('B80650')
+  hs = Generator.front_slabs(u).map { |x| [x[:h_mm], x[:z_mm]] }
+  raise hs.inspect unless hs == [[585.0, 0.0], [195.0, 585.0]]
+  gs = Panel.effective_slabs(u, true).map { |x| [x[:h_mm], x[:z_mm]] }
+  raise gs.inspect unless gs == [[555.0, 0.0], [165.0, 585.0]]
+end
+check('every new code yields contract-valid attributes') do
+  (Registry.codes.select { |c| c.end_with?('57', '50') } - ['B80553']).each do |code|
+    Contract.validate!(Generator.attributes_for(Registry.lookup(code)))
   end
 end
 

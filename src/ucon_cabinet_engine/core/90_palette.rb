@@ -65,7 +65,9 @@ module UCON
       GROUP_LABELS = {
         'base_door'          => 'Door units',
         'base_doors'         => 'Two-door units',
-        'base_drawers_jumbo' => 'Drawer units'
+        'base_drawers_jumbo' => 'Drawer units (2 + jumbo)',
+        'base_jumbo_drawers'  => 'Jumbo drawer units (2 jumbo)',
+        'base_drawer_jumbo'   => 'Drawer + jumbo units'
       }.freeze
 
       def picker_html(catalog)

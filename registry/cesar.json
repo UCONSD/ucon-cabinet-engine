@@ -7,7 +7,7 @@
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
-  "scope_note": "v1 covers H.78 hinged-door, two-door and drawer+jumbo base units (printed p.36, p.39). Sink (p.46-47), corner (p.44-45), waste, appliance and remaining drawer variants are NOT yet in this registry - extend only after reading their pages.",
+  "scope_note": "Covers H.78 hinged-door, two-door, drawers+jumbo (p.36, p.39), jumbo-drawers and drawer+jumbo units (p.40). Sink (p.46-47), corner (p.44-45), waste, appliance and remaining drawer variants are NOT yet in this registry - extend only after reading their pages.",
   "code_grammar": {
     "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
     "depth_digit": {
@@ -339,6 +339,269 @@
             ],
             "gola_note": "Verified from the p.39 elevation (zoomed 2026-08-16): undercounter recess above the top drawer; plain joint between the two 180 drawers; intermediate recess between the second drawer and the jumbo. Top drawer opens from the undercounter zone, second drawer from below via the intermediate zone, jumbo from above via the same zone. A gola drawer unit therefore needs BOTH profiles: undercounter (GOL001/GOL005) + intermediate (GOL002/GOL006), same system."
           }
+        },
+        "base_jumbo_drawers": {
+          "description": "Base unit with jumbo drawers - 2 jumbo drawers",
+          "opening": "pull-out",
+          "handed": false,
+          "interior_confirmed": [
+            "2 jumbo drawers"
+          ],
+          "source_ref": "printed p.40 / PDF 42",
+          "front_layout": {
+            "kind": "horizontal",
+            "heights_mm_top_to_bottom": [
+              390,
+              390
+            ],
+            "note": "Elevation printed p.40: 39 / 39 (handle); gola shows 36 / 36.",
+            "gola_stack_top_to_bottom": [
+              {
+                "kind": "zone",
+                "h_mm": 30,
+                "role": "undercounter recess"
+              },
+              {
+                "kind": "front",
+                "h_mm": 360
+              },
+              {
+                "kind": "zone",
+                "h_mm": 30,
+                "role": "intermediate recess"
+              },
+              {
+                "kind": "front",
+                "h_mm": 360
+              }
+            ],
+            "gola_note": "Both jumbo fronts lose 30 (390->360); zones: undercounter above the top front, intermediate between the two."
+          },
+          "codes": [
+            {
+              "code": "B70557",
+              "width_mm": 450,
+              "depth_mm": 350
+            },
+            {
+              "code": "B70657",
+              "width_mm": 600,
+              "depth_mm": 350
+            },
+            {
+              "code": "B70757",
+              "width_mm": 750,
+              "depth_mm": 350
+            },
+            {
+              "code": "B70957",
+              "width_mm": 900,
+              "depth_mm": 350
+            },
+            {
+              "code": "B71057",
+              "width_mm": 1050,
+              "depth_mm": 350
+            },
+            {
+              "code": "B71257",
+              "width_mm": 1200,
+              "depth_mm": 350
+            },
+            {
+              "code": "B80557",
+              "width_mm": 450,
+              "depth_mm": 620
+            },
+            {
+              "code": "B80657",
+              "width_mm": 600,
+              "depth_mm": 620
+            },
+            {
+              "code": "B80757",
+              "width_mm": 750,
+              "depth_mm": 620
+            },
+            {
+              "code": "B80957",
+              "width_mm": 900,
+              "depth_mm": 620
+            },
+            {
+              "code": "B81057",
+              "width_mm": 1050,
+              "depth_mm": 620
+            },
+            {
+              "code": "B81257",
+              "width_mm": 1200,
+              "depth_mm": 620
+            },
+            {
+              "code": "B90557",
+              "width_mm": 450,
+              "depth_mm": 670
+            },
+            {
+              "code": "B90657",
+              "width_mm": 600,
+              "depth_mm": 670
+            },
+            {
+              "code": "B90757",
+              "width_mm": 750,
+              "depth_mm": 670
+            },
+            {
+              "code": "B90957",
+              "width_mm": 900,
+              "depth_mm": 670
+            },
+            {
+              "code": "B91057",
+              "width_mm": 1050,
+              "depth_mm": 670
+            },
+            {
+              "code": "B91257",
+              "width_mm": 1200,
+              "depth_mm": 670
+            }
+          ],
+          "notes": "Servo Drive referenced; interior-drawer surcharge p.570 noted at d.62 block."
+        },
+        "base_drawer_jumbo": {
+          "description": "Base unit with drawer and jumbo drawer - 1 drawer, 1 jumbo drawer, no Push-pull device",
+          "opening": "pull-out",
+          "handed": false,
+          "interior_confirmed": [
+            "1 drawer",
+            "1 jumbo drawer"
+          ],
+          "source_ref": "printed p.40 / PDF 42",
+          "front_layout": {
+            "kind": "horizontal",
+            "heights_mm_top_to_bottom": [
+              195,
+              585
+            ],
+            "note": "Elevation printed p.40: 19,5 / 58,5 (handle); gola shows 16,5 / 55,5.",
+            "gola_stack_top_to_bottom": [
+              {
+                "kind": "zone",
+                "h_mm": 30,
+                "role": "undercounter recess"
+              },
+              {
+                "kind": "front",
+                "h_mm": 165
+              },
+              {
+                "kind": "zone",
+                "h_mm": 30,
+                "role": "intermediate recess"
+              },
+              {
+                "kind": "front",
+                "h_mm": 555
+              }
+            ],
+            "gola_note": "Drawer 195->165, jumbo 585->555 (each -30); zones as in other stacks."
+          },
+          "codes": [
+            {
+              "code": "B70550",
+              "width_mm": 450,
+              "depth_mm": 350
+            },
+            {
+              "code": "B70650",
+              "width_mm": 600,
+              "depth_mm": 350
+            },
+            {
+              "code": "B70750",
+              "width_mm": 750,
+              "depth_mm": 350
+            },
+            {
+              "code": "B70950",
+              "width_mm": 900,
+              "depth_mm": 350
+            },
+            {
+              "code": "B71050",
+              "width_mm": 1050,
+              "depth_mm": 350
+            },
+            {
+              "code": "B71250",
+              "width_mm": 1200,
+              "depth_mm": 350
+            },
+            {
+              "code": "B80550",
+              "width_mm": 450,
+              "depth_mm": 620
+            },
+            {
+              "code": "B80650",
+              "width_mm": 600,
+              "depth_mm": 620
+            },
+            {
+              "code": "B80750",
+              "width_mm": 750,
+              "depth_mm": 620
+            },
+            {
+              "code": "B80950",
+              "width_mm": 900,
+              "depth_mm": 620
+            },
+            {
+              "code": "B81050",
+              "width_mm": 1050,
+              "depth_mm": 620
+            },
+            {
+              "code": "B81250",
+              "width_mm": 1200,
+              "depth_mm": 620
+            },
+            {
+              "code": "B90550",
+              "width_mm": 450,
+              "depth_mm": 670
+            },
+            {
+              "code": "B90650",
+              "width_mm": 600,
+              "depth_mm": 670
+            },
+            {
+              "code": "B90750",
+              "width_mm": 750,
+              "depth_mm": 670
+            },
+            {
+              "code": "B90950",
+              "width_mm": 900,
+              "depth_mm": 670
+            },
+            {
+              "code": "B91050",
+              "width_mm": 1050,
+              "depth_mm": 670
+            },
+            {
+              "code": "B91250",
+              "width_mm": 1200,
+              "depth_mm": 670
+            }
+          ],
+          "notes": "No Push-pull device per source."
         }
       }
     }
