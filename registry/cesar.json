@@ -412,53 +412,62 @@
   "external_specs": {
     "legrabox_runners": {
       "provenance": "Blum LEGRABOX runner table, provided by Andriy 2026-08-16. NOT a Cesar source fact - kept outside the four-level trust model; Cesar confirmation tracked as Elda Q2.",
-      "columns": "nl_mm / actual_runner_mm / min_internal_depth_overlay_mm (inset adds front thickness; UCON fronts are overlay)",
-      "travel_assumption": "Full-extension travel drawn equal to NL; the table lists no separate travel column and this is recorded as an assumption.",
+      "columns": "nl_mm / actual_runner_mm / min_internal_depth_overlay_mm / travel_mm (inset adds front thickness; UCON fronts are overlay)",
+      "travel_assumption": "Travel column provided by Andriy 2026-08-16 (second table, values marked approximate '~' in the source): travel = NL - 2. Supersedes the earlier travel=NL assumption.",
       "rows": [
         {
           "nl_mm": 270,
           "actual_runner_mm": 262,
-          "min_internal_depth_overlay_mm": 273
+          "min_internal_depth_overlay_mm": 273,
+          "travel_mm": 268
         },
         {
           "nl_mm": 300,
           "actual_runner_mm": 292,
-          "min_internal_depth_overlay_mm": 303
+          "min_internal_depth_overlay_mm": 303,
+          "travel_mm": 298
         },
         {
           "nl_mm": 350,
           "actual_runner_mm": 342,
-          "min_internal_depth_overlay_mm": 353
+          "min_internal_depth_overlay_mm": 353,
+          "travel_mm": 348
         },
         {
           "nl_mm": 400,
           "actual_runner_mm": 392,
-          "min_internal_depth_overlay_mm": 403
+          "min_internal_depth_overlay_mm": 403,
+          "travel_mm": 398
         },
         {
           "nl_mm": 450,
           "actual_runner_mm": 442,
-          "min_internal_depth_overlay_mm": 453
+          "min_internal_depth_overlay_mm": 453,
+          "travel_mm": 448
         },
         {
           "nl_mm": 500,
           "actual_runner_mm": 492,
-          "min_internal_depth_overlay_mm": 503
+          "min_internal_depth_overlay_mm": 503,
+          "travel_mm": 498
         },
         {
           "nl_mm": 550,
           "actual_runner_mm": 542,
-          "min_internal_depth_overlay_mm": 553
+          "min_internal_depth_overlay_mm": 553,
+          "travel_mm": 548
         },
         {
           "nl_mm": 600,
           "actual_runner_mm": 592,
-          "min_internal_depth_overlay_mm": 603
+          "min_internal_depth_overlay_mm": 603,
+          "travel_mm": 598
         },
         {
           "nl_mm": 650,
           "actual_runner_mm": 642,
-          "min_internal_depth_overlay_mm": 653
+          "min_internal_depth_overlay_mm": 653,
+          "travel_mm": 648
         }
       ]
     }

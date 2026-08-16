@@ -123,7 +123,14 @@ module UCON
         internal = depth_mm - Standards::BACK_INSET_MM - Standards::BACK_T_MM
         fitting = spec['legrabox_runners']['rows']
                   .select { |row| row['min_internal_depth_overlay_mm'] <= internal }
-        fitting.map { |row| row['nl_mm'] }.max
+        fitting.max_by { |row| row['nl_mm'] }
+      end
+
+      # Travel (front displacement at full extension) for a carcass depth,
+      # from the user-provided table (travel = NL - 2, values approximate).
+      def runner_travel_for(depth_mm)
+        row = runner_nl_for(depth_mm)
+        row && row['travel_mm']
       end
 
       # Registry row -> Object Contract v1.2 attributes. Pure; tested headless

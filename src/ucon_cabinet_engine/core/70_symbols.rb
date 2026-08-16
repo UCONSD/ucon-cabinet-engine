@@ -73,15 +73,15 @@ module UCON
           # Plan: fully extended drawer, dashed. Travel = LEGRABOX NL fitted
           # to this depth (user-provided Blum table; travel==NL recorded as an
           # assumption in the registry). No fitting NL -> draw nothing.
-          nl = Generator.runner_nl_for(unit['depth_mm'])
-          if nl
+          travel = Generator.runner_travel_for(unit['depth_mm'])
+          if travel
             plan_tag = tag(model, TAG_PLAN)
             g = definition.entities.add_group
             g.name  = 'SYM_PLAN_PULLOUT'
             g.layer = plan_tag
             z_plan = (z0 + h + 1).mm
             y0 = y_face
-            y1 = y_face - nl
+            y1 = y_face - travel
             pts = [[0, y0], [w, y0], [w, y1], [0, y1]]
             edges = pts.each_index.map do |i|
               a = pts[i]; b = pts[(i + 1) % 4]

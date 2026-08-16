@@ -319,14 +319,19 @@ end
 
 puts "\nLEGRABOX NL selection (user-provided Blum table, overlay column)"
 check('d.350 -> NL 300, d.620 -> NL 550, d.670 -> NL 600') do
-  got = [350, 620, 670].map { |d| Generator.runner_nl_for(d) }
+  got = [350, 620, 670].map { |d| Generator.runner_nl_for(d)['nl_mm'] }
   raise got.inspect unless got == [300, 550, 600]
 end
+check('travel comes from the table: 298 / 548 / 598 (NL - 2)') do
+  got = [350, 620, 670].map { |d| Generator.runner_travel_for(d) }
+  raise got.inspect unless got == [298, 548, 598]
+end
 check('a depth too shallow for any runner -> nil, nothing drawn') do
-  raise 'expected nil' unless Generator.runner_nl_for(200).nil?
+  raise 'expected nil' unless Generator.runner_nl_for(200).nil? && Generator.runner_travel_for(200).nil?
 end
 check('internal depth math uses UCON standards (620 - 20 - 4 = 596 < 603)') do
-  raise 'NL600 must NOT fit d.62' if Generator.runner_nl_for(620) == 600
+  row = Generator.runner_nl_for(620)
+  raise 'NL600 must NOT fit d.62' if row['nl_mm'] == 600
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
