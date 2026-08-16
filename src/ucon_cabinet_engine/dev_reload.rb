@@ -15,8 +15,13 @@
 # Nothing here touches the shell (main.rb). The shell is loaded once by
 # SketchUp at startup and must not be re-loaded, or the menu duplicates.
 
-_ucon_dir   = File.dirname(__FILE__)
+_ucon_dir   = File.expand_path(File.dirname(__FILE__))
 _ucon_files = Dir.glob(File.join(_ucon_dir, 'core', '**', '*.rb')).sort
+
+if _ucon_files.empty?
+  raise "[UCON] no core files found under #{_ucon_dir}/core - " \
+        'has the repository moved?'
+end
 
 _ucon_files.each { |file| load file }
 

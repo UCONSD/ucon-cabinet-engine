@@ -19,7 +19,10 @@ module UCON
   module CabinetEngine
     PLUGIN_NAME = 'UCON Cabinet Engine' unless defined?(PLUGIN_NAME)
     VERSION     = '0.1.0'               unless defined?(VERSION)
-    SHELL_ROOT  = File.dirname(__FILE__) unless defined?(SHELL_ROOT)
+    # expand_path, not just dirname: if SketchUp ever loads this file via a
+    # relative path the glob below silently finds nothing and the engine
+    # reports "0 file(s)" instead of failing loudly.
+    SHELL_ROOT  = File.expand_path(File.dirname(__FILE__)) unless defined?(SHELL_ROOT)
     CORE_GLOB   = File.join(SHELL_ROOT, 'core', '**', '*.rb') unless defined?(CORE_GLOB)
 
     # Core files are loaded in sorted order. Names are prefixed numerically so
