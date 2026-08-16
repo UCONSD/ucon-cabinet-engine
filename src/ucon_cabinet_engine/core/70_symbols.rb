@@ -111,7 +111,7 @@ module UCON
       # front_height_mm: the ACTUAL door height (780 handle / 750 gola) —
       # the elevation V outlines the real leaf, not the family height.
       # nil falls back to the family height (handle default).
-      def draw(model, definition, unit, hinge_side, front_height_mm = nil)
+      def draw(model, definition, unit, hinge_side, front_height_mm = nil, slabs = nil)
         clear(definition)
         layout = unit['front_layout'] || {}
         kind   = layout['kind'] || 'single'
@@ -129,7 +129,7 @@ module UCON
 
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'
-          Generator.front_slabs(unit).each_with_index do |slab, i|
+          (slabs || Generator.front_slabs(unit)).each_with_index do |slab, i|
             g = definition.entities.add_group
             g.name = "SYM_FRONT_DRAWER_#{i + 1}"
             x1 = slab[:x_mm]

@@ -82,7 +82,19 @@ module UCON
       # offering them here would invite a wrong order line.
       def gola_options(unit = nil)
         rows = (Registry.data['hardware'] || {})['gola_profiles'] || []
-        rows.select { |row| row['position'] == 'undercounter' }
+        kind = unit && (unit['front_layout'] || {})['kind']
+        if kind == 'horizontal'
+          # A drawer stack needs BOTH profiles (undercounter + intermediate,
+          # same system) - offered as a pair so the order can't lose one.
+          %w[L-shaped straight].map do |sys|
+            pair = rows.select { |row| row['system'] == sys }
+                       .sort_by { |row| row['position'] == 'undercounter' ? 0 : 1 }
+            { 'code' => pair.map { |row| row['code'] }.join('+'),
+              'name' => "#{sys} system (#{pair.map { |row| row['code'] }.join(' + ')})" }
+          end
+        else
+          rows.select { |row| row['position'] == 'undercounter' }
+        end
       end
 
       # Effective slab list for a door version (gola shortens door slabs by 30,
@@ -92,6 +104,23 @@ module UCON
         layout = unit['front_layout'] || { 'kind' => 'single' }
         if gola && %w[single vertical_split].include?(layout['kind'])
           Generator.front_slabs(unit.merge('height_mm' => unit['height_mm'] - 30))
+        elsif gola && layout['kind'] == 'horizontal' && layout['gola_stack_top_to_bottom']
+          stack = layout['gola_stack_top_to_bottom']
+          total = stack.sum { |seg| seg['h_mm'].to_f }
+          unless (total - unit['height_mm']).abs < 0.001
+            raise "gola stack #{total} does not sum to #{unit['height_mm']}"
+          end
+          w = unit['width_mm']
+          z = 0.0
+          slabs = []
+          stack.reverse.each do |seg|
+            if seg['kind'] == 'front'
+              slabs << { name: "FRONT_#{slabs.length + 1}_FROM_BOTTOM",
+                         x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: seg['h_mm'].round(1) }
+            end
+            z += seg['h_mm']
+          end
+          slabs
         else
           Generator.front_slabs(unit)
         end
@@ -160,10 +189,12 @@ module UCON
         model.start_operation('UCON: apply unit properties', true)
         begin
           Contract.write!(defn, attrs.merge(patch))
-          rebuild_fronts(model, defn, unit, patch['opening_method'] == 'gola')
+          gola = patch['opening_method'] == 'gola'
+          rebuild_fronts(model, defn, unit, gola)
           Symbols.draw(model, defn, unit,
                        patch['hinge_side'] || attrs['hinge_side'],
-                       patch['front_height_mm'])
+                       patch['front_height_mm'],
+                       effective_slabs(unit, gola))
           model.commit_operation
         rescue StandardError
           model.abort_operation

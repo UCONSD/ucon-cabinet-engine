@@ -304,11 +304,9 @@ check('every patched attribute set stays contract-valid') do
     Contract.validate!(base.merge(Panel.attributes_patch(U, payload)))
   end
 end
-check('gola shortens door slabs by 30, drawer stack unchanged') do
+check('gola shortens door slabs by 30') do
   slabs = Panel.effective_slabs(U, true)
   raise slabs.inspect unless slabs[0][:h_mm] == 750
-  dr = Panel.effective_slabs(Registry.lookup('B81253'), true)
-  raise dr.inspect unless dr.map { |x| x[:h_mm] } == [390.0, 195.0, 195.0]
 end
 check('registry hardware: 4 gola profiles, 8 handles, Tratto excluded') do
   hw = Registry.data['hardware']
@@ -357,6 +355,33 @@ check('registry catalog: 38 rows, each with code/dims/description/source') do
     c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
     c['description'] && c['source_ref'] && c['type_key']
   }
+end
+
+puts "\ngola drawer stack (verified from p.39 elevation)"
+check('gola slabs: 360 at 0, 180 at 390, 180 at 570 (zones 30 above jumbo-joint and under worktop)') do
+  slabs = Panel.effective_slabs(Registry.lookup('B81253'), true)
+  got = slabs.map { |sl| [sl[:h_mm], sl[:z_mm]] }
+  raise got.inspect unless got == [[360.0, 0.0], [180.0, 390.0], [180.0, 570.0]]
+end
+check('gola drawer unit is offered profile PAIRS, both systems') do
+  opts = Panel.gola_options(Registry.lookup('B81253'))
+  codes = opts.map { |o| o['code'] }.sort
+  raise codes.inspect unless codes == ['GOL001+GOL002', 'GOL005+GOL006']
+end
+check('door unit still gets single undercounter profiles') do
+  codes = Panel.gola_options(Registry.lookup('B80601')).map { |o| o['code'] }.sort
+  raise codes.inspect unless codes == %w[GOL001 GOL005]
+end
+check('a broken stack that does not sum to 780 raises') do
+  u = Registry.lookup('B81253')
+  bad = u.merge('front_layout' => u['front_layout'].merge(
+    'gola_stack_top_to_bottom' => [{ 'kind' => 'front', 'h_mm' => 700 }]))
+  begin
+    Panel.effective_slabs(bad, true)
+    raise 'accepted'
+  rescue RuntimeError => e
+    raise e.message unless e.message.include?('does not sum')
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
