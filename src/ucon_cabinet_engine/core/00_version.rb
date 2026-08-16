@@ -14,7 +14,10 @@
 
 module UCON
   module CabinetEngine
-    CORE_VERSION = '0.5.0' unless defined?(CORE_VERSION)
+    # Plain assignment, NO defined? guard: a guard would keep the stale value
+    # across reloads, which is precisely the bug this file exists to prevent.
+    # Re-assignment warnings are silenced by the reload wrappers.
+    CORE_VERSION = '0.6.0'
 
     def self.core_stamp
       dir = File.expand_path(File.join(File.dirname(__FILE__)))

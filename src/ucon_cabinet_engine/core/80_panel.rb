@@ -188,37 +188,37 @@ module UCON
             button:disabled{background:#aaa} .warn{color:#b45309;font-size:11px;margin-top:4px}
             #empty{color:#888;padding:30px 0;text-align:center}
           </style></head><body>
-          <div id="empty">Выберите юнит UCON в модели</div>
+          <div id="empty">Select a UCON unit in the model</div>
           <div id="form" style="display:none">
             <h3 id="code"></h3><div class="muted" id="desc"></div>
-            <fieldset><legend>Высота двери</legend>
-              <label><input type="radio" name="dv" value="78" checked onchange="rules()"> 78 — полный фасад</label>
-              <label><input type="radio" name="dv" value="75" onchange="rules()"> 75 — gola (−30 мм)</label>
+            <fieldset><legend>Door height</legend>
+              <label><input type="radio" name="dv" value="78" checked onchange="rules()"> 78 — full front</label>
+              <label><input type="radio" name="dv" value="75" onchange="rules()"> 75 — gola (−30 mm)</label>
             </fieldset>
-            <fieldset><legend>Открывание</legend>
+            <fieldset><legend>Opening</legend>
               <select id="om" onchange="rules()">
-                <option value="handle">Ручка</option>
+                <option value="handle">Handle</option>
                 <option value="push_to_open">Push-to-open</option>
               </select>
-              <div id="golaNote" class="warn" style="display:none">Дверь 75 — открывание только gola. Профиль обязателен (отдельная строка заказа):</div>
+              <div id="golaNote" class="warn" style="display:none">Door 75 opens by gola only. A grip-recess profile is required (separate order line):</div>
               <select id="gol" style="display:none"></select>
               <div id="handleBlock">
                 <select id="hmode" onchange="rules()">
-                  <option value="factory">Ручка из каталога</option>
-                  <option value="client">На усмотрение клиента</option>
+                  <option value="factory">Handle from catalog</option>
+                  <option value="client">Client-supplied</option>
                 </select>
                 <select id="handle"></select>
               </div>
-              <div id="ptoNote" class="warn" style="display:none">Код устройства push-pull не найден в источнике — P3, ждёт Elda. hardware_ref останется пустым.</div>
+              <div id="ptoNote" class="warn" style="display:none">Push-pull device code not found in source — P3, pending Elda. hardware_ref stays empty.</div>
             </fieldset>
-            <fieldset id="hingeFs"><legend>Сторона открытия</legend>
+            <fieldset id="hingeFs"><legend>Hinge side</legend>
               <select id="hinge">
-                <option value="">— не выбрана —</option>
-                <option value="lh">Левая (петли слева)</option>
-                <option value="rh">Правая (петли справа)</option>
+                <option value="">— not chosen —</option>
+                <option value="lh">Left (hinges left)</option>
+                <option value="rh">Right (hinges right)</option>
               </select>
             </fieldset>
-            <button onclick="apply()">Применить</button>
+            <button onclick="apply()">Apply</button>
           </div>
           <script>
             var HANDED=false;
