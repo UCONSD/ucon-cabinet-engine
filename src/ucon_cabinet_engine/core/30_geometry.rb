@@ -59,6 +59,12 @@ module UCON
         face.reverse! if face.normal.z < 0
         face.pushpull(h)
         group.material = material
+
+        # Edge color mode is by-material (symbols render gray); without an
+        # explicit material, edges INHERIT the group's material and the whole
+        # carcass would outline in its face color. Pin unit edges to black.
+        edge_mat = Geometry.material(group.model, 'UCON_Edge_Black', [0, 0, 0])
+        group.entities.grep(Sketchup::Edge).each { |e| e.material = edge_mat }
         group
       end
 
