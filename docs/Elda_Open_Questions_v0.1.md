@@ -48,3 +48,26 @@ items `PRELIMINARY` and `P3` where the notation affects orderability.
 > or does the grip-recess version of the cabinet carry its own modification code or surcharge
 > in the current price list (separate from the `GOL` grip-recess profile, which we already
 > order as its own line)?
+
+---
+
+## Q2 — Full-extension drawer travel dimension (plan-view symbol)
+
+**Status:** open · added 2026-08-16
+
+**Context.** UCON preliminary plans need to show fully extended drawers
+(dashed) in plan view. The Kitchen System catalog describes LEGRABOX runners
+only qualitatively ("soft-close full-extension runners", capacities 40/70 kg;
+interior pull-outs 10/30/120 kg). The technical page (printed p.14) gives
+drawer-box internal depth only as ranges: 30–40 cm (d.35 carcasses) and
+50–60 cm (d.62/d.67). No travel/extension dimension in mm appears anywhere in
+the catalog or in the mechanisms extract.
+
+**Question.** For H.78 base units at d.62 and d.67: what is the actual drawer
+travel (front face displacement) at full extension, per drawer/jumbo type?
+Alternatively: which Blum LEGRABOX nominal length (NL) is fitted per carcass
+depth, from which travel follows?
+
+**Disposition until answered:** the engine draws NO plan-view pull-out symbol
+for drawer units (drawing a guessed travel would violate the no-invention
+rule). Elevation crosses only.

@@ -59,6 +59,9 @@ module UCON
           end
 
           Contract.write!(definition, attributes_for(unit))
+          # Symbols that need no user choice (drawer crosses) appear at build
+          # time; door symbols wait for a hinge_side from the panel.
+          Symbols.draw(model, definition, unit, nil)
 
           instance = model.active_entities.add_instance(definition, Geom::Transformation.new)
           instance.name = "Cesar #{code} — #{unit['description']}"

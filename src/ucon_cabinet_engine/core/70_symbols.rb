@@ -43,13 +43,36 @@ module UCON
         clear(definition)
         layout = unit['front_layout'] || {}
         kind   = layout['kind'] || 'single'
-        return unless %w[single vertical_split].include?(kind)
 
         s  = Standards
         z0 = s::PLINTH_H_MM
         w  = unit['width_mm']
         h  = unit['height_mm']
         y_face = -(s::FRONT_GAP_MM + s::FRONT_T_MM) - 1
+
+        # Drawer stacks: dashed diagonal cross per pull-out front (elevation).
+        # NO plan pull-out symbol: the source states "full-extension" runners
+        # only qualitatively - no travel dimension anywhere in the Kitchen
+        # System catalog or the mechanisms extract (searched 2026-08-16), and
+        # the LEGRABOX tech page gives box depth only as ranges (30-40 /
+        # 50-60 cm). Drawing a travel would be invention; see Elda Q2.
+        if kind == 'horizontal'
+          front_tag = tag(model, TAG_FRONT)
+          Generator.front_slabs(unit).each_with_index do |slab, i|
+            g = definition.entities.add_group
+            g.name  = "SYM_FRONT_DRAWER_#{i + 1}"
+            g.layer = front_tag
+            x1 = slab[:x_mm]
+            x2 = slab[:x_mm] + slab[:w_mm]
+            z1 = z0 + slab[:z_mm]
+            z2 = z1 + slab[:h_mm]
+            d1 = g.entities.add_line([x1.mm, y_face.mm, z1.mm], [x2.mm, y_face.mm, z2.mm])
+            d2 = g.entities.add_line([x1.mm, y_face.mm, z2.mm], [x2.mm, y_face.mm, z1.mm])
+            [d1, d2].each { |ed| ed.layer = front_tag if ed }
+          end
+          return
+        end
+        return unless %w[single vertical_split].include?(kind)
 
         leaves =
           if kind == 'single'
