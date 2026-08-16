@@ -4,16 +4,24 @@
 #
 # Dashed opening symbols on two hideable tags:
 #
-#   TAG_FRONT — elevation: dashed V per door leaf. Base of the V at the hinge
-#               edge, apex at mid-height of the opening edge (European
-#               drawing convention — flip here if UCON draws it the other way).
-#   TAG_PLAN  — plan: dashed quarter-arc of the door swing plus the open leaf,
-#               drawn just above the carcass top.
+#   TAG_FRONT — elevation: dashed V per door leaf (base at the hinge edge,
+#               apex at the opening edge); one diagonal per drawer front,
+#               top-left to bottom-right (UCON convention).
+#   TAG_PLAN  — plan: door leaf as the real 22 mm slab open at
+#               DOOR_OPEN_ANGLE_DEG plus the swing arc; drawer as two runner
+#               lines inset RUNNER_INSET_MM plus the 22 mm front slab at the
+#               full-extension travel (user-provided Blum table).
+#               No dashed line along the facade itself.
 #
-# Tags get the native "Dash" line style (SketchUp 2019+); on both the tag and
-# the edges, so hiding the tag hides the symbols and the dashes render.
-# Symbols live INSIDE the unit definition, so they move with the instance.
-# Groups are named SYM_* and are wiped before redraw — idempotent.
+# Appearance: all symbol edges carry the UCON_Symbol_Gray material and the
+# model's edge color mode is switched to by-material, so symbols render gray
+# while ordinary edges (no material) stay the style foreground color.
+# Line WIDTH is a style property in SketchUp — free edges draw at Profiles
+# width; the palette's "Thin lines" button toggles Profiles for the model.
+#
+# Tags get the native "Dash" line style (SketchUp 2019+). Symbols live INSIDE
+# the unit definition, so they move with the instance. Groups are named SYM_*
+# and are wiped before redraw — idempotent.
 
 module UCON
   module CabinetEngine
@@ -26,6 +34,8 @@ module UCON
 
       # Plan symbol: doors drawn open at this angle, not fully at 90.
       DOOR_OPEN_ANGLE_DEG = 85
+
+      SYMBOL_RGB = [128, 128, 128].freeze
 
       module_function
 
@@ -40,6 +50,16 @@ module UCON
         mode
       end
 
+      # Style-level line weight: free edges render at Profiles width, so the
+      # one-click way to thin the symbols (and the whole drawing) is toggling
+      # Profiles. Returns the new state.
+      def toggle_thin_lines(model)
+        ro = model.rendering_options
+        ro['DrawSilhouettes'] = !ro['DrawSilhouettes']
+        model.active_view.invalidate
+        ro['DrawSilhouettes'] ? 'profiles ON (thick)' : 'profiles OFF (thin)'
+      end
+
       def tag(model, name)
         layer = model.layers[name] || model.layers.add(name)
         if layer.respond_to?(:line_style=) && model.respond_to?(:line_styles)
@@ -49,14 +69,34 @@ module UCON
         layer
       end
 
+      def symbol_material(model)
+        Geometry.material(model, 'UCON_Symbol_Gray', SYMBOL_RGB)
+      end
+
+      # Symbols render gray only when edge color mode is by-material (0).
+      # Ordinary edges carry no material and keep the foreground color.
+      def enable_material_edges(model)
+        model.rendering_options['EdgeColorMode'] = 0
+      rescue StandardError
+        nil
+      end
+
+      # Assign tag + gray material to a finished symbol group.
+      def finalize(group, layer, mat)
+        group.layer = layer
+        group.entities.grep(Sketchup::Edge).each do |ed|
+          ed.layer    = layer
+          ed.material = mat
+        end
+      end
+
       # Closed dashed rectangle at height z; the auto-created face is erased
       # so plans get four lines, not a fill.
-      def dashed_rect(group, layer, corners, z)
+      def dashed_rect(group, corners, z)
         corners.each_index do |i|
           a = corners[i]
           b = corners[(i + 1) % corners.length]
-          ed = group.entities.add_line([a[0].mm, a[1].mm, z], [b[0].mm, b[1].mm, z])
-          ed.layer = layer if ed
+          group.entities.add_line([a[0].mm, a[1].mm, z], [b[0].mm, b[1].mm, z])
         end
         group.entities.grep(Sketchup::Face).each(&:erase!)
       end
@@ -67,7 +107,7 @@ module UCON
         definition.entities.erase_entities(doomed) unless doomed.empty?
       end
 
-      # unit: registry hash; hinge_side: 'lh'/'rh'/nil; door_version: 780/750.
+      # unit: registry hash; hinge_side: 'lh'/'rh'/nil.
       def draw(model, definition, unit, hinge_side)
         clear(definition)
         layout = unit['front_layout'] || {}
@@ -79,52 +119,44 @@ module UCON
         h  = unit['height_mm']
         y_face = -(s::FRONT_GAP_MM + s::FRONT_T_MM) - 1
 
-        # Drawer stacks: dashed diagonal cross per pull-out front (elevation).
-        # NO plan pull-out symbol: the source states "full-extension" runners
-        # only qualitatively - no travel dimension anywhere in the Kitchen
-        # System catalog or the mechanisms extract (searched 2026-08-16), and
-        # the LEGRABOX tech page gives box depth only as ranges (30-40 /
-        # 50-60 cm). Drawing a travel would be invention; see Elda Q2.
+        front_tag = tag(model, TAG_FRONT)
+        plan_tag  = tag(model, TAG_PLAN)
+        mat       = symbol_material(model)
+        enable_material_edges(model)
+
+        # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'
-          front_tag = tag(model, TAG_FRONT)
           Generator.front_slabs(unit).each_with_index do |slab, i|
             g = definition.entities.add_group
-            g.name  = "SYM_FRONT_DRAWER_#{i + 1}"
-            g.layer = front_tag
+            g.name = "SYM_FRONT_DRAWER_#{i + 1}"
             x1 = slab[:x_mm]
             x2 = slab[:x_mm] + slab[:w_mm]
             z1 = z0 + slab[:z_mm]
             z2 = z1 + slab[:h_mm]
             # UCON convention: one diagonal, top-left to bottom-right.
-            d = g.entities.add_line([x1.mm, y_face.mm, z2.mm], [x2.mm, y_face.mm, z1.mm])
-            d.layer = front_tag if d
+            g.entities.add_line([x1.mm, y_face.mm, z2.mm], [x2.mm, y_face.mm, z1.mm])
+            finalize(g, front_tag, mat)
           end
-          # Plan: fully extended drawer, dashed. Travel = LEGRABOX NL fitted
-          # to this depth (user-provided Blum table; travel==NL recorded as an
-          # assumption in the registry). No fitting NL -> draw nothing.
+
           travel = Generator.runner_travel_for(unit['depth_mm'])
           if travel
-            plan_tag = tag(model, TAG_PLAN)
-            g = definition.entities.add_group
-            g.name  = 'SYM_PLAN_PULLOUT'
-            g.layer = plan_tag
-            z_plan = (z0 + h + 1).mm
             t  = s::FRONT_T_MM
             y0 = y_face
             y1 = y_face - travel      # outer face of the front at full extension
             yb = y1 + t               # its back face
-            # No dashed line along the facade (UCON convention): two box sides
-            # up to the back of the extended front, then the front panel
-            # itself as a 22 mm dashed slab.
             xi = RUNNER_INSET_MM
+            g = definition.entities.add_group
+            g.name = 'SYM_PLAN_PULLOUT'
+            z_plan = (z0 + h + 1).mm
             [[[xi, y0], [xi, yb]], [[w - xi, y0], [w - xi, yb]]].each do |a, b|
-              ed = g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
-              ed.layer = plan_tag if ed
+              g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
             end
-            dashed_rect(g, plan_tag, [[0, yb], [w, yb], [w, y1], [0, y1]], z_plan)
+            dashed_rect(g, [[0, yb], [w, yb], [w, y1], [0, y1]], z_plan)
+            finalize(g, plan_tag, mat)
           end
           return
         end
+
         return unless %w[single vertical_split].include?(kind)
 
         leaves =
@@ -136,27 +168,23 @@ module UCON
              { x: w / 2.0, w: w / 2.0, hinge: 'rh' }]
           end
 
-        front_tag = tag(model, TAG_FRONT)
-        plan_tag  = tag(model, TAG_PLAN)
-
         leaves.each_with_index do |leaf, i|
           hinge_x   = leaf[:hinge] == 'lh' ? leaf[:x] : leaf[:x] + leaf[:w]
           opening_x = leaf[:hinge] == 'lh' ? leaf[:x] + leaf[:w] : leaf[:x]
 
           g = definition.entities.add_group
-          g.name  = "SYM_FRONT_#{i + 1}"
-          g.layer = front_tag
+          g.name = "SYM_FRONT_#{i + 1}"
           apex = [opening_x.mm, y_face.mm, (z0 + h / 2.0).mm]
-          e1 = g.entities.add_line([hinge_x.mm, y_face.mm, z0.mm], apex)
-          e2 = g.entities.add_line([hinge_x.mm, y_face.mm, (z0 + h).mm], apex)
-          [e1, e2].each { |ed| ed.layer = front_tag if ed }
+          g.entities.add_line([hinge_x.mm, y_face.mm, z0.mm], apex)
+          g.entities.add_line([hinge_x.mm, y_face.mm, (z0 + h).mm], apex)
+          finalize(g, front_tag, mat)
 
           g = definition.entities.add_group
-          g.name  = "SYM_PLAN_#{i + 1}"
-          g.layer = plan_tag
+          g.name = "SYM_PLAN_#{i + 1}"
           z_plan  = (z0 + h + 1).mm
           center  = [hinge_x.mm, y_face.mm, z_plan]
           r       = leaf[:w].mm
+
           # Open leaf drawn as the actual 22 mm front slab, dashed, at
           # DOOR_OPEN_ANGLE_DEG from closed. Thickness points into the swing
           # region (toward where the arc comes from).
@@ -173,15 +201,15 @@ module UCON
           v_ang = leaf[:hinge] == 'lh' ? u_ang + Math::PI / 2 : u_ang - Math::PI / 2
           vx, vy = Math.cos(v_ang), Math.sin(v_ang)
           l = leaf[:w]
-          dashed_rect(g, plan_tag,
+          dashed_rect(g,
                       [[hinge_x, y_face],
                        [hinge_x + t * vx, y_face + t * vy],
                        [hinge_x + t * vx + l * ux, y_face + t * vy + l * uy],
                        [hinge_x + l * ux, y_face + l * uy]],
                       z_plan)
-          arc = g.entities.add_arc(Geom::Point3d.new(*center), Geom::Vector3d.new(1, 0, 0),
-                                   Geom::Vector3d.new(0, 0, 1), r, a1, a2, 12)
-          Array(arc).compact.each { |ed| ed.layer = plan_tag }
+          g.entities.add_arc(Geom::Point3d.new(*center), Geom::Vector3d.new(1, 0, 0),
+                             Geom::Vector3d.new(0, 0, 1), r, a1, a2, 12)
+          finalize(g, plan_tag, mat)
         end
         nil
       end

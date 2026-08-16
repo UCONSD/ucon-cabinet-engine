@@ -16,7 +16,7 @@ module UCON
         @dialog&.close rescue nil
         @dialog = UI::HtmlDialog.new(
           dialog_title: 'UCON Cabinet Engine', preferences_key: 'UCONPalette',
-          style: UI::HtmlDialog::STYLE_UTILITY, width: 240, height: 310,
+          style: UI::HtmlDialog::STYLE_UTILITY, width: 240, height: 360,
           resizable: false
         )
         @dialog.set_html(html)
@@ -34,6 +34,9 @@ module UCON
         @dialog.add_action_callback('panel')  { |_| Panel.show }
         @dialog.add_action_callback('symbols') do |_, mode|
           Symbols.show_mode(Sketchup.active_model, mode.to_sym)
+        end
+        @dialog.add_action_callback('thin') do |_|
+          Symbols.toggle_thin_lines(Sketchup.active_model)
         end
         @dialog.add_action_callback('reload') do |_|
           begin
@@ -73,6 +76,7 @@ module UCON
               <button class="seg" onclick="sketchup.symbols('all')">All</button>
               <button class="seg" onclick="sketchup.symbols('off')">Off</button>
             </div>
+            <button onclick="sketchup.thin()" style="margin-top:8px">Thin / thick lines</button>
             <div id="ver"></div>
             <script>
               function setVersion(v){document.getElementById('ver').textContent=v;}
