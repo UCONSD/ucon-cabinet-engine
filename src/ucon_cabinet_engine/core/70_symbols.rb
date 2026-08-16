@@ -23,6 +23,17 @@ module UCON
 
       module_function
 
+      # Palette-driven visibility: plan views want only the plan tag,
+      # elevations only the front tag. mode: :plan | :front | :off | :all
+      def show_mode(model, mode)
+        front = tag(model, TAG_FRONT)
+        plan  = tag(model, TAG_PLAN)
+        front.visible = %i[front all].include?(mode)
+        plan.visible  = %i[plan all].include?(mode)
+        model.active_view.invalidate
+        mode
+      end
+
       def tag(model, name)
         layer = model.layers[name] || model.layers.add(name)
         if layer.respond_to?(:line_style=) && model.respond_to?(:line_styles)
@@ -82,15 +93,18 @@ module UCON
             z_plan = (z0 + h + 1).mm
             y0 = y_face
             y1 = y_face - travel
-            pts = [[0, y0], [w, y0], [w, y1], [0, y1]]
-            edges = pts.each_index.map do |i|
-              a = pts[i]; b = pts[(i + 1) % 4]
-              g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
+            # U-shape, open toward the cabinet: no dashed line along the
+            # facade itself (UCON convention) - two sides + the far edge of
+            # the extended drawer. Open contour also means no auto-face.
+            segs = [
+              [[0, y0], [0, y1]],
+              [[0, y1], [w, y1]],
+              [[w, y1], [w, y0]]
+            ]
+            segs.each do |a, b|
+              ed = g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
+              ed.layer = plan_tag if ed
             end
-            # A closed loop auto-creates a face; erase it or the plan gets a
-            # filled rectangle instead of four dashed lines.
-            g.entities.grep(Sketchup::Face).each(&:erase!)
-            edges.compact.each { |ed| ed.layer = plan_tag }
           end
           return
         end

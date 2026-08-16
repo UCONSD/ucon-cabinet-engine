@@ -16,7 +16,7 @@ module UCON
         @dialog&.close rescue nil
         @dialog = UI::HtmlDialog.new(
           dialog_title: 'UCON Cabinet Engine', preferences_key: 'UCONPalette',
-          style: UI::HtmlDialog::STYLE_UTILITY, width: 240, height: 250,
+          style: UI::HtmlDialog::STYLE_UTILITY, width: 240, height: 310,
           resizable: false
         )
         @dialog.set_html(html)
@@ -32,6 +32,9 @@ module UCON
           end
         end
         @dialog.add_action_callback('panel')  { |_| Panel.show }
+        @dialog.add_action_callback('symbols') do |_, mode|
+          Symbols.show_mode(Sketchup.active_model, mode.to_sym)
+        end
         @dialog.add_action_callback('reload') do |_|
           begin
             files = CabinetEngine.load_core
@@ -56,10 +59,20 @@ module UCON
             .primary{background:#2563eb;color:#fff;border-color:#2563eb}
             .primary:hover{background:#1d4ed8}
             #ver{color:#999;font-size:10px;margin-top:6px;text-align:center}
+            .grp{color:#777;font-size:11px;margin:6px 0 4px}
+            .row{display:flex;gap:4px}
+            .seg{flex:1;margin:0;padding:6px 2px;text-align:center;font-size:12px}
           </style></head><body>
             <button class="primary" onclick="sketchup.build_by_code()">Build by code…</button>
             <button onclick="sketchup.panel()">Unit Properties panel</button>
             <button onclick="sketchup.reload()">Reload core</button>
+            <div class="grp">Opening symbols</div>
+            <div class="row">
+              <button class="seg" onclick="sketchup.symbols('plan')">Plan</button>
+              <button class="seg" onclick="sketchup.symbols('front')">Elevation</button>
+              <button class="seg" onclick="sketchup.symbols('all')">All</button>
+              <button class="seg" onclick="sketchup.symbols('off')">Off</button>
+            </div>
             <div id="ver"></div>
             <script>
               function setVersion(v){document.getElementById('ver').textContent=v;}
