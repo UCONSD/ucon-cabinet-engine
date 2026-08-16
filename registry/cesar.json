@@ -408,5 +408,59 @@
       "code": null,
       "note": "Device exists (printed p.613) but no article code found in source; P3 - needs Elda confirmation. Selecting push_to_open leaves hardware_ref empty with hardware_source=factory."
     }
+  },
+  "external_specs": {
+    "legrabox_runners": {
+      "provenance": "Blum LEGRABOX runner table, provided by Andriy 2026-08-16. NOT a Cesar source fact - kept outside the four-level trust model; Cesar confirmation tracked as Elda Q2.",
+      "columns": "nl_mm / actual_runner_mm / min_internal_depth_overlay_mm (inset adds front thickness; UCON fronts are overlay)",
+      "travel_assumption": "Full-extension travel drawn equal to NL; the table lists no separate travel column and this is recorded as an assumption.",
+      "rows": [
+        {
+          "nl_mm": 270,
+          "actual_runner_mm": 262,
+          "min_internal_depth_overlay_mm": 273
+        },
+        {
+          "nl_mm": 300,
+          "actual_runner_mm": 292,
+          "min_internal_depth_overlay_mm": 303
+        },
+        {
+          "nl_mm": 350,
+          "actual_runner_mm": 342,
+          "min_internal_depth_overlay_mm": 353
+        },
+        {
+          "nl_mm": 400,
+          "actual_runner_mm": 392,
+          "min_internal_depth_overlay_mm": 403
+        },
+        {
+          "nl_mm": 450,
+          "actual_runner_mm": 442,
+          "min_internal_depth_overlay_mm": 453
+        },
+        {
+          "nl_mm": 500,
+          "actual_runner_mm": 492,
+          "min_internal_depth_overlay_mm": 503
+        },
+        {
+          "nl_mm": 550,
+          "actual_runner_mm": 542,
+          "min_internal_depth_overlay_mm": 553
+        },
+        {
+          "nl_mm": 600,
+          "actual_runner_mm": 592,
+          "min_internal_depth_overlay_mm": 603
+        },
+        {
+          "nl_mm": 650,
+          "actual_runner_mm": 642,
+          "min_internal_depth_overlay_mm": 653
+        }
+      ]
+    }
   }
 }

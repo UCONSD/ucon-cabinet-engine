@@ -68,6 +68,9 @@ travel (front face displacement) at full extension, per drawer/jumbo type?
 Alternatively: which Blum LEGRABOX nominal length (NL) is fitted per carcass
 depth, from which travel follows?
 
-**Disposition until answered:** the engine draws NO plan-view pull-out symbol
-for drawer units (drawing a guessed travel would violate the no-invention
-rule). Elevation crosses only.
+**Disposition until answered:** interim data in use — a Blum LEGRABOX runner
+table provided by Andriy (2026-08-16) sits in the registry as
+`external_specs`, clearly marked as outside the Cesar source system. The
+engine selects the largest NL fitting the carcass internal depth (d.35→300,
+d.62→550, d.67→600) and draws plan travel = NL as a stated assumption. The
+question stays open until Cesar confirms actual fitted runner lengths.

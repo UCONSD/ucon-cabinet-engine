@@ -70,6 +70,25 @@ module UCON
             d2 = g.entities.add_line([x1.mm, y_face.mm, z2.mm], [x2.mm, y_face.mm, z1.mm])
             [d1, d2].each { |ed| ed.layer = front_tag if ed }
           end
+          # Plan: fully extended drawer, dashed. Travel = LEGRABOX NL fitted
+          # to this depth (user-provided Blum table; travel==NL recorded as an
+          # assumption in the registry). No fitting NL -> draw nothing.
+          nl = Generator.runner_nl_for(unit['depth_mm'])
+          if nl
+            plan_tag = tag(model, TAG_PLAN)
+            g = definition.entities.add_group
+            g.name  = 'SYM_PLAN_PULLOUT'
+            g.layer = plan_tag
+            z_plan = (z0 + h + 1).mm
+            y0 = y_face
+            y1 = y_face - nl
+            pts = [[0, y0], [w, y0], [w, y1], [0, y1]]
+            edges = pts.each_index.map do |i|
+              a = pts[i]; b = pts[(i + 1) % 4]
+              g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
+            end
+            edges.compact.each { |ed| ed.layer = plan_tag }
+          end
           return
         end
         return unless %w[single vertical_split].include?(kind)

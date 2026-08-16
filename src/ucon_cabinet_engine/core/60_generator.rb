@@ -112,6 +112,20 @@ module UCON
         end
       end
 
+      # Largest LEGRABOX nominal length that fits a carcass depth, from the
+      # user-provided Blum table in registry external_specs (overlay column).
+      # Internal depth = carcass depth - back inset - back panel (UCON working
+      # standards). Returns nil when nothing fits - callers draw nothing then.
+      def runner_nl_for(depth_mm)
+        spec = Registry.data['external_specs']
+        return nil unless spec && spec['legrabox_runners']
+
+        internal = depth_mm - Standards::BACK_INSET_MM - Standards::BACK_T_MM
+        fitting = spec['legrabox_runners']['rows']
+                  .select { |row| row['min_internal_depth_overlay_mm'] <= internal }
+        fitting.map { |row| row['nl_mm'] }.max
+      end
+
       # Registry row -> Object Contract v1.2 attributes. Pure; tested headless
       # for every code in the registry.
       #

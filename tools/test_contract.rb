@@ -317,5 +317,17 @@ check('registry hardware: 4 gola profiles, 8 handles, Tratto excluded') do
   raise 'tratto' unless hw['handles_excluded'].any? { |x| x['code'] == 'M00010' }
 end
 
+puts "\nLEGRABOX NL selection (user-provided Blum table, overlay column)"
+check('d.350 -> NL 300, d.620 -> NL 550, d.670 -> NL 600') do
+  got = [350, 620, 670].map { |d| Generator.runner_nl_for(d) }
+  raise got.inspect unless got == [300, 550, 600]
+end
+check('a depth too shallow for any runner -> nil, nothing drawn') do
+  raise 'expected nil' unless Generator.runner_nl_for(200).nil?
+end
+check('internal depth math uses UCON standards (620 - 20 - 4 = 596 < 603)') do
+  raise 'NL600 must NOT fit d.62' if Generator.runner_nl_for(620) == 600
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
