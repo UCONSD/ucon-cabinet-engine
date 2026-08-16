@@ -19,14 +19,14 @@ _ucon_dir   = File.expand_path(File.dirname(__FILE__))
 _ucon_files = Dir.glob(File.join(_ucon_dir, 'core', '**', '*.rb')).sort
 
 if _ucon_files.empty?
-  raise "[UCON] no core files found under #{_ucon_dir}/core - " \
-        'has the repository moved?'
+  raise "[UCON] no core files found under #{_ucon_dir}/core - has the repository moved?"
 end
 
 _ucon_files.each { |file| load file }
 
-puts "[UCON] reloaded #{_ucon_files.length} core file(s): " \
+puts "[UCON] #{UCON::CabinetEngine.version_line} — " \
+     "reloaded #{_ucon_files.length} file(s): " \
      "#{_ucon_files.map { |f| File.basename(f) }.join(', ')}"
 
 # Comment out the line below if you want reload without rebuild.
-UCON::CabinetEngine::Baseline::B80601.build
+UCON::CabinetEngine::Units::B80601.build

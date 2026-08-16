@@ -10,9 +10,14 @@
 
 require_relative '../src/ucon_cabinet_engine/core/10_standards'
 require_relative '../src/ucon_cabinet_engine/core/20_contract'
+# 40_unit_b80601 touches the SketchUp API only inside build, so the unit's
+# metadata and derived dimensions are reachable from here. 30_geometry is the
+# one core file that genuinely needs SketchUp and is deliberately not loaded.
+require_relative '../src/ucon_cabinet_engine/core/40_unit_b80601'
 
 Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
+B80601    = UCON::CabinetEngine::Units::B80601
 
 $failures = 0
 $checks   = 0
@@ -126,19 +131,51 @@ check('every standard records where its authority comes from') do
   raise "undocumented: #{(defined_consts - documented).inspect}" unless (defined_consts - documented).empty?
 end
 
-puts "\nB80601 derived dimensions (must match the frozen baseline)"
+puts "\nB80601 — catalog dimensions (frozen baseline is the authority)"
 {
-  'interior width'  => [600 - 2 * 18, 564],
-  'interior height' => [780 - 2 * 18, 744],
-  'front width'     => [600 - 2 * 1.5, 597.0],
-  'front height'    => [780 - 2 * 1.5, 777.0],
-  'back y'          => [620 - 20 - 4, 596],
-  'shelf depth'     => [620 - 20 - 4 - 18, 578],
-  'shelf z'         => [100 + 18 + (744 - 18) / 2.0, 481.0]
+  'width_mm'  => [B80601::WIDTH_MM,  600],
+  'height_mm' => [B80601::HEIGHT_MM, 780],
+  'depth_mm'  => [B80601::DEPTH_MM,  620]
 }.each do |name, (actual, expected)|
   check("#{name} == #{expected}") do
     raise "got #{actual}" unless actual == expected
   end
+end
+
+puts "\nB80601 — derived dimensions"
+# The front is drawn flush (600 x 780) — the 1.5 mm reveal is a recorded
+# standard, not drawn geometry — so there are no derived front dimensions to
+# check; the reveal value itself is covered by the locked-standards block.
+{
+  'overall height (carcass + plinth)' => [B80601.overall_height_mm, 880],
+  'overall depth  (carcass + gap + front)' => [B80601.overall_depth_mm, 645]
+}.each do |name, (actual, expected)|
+  check("#{name} == #{expected}") do
+    raise "got #{actual}" unless actual == expected
+  end
+end
+
+puts "\nB80601 — contract attributes (integration: the unit satisfies the contract)"
+check('B80601 attributes validate against Object Contract v1.1') do
+  Contract.validate!(B80601.contract_attributes)
+end
+check('front_height_mm derives to the full family door for opening_method = handle') do
+  a = B80601.contract_attributes
+  raise "opening_method is #{a['opening_method']}" unless a['opening_method'] == 'handle'
+  raise "got #{a['front_height_mm']}" unless a['front_height_mm'] == 780
+end
+check('the code stays PRELIMINARY while status is PLANNING') do
+  a = B80601.contract_attributes
+  raise "got #{a['code_status']}" unless a['code_status'] == 'PRELIMINARY'
+  raise "got #{a['status']}" unless a['status'] == 'PLANNING'
+end
+check('no hardware is invented') do
+  a = B80601.contract_attributes
+  raise 'hardware_ref was guessed' if a.key?('hardware_ref')
+  raise 'hardware_source was guessed' if a.key?('hardware_source')
+end
+check('notes record the envelope-only representation') do
+  raise 'envelope not mentioned' unless B80601.notes.downcase.include?('envelope')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
