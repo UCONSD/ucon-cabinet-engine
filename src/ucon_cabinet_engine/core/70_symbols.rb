@@ -43,6 +43,18 @@ module UCON
         layer
       end
 
+      # Closed dashed rectangle at height z; the auto-created face is erased
+      # so plans get four lines, not a fill.
+      def dashed_rect(group, layer, corners, z)
+        corners.each_index do |i|
+          a = corners[i]
+          b = corners[(i + 1) % corners.length]
+          ed = group.entities.add_line([a[0].mm, a[1].mm, z], [b[0].mm, b[1].mm, z])
+          ed.layer = layer if ed
+        end
+        group.entities.grep(Sketchup::Face).each(&:erase!)
+      end
+
       def clear(definition)
         doomed = definition.entities.grep(Sketchup::Group)
                            .select { |g| g.name.start_with?('SYM_') }
@@ -91,20 +103,18 @@ module UCON
             g.name  = 'SYM_PLAN_PULLOUT'
             g.layer = plan_tag
             z_plan = (z0 + h + 1).mm
+            t  = s::FRONT_T_MM
             y0 = y_face
-            y1 = y_face - travel
-            # U-shape, open toward the cabinet: no dashed line along the
-            # facade itself (UCON convention) - two sides + the far edge of
-            # the extended drawer. Open contour also means no auto-face.
-            segs = [
-              [[0, y0], [0, y1]],
-              [[0, y1], [w, y1]],
-              [[w, y1], [w, y0]]
-            ]
-            segs.each do |a, b|
+            y1 = y_face - travel      # outer face of the front at full extension
+            yb = y1 + t               # its back face
+            # No dashed line along the facade (UCON convention): two box sides
+            # up to the back of the extended front, then the front panel
+            # itself as a 22 mm dashed slab.
+            [[[0, y0], [0, yb]], [[w, y0], [w, yb]]].each do |a, b|
               ed = g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
               ed.layer = plan_tag if ed
             end
+            dashed_rect(g, plan_tag, [[0, yb], [w, yb], [w, y1], [0, y1]], z_plan)
           end
           return
         end
@@ -140,12 +150,18 @@ module UCON
           z_plan  = (z0 + h + 1).mm
           center  = [hinge_x.mm, y_face.mm, z_plan]
           r       = leaf[:w].mm
-          open_pt = [hinge_x.mm, (y_face - leaf[:w]).mm, z_plan]
-          leaf_edge = g.entities.add_line(center, open_pt)
+          # Open leaf drawn as the actual 22 mm front slab, dashed. Thickness
+          # points into the swing region (toward where the arc comes from).
+          t   = s::FRONT_T_MM
+          xin = leaf[:hinge] == 'lh' ? hinge_x + t : hinge_x - t
+          dashed_rect(g, plan_tag,
+                      [[hinge_x, y_face], [xin, y_face],
+                       [xin, y_face - leaf[:w]], [hinge_x, y_face - leaf[:w]]],
+                      z_plan)
           a1, a2 = leaf[:hinge] == 'lh' ? [-Math::PI / 2, 0] : [Math::PI, Math::PI * 1.5]
           arc = g.entities.add_arc(Geom::Point3d.new(*center), Geom::Vector3d.new(1, 0, 0),
                                    Geom::Vector3d.new(0, 0, 1), r, a1, a2, 12)
-          ([leaf_edge] + Array(arc)).compact.each { |ed| ed.layer = plan_tag }
+          Array(arc).compact.each { |ed| ed.layer = plan_tag }
         end
         nil
       end
