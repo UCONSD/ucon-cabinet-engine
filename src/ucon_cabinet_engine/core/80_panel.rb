@@ -161,7 +161,9 @@ module UCON
         begin
           Contract.write!(defn, attrs.merge(patch))
           rebuild_fronts(model, defn, unit, patch['opening_method'] == 'gola')
-          Symbols.draw(model, defn, unit, patch['hinge_side'] || attrs['hinge_side'])
+          Symbols.draw(model, defn, unit,
+                       patch['hinge_side'] || attrs['hinge_side'],
+                       patch['front_height_mm'])
           model.commit_operation
         rescue StandardError
           model.abort_operation
@@ -184,22 +186,10 @@ module UCON
                        slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat)
         end
 
-        # Gola: the profile body occupies the 30 mm zone above the shortened
-        # door, so the elevation reads 750 + 30 = 780 like the catalog page.
-        # Drawn as the visible strip at the front plane, front thickness; the
-        # true cross-section (57 zone / 27 depth) is recorded in the registry
-        # (hardware.gola_profile_body) and stays out of the drawing until the
-        # system is confirmed. Named FRONT_* so the rebuild wipe catches it.
-        kind = (unit['front_layout'] || {})['kind'] || 'single'
-        if gola && %w[single vertical_split].include?(kind)
-          body = (Registry.data['hardware'] || {})['gola_profile_body'] || {}
-          bh = body['upper_dim_mm'] || 30
-          gola_mat = Geometry.material(model, 'UCON_Gola_Aluminium', [168, 168, 168])
-          Geometry.box(defn.entities, 'FRONT_GOLA_PROFILE',
-                       0, front_y,
-                       s::PLINTH_H_MM + unit['height_mm'] - bh,
-                       unit['width_mm'], s::FRONT_T_MM, bh, gola_mat)
-        end
+        # Gola (door 75): the 30 mm zone above the shortened door stays EMPTY
+        # by decision (2026-08-16) - drawing the profile body read as noise.
+        # The true cross-section stays recorded in the registry
+        # (hardware.gola_profile_body) for when a detailed view needs it.
       end
 
       def html

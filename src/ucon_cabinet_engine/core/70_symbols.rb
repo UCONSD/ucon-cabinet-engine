@@ -107,8 +107,11 @@ module UCON
         definition.entities.erase_entities(doomed) unless doomed.empty?
       end
 
-      # unit: registry hash; hinge_side: 'lh'/'rh'/nil.
-      def draw(model, definition, unit, hinge_side)
+      # unit: registry hash; hinge_side: 'lh'/'rh'/nil;
+      # front_height_mm: the ACTUAL door height (780 handle / 750 gola) —
+      # the elevation V outlines the real leaf, not the family height.
+      # nil falls back to the family height (handle default).
+      def draw(model, definition, unit, hinge_side, front_height_mm = nil)
         clear(definition)
         layout = unit['front_layout'] || {}
         kind   = layout['kind'] || 'single'
@@ -168,15 +171,17 @@ module UCON
              { x: w / 2.0, w: w / 2.0, hinge: 'rh' }]
           end
 
+        door_h = front_height_mm || h
+
         leaves.each_with_index do |leaf, i|
           hinge_x   = leaf[:hinge] == 'lh' ? leaf[:x] : leaf[:x] + leaf[:w]
           opening_x = leaf[:hinge] == 'lh' ? leaf[:x] + leaf[:w] : leaf[:x]
 
           g = definition.entities.add_group
           g.name = "SYM_FRONT_#{i + 1}"
-          apex = [opening_x.mm, y_face.mm, (z0 + h / 2.0).mm]
+          apex = [opening_x.mm, y_face.mm, (z0 + door_h / 2.0).mm]
           g.entities.add_line([hinge_x.mm, y_face.mm, z0.mm], apex)
-          g.entities.add_line([hinge_x.mm, y_face.mm, (z0 + h).mm], apex)
+          g.entities.add_line([hinge_x.mm, y_face.mm, (z0 + door_h).mm], apex)
           finalize(g, front_tag, mat)
 
           g = definition.entities.add_group
