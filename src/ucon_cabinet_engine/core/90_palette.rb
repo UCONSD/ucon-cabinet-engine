@@ -20,17 +20,7 @@ module UCON
           resizable: false
         )
         @dialog.set_html(html)
-        @dialog.add_action_callback('build_by_code') do |_|
-          input = UI.inputbox(['Article code'], ['B80601'], 'UCON — Build by code')
-          if input
-            code = input[0].to_s.strip.upcase
-            begin
-              Generator.build(code) unless code.empty?
-            rescue StandardError => e
-              UI.messagebox("Build failed:\n\n#{e.message}")
-            end
-          end
-        end
+        @dialog.add_action_callback('build_by_code') { |_| show_picker }
         @dialog.add_action_callback('panel')  { |_| Panel.show }
         @dialog.add_action_callback('symbols') do |_, mode|
           Symbols.show_mode(Sketchup.active_model, mode.to_sym)
@@ -50,6 +40,72 @@ module UCON
         @dialog.show
         @dialog.execute_script("setVersion(#{CabinetEngine.version_line.inspect})")
         nil
+      end
+
+      def show_picker
+        require 'json'
+        @picker&.close rescue nil
+        @picker = UI::HtmlDialog.new(
+          dialog_title: 'UCON — Build unit', preferences_key: 'UCONPicker',
+          style: UI::HtmlDialog::STYLE_UTILITY, width: 340, height: 300,
+          resizable: false
+        )
+        catalog = Registry.catalog
+        @picker.set_html(picker_html(catalog))
+        @picker.add_action_callback('build') do |_, code|
+          begin
+            Generator.build(code)
+          rescue StandardError => e
+            UI.messagebox("Build failed:\n\n#{e.message}")
+          end
+        end
+        @picker.show
+      end
+
+      GROUP_LABELS = {
+        'base_door'          => 'Door units',
+        'base_doors'         => 'Two-door units',
+        'base_drawers_jumbo' => 'Drawer units'
+      }.freeze
+
+      def picker_html(catalog)
+        require 'json'
+        groups = catalog.group_by { |c| c['type_key'] }
+        options = groups.map do |key, rows|
+          items = rows.sort_by { |c| [c['depth_mm'], c['width_mm']] }.map do |c|
+            "<option value=\"#{c['code']}\">#{c['code']}  —  #{c['width_mm']}×#{c['height_mm']}×#{c['depth_mm']}</option>"
+          end.join
+          "<optgroup label=\"#{GROUP_LABELS[key] || key}\">#{items}</optgroup>"
+        end.join
+        <<~HTML
+          <!DOCTYPE html><html><head><meta charset="utf-8"><style>
+            body{font:13px -apple-system,Helvetica,Arial;margin:0;padding:14px;background:#f5f5f4;color:#222}
+            select{width:100%;font-size:13px;padding:4px}
+            #desc{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;margin:10px 0;
+                  font-size:12px;line-height:1.5;min-height:74px}
+            #desc b{font-size:13px} .src{color:#888;font-size:11px}
+            button{width:100%;padding:9px;border:0;border-radius:6px;background:#2563eb;color:#fff;
+                   font-size:13px;cursor:pointer}
+          </style></head><body>
+            <select id="code" size="1" onchange="upd()">#{options}</select>
+            <div id="desc"></div>
+            <button onclick="sketchup.build(document.getElementById('code').value)">Build</button>
+            <script>
+              var CAT = #{catalog.to_json};
+              function upd(){
+                var code = document.getElementById('code').value;
+                var c = CAT.find(function(x){ return x.code === code; });
+                if(!c) return;
+                document.getElementById('desc').innerHTML =
+                  '<b>' + c.code + '</b> · ' + c.family + '<br>' +
+                  c.description + '<br>' +
+                  'W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm<br>' +
+                  '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
+              }
+              window.onload = upd;
+            </script>
+          </body></html>
+        HTML
       end
 
       def html

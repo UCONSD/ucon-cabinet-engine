@@ -21,6 +21,25 @@ module UCON
     module Generator
       module_function
 
+      # Placement: a new unit lands on the floor (z = 0). If a UCON unit is
+      # selected when building, the new one continues the run - flush to the
+      # selected unit's right edge, inheriting its orientation (a rotated run
+      # keeps its direction); the visual joint comes from the reveal, so no
+      # gap. Nothing selected -> origin.
+      def placement_transform(model)
+        sel = model.selection.grep(Sketchup::ComponentInstance).find do |i|
+          i.definition.get_attribute(Contract::DICTIONARY, 'code')
+        end
+        return Geom::Transformation.new unless sel
+
+        width = sel.definition.get_attribute(Contract::DICTIONARY, 'width_mm').to_f
+        t = sel.transformation
+        shifted = t * Geom::Transformation.translation(Geom::Vector3d.new(width.mm, 0, 0))
+        # pin to the floor regardless of where the selected unit sits
+        o = shifted.origin
+        Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * shifted
+      end
+
       def build(code, model = Sketchup.active_model)
         unit = Registry.lookup(code)
         s    = Standards
@@ -63,7 +82,7 @@ module UCON
           # time; door symbols wait for a hinge_side from the panel.
           Symbols.draw(model, definition, unit, nil)
 
-          instance = model.active_entities.add_instance(definition, Geom::Transformation.new)
+          instance = model.active_entities.add_instance(definition, placement_transform(model))
           instance.name = "Cesar #{code} — #{unit['description']}"
 
           model.selection.clear

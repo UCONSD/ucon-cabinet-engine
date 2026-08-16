@@ -68,6 +68,17 @@ module UCON
               codes(manufacturer).sort.join(', ')
       end
 
+      # Flat catalog for pickers: every code with its type, dims and source.
+      def catalog(manufacturer = 'cesar')
+        each_code(data(manufacturer)).map do |row, family_name, family, type_key, unit_type|
+          { 'code' => row['code'], 'width_mm' => row['width_mm'],
+            'depth_mm' => row['depth_mm'], 'height_mm' => family['height_mm'],
+            'family' => family_name, 'type_key' => type_key,
+            'description' => unit_type['description'],
+            'source_ref' => unit_type['source_ref'] }
+        end
+      end
+
       # Iterate every code row. With a block, yields
       # (row, family_name, family, type_key, unit_type); without, returns an
       # array of those tuples.

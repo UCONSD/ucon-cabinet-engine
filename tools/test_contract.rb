@@ -350,5 +350,14 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
+check('registry catalog: 38 rows, each with code/dims/description/source') do
+  cat = Registry.catalog
+  raise cat.length.to_s unless cat.length == 38
+  raise 'incomplete row' unless cat.all? { |c|
+    c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
+    c['description'] && c['source_ref'] && c['type_key']
+  }
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
