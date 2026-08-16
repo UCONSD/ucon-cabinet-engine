@@ -66,9 +66,9 @@ module UCON
             x2 = slab[:x_mm] + slab[:w_mm]
             z1 = z0 + slab[:z_mm]
             z2 = z1 + slab[:h_mm]
-            d1 = g.entities.add_line([x1.mm, y_face.mm, z1.mm], [x2.mm, y_face.mm, z2.mm])
-            d2 = g.entities.add_line([x1.mm, y_face.mm, z2.mm], [x2.mm, y_face.mm, z1.mm])
-            [d1, d2].each { |ed| ed.layer = front_tag if ed }
+            # UCON convention: one diagonal, top-left to bottom-right.
+            d = g.entities.add_line([x1.mm, y_face.mm, z2.mm], [x2.mm, y_face.mm, z1.mm])
+            d.layer = front_tag if d
           end
           # Plan: fully extended drawer, dashed. Travel = LEGRABOX NL fitted
           # to this depth (user-provided Blum table; travel==NL recorded as an
@@ -87,6 +87,9 @@ module UCON
               a = pts[i]; b = pts[(i + 1) % 4]
               g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
             end
+            # A closed loop auto-creates a face; erase it or the plan gets a
+            # filled rectangle instead of four dashed lines.
+            g.entities.grep(Sketchup::Face).each(&:erase!)
             edges.compact.each { |ed| ed.layer = plan_tag }
           end
           return
