@@ -216,6 +216,34 @@ check('the generator never guesses hinge_side') do
   attrs = Generator.attributes_for(Registry.lookup('B80601'))
   raise 'hinge_side was set' if attrs.key?('hinge_side')
 end
+check('front slabs: single door -> one full slab') do
+  slabs = Generator.front_slabs(Registry.lookup('B80601'))
+  raise slabs.inspect unless slabs.length == 1 &&
+                             slabs[0][:w_mm] == 600 && slabs[0][:h_mm] == 780
+end
+check('front slabs: two-door unit -> two equal slabs') do
+  slabs = Generator.front_slabs(Registry.lookup('B70900'))
+  raise slabs.inspect unless slabs.length == 2 &&
+                             slabs.all? { |sl| sl[:w_mm] == 450.0 && sl[:h_mm] == 780 } &&
+                             slabs[1][:x_mm] == 450.0
+end
+check('front slabs: drawer unit -> 195/195/390 top to bottom, jumbo at the bottom') do
+  slabs = Generator.front_slabs(Registry.lookup('B81253'))
+  hs = slabs.map { |sl| sl[:h_mm] }
+  zs = slabs.map { |sl| sl[:z_mm] }
+  raise slabs.inspect unless hs == [390.0, 195.0, 195.0] && zs == [0.0, 390.0, 585.0]
+end
+check('front slab heights that do not sum to the door height raise') do
+  bad = Registry.lookup('B81253').merge(
+    'front_layout' => { 'kind' => 'horizontal', 'heights_mm_top_to_bottom' => [200, 200, 200] }
+  )
+  begin
+    Generator.front_slabs(bad)
+    raise 'accepted'
+  rescue RuntimeError => e
+    raise e.message unless e.message.include?('do not sum')
+  end
+end
 check('interior confirmed by source is recorded in notes, not drawn') do
   attrs = Generator.attributes_for(Registry.lookup('B80601'))
   raise attrs['notes'] unless attrs['notes'].include?('1 shelf')

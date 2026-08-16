@@ -58,6 +58,7 @@ module UCON
             'opening'            => unit_type['opening'],
             'handed'             => unit_type['handed'],
             'interior_confirmed' => unit_type['interior_confirmed'] || [],
+            'front_layout'       => unit_type['front_layout'],
             'source_ref'         => "#{reg['source_pdf']} #{unit_type['source_ref']}",
             'registry_status'    => reg['registry_status']
           }

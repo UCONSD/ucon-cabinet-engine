@@ -49,11 +49,14 @@ module UCON
 
           Geometry.box(e, 'CARCASS', 0, 0, z0, w, d, h, carcass_mat)
 
-          Geometry.box(
-            e, 'FRONT',
-            0, -(s::FRONT_GAP_MM + s::FRONT_T_MM), z0,
-            w, s::FRONT_T_MM, h, front_mat
-          )
+          front_y = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
+          front_slabs(unit).each do |slab|
+            Geometry.box(
+              e, slab[:name],
+              slab[:x_mm], front_y, z0 + slab[:z_mm],
+              slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat
+            )
+          end
 
           Contract.write!(definition, attributes_for(unit))
 
@@ -68,6 +71,41 @@ module UCON
         rescue StandardError
           model.abort_operation
           raise
+        end
+      end
+
+      # Front layout -> flat slab list, in mm, z measured from the carcass
+      # bottom. Slabs butt together with no drawn gap, so each joint reads as
+      # exactly one line — the same one-line-per-edge rule as the flush front.
+      # Pure; tested headless.
+      def front_slabs(unit)
+        w = unit['width_mm']
+        h = unit['height_mm']
+        layout = unit['front_layout'] || { 'kind' => 'single' }
+
+        case layout['kind']
+        when 'vertical_split'
+          n = layout['count'].to_i
+          slab_w = w / n.to_f
+          (0...n).map do |i|
+            { name: "FRONT_#{i + 1}_OF_#{n}",
+              x_mm: (i * slab_w).round(1), z_mm: 0,
+              w_mm: slab_w.round(1), h_mm: h }
+          end
+        when 'horizontal'
+          heights = layout['heights_mm_top_to_bottom'].map(&:to_f)
+          unless (heights.sum - h).abs < 0.001
+            raise "front_layout heights #{heights.inspect} do not sum to #{h}"
+          end
+          z = 0.0
+          heights.reverse.each_with_index.map do |hh, i|
+            slab = { name: "FRONT_#{i + 1}_FROM_BOTTOM",
+                     x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1) }
+            z += hh
+            slab
+          end
+        else
+          [{ name: 'FRONT', x_mm: 0, z_mm: 0, w_mm: w, h_mm: h }]
         end
       end
 
