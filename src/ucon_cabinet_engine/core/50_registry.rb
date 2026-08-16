@@ -23,15 +23,55 @@ module UCON
         File.expand_path('../../..', __dir__)
       end
 
-      def registry_path(manufacturer = 'cesar')
-        File.join(repo_root, 'registry', "#{manufacturer}.json")
+      def registry_dir(manufacturer = 'cesar')
+        File.join(repo_root, 'registry', manufacturer)
       end
 
+      # The catalog is stored as one file per catalog section:
+      #   registry/cesar/_manifest.json  - shared facts (grammar, hardware,
+      #                                    external specs, order axes)
+      #   registry/cesar/<section>.json  - one catalog section: class,
+      #                                    section title, family, unit types
+      # One extracted catalog page = one file = one commit. The loader merges
+      # everything into the same structure the old single file had, so
+      # nothing downstream changes. Sections sharing a family (e.g. Sink base
+      # H.78) merge their unit_types into that family; each unit type is
+      # stamped with its section and class for the picker.
+      #
+      # Cached by mtime: unchanged files are not re-read; an edited file is
+      # picked up on the next call - same hot-edit behaviour as before.
       def data(manufacturer = 'cesar')
-        path = registry_path(manufacturer)
-        raise "Registry not found: #{path}" unless File.exist?(path)
+        dir = registry_dir(manufacturer)
+        raise "Registry directory not found: #{dir}" unless File.directory?(dir)
 
-        JSON.parse(File.read(path))
+        files  = Dir.glob(File.join(dir, '*.json')).sort
+        stamps = files.map { |f| [f, File.mtime(f).to_f] }.to_h
+        @cache ||= {}
+        cached = @cache[manufacturer]
+        return cached[:data] if cached && cached[:stamps] == stamps
+
+        manifest_path = File.join(dir, '_manifest.json')
+        raise "Registry manifest missing: #{manifest_path}" unless File.exist?(manifest_path)
+
+        merged = JSON.parse(File.read(manifest_path))
+        merged['families'] ||= {}
+        (files - [manifest_path]).each do |file|
+          sec = JSON.parse(File.read(file))
+          fam_name = sec['family']
+          raise "#{file}: section file must name its 'family'" unless fam_name
+
+          fam = merged['families'][fam_name] ||= {}
+          payload = sec['data'] || {}
+          (payload['unit_types'] || {}).each do |key, unit_type|
+            unit_type['section'] = sec['section'] if sec['section']
+            unit_type['class']   = sec['class'] if sec['class']
+            (fam['unit_types'] ||= {})[key] = unit_type
+          end
+          payload.each { |k, v| fam[k] = v unless k == 'unit_types' }
+        end
+
+        @cache[manufacturer] = { stamps: stamps, data: merged }
+        merged
       end
 
       # All codes across every family and unit type.
@@ -75,7 +115,8 @@ module UCON
             'depth_mm' => row['depth_mm'], 'height_mm' => family['height_mm'],
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],
-            'source_ref' => unit_type['source_ref'] }
+            'source_ref' => unit_type['source_ref'],
+            'section' => unit_type['section'], 'class' => unit_type['class'] }
         end
       end
 

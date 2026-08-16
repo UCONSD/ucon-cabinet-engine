@@ -1,0 +1,230 @@
+{
+  "manufacturer": "cesar",
+  "schema_version": "1",
+  "contract_revision": "1.2",
+  "catalog_edition": "2021 price list (later update notation)",
+  "source_pdf": "CESAR - 2 Kitchen System.pdf",
+  "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
+  "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
+  "verified_on": "2026-08-16",
+  "scope_note": "Covers H.78 hinged-door, two-door, drawers+jumbo (p.36, p.39), jumbo-drawers and drawer+jumbo units (p.40). Sink (p.46-47), corner (p.44-45), waste, appliance and remaining drawer variants are NOT yet in this registry - extend only after reading their pages.",
+  "code_grammar": {
+    "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
+    "depth_digit": {
+      "note": "FAMILY-SPECIFIC. Verified for H.78: 7=d.35, 8=d.62, 9=d.67 (printed p.36/PDF 38). H.58.5 differs: 6=d.47, 4=d.62 (printed p.35/PDF 37). Never reuse one family's mapping for another.",
+      "H.78": {
+        "7": 350,
+        "8": 620,
+        "9": 670
+      }
+    },
+    "width_field": {
+      "note": "Lookup, not arithmetic: 45 maps to 05, 105 maps to 10. Verified printed p.36, p.39.",
+      "mm_to_code": {
+        "150": "01",
+        "300": "03",
+        "450": "05",
+        "600": "06",
+        "750": "07",
+        "900": "09",
+        "1050": "10",
+        "1200": "12"
+      }
+    },
+    "config_suffix": {
+      "note": "NOT globally unique: B80300 (pull-out door, W300) and B80600 (two-door unit, W600) share suffix 00. Decoding a code therefore requires the explicit code rows below; a suffix grammar cannot recover configuration. Verified printed p.36."
+    }
+  },
+  "order_axes_outside_code": {
+    "door_version": {
+      "values": [
+        "handle_or_push_pull_780",
+        "gola_750"
+      ],
+      "contract_key": "opening_method",
+      "note": "Each base-unit page shows door heights 78 and 75 over a single code table; gola takes the top 30 mm. Object Contract 4.1. Verified printed p.36/PDF 38.",
+      "elda_open": "Order notation for the chosen version - Elda_Open_Questions Q1"
+    },
+    "hinge_side": {
+      "values": [
+        "rh",
+        "lh"
+      ],
+      "contract_key": "hinge_side",
+      "note": "Source states '1 rh or lh door' with one code per width; hinge side is a per-order choice. Contract v1.2. Verified printed p.36/PDF 38."
+    }
+  },
+  "pricing_groups": {
+    "note": "Code tables carry price columns for groups 1-11. Group labels are structure only; no price is ever extracted (Object Contract 1.2)."
+  },
+  "hardware": {
+    "status_note": "CONTROL level: taken from Plinths_Handles_Grip_Recess_Source_Extract_v0.1 (rows marked 'confirmed from source'); page refs are to the source PDF. Not yet re-verified against the PDF by the engine. All PRELIMINARY.",
+    "gola_profiles": [
+      {
+        "code": "GOL001",
+        "name": "L-shaped grip recess - undercounter horizontal",
+        "source_ref": "printed p.615 / PDF 617",
+        "position": "undercounter",
+        "system": "L-shaped"
+      },
+      {
+        "code": "GOL002",
+        "name": "L-shaped grip recess - intermediate horizontal",
+        "source_ref": "printed p.615 / PDF 617",
+        "position": "intermediate",
+        "system": "L-shaped"
+      },
+      {
+        "code": "GOL005",
+        "name": "Straight grip recess - undercounter horizontal",
+        "source_ref": "printed p.620 / PDF 622",
+        "position": "undercounter",
+        "system": "straight"
+      },
+      {
+        "code": "GOL006",
+        "name": "Straight grip recess - intermediate horizontal",
+        "source_ref": "printed p.620 / PDF 622",
+        "position": "intermediate",
+        "system": "straight"
+      }
+    ],
+    "handles": [
+      {
+        "code": "M00001",
+        "name": "Eero",
+        "source_ref": "printed p.584"
+      },
+      {
+        "code": "M00003",
+        "name": "Filo",
+        "source_ref": "printed p.590"
+      },
+      {
+        "code": "M00004",
+        "name": "Line",
+        "source_ref": "printed p.600"
+      },
+      {
+        "code": "M00005",
+        "name": "Ouverture",
+        "source_ref": "printed p.592"
+      },
+      {
+        "code": "M00007",
+        "name": "Knurled Pipe",
+        "source_ref": "printed p.594"
+      },
+      {
+        "code": "M00008",
+        "name": "Shell",
+        "source_ref": "printed p.588"
+      },
+      {
+        "code": "M00009",
+        "name": "Titanium",
+        "source_ref": "printed p.597"
+      },
+      {
+        "code": "M00014",
+        "name": "Lume - with straight grip recess system only",
+        "source_ref": "printed p.587"
+      }
+    ],
+    "handles_excluded": [
+      {
+        "code": "M00010",
+        "name": "Tratto",
+        "reason": "Source: not available for hinged-door base fronts",
+        "source_ref": "printed p.603"
+      },
+      {
+        "code": "M00015",
+        "name": "Oi / Cloe",
+        "reason": "Extract shows the same code on two different handles - conflict, verify before offering",
+        "source_ref": "printed p.578 / p.612"
+      },
+      {
+        "code": "M00016",
+        "name": "Accento / Barchetta",
+        "reason": "Same-code conflict in extract - verify before offering",
+        "source_ref": "printed p.581 / p.612"
+      }
+    ],
+    "push_pull_device": {
+      "code": null,
+      "note": "Device exists (printed p.613) but no article code found in source; P3 - needs Elda confirmation. Selecting push_to_open leaves hardware_ref empty with hardware_source=factory."
+    },
+    "gola_note": "position=undercounter profiles (GOL001 L-shaped / GOL005 straight) are the valid choice for a base-unit front under the worktop; intermediate profiles join stacked front zones and are NOT offered for single-door base units. Source: 'Do not add 57 to carcass height' - the profile lives in the 30 mm gola zone, the carcass does not grow. Cross-restriction: handle Lume M00014 pairs with the straight system only.",
+    "gola_profile_body": {
+      "upper_dim_mm": 30,
+      "zone_height_mm": 57,
+      "profile_depth_mm": 27,
+      "note": "Cross-section from the extract (printed p.615/620): upper dimension 30 fills the gola zone above the 750 door; full grip zone 57 below worktop, profile depth 27. Preliminary drawing shows the visible 30 mm strip at the front plane with front thickness; true section stays recorded here. Do not add to carcass height."
+    }
+  },
+  "external_specs": {
+    "legrabox_runners": {
+      "provenance": "Blum LEGRABOX runner table, provided by Andriy 2026-08-16. NOT a Cesar source fact - kept outside the four-level trust model; Cesar confirmation tracked as Elda Q2.",
+      "columns": "nl_mm / actual_runner_mm / min_internal_depth_overlay_mm / travel_mm (inset adds front thickness; UCON fronts are overlay)",
+      "travel_assumption": "Travel column provided by Andriy 2026-08-16 (second table, values marked approximate '~' in the source): travel = NL - 2. Supersedes the earlier travel=NL assumption.",
+      "rows": [
+        {
+          "nl_mm": 270,
+          "actual_runner_mm": 262,
+          "min_internal_depth_overlay_mm": 273,
+          "travel_mm": 268
+        },
+        {
+          "nl_mm": 300,
+          "actual_runner_mm": 292,
+          "min_internal_depth_overlay_mm": 303,
+          "travel_mm": 298
+        },
+        {
+          "nl_mm": 350,
+          "actual_runner_mm": 342,
+          "min_internal_depth_overlay_mm": 353,
+          "travel_mm": 348
+        },
+        {
+          "nl_mm": 400,
+          "actual_runner_mm": 392,
+          "min_internal_depth_overlay_mm": 403,
+          "travel_mm": 398
+        },
+        {
+          "nl_mm": 450,
+          "actual_runner_mm": 442,
+          "min_internal_depth_overlay_mm": 453,
+          "travel_mm": 448
+        },
+        {
+          "nl_mm": 500,
+          "actual_runner_mm": 492,
+          "min_internal_depth_overlay_mm": 503,
+          "travel_mm": 498
+        },
+        {
+          "nl_mm": 550,
+          "actual_runner_mm": 542,
+          "min_internal_depth_overlay_mm": 553,
+          "travel_mm": 548
+        },
+        {
+          "nl_mm": 600,
+          "actual_runner_mm": 592,
+          "min_internal_depth_overlay_mm": 603,
+          "travel_mm": 598
+        },
+        {
+          "nl_mm": 650,
+          "actual_runner_mm": 642,
+          "min_internal_depth_overlay_mm": 653,
+          "travel_mm": 648
+        }
+      ]
+    }
+  },
+  "storage_note": "Catalog is stored as one file per catalog section in registry/cesar/. _manifest.json holds shared facts (grammar, hardware, external specs); section files hold unit types and codes. The loader merges them; one extracted catalog page = one file = one commit."
+}

@@ -410,5 +410,10 @@ check('every new code yields contract-valid attributes') do
   end
 end
 
+check('split storage: every catalog row is stamped with its section and class') do
+  cat = Registry.catalog
+  raise 'missing stamps' unless cat.all? { |c| c['section'] == 'Base units H. 78' && c['class'] == 'base' }
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
