@@ -49,67 +49,11 @@ module UCON
 
         module_function
 
+        # Since M1.4 this is a thin delegate: the registry-driven generator
+        # builds every unit, B80601 included. Kept so the existing menu item,
+        # dev_reload habit and tests keep working unchanged.
         def build(model = Sketchup.active_model)
-          s  = Standards
-          z0 = s::PLINTH_H_MM
-
-          model.start_operation("UCON: build #{CODE}", true)
-
-          begin
-            carcass_mat = Geometry.material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216])
-            front_mat   = Geometry.material(model, 'UCON_Front_White',        [245, 245, 245])
-            plinth_mat  = Geometry.material(model, 'UCON_Plinth_White',       [245, 245, 245])
-
-            definition = model.definitions.add(definition_name)
-            e = definition.entities
-
-            # Plinth — recessed, so the toe kick reads as a shadow line.
-            plinth = Geometry.box(
-              e, 'PLINTH',
-              0, s::PLINTH_SETBACK_MM, 0,
-              WIDTH_MM, s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
-            )
-            # Confirmed decision: vertical end edges hidden, so a run of
-            # cabinets reads as one continuous base.
-            Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
-
-            # Carcass — one volume. This is the envelope §6.2 asks for.
-            Geometry.box(
-              e, 'CARCASS',
-              0, 0, z0,
-              WIDTH_MM, DEPTH_MM, HEIGHT_MM, carcass_mat
-            )
-
-            # Front — sits proud of the carcass, separated by the gap.
-            #
-            # DRAWN FLUSH: the outline is the full 600 x 780, coinciding with
-            # the carcass, so elevations show one line per edge instead of a
-            # 1.5 mm step cluster at every corner. The real reveal
-            # (Standards::FRONT_REVEAL_MM per side, a confirmed decision) is
-            # recorded in the contract attributes and in 10_standards.rb; it is
-            # the representation that omits it, not the data.
-            Geometry.box(
-              e, 'FRONT_SINGLE',
-              0,
-              -(s::FRONT_GAP_MM + s::FRONT_T_MM),
-              z0,
-              WIDTH_MM, s::FRONT_T_MM, HEIGHT_MM, front_mat
-            )
-
-            Contract.write!(definition, contract_attributes)
-
-            instance = model.active_entities.add_instance(definition, Geom::Transformation.new)
-            instance.name = "Cesar #{CODE}"
-
-            model.selection.clear
-            model.selection.add(instance)
-            model.commit_operation
-            model.active_view.zoom(instance)
-            instance
-          rescue StandardError
-            model.abort_operation
-            raise
-          end
+          Generator.build(CODE, model)
         end
 
         # Overall bounding dimensions of what actually gets drawn, including the

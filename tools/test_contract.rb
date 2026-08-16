@@ -14,6 +14,8 @@ require_relative '../src/ucon_cabinet_engine/core/20_contract'
 # metadata and derived dimensions are reachable from here. 30_geometry is the
 # one core file that genuinely needs SketchUp and is deliberately not loaded.
 require_relative '../src/ucon_cabinet_engine/core/40_unit_b80601'
+require_relative '../src/ucon_cabinet_engine/core/50_registry'
+require_relative '../src/ucon_cabinet_engine/core/60_generator'
 
 Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
@@ -180,6 +182,43 @@ check('no hardware is invented') do
 end
 check('notes record the envelope-only representation') do
   raise 'envelope not mentioned' unless B80601.notes.downcase.include?('envelope')
+end
+
+puts "\nregistry + generator (M1.4 integration)"
+Registry  = UCON::CabinetEngine::Registry
+Generator = UCON::CabinetEngine::Generator
+
+check('registry loads and holds 38 codes') do
+  n = Registry.codes.length
+  raise "got #{n}" unless n == 38
+end
+check('B80601 resolves to the frozen-baseline dimensions') do
+  u = Registry.lookup('B80601')
+  raise u.inspect unless u['width_mm'] == 600 && u['depth_mm'] == 620 &&
+                         u['height_mm'] == 780 && u['unit_type'] == 'base_door' &&
+                         u['handed'] == true
+end
+check('an unknown code raises with the known-code list') do
+  begin
+    Registry.lookup('B99999')
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('not in the registry')
+  end
+end
+check('EVERY registry code yields contract-valid attributes') do
+  Registry.codes.each do |code|
+    attrs = Generator.attributes_for(Registry.lookup(code))
+    Contract.validate!(attrs)
+  end
+end
+check('the generator never guesses hinge_side') do
+  attrs = Generator.attributes_for(Registry.lookup('B80601'))
+  raise 'hinge_side was set' if attrs.key?('hinge_side')
+end
+check('interior confirmed by source is recorded in notes, not drawn') do
+  attrs = Generator.attributes_for(Registry.lookup('B80601'))
+  raise attrs['notes'] unless attrs['notes'].include?('1 shelf')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

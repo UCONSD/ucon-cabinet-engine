@@ -18,7 +18,7 @@ require 'sketchup.rb'
 module UCON
   module CabinetEngine
     PLUGIN_NAME = 'UCON Cabinet Engine' unless defined?(PLUGIN_NAME)
-    VERSION     = '0.2.0'               unless defined?(VERSION)
+    VERSION     = '0.3.0'               unless defined?(VERSION)
 
     # expand_path, not bare dirname: if SketchUp ever loads this file through a
     # relative path, the glob below silently finds nothing and the engine
@@ -58,6 +58,18 @@ module UCON
     # ---- UI registration: exactly once per SketchUp session ----------------
     unless defined?(@ui_installed) && @ui_installed
       menu = UI.menu('Extensions').add_submenu(PLUGIN_NAME)
+
+      menu.add_item('Build by code…') do
+        begin
+          input = UI.inputbox(['Article code'], ['B80601'], 'UCON — Build by code')
+          if input
+            code = input[0].to_s.strip.upcase
+            Generator.build(code) unless code.empty?
+          end
+        rescue StandardError => e
+          UI.messagebox("Build failed:\n\n#{e.message}")
+        end
+      end
 
       menu.add_item('Build B80601 — H.78 base unit') do
         begin
