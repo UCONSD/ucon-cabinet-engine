@@ -1,7 +1,7 @@
 # UCON Object Contract — v1
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v1 (revision v1.1) · **Date:** 2026-07-29 · **Status:** Locked (change only via versioned migration)
+**Version:** v1 (revision v1.2) · **Date:** 2026-08-16 · **Status:** Locked (change only via versioned migration)
 
 This document defines the data foundation every other part of the Cabinet Engine depends
 on: the attribute namespace written onto model objects, the component structure, the
@@ -48,6 +48,7 @@ exporter reads it off any object without knowing what the object is.
 | `opening` | string | no | e.g. `door` · `doors` · `top-hung` · `push-up` · `pull-out` · `bottom-hung` · `folding` | Front / opening configuration (door type) |
 | `opening_method` | string | no | `handle` · `push_to_open` · `gola` | How the front is opened — a separate axis from `code` (see §4.1) |
 | `front_height_mm` | number | no | integer mm | Visible front height; derived from family + `opening_method` (`gola` = family door − 30) |
+| `hinge_side` | string | no | `rh` · `lh` | Hinge side for handed single-door fronts. Chosen per order; NOT encoded in the article code (verified: Kitchen System printed p.36, "1 rh or lh door", single code per width) |
 | `hardware_ref` | string | no | e.g. `GOL001`, `M00001`, or empty | The separately-ordered opening hardware (see §4.1) |
 | `hardware_source` | string | no | `factory` · `client` | Who supplies the opening hardware (empty `hardware_ref` + `client` = client-provided) |
 | `code` | string | no | manufacturer article code as printed (e.g. `B30601`, `PB0500`) | The factory code — see §4 |
@@ -240,6 +241,15 @@ These hold across every tool and document:
   with fixed order; `priority` P1/P2/P3 (P3 blocks until CONFIRMED); registry-as-data
   format with `H.78` as the first worked family. Formalizes the existing source-control
   layer (source hierarchy, extraction status, priority) into the four-level model.
+- **v1.2 (2026-08-16)** — Additive, non-breaking. Added `hinge_side` (`rh`/`lh`):
+  handed single-door units carry one code per width while the hinge side is chosen per
+  order (verified against Kitchen System printed p.36). Also corrected, with source, the
+  `code_grammar` placeholders of §5: for H.78 the depth digit is B7=d.35, B8=d.62,
+  B9=d.67 (family-specific — H.58.5 uses B6=d.47, B4=d.62, printed p.35); the width
+  field is a lookup (15→01, 30→03, 45→05, 60→06, 75→07, 90→09, 105→10, 120→12), not
+  arithmetic; the configuration suffix is NOT globally unique (B80300 pull-out door vs
+  B80600 two-door unit share suffix 00), so codes decode only via explicit per-table
+  code rows, never via a suffix grammar.
 - **v1.1 (2026-07-29)** — Additive, non-breaking. Added `opening_method`
   (`handle`/`push_to_open`/`gola`), derived `front_height_mm`, and `hardware_ref` +
   `hardware_source` (`factory`/`client`); added §4.1 establishing that the factory code

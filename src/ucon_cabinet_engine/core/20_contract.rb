@@ -23,7 +23,7 @@ module UCON
         schema_version object_class manufacturer collection family
         unit_category unit_type geometry_kind
         height_mm depth_mm width_mm corner_geometry
-        opening opening_method front_height_mm
+        opening opening_method front_height_mm hinge_side
         hardware_ref hardware_source
         code code_status pricing_group_ref
         status priority source_ref restrictions notes
@@ -39,6 +39,7 @@ module UCON
         'code_status'     => %w[PRELIMINARY CONFIRMED],
         'status'          => %w[SOURCE CONTROL PLANNING CONFIRMED],
         'opening_method'  => %w[handle push_to_open gola],
+        'hinge_side'      => %w[rh lh],
         'hardware_source' => %w[factory client],
         'priority'        => %w[P1 P2 P3]
       }.freeze

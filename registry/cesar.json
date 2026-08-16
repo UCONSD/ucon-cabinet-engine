@@ -1,0 +1,122 @@
+{
+  "manufacturer": "cesar",
+  "schema_version": "1",
+  "contract_revision": "1.2",
+  "catalog_edition": "2021 price list (later update notation)",
+  "source_pdf": "CESAR - 2 Kitchen System.pdf",
+  "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
+  "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
+  "verified_on": "2026-08-16",
+  "scope_note": "v1 covers H.78 hinged-door, two-door and drawer+jumbo base units (printed p.36, p.39). Sink (p.46-47), corner (p.44-45), waste, appliance and remaining drawer variants are NOT yet in this registry - extend only after reading their pages.",
+
+  "code_grammar": {
+    "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
+    "depth_digit": {
+      "note": "FAMILY-SPECIFIC. Verified for H.78: 7=d.35, 8=d.62, 9=d.67 (printed p.36/PDF 38). H.58.5 differs: 6=d.47, 4=d.62 (printed p.35/PDF 37). Never reuse one family's mapping for another.",
+      "H.78": { "7": 350, "8": 620, "9": 670 }
+    },
+    "width_field": {
+      "note": "Lookup, not arithmetic: 45 maps to 05, 105 maps to 10. Verified printed p.36, p.39.",
+      "mm_to_code": { "150": "01", "300": "03", "450": "05", "600": "06", "750": "07", "900": "09", "1050": "10", "1200": "12" }
+    },
+    "config_suffix": {
+      "note": "NOT globally unique: B80300 (pull-out door, W300) and B80600 (two-door unit, W600) share suffix 00. Decoding a code therefore requires the explicit code rows below; a suffix grammar cannot recover configuration. Verified printed p.36."
+    }
+  },
+
+  "order_axes_outside_code": {
+    "door_version": {
+      "values": ["handle_or_push_pull_780", "gola_750"],
+      "contract_key": "opening_method",
+      "note": "Each base-unit page shows door heights 78 and 75 over a single code table; gola takes the top 30 mm. Object Contract 4.1. Verified printed p.36/PDF 38.",
+      "elda_open": "Order notation for the chosen version - Elda_Open_Questions Q1"
+    },
+    "hinge_side": {
+      "values": ["rh", "lh"],
+      "contract_key": "hinge_side",
+      "note": "Source states '1 rh or lh door' with one code per width; hinge side is a per-order choice. Contract v1.2. Verified printed p.36/PDF 38."
+    }
+  },
+
+  "pricing_groups": {
+    "note": "Code tables carry price columns for groups 1-11. Group labels are structure only; no price is ever extracted (Object Contract 1.2)."
+  },
+
+  "families": {
+    "H.78": {
+      "height_mm": 780,
+      "depths_mm": [350, 620, 670],
+      "collections": ["Maxima", "Intarsio"],
+      "source_ref": "CESAR - 2 Kitchen System.pdf printed p.36-43 / PDF 38-45",
+      "unit_types": {
+        "base_door": {
+          "description": "Base unit with door - 1 rh or lh door, 1 shelf",
+          "opening": "door",
+          "handed": true,
+          "interior_confirmed": ["1 shelf"],
+          "source_ref": "printed p.36 / PDF 38",
+          "codes": [
+            { "code": "B70101", "width_mm": 150,  "depth_mm": 350 },
+            { "code": "B70301", "width_mm": 300,  "depth_mm": 350 },
+            { "code": "B70501", "width_mm": 450,  "depth_mm": 350 },
+            { "code": "B70601", "width_mm": 600,  "depth_mm": 350 },
+            { "code": "B80101", "width_mm": 150,  "depth_mm": 620 },
+            { "code": "B80301", "width_mm": 300,  "depth_mm": 620 },
+            { "code": "B80501", "width_mm": 450,  "depth_mm": 620 },
+            { "code": "B80601", "width_mm": 600,  "depth_mm": 620 },
+            { "code": "B90301", "width_mm": 300,  "depth_mm": 670 },
+            { "code": "B90501", "width_mm": 450,  "depth_mm": 670 },
+            { "code": "B90601", "width_mm": 600,  "depth_mm": 670 }
+          ],
+          "notes": "W150 exists only at d.35 and d.62 - there is no B90101. The explicit rows are the authority; do not synthesise missing combinations."
+        },
+        "base_doors": {
+          "description": "Base unit with doors - 2 doors, 1 shelf",
+          "opening": "doors",
+          "handed": false,
+          "interior_confirmed": ["1 shelf"],
+          "source_ref": "printed p.36 / PDF 38",
+          "codes": [
+            { "code": "B70600", "width_mm": 600,  "depth_mm": 350 },
+            { "code": "B70900", "width_mm": 900,  "depth_mm": 350 },
+            { "code": "B71200", "width_mm": 1200, "depth_mm": 350 },
+            { "code": "B80600", "width_mm": 600,  "depth_mm": 620 },
+            { "code": "B80900", "width_mm": 900,  "depth_mm": 620 },
+            { "code": "B81200", "width_mm": 1200, "depth_mm": 620 },
+            { "code": "B90600", "width_mm": 600,  "depth_mm": 670 },
+            { "code": "B90900", "width_mm": 900,  "depth_mm": 670 },
+            { "code": "B91200", "width_mm": 1200, "depth_mm": 670 }
+          ]
+        },
+        "base_drawers_jumbo": {
+          "description": "Base unit with drawers and jumbo drawer - 2 drawers, 1 jumbo drawer",
+          "opening": "pull-out",
+          "handed": false,
+          "interior_confirmed": ["2 drawers", "1 jumbo drawer"],
+          "source_ref": "printed p.39 / PDF 41",
+          "codes": [
+            { "code": "B70553", "width_mm": 450,  "depth_mm": 350 },
+            { "code": "B70653", "width_mm": 600,  "depth_mm": 350 },
+            { "code": "B70753", "width_mm": 750,  "depth_mm": 350 },
+            { "code": "B70953", "width_mm": 900,  "depth_mm": 350 },
+            { "code": "B71053", "width_mm": 1050, "depth_mm": 350 },
+            { "code": "B71253", "width_mm": 1200, "depth_mm": 350 },
+            { "code": "B80553", "width_mm": 450,  "depth_mm": 620 },
+            { "code": "B80653", "width_mm": 600,  "depth_mm": 620 },
+            { "code": "B80753", "width_mm": 750,  "depth_mm": 620 },
+            { "code": "B80953", "width_mm": 900,  "depth_mm": 620 },
+            { "code": "B81053", "width_mm": 1050, "depth_mm": 620 },
+            { "code": "B81253", "width_mm": 1200, "depth_mm": 620 },
+            { "code": "B90553", "width_mm": 450,  "depth_mm": 670 },
+            { "code": "B90653", "width_mm": 600,  "depth_mm": 670 },
+            { "code": "B90753", "width_mm": 750,  "depth_mm": 670 },
+            { "code": "B90953", "width_mm": 900,  "depth_mm": 670 },
+            { "code": "B91053", "width_mm": 1050, "depth_mm": 670 },
+            { "code": "B91253", "width_mm": 1200, "depth_mm": 670 }
+          ],
+          "notes": "Servo Drive referenced on the page as an option; drawer internals beyond the confirmed front layout are not established."
+        }
+      }
+    }
+  }
+}

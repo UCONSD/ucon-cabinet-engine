@@ -104,6 +104,10 @@ rejects('a confirmed code on an unconfirmed object',
 rejects('a blocked P3 object claiming PLANNING',
         with('priority' => 'P3'), 'blocked at CONTROL')
 
+puts "\nhinge side (contract v1.2)"
+accepts('a handed door unit may record hinge_side', with('hinge_side' => 'lh'))
+rejects('an invalid hinge_side', with('hinge_side' => 'left'), 'is not one of')
+
 puts "\nstatus ordering (§3 — must not be alphabetical)"
 check('SOURCE < CONTROL < PLANNING < CONFIRMED') do
   ranks = %w[SOURCE CONTROL PLANNING CONFIRMED].map { |s| Contract.status_rank(s) }
