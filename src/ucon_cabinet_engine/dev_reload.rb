@@ -22,7 +22,13 @@ if _ucon_files.empty?
   raise "[UCON] no core files found under #{_ucon_dir}/core - has the repository moved?"
 end
 
-_ucon_files.each { |file| load file }
+_ucon_verbose = $VERBOSE
+$VERBOSE = nil  # constant re-assignment warnings are the point of a reload, not a problem
+begin
+  _ucon_files.each { |file| load file }
+ensure
+  $VERBOSE = _ucon_verbose
+end
 
 puts "[UCON] #{UCON::CabinetEngine.version_line} — " \
      "reloaded #{_ucon_files.length} file(s): " \

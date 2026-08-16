@@ -39,7 +39,17 @@ module UCON
       files = core_files
       raise "No core files found under #{SHELL_ROOT}/core" if files.empty?
 
-      files.each { |file| load file }
+      # Re-loading a file re-assigns its constants, which is exactly what a
+      # reload is for — but Ruby warns about every one of them, and the noise
+      # buries real output. Silence warnings for the duration of the load
+      # only; anything else (syntax errors, exceptions) still surfaces.
+      previous_verbose = $VERBOSE
+      $VERBOSE = nil
+      begin
+        files.each { |file| load file }
+      ensure
+        $VERBOSE = previous_verbose
+      end
       files
     end
 
