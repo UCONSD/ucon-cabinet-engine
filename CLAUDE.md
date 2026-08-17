@@ -14,6 +14,25 @@ Repo is symlinked into SketchUp Plugins:
 `~/Library/Application Support/SketchUp 2025/SketchUp/Plugins/ucon_cabinet_engine
  -> ~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine`
 
+## How we work: demand-driven
+
+Development is driven by building a REAL kitchen, not by completing the catalog
+or the feature list up front. Andriy models an actual project; when he hits a
+missing element, THAT becomes the next task — extract the catalog section,
+add the module, or write the behaviour, verify it on the same kitchen that was
+blocked, continue. The architecture is built for exactly this: catalog is
+per-section JSON files (add one, the picker shows it, no code change), core
+hot-reloads, picker and symbols derive from data.
+
+Consequence for planning: the roadmap is a MENU of unlocks, not a fixed queue.
+Pick the milestone the current kitchen needs (sink wall → M1.7; shared plinth
+in a run → M2.1a; finishes → M1.8), not the next number.
+
+Discipline (Control-doc failure signal): when a real kitchen needs something,
+ask "catalog fact or one-off?" — a catalog fact goes in the registry (verified
+against the source), a one-off goes on that unit's attributes. Never let a
+project-specific choice harden into a global standard.
+
 ## Non-negotiable domain rules
 
 1. **The source PDF wins.** Catalog facts enter the registry only after

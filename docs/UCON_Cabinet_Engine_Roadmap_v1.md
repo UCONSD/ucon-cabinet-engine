@@ -172,7 +172,14 @@ Verify tool and exporter (rest of M1.4) — deliberately deferred: nothing to
 export until real layouts exist. Catalog-extraction SKILL (M1.5) — the
 extraction workflow is being exercised page by page instead.
 
-**Next milestones (agreed order):**
+**Development strategy: demand-driven (2026-08-16).** Work is driven by
+building a real kitchen. When modelling hits a missing element, that element is
+the next task. The list below is therefore a MENU of unlocks, not a fixed
+queue — pick what the current kitchen needs. Order shown is a reasonable
+default, not a mandate. (Full rationale: the "How we work" section of
+CLAUDE.md.)
+
+**Milestone menu:**
 
 - **M1.6 — Project defaults.** Per-model defaults dialog (depth, door
   version, gola system, handle, finishes); new units inherit; panel becomes
