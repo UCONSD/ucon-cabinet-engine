@@ -16,3 +16,6 @@ sources/**/*.xls
 
 # --- SketchUp scratch ---
 *.skb
+sources/**/*.png
+sources/**/*.jpg
+sources/**/*.jpeg
