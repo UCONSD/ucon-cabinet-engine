@@ -219,6 +219,47 @@ CLAUDE.md.)
 - **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
   packaging (build step copies registry/ into the payload).
 
+### 7.05 Will demand-driven growth break the foundation? (2026-08-16)
+
+Honest layered assessment, so future work knows what is safe to touch.
+
+**Load-bearing (redo almost never):** Object Contract, trust model,
+CabinetEngine dictionary, code grammar, registry/code separation. Designed to
+extend, not rewrite — already went v1.0 → v1.1 → v1.2 (added hinge_side and
+order axes) with ZERO existing units broken. It knows nothing about specific
+cabinet types, so new types cannot break it. Small on purpose: the less the
+foundation promises, the less can be wrong in it.
+
+**Data (cannot break by construction):** a new catalog section is a new file;
+the loader merges it; existing sections are untouched. Safest layer, and the
+one touched most often under the demand-driven plan.
+
+**Tools — fluid, expect rework, that is their job:** generator, panel, symbols,
+picker. "Foundation stable, tools fluid." Reworking a tool is a local swap in
+core/ (minutes, tests stay green, foundation untouched) — e.g. the opening
+symbols were rewritten ~4 times in one session with no ripple. This is what
+"redo" costs here: a part swap, not a rebuild.
+
+**Genuine rework risks (named so nobody is surprised later):**
+1. **Corners / arrangement.** Placement today is a single-axis (X) shift.
+   Corners need rotation and may force revisiting how a unit's position in a
+   run is stored. `geometry_kind=corner` is already in the Contract, but this
+   logic cannot be truly validated until a real corner exists — a placement
+   refactor is plausible there (M2.2). NOT a foundation change.
+2. **First genuinely new object class.** Everything so far is a rectangular
+   floor cabinet. A sink with a bowl, a carousel corner, a shaped worktop may
+   show a current geometry simplification was too narrow — that grows
+   `30_geometry.rb` by one case, not a rebuild.
+
+**What actually protects against "redo everything":** 77 headless tests (break
+the foundation, know in seconds); physical layer boundaries (a tool rework
+cannot reach data or contract); git + small commits (every change reversible).
+
+**The one thing that could force a big redo:** discovering the Contract failed
+to anticipate something fundamental (an object no `geometry_kind` describes).
+Mitigated by keeping the Contract small and source-verified; no cracks in 2
+days / 74 codes so far. If it ever happens: versioned migration, not rewrite.
+
 ### 7.1 Auto-arrangement track (added 2026-08-16)
 
 Source: `docs/Autoarrangement_Note_v0.1.md` (project note). Status against it:
