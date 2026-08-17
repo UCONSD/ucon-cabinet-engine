@@ -115,7 +115,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 134 checks. Run after every change; keep it green. New pure
+  currently 136 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -139,7 +139,7 @@ project-specific choice harden into a global standard.
 Core v0.23.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 134 green checks.
+hinge side), dashed opening symbols on two hideable tags, 136 green checks.
 
 Registry: 126 codes in three sections of family H.78 — base units (103, printed
 p.36, p.39, p.40 complete and the corner units of p.42), sink bases (20,
@@ -166,7 +166,15 @@ and differ only in the gola front split (165+555 vs 195+555); the source
 never names the distinction.
 
 Q5 which side GBBF01 stands on for a 75 cm dishwasher door; Q6 whether an
-appliance panel in a gola kitchen orders its own GOL profile.
+appliance panel in a gola kitchen orders its own GOL profile; Q7 whether
+"1 rh or lh door" on the corner base names the door's hinge or the cabinet's
+execution, given that the code already carries D/S and the drawings contradict
+each other (p.10/p.11 draw RH, p.42 draws LH).
+
+Clearances the catalog requires between a unit and its neighbour (5 cm closing
+strips, corner filler minimums, modification limits) are quoted with sources in
+`docs/Clearance_Rules_H78_v0.1.md`. None of it is implemented: it is written
+down so placement (M2.1a / M2.2) starts from the source instead of memory.
 
 Page numbers: always cite PRINTED pages (PDF = printed + 2, verified against
 the page footers). Notes written before 2026-08-17 sometimes cited PDF
