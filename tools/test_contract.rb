@@ -192,9 +192,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 100 codes (80 base + 20 sink base)') do
+check('registry loads and holds 103 codes (80 base + 20 sink + 3 appliance)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 100
+  raise "got #{n}" unless n == 103
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -351,9 +351,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 100 rows, each with code/dims/description/source') do
+check('registry catalog: 103 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 100
+  raise cat.length.to_s unless cat.length == 103
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
     c['description'] && c['source_ref'] && c['type_key']
@@ -419,7 +419,9 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise "missing stamps: #{bad.map { |c| c['code'] }.inspect}" unless bad.empty?
 
   sections = cat.map { |c| c['section'] }.uniq.sort
-  raise sections.inspect unless sections == ['Base units H. 78', 'Sink base units H. 78']
+  raise sections.inspect unless sections == ['Base units H. 78',
+                                             'Base units H. 78 | for household appliances',
+                                             'Sink base units H. 78']
   raise cat.map { |c| c['class'] }.uniq.inspect unless cat.map { |c| c['class'] }.uniq == ['base']
 end
 
@@ -514,6 +516,43 @@ check('the pull-out door is marked as a mechanism, not a swinging leaf') do
   raise u['front_layout'].inspect unless u['front_layout']['mechanism'] == 'pull_out_door'
 end
 
+puts "\ndishwasher door: an appliance panel and its companion order lines"
+check('the door is an appliance_front panel, not a cabinet') do
+  a = Generator.attributes_for(Registry.lookup('V80630'))
+  raise a['object_class'] unless a['object_class'] == 'appliance_front'
+  raise a.inspect unless [a['width_mm'], a['height_mm'], a['depth_mm']] == [600, 780, 22]
+  Contract.validate!(a)
+end
+check('the door is never handed: its hinges belong to the machine') do
+  u = Registry.lookup('V80730')
+  raise u.inspect unless u['handed'] == false
+  raise u['front_layout'].inspect unless u['front_layout']['hinge_axis'] == 'bottom'
+  raise 'a panel must not carry hinge_side' if Generator.attributes_for(u).key?('hinge_side')
+end
+check('companion refs resolve per width: 45/60 take a filler, 75 adds GBBF01') do
+  refs = ->(code) { Generator.attributes_for(Registry.lookup(code))['companion_refs'] }
+  raise refs.call('V80530').inspect unless refs.call('V80530') == '995945'
+  raise refs.call('V80630').inspect unless refs.call('V80630') == '995946'
+  # 60 + 15 = 75: the appliance behind a 75 door is still 60 wide, so the
+  # filler is the W60 one and GBBF01 makes up the difference.
+  raise refs.call('V80730').inspect unless refs.call('V80730') == '995946,GBBF01'
+end
+check('a cabinet carries no companion key at all') do
+  %w[B80601 B81087 B80614].each do |code|
+    a = Generator.attributes_for(Registry.lookup(code))
+    raise code if a.key?('companion_refs')
+  end
+end
+check('EVERY appliance code yields contract-valid attributes') do
+  Registry.catalog.select { |c| c['section'].include?('household appliances') }.each do |row|
+    Contract.validate!(Generator.attributes_for(Registry.lookup(row['code'])))
+  end
+end
+check('companion_refs is a contract key (v1.3) and rejects nothing valid') do
+  raise 'key missing from the contract' unless Contract::KEYS.include?('companion_refs')
+  Contract.validate!(VALID.merge('companion_refs' => '995946,GBBF01'))
+end
+
 puts "\ncatalog map + picker gaps (what the printed index says exists)"
 # A gap row is either a page (inside a section we hold) or a section carrying
 # the pages we have read. This flattens both shapes to "find me printed p.N".
@@ -561,19 +600,24 @@ check('p.44 is not a gap; p.45, p.46 and the H.84 sections are') do
   %w[p.45 p.46].each { |p| raise "#{p} missing" unless gap_page(p) }
   raise 'H.84 section missing' unless Registry.gaps.any? { |g| g['printed'] == 'p.49-52' }
 end
-check('a section appears once, with its read pages nested inside it') do
+check('a section appears once; a held section reports its pages as type rows') do
   sections = Registry.gaps.select { |g| g['level'] == 'section' }.map { |g| g['section'] }
   raise "duplicated rows: #{sections.inspect}" unless sections.uniq == sections
-  appl = Registry.gaps.find { |g| g['section'].include?('household appliances') }
-  raise appl.inspect unless appl['pages'].map { |p| p['printed'] } == ['p.47', 'p.48']
+  # Appliances became a held section the moment the dishwasher door landed, so
+  # its remaining pages now surface as type-level rows inside it.
+  appl = Registry.gaps.select do |g|
+    g['family'] == 'H.78' && g['section'].include?('household appliances')
+  end
+  raise appl.inspect unless appl.map { |g| g['printed'] } == ['p.47', 'p.48']
+  raise appl.inspect unless appl.all? { |g| g['level'] == 'type' }
 end
-check('decisions are per position: p.47 excludes 3 of 4 types, keeps the dishwasher door') do
+check('decisions are per position: p.47 excludes 3 of 4 types, the dishwasher door is in') do
   g47 = gap_page('p.47')
   raise g47.inspect unless g47
   by_status = g47['types'].group_by { |t| t['status'] }
   raise by_status.transform_values(&:size).inspect unless
-    by_status['excluded'].to_a.size == 3 && by_status['planned'].to_a.size == 1
-  kept = by_status['planned'].first
+    by_status['excluded'].to_a.size == 3 && by_status['extracted'].to_a.size == 1
+  kept = by_status['extracted'].first
   raise kept.inspect unless kept['title'].include?('dishwasher')
   by_status['excluded'].each do |t|
     raise "#{t['title']} has no recorded reason" if t['note'].to_s.empty?

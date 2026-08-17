@@ -1,0 +1,49 @@
+{
+  "section": "Base units H. 78 | for household appliances",
+  "class": "base",
+  "family": "H.78",
+  "source_pages": "printed p.47-48 / PDF 49-50 (subset extracted: the fully-integrated dishwasher door on p.47)",
+  "extraction_note": "Only the dishwasher door is extracted. Printed p.47 fridge/freezer housings and the washing-machine door are EXCLUDED by decision (2026-08-17). Printed p.48 carries a second dishwasher door execution (Maxima 2.2 with Shaker door) and the induction-hob protection - still planned. GBBF01 and the filler profile appear here as companion ORDER LINES, not as buildable rows: the source gives GBBF01 no depth, and which side it stands on is Elda Q5.",
+  "data": {
+    "height_mm": 780,
+    "unit_types": {
+      "appliance_dishwasher_door": {
+        "description": "Door for fully-integrated dishwasher - 1 door, without fixing holes",
+        "object_class": "appliance_front",
+        "opening": "bottom-hung",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.47 / PDF 49",
+        "codes": [
+          { "code": "V80530", "width_mm": 450, "depth_mm": 22 },
+          { "code": "V80630", "width_mm": 600, "depth_mm": 22 },
+          { "code": "V80730", "width_mm": 750, "depth_mm": 22 }
+        ],
+        "notes": "A PANEL, not a cabinet: it bolts onto the appliance's own door, which is why the source specifies it 'without fixing holes' - there are no hinges on it. The hinge axis is therefore a constant of the appliance class (a dishwasher only ever drops down), not a per-order choice, so hinge_side never applies. depth_mm is the front thickness (22, the UCON standard), not a carcass depth. The side elevation prints 78 / 75, so the panel follows the same door-version axis as any front. The page also prints 'cutout for plinth 40' - UNRESOLVED whether the 40 mm is cut from the plinth in front of the appliance or from the panel itself; envelope-only representation does not draw it either way, but do not encode it until read.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "bottom",
+          "note": "One full-height panel hinged along its bottom edge, carried by the machine. Per docs/Drawing_Spec_v0.1.md the elevation symbol is the inverted V and the plan shows it fallen forward by the front height. Not rendered yet - 70_symbols draws a single leaf only when a hinge_side is given, and this object never has one, so nothing is drawn rather than something wrong."
+        },
+        "companions": [
+          {
+            "role": "filler_profile",
+            "by": "width",
+            "map": { "450": "995945", "600": "995946", "750": "995946" },
+            "drawn": false,
+            "source_ref": "printed p.48 / PDF 50",
+            "note": "Filler profile between the dishwasher and the top. Only W45 and W60 exist; the 75 cm door takes the W60 profile because the appliance behind it is 60 cm wide. A strip, like a GOL profile: ordered, never drawn."
+          },
+          {
+            "role": "door_bearing_cabinet",
+            "code": "GBBF01",
+            "applies_to_widths_mm": [750],
+            "drawn": false,
+            "source_ref": "printed p.47 / PDF 49",
+            "note": "Stainless steel cabinet W150 with the door-bearing mechanism, required only by the 75 cm version: 60 (appliance) + 15 = 75. NOT generated as geometry: the source states no depth for it, and which side of the appliance it stands on is Elda Q5. Order line until both are answered."
+          }
+        ]
+      }
+    }
+  }
+}

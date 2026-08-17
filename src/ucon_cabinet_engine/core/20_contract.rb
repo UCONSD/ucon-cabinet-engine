@@ -24,7 +24,7 @@ module UCON
         unit_category unit_type geometry_kind
         height_mm depth_mm width_mm corner_geometry
         opening opening_method front_height_mm hinge_side
-        hardware_ref hardware_source
+        hardware_ref hardware_source companion_refs
         code code_status pricing_group_ref
         status priority source_ref restrictions notes
       ].freeze

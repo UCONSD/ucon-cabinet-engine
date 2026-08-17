@@ -52,17 +52,17 @@
             "types": ["Corner sink base unit", "Corner sink base unit. 120 cm carcass", "Corner sink base unit with 155 degree hinges"],
             "note": "corner units need M2.2 placement" }
         ] },
-      { "class": "base", "family": "H.78", "section": "Base units H. 78 | for household appliances", "printed_pages": "47-48", "status": "not_extracted",
+      { "class": "base", "family": "H.78", "section": "Base units H. 78 | for household appliances", "printed_pages": "47-48", "status": "partial",
         "pages": [
-          { "printed": 47, "status": "not_extracted",
-            "note": "Decisions on this page are per POSITION, not per page: three types are excluded, the dishwasher door is kept and planned.",
+          { "printed": 47, "status": "partial",
+            "note": "Decisions on this page are per POSITION: three types are excluded by decision, the dishwasher door is extracted.",
             "types": [
               { "title": "Floor-standing housing for fridge or freezer with sliding/fixed hinges", "status": "excluded", "decided_on": "2026-08-17",
                 "note": "V80601, V90601 (W60). EXCLUDED by decision, not by oversight - no current project orders Cesar fridge housings. PLANNING trust, reversible on demand." },
               { "title": "Base unit for built-in fridge-freezer with sliding/fixed hinges", "status": "excluded", "decided_on": "2026-08-17",
                 "note": "V80611, V90611 (W60). Excluded with the housing above, same reason." },
-              { "title": "Door for fully-integrated dishwasher", "status": "planned",
-                "note": "V80530 (W45), V80630 (W60), V80730 (W75), plus GBBF01 - a stainless steel cabinet with door-bearing mechanism required by the 75 cm version. KEPT: goes with the dishwasher placeholder task together with p.48, which carries a second dishwasher door execution." },
+              { "title": "Door for fully-integrated dishwasher", "status": "extracted",
+                "note": "V80530 (W45), V80630 (W60), V80730 (W75) - extracted 2026-08-17 as an appliance_front panel. GBBF01 and the filler profile ride along as companion order lines, not as buildable rows." },
               { "title": "Door for fully-integrated washing machine", "status": "excluded", "decided_on": "2026-08-17",
                 "note": "V80640 (W60). Excluded - rare in the kitchens we build." }
             ] },

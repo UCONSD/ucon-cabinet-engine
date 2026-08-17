@@ -1,7 +1,7 @@
 # UCON Object Contract — v1
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v1 (revision v1.2) · **Date:** 2026-08-16 · **Status:** Locked (change only via versioned migration)
+**Version:** v1 (revision v1.3) · **Date:** 2026-08-17 · **Status:** Locked (change only via versioned migration)
 
 This document defines the data foundation every other part of the Cabinet Engine depends
 on: the attribute namespace written onto model objects, the component structure, the
@@ -50,6 +50,7 @@ exporter reads it off any object without knowing what the object is.
 | `front_height_mm` | number | no | integer mm | Visible front height; derived from family + `opening_method` (`gola` = family door − 30) |
 | `hinge_side` | string | no | `rh` · `lh` | Hinge side for handed single-door fronts. Chosen per order; NOT encoded in the article code (verified: Kitchen System printed p.36, "1 rh or lh door", single code per width) |
 | `hardware_ref` | string | no | e.g. `GOL001`, `M00001`, or empty | The separately-ordered opening hardware (see §4.1) |
+| `companion_refs` | string | no | comma-separated codes, e.g. `995946,GBBF01` | Codes the catalog MANDATES alongside this one — see §4.2. Order lines, whether or not they are drawn |
 | `hardware_source` | string | no | `factory` · `client` | Who supplies the opening hardware (empty `hardware_ref` + `client` = client-provided) |
 | `code` | string | no | manufacturer article code as printed (e.g. `B30601`, `PB0500`) | The factory code — see §4 |
 | `code_status` | string | yes | `PRELIMINARY` · `CONFIRMED` | Trust in the code — see §4 |
@@ -174,6 +175,34 @@ the grip-recess version of the cabinet carries its own modification code / surch
 
 ---
 
+### 4.2 Companion codes (added v1.3)
+
+A catalog choice can oblige other order lines. This is not an exception; it is a
+recurring shape of the source:
+
+- Door version 75 (gola) requires its `GOL` grip-recess profile — a separate
+  line, established in §4.1.
+- A dishwasher door requires the filler profile between the appliance and the
+  top (`995945` W45 / `995946` W60, printed p.48), and at W75 additionally
+  `GBBF01`, the stainless steel cabinet carrying the door-bearing mechanism
+  (printed p.47).
+
+`companion_refs` records those codes on the object as a comma-separated string,
+in the order the source presents them. Rules:
+
+1. **Companions are order lines, not geometry.** Whether one is drawn is a
+   separate question — the filler profile is a strip and is never drawn; a
+   companion that is a real box may be generated as its own object, and then
+   it carries its own attributes and its own code.
+2. **Companions are derived from the registry, never typed by a user.** The
+   registry states the rule (which code, at which width); the generator
+   resolves it for the chosen code.
+3. **The exporter must emit every companion**, or the order is incomplete. A
+   companion missing from the schedule is a defect, not a formatting choice.
+4. `hardware_ref` stays what it is — the opening hardware of THIS object.
+   A future revision may fold it into `companion_refs`; until the exporter
+   exists there is no reason to churn it.
+
 ## 5. Rules-registry format
 
 Manufacturer rules live as **data**, not as code. Tools (generator, decoder, verify) read
@@ -236,6 +265,12 @@ These hold across every tool and document:
 
 ## 7. Change log
 
+- **v1.3 (2026-08-17)** — Additive, non-breaking. Added `companion_refs`: codes the
+  catalog mandates alongside the chosen one, recorded as a comma-separated string and
+  emitted by the exporter as separate order lines (§4.2). Driven by the dishwasher door,
+  where a 75 cm door obliges the W60 filler profile (the appliance behind it is 60 wide)
+  plus `GBBF01`; the same shape already existed for gola profiles. No existing key or
+  value changed; every object built under v1.0-v1.2 stays valid.
 - **v1 (2026-07-29)** — Initial contract. Namespace `CabinetEngine` with plain keys;
   single `code` + `code_status`; `status` vocabulary `SOURCE/CONTROL/PLANNING/CONFIRMED`
   with fixed order; `priority` P1/P2/P3 (P3 blocks until CONFIRMED); registry-as-data

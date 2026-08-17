@@ -59,6 +59,29 @@ module UCON
           )
           e = definition.entities
 
+          # An appliance front is a PANEL, not a cabinet: it bolts onto the
+          # machine's own door. No carcass, no plinth — the box behind it is
+          # the client's appliance, not a Cesar object, and it is not drawn
+          # until the placeholder task. The panel sits on the same front line
+          # and at the same height as any other front in the run.
+          if unit['object_class'] == 'appliance_front'
+            Geometry.box(
+              e, 'APPLIANCE_FRONT',
+              0, -(s::FRONT_GAP_MM + s::FRONT_T_MM), z0,
+              w, s::FRONT_T_MM, h, front_mat
+            )
+            Contract.write!(definition, attributes_for(unit))
+            Symbols.draw(model, definition, unit, nil)
+
+            instance = model.active_entities.add_instance(definition, placement_transform(model))
+            instance.name = "Cesar #{code} — #{unit['description']}"
+            model.selection.clear
+            model.selection.add(instance)
+            model.commit_operation
+            model.active_view.zoom(instance)
+            return instance
+          end
+
           plinth = Geometry.box(
             e, 'PLINTH',
             0, s::PLINTH_SETBACK_MM, 0,
@@ -159,10 +182,27 @@ module UCON
       # full-height front; gola is a separate non-default option).
       # hinge_side is NOT set here even for handed units — it is a
       # per-placement order choice, and guessing it would violate §6.4.
+      # Codes the catalog mandates alongside this one (Contract v1.3 §4.2).
+      # Resolved from the registry for THIS code's width — never typed by a
+      # user, never guessed. Returns a comma-separated string, or nil when the
+      # unit has no companions, so the key stays absent rather than empty.
+      def companion_refs_for(unit)
+        refs = (unit['companions'] || []).filter_map do |c|
+          if c['by'] == 'width'
+            (c['map'] || {})[unit['width_mm'].to_s]
+          elsif c['applies_to_widths_mm']
+            c['code'] if c['applies_to_widths_mm'].include?(unit['width_mm'])
+          else
+            c['code']
+          end
+        end
+        refs.empty? ? nil : refs.join(',')
+      end
+
       def attributes_for(unit)
         attrs = {
           'schema_version'  => Contract::SCHEMA_VERSION,
-          'object_class'    => 'cabinet',
+          'object_class'    => unit['object_class'] || 'cabinet',
           'manufacturer'    => unit['manufacturer'],
           'family'          => unit['family'],
           'unit_type'       => unit['description'],
@@ -179,6 +219,8 @@ module UCON
           'source_ref'      => unit['source_ref'],
           'notes'           => notes_for(unit)
         }
+        companions = companion_refs_for(unit)
+        attrs['companion_refs'] = companions if companions
         attrs
       end
 

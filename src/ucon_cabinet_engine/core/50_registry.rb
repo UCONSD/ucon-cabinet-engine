@@ -99,6 +99,8 @@ module UCON
             'handed'             => unit_type['handed'],
             'interior_confirmed' => unit_type['interior_confirmed'] || [],
             'front_layout'       => unit_type['front_layout'],
+            'object_class'       => unit_type['object_class'] || 'cabinet',
+            'companions'         => unit_type['companions'] || [],
             'source_ref'         => "#{reg['source_pdf']} #{unit_type['source_ref']}",
             'registry_status'    => reg['registry_status']
           }

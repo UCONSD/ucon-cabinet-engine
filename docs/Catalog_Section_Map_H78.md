@@ -45,7 +45,7 @@ for any section we extract — a good future test, not yet written.
 | 35 | Sink base units H. 58.5 | not extracted |
 | 36-43 | **Base units H. 78** | partial (p.36, p.40 done) |
 | 44-46 | **Sink base units H. 78** | partial |
-| 47-48 | Base units H. 78 \| for household appliances | p.47 mixed (3 excluded, dishwasher door planned), p.48 planned |
+| 47-48 | Base units H. 78 \| for household appliances | partial — p.47 dishwasher door extracted, 3 positions excluded; p.48 planned |
 | 49-52 | Base units H. 84 | not extracted |
 | 53-54 | Sink base units H. 84 | not extracted |
 | 55-56 | Base units H. 84 \| for household appliances | not extracted |
@@ -69,10 +69,10 @@ the H.78 mapping.
 | 44 | **sink: door · doors · w/jumbo drawer · w/jumbo drawers** | 20 | extracted |
 | 45 | sink with fixed front + jumbo · corner sink with fixed front | 24 | not extracted — Elda Q4 |
 | 46 | corner sink ×3 variants | 10 | not extracted (M2.2) |
-| 47 | fridge/freezer housings · dishwasher door · washing machine door | 8 | 3 positions **excluded**, dishwasher door **planned** |
+| 47 | fridge/freezer housings · **dishwasher door** · washing machine door | 8 | 3 positions **excluded**, dishwasher door **extracted** |
 | 48 | door for integrated dishwasher | 6 | **planned** |
 
-Held: 100 of 231 codes in this block. Printed p.36 was completed on 2026-08-17 — the
+Held: 103 of 231 codes in this block. Printed p.36 was completed on 2026-08-17 — the
 pull-out door (B70100, B80100, B80300, B80400) and the laundry basket
 (B80614, B90614), the six codes the first pass had skipped.
 
@@ -115,6 +115,12 @@ concept:
 | W45 | door + filler profile `995945` |
 | W60 | door + filler profile `995946` |
 | **W75** (p.47, V80730) | door + filler `995946` + **`GBBF01`** |
+
+Implemented 2026-08-17 as `companion_refs` (Contract v1.3 §4.2): the generator
+resolves the companions for the chosen code's width and writes them onto the
+object, so the exporter can emit them as order lines. Neither companion is
+drawn — the filler is a strip, and `GBBF01` has no depth in the source and no
+answered side (Elda Q5), so drawing it would be an invention.
 
 The filler profile ("between the dishwasher and the top", printed p.48) exists
 only in W45 and W60 — a 75 door takes the W60 filler because the appliance

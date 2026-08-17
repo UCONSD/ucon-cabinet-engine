@@ -62,7 +62,7 @@ project-specific choice harden into a global standard.
 2. **Everything is PRELIMINARY** until Cesar/DzineElements (Elda/Giorgio)
    confirms in writing. Trust order: SOURCE < CONTROL < PLANNING < CONFIRMED.
 3. **Object Contract is load-bearing** (`docs/UCON_Object_Contract_v1.md`,
-   currently v1.2). Attribute dictionary `CabinetEngine`, closed key list,
+   currently v1.3). Attribute dictionary `CabinetEngine`, closed key list,
    enforced by `core/20_contract.rb`. Changes only via versioned revision.
 4. **Envelope-only geometry.** Carcass = one volume; front drawn flush
    (the 1.5 mm reveal is recorded data, deliberately not drawn); no interior
@@ -73,6 +73,11 @@ project-specific choice harden into a global standard.
 6. **Per-order axes live outside the article code**: door version 78/75
    (gola = −30 mm, requires GOL profile order lines) and hinge_side (rh/lh,
    never guessed).
+7. **A choice can mandate companion codes** (Contract v1.3 §4.2,
+   `companion_refs`): gola forces its `GOL` profile, a dishwasher door forces
+   the filler profile and — at W75 — `GBBF01`. Companions are resolved from
+   the registry, never typed by hand, and the exporter must emit them all.
+   Being drawn is a separate question from being ordered.
 
 ## Layout
 
@@ -85,7 +90,8 @@ project-specific choice harden into a global standard.
   touch the SketchUp API; 00/10/20/50 must stay headless-loadable.
 - `registry/cesar/` — the catalog AS DATA. `_manifest.json` (grammar,
   hardware, external specs) + one JSON file per catalog section
-  (`base_h78.json`: 80 codes, 7 unit types; `sink_base_h78.json`: 20, 4). One extracted catalog page =
+  (`base_h78.json`: 80 codes, 7 unit types; `sink_base_h78.json`: 20, 4;
+  `appliance_h78.json`: 3, 1). One extracted catalog page =
   one section file = one commit. Loader merges + mtime-caches.
 - `docs/` — Object Contract, Roadmap (see §7/§7.1 for current milestones),
   Elda open questions + email drafts, project notes.
@@ -96,7 +102,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 102 checks. Run after every change; keep it green. New pure
+  currently 108 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -117,13 +123,14 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.15.0. Working: registry-driven generator (build by code, floor
+Core v0.16.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 102 green checks.
+hinge side), dashed opening symbols on two hideable tags, 108 green checks.
 
-Registry: 100 codes in two sections of family H.78 — base units (80, printed
-p.36 complete, p.39, p.40) and sink bases (20, printed p.44). M1.7 proved the
+Registry: 103 codes in three sections of family H.78 — base units (80, printed
+p.36 complete, p.39, p.40), sink bases (20, printed p.44) and the
+fully-integrated dishwasher door (3, printed p.47). M1.7 proved the
 intent: a new section file unfolded new picker levels with zero changes in
 core/. What the catalog contains but we have not extracted is recorded in
 `_manifest.json` → `catalog_map` and shown as grey rows in the picker, so a
