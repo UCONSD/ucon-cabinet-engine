@@ -92,6 +92,29 @@ module UCON
 
       # Closed dashed rectangle at height z; the auto-created face is erased
       # so plans get four lines, not a fill.
+      # Pure geometry of the bottom-hung symbol, in mm, so the rule itself is
+      # testable without SketchUp: the renderer only draws what this returns.
+      #
+      #   :front     — two lines from the bottom corners to the top mid-point
+      #                (base on the hinge axis, apex at the opening edge)
+      #   :plan_rect — the leaf fallen to horizontal: the front width by its own
+      #                height, projecting forward from the front face
+      def bottom_hung_marks(width_mm, z0_mm, door_h_mm, y_face_mm)
+        apex = [width_mm / 2.0, y_face_mm, z0_mm + door_h_mm]
+        {
+          front: [
+            [[0.0, y_face_mm, z0_mm], apex],
+            [[width_mm.to_f, y_face_mm, z0_mm], apex]
+          ],
+          plan_rect: [
+            [0.0, y_face_mm],
+            [width_mm.to_f, y_face_mm],
+            [width_mm.to_f, y_face_mm - door_h_mm],
+            [0.0, y_face_mm - door_h_mm]
+          ]
+        }
+      end
+
       def dashed_rect(group, corners, z)
         corners.each_index do |i|
           a = corners[i]
@@ -157,6 +180,30 @@ module UCON
             dashed_rect(g, [[0, yb], [w, yb], [w, y1], [0, y1]], z_plan)
             finalize(g, plan_tag, mat)
           end
+          return
+        end
+
+        # ---- bottom-hung fronts --------------------------------------------
+        # Drawing_Spec: one rule, not a third symbol — the base of the V lies on
+        # the hinge axis and the apex points at the opening edge. With the hinge
+        # along the bottom, that base is the bottom edge and the figure reads as
+        # an inverted V. In plan the leaf falls flat, projecting forward by its
+        # own height. No hinge_side is involved: the axis is a fact of the type
+        # (a laundry unit) or a constant of the class (an appliance panel).
+        if layout['hinge_axis'] == 'bottom'
+          marks = bottom_hung_marks(w, z0, front_height_mm || h, y_face)
+
+          g = definition.entities.add_group
+          g.name = 'SYM_FRONT_BOTTOM_HUNG'
+          marks[:front].each do |a, b|
+            g.entities.add_line([a[0].mm, a[1].mm, a[2].mm], [b[0].mm, b[1].mm, b[2].mm])
+          end
+          finalize(g, front_tag, mat)
+
+          g = definition.entities.add_group
+          g.name = 'SYM_PLAN_BOTTOM_HUNG'
+          dashed_rect(g, marks[:plan_rect], (z0 + h + 1).mm)
+          finalize(g, plan_tag, mat)
           return
         end
 

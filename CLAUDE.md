@@ -107,7 +107,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 113 checks. Run after every change; keep it green. New pure
+  currently 117 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -128,10 +128,10 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.17.0. Working: registry-driven generator (build by code, floor
+Core v0.18.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 113 green checks.
+hinge side), dashed opening symbols on two hideable tags, 117 green checks.
 
 Registry: 103 codes in three sections of family H.78 — base units (80, printed
 p.36 complete, p.39, p.40), sink bases (20, printed p.44) and the

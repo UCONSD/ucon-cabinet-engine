@@ -122,10 +122,19 @@ what a plan is for.
 
 ## Status
 
-Thumbnails: not implemented, built with M1.7a. The hinge-axis rule above is
-settled but not yet rendered: `70_symbols.rb` today draws side-hung doors and
-drawers only, and no bottom-hung front exists in the registry yet (B80614 /
-B90614 are among the p.36 codes still unextracted, and the dishwasher panel
-comes with the placeholder task). Implement it when the first bottom-hung
-front lands, then test on a real model and correct the spec if the drawing
-argues with it — the spec is the authority, but reality gets a vote.
+Thumbnails: not implemented, built with M1.7a.
+
+The hinge-axis rule IS implemented as of 2026-08-17 (core 0.18.0): bottom-hung
+fronts draw the inverted V in elevation and the fallen leaf in plan, for both
+objects that have one — the laundry unit (B80614 / B90614) and the dishwasher
+panel (V80530 / V80630 / V80730). The geometry lives in a pure function,
+`Symbols.bottom_hung_marks`, so the rule is checked headless and the renderer
+only draws what it returns; door version 75 shortens the elevation apex and the
+plan projection together, because both read the same front height.
+
+Still unrendered: the pull-out door (printed p.36, B70100 / B80100 / B80300 /
+B80400) — it neither swings nor is a drawer, and the travel of its mechanism is
+not in the catalog, so it deliberately draws nothing.
+
+Test on a real model and correct the spec if the drawing argues with it — the
+spec is the authority, but reality gets a vote.

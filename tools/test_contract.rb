@@ -16,6 +16,9 @@ require_relative '../src/ucon_cabinet_engine/core/20_contract'
 require_relative '../src/ucon_cabinet_engine/core/40_unit_b80601'
 require_relative '../src/ucon_cabinet_engine/core/50_registry'
 require_relative '../src/ucon_cabinet_engine/core/60_generator'
+# 70_symbols touches the SketchUp API only when drawing; the geometry rules
+# themselves are pure and are checked here.
+require_relative '../src/ucon_cabinet_engine/core/70_symbols' rescue nil
 require_relative '../src/ucon_cabinet_engine/core/80_panel' rescue nil
 # 90_palette touches the SketchUp API only inside show/show_picker; the HTML
 # builders are pure string work and are checked here.
@@ -551,6 +554,34 @@ end
 check('companion_refs is a contract key (v1.3) and rejects nothing valid') do
   raise 'key missing from the contract' unless Contract::KEYS.include?('companion_refs')
   Contract.validate!(VALID.merge('companion_refs' => '995946,GBBF01'))
+end
+
+if defined?(UCON::CabinetEngine::Symbols)
+  Symbols = UCON::CabinetEngine::Symbols
+  check('bottom-hung front symbol: base on the hinge axis, apex at the opening edge') do
+    m = Symbols.bottom_hung_marks(600, 100, 780, -25)
+    # Two lines from the bottom corners to the mid-point of the top edge: the
+    # inverted V. Same rule as a side-hung door, rotated onto the bottom axis.
+    apex = [300.0, -25, 880]
+    raise m[:front].inspect unless m[:front] == [[[0.0, -25, 100], apex],
+                                                 [[600.0, -25, 100], apex]]
+  end
+  check('bottom-hung plan symbol: the leaf falls forward by its own height') do
+    m = Symbols.bottom_hung_marks(600, 100, 780, -25)
+    raise m[:plan_rect].inspect unless m[:plan_rect] == [[0.0, -25], [600.0, -25],
+                                                        [600.0, -805], [0.0, -805]]
+  end
+  check('gola shortens both marks together: 750 front, 750 projection') do
+    m = Symbols.bottom_hung_marks(600, 100, 750, -25)
+    raise m[:front].inspect unless m[:front].all? { |(_, apex)| apex[2] == 850 }
+    raise m[:plan_rect].inspect unless m[:plan_rect][2] == [600.0, -775]
+  end
+  check('the two bottom-hung fronts we hold are the laundry unit and the panel') do
+    hung = Registry.catalog.map { |c| Registry.lookup(c['code']) }
+                   .select { |u| (u['front_layout'] || {})['hinge_axis'] == 'bottom' }
+                   .map { |u| u['code'] }.sort
+    raise hung.inspect unless hung == %w[B80614 B90614 V80530 V80630 V80730]
+  end
 end
 
 check('the appliance niche is the occupied space, never an order line') do
