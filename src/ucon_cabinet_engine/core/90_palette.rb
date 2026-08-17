@@ -196,13 +196,21 @@ module UCON
               // otherwise would be worse than the gap itself.
               function esc(s){ return String(s==null?'':s)
                 .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+              function badge(s){ return '<span class="tag">' + esc(String(s).replace(/_/g,' ')) + '</span>'; }
               function ghosts(el, keep, title){
                 GAPS.filter(keep).forEach(function(g){
                   var d = document.createElement('div'); d.className='ghost';
-                  var types = (g.types||[]).join(' · ');
-                  d.innerHTML = '<span class="tag">' + esc(g.status.replace(/_/g,' ')) + '</span>' +
+                  // A type carries its own badge only when a decision was made
+                  // about that position specifically — p.47 excludes the fridge
+                  // housings but keeps the dishwasher door.
+                  var types = (g.types||[]).map(function(t){
+                    var own = t.status && t.status !== g.status;
+                    return '<small>' + (own ? badge(t.status) : '') + esc(t.title) +
+                           (own && t.note ? '<br>' + esc(t.note) : '') + '</small>';
+                  }).join('<br>');
+                  d.innerHTML = badge(g.status) +
                     esc(title(g)) + (g.level==='type' ? '' : ' <small>· ' + esc(g.printed) + '</small>') +
-                    (types ? '<br><small>' + esc(types) + '</small>' : '') +
+                    (types ? '<br>' + types : '') +
                     (g.note ? '<br><small>' + esc(g.note) + '</small>' : '');
                   el.appendChild(d);
                 });

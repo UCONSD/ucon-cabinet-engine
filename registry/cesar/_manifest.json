@@ -54,12 +54,21 @@
         ] },
       { "class": "base", "family": "H.78", "section": "Base units H. 78 | for household appliances", "printed_pages": "47-48", "status": "not_extracted",
         "pages": [
-          { "printed": 47, "status": "excluded", "decided_on": "2026-08-17",
-            "types": ["Floor-standing housing for fridge or freezer", "Base unit for built-in fridge-freezer", "Door for fully-integrated dishwasher", "Door for fully-integrated washing machine"],
-            "note": "EXCLUDED by decision, not by oversight: no current project needs Cesar appliance housings. UCON decision at PLANNING trust - reversible the moment a real project asks for one." },
+          { "printed": 47, "status": "not_extracted",
+            "note": "Decisions on this page are per POSITION, not per page: three types are excluded, the dishwasher door is kept and planned.",
+            "types": [
+              { "title": "Floor-standing housing for fridge or freezer with sliding/fixed hinges", "status": "excluded", "decided_on": "2026-08-17",
+                "note": "V80601, V90601 (W60). EXCLUDED by decision, not by oversight - no current project orders Cesar fridge housings. PLANNING trust, reversible on demand." },
+              { "title": "Base unit for built-in fridge-freezer with sliding/fixed hinges", "status": "excluded", "decided_on": "2026-08-17",
+                "note": "V80611, V90611 (W60). Excluded with the housing above, same reason." },
+              { "title": "Door for fully-integrated dishwasher", "status": "planned",
+                "note": "V80530 (W45), V80630 (W60), V80730 (W75), plus GBBF01 - a stainless steel cabinet with door-bearing mechanism required by the 75 cm version. KEPT: goes with the dishwasher placeholder task together with p.48, which carries a second dishwasher door execution." },
+              { "title": "Door for fully-integrated washing machine", "status": "excluded", "decided_on": "2026-08-17",
+                "note": "V80640 (W60). Excluded - rare in the kitchens we build." }
+            ] },
           { "printed": 48, "status": "planned",
             "types": ["Door for integrated dish-washer"],
-            "note": "planned together with the dishwasher appliance placeholder (object_class=appliance_front): the Cesar order line is the door, the machine itself is the client's" }
+            "note": "V88559, V88566, V88569, V88659, V88666, V88669 - a second dishwasher door execution. Planned together with the p.47 dishwasher door and the appliance placeholder (object_class=appliance_front): the Cesar order line is the DOOR, the machine itself is the client's." }
         ] },
       { "class": "base", "family": "H.84", "section": "Base units H. 84", "printed_pages": "49-52", "status": "not_extracted",
         "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78" },

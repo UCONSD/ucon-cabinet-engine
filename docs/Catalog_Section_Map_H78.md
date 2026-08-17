@@ -45,7 +45,7 @@ for any section we extract — a good future test, not yet written.
 | 35 | Sink base units H. 58.5 | not extracted |
 | 36-43 | **Base units H. 78** | partial |
 | 44-46 | **Sink base units H. 78** | partial |
-| 47-48 | Base units H. 78 \| for household appliances | p.47 excluded, p.48 planned |
+| 47-48 | Base units H. 78 \| for household appliances | p.47 mixed (3 excluded, dishwasher door planned), p.48 planned |
 | 49-52 | Base units H. 84 | not extracted |
 | 53-54 | Sink base units H. 84 | not extracted |
 | 55-56 | Base units H. 84 \| for household appliances | not extracted |
@@ -69,7 +69,7 @@ the H.78 mapping.
 | 44 | **sink: door · doors · w/jumbo drawer · w/jumbo drawers** | 20 | extracted |
 | 45 | sink with fixed front + jumbo · corner sink with fixed front | 24 | not extracted — Elda Q4 |
 | 46 | corner sink ×3 variants | 10 | not extracted (M2.2) |
-| 47 | fridge/freezer housings · dishwasher door · washing machine door | 8 | **excluded** |
+| 47 | fridge/freezer housings · dishwasher door · washing machine door | 8 | 3 positions **excluded**, dishwasher door **planned** |
 | 48 | door for integrated dishwasher | 6 | **planned** |
 
 Held: 94 of 231 codes in this block.
@@ -82,19 +82,38 @@ page's grammar has to be read from scratch before anything is extracted from
 it. This is the manifest's warning made concrete: the config suffix and width
 field are not globally uniform, and explicit rows are the only authority.
 
-### Decision — printed p.47 excluded (2026-08-17)
+### Decisions are per POSITION, not per page (2026-08-17)
 
-Cesar appliance housings (floor-standing fridge/freezer housing, built-in
-fridge-freezer unit, fully-integrated dishwasher and washing machine doors) are
-excluded on purpose: no current project orders them. Recorded so a future
-session reads a decision, not an oversight. PLANNING trust, reversible the
-moment a real kitchen asks for one.
+The first version of this map put status on the page, which meant a decision
+could only ever exclude a whole spread. That was wrong: what gets excluded is a
+type. A type in `catalog_map` may therefore be written either as a bare string
+(meaning "same status as its page") or as an object carrying its own status and
+reason. Printed p.47 is the case that forced it:
 
-### Planned — printed p.48 with the dishwasher placeholder
+| Position on p.47 | Codes | Status |
+|---|---|---|
+| Floor-standing housing for fridge or freezer | V80601, V90601 | excluded |
+| Base unit for built-in fridge-freezer | V80611, V90611 | excluded |
+| Door for fully-integrated dishwasher | V80530, V80630, V80730 (+ GBBF01) | **planned** |
+| Door for fully-integrated washing machine | V80640 | excluded |
 
-The page holds the door for an integrated dishwasher. It is scheduled together
-with the dishwasher appliance placeholder, because the two are one deliverable:
-the Cesar order line is the DOOR, while the machine itself is the client's.
+Exclusions are UCON decisions at PLANNING trust — no current project orders
+Cesar fridge housings or a washing-machine door — and are reversible the moment
+a real kitchen asks. They are recorded so a future session reads a decision,
+not an oversight.
+
+### Planned — the dishwasher door spans BOTH pages
+
+The dishwasher door exists in two executions: fully-integrated on printed p.47
+(V80530 / V80630 / V80730, plus `GBBF01`, a stainless steel cabinet with
+door-bearing mechanism that the 75 cm version requires) and a second execution
+on printed p.48 (V88559 … V88669). Both belong to one task together with the
+dishwasher appliance placeholder, because they are one deliverable: the Cesar
+order line is the DOOR, while the machine itself is the client's.
 `object_class=appliance_front` already exists in the Contract; the placeholder
 is the sixth tier of the non-standard spectrum in
 `docs/Bespoke_Elements_Design_Spec_v0.1.md`.
+
+Note also `GBBF01` — a code shape we have not met before (GB prefix, an
+accessory sold with a door). One more reason not to assume the B-grammar
+generalises.

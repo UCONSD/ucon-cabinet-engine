@@ -160,16 +160,34 @@ module UCON
       end
 
       def gap_row(level, sec, page)
+        status = page ? page['status'] : sec['status']
         {
           'level'        => level,
           'class'        => sec['class'],
           'section'      => sec['section'],
           'family'       => sec['family'],
           'printed'      => page ? "p.#{page['printed']}" : "p.#{sec['printed_pages']}",
-          'status'       => (page ? page['status'] : sec['status']),
-          'types'        => (page ? page['types'] : []) || [],
+          'status'       => status,
+          'types'        => normalize_types(page, status),
           'note'         => (page ? page['note'] : sec['note'])
         }
+      end
+
+      # A unit type in the map may be written either as a bare string, meaning
+      # "same status as its page", or as an object with its own status and
+      # reason. The second form exists because a decision is usually about a
+      # POSITION, not about a whole catalog page: p.47 keeps the dishwasher
+      # door while its fridge housings are excluded.
+      def normalize_types(page, fallback_status)
+        ((page || {})['types'] || []).map do |t|
+          if t.is_a?(String)
+            { 'title' => t, 'status' => fallback_status, 'note' => nil }
+          else
+            { 'title'  => t['title'],
+              'status' => t['status'] || fallback_status,
+              'note'   => t['note'] }
+          end
+        end
       end
 
       # Iterate every code row. With a block, yields

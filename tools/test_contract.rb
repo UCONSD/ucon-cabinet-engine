@@ -481,6 +481,10 @@ check('every status in the map is from the closed vocabulary') do
     bad << sec['section'] unless Registry::STATUSES.include?(sec['status'])
     (sec['pages'] || []).each do |pg|
       bad << "#{sec['section']} p.#{pg['printed']}" unless Registry::STATUSES.include?(pg['status'])
+      Registry.normalize_types(pg, pg['status']).each do |t|
+        bad << "p.#{pg['printed']} / #{t['title']}" unless Registry::STATUSES.include?(t['status'])
+        bad << "p.#{pg['printed']} / (untitled type)" if t['title'].to_s.empty?
+      end
     end
   end
   raise bad.inspect unless bad.empty?
@@ -512,12 +516,29 @@ check('p.44 is not a gap; p.45, p.46 and the H.84 sections are') do
   raise printed.inspect if printed.include?('p.44')
   %w[p.45 p.46 p.49-52].each { |p| raise "#{p} missing" unless printed.include?(p) }
 end
-check('p.47 is excluded by decision and p.48 is planned') do
+check('decisions are per position: p.47 excludes 3 of 4 types, keeps the dishwasher door') do
   g47 = Registry.gaps.find { |g| g['printed'] == 'p.47' }
+  raise g47.inspect unless g47
+  by_status = g47['types'].group_by { |t| t['status'] }
+  raise by_status.transform_values(&:size).inspect unless
+    by_status['excluded'].to_a.size == 3 && by_status['planned'].to_a.size == 1
+  kept = by_status['planned'].first
+  raise kept.inspect unless kept['title'].include?('dishwasher')
+  by_status['excluded'].each do |t|
+    raise "#{t['title']} has no recorded reason" if t['note'].to_s.empty?
+  end
+end
+check('p.48 is planned with the dishwasher placeholder') do
   g48 = Registry.gaps.find { |g| g['printed'] == 'p.48' }
-  raise g47.inspect unless g47 && g47['status'] == 'excluded'
-  raise 'p.47 exclusion must carry its reason' unless g47['note'].to_s.include?('EXCLUDED by decision')
   raise g48.inspect unless g48 && g48['status'] == 'planned'
+  raise 'p.48 must point at the placeholder' unless g48['note'].to_s.include?('appliance placeholder')
+end
+check('a bare string type inherits its page status; an object keeps its own') do
+  page = { 'status' => 'not_extracted',
+           'types' => ['plain', { 'title' => 'decided', 'status' => 'excluded', 'note' => 'why' }] }
+  out = Registry.normalize_types(page, 'not_extracted')
+  raise out.inspect unless out[0] == { 'title' => 'plain', 'status' => 'not_extracted', 'note' => nil }
+  raise out.inspect unless out[1]['status'] == 'excluded' && out[1]['note'] == 'why'
 end
 check('p.41 carries its grammar warning into the gap row') do
   g = Registry.gaps.find { |x| x['printed'] == 'p.41' }
