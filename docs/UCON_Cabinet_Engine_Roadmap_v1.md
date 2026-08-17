@@ -1,7 +1,7 @@
 # UCON Cabinet Engine — Roadmap v1
 
 **Org:** UCONSD · **Document role:** Two-phase build plan and milestone register
-**Version:** v1 · **Date:** 2026-07-29 · **Status:** Active planning document
+**Version:** v1 (status update 2026-08-16) · **Status:** Active planning document
 
 This roadmap is a planning document, not a contract. It is expected to be reworked as we
 learn. The foundation it points to (`UCON_Object_Contract_v1.md`) is the stable part;
@@ -127,3 +127,57 @@ is stable.
 Foundation stable, tools fluid. Concrete on the near step, loose on the far ones. Verify
 against the source PDF and never override it. Codes stay PRELIMINARY until human
 confirmation. Ask before assuming catalog facts. Keep changes small and committable.
+
+---
+
+## 7. Status update — 2026-08-16
+
+**Where reality diverged from the plan, and why it was the right call:** the
+Phase 2 shell (extension registrar, menu, floating palette) was built early,
+in v0.1, because the shell/core split with hot reload turned out to be the
+cheapest way to iterate on Phase 1 itself. The shell is ~100 lines and frozen;
+everything fluid lives in core/ and reloads without restarting SketchUp.
+
+**Done (beyond the original M1.x scope):**
+
+- Object Contract implemented and enforced in code (v1.2: + hinge_side);
+  67+ headless checks run without SketchUp.
+- Registry: 74 codes across five H.78 unit types, verified against printed
+  p.36/39/40; stored one-file-per-catalog-section (registry/cesar/) with an
+  mtime-cached merging loader. Code grammar corrected from source (depth digit
+  family-specific; width field is a lookup; suffix not globally unique).
+- Generator (M1.4 forward path): code -> envelope unit with contract
+  attributes; floor snap; build-next-to-selected continues a run.
+- Reverse lookup (M1.4 decoder in practice): Registry.lookup(code).
+- Unit Properties panel: door 78/75, gola with mandatory profile lines
+  (undercounter single for doors, pairs for drawer stacks), handle
+  factory/client, push-to-open (device code pending Elda), hinge side.
+- Opening symbols on two hideable dashed tags (elevation V / diagonals;
+  plan swing arcs / pull-out with real travel), gray, view switcher.
+- Cascading catalog picker: class > section > type > size grid + search.
+- Hardware at CONTROL level: 4 gola profiles, 8 handles (Tratto excluded per
+  source restriction, conflicting M-codes held back), Blum runner table as
+  clearly-marked external spec.
+
+**Not done from M1.x:** UCON_Data_Levels_v1.md (M1.2) — the trust vocabulary
+lives in the Contract §3 and has not needed a separate document yet.
+Verify tool and exporter (rest of M1.4) — deliberately deferred: nothing to
+export until real layouts exist. Catalog-extraction SKILL (M1.5) — the
+extraction workflow is being exercised page by page instead.
+
+**Next milestones (agreed order):**
+
+- **M1.6 — Project defaults.** Per-model defaults dialog (depth, door
+  version, gola system, handle, finishes); new units inherit; panel becomes
+  the exception editor.
+- **M1.7 — Sink base H.78 section** (printed p.46-48): first proof that a new
+  section file unfolds new picker levels with zero code changes. P1 units.
+- **M1.8 — Appearance layer.** registry/ucon_appearance.json working palette
+  + UCONAppearance dictionary on units (outside the Contract namespace);
+  front/carcass finish from the panel.
+- **M1.9 — Elda round one.** Send Q1+Q2 (docs/Elda_Email_Draft_v0.2.md);
+  on written answers move affected registry entries toward CONFIRMED.
+- **M1.10 — Exporter** (when first real layout exists): walk a model, read
+  the CabinetEngine dictionary, emit the factory-code schedule (CSV first).
+- **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
+  packaging (build step copies registry/ into the payload).
