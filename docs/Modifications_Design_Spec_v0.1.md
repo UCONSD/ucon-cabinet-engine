@@ -104,12 +104,13 @@ scope for now (not precluded — the `modifications` array can hold new typed
 entries later): adding structural elements, shaping (989340/989310, status
 unclear), appliance-driven custom cabinets, off-square corners.
 
-## Where US Elements fit
+## Where this fits in the non-standard spectrum
 
-The spectrum of "non-standard": (1) European standard code as-is;
-(2) US Elements — a separate catalog section, own codes (extract exists,
-not yet a registry section); (3) modified standard — this spec; (4) fully
-bespoke / made-to-measure — future. This spec is only (3).
+(1) European standard code as-is; (2) US Elements — a catalog section;
+(3) catalog filler/end/open units (Cesar section, printed p.457 — reach here
+first for simple infill); (4) modified standard — THIS spec (base + 989xxx);
+(5) bespoke / made-to-measure — no code, UCON-defined
+(`docs/Bespoke_Elements_Design_Spec_v0.1.md`). This spec is only (4).
 
 ## Elda Q3
 

@@ -224,6 +224,12 @@ CLAUDE.md.)
   modification ⟺ PRELIMINARY"; validator enforces prohibited families + depth
   maxima; exporter emits the modification order lines. The anti-DC: additive
   data, no heavy editable object.
+- **M1.12 — Bespoke elements** (spec ready:
+  `docs/Bespoke_Elements_Design_Spec_v0.1.md`). Made-to-measure, no catalog
+  code — the simplest object (a named box), the LAST resort after catalog
+  fillers and modifications. Never a fake Cesar code (UCON-internal ref only);
+  exporter emits the full made-to-measure spec; PRELIMINARY until factory
+  feasibility. Build only when a real project needs one.
 - **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
   packaging (build step copies registry/ into the payload).
 
