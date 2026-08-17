@@ -237,6 +237,11 @@ CLAUDE.md.)
 - **US vs EU parameters** — the real sheet uses 19 mm (3/4") fronts, not the
   22 mm EU standard. Front thickness is market-dependent; fold into US Elements
   work and project defaults (M1.6).
+- **Catalog edition stamp — PROACTIVE, do before first real delivery**
+  (strategy: docs/Catalog_Update_Strategy_v0.1.md). Stamp `catalog_edition` on
+  every built unit; cannot be retrofitted to models built without it. Cheap,
+  additive (Contract v1.3); the exporter M1.10 needs it anyway. Catalog diff +
+  model audit tools stay demand-driven (build when Cesar ships a new edition).
 - **M1.12 — Bespoke elements** (spec ready:
   `docs/Bespoke_Elements_Design_Spec_v0.1.md`). Made-to-measure, no catalog
   code — the simplest object (a named box), the LAST resort after catalog
