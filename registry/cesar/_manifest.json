@@ -66,9 +66,16 @@
               { "title": "Door for fully-integrated washing machine", "status": "excluded", "decided_on": "2026-08-17",
                 "note": "V80640 (W60). Excluded - rare in the kitchens we build." }
             ] },
-          { "printed": 48, "status": "planned",
-            "types": ["Door for integrated dish-washer"],
-            "note": "V88559, V88566, V88569, V88659, V88666, V88669 - a second dishwasher door execution. Planned together with the p.47 dishwasher door and the appliance placeholder (object_class=appliance_front): the Cesar order line is the DOOR, the machine itself is the client's." }
+          { "printed": 48, "status": "not_extracted",
+            "note": "Three dishwasher door executions plus two accessories; statuses differ per position.",
+            "types": [
+              { "title": "Door for integrated dish-washer (three executions)", "status": "planned",
+                "note": "V88559/V88659 (2 fronts, aluminium profile for straight groove), V88566/V88666 and V88569/V88669 (1 front each, differing front split). W45 and W60 only - the 75 version exists on p.47. Planned with the p.47 door and the appliance placeholder." },
+              { "title": "Filler profile between the dishwasher and the top", "status": "planned",
+                "note": "995945 (W45), 995946 (W60). Mandatory companion of a dishwasher door - an order line, not drawn, like a GOL profile. A 75 door takes the W60 filler, because the appliance behind it is 60 wide." },
+              { "title": "Protection under induction hob", "status": "not_extracted",
+                "note": "996466 (W60), 996467 (W75), 996469 (W90), 996460 (W105), 996462 (W120). Custom sizing not available per source. Belongs to a hob, not to the dishwasher kit." }
+            ] }
         ] },
       { "class": "base", "family": "H.84", "section": "Base units H. 84", "printed_pages": "49-52", "status": "not_extracted",
         "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78" },

@@ -528,10 +528,17 @@ check('decisions are per position: p.47 excludes 3 of 4 types, keeps the dishwas
     raise "#{t['title']} has no recorded reason" if t['note'].to_s.empty?
   end
 end
-check('p.48 is planned with the dishwasher placeholder') do
-  g48 = Registry.gaps.find { |g| g['printed'] == 'p.48' }
-  raise g48.inspect unless g48 && g48['status'] == 'planned'
-  raise 'p.48 must point at the placeholder' unless g48['note'].to_s.include?('appliance placeholder')
+check('the dishwasher kit is recorded: door and filler planned, hob protection not') do
+  types = Registry.gaps.find { |g| g['printed'] == 'p.48' }['types']
+  door   = types.find { |t| t['title'].include?('dish-washer') }
+  filler = types.find { |t| t['title'].start_with?('Filler profile') }
+  hob    = types.find { |t| t['title'].include?('induction hob') }
+  raise door.inspect unless door && door['status'] == 'planned'
+  raise filler.inspect unless filler && filler['status'] == 'planned'
+  raise hob.inspect unless hob && hob['status'] == 'not_extracted'
+  # The filler is the companion order line; the codes are the source's, and a
+  # 75 door takes the 60 filler because the appliance behind it is 60 wide.
+  %w[995945 995946].each { |c| raise "filler #{c} missing" unless filler['note'].include?(c) }
 end
 check('a bare string type inherits its page status; an object keeps its own') do
   page = { 'status' => 'not_extracted',

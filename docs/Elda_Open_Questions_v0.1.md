@@ -100,3 +100,51 @@ mechanism / framed-glass units, and depth-reduction maxima for drawer units
 the prohibited families and enforce the known depth maxima; width/height
 reduction minimums stay unbounded-but-flagged until confirmed. 989346 is not
 offered until clarified.
+
+---
+
+## Q4 — Sink base units: what distinguishes codes 90 from 91?
+
+**Status:** open · added 2026-08-17
+
+**Context.** Printed p.45 (PDF 47) lists the sink base unit with fixed front
+and jumbo drawer twice, as two code series with **identical widths, depths and
+prices**: B80790/B80990/B81090/B81290 (and d.67 B90790…) against
+B80791/B80991/B81091/B81291 (and B90791…). The corner sink units on the same
+page repeat the pattern: AU925/AU935 against AU945/AU955.
+
+The only visible difference is in the front-height annotations. The first
+series reads 19,5 + 58,5 in the handle version and 16,5 + 55,5 in the grip-
+recess version (sum 720 — two 30 mm recesses). The second reads 19,5 + 58,5
+and 19,5 + 55,5 (sum 750 — one recess). Read against our gola model that looks
+like "where the 30 mm recess is taken": whether the fixed front also loses 30
+under the worktop, or stays full height because it never opens.
+
+**Question.** What distinguishes the two code series? If it is the grip-recess
+arrangement, which one is ordered when the kitchen has a continuous gola line
+across the run?
+
+**Disposition until answered:** printed p.45 is NOT extracted. The four types
+on printed p.44 are in the registry; p.45 waits for this answer rather than a
+guess.
+
+---
+
+## Q5 — 75 cm dishwasher door: which side does GBBF01 go?
+
+**Status:** open · added 2026-08-17
+
+**Context.** Printed p.47 states that for the 75 cm wide dishwasher door
+(V80730) "a stainless steel cabinet is installed adjacent to the 60 cm wide
+appliance", ordered as `GBBF01` (W15), and that "an automatic opening and
+closing mechanism is installed on the right-hand side panel". 60 + 15 = 75, so
+the geometry is unambiguous; the position is not.
+
+**Question.** Is the stainless steel cabinet always on one side (and if so,
+which), or is the side chosen per order? Does the sentence about the
+right-hand side panel fix the cabinet's position, or only describe where the
+mechanism sits within it?
+
+**Disposition until answered:** the engine will treat the side as a per-order
+axis with no default, the same discipline as `hinge_side` — asked, never
+guessed. Nothing is generated until the dishwasher placeholder task is built.

@@ -102,6 +102,24 @@ Cesar fridge housings or a washing-machine door — and are reversible the momen
 a real kitchen asks. They are recorded so a future session reads a decision,
 not an oversight.
 
+### The dishwasher door is a KIT, not a single code
+
+Choosing a dishwasher door mandates companion order lines. Same shape as the
+gola rule (door 75 forces its `GOL` profile lines), second instance of the same
+concept:
+
+| Chosen door | Codes emitted |
+|---|---|
+| W45 | door + filler profile `995945` |
+| W60 | door + filler profile `995946` |
+| **W75** (p.47, V80730) | door + filler `995946` + **`GBBF01`** |
+
+The filler profile ("between the dishwasher and the top", printed p.48) exists
+only in W45 and W60 — a 75 door takes the W60 filler because the appliance
+behind it is 60 wide. It is a strip: recorded, not drawn. `GBBF01` is the
+opposite — a real 15 cm stainless steel box with the door-bearing mechanism, so
+it is generated into the run (60 + 15 = 75). Which side it goes on is Elda Q5.
+
 ### Planned — the dishwasher door spans BOTH pages
 
 The dishwasher door exists in two executions: fully-integrated on printed p.47

@@ -222,15 +222,38 @@ CLAUDE.md.)
   rows in the picker. Readable copy: `docs/Catalog_Section_Map_H78.md`.
   Held: 94 of 231 codes in the H.78 block. Rule established: a placeholder may
   only be shown at a level we have actually read in the source.
-- **Dishwasher placeholder + both dishwasher doors — ONE task.** The door
-  exists in two executions: fully-integrated on printed p.47 (V80530 / V80630 /
-  V80730, plus GBBF01, the stainless steel cabinet the 75 cm version needs) and
-  a second on printed p.48 (V88559…V88669). The machine is the client's, the
-  Cesar order line is the DOOR. Build the appliance placeholder
+- **Dishwasher placeholder + both dishwasher doors — ONE task, and it is a KIT.**
+  The door exists in two executions: fully-integrated on printed p.47
+  (V80530 W45, V80630 W60, V80730 W75) and a second on printed p.48
+  (V88559…V88669, W45 and W60 only). The machine is the client's; the Cesar
+  order line is the DOOR. Build the appliance placeholder
   (`object_class=appliance_front`, sixth tier of the spectrum in
-  `docs/Bespoke_Elements_Design_Spec_v0.1.md`) together with both extractions
-  so the order line and the stand-in land at once. Demand-driven: build when a
-  kitchen has a dishwasher.
+  `docs/Bespoke_Elements_Design_Spec_v0.1.md`) together with both extractions.
+
+  **Choosing a dishwasher door must emit companion order lines, not just the
+  door.** This is the gola pattern again — door 75 already forces its `GOL`
+  profile lines — so the concept is not new, only its second instance. Name it
+  once here and reuse it: a catalog choice may MANDATE companion codes, and the
+  exporter emits them whether or not they are drawn.
+
+  Composition, all source-verified on printed p.47-48:
+  - **Filler profile between the dishwasher and the top** — `995945` (W45),
+    `995946` (W60). Only two widths exist. It is a strip, not a box: recorded
+    as an order line, not drawn, exactly like a `GOL` profile.
+  - **The door** itself, at the chosen width.
+  - **`GBBF01`** — stainless steel cabinet W15 with the door-bearing mechanism,
+    required ONLY by the 75 cm version: the appliance is 60 wide, the door is
+    75, and 60 + 15 = 75. Unlike the filler this is a real box and occupies
+    space in the run, so it is GENERATED as an object, not merely listed.
+  - Therefore: door 45 → 2 codes (door + filler 995945). Door 60 → 2 codes
+    (door + filler 995946). **Door 75 → 3 codes** (door V80730 + filler 995946,
+    because the machine behind it is 60 wide + GBBF01).
+  - Open: which side GBBF01 goes on — Elda Q5. Per-order axis with no default
+    until answered, same discipline as `hinge_side`.
+
+  Also on printed p.48, not part of this kit but noted while reading it:
+  "Protection under induction hob" (`996466` W60 … `996462` W120). A 99xxxx
+  accessory family, extract when a hob needs it.
 - **Printed p.47 — three positions excluded by decision (2026-08-17).** Fridge/
   freezer housing (V80601, V90601), built-in fridge-freezer unit (V80611,
   V90611) and the washing-machine door (V80640) are not extracted because no
