@@ -195,7 +195,7 @@ CLAUDE.md.)
   render a plan-view schematic (geometry_kind=corner); appliance/sink
   pictogram hints become an optional registry field when those sections are
   extracted. Cost: ~60-80 lines JS in picker_html + front_layout passthrough
-  in Registry.catalog. Also adopted from that review, unscheduled: Smart
+  DECISION 2026-08-16: iso direction, catalog-like; TYPE-level iso uses PDF-extracted placeholders with a generative fallback via an optional `thumbnail` field (generative is the default); the result card uses the generated front schematic per code; flame pictogram ignored. Drawing rules are authored in docs/Drawing_Spec_v0.1.md (procedural graphics; spec is the authority, renderer implements it). Also adopted from that review, unscheduled: Smart
   Right Click (context menu on a unit: panel / flip hinge / door version)
   and saved unit variants (code + options preset, extends M1.6 defaults).
   Rejected from it: static asset libraries, door animations (a wireframe
