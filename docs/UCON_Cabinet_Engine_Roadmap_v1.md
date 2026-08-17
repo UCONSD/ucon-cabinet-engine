@@ -181,3 +181,37 @@ extraction workflow is being exercised page by page instead.
   the CabinetEngine dictionary, emit the factory-code schedule (CSV first).
 - **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
   packaging (build step copies registry/ into the payload).
+
+### 7.1 Auto-arrangement track (added 2026-08-16)
+
+Source: `docs/Autoarrangement_Note_v0.1.md` (project note). Status against it:
+the foundation it demands — catalog as data, separate from code — is DONE
+(registry/cesar/, JSON sections; its open question "catalog.rb vs catalog.json"
+is resolved by reality). A seed of the straight run also exists:
+build-next-to-selected chains units flush along X, inheriting the run's
+orientation and snapping to the floor.
+
+Milestones, in the note's own order (straight run before corner, corner
+before interactive):
+
+- **M2.1a — Batch row builder.** Dialog takes an ordered list (codes +
+  quantities) + start point; builds the whole run in one operation. Covers
+  the real workflow: kitchen composition is known from the spec. Includes
+  the shared-plinth decision (one continuous plinth strip per run vs butted
+  per-unit plinths - note leans continuous; hidden plinth ends already make
+  butted read as one).
+- **M2.1b — Worktop.** One slab over the run (open question in the note:
+  part of arrangement or separate step - decide at M2.1a review).
+- **M2.2 — Corner as hinge.** Requires the corner pages first (printed
+  p.44-45, AU/AW codes; geometry_kind=corner already in the Contract).
+  The corner unit comes FROM THE CATALOG - its record defines how run B
+  turns 90 degrees off run A. Open: per-corner-type joining rules
+  (diagonal / L / carousel), Y inheritance through the turn.
+- **M2.3 — Interactive placement tool** (SketchUp Tool API, onMouseMove
+  drag-out) - last, once geometry is settled. Batch covers the drawing
+  workflow until then.
+
+North star from the note, worth keeping verbatim: the goal is presentation
+CAD sheets in LayOut (wireframe, four views: front / plan / side / iso) -
+data quality and correct run geometry over 3D richness. The engine's
+envelope-only + symbols-on-tags representation is already aimed there.
