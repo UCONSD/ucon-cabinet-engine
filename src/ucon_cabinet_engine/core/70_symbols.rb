@@ -29,6 +29,13 @@ module UCON
       TAG_FRONT = 'UCON — Opening (front)'
       TAG_PLAN  = 'UCON — Opening (plan)'
 
+      # Plan symbols are drawn just above the FLOOR, not above the unit.
+      # Drawn at cabinet top they float over the worktops of the neighbours,
+      # and any plan view cut below the worktop loses them entirely — the one
+      # view they exist for. At the floor they sit under every section cut and
+      # read against the run's footprint, which is what a plan shows.
+      PLAN_Z_MM = 1
+
       # Plan symbol: drawer runner lines drawn inset from the unit sides.
       RUNNER_INSET_MM = 25
 
@@ -90,8 +97,6 @@ module UCON
         end
       end
 
-      # Closed dashed rectangle at height z; the auto-created face is erased
-      # so plans get four lines, not a fill.
       # Pure geometry of the bottom-hung symbol, in mm, so the rule itself is
       # testable without SketchUp: the renderer only draws what this returns.
       #
@@ -115,6 +120,8 @@ module UCON
         }
       end
 
+      # Closed dashed rectangle at height z; the auto-created face is erased
+      # so plans get four lines, not a fill.
       def dashed_rect(group, corners, z)
         corners.each_index do |i|
           a = corners[i]
@@ -173,7 +180,7 @@ module UCON
             xi = RUNNER_INSET_MM
             g = definition.entities.add_group
             g.name = 'SYM_PLAN_PULLOUT'
-            z_plan = (z0 + h + 1).mm
+            z_plan = PLAN_Z_MM.mm
             [[[xi, y0], [xi, yb]], [[w - xi, y0], [w - xi, yb]]].each do |a, b|
               g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
             end
@@ -202,7 +209,7 @@ module UCON
 
           g = definition.entities.add_group
           g.name = 'SYM_PLAN_BOTTOM_HUNG'
-          dashed_rect(g, marks[:plan_rect], (z0 + h + 1).mm)
+          dashed_rect(g, marks[:plan_rect], PLAN_Z_MM.mm)
           finalize(g, plan_tag, mat)
           return
         end
@@ -233,7 +240,7 @@ module UCON
 
           g = definition.entities.add_group
           g.name = "SYM_PLAN_#{i + 1}"
-          z_plan  = (z0 + h + 1).mm
+          z_plan  = PLAN_Z_MM.mm
           center  = [hinge_x.mm, y_face.mm, z_plan]
           r       = leaf[:w].mm
 

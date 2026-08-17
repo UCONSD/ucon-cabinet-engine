@@ -128,7 +128,7 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.18.0. Working: registry-driven generator (build by code, floor
+Core v0.19.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
 hinge side), dashed opening symbols on two hideable tags, 117 green checks.

@@ -81,6 +81,20 @@ This distinction is the point, not a detail:
   needs `GBBF01`, a stainless steel cabinet carrying the door-bearing
   mechanism, and that IS a Cesar order line.
 
+### Plan symbols sit at the FLOOR (SETTLED 2026-08-17)
+
+Every plan symbol — door swing, drawer travel, fallen leaf — is drawn just above
+the floor, not above the unit it belongs to.
+
+Two reasons, both found on a real model: at cabinet-top height the dashed marks
+float over the neighbouring worktops and read as clutter rather than as the
+unit's own footprint; and a plan view cut below the worktop — the ordinary way
+to cut a kitchen plan — loses them entirely, which is the one view they exist
+for. At the floor they always sit under the section cut.
+
+This applies to EVERY unit, not only the ones drawn since: doors, drawers and
+bottom-hung fronts alike.
+
 ### Plan view — the leaf drawn where it actually goes
 
 Same principle as the drawer: dashed, real geometry, fully open position.
