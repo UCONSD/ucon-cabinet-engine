@@ -189,9 +189,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 74 codes') do
+check('registry loads and holds 94 codes (74 base + 20 sink base)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 74
+  raise "got #{n}" unless n == 94
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -348,9 +348,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 74 rows, each with code/dims/description/source') do
+check('registry catalog: 94 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 74
+  raise cat.length.to_s unless cat.length == 94
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
     c['description'] && c['source_ref'] && c['type_key']
@@ -412,7 +412,63 @@ end
 
 check('split storage: every catalog row is stamped with its section and class') do
   cat = Registry.catalog
-  raise 'missing stamps' unless cat.all? { |c| c['section'] == 'Base units H. 78' && c['class'] == 'base' }
+  bad = cat.reject { |c| c['section'].to_s != '' && c['class'].to_s != '' }
+  raise "missing stamps: #{bad.map { |c| c['code'] }.inspect}" unless bad.empty?
+
+  sections = cat.map { |c| c['section'] }.uniq.sort
+  raise sections.inspect unless sections == ['Base units H. 78', 'Sink base units H. 78']
+  raise cat.map { |c| c['class'] }.uniq.inspect unless cat.map { |c| c['class'] }.uniq == ['base']
+end
+
+puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
+check('the section adds 20 codes across four unit types') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Sink base units H. 78' }
+  raise rows.length.to_s unless rows.length == 20
+
+  types = rows.group_by { |r| r['type_key'] }.transform_values(&:length)
+  expected = { 'sink_base_door' => 4, 'sink_base_doors' => 6,
+               'sink_base_jumbo_drawer' => 2, 'sink_base_jumbo_drawers' => 8 }
+  raise types.inspect unless types == expected
+end
+check('EVERY sink code yields contract-valid attributes') do
+  Registry.catalog.select { |c| c['section'] == 'Sink base units H. 78' }.each do |row|
+    Contract.validate!(Generator.attributes_for(Registry.lookup(row['code'])))
+  end
+end
+check('sink codes obey the H.78 grammar: depth digit and width lookup') do
+  depth = { '8' => 620, '9' => 670 }
+  width = { '05' => 450, '06' => 600, '07' => 750, '09' => 900, '10' => 1050, '12' => 1200 }
+  Registry.catalog.select { |c| c['section'] == 'Sink base units H. 78' }.each do |row|
+    code = row['code']
+    raise code unless depth[code[1]] == row['depth_mm']
+    raise code unless width[code[2, 2]] == row['width_mm']
+  end
+end
+check('B81087 sink w/jumbo drawers: 1050x780x620, slabs 390/390, gola 360/360') do
+  u = Registry.lookup('B81087')
+  raise u.inspect unless [u['width_mm'], u['height_mm'], u['depth_mm']] == [1050, 780, 620]
+  raise u['unit_type'] unless u['unit_type'] == 'sink_base_jumbo_drawers'
+  hs = Generator.front_slabs(u).map { |x| [x[:h_mm], x[:z_mm]] }
+  raise hs.inspect unless hs == [[390.0, 0.0], [390.0, 390.0]]
+  gs = Panel.effective_slabs(u, true).map { |x| [x[:h_mm], x[:z_mm]] }
+  raise gs.inspect unless gs == [[360.0, 0.0], [360.0, 390.0]]
+end
+check('B80681 sink w/jumbo drawer: one full-height front, gola 750') do
+  u = Registry.lookup('B80681')
+  hs = Generator.front_slabs(u).map { |x| [x[:h_mm], x[:z_mm]] }
+  raise hs.inspect unless hs == [[780.0, 0.0]]
+  gs = Panel.effective_slabs(u, true).map { |x| [x[:h_mm], x[:z_mm]] }
+  raise gs.inspect unless gs == [[750.0, 0.0]]
+end
+check('B80603 sink w/door is handed; B80602 two-door is not') do
+  raise 'B80603' unless Registry.lookup('B80603')['handed'] == true
+  raise 'B80602' unless Registry.lookup('B80602')['handed'] == false
+end
+check('the aluminium tray is recorded as interior, never drawn') do
+  u = Registry.lookup('B81087')
+  raise u['interior_confirmed'].inspect unless u['interior_confirmed'].include?('1 aluminium tray')
+  attrs = Generator.attributes_for(u)
+  raise attrs['notes'].to_s unless attrs['notes'].to_s.include?('aluminium tray')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
