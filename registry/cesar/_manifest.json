@@ -226,5 +226,120 @@
       ]
     }
   },
-  "storage_note": "Catalog is stored as one file per catalog section in registry/cesar/. _manifest.json holds shared facts (grammar, hardware, external specs); section files hold unit types and codes. The loader merges them; one extracted catalog page = one file = one commit."
+  "storage_note": "Catalog is stored as one file per catalog section in registry/cesar/. _manifest.json holds shared facts (grammar, hardware, external specs); section files hold unit types and codes. The loader merges them; one extracted catalog page = one file = one commit.",
+  "modifications": {
+    "status_note": "CONTROL level from Modifications_Customisations_Source_Extract_v0.1 (rows confirmed from source). NOT yet wired to the generator/panel - groundwork for the modifications feature (see docs/Modifications_Design_Spec_v0.1.md). Every modification is feasibility-pending -> PRELIMINARY. Elda Q3 open for min width/height and the 989346 ambiguity.",
+    "master_rule": "Always check feasibility with Cesar before relying on a modified item.",
+    "each_charged_separately": true,
+    "codes": {
+      "width_reduction": {
+        "base_wall": {
+          "code": "989370",
+          "points": 138
+        },
+        "tall": {
+          "code": "989380",
+          "points": 227
+        }
+      },
+      "height_reduction": {
+        "base_wall": {
+          "code": "989370",
+          "points": 138
+        },
+        "tall": {
+          "code": "989370",
+          "points": 138
+        },
+        "min_result_mm": null,
+        "min_note": "not in source - Elda Q3"
+      },
+      "depth_reduction": {
+        "base": {
+          "code": "989350",
+          "points": 92
+        },
+        "tall": {
+          "code": "989360",
+          "points": 143
+        }
+      },
+      "adjustable_feet_h5": {
+        "code": "989053",
+        "points": 22
+      },
+      "wall_hung": {
+        "base": {
+          "code": "989410",
+          "points": 42,
+          "capacity": "240kg/pair"
+        },
+        "tall": {
+          "code": "989411",
+          "points": 84
+        }
+      },
+      "matt_lacquered_carcass": {
+        "base": {
+          "code": "989400",
+          "points": 172
+        },
+        "wall": {
+          "code": "989401",
+          "points": 120
+        },
+        "tall": {
+          "code": "989402",
+          "points": 417
+        },
+        "dim_change": false
+      }
+    },
+    "depth_reduction_max_mm": {
+      "350": 20,
+      "620": 90,
+      "670": 40,
+      "note": "drawer/jumbo units; implied minima 330/530/630 arithmetic, subject to confirmation"
+    },
+    "depth_increase_side_panel": {
+      "steps_mm": [
+        [
+          620,
+          670
+        ],
+        [
+          670,
+          720
+        ],
+        [
+          720,
+          770
+        ]
+      ],
+      "each_step_mm": 50,
+      "points": 41,
+      "note": "one side panel; only listed heights"
+    },
+    "width_modification_prohibited_for": [
+      "appliance units",
+      "units with interior drawers",
+      "units with jumbo drawers",
+      "pull-out units",
+      "units with mechanisms",
+      "tall or wall units with framed glass doors"
+    ],
+    "unclear_pending_elda": {
+      "shaping_special_reduction": {
+        "base_wall": "989340",
+        "tall": "989310",
+        "note": "status unclear; not on units with interior accessories"
+      },
+      "drawer_width_reduction": {
+        "code": "989346",
+        "points": 69,
+        "note": "contradicts interior/jumbo drawer prohibition - Elda Q3"
+      }
+    },
+    "source_ref": "CESAR - 2 Kitchen System.pdf, Modifications/Customisations section (Modifications_Customisations_Source_Extract_v0.1)"
+  }
 }

@@ -216,6 +216,14 @@ CLAUDE.md.)
   hardware, hinge side, W/H/D, status. NOT a joinery cut list — Cesar order
   lines. Can run against the current single-unit models; does not truly need
   a full layout first. Consider pulling ahead of M1.8/M1.9 once M1.7 lands.
+- **M1.11 — Modified elements** (spec ready:
+  `docs/Modifications_Design_Spec_v0.1.md`; registry `modifications` section +
+  Elda Q3 already recorded). Build ONLY when a real project needs a modified
+  unit. Base code immutable; modification codes (989xxx) attached additively;
+  auto-marked on dimension divergence; contract invariant "diverged ⟺ has
+  modification ⟺ PRELIMINARY"; validator enforces prohibited families + depth
+  maxima; exporter emits the modification order lines. The anti-DC: additive
+  data, no heavy editable object.
 - **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
   packaging (build step copies registry/ into the payload).
 

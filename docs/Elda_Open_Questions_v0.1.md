@@ -74,3 +74,29 @@ table provided by Andriy (2026-08-16) sits in the registry as
 engine selects the largest NL fitting the carcass internal depth (d.35→300,
 d.62→550, d.67→600) and draws plan travel = NL as a stated assumption. The
 question stays open until Cesar confirms actual fitted runner lengths.
+
+---
+
+## Q3 — Modification limits and the drawer-width-reduction ambiguity
+
+**Status:** open · added 2026-08-16
+
+**Context.** The Modifications/Customisations section confirms modification
+codes (989370 width/height base-wall, 989380 tall, 989350/989360 depth) added
+as separate order lines to the unmodified base code, with width modification
+prohibited for appliance / interior-drawer / jumbo-drawer / pull-out /
+mechanism / framed-glass units, and depth-reduction maxima for drawer units
+(D.350 −20, D.620 −90, D.670 −40).
+
+**Questions.**
+1. What is the minimum resulting width and height after reduction? The source
+   lists reduction as "available" (989370) but states no lower limit.
+2. Code 989346 (drawer/jumbo-drawer width reduction, 69 pts) appears on the
+   same page that prohibits reducing interior/jumbo drawers. What is the
+   distinction — a drawer box / custom-sized drawer vs an interior-drawer
+   configuration? When does 989346 apply?
+
+**Disposition until answered:** the engine will refuse width modification for
+the prohibited families and enforce the known depth maxima; width/height
+reduction minimums stay unbounded-but-flagged until confirmed. 989346 is not
+offered until clarified.
