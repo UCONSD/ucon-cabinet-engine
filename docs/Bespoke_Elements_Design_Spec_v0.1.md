@@ -13,6 +13,23 @@ logic, no profiles, no article code. The generator already builds boxes.
 Discipline: it is a box and stays a box — do not grow it into a cabinet-scale
 subsystem.
 
+## Buildability ladder (the real purpose — 2026-08-16, from a real sheet)
+
+Custom elements are NOT a production spec — they are a COMMUNICATION to the
+factory, which re-models them (Metron, then production software). The goal is
+"do not complicate the factory's life." When an element is custom, the
+decision ladder is:
+
+1. **Factory builds it** — if they understand the drawing and can make it.
+2. **Change the plan** — avoid needing the custom element at all.
+3. **Simplify the element** — make it factory-friendly.
+4. **Order extra sheet material and fabricate it ourselves (UCON)** — backstop.
+
+Consequence for design: model the MINIMAL, factory-communicable description,
+not the maximal one. Complexity in a bespoke element is a smell — it usually
+means option 1 is at risk, so prefer 2/3, or accept 4. The engine's job is a
+clear, consistently-named, dimensioned box — not a production-accurate model.
+
 ## What defines it
 
 No catalog article code. That is the whole distinction from a modification.
@@ -27,8 +44,13 @@ nothing — UCON/the designer defines it, the catalog does not.
 3. Catalog filler / end / open units — Cesar has this section (printed p.457);
    simple infill panels often EXIST here with codes. Reach here FIRST.
 4. Modified standard — base code + 989xxx (M1.11, spec ready).
-5. **Bespoke / made-to-measure — no code, UCON-defined. LAST resort**, only
-   when nothing catalog-traceable fits.
+5. **Bespoke / made-to-measure — no code, UCON-defined.** The simplest object,
+   used when nothing catalog-traceable fits (subject to the buildability
+   ladder above).
+6. **Appliance placeholder — a stand-in for the client's own appliance**
+   (e.g. DACOR_42_FOUR_DOOR_PANEL_READY_PLACEHOLDER), not cabinetry. Panel-ready
+   so panels plan around it. object_class=appliance_front / geometry_kind=non_dim
+   (already in the Contract). No Cesar code; brand+model in the name.
 
 ## Two safety rules (mirror of the modification danger)
 

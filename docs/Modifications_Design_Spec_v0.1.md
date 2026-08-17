@@ -110,7 +110,8 @@ unclear), appliance-driven custom cabinets, off-square corners.
 (3) catalog filler/end/open units (Cesar section, printed p.457 — reach here
 first for simple infill); (4) modified standard — THIS spec (base + 989xxx);
 (5) bespoke / made-to-measure — no code, UCON-defined
-(`docs/Bespoke_Elements_Design_Spec_v0.1.md`). This spec is only (4).
+(`docs/Bespoke_Elements_Design_Spec_v0.1.md`); (6) appliance placeholder —
+client's own appliance stand-in, panel-ready, no code. This spec is only (4).
 
 ## Elda Q3
 

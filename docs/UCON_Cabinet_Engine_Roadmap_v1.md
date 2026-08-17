@@ -208,7 +208,11 @@ CLAUDE.md.)
   front/carcass finish from the panel.
 - **M1.9 — Elda round one.** Send Q1+Q2 (docs/Elda_Email_Draft_v0.2.md);
   on written answers move affected registry entries toward CONFIRMED.
-- **M1.10 — Exporter — PRIORITY RAISED** (competitive review 2026-08-16:
+- **M1.10 — Exporter — PRIORITY RAISED** — TARGET OUTPUT FORMAT is a real
+  deliverable: the "Custom Elements" sheet (iso views + dimensions + structured
+  machine-generated names), e.g. Bobby_410_Alta_Vista sheet 7/9. Emits catalog
+  order codes for standard/modified units and generated structured names
+  (see docs/Naming_Convention_Spec_v0.1.md) for non-catalog elements. (competitive review 2026-08-16:
   one-click cut list / order schedule is an expected baseline in peer tools,
   not a final flourish; and it feeds the order-ready goal directly). Walk a
   model, read the CabinetEngine dictionary off every unit, emit the factory
@@ -224,6 +228,15 @@ CLAUDE.md.)
   modification ⟺ PRELIMINARY"; validator enforces prohibited families + depth
   maxima; exporter emits the modification order lines. The anti-DC: additive
   data, no heavy editable object.
+- **Naming convention** (spec: docs/Naming_Convention_Spec_v0.1.md) — the
+  engine generates consistent structured names for non-catalog elements;
+  this IS the identity the factory reads. Finalize token set with the factory.
+- **Appliance placeholders** — client-appliance stand-ins (panel-ready), sixth
+  tier of the non-standard spectrum; object_class=appliance_front already in
+  the Contract. Build when a real project needs one.
+- **US vs EU parameters** — the real sheet uses 19 mm (3/4") fronts, not the
+  22 mm EU standard. Front thickness is market-dependent; fold into US Elements
+  work and project defaults (M1.6).
 - **M1.12 — Bespoke elements** (spec ready:
   `docs/Bespoke_Elements_Design_Spec_v0.1.md`). Made-to-measure, no catalog
   code — the simplest object (a named box), the LAST resort after catalog
