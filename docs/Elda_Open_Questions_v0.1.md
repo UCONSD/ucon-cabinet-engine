@@ -172,3 +172,52 @@ units?
 version (the elevation is printed, so the height is a source fact) but does
 NOT require or invent a profile line for it. A profile may still be recorded
 by hand if the order needs one.
+
+
+---
+
+## Q7 — "rh or lh" in the corner base description: the door's hinge, or the cabinet's execution?
+
+**Status:** open · added 2026-08-17
+
+**Context.** A corner base unit is ordered as `AU110D` or `AU110S` — the letter
+is Destra / Sinistra. The carcass is not symmetric (one end carries the door
+and the 8x8 fixed corner front panel, the other is blind), so the mirror is a
+genuinely different article and a U-shaped kitchen needs both. Separately, the
+door itself has a hinge side, which for every other unit we order is a free
+per-order choice that does not change the code.
+
+The catalog uses "rh / lh" for both senses without defining either:
+
+- printed p.42, in the article description: "– 1 rh or lh door";
+- printed p.42, beside the iso of the article: **LH**;
+- printed p.10 ("overall dimensions of corner base units") and printed p.11
+  ("overall dimensions of corner tall units"), inside the plan diagram of the
+  same product: **RH**.
+
+So the two dimension pages illustrate the opposite hand from the price-list
+page, and neither picture is tied to a D or an S. Reading p.10's diagram
+literally — corner on the left, door at the right end, 8x8 immediately left of
+the door — makes RH correspond to D.
+
+**Questions.**
+
+1. In "1 rh or lh door", does rh/lh name the DOOR's hinge side (a free choice
+   inside one article), or the CABINET's execution (already fixed by the D/S
+   letter)?
+2. If it names the door: on a `...D` unit, may either hinge side be ordered,
+   and how is that stated on the order?
+3. Is the RH on printed p.10 / p.11 the same axis as the LH on printed p.42,
+   or are the two pages labelling different things?
+
+**Why it matters.** Our exporter must emit exactly one article code plus, where
+it is a real choice, the hinge side. If rh/lh IS the execution, then "hinge
+side" on a corner unit is not an order field at all and must not be emitted;
+if it is the door, then it is, and the D/S letter alone does not determine how
+the door opens.
+
+**Disposition until answered:** the engine keeps them as two independent axes —
+the code letter drives the geometry (which end carries the door, the 8x8 and
+the wasted space), `hinge_side` drives only the opening symbol. The hand is
+read from the code letter and NEVER from a drawing; see
+`docs/Clearance_Rules_H78_v0.1.md` §5.
