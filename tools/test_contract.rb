@@ -553,6 +553,36 @@ check('companion_refs is a contract key (v1.3) and rejects nothing valid') do
   Contract.validate!(VALID.merge('companion_refs' => '995946,GBBF01'))
 end
 
+check('the appliance niche is the occupied space, never an order line') do
+  u = Registry.lookup('V80730')
+  n = Generator.niche_attributes_for(u)
+  Contract.validate!(n)
+  raise n['object_class'] unless n['object_class'] == 'appliance'
+  raise n['manufacturer'] unless n['manufacturer'] == 'client'
+  raise 'a niche must carry no code' if n['code']
+  raise 'a niche must never carry companions' if n.key?('companion_refs')
+  # Width is the catalog door width - for a 75 door that is the whole opening,
+  # appliance plus GBBF01, so the niche is right whichever side the cabinet
+  # ends up on (Elda Q5).
+  raise n['width_mm'].to_s unless n['width_mm'] == 750
+  # Floor to worktop underside: an appliance stands on the floor.
+  raise n['height_mm'].to_s unless n['height_mm'] == Standards::PLINTH_H_MM + 780
+end
+check('the niche inherits the run depth when there is one, and says which') do
+  u = Registry.lookup('V80630')
+  default = Generator.niche_attributes_for(u)
+  raise default['depth_mm'].to_s unless default['depth_mm'] == 620
+  raise default['notes'] unless default['notes'].include?('no neighbour was selected')
+  inherited = Generator.niche_attributes_for(u, 670, true)
+  raise inherited['depth_mm'].to_s unless inherited['depth_mm'] == 670
+  raise inherited['notes'] unless inherited['notes'].include?('inherited from the neighbouring unit')
+end
+check('appliance is a contract class (v1.4) and appliance_front still is too') do
+  %w[appliance appliance_front].each do |k|
+    raise k unless Contract::ENUMS['object_class'].include?(k)
+  end
+end
+
 check('door version 75 shortens the panel to 750, through the normal front path') do
   u = Registry.lookup('V80630')
   raise Generator.front_slabs(u).inspect unless

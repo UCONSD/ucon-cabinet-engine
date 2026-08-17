@@ -1,7 +1,7 @@
 # UCON Object Contract — v1
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v1 (revision v1.3) · **Date:** 2026-08-17 · **Status:** Locked (change only via versioned migration)
+**Version:** v1 (revision v1.4) · **Date:** 2026-08-17 · **Status:** Locked (change only via versioned migration)
 
 This document defines the data foundation every other part of the Cabinet Engine depends
 on: the attribute namespace written onto model objects, the component structure, the
@@ -265,6 +265,11 @@ These hold across every tool and document:
 
 ## 7. Change log
 
+- **v1.4 (2026-08-17)** — Additive, non-breaking. `object_class` gains `appliance`:
+  the client's machine itself, as opposed to `appliance_front`, the Cesar panel that
+  hides it. The two are deliberately separate objects with opposite natures — the panel
+  is an order line that is drawn, the appliance is drawn but is never an order line, and
+  `manufacturer = client` says so. No existing key or value changed.
 - **v1.3 (2026-08-17)** — Additive, non-breaking. Added `companion_refs`: codes the
   catalog mandates alongside the chosen one, recorded as a comma-separated string and
   emitted by the exporter as separate order lines (§4.2). Driven by the dishwasher door,

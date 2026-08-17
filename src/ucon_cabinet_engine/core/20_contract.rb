@@ -34,7 +34,7 @@ module UCON
       ].freeze
 
       ENUMS = {
-        'object_class'    => %w[cabinet worktop panel filler accessory appliance_front corner_unit],
+        'object_class'    => %w[cabinet worktop panel filler accessory appliance appliance_front corner_unit],
         'geometry_kind'   => %w[linear corner non_dim],
         'code_status'     => %w[PRELIMINARY CONFIRMED],
         'status'          => %w[SOURCE CONTROL PLANNING CONFIRMED],

@@ -62,7 +62,7 @@ project-specific choice harden into a global standard.
 2. **Everything is PRELIMINARY** until Cesar/DzineElements (Elda/Giorgio)
    confirms in writing. Trust order: SOURCE < CONTROL < PLANNING < CONFIRMED.
 3. **Object Contract is load-bearing** (`docs/UCON_Object_Contract_v1.md`,
-   currently v1.3). Attribute dictionary `CabinetEngine`, closed key list,
+   currently v1.4). Attribute dictionary `CabinetEngine`, closed key list,
    enforced by `core/20_contract.rb`. Changes only via versioned revision.
 4. **Envelope-only geometry.** Carcass = one volume; front drawn flush
    (the 1.5 mm reveal is recorded data, deliberately not drawn); no interior
@@ -73,7 +73,12 @@ project-specific choice harden into a global standard.
 6. **Per-order axes live outside the article code**: door version 78/75
    (gola = −30 mm, requires GOL profile order lines) and hinge_side (rh/lh,
    never guessed).
-7. **A choice can mandate companion codes** (Contract v1.3 §4.2,
+7. **An appliance is two objects, not one.** The Cesar panel
+   (`object_class=appliance_front`) is ordered and drawn; the machine's niche
+   (`appliance`, `manufacturer=client`) is drawn and never ordered. Keep them
+   separate — that separation is what lets the exporter emit one and skip the
+   other.
+8. **A choice can mandate companion codes** (Contract v1.3 §4.2,
    `companion_refs`): gola forces its `GOL` profile, a dishwasher door forces
    the filler profile and — at W75 — `GBBF01`. Companions are resolved from
    the registry, never typed by hand, and the exporter must emit them all.
@@ -102,7 +107,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 110 checks. Run after every change; keep it green. New pure
+  currently 113 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -123,10 +128,10 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.16.0. Working: registry-driven generator (build by code, floor
+Core v0.17.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 110 green checks.
+hinge side), dashed opening symbols on two hideable tags, 113 green checks.
 
 Registry: 103 codes in three sections of family H.78 — base units (80, printed
 p.36 complete, p.39, p.40), sink bases (20, printed p.44) and the

@@ -65,6 +65,8 @@ module UCON
           # until the placeholder task. The panel sits on the same front line
           # and at the same height as any other front in the run.
           if unit['object_class'] == 'appliance_front'
+            niche_depth = selected_depth_mm(model)
+            placement   = placement_transform(model)
             # Built through the ordinary front_slabs path and named FRONT…, so
             # the properties panel rebuilds it like any other front: choosing
             # door version 75 shortens the panel to 750 with no special case.
@@ -78,8 +80,27 @@ module UCON
             Contract.write!(definition, attributes_for(unit))
             Symbols.draw(model, definition, unit, nil)
 
-            instance = model.active_entities.add_instance(definition, placement_transform(model))
+            instance = model.active_entities.add_instance(definition, placement)
             instance.name = "Cesar #{code} — #{unit['description']}"
+
+            # The niche is a SEPARATE object, not part of the panel: opposite
+            # natures. The panel is ordered and drawn; the niche is drawn and
+            # never ordered. Keeping them apart is what lets the exporter emit
+            # one and skip the other.
+            niche_attrs = niche_attributes_for(unit, niche_depth, !niche_depth.nil?)
+            niche_def = model.definitions.add(
+              "UCON_APPLIANCE_NICHE_#{unit['width_mm']}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
+            )
+            Geometry.box(
+              niche_def.entities, 'APPLIANCE_NICHE',
+              0, 0, 0,
+              niche_attrs['width_mm'], niche_attrs['depth_mm'], niche_attrs['height_mm'],
+              Geometry.material(model, 'UCON_Appliance_Niche', [200, 200, 198])
+            )
+            Contract.write!(niche_def, niche_attrs)
+            niche = model.active_entities.add_instance(niche_def, placement)
+            niche.name = "Appliance niche #{unit['width_mm']} — client-supplied machine"
+
             model.selection.clear
             model.selection.add(instance)
             model.commit_operation
@@ -202,6 +223,60 @@ module UCON
           end
         end
         refs.empty? ? nil : refs.join(',')
+      end
+
+      # The volume an appliance occupies in the run, NOT the machine itself.
+      # Deliberate: the machine is the client's and its real dimensions are not
+      # a catalog fact, but the space it takes is — the door width comes from
+      # the catalog and the height from our own standards (floor to worktop
+      # underside, because an appliance stands on the floor and the plinth in
+      # front of it is cut away). Depth is inherited from the run when a
+      # neighbour is selected, otherwise the d.62 default, and the note says
+      # which happened.
+      #
+      # It is never an order line: manufacturer is the client, there is no
+      # code, and the exporter must skip object_class = appliance.
+      NICHE_DEFAULT_DEPTH_MM = 620
+
+      def niche_height_mm
+        Standards::PLINTH_H_MM + 780
+      end
+
+      def niche_attributes_for(unit, depth_mm = nil, inherited = false)
+        d = depth_mm || NICHE_DEFAULT_DEPTH_MM
+        {
+          'schema_version' => Contract::SCHEMA_VERSION,
+          'object_class'   => 'appliance',
+          'manufacturer'   => 'client',
+          'unit_type'      => "Appliance niche for #{unit['description']}",
+          'geometry_kind'  => 'linear',
+          'width_mm'       => unit['width_mm'],
+          'depth_mm'       => d,
+          'height_mm'      => niche_height_mm,
+          'code_status'    => 'PRELIMINARY',
+          'status'         => 'PLANNING',
+          'source_ref'     => unit['source_ref'],
+          'notes'          => 'Placeholder for the client-supplied appliance: the SPACE it ' \
+                              'occupies in the run, not the machine. Width from the Cesar door ' \
+                              "code #{unit['code']}; height = plinth + carcass (the appliance " \
+                              'stands on the floor, the plinth in front of it is cut away); ' \
+                              "depth #{inherited ? 'inherited from the neighbouring unit' : 'defaulted to d.62 - no neighbour was selected'}. " \
+                              'Never an order line: the machine is not a Cesar object. The ' \
+                              "page's 'cutout for plinth 40' is recorded as unresolved and is not drawn."
+        }
+      end
+
+      # Depth of the selected UCON unit, so a niche can inherit the run it is
+      # placed into instead of guessing.
+      def selected_depth_mm(model)
+        sel = model.selection.grep(Sketchup::ComponentInstance).first
+        return nil unless sel
+
+        attrs = Contract.read(sel.definition)
+        d = attrs && attrs['depth_mm']
+        d && d.to_i.positive? && d.to_i != Standards::FRONT_T_MM ? d.to_i : nil
+      rescue StandardError
+        nil
       end
 
       def attributes_for(unit)
