@@ -148,3 +148,27 @@ mechanism sits within it?
 **Disposition until answered:** the engine will treat the side as a per-order
 axis with no default, the same discipline as `hinge_side` — asked, never
 guessed. Nothing is generated until the dishwasher placeholder task is built.
+
+
+---
+
+## Q6 — Does an appliance panel in a gola kitchen order its own grip-recess profile?
+
+**Status:** open · added 2026-08-17
+
+**Context.** The dishwasher door (printed p.47, V80530/V80630/V80730) is drawn
+with the same two door-version elevations as any front: 78 and 75. In the 75
+version a cabinet front loses 30 mm and the `GOL` grip-recess profile is
+ordered as its own line (§4.1 of the Object Contract, Q1). The panel, however,
+is not a cabinet front: it bolts onto the appliance, and the profile above it
+runs along the worktop as part of the adjacent units' order.
+
+**Question.** In a gola kitchen, does the dishwasher panel carry a `GOL`
+profile line of its own, or is the profile above it already covered by the
+run? If it does, is it the same undercounter profile as the neighbouring
+units?
+
+**Disposition until answered:** the engine shortens the panel to 750 in the 75
+version (the elevation is printed, so the height is a source fact) but does
+NOT require or invent a profile line for it. A profile may still be recorded
+by hand if the order needs one.

@@ -47,9 +47,18 @@ module UCON
         case method
         when 'gola'
           ref = payload['hardware_ref'].to_s
-          raise ArgumentError, 'Gola (door 75) requires a grip-recess profile (GOL…) — it is a separate order line' if ref.empty?
-          patch['hardware_ref']    = ref
-          patch['hardware_source'] = 'factory'
+          # A cabinet front in the 75 version orders its own GOL profile.
+          # An APPLIANCE panel is not a cabinet front: the profile above it
+          # belongs to the run, and the source never gives the panel a profile
+          # line of its own. Whether one is nevertheless ordered is Elda Q6, so
+          # the profile is optional here rather than invented or demanded.
+          appliance = unit['object_class'] == 'appliance_front'
+          if ref.empty?
+            raise ArgumentError, 'Gola (door 75) requires a grip-recess profile (GOL…) — it is a separate order line' unless appliance
+          else
+            patch['hardware_ref']    = ref
+            patch['hardware_source'] = 'factory'
+          end
         when 'handle'
           if payload['hardware_mode'] == 'client'
             patch['hardware_ref']    = ''

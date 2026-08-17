@@ -65,11 +65,16 @@ module UCON
           # until the placeholder task. The panel sits on the same front line
           # and at the same height as any other front in the run.
           if unit['object_class'] == 'appliance_front'
-            Geometry.box(
-              e, 'APPLIANCE_FRONT',
-              0, -(s::FRONT_GAP_MM + s::FRONT_T_MM), z0,
-              w, s::FRONT_T_MM, h, front_mat
-            )
+            # Built through the ordinary front_slabs path and named FRONT…, so
+            # the properties panel rebuilds it like any other front: choosing
+            # door version 75 shortens the panel to 750 with no special case.
+            front_slabs(unit).each do |slab|
+              Geometry.box(
+                e, slab[:name],
+                slab[:x_mm], -(s::FRONT_GAP_MM + s::FRONT_T_MM), z0 + slab[:z_mm],
+                slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat
+              )
+            end
             Contract.write!(definition, attributes_for(unit))
             Symbols.draw(model, definition, unit, nil)
 

@@ -553,6 +553,32 @@ check('companion_refs is a contract key (v1.3) and rejects nothing valid') do
   Contract.validate!(VALID.merge('companion_refs' => '995946,GBBF01'))
 end
 
+check('door version 75 shortens the panel to 750, through the normal front path') do
+  u = Registry.lookup('V80630')
+  raise Generator.front_slabs(u).inspect unless
+    Generator.front_slabs(u) == [{ name: 'FRONT', x_mm: 0, z_mm: 0, w_mm: 600, h_mm: 780 }]
+  raise Panel.effective_slabs(u, true).inspect unless
+    Panel.effective_slabs(u, true) == [{ name: 'FRONT', x_mm: 0, z_mm: 0, w_mm: 600, h_mm: 750 }]
+  # The slab is named FRONT, so Panel.rebuild_fronts replaces it like any other
+  # front instead of leaving a stale 780 panel behind a new 750 one.
+  raise 'the panel slab must be named FRONT*' unless
+    Generator.front_slabs(u).all? { |sl| sl[:name].start_with?('FRONT') }
+end
+check('an appliance panel may take door 75 without ordering its own GOL profile') do
+  u = Registry.lookup('V80630')
+  patch = Panel.attributes_patch(u, 'door_version' => '75', 'hardware_ref' => '')
+  raise patch.inspect unless patch['front_height_mm'] == 750 && patch['opening_method'] == 'gola'
+  raise 'no profile must be invented' if patch.key?('hardware_ref')
+  # A cabinet still must name one - that rule is source-backed and unchanged.
+  cab = Registry.lookup('B80601')
+  begin
+    Panel.attributes_patch(cab, 'door_version' => '75', 'hardware_ref' => '')
+    raise 'a cabinet without a GOL profile must be refused'
+  rescue ArgumentError
+    nil
+  end
+end
+
 puts "\ncatalog map + picker gaps (what the printed index says exists)"
 # A gap row is either a page (inside a section we hold) or a section carrying
 # the pages we have read. This flattens both shapes to "find me printed p.N".
