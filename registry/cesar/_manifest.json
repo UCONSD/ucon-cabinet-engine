@@ -8,6 +8,65 @@
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
   "scope_note": "Page numbers here are PRINTED pages (PDF = printed + 2), verified against the page footers. Covers H.78 hinged-door, two-door, drawers+jumbo (printed p.36, p.39), jumbo-drawers and drawer+jumbo units (printed p.40), and straight sink bases (printed p.44). NOT yet in this registry: sink bases with fixed front + jumbo drawer (printed p.45), corner sink bases (printed p.46), corner base units (printed p.42-43), appliance housings (printed p.47-48), waste and remaining drawer variants - extend only after reading their pages. Earlier editions of this note cited PDF numbers as if they were printed pages; corrected 2026-08-17.",
+  "catalog_map": {
+    "source_ref": "printed p.19 chapter index (Maxima e Intarsio) for sections; page headers p.36-48 for the unit types inside H.78; visual D x W index printed p.20-22",
+    "verified_on": "2026-08-17",
+    "note": "The catalog's own hierarchy is: collection (Maxima/Intarsio, Tangram, Unit, N_Elle...) > element class (base/wall/tall) > height family (H.39/H.48/H.58.5/H.78/H.84) > family variant (plain / sink / for household appliances) > unit type > depth x width. Our picker mirrors class > section (family+variant) > type > size. RULE: a placeholder may only be shown at a level we have actually read in the source - sections come from the printed index, unit types only from pages we have opened. Statuses: extracted | partial | not_extracted | planned | excluded.",
+    "sections": [
+      { "class": "base", "family": "H.39", "section": "Base units H. 39", "printed_pages": "24-27", "status": "not_extracted" },
+      { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "not_extracted" },
+      { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
+      { "class": "base", "family": "H.58.5", "section": "Sink base units H. 58.5", "printed_pages": "35", "status": "not_extracted" },
+      { "class": "base", "family": "H.78", "section": "Base units H. 78", "printed_pages": "36-43", "status": "partial",
+        "pages": [
+          { "printed": 36, "status": "partial",
+            "types": ["Base unit with pull-out door", "Base unit with laundry basket", "Base unit with door", "Base unit with doors"],
+            "note": "door and doors extracted; pull-out door and laundry basket rows are not (B70100, B80100, B80300, B80400, B80614, B90614)" },
+          { "printed": 37, "status": "not_extracted",
+            "types": ["Base unit with door for interior drawer and jumbo drawer kit", "Base unit w/door and pull-out table", "Base unit with drawer and door"] },
+          { "printed": 38, "status": "not_extracted",
+            "types": ["Base unit with drawer and doors", "Base unit with drawer and door", "Base unit with jumbo drawer and interior drawers"] },
+          { "printed": 39, "status": "partial",
+            "types": ["Base unit with jumbo drawer for P-One pull-out waste unit", "Base unit with pull-out XL waste unit", "Base unit with drawers and jumbo drawer"],
+            "note": "drawers+jumbo extracted; the two waste units are not (B80366, B80565, B80566, B80665, B80666)" },
+          { "printed": 40, "status": "extracted",
+            "types": ["Base unit with jumbo drawers", "Base unit with drawer and jumbo drawer"] },
+          { "printed": 41, "status": "not_extracted",
+            "types": ["Base unit with drawer and jumbo drawer", "Base unit for built-in oven H. 60"],
+            "note": "CAUTION: codes on this page (B78566, B88566, B98566 ...) do NOT decode with the p.36 width lookup, and the elevation reads 19,5 + 55,5 = 750, not 780. Read this page's grammar from scratch before extracting; do not assume." },
+          { "printed": 42, "status": "not_extracted",
+            "types": ["Base unit for built-in oven H. 60", "Corner base unit", "Corner base unit with Magicorner pull-out mechanism"],
+            "note": "corner units need M2.2 placement" },
+          { "printed": 43, "status": "not_extracted",
+            "types": ["Corner base unit with Slidecorner pull-out mechanism", "Corner base unit"],
+            "note": "corner units need M2.2 placement" }
+        ] },
+      { "class": "base", "family": "H.78", "section": "Sink base units H. 78", "printed_pages": "44-46", "status": "partial",
+        "pages": [
+          { "printed": 44, "status": "extracted",
+            "types": ["Sink base unit with door", "Sink base unit with doors", "Sink base unit w/jumbo drawer", "Sink base unit w/jumbo drawers"] },
+          { "printed": 45, "status": "not_extracted",
+            "types": ["Sink base unit with fixed front and jumbo drawer", "Corner sink base unit"],
+            "note": "blocked on Elda Q4: codes 90 vs 91 (and AU925/945) are identical except for the gola front split" },
+          { "printed": 46, "status": "not_extracted",
+            "types": ["Corner sink base unit", "Corner sink base unit. 120 cm carcass", "Corner sink base unit with 155 degree hinges"],
+            "note": "corner units need M2.2 placement" }
+        ] },
+      { "class": "base", "family": "H.78", "section": "Base units H. 78 | for household appliances", "printed_pages": "47-48", "status": "not_extracted",
+        "pages": [
+          { "printed": 47, "status": "excluded", "decided_on": "2026-08-17",
+            "types": ["Floor-standing housing for fridge or freezer", "Base unit for built-in fridge-freezer", "Door for fully-integrated dishwasher", "Door for fully-integrated washing machine"],
+            "note": "EXCLUDED by decision, not by oversight: no current project needs Cesar appliance housings. UCON decision at PLANNING trust - reversible the moment a real project asks for one." },
+          { "printed": 48, "status": "planned",
+            "types": ["Door for integrated dish-washer"],
+            "note": "planned together with the dishwasher appliance placeholder (object_class=appliance_front): the Cesar order line is the door, the machine itself is the client's" }
+        ] },
+      { "class": "base", "family": "H.84", "section": "Base units H. 84", "printed_pages": "49-52", "status": "not_extracted",
+        "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78" },
+      { "class": "base", "family": "H.84", "section": "Sink base units H. 84", "printed_pages": "53-54", "status": "not_extracted" },
+      { "class": "base", "family": "H.84", "section": "Base units H. 84 | for household appliances", "printed_pages": "55-56", "status": "not_extracted" }
+    ]
+  },
   "code_grammar": {
     "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
     "depth_digit": {
