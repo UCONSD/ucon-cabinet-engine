@@ -427,3 +427,113 @@ North star from the note, worth keeping verbatim: the goal is presentation
 CAD sheets in LayOut (wireframe, four views: front / plan / side / iso) -
 data quality and correct run geometry over 3D richness. The engine's
 envelope-only + symbols-on-tags representation is already aimed there.
+
+---
+
+## 7.2 Status update — 2026-08-17 (session close)
+
+Core **v0.23.0**, **136 headless checks**, registry **126 codes** in three
+sections of family H.78.
+
+**Shipped this session, in the order the model demanded it:**
+
+- **M1.7 completed for printed p.44** — `sink_base_h78.json`, 20 codes in four
+  unit types. The thesis held: a new section file unfolded new picker levels
+  with ZERO changes in `core/`.
+- **Catalog map + picker gaps.** `_manifest.json` → `catalog_map` records what
+  the printed index says exists, at per-PAGE and per-POSITION granularity
+  (`extracted | partial | not_extracted | planned | excluded`), and the picker
+  renders it as inert grey rows. A gap is now never mistaken for an oversight.
+  Human companion: `docs/Catalog_Section_Map_H78.md`.
+- **Printed p.36 completed**, plus pull-out door and laundry basket units.
+- **Appliances (printed p.47).** Contract **v1.3** added `companion_refs` (a
+  catalog choice can mandate companion order lines); **v1.4** added
+  `object_class: appliance`. An appliance is TWO objects: the Cesar panel
+  (`appliance_front`, ordered and drawn) and the machine's niche (`appliance`,
+  `manufacturer=client`, drawn and never ordered).
+- **Trash & Recycle** (P-One and XL / Envi Space) with their bin kits as
+  companions.
+- **Corner base units (printed p.42) — DECODED AND BUILDABLE.** 9 sizes x 2
+  executions = 18 real articles; no template can reach an order. The letter is
+  the EXECUTION, the door's LH/RH is the ordinary per-order `hinge_side`; the W
+  notation is the corner NODE (depth + 80 across, nominal length along the
+  wall) and nominal minus carcass is WASTED SPACE, drawn as edges only on its
+  own tag. Corner PLACEMENT is still M2.2 — a corner unit builds, a run does
+  not yet turn.
+- **Drawing conventions settled:** surfaces mean ownership (Cesar objects have
+  faces, stand-ins for what is not ours are edges only); the opening symbol's
+  base sits on the hinge axis and its apex on the opening edge (so bottom-hung
+  reads as an inverted V); plan symbols are drawn at the FLOOR for every unit.
+- **Printed p.1-17 read** (technical and dimensional information). It confirmed
+  the corner model independently — p.10's RH plan diagram IS our D execution,
+  and the geometry matched with no change — and produced
+  `docs/Clearance_Rules_H78_v0.1.md` (5 cm closing strips, corner filler
+  minimums, modification limits), a d.57 corner gap, and Elda **Q7**.
+
+**Open questions now Q1-Q7** (`docs/Elda_Open_Questions_v0.1.md`). Q7: does
+"1 rh or lh door" name the door's hinge or the cabinet's execution, given the
+code already carries D/S and p.10/p.11 draw RH while p.42 draws LH.
+
+**Next session: WALL CABINETS.** Scouted, not extracted. The wall-unit chapter
+has its own contents index at printed p.205 and a visual D x W index at printed
+p.206-210; the sections themselves run **printed p.211-256** (PDF = printed + 2,
+verified against the footers: printed 211 = PDF 213):
+
+| printed | section |
+|---|---|
+| 211 | Wall units H. 36 |
+| 213 | Dish-drainer units H. 36 |
+| 214 | Wall units H. 48 |
+| 217 | Dish-drainer units H. 48 |
+| 219 | Wall units H. 48 with Virgola hood |
+| 221 | Wall units H. 60 |
+| 224 | Dish-drainer units H. 60 |
+| 226 | Wall units H. 60 with Virgola hood |
+| 227 | Wall units H. 60 with Virgola No Drop hood |
+| 228 | Wall units H. 72 |
+| 232 | Dish-drainer units H. 72 |
+| 234 | Wall units H. 72 with Virgola hood |
+| 236 | Wall units H. 72 with Virgola No Drop hood |
+| 238 | Wall units H. 84 |
+| 241 | Dish-drainer units H. 84 |
+| 243 | Wall units H. 84 with Virgola hood |
+| 244 | Wall units H. 84 with Virgola No Drop hood |
+| 245 | Wall units H. 96 |
+| 248 | Dish-drainer units H. 96 |
+| 250 | Wall units H. 96 with Virgola hood |
+| 251 | Wall units H. 96 with Virgola No Drop hood |
+| 252 | Wall units H. 120 |
+| 255 | Wall units H. 120 with Virgola hood |
+| 256 | Wall units H. 120 with Virgola No Drop hood |
+
+Seven height families (H.36 / 48 / 60 / 72 / 84 / 96 / 120), depth D.35 on the
+index pages, and unit types already visible in the index text: wall unit with
+door, with doors, with glass door(s) ("Cannot be reduced"), with top-hung
+doors. The page notice reads "The handles are not included in the price".
+
+What wall units will demand that base units did not, and should be decided
+BEFORE extracting:
+
+1. **Z placement.** A wall unit hangs; it has no plinth and no floor snap. The
+   engine's floor snap and build-next-to-selected assume a base run. A hanging
+   height is a project default (M1.6), not a catalog fact — the catalog gives
+   the unit's height, not where it goes on the wall.
+2. **Top-hung and glass doors** are new opening kinds for `70_symbols.rb`. The
+   hinge-axis rule already covers them (base on the hinge axis, apex on the
+   opening edge), so a top-hung door is the mirror of the bottom-hung Λ we
+   built for the dishwasher and the laundry unit — reuse, do not reinvent.
+3. **The 5 cm closing strip rule** (`docs/Clearance_Rules_H78_v0.1.md` §1) is
+   written ABOUT wall units. It is the first rule where `hinge_side` changes
+   the plan, not just the symbol. Still PLANNING — do not implement it as an
+   auto-insert.
+4. **A new height-family grammar.** H.78's depth digit (7/8/9 = d.35/62/67) is
+   family-specific by rule; wall codes must be decoded from explicit registry
+   rows, never by analogy.
+5. **Hood variants (Virgola / Virgola No Drop) are probably out of scope** for
+   the first pass — decide per position, as we did on printed p.47, rather than
+   taking or skipping whole pages.
+
+First concrete step next session: add the wall sections to `catalog_map` as
+`not_extracted` so the picker shows the whole chapter as grey rows, then
+extract ONE page (printed p.211, Wall units H. 36) and let the demand of the
+real kitchen choose the next.
