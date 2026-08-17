@@ -26,6 +26,57 @@ first hand-drawn draft and is superseded by this spec.
   in real proportion + one dashed diagonal per band (top-left → bottom-right).
 - gola: bands/V follow the shortened front height; the 30 mm zone stays empty.
 
+## Hinge axis — one rule, three drawings (SETTLED 2026-08-17)
+
+The V is not three symbols, it is one rule applied to an axis:
+
+> **The base of the symbol lies ON the hinge axis; the apex points at the
+> opening edge.**
+
+Everything else follows without a second rule:
+
+- **Side-hung door** — base vertical at the hinge stile, apex at the handle
+  stile: the V lying on its side. Side comes from `hinge_side` (rh/lh).
+- **Bottom-hung door** — base along the bottom edge, apex up at mid-width:
+  **Λ**, an inverted V.
+- **Top-hung** — the same figure the other way up (V). None in the catalog yet;
+  it needs no new rule if one appears.
+
+### Where the axis comes from — cabinet vs appliance
+
+This distinction is the point, not a detail:
+
+- **A cabinet's hinge axis is DATA.** Sometimes a per-order axis that must
+  never be guessed (`hinge_side` rh/lh); sometimes a stated fact of the unit
+  type — printed p.36 "Base unit with laundry basket — 1 bottom-hung door"
+  (B80614, B90614) is bottom-hung by catalog, not by choice.
+- **An appliance panel's axis is a CONSTANT OF ITS CLASS.** A dishwasher panel
+  bolts onto the machine's own door; the hinges belong to the appliance, not to
+  the cabinet, and a dishwasher has no other way of opening. So the renderer
+  draws Λ with no input at all — nothing to ask the user, nothing to store as a
+  variant, and no Elda question. The source agrees: the dishwasher door is
+  specified "without fixing holes" and the washing-machine door "without holes
+  for hinges", because there are no hinges on the panel.
+- Order consequence: an appliance panel's order line is the FRONT only — no
+  hinge, no mechanism. One exception is printed p.47, where the 75 cm version
+  needs `GBBF01`, a stainless steel cabinet carrying the door-bearing
+  mechanism, and that IS a Cesar order line.
+
+### Plan view — the leaf drawn where it actually goes
+
+Same principle as the drawer: dashed, real geometry, fully open position.
+
+- **Side-hung**: the real 22 mm leaf swung 90°.
+- **Bottom-hung**: the leaf falls to horizontal, so the plan shows a dashed
+  rectangle in front of the unit — width = front width, projection = the
+  FRONT HEIGHT (780 handle, 750 gola). Pure geometry, no hardware table
+  needed, unlike the drawer's runner travel.
+- **Drawer**: real travel from the runner table, as already built.
+
+Useful side effect worth keeping: on a plan sheet the projection immediately
+shows whether an open dishwasher or laundry door blocks the aisle. That is
+what a plan is for.
+
 ## Iso thumbnail — TYPE level (DECISION 2026-08-16)
 
 - Direction: isometric, catalog-like. The generated iso is NOT the final form.
@@ -52,5 +103,10 @@ first hand-drawn draft and is superseded by this spec.
 
 ## Status
 
-Not implemented. Built with M1.7a (paired with M1.7 sink section). This spec
-is authored first so the renderer follows defined rules, not ad-hoc SVG.
+Thumbnails: not implemented, built with M1.7a. The hinge-axis rule above is
+settled but not yet rendered: `70_symbols.rb` today draws side-hung doors and
+drawers only, and no bottom-hung front exists in the registry yet (B80614 /
+B90614 are among the p.36 codes still unextracted, and the dishwasher panel
+comes with the placeholder task). Implement it when the first bottom-hung
+front lands, then test on a real model and correct the spec if the drawing
+argues with it — the spec is the authority, but reality gets a vote.
