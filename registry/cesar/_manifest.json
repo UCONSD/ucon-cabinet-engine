@@ -7,7 +7,7 @@
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
-  "scope_note": "Covers H.78 hinged-door, two-door, drawers+jumbo (p.36, p.39), jumbo-drawers and drawer+jumbo units (p.40). Sink (p.46-47), corner (p.44-45), waste, appliance and remaining drawer variants are NOT yet in this registry - extend only after reading their pages.",
+  "scope_note": "Page numbers here are PRINTED pages (PDF = printed + 2), verified against the page footers. Covers H.78 hinged-door, two-door, drawers+jumbo (printed p.36, p.39), jumbo-drawers and drawer+jumbo units (printed p.40), and straight sink bases (printed p.44). NOT yet in this registry: sink bases with fixed front + jumbo drawer (printed p.45), corner sink bases (printed p.46), corner base units (printed p.42-43), appliance housings (printed p.47-48), waste and remaining drawer variants - extend only after reading their pages. Earlier editions of this note cited PDF numbers as if they were printed pages; corrected 2026-08-17.",
   "code_grammar": {
     "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
     "depth_digit": {
