@@ -91,15 +91,20 @@ module UCON
             niche_def = model.definitions.add(
               "UCON_APPLIANCE_NICHE_#{unit['width_mm']}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
             )
-            Geometry.box(
+            # Edges only, no surfaces: a solid box would read as a cabinet we
+            # are selling. See Geometry.wire_box.
+            Geometry.wire_box(
               niche_def.entities, 'APPLIANCE_NICHE',
               0, 0, 0,
               niche_attrs['width_mm'], niche_attrs['depth_mm'], niche_attrs['height_mm'],
-              Geometry.material(model, 'UCON_Appliance_Niche', [200, 200, 198])
+              Geometry.material(model, 'UCON_Placeholder_Gray', [138, 138, 138])
             )
             Contract.write!(niche_def, niche_attrs)
             niche = model.active_entities.add_instance(niche_def, placement)
             niche.name = "Appliance niche #{unit['width_mm']} — client-supplied machine"
+            # Its own hideable tag, like the symbol tags: one switch takes every
+            # placeholder off the sheet.
+            niche.layer = model.layers[PLACEHOLDER_TAG] || model.layers.add(PLACEHOLDER_TAG)
 
             model.selection.clear
             model.selection.add(instance)
@@ -237,6 +242,7 @@ module UCON
       # It is never an order line: manufacturer is the client, there is no
       # code, and the exporter must skip object_class = appliance.
       NICHE_DEFAULT_DEPTH_MM = 620
+      PLACEHOLDER_TAG        = 'UCON — Placeholder (not ours)'
 
       def niche_height_mm
         Standards::PLINTH_H_MM + 780

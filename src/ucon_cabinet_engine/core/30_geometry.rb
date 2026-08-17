@@ -68,6 +68,21 @@ module UCON
         group
       end
 
+      # A box with no faces: the twelve edges only.
+      #
+      # Convention (Drawing_Spec): a Cesar object has surfaces, a stand-in for
+      # something that is not ours has none. A solid grey box for a client
+      # appliance reads as a cabinet we are selling, which is a lie on a
+      # presentation sheet; a wireframe volume reads as "this space is taken,
+      # by something else". Built as a normal box, then its faces are erased —
+      # the same trick the opening symbols use.
+      def wire_box(entities, name, x_mm, y_mm, z_mm, w_mm, d_mm, h_mm, material)
+        group = box(entities, name, x_mm, y_mm, z_mm, w_mm, d_mm, h_mm, material)
+        group.entities.grep(Sketchup::Face).each(&:erase!)
+        group.entities.grep(Sketchup::Edge).each { |e| e.material = material }
+        group
+      end
+
       # Hide the four vertical corner edges of a group. Used on the plinth so a
       # run of adjacent cabinets reads as one continuous base rather than a row
       # of separate blocks.

@@ -26,6 +26,25 @@ first hand-drawn draft and is superseded by this spec.
   in real proportion + one dashed diagonal per band (top-left → bottom-right).
 - gola: bands/V follow the shortened front height; the 30 mm zone stays empty.
 
+## Surfaces mean ownership (SETTLED 2026-08-17)
+
+> **A Cesar object has surfaces. A stand-in for something that is not ours has
+> none — edges only.**
+
+A solid grey box for a client's dishwasher reads, on a presentation sheet, as a
+cabinet we are selling. That is the same class of error as drawing the wrong
+opening symbol: the drawing asserts something untrue. A wireframe volume says
+what is actually meant — this space is taken, by something that is not our
+order.
+
+- Client appliances (the niche behind a Cesar panel) — edges only, thin grey
+  (`#8a8a8a`), on the hideable tag `UCON — Placeholder (not ours)`, so one
+  switch clears every placeholder off a sheet.
+- The rule generalises to anything we place but do not sell: existing
+  appliances, client-supplied furniture, a machine with no Cesar front.
+- It does NOT use dashes. Dashed lines already mean movement (opening
+  symbols); giving them a second meaning would weaken the first.
+
 ## Hinge axis — one rule, three drawings (SETTLED 2026-08-17)
 
 The V is not three symbols, it is one rule applied to an axis:
