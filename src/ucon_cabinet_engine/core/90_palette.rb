@@ -107,6 +107,7 @@ module UCON
                    border:1px dashed #d4d4d4;border-radius:6px;background:#fafaf9;color:#9a9a9a;
                    font-size:13px;cursor:default}
             .ghost small{color:#b0b0b0}
+            .ghost .page{margin:6px 0 0 10px;padding-left:8px;border-left:2px solid #e6e6e6}
             .tag{float:right;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
                  color:#9a9a9a;border:1px solid #e0e0e0;border-radius:4px;padding:1px 5px;background:#fff}
             .drow{display:flex;align-items:center;gap:4px;margin-bottom:6px}
@@ -197,21 +198,34 @@ module UCON
               function esc(s){ return String(s==null?'':s)
                 .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
               function badge(s){ return '<span class="tag">' + esc(String(s).replace(/_/g,' ')) + '</span>'; }
+              // A type carries its own badge only when a decision was made about
+              // that position — p.47 excludes the fridge housings but keeps the
+              // dishwasher door. Reasons live in the tooltip so the row stays a
+              // row and not a paragraph.
+              function typeLines(types, parentStatus){
+                return (types||[]).map(function(t){
+                  var own = t.status && t.status !== parentStatus;
+                  return '<small' + (t.note ? ' title="' + esc(t.note) + '"' : '') + '>' +
+                         (own ? badge(t.status) : '') + esc(t.title) + '</small>';
+                }).join('<br>');
+              }
               function ghosts(el, keep, title){
                 GAPS.filter(keep).forEach(function(g){
                   var d = document.createElement('div'); d.className='ghost';
-                  // A type carries its own badge only when a decision was made
-                  // about that position specifically — p.47 excludes the fridge
-                  // housings but keeps the dishwasher door.
-                  var types = (g.types||[]).map(function(t){
-                    var own = t.status && t.status !== g.status;
-                    return '<small>' + (own ? badge(t.status) : '') + esc(t.title) +
-                           (own && t.note ? '<br>' + esc(t.note) : '') + '</small>';
-                  }).join('<br>');
-                  d.innerHTML = badge(g.status) +
-                    esc(title(g)) + (g.level==='type' ? '' : ' <small>· ' + esc(g.printed) + '</small>') +
-                    (types ? '<br>' + types : '') +
-                    (g.note ? '<br><small>' + esc(g.note) + '</small>' : '');
+                  var html = badge(g.status) + esc(title(g)) +
+                    (g.level==='type' ? '' : ' <small>· ' + esc(g.printed) + '</small>');
+                  if(g.note) html += '<br><small>' + esc(g.note) + '</small>';
+                  var own = typeLines(g.types, g.status);
+                  if(own) html += '<br>' + own;
+                  // Pages we have read, nested under their section — the index
+                  // names a section once, so the picker shows it once.
+                  (g.pages||[]).forEach(function(p){
+                    html += '<div class="page">' + badge(p.status) + '<small>' + esc(p.printed) + '</small>' +
+                            (p.note ? '<br><small>' + esc(p.note) + '</small>' : '') +
+                            (p.types && p.types.length ? '<br>' + typeLines(p.types, p.status) : '') +
+                            '</div>';
+                  });
+                  d.innerHTML = html;
                   el.appendChild(d);
                 });
               }

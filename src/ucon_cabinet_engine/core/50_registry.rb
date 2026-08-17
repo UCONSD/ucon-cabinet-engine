@@ -149,12 +149,18 @@ module UCON
             pages.reject { |pg| pg['status'] == 'extracted' }.map do |pg|
               gap_row('type', sec, pg)
             end
-          elsif pages.empty?
-            [gap_row('section', sec, nil)]
           else
-            # Section not extracted at all, but we have read its pages: show
-            # one section-level row per page so the reason travels with it.
-            pages.map { |pg| gap_row('section', sec, pg) }
+            # One row per SECTION, never one per page: the printed index lists
+            # a section once, and the picker level is the section. Pages we
+            # have read hang inside it as detail.
+            row = gap_row('section', sec, nil)
+            row['pages'] = pages.map do |pg|
+              { 'printed' => "p.#{pg['printed']}",
+                'status'  => pg['status'],
+                'types'   => normalize_types(pg, pg['status']),
+                'note'    => pg['note'] }
+            end
+            [row]
           end
         end
       end

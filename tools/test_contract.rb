@@ -475,6 +475,11 @@ check('the aluminium tray is recorded as interior, never drawn') do
 end
 
 puts "\ncatalog map + picker gaps (what the printed index says exists)"
+# A gap row is either a page (inside a section we hold) or a section carrying
+# the pages we have read. This flattens both shapes to "find me printed p.N".
+def gap_page(printed)
+  Registry.gaps.flat_map { |g| g['pages'] || [g] }.find { |x| x['printed'] == printed }
+end
 check('every status in the map is from the closed vocabulary') do
   bad = []
   Registry.map_sections.each do |sec|
@@ -512,12 +517,18 @@ check('type-level gaps only appear inside sections we hold') do
   raise bad.map { |g| g['printed'] }.inspect unless bad.empty?
 end
 check('p.44 is not a gap; p.45, p.46 and the H.84 sections are') do
-  printed = Registry.gaps.map { |g| g['printed'] }
-  raise printed.inspect if printed.include?('p.44')
-  %w[p.45 p.46 p.49-52].each { |p| raise "#{p} missing" unless printed.include?(p) }
+  raise 'p.44 is extracted and must not be a gap' if gap_page('p.44')
+  %w[p.45 p.46].each { |p| raise "#{p} missing" unless gap_page(p) }
+  raise 'H.84 section missing' unless Registry.gaps.any? { |g| g['printed'] == 'p.49-52' }
+end
+check('a section appears once, with its read pages nested inside it') do
+  sections = Registry.gaps.select { |g| g['level'] == 'section' }.map { |g| g['section'] }
+  raise "duplicated rows: #{sections.inspect}" unless sections.uniq == sections
+  appl = Registry.gaps.find { |g| g['section'].include?('household appliances') }
+  raise appl.inspect unless appl['pages'].map { |p| p['printed'] } == ['p.47', 'p.48']
 end
 check('decisions are per position: p.47 excludes 3 of 4 types, keeps the dishwasher door') do
-  g47 = Registry.gaps.find { |g| g['printed'] == 'p.47' }
+  g47 = gap_page('p.47')
   raise g47.inspect unless g47
   by_status = g47['types'].group_by { |t| t['status'] }
   raise by_status.transform_values(&:size).inspect unless
@@ -529,7 +540,7 @@ check('decisions are per position: p.47 excludes 3 of 4 types, keeps the dishwas
   end
 end
 check('the dishwasher kit is recorded: door and filler planned, hob protection not') do
-  types = Registry.gaps.find { |g| g['printed'] == 'p.48' }['types']
+  types = gap_page('p.48')['types']
   door   = types.find { |t| t['title'].include?('dish-washer') }
   filler = types.find { |t| t['title'].start_with?('Filler profile') }
   hob    = types.find { |t| t['title'].include?('induction hob') }
@@ -548,7 +559,7 @@ check('a bare string type inherits its page status; an object keeps its own') do
   raise out.inspect unless out[1]['status'] == 'excluded' && out[1]['note'] == 'why'
 end
 check('p.41 carries its grammar warning into the gap row') do
-  g = Registry.gaps.find { |x| x['printed'] == 'p.41' }
+  g = gap_page('p.41')
   raise g.inspect unless g && g['note'].to_s.include?('do NOT decode')
 end
 if defined?(UCON::CabinetEngine::Palette)
