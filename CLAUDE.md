@@ -10,9 +10,29 @@ placeholder cabinetry from Cesar catalog data. The goal is presentation CAD
 sheets in LayOut (wireframe, four views: front / plan / side / iso) — data
 quality and correct run geometry over 3D richness.
 
-Repo is symlinked into SketchUp Plugins:
-`~/Library/Application Support/SketchUp 2025/SketchUp/Plugins/ucon_cabinet_engine
- -> ~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine`
+The repo IS the installation — no .rbz, just symlinks into the SketchUp
+Plugins folder. TWO of them are required: SketchUp discovers the registrar
+`.rb` file at the top level, and that file points at the folder next to it.
+Linking only the folder leaves the extension invisible with no error.
+
+```
+P="$HOME/Library/Application Support/SketchUp <VERSION>/SketchUp/Plugins"
+ln -s ~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine    "$P/ucon_cabinet_engine"
+ln -s ~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine.rb "$P/ucon_cabinet_engine.rb"
+```
+
+`<VERSION>` is per machine, and they differ: the laptop runs SketchUp 2025,
+the office Mac runs 2026 (each version has its own Plugins folder, so linking
+into the wrong one silently does nothing). Nothing in the engine is pinned to
+a SketchUp version; if one ever behaves differently, the Ruby Console at
+startup is where it shows. If the extension still does not appear, check
+Window -> Extension Manager -> Manage -> Loading Policy: ours is unsigned and
+needs "Unrestricted".
+
+Cloning onto a new machine gets you the code but NOT the catalog: `sources/`
+is git-ignored (factory/ alone is ~438 MB). Copy
+`CESAR - 2 Kitchen System.pdf` into `sources/factory/` before extracting any
+new section.
 
 ## How we work: demand-driven
 
@@ -95,18 +115,31 @@ project-specific choice harden into a global standard.
 - Session rituals: start by reading `docs/UCON_Cabinet_Engine_Roadmap_v1.md`
   §7 (status + next milestones); end by updating it if milestones moved.
 
-## Current state (2026-08-16)
+## Current state (2026-08-17)
 
 Core v0.14.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 77 green checks.
+hinge side), dashed opening symbols on two hideable tags, 84 green checks.
 
-Next milestones (roadmap §7): M1.6 project defaults → M1.7 sink base H.78
-section → M1.8 appearance layer → M1.9 Elda round one → M1.10 exporter.
+Registry: 94 codes in two sections of family H.78 — base units (74, printed
+p.36/39/40) and sink bases (20, printed p.44). M1.7 proved the intent: a new
+section file unfolded new picker levels with zero changes in core/.
+
+Next milestones (roadmap §7): M1.6 project defaults → M1.8 appearance layer
+→ M1.9 Elda round one → M1.10 exporter.
 Auto-arrangement track (§7.1): M2.1a batch row builder → M2.1b worktop →
 M2.2 corner-as-hinge → M2.3 interactive tool.
 
 Open questions pending Elda (docs/Elda_Open_Questions_v0.1.md): Q1 door
 version order notation; Q2 fitted LEGRABOX runner lengths (interim Blum
-table in registry external_specs, clearly marked non-Cesar).
+table in registry external_specs, clearly marked non-Cesar); Q3 modification
+minimum width/height + the 989346 ambiguity; Q4 sink bases printed p.45 —
+codes 90 vs 91 (and corner AU925/945) are identical in dimensions and price
+and differ only in the gola front split (165+555 vs 195+555); the source
+never names the distinction.
+
+Page numbers: always cite PRINTED pages (PDF = printed + 2, verified against
+the page footers). Notes written before 2026-08-17 sometimes cited PDF
+numbers as if printed — if a page reference does not match its content,
+suspect that slip.

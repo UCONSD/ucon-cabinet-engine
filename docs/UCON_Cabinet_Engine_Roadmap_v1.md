@@ -184,8 +184,20 @@ CLAUDE.md.)
 - **M1.6 — Project defaults.** Per-model defaults dialog (depth, door
   version, gola system, handle, finishes); new units inherit; panel becomes
   the exception editor.
-- **M1.7 — Sink base H.78 section** (printed p.46-48): first proof that a new
-  section file unfolds new picker levels with zero code changes. P1 units.
+- **M1.7 — Sink base H.78 section — DONE for printed p.44 (2026-08-17).**
+  `registry/cesar/sink_base_h78.json`: 20 codes in four unit types (door 4,
+  doors 6, jumbo drawer 2, jumbo drawers 8). The proof held — the picker
+  unfolded the new section with ZERO changes in core/; the only code touched
+  was the test suite (77 -> 84 checks). Registry now 94 codes.
+  Page numbers corrected: the sink section is printed p.44-46 / PDF 46-48,
+  not "printed p.46-48" — earlier notes cited PDF numbers as printed ones
+  (same slip for the corner pages, which are printed p.42-43).
+  Still open on this section: printed p.45 (fixed front + jumbo drawer)
+  carries paired codes 90/91 with identical dimensions and prices, differing
+  only in the gola front split — 165+555 vs 195+555. Reads as "where the
+  30 mm recess is taken", consistent with our gola-zone model, but the source
+  never says so: Elda Q4, not a guess. Printed p.46 (corner sink bases,
+  AU/AW/A81171) waits for M2.2.
 - **M1.7a — Registry-drawn picker thumbnails** (paired with M1.7, from the
   EasySketch review 2026-08-16). Inline SVG mini-elevations generated in the
   picker from front_layout data - our own drawing convention (dashed V /
@@ -203,6 +215,15 @@ CLAUDE.md.)
   free-sized cabinets, pretty pictures, manual translation to a factory
   order) is the opposite of ours (article-coded, source-verified,
   order-ready) - UX patterns borrowed, data model deliberately not.
+- **Registry loader hardening — small, do before the next section lands
+  (found 2026-08-17 while adding the sink section).** `core/50_registry.rb`
+  merges every non-`unit_types` key from a section file into its FAMILY, last
+  file wins, files sorted by name. `sink_base_h78.json` sorts after
+  `base_h78.json`, so a `depths_mm` in the sink file would have silently
+  overwritten the base family's `[350, 620, 670]`. Worked around by keeping
+  only `height_mm` in the sink section, but the next section will meet it
+  again. Fix: raise on conflicting family-level values instead of overwriting
+  silently; the tests should carry a check for it.
 - **M1.8 — Appearance layer.** registry/ucon_appearance.json working palette
   + UCONAppearance dictionary on units (outside the Contract namespace);
   front/carcass finish from the panel.
@@ -320,8 +341,32 @@ before interactive):
   butted read as one).
 - **M2.1b — Worktop.** One slab over the run (open question in the note:
   part of arrangement or separate step - decide at M2.1a review).
-- **M2.2 — Corner as hinge.** Requires the corner pages first (printed
-  p.44-45, AU/AW codes; geometry_kind=corner already in the Contract).
+  **Sink bowl decision (2026-08-17, settled while modelling 545 Avenida
+  Primavera).** The bowl belongs to the worktop layer, not to the unit: in
+  the catalog it lives in Linear Elements (integrated bowls TOPDR/TOPMO/TOPSH,
+  block sink LAVBL), so the worktop module draws it. It is drawn as a SYMBOL
+  on the existing hideable plan/front tags, not as a solid - the deliverable
+  is a wireframe sheet, and the "carcass top shows through the bowl" problem
+  only exists in shaded 3D. Two options were rejected: building the sink
+  carcass without its top face (breaks the envelope-is-one-volume invariant
+  and puts a sink exception into 30_geometry.rb), and having the worktop
+  boolean-cut the unit (mutates geometry, so the object stops matching its
+  code and cannot be rebuilt from it - the heavy editable object we rejected
+  with Dynamic Components). If a solid bowl is ever needed for a render, it
+  is a separate display-only copy; the unit is never mutated.
+  Bowl configuration by unit width - single on narrow, symmetric double on
+  wide, asymmetric double (one small bowl, one standard) in between - is a
+  UCON drafting convention at PLANNING trust, NOT a Cesar fact: it only
+  chooses the default symbol, never an order line, and its width thresholds
+  live in data, not in code. The bowl's article code comes from Linear
+  Elements, source-verified, when the order needs it.
+  Identification note: a sink base is externally indistinguishable from a
+  plain base (sink B81087 and plain B81057 are both 1050 wide, d.62, and both
+  split 390/390), so until this symbol
+  exists the Outliner instance name is how a sink is recognised in a model.
+- **M2.2 — Corner as hinge.** Requires the corner pages first (corner base
+  units printed p.42-43 / PDF 44-45, corner sink bases printed p.46 / PDF 48;
+  AU/AW/A81171 codes; geometry_kind=corner already in the Contract).
   The corner unit comes FROM THE CATALOG - its record defines how run B
   turns 90 degrees off run A. Open: per-corner-type joining rules
   (diagonal / L / carousel), Y inheritance through the turn.
