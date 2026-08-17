@@ -262,6 +262,15 @@ module UCON
         h = unit['height_mm']
         layout = unit['front_layout'] || { 'kind' => 'single' }
 
+        # A corner unit has no single width: its front is the door, sitting at
+        # the end the execution letter decides. Returning it here means the
+        # properties panel rebuilds a corner door through the ordinary path.
+        if unit['geometry_kind'] == 'corner'
+          p = corner_parts(unit, h)
+          return [{ name: 'FRONT', x_mm: p[:door_x], z_mm: 0,
+                    w_mm: p[:door], h_mm: h }]
+        end
+
         case layout['kind']
         when 'vertical_split'
           n = layout['count'].to_i

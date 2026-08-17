@@ -111,7 +111,7 @@ module UCON
       # catalog heights until the gola stack is verified).
       def effective_slabs(unit, gola)
         layout = unit['front_layout'] || { 'kind' => 'single' }
-        if gola && %w[single vertical_split].include?(layout['kind'])
+        if gola && %w[single vertical_split corner_door].include?(layout['kind'])
           Generator.front_slabs(unit.merge('height_mm' => unit['height_mm'] - 30))
         elsif gola && layout['kind'] == 'horizontal' && layout['gola_stack_top_to_bottom']
           stack = layout['gola_stack_top_to_bottom']
@@ -216,7 +216,11 @@ module UCON
 
       def rebuild_fronts(model, defn, unit, gola)
         s = Standards
-        doomed = defn.entities.grep(Sketchup::Group).select { |g| g.name.start_with?('FRONT') }
+        # The 8x8 corner filler shares the door's height, so it is rebuilt with
+        # the fronts, not left behind at the old one.
+        doomed = defn.entities.grep(Sketchup::Group).select do |g|
+          g.name.start_with?('FRONT') || g.name == 'FILLER_8X8'
+        end
         defn.entities.erase_entities(doomed) unless doomed.empty?
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
         front_y   = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
@@ -224,6 +228,13 @@ module UCON
           Geometry.box(defn.entities, slab[:name],
                        slab[:x_mm], front_y, s::PLINTH_H_MM + slab[:z_mm],
                        slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat)
+        end
+
+        if unit['geometry_kind'] == 'corner'
+          front_h = effective_slabs(unit, gola).first[:h_mm]
+          parts   = Generator.corner_parts(unit, front_h)
+          Geometry.prism(defn.entities, 'FILLER_8X8', parts[:filler_plan],
+                         s::PLINTH_H_MM, front_h, front_mat)
         end
 
         # Gola (door 75): the 30 mm zone above the shortened door stays EMPTY
@@ -299,7 +310,10 @@ module UCON
               document.getElementById('form').style.display=has?'':'none';
               if(!has)return;
               HANDED=!!st.handed;
-              document.getElementById('code').textContent=st.attrs.code+'  ('+st.attrs.width_mm+'×'+st.attrs.height_mm+'×'+st.attrs.depth_mm+')';
+              var dims = st.attrs.corner_geometry
+                ? st.attrs.corner_geometry.replace('x','×')+' mm node · H '+st.attrs.height_mm+' · D '+st.attrs.depth_mm
+                : st.attrs.width_mm+'×'+st.attrs.height_mm+'×'+st.attrs.depth_mm;
+              document.getElementById('code').textContent=st.attrs.code+'  ('+dims+')';
               document.getElementById('desc').textContent=(st.desc||'')+' · '+st.attrs.code_status+' / '+st.attrs.status;
               opt(document.getElementById('gol'),st.gola_profiles,st.attrs.hardware_ref);
               opt(document.getElementById('handle'),st.handles,st.attrs.hardware_ref);

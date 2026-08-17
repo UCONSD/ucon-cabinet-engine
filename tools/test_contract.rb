@@ -598,6 +598,38 @@ check('the corner symbol follows hinge_side, not the execution letter') do
   raise lh.inspect unless lh[:front][0][0][0].zero?          # hinged on the left edge
   raise rh.inspect unless rh[:front][0][0][0] == 450.0       # hinged on the right edge
 end
+check('REGRESSION: a corner front slab has a real width at BOTH door versions') do
+  # The bug: front_slabs read unit['width_mm'], which a corner does not have,
+  # so changing the door version in the properties panel produced
+  #   "Non-positive dimension for FRONT: w= d=22 h=780".
+  %w[AU110S AU110D].each do |code|
+    u = Registry.lookup(code)
+    [780, 750].each do |h|
+      slabs = Generator.front_slabs(u.merge('height_mm' => h))
+      raise "#{code}@#{h}: #{slabs.inspect}" unless slabs.length == 1
+      s = slabs.first
+      raise "#{code}@#{h}: #{s.inspect}" unless s[:name] == 'FRONT'
+      raise "#{code}@#{h}: w=#{s[:w_mm].inspect}" unless s[:w_mm].to_f > 0
+      raise "#{code}@#{h}: h=#{s[:h_mm].inspect}" unless s[:h_mm] == h
+      raise "#{code}@#{h}: x=#{s[:x_mm].inspect}" unless s[:x_mm] == Generator.corner_parts(u)[:door_x]
+    end
+  end
+end
+if defined?(UCON::CabinetEngine::Panel)
+  check('REGRESSION: the panel shortens a corner door for gola, and the 8x8 follows') do
+    panel = UCON::CabinetEngine::Panel
+    u = Registry.lookup('AU110S')
+    full = panel.effective_slabs(u, false)
+    gola = panel.effective_slabs(u, true)
+    raise full.inspect unless full.length == 1 && full.first[:h_mm] == 780
+    raise gola.inspect unless gola.length == 1 && gola.first[:h_mm] == 750
+    raise gola.inspect unless gola.first[:w_mm] == full.first[:w_mm]
+    # rebuild_fronts drives the filler off the rebuilt door height: the 8x8
+    # must end up exactly as tall as the door it stands next to.
+    raise 'filler height must follow the door' unless
+      Generator.corner_parts(u, gola.first[:h_mm])[:front_h] == 750
+  end
+end
 check('every corner article is still buildable and contract-valid') do
   not_buildable = Registry.catalog.reject { |c| c['buildable'] }
   raise not_buildable.map { |c| c['code'] }.inspect unless not_buildable.empty?
