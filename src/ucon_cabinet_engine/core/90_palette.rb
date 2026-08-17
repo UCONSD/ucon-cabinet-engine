@@ -50,7 +50,7 @@ module UCON
           style: UI::HtmlDialog::STYLE_UTILITY, width: 360, height: 470,
           resizable: true
         )
-        @picker.set_html(picker_html(Registry.catalog))
+        @picker.set_html(picker_html(Registry.catalog, Registry.gaps))
         @picker.add_action_callback('build') do |_, code|
           begin
             Generator.build(code)
@@ -78,7 +78,19 @@ module UCON
       # extracted section file appears here by itself. Levels with a single
       # option auto-advance; the breadcrumb steps back. Search jumps straight
       # to a code from any level.
-      def picker_html(catalog)
+      # Gaps (Registry.gaps) are rendered as inert grey rows next to the real
+      # ones, so the picker shows the whole printed catalog and is honest about
+      # what is missing. They come from the registry map — nothing about them
+      # is hardcoded here.
+      # JSON that is safe to paste inside an inline <script>: a literal
+      # "</script>" anywhere in the data (a description, a section title)
+      # would otherwise close the tag and kill the dialog.
+      def script_json(obj)
+        require 'json'
+        obj.to_json.gsub('</', '<\/')
+      end
+
+      def picker_html(catalog, gaps = [])
         require 'json'
         <<~HTML
           <!DOCTYPE html><html><head><meta charset="utf-8"><style>
@@ -91,6 +103,12 @@ module UCON
                   border:1px solid #d4d4d4;border-radius:6px;background:#fff;font-size:13px;cursor:pointer}
             .item:hover{background:#eef2ff;border-color:#93b4f5}
             .item small{color:#888}
+            .ghost{display:block;width:100%;text-align:left;margin:0 0 6px;padding:8px 10px;
+                   border:1px dashed #d4d4d4;border-radius:6px;background:#fafaf9;color:#9a9a9a;
+                   font-size:13px;cursor:default}
+            .ghost small{color:#b0b0b0}
+            .tag{float:right;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
+                 color:#9a9a9a;border:1px solid #e0e0e0;border-radius:4px;padding:1px 5px;background:#fff}
             .drow{display:flex;align-items:center;gap:4px;margin-bottom:6px}
             .dlab{width:44px;color:#555;font-size:12px}
             .wbtn{flex:1;padding:6px 0;border:1px solid #d4d4d4;border-radius:5px;background:#fff;
@@ -109,9 +127,10 @@ module UCON
             <div id="card"></div>
             <button id="buildBtn" onclick="doBuild()">Build</button>
             <script>
-              var CAT = #{catalog.to_json};
-              var CLS = #{CLASS_LABELS.to_json};
-              var TYP = #{TYPE_LABELS.to_json};
+              var CAT = #{script_json(catalog)};
+              var GAPS = #{script_json(gaps)};
+              var CLS = #{script_json(CLASS_LABELS)};
+              var TYP = #{script_json(TYPE_LABELS)};
               var st = { cls:null, sec:null, typ:null, code:null };
 
               function uniq(a){ return a.filter(function(v,i){ return a.indexOf(v)===i; }); }
@@ -151,7 +170,10 @@ module UCON
                 if(!st.cls){ list(uniq(CAT.map(function(c){return c['class'];})),
                   function(v){return CLS[v]||v;}, function(v){ setLevel(v,null,null); }); return; }
                 if(!st.sec){ list(uniq(rows().map(function(c){return c.section;})),
-                  function(v){return v;}, function(v){ setLevel(st.cls,v,null); }); return; }
+                  function(v){return v;}, function(v){ setLevel(st.cls,v,null); });
+                  ghosts(el, function(g){ return g.level==='section' && g['class']===st.cls; },
+                         function(g){ return g.section; });
+                  return; }
                 if(!st.typ){
                   var ts = uniq(rows().map(function(c){return c.type_key;}));
                   ts.forEach(function(t){
@@ -163,9 +185,27 @@ module UCON
                     b.onclick = function(){ setLevel(st.cls, st.sec, t); };
                     el.appendChild(b);
                   });
+                  ghosts(el, function(g){ return g.level==='type' && g.section===st.sec; },
+                         function(g){ return g.printed; });
                   return;
                 }
                 sizeGrid(el);
+              }
+              // Inert rows for catalog entries we have not extracted. Never
+              // clickable: there is nothing behind them yet, and pretending
+              // otherwise would be worse than the gap itself.
+              function esc(s){ return String(s==null?'':s)
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+              function ghosts(el, keep, title){
+                GAPS.filter(keep).forEach(function(g){
+                  var d = document.createElement('div'); d.className='ghost';
+                  var types = (g.types||[]).join(' · ');
+                  d.innerHTML = '<span class="tag">' + esc(g.status.replace(/_/g,' ')) + '</span>' +
+                    esc(title(g)) + (g.level==='type' ? '' : ' <small>· ' + esc(g.printed) + '</small>') +
+                    (types ? '<br><small>' + esc(types) + '</small>' : '') +
+                    (g.note ? '<br><small>' + esc(g.note) + '</small>' : '');
+                  el.appendChild(d);
+                });
               }
               function list(vals, lab, go){
                 var el = document.getElementById('content');

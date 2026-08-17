@@ -120,6 +120,58 @@ module UCON
         end
       end
 
+      # ---- catalog map (what the printed index says exists) --------------
+      #
+      # The registry holds what we HAVE extracted. The map in _manifest.json
+      # holds what the catalog SAYS exists, read from the printed chapter
+      # index. The difference between the two is the honest list of gaps, and
+      # it is data — the picker renders it, it does not invent it.
+      STATUSES = %w[extracted partial not_extracted planned excluded].freeze
+
+      def catalog_map(manufacturer = 'cesar')
+        data(manufacturer)['catalog_map'] || {}
+      end
+
+      def map_sections(manufacturer = 'cesar')
+        catalog_map(manufacturer)['sections'] || []
+      end
+
+      # Everything the picker should show greyed out, in the order the catalog
+      # prints it. Two levels only, and each is bounded by what we actually
+      # read: a SECTION gap comes from the printed index; a TYPE gap comes
+      # from a page we have opened. Never invent a level deeper than the
+      # source we have seen.
+      def gaps(manufacturer = 'cesar')
+        have = catalog(manufacturer).map { |r| r['section'] }.uniq
+        map_sections(manufacturer).flat_map do |sec|
+          pages = sec['pages'] || []
+          if have.include?(sec['section'])
+            pages.reject { |pg| pg['status'] == 'extracted' }.map do |pg|
+              gap_row('type', sec, pg)
+            end
+          elsif pages.empty?
+            [gap_row('section', sec, nil)]
+          else
+            # Section not extracted at all, but we have read its pages: show
+            # one section-level row per page so the reason travels with it.
+            pages.map { |pg| gap_row('section', sec, pg) }
+          end
+        end
+      end
+
+      def gap_row(level, sec, page)
+        {
+          'level'        => level,
+          'class'        => sec['class'],
+          'section'      => sec['section'],
+          'family'       => sec['family'],
+          'printed'      => page ? "p.#{page['printed']}" : "p.#{sec['printed_pages']}",
+          'status'       => (page ? page['status'] : sec['status']),
+          'types'        => (page ? page['types'] : []) || [],
+          'note'         => (page ? page['note'] : sec['note'])
+        }
+      end
+
       # Iterate every code row. With a block, yields
       # (row, family_name, family, type_key, unit_type); without, returns an
       # array of those tuples.

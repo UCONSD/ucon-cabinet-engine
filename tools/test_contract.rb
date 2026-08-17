@@ -17,6 +17,9 @@ require_relative '../src/ucon_cabinet_engine/core/40_unit_b80601'
 require_relative '../src/ucon_cabinet_engine/core/50_registry'
 require_relative '../src/ucon_cabinet_engine/core/60_generator'
 require_relative '../src/ucon_cabinet_engine/core/80_panel' rescue nil
+# 90_palette touches the SketchUp API only inside show/show_picker; the HTML
+# builders are pure string work and are checked here.
+require_relative '../src/ucon_cabinet_engine/core/90_palette' rescue nil
 
 Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
@@ -469,6 +472,73 @@ check('the aluminium tray is recorded as interior, never drawn') do
   raise u['interior_confirmed'].inspect unless u['interior_confirmed'].include?('1 aluminium tray')
   attrs = Generator.attributes_for(u)
   raise attrs['notes'].to_s unless attrs['notes'].to_s.include?('aluminium tray')
+end
+
+puts "\ncatalog map + picker gaps (what the printed index says exists)"
+check('every status in the map is from the closed vocabulary') do
+  bad = []
+  Registry.map_sections.each do |sec|
+    bad << sec['section'] unless Registry::STATUSES.include?(sec['status'])
+    (sec['pages'] || []).each do |pg|
+      bad << "#{sec['section']} p.#{pg['printed']}" unless Registry::STATUSES.include?(pg['status'])
+    end
+  end
+  raise bad.inspect unless bad.empty?
+end
+check('every extracted section is present in the map, and vice versa') do
+  in_registry = Registry.catalog.map { |r| r['section'] }.uniq.sort
+  in_map      = Registry.map_sections.map { |s| s['section'] }
+  raise "duplicate map sections: #{in_map.inspect}" unless in_map.uniq == in_map
+  missing = in_registry - in_map
+  raise "extracted but unmapped: #{missing.inspect}" unless missing.empty?
+  in_registry.each do |name|
+    sec = Registry.map_sections.find { |s| s['section'] == name }
+    raise "#{name} is extracted but mapped as #{sec['status']}" unless
+      %w[extracted partial].include?(sec['status'])
+  end
+end
+check('a section we hold is never offered as a section-level gap') do
+  have = Registry.catalog.map { |r| r['section'] }.uniq
+  bad = Registry.gaps.select { |g| g['level'] == 'section' && have.include?(g['section']) }
+  raise bad.map { |g| g['section'] }.inspect unless bad.empty?
+end
+check('type-level gaps only appear inside sections we hold') do
+  have = Registry.catalog.map { |r| r['section'] }.uniq
+  bad = Registry.gaps.select { |g| g['level'] == 'type' && !have.include?(g['section']) }
+  raise bad.map { |g| g['printed'] }.inspect unless bad.empty?
+end
+check('p.44 is not a gap; p.45, p.46 and the H.84 sections are') do
+  printed = Registry.gaps.map { |g| g['printed'] }
+  raise printed.inspect if printed.include?('p.44')
+  %w[p.45 p.46 p.49-52].each { |p| raise "#{p} missing" unless printed.include?(p) }
+end
+check('p.47 is excluded by decision and p.48 is planned') do
+  g47 = Registry.gaps.find { |g| g['printed'] == 'p.47' }
+  g48 = Registry.gaps.find { |g| g['printed'] == 'p.48' }
+  raise g47.inspect unless g47 && g47['status'] == 'excluded'
+  raise 'p.47 exclusion must carry its reason' unless g47['note'].to_s.include?('EXCLUDED by decision')
+  raise g48.inspect unless g48 && g48['status'] == 'planned'
+end
+check('p.41 carries its grammar warning into the gap row') do
+  g = Registry.gaps.find { |x| x['printed'] == 'p.41' }
+  raise g.inspect unless g && g['note'].to_s.include?('do NOT decode')
+end
+if defined?(UCON::CabinetEngine::Palette)
+  Palette = UCON::CabinetEngine::Palette
+  check('picker HTML renders gaps as inert rows, never as buttons') do
+    html = Palette.picker_html(Registry.catalog, Registry.gaps)
+    raise 'no ghost rows' unless html.include?("class='ghost'") || html.include?('ghost')
+    ghost_js = html[/function ghosts\(.*?\n              \}/m].to_s
+    raise 'a gap row must not be clickable' if ghost_js.include?('onclick')
+    raise 'gaps not injected' unless html.include?('var GAPS =')
+    %w[p.37 H.\ 84].each { |frag| raise "missing #{frag}" unless html.include?(frag.delete('\\')) }
+  end
+  check('picker HTML escapes gap text (it comes from a data file)') do
+    html = Palette.picker_html([], [{ 'level' => 'section', 'class' => 'base',
+                                      'section' => '<script>x</script>', 'printed' => 'p.1',
+                                      'status' => 'not_extracted', 'types' => [], 'note' => nil }])
+    raise 'unescaped section title reached the HTML' if html.include?('<script>x</script>')
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
