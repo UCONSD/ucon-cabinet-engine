@@ -132,6 +132,13 @@ confirmation. Ask before assuming catalog facts. Keep changes small and committa
 
 ## 7. Status update — 2026-08-16
 
+**Settled architecture decision (do not revisit without cause):** NOT built on
+Dynamic Components. DC can deliver live Component-Options editing (SG Kitchen
+Pro does), but only with generic parametric geometry and no article-code
+binding — incompatible with "every unit is an existing catalog code." We
+generate from the registry and rebuild instead. Full reasoning:
+`docs/Competitive_Notes_v0.1.md`.
+
 **Where reality diverged from the plan, and why it was the right call:** the
 Phase 2 shell (extension registrar, menu, floating palette) was built early,
 in v0.1, because the shell/core split with hot reload turned out to be the
@@ -194,8 +201,14 @@ extraction workflow is being exercised page by page instead.
   front/carcass finish from the panel.
 - **M1.9 — Elda round one.** Send Q1+Q2 (docs/Elda_Email_Draft_v0.2.md);
   on written answers move affected registry entries toward CONFIRMED.
-- **M1.10 — Exporter** (when first real layout exists): walk a model, read
-  the CabinetEngine dictionary, emit the factory-code schedule (CSV first).
+- **M1.10 — Exporter — PRIORITY RAISED** (competitive review 2026-08-16:
+  one-click cut list / order schedule is an expected baseline in peer tools,
+  not a final flourish; and it feeds the order-ready goal directly). Walk a
+  model, read the CabinetEngine dictionary off every unit, emit the factory
+  ORDER schedule (CSV first): code, door version (78/75), gola profile lines,
+  hardware, hinge side, W/H/D, status. NOT a joinery cut list — Cesar order
+  lines. Can run against the current single-unit models; does not truly need
+  a full layout first. Consider pulling ahead of M1.8/M1.9 once M1.7 lands.
 - **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
   packaging (build step copies registry/ into the payload).
 
