@@ -73,12 +73,20 @@ project-specific choice harden into a global standard.
 6. **Per-order axes live outside the article code**: door version 78/75
    (gola = −30 mm, requires GOL profile order lines) and hinge_side (rh/lh,
    never guessed).
-7. **An appliance is two objects, not one.** The Cesar panel
+7. **A corner unit's hand is TWO things, not one.** The letter in the code
+   (`AU110S` / `AU110D`) is the EXECUTION — which end carries the door and the
+   8x8 filler; the carcass is not symmetric, so the mirror is a different
+   article and a U-shaped kitchen needs both. The door's own hand (LH/RH) is
+   the ordinary per-order `hinge_side` and changes no code. The printed W
+   notation is the corner NODE, not the box: depth + 80 across, nominal length
+   along the wall, and nominal minus carcass is WASTED SPACE — drawn as edges
+   only on its own tag, because it must stay free.
+8. **An appliance is two objects, not one.** The Cesar panel
    (`object_class=appliance_front`) is ordered and drawn; the machine's niche
    (`appliance`, `manufacturer=client`) is drawn and never ordered. Keep them
    separate — that separation is what lets the exporter emit one and skip the
    other.
-8. **A choice can mandate companion codes** (Contract v1.3 §4.2,
+9. **A choice can mandate companion codes** (Contract v1.3 §4.2,
    `companion_refs`): gola forces its `GOL` profile, a dishwasher door forces
    the filler profile and — at W75 — `GBBF01`. Companions are resolved from
    the registry, never typed by hand, and the exporter must emit them all.
@@ -95,7 +103,7 @@ project-specific choice harden into a global standard.
   touch the SketchUp API; 00/10/20/50 must stay headless-loadable.
 - `registry/cesar/` — the catalog AS DATA. `_manifest.json` (grammar,
   hardware, external specs) + one JSON file per catalog section
-  (`base_h78.json`: 85 codes, 9 unit types; `sink_base_h78.json`: 20, 4;
+  (`base_h78.json`: 103 codes, 10 unit types; `sink_base_h78.json`: 20, 4;
   `appliance_h78.json`: 3, 1). One extracted catalog page =
   one section file = one commit. Loader merges + mtime-caches.
 - `docs/` — Object Contract, Roadmap (see §7/§7.1 for current milestones),
@@ -107,7 +115,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 128 checks. Run after every change; keep it green. New pure
+  currently 132 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -128,17 +136,17 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.21.0. Working: registry-driven generator (build by code, floor
+Core v0.22.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 128 green checks.
+hinge side), dashed opening symbols on two hideable tags, 132 green checks.
 
-Registry: 117 codes in three sections of family H.78 — base units (94, printed
-p.36, p.39 and p.40 complete, plus the nine corner codes of p.42), sink bases
-(20, printed p.44) and the fully-integrated dishwasher door (3, printed p.47).
+Registry: 126 codes in three sections of family H.78 — base units (103, printed
+p.36, p.39, p.40 complete and the corner units of p.42), sink bases (20,
+printed p.44) and the fully-integrated dishwasher door (3, printed p.47).
 A unit type may be `buildable: false` — in the registry, findable and orderable,
-but not drawn, because its geometry is not implemented honestly yet. Corners are
-the first case. M1.7 proved the
+but not drawn, because its geometry is not implemented honestly yet. Nothing is
+in that state right now. M1.7 proved the
 intent: a new section file unfolded new picker levels with zero changes in
 core/. What the catalog contains but we have not extracted is recorded in
 `_manifest.json` → `catalog_map` and shown as grey rows in the picker, so a

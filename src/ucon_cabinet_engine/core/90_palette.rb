@@ -274,8 +274,36 @@ module UCON
                   el.appendChild(b);
                 });
               }
+              // A corner type has no single width: it is dimensioned by the
+              // node it occupies, and each size exists in two EXECUTIONS that
+              // are different articles. So it gets a list, not a grid.
+              function cornerList(el){
+                var rs = rows();
+                var sizes = uniq(rs.map(function(c){return c.corner_geometry;}));
+                sizes.forEach(function(geom){
+                  var lab = document.createElement('div');
+                  lab.className = 'dlab'; lab.style.width='auto'; lab.style.margin='8px 0 4px';
+                  var any = rs.find(function(c){return c.corner_geometry===geom;});
+                  lab.textContent = geom.replace('x',' × ') + ' mm · door ' + any.door_width_mm +
+                                    ' · carcass ' + any.carcass_length_mm + ' · d.' + (any.depth_mm/10);
+                  el.appendChild(lab);
+                  var row = document.createElement('div'); row.className='drow';
+                  rs.filter(function(c){return c.corner_geometry===geom;})
+                    .sort(function(a,b){return a.execution < b.execution ? -1 : 1;})
+                    .forEach(function(c){
+                      var b = document.createElement('button'); b.className='wbtn';
+                      if(st.code===c.code) b.className += ' sel';
+                      b.innerHTML = c.code + '<br><small>' + c.execution + '</small>';
+                      b.onclick = function(){ st.code = c.code; render(); };
+                      row.appendChild(b);
+                    });
+                  el.appendChild(row);
+                });
+                if(st.code) showCard(CAT.find(function(c){return c.code===st.code;}));
+              }
               function sizeGrid(el){
                 var rs = rows();
+                if(rs.length && rs[0].corner_geometry){ cornerList(el); return; }
                 var depths = uniq(rs.map(function(c){return c.depth_mm;})).sort(function(a,b){return a-b;});
                 depths.forEach(function(d){
                   var row = document.createElement('div'); row.className='drow';
@@ -298,8 +326,14 @@ module UCON
               function showCard(c){
                 if(!c) return;
                 var el = document.getElementById('card');
+                var dims = c.corner_geometry
+                  ? 'node ' + c.corner_geometry.replace('x',' × ') + ' mm · carcass ' +
+                    c.carcass_length_mm + ' × ' + c.depth_mm + ' · door ' + c.door_width_mm +
+                    '<br><i>' + c.execution + ' execution — the mirror is a different code; ' +
+                    'the door hand is set in the properties panel</i>'
+                  : 'W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm';
                 el.innerHTML = '<b>' + c.code + '</b> · ' + c.family + '<br>' + c.description +
-                  '<br>W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm<br>' +
+                  '<br>' + dims + '<br>' +
                   '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
                 el.style.display='block';
                 document.getElementById('buildBtn').style.display='block';

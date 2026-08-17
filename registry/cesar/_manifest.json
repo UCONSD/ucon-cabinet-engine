@@ -37,7 +37,7 @@
           { "printed": 42, "status": "partial",
             "types": [
               { "title": "Base unit for built-in oven H. 60", "status": "not_extracted" },
-              { "title": "Corner base unit", "status": "extracted", "note": "9 codes extracted 2026-08-17 as DATA only - geometry_kind corner, buildable=false until M2.2. The hand is inside the code (D/S) and the W notation is not yet decoded." },
+              { "title": "Corner base unit", "status": "extracted", "note": "Extracted and BUILDABLE since 2026-08-17: 9 sizes x 2 executions = 18 articles. The letter is the execution (S = door at the left end, D mirrored), the door hand (LH/RH) stays the per-order hinge_side. W notation decoded: second number = depth + 80 (the 8x8 filler), first = nominal length along the door wall; nominal minus carcass = wasted space, drawn as edges only. Corner PLACEMENT (how a run turns) is still M2.2." },
               { "title": "Corner base unit with Magicorner pull-out mechanism", "status": "not_extracted" }
             ] },
           { "printed": 43, "status": "not_extracted",

@@ -97,6 +97,26 @@ module UCON
         end
       end
 
+      # Pure geometry of a corner unit's door symbol. The door is only part of
+      # the front, so the V is drawn on the door's own rectangle, not on the
+      # carcass. hinge_side is the ordinary per-order axis — the execution
+      # letter of the code decides WHERE the door is, this decides which edge
+      # it turns on.
+      def corner_door_marks(door_x_mm, door_w_mm, z0_mm, door_h_mm, y_face_mm, hinge_side)
+        left_edge  = door_x_mm.to_f
+        right_edge = door_x_mm + door_w_mm.to_f
+        hinge_x    = hinge_side == 'lh' ? left_edge : right_edge
+        open_x     = hinge_side == 'lh' ? right_edge : left_edge
+        apex = [open_x, y_face_mm, z0_mm + door_h_mm / 2.0]
+        {
+          front: [
+            [[hinge_x, y_face_mm, z0_mm], apex],
+            [[hinge_x, y_face_mm, z0_mm + door_h_mm], apex]
+          ],
+          plan_leaf: [[hinge_x, y_face_mm], [hinge_x, y_face_mm - door_w_mm]]
+        }
+      end
+
       # Pure geometry of the bottom-hung symbol, in mm, so the rule itself is
       # testable without SketchUp: the renderer only draws what this returns.
       #
@@ -187,6 +207,30 @@ module UCON
             dashed_rect(g, [[0, yb], [w, yb], [w, y1], [0, y1]], z_plan)
             finalize(g, plan_tag, mat)
           end
+          return
+        end
+
+        # ---- corner units --------------------------------------------------
+        # The door sits at one end of a longer, blind front. Nothing is drawn
+        # until a hinge side is chosen, exactly as for a straight single door.
+        if unit['geometry_kind'] == 'corner'
+          return unless hinge_side
+
+          p = Generator.corner_parts(unit, front_height_mm)
+          marks = corner_door_marks(p[:door_x], p[:door], z0,
+                                    p[:front_h], y_face, hinge_side)
+          g = definition.entities.add_group
+          g.name = 'SYM_FRONT_CORNER'
+          marks[:front].each do |a, b|
+            g.entities.add_line([a[0].mm, a[1].mm, a[2].mm], [b[0].mm, b[1].mm, b[2].mm])
+          end
+          finalize(g, front_tag, mat)
+
+          g = definition.entities.add_group
+          g.name = 'SYM_PLAN_CORNER'
+          a, b = marks[:plan_leaf]
+          g.entities.add_line([a[0].mm, a[1].mm, PLAN_Z_MM.mm], [b[0].mm, b[1].mm, PLAN_Z_MM.mm])
+          finalize(g, plan_tag, mat)
           return
         end
 

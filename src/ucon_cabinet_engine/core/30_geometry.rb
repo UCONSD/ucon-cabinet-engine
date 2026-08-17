@@ -68,6 +68,24 @@ module UCON
         group
       end
 
+      # A solid from a plan polygon, extruded up. The 8x8 corner filler is one
+      # L-shaped piece, not two panels leaning together.
+      def prism(entities, name, plan_pts_mm, z_mm, h_mm, material)
+        group = entities.add_group
+        group.name = name
+        face = group.entities.add_face(
+          plan_pts_mm.map { |p| [p[0].mm, p[1].mm, z_mm.mm] }
+        )
+        raise "Face creation failed for #{name}" unless face
+
+        face.reverse! if face.normal.z < 0
+        face.pushpull(h_mm.mm)
+        group.material = material
+        edge_mat = Geometry.material(group.model, 'UCON_Edge_Black', [0, 0, 0])
+        group.entities.grep(Sketchup::Edge).each { |e| e.material = edge_mat }
+        group
+      end
+
       # A box with no faces: the twelve edges only.
       #
       # Convention (Drawing_Spec): a Cesar object has surfaces, a stand-in for

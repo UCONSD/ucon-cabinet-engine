@@ -8,9 +8,11 @@
 #
 #   load '/Users/andriydemko/dev/ucon-cabinet-engine/tools/corner_probe.rb'
 #
-#   UCON_CornerProbe.build                             # AU110D/S, door left, 78
-#   UCON_CornerProbe.build('AU110D/S', hand: :right)   # mirrored
+#   UCON_CornerProbe.build                             # door left, hinge outer, 78
+#   UCON_CornerProbe.build('AU110D/S', hand: :right)   # mirrored cabinet
+#   UCON_CornerProbe.build('AU110D/S', hinge: :corner) # other hinge side
 #   UCON_CornerProbe.build('AW125D/S', door: 75)       # gola version
+#   UCON_CornerProbe.build_four                        # one size, all 4 combos
 #   UCON_CornerProbe.build_all                         # all nine, side by side
 #   UCON_CornerProbe.build_u_kitchen                   # a U: two corners, mirrored
 #   UCON_CornerProbe.report                            # positions in mm
@@ -29,9 +31,18 @@
 #             because it is space to keep free, not something we sell
 #   symbol  — dashed V, base on the hinge axis, apex on the opening edge
 #
-# ASSUMPTION, unconfirmed: the door is hinged on its OUTER edge, away from the
-# corner, so it cannot swing into the perpendicular run. Say the word and it
-# flips.
+# TWO INDEPENDENT AXES, and they are not the same thing:
+#
+#   hand  — the MIRRORED CABINET. Which end carries the door and the 8x8, and
+#           which end is blind with the wasted space behind it. This is inside
+#           the article: AU110D against AU110S. It changes the order line.
+#   hinge — which vertical edge of that door carries the hinges. This is the
+#           ordinary per-order hinge_side, outside the code, exactly as on a
+#           straight unit. It changes nothing in the order line.
+#
+# So a corner unit is fully specified by a code AND an axis, four combinations
+# per size. Pass hinge: :outer (away from the corner) or :corner, or name the
+# edge absolutely with :left / :right.
 #
 # ALSO UNCONFIRMED: which letter is which. D/S is Destra / Sinistra, but
 # whether D means the door sits right or hinges right is not established, so
@@ -147,7 +158,7 @@ module UCON_CornerProbe
 
   # One corner unit. hand: :left or :right is the side the DOOR is on; the 8x8
   # and the wasted space are always on the other side, which is the corner.
-  def one(code, hand: :left, door: 78, x_offset: 0)
+  def one(code, hand: :left, hinge: :outer, door: 78, x_offset: 0)
     container = model.active_entities.add_group
     container.name = "#{PREFIX}_UNIT_#{code.sub('/', '_')}_#{hand}"
     prev = @ents
@@ -159,7 +170,7 @@ module UCON_CornerProbe
     front_y = -(FRONT_GAP_MM + FRONT_T_MM)   # -25, outer face of the front
     back_y  = front_y + FRONT_T_MM           #  -3, back face of the front
     out_y   = back_y - FILLER_MM             # -83, outer face of the 8x8
-    sfx     = "#{code.sub('/', '_')}_#{hand}_#{door}"
+    sfx     = "#{code.sub('/', '_')}_#{hand}_h#{hinge}_#{door}"
 
     box("CARCASS_#{sfx}", x_offset, 0, z0, carcass, depth, HEIGHT_MM, [220, 220, 216])
     box("PLINTH_#{sfx}", x_offset, PLINTH_SETBACK_MM, 0,
@@ -171,23 +182,33 @@ module UCON_CornerProbe
       out_x    = fill_l + FILLER_MM          # its outer face, toward the corner
       in_x     = out_x - FRONT_T_MM
       wasted_x = x_offset + carcass          # corner side is the right
-      hinge_x  = door_x                      # hinged away from the corner
-      open_x   = door_x + door_mm
+      outer_edge  = door_x                   # away from the corner
+      corner_edge = door_x + door_mm
       plan = [[fill_l, back_y], [out_x, back_y], [out_x, out_y],
               [in_x, out_y], [in_x, front_y], [fill_l, front_y]]
-      swing_to = [hinge_x, front_y - door_mm]
     else
       door_x   = x_offset + carcass - door_mm
       fill_l   = door_x - FILLER_MM
       out_x    = fill_l                      # outer face toward the corner
       in_x     = out_x + FRONT_T_MM
       wasted_x = x_offset - wasted           # corner side is the left
-      hinge_x  = door_x + door_mm
-      open_x   = door_x
+      outer_edge  = door_x + door_mm
+      corner_edge = door_x
       plan = [[fill_l + FILLER_MM, back_y], [out_x, back_y], [out_x, out_y],
               [in_x, out_y], [in_x, front_y], [fill_l + FILLER_MM, front_y]]
-      swing_to = [hinge_x, front_y - door_mm]
     end
+
+    # The hinge is its own choice, independent of the cabinet's hand.
+    hinge_x =
+      case hinge
+      when :outer  then outer_edge
+      when :corner then corner_edge
+      when :left   then door_x
+      when :right  then door_x + door_mm
+      else raise ArgumentError, "hinge must be :outer, :corner, :left or :right"
+      end
+    open_x   = hinge_x == door_x ? door_x + door_mm : door_x
+    swing_to = [hinge_x, front_y - door_mm]
 
     box("DOOR_#{sfx}", door_x, front_y, z0, door_mm, FRONT_T_MM, front_h, [245, 245, 245])
     prism("FILLER_8x8_#{sfx}", plan, z0, front_h, [235, 235, 240])
@@ -212,8 +233,9 @@ module UCON_CornerProbe
           [128, 128, 128], sym)
 
     @ents = prev
-    { code: code, hand: hand, door: door, depth: depth, door_mm: door_mm,
-      carcass: carcass, nominal: nominal, wasted: wasted, front_h: front_h,
+    { code: code, hand: hand, hinge: hinge, door: door, depth: depth,
+      door_mm: door_mm, carcass: carcass, nominal: nominal, wasted: wasted,
+      front_h: front_h, hinge_edge: (hinge_x == door_x ? :left : :right),
       group: container }
   end
 
@@ -234,12 +256,12 @@ module UCON_CornerProbe
     container
   end
 
-  def build(code = 'AU110D/S', hand: :left, door: 78)
+  def build(code = 'AU110D/S', hand: :left, hinge: :outer, door: 78)
     model.start_operation('UCON corner probe', true)
     info = nil
     begin
       clear
-      info = one(code, hand: hand, door: door)
+      info = one(code, hand: hand, hinge: hinge, door: door)
       model.commit_operation
     rescue StandardError => e
       model.abort_operation
@@ -250,15 +272,37 @@ module UCON_CornerProbe
   end
 
   # All nine side by side, so the whole block can be judged at once.
-  def build_all(hand: :left, door: 78, gap_mm: 400)
+  def build_all(hand: :left, hinge: :outer, door: 78, gap_mm: 400)
     model.start_operation('UCON corner probe (all)', true)
     infos = []
     begin
       clear
       x = 0
       ROWS.each_key do |code|
-        infos << one(code, hand: hand, door: door, x_offset: x)
+        infos << one(code, hand: hand, hinge: hinge, door: door, x_offset: x)
         x += ROWS[code][3] + gap_mm
+      end
+      model.commit_operation
+    rescue StandardError => e
+      model.abort_operation
+      raise e
+    end
+    puts summary(infos)
+    nil
+  end
+
+  # One size, all FOUR combinations: two hands x two hinge sides. This is the
+  # picture that settles what is in the article and what is beside it.
+  def build_four(code = 'AU110D/S', door: 78, gap_mm: 500)
+    _d, _dr, _ca, nominal = ROWS.fetch(code)
+    model.start_operation('UCON corner probe (four)', true)
+    infos = []
+    begin
+      clear
+      x = 0
+      [[:left, :outer], [:left, :corner], [:right, :outer], [:right, :corner]].each do |hand, hinge|
+        infos << one(code, hand: hand, hinge: hinge, door: door, x_offset: x)
+        x += nominal + gap_mm
       end
       model.commit_operation
     rescue StandardError => e
@@ -273,7 +317,8 @@ module UCON_CornerProbe
   # corner. The two corners are the SAME article in opposite hands — that is
   # the whole point of the exercise. Nothing here is placement logic for the
   # engine; it is a demonstration.
-  def build_u_kitchen(code: 'AU110D/S', door: 78, back_len: 4200, leg_len: 2400, run_w: 600)
+  def build_u_kitchen(code: 'AU110D/S', hinge: :outer, door: 78,
+                      back_len: 4200, leg_len: 2400, run_w: 600)
     depth, _door_mm, carcass, nominal = ROWS.fetch(code)
     leg_b = depth + FILLER_MM        # what the node occupies along the side wall
     model.start_operation('UCON U kitchen probe', true)
@@ -281,10 +326,10 @@ module UCON_CornerProbe
       clear
 
       # LEFT corner: the corner is at the left, so the door is on the right.
-      one(code, hand: :right, door: door, x_offset: nominal - carcass)
+      one(code, hand: :right, hinge: hinge, door: door, x_offset: nominal - carcass)
 
       # RIGHT corner: mirror image, same article, other hand.
-      one(code, hand: :left, door: door, x_offset: back_len - nominal)
+      one(code, hand: :left, hinge: hinge, door: door, x_offset: back_len - nominal)
 
       # Back run between the two corners.
       x = nominal
@@ -325,8 +370,8 @@ module UCON_CornerProbe
       back run #{back_len}, legs #{leg_len}, node #{nominal} x #{leg_b}
       LEFT corner  : hand right (door on the right, corner and wasted space on the left)
       RIGHT corner : hand left  (mirror image, SAME article, other letter)
-      Two corners in a U therefore need BOTH executions of one code — the hand
-      is the article, not an axis on top of it.
+      hinge #{hinge} on both — the hinge side is a SEPARATE choice and does not
+      change the code; the hand does.
 
     TXT
     nil
@@ -334,15 +379,15 @@ module UCON_CornerProbe
 
   def summary(infos)
     out = +"\nUCON corner probe\n"
-    out << format("%-11s %6s %5s %6s %8s %8s %7s %6s\n",
-                  'code', 'hand', 'door', 'depth', 'carcass', 'nominal', 'wasted', 'front')
+    out << format("%-11s %6s %7s %6s %5s %8s %8s %7s %6s\n",
+                  'code', 'hand', 'hinge', 'edge', 'door', 'carcass', 'nominal', 'wasted', 'front')
     infos.each do |i|
-      out << format("%-11s %6s %5s %6d %8d %8d %7d %6d\n",
-                    i[:code], i[:hand], i[:door], i[:depth], i[:carcass],
-                    i[:nominal], i[:wasted], i[:front_h])
+      out << format("%-11s %6s %7s %6s %5s %8d %8d %7d %6d\n",
+                    i[:code], i[:hand], i[:hinge], i[:hinge_edge], i[:door],
+                    i[:carcass], i[:nominal], i[:wasted], i[:front_h])
     end
     out << "\nwasted space sits on the corner side past the carcass — tag '#{WASTED_TAG}'\n"
-    out << "door hinged on its outer edge: ASSUMPTION, say the word and it flips\n\n"
+    out << "hand = the mirrored article (D/S, in the code); hinge = the per-order axis (rh/lh)\n\n"
     out
   end
 

@@ -40,6 +40,66 @@ module UCON
         Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * shifted
       end
 
+      # ---- corner units ---------------------------------------------------
+      #
+      # A corner unit is not a wider cabinet: its carcass is not symmetric and
+      # its footprint is not its box. Decoded from printed p.42 with Andriy,
+      # 2026-08-17:
+      #
+      #   * the LETTER in the code is the EXECUTION — which end carries the
+      #     door and the 8x8 filler. S = door at the left end, D = mirrored.
+      #     Turning a corner unit round would put its front against the wall,
+      #     so the mirror is a different article, and a U-shaped kitchen needs
+      #     both. The door's own hand (LH/RH) is the ordinary per-order
+      #     hinge_side and changes nothing in the code.
+      #   * the 8x8 is ONE solid L: front leg 80 along the wall, return 80
+      #     projecting FORWARD of the front plane, both 22 thick, inner faces
+      #     flush. Door and filler share the front height, so door 75 shortens
+      #     both.
+      #   * the printed W notation is the NODE, not the box: second number =
+      #     depth + 80, first = nominal length along the door wall. Nominal
+      #     minus carcass = WASTED SPACE, the unreachable corner depth. It is
+      #     drawn as edges only on its own tag, because it is space that must
+      #     stay free, not something we sell.
+      WASTED_TAG = 'UCON — Wasted space'
+      FILLER_MM  = 80
+
+      def corner_parts(unit, front_height_mm = nil)
+        s        = Standards
+        carcass  = unit['carcass_length_mm']
+        door     = unit['door_width_mm']
+        depth    = unit['depth_mm']
+        nominal  = unit['corner_geometry'].to_s.split('x').first.to_i
+        front_h  = front_height_mm || unit['height_mm']
+        front_y  = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
+        back_y   = front_y + s::FRONT_T_MM
+        out_y    = back_y - FILLER_MM
+        wasted   = nominal - carcass
+        left     = unit['execution'] == 'left'
+
+        if left
+          door_x = 0
+          fill_l = door
+          out_x  = fill_l + FILLER_MM
+          in_x   = out_x - s::FRONT_T_MM
+          plan   = [[fill_l, back_y], [out_x, back_y], [out_x, out_y],
+                    [in_x, out_y], [in_x, front_y], [fill_l, front_y]]
+          wasted_x = carcass
+        else
+          door_x = carcass - door
+          fill_l = door_x - FILLER_MM
+          out_x  = fill_l
+          in_x   = out_x + s::FRONT_T_MM
+          plan   = [[fill_l + FILLER_MM, back_y], [out_x, back_y], [out_x, out_y],
+                    [in_x, out_y], [in_x, front_y], [fill_l + FILLER_MM, front_y]]
+          wasted_x = -wasted
+        end
+
+        { carcass: carcass, depth: depth, door: door, door_x: door_x,
+          front_h: front_h, front_y: front_y, filler_plan: plan,
+          wasted: wasted, wasted_x: wasted_x, nominal: nominal }
+      end
+
       def build(code, model = Sketchup.active_model)
         unit = Registry.lookup(code)
         unless unit.fetch('buildable', true)
@@ -112,6 +172,43 @@ module UCON
             # placeholder off the sheet.
             niche.layer = model.layers[PLACEHOLDER_TAG] || model.layers.add(PLACEHOLDER_TAG)
 
+            model.selection.clear
+            model.selection.add(instance)
+            model.commit_operation
+            model.active_view.zoom(instance)
+            return instance
+          end
+
+          if unit['geometry_kind'] == 'corner'
+            p = corner_parts(unit)
+            plinth = Geometry.box(
+              e, 'PLINTH',
+              0, s::PLINTH_SETBACK_MM, 0,
+              p[:carcass], s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
+            )
+            Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+
+            Geometry.box(e, 'CARCASS', 0, 0, z0, p[:carcass], p[:depth], h, carcass_mat)
+            Geometry.box(e, 'FRONT', p[:door_x], p[:front_y], z0,
+                         p[:door], s::FRONT_T_MM, p[:front_h], front_mat)
+            Geometry.prism(e, 'FILLER_8X8', p[:filler_plan], z0, p[:front_h], front_mat)
+
+            if p[:wasted].positive?
+              g = Geometry.wire_box(
+                e, 'WASTED_SPACE', p[:wasted_x], 0, z0,
+                p[:wasted], p[:depth], h,
+                Geometry.material(model, 'UCON_Placeholder_Gray', [138, 138, 138])
+              )
+              tag = model.layers[WASTED_TAG] || model.layers.add(WASTED_TAG)
+              g.layer = tag
+              g.entities.grep(Sketchup::Edge).each { |ed| ed.layer = tag }
+            end
+
+            Contract.write!(definition, attributes_for(unit))
+            Symbols.draw(model, definition, unit, nil)
+
+            instance = model.active_entities.add_instance(definition, placement_transform(model))
+            instance.name = "Cesar #{code} — #{unit['description']}"
             model.selection.clear
             model.selection.add(instance)
             model.commit_operation

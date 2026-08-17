@@ -195,9 +195,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 117 codes (94 base + 20 sink + 3 appliance)') do
+check('registry loads and holds 126 codes (103 base + 20 sink + 3 appliance)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 117
+  raise "got #{n}" unless n == 126
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -354,9 +354,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 117 rows, each with code/dims/description/source') do
+check('registry catalog: 126 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 117
+  raise cat.length.to_s unless cat.length == 126
   # A corner row is dimensioned by corner_geometry instead of a single width.
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['height_mm'] && c['depth_mm'] &&
@@ -522,9 +522,18 @@ check('the pull-out door is marked as a mechanism, not a swinging leaf') do
 end
 
 puts "\ncorner base units (printed p.42) - data now, geometry at M2.2"
-check('nine corner codes are in, dimensioned by corner_geometry') do
+check('nine sizes x two executions = eighteen corner articles') do
   rows = Registry.catalog.select { |c| c['type_key'] == 'base_corner' }
-  raise rows.length.to_s unless rows.length == 9
+  raise rows.length.to_s unless rows.length == 18
+  by_exec = rows.group_by { |r| r['execution'] }.transform_values(&:length)
+  raise by_exec.inspect unless by_exec == { 'left' => 9, 'right' => 9 }
+  # The template must never survive into the data: an order line carries a
+  # letter, not "D/S".
+  raise 'a D/S template reached the catalog' if rows.any? { |r| r['code'].include?('/') }
+  rows.group_by { |r| r['corner_geometry'] }.each_value do |pair|
+    letters = pair.map { |r| r['code'][-1] }.sort
+    raise letters.inspect unless letters == %w[D S]
+  end
   raise 'a corner row must not carry a single width' if rows.any? { |r| r['width_mm'] }
   raise 'every corner row needs its corner geometry' unless rows.all? { |r| r['corner_geometry'] }
 end
@@ -543,23 +552,60 @@ check('the second W number is always depth + 80 (the 8x8 corner panel)') do
     raise "#{row['code']}: #{second} vs #{u['depth_mm']}" unless second == u['depth_mm'] + 80
   end
 end
-check('the hand lives INSIDE a corner code, so the D/S template is never orderable') do
-  codes = Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.map { |c| c['code'] }
-  raise codes.inspect unless codes.all? { |c| c.end_with?('D/S') }
+check('the hand is the article and the hinge is not — both rules recorded') do
   notes = Registry.data['families']['H.78']['unit_types']['base_corner']['notes']
-  raise 'the D/S rule must be recorded' unless notes.include?('THE HAND IS PART OF THE CODE')
+  raise 'the execution rule must be recorded' unless notes.include?('THE HAND IS PART OF THE CODE')
+  raise 'the hinge distinction must be recorded' unless notes.include?("DOOR's hand")
 end
-check('a corner unit refuses to build, and says why') do
-  begin
-    Generator.build('AU090D/S', nil)
-    raise 'expected a refusal'
-  rescue ArgumentError => e
-    raise e.message unless e.message.include?('cannot be built yet') && e.message.include?('M2.2')
+check('S puts the door at the left end, D mirrors it') do
+  l = Generator.corner_parts(Registry.lookup('AU110S'))
+  r = Generator.corner_parts(Registry.lookup('AU110D'))
+  raise l.inspect unless l[:door_x].zero?                    # door at the left end
+  raise r.inspect unless r[:door_x] == 900 - 450             # door at the right end
+  # The wasted space always sits on the corner side, so it mirrors too.
+  raise l[:wasted_x].to_s unless l[:wasted_x] == 900
+  raise r[:wasted_x].to_s unless r[:wasted_x] == -250
+end
+check('the 8x8 filler is one L: both legs 80 long, 22 thick, projecting forward') do
+  plan = Generator.corner_parts(Registry.lookup('AU110S'))[:filler_plan]
+  xs = plan.map(&:first)
+  ys = plan.map(&:last)
+  raise plan.inspect unless (xs.max - xs.min) == 80 && (ys.max - ys.min) == 80
+  # It stands in FRONT of the front plane: the outermost y is -83, not +55.
+  raise ys.min.to_s unless ys.min == -83
+  raise ys.max.to_s unless ys.max == -3
+end
+check('wasted space is nominal minus carcass, for every corner article') do
+  Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
+    u = Registry.lookup(row['code'])
+    p = Generator.corner_parts(u)
+    nominal = u['corner_geometry'].split('x').first.to_i
+    raise row['code'] unless p[:wasted] == nominal - u['carcass_length_mm']
   end
 end
-check('every other type is still buildable') do
-  not_buildable = Registry.catalog.reject { |c| c['buildable'] }.map { |c| c['type_key'] }.uniq
-  raise not_buildable.inspect unless not_buildable == ['base_corner']
+check('door 75 shortens the door AND the 8x8 together') do
+  p78 = Generator.corner_parts(Registry.lookup('AU110S'))
+  p75 = Generator.corner_parts(Registry.lookup('AU110S'), 750)
+  raise p78[:front_h].to_s unless p78[:front_h] == 780
+  raise p75[:front_h].to_s unless p75[:front_h] == 750
+end
+check('the corner symbol follows hinge_side, not the execution letter') do
+  u = Registry.lookup('AU110S')
+  p = Generator.corner_parts(u)
+  lh = UCON::CabinetEngine::Symbols.corner_door_marks(p[:door_x], p[:door], 100, p[:front_h], -26, 'lh')
+  rh = UCON::CabinetEngine::Symbols.corner_door_marks(p[:door_x], p[:door], 100, p[:front_h], -26, 'rh')
+  # Same cabinet, same door, opposite hinge: the V flips.
+  raise lh.inspect unless lh[:front][0][0][0].zero?          # hinged on the left edge
+  raise rh.inspect unless rh[:front][0][0][0] == 450.0       # hinged on the right edge
+end
+check('every corner article is still buildable and contract-valid') do
+  not_buildable = Registry.catalog.reject { |c| c['buildable'] }
+  raise not_buildable.map { |c| c['code'] }.inspect unless not_buildable.empty?
+  Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
+    a = Generator.attributes_for(Registry.lookup(row['code']))
+    raise a.inspect unless a['geometry_kind'] == 'corner'
+    Contract.validate!(a)
+  end
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
