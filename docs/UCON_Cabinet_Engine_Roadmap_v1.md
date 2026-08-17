@@ -248,6 +248,14 @@ CLAUDE.md.)
   fillers and modifications. Never a fake Cesar code (UCON-internal ref only);
   exporter emits the full made-to-measure spec; PRELIMINARY until factory
   feasibility. Build only when a real project needs one.
+- **M3 — Multi-manufacturer** (strategy:
+  `docs/Multi_Manufacturer_Strategy_v0.1.md`). Foundation ready (manufacturer
+  is a Contract field; registry is per-manufacturer). Seams: standards move
+  from core/10_standards.rb into per-manufacturer data; domain concepts
+  (gola axis) become declared capabilities; picker gains a manufacturer level;
+  exporter groups the order by manufacturer. Build when a real second factory
+  is onboarded. Scenarios A-D in the strategy doc (incl. mixed brands in one
+  kitchen, and UCON's own shop as a codeless manufacturer).
 - **Later:** corner/waste/appliance H.78 pages; wall + tall sections; .rbz
   packaging (build step copies registry/ into the payload).
 
