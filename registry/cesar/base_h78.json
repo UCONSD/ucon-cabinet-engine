@@ -349,6 +349,120 @@
           "gola_note": "Verified from the p.39 elevation (zoomed 2026-08-16): undercounter recess above the top drawer; plain joint between the two 180 drawers; intermediate recess between the second drawer and the jumbo. Top drawer opens from the undercounter zone, second drawer from below via the intermediate zone, jumbo from above via the same zone. A gola drawer unit therefore needs BOTH profiles: undercounter (GOL001/GOL005) + intermediate (GOL002/GOL006), same system."
         }
       },
+      "base_waste_pone": {
+        "description": "Base unit with jumbo drawer for P-One pull-out waste unit - 1 jumbo drawer, no Push-pull device",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 jumbo drawer"
+        ],
+        "source_ref": "printed p.39 / PDF 41",
+        "codes": [
+          {
+            "code": "B80565",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80665",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "UCON calls this a Trash & Recycle unit; the catalog calls it a waste unit. d.62 only, W450 and W600 only. Servo Drive referenced on the page as an option (p.567). The bins are NOT part of this code - see companions.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            780
+          ],
+          "note": "Elevation printed p.39: 78 / 75 - one full-height front carried by the waste pull-out (handle 780; gola 750).",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
+        },
+        "companions": [
+          {
+            "role": "waste_bin_kit",
+            "by": "width",
+            "map": {
+              "450": "995625",
+              "600": "995626"
+            },
+            "drawn": false,
+            "source_ref": "printed p.524 / PDF 526",
+            "note": "P-One recycling sorter bins, ordered separately: 995625 for W450 (2 bins, 27+27 l), 995626 for W600 (3 bins, 55+17+17 l). The kit fixes onto the door so the lids lift as it opens. Printed p.39 points at this page and the widths match one to one; the source does not state in words that a unit cannot be ordered without its kit, so this is a companion by evidence, not by a printed rule."
+          }
+        ]
+      },
+      "base_waste_xl": {
+        "description": "Base unit with pull-out XL waste unit - 1 jumbo drawer, no Push-pull device, no Servo Drive mechanism",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 jumbo drawer"
+        ],
+        "source_ref": "printed p.39 / PDF 41",
+        "codes": [
+          {
+            "code": "B80366",
+            "width_mm": 300,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80566",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80666",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "UCON calls this a Trash & Recycle unit. d.62 only. Source states no Push-pull device AND no Servo Drive mechanism for this type - unlike the P-One unit above, which allows Servo Drive.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            780
+          ],
+          "note": "Elevation printed p.39: 78 / 75 - one full-height front carried by the waste pull-out (handle 780; gola 750).",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
+        },
+        "companions": [
+          {
+            "role": "waste_bin_kit",
+            "by": "width",
+            "map": {
+              "300": "995603",
+              "450": "995605",
+              "600": "995606"
+            },
+            "drawn": false,
+            "source_ref": "printed p.525 / PDF 527",
+            "note": "Envi Space waste kits, h.58 cm, silver grey RAL 9006, ordered separately: 995603 for W300 (32 l + small bin), 995605 for W450 (2 x 37 l), 995606 for W600 (37+37+22 l). Wording mismatch worth knowing: p.525 titles them 'for 30/45/60 cm wide base unit with door' while our unit is a pull-out; widths match one to one and printed p.39 points at this page."
+          }
+        ]
+      },
       "base_jumbo_drawers": {
         "description": "Base unit with jumbo drawers - 2 jumbo drawers",
         "opening": "pull-out",

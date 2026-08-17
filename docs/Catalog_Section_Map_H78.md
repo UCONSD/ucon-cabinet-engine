@@ -43,7 +43,7 @@ for any section we extract — a good future test, not yet written.
 | 28-31 | Base units H. 48 | not extracted |
 | 32-34 | Base units H. 58.5 | not extracted |
 | 35 | Sink base units H. 58.5 | not extracted |
-| 36-43 | **Base units H. 78** | partial (p.36, p.40 done) |
+| 36-43 | **Base units H. 78** | partial (p.36, p.39, p.40 done) |
 | 44-46 | **Sink base units H. 78** | partial |
 | 47-48 | Base units H. 78 \| for household appliances | partial — p.47 dishwasher door extracted, 3 positions excluded; p.48 planned |
 | 49-52 | Base units H. 84 | not extracted |
@@ -61,7 +61,7 @@ the H.78 mapping.
 | 36 | **pull-out door · laundry basket · door · doors** | 26 | extracted |
 | 37 | door for interior drawer + jumbo kit · w/door and pull-out table ×2 · drawer and door | 12 | not extracted |
 | 38 | drawer and doors · drawer and door · jumbo drawer and interior drawers | 16 | not extracted |
-| 39 | jumbo drawer for P-One waste · pull-out XL waste · **drawers and jumbo drawer** | 23 | partial (18 held) |
+| 39 | **jumbo drawer for P-One waste · pull-out XL waste · drawers and jumbo drawer** | 23 | extracted |
 | 40 | **jumbo drawers** · **drawer and jumbo drawer** | 36 | extracted |
 | 41 | drawer and jumbo drawer (B7856x series) · built-in oven H.60 | 28 | not extracted — see caution |
 | 42 | built-in oven H.60 · corner base unit · corner with Magicorner | 16 | not extracted (M2.2) |
@@ -72,7 +72,7 @@ the H.78 mapping.
 | 47 | fridge/freezer housings · **dishwasher door** · washing machine door | 8 | 3 positions **excluded**, dishwasher door **extracted** |
 | 48 | door for integrated dishwasher | 6 | **planned** |
 
-Held: 103 of 231 codes in this block. Printed p.36 was completed on 2026-08-17 — the
+Held: 108 of 231 codes in this block. Printed p.36 was completed on 2026-08-17 — the
 pull-out door (B70100, B80100, B80300, B80400) and the laundry basket
 (B80614, B90614), the six codes the first pass had skipped.
 
@@ -103,6 +103,25 @@ Exclusions are UCON decisions at PLANNING trust — no current project orders
 Cesar fridge housings or a washing-machine door — and are reversible the moment
 a real kitchen asks. They are recorded so a future session reads a decision,
 not an oversight.
+
+### Waste units are kits too (2026-08-17)
+
+The third instance of the same shape, after gola profiles and the dishwasher
+door. A Trash & Recycle unit is a carcass prepared for a bin system; the bins
+are their own codes, by width:
+
+| Unit | Width | Bin kit |
+|---|---|---|
+| B80565 (P-One) | 450 | `995625` — 2 bins, 27+27 l |
+| B80665 (P-One) | 600 | `995626` — 3 bins, 55+17+17 l |
+| B80366 (XL / Envi Space) | 300 | `995603` — 32 l + small bin |
+| B80566 (XL) | 450 | `995605` — 2 × 37 l |
+| B80666 (XL) | 600 | `995606` — 37+37+22 l |
+
+Honest caveat recorded in the registry: printed p.39 points at the bin pages
+(524 for P-One, 525 for Envi Space) and the widths match one to one, but the
+source never says in words that a unit cannot be ordered without its kit. These
+are companions by evidence, not by a printed rule.
 
 ### The dishwasher door is a KIT, not a single code
 

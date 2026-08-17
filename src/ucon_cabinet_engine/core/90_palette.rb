@@ -65,23 +65,26 @@ module UCON
         'base' => 'Base units', 'wall' => 'Wall units', 'tall' => 'Tall units'
       }.freeze
 
+      # Display labels only — UCON's own vocabulary for the picker. The
+      # registry keeps the catalog's wording; this map never travels into data
+      # or into an order. An unmapped type falls back to its key.
       TYPE_LABELS = {
-        'base_door'          => 'Door units',
-        'base_doors'         => 'Two-door units',
-        'base_drawers_jumbo' => 'Drawer units (2 + jumbo)',
-        'base_jumbo_drawers' => 'Jumbo drawer units (2 jumbo)',
-        'base_drawer_jumbo'  => 'Drawer + jumbo units'
+        'base_door'               => 'Door units',
+        'base_doors'              => 'Two-door units',
+        'base_drawers_jumbo'      => 'Drawer units (2 + jumbo)',
+        'base_jumbo_drawers'      => 'Jumbo drawer units (2 jumbo)',
+        'base_drawer_jumbo'       => 'Drawer + jumbo units',
+        'base_pull_out_door'      => 'Pull-out door units',
+        'base_laundry_basket'     => 'Laundry basket units',
+        'base_waste_pone'         => 'Trash & Recycle (P-One)',
+        'base_waste_xl'           => 'Trash & Recycle (XL / Envi Space)',
+        'sink_base_door'          => 'Sink units, one door',
+        'sink_base_doors'         => 'Sink units, two doors',
+        'sink_base_jumbo_drawer'  => 'Sink units, jumbo drawer',
+        'sink_base_jumbo_drawers' => 'Sink units, two jumbo drawers',
+        'appliance_dishwasher_door' => 'Dishwasher door'
       }.freeze
 
-      # Cascading picker: class > section > type > depth x width grid.
-      # The tree is derived entirely from the registry catalog, so a newly
-      # extracted section file appears here by itself. Levels with a single
-      # option auto-advance; the breadcrumb steps back. Search jumps straight
-      # to a code from any level.
-      # Gaps (Registry.gaps) are rendered as inert grey rows next to the real
-      # ones, so the picker shows the whole printed catalog and is honest about
-      # what is missing. They come from the registry map — nothing about them
-      # is hardcoded here.
       # JSON that is safe to paste inside an inline <script>: a literal
       # "</script>" anywhere in the data (a description, a section title)
       # would otherwise close the tag and kill the dialog.
@@ -90,6 +93,16 @@ module UCON
         obj.to_json.gsub('</', '<\/')
       end
 
+      # Cascading picker: class > section > type > depth x width grid.
+      # The tree is derived entirely from the registry catalog, so a newly
+      # extracted section file appears here by itself. Levels with a single
+      # option auto-advance; the breadcrumb steps back. Search jumps straight
+      # to a code from any level.
+      #
+      # Gaps (Registry.gaps) are rendered as inert grey rows next to the real
+      # ones, so the picker shows the whole printed catalog and is honest about
+      # what is missing. They come from the registry map — nothing about them
+      # is hardcoded here.
       def picker_html(catalog, gaps = [])
         require 'json'
         <<~HTML

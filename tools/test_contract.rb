@@ -195,9 +195,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 103 codes (80 base + 20 sink + 3 appliance)') do
+check('registry loads and holds 108 codes (85 base + 20 sink + 3 appliance)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 103
+  raise "got #{n}" unless n == 108
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -354,9 +354,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 103 rows, each with code/dims/description/source') do
+check('registry catalog: 108 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 103
+  raise cat.length.to_s unless cat.length == 108
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
     c['description'] && c['source_ref'] && c['type_key']
@@ -517,6 +517,38 @@ end
 check('the pull-out door is marked as a mechanism, not a swinging leaf') do
   u = Registry.lookup('B80300')
   raise u['front_layout'].inspect unless u['front_layout']['mechanism'] == 'pull_out_door'
+end
+
+puts "\nwaste units (Trash & Recycle) and their bin kits"
+check('both waste types are in: P-One 2 codes, XL 3 codes') do
+  by_type = Registry.catalog.group_by { |c| c['type_key'] }.transform_values(&:length)
+  raise by_type.inspect unless by_type['base_waste_pone'] == 2 && by_type['base_waste_xl'] == 3
+end
+check('EVERY waste code yields contract-valid attributes') do
+  %w[B80565 B80665 B80366 B80566 B80666].each do |code|
+    Contract.validate!(Generator.attributes_for(Registry.lookup(code)))
+  end
+end
+check('each waste unit orders the bin kit for its own width') do
+  refs = ->(code) { Generator.attributes_for(Registry.lookup(code))['companion_refs'] }
+  # P-One, printed p.524: W450 -> 2 bins, W600 -> 3 bins.
+  raise refs.call('B80565').inspect unless refs.call('B80565') == '995625'
+  raise refs.call('B80665').inspect unless refs.call('B80665') == '995626'
+  # Envi Space XL, printed p.525: one kit per width, 30/45/60.
+  raise refs.call('B80366').inspect unless refs.call('B80366') == '995603'
+  raise refs.call('B80566').inspect unless refs.call('B80566') == '995605'
+  raise refs.call('B80666').inspect unless refs.call('B80666') == '995606'
+end
+check('a waste unit is a full-height pull-out front, gola 750') do
+  u = Registry.lookup('B80666')
+  raise Generator.front_slabs(u).inspect unless
+    Generator.front_slabs(u).map { |s| [s[:h_mm], s[:z_mm]] } == [[780.0, 0.0]]
+  raise Panel.effective_slabs(u, true).inspect unless
+    Panel.effective_slabs(u, true).map { |s| [s[:h_mm], s[:z_mm]] } == [[750.0, 0.0]]
+end
+check('the XL unit records that the source forbids Servo Drive') do
+  u = Registry.lookup('B80366')
+  raise u.inspect unless u['description'].include?('no Servo Drive mechanism')
 end
 
 puts "\ndishwasher door: an appliance panel and its companion order lines"

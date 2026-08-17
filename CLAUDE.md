@@ -95,7 +95,7 @@ project-specific choice harden into a global standard.
   touch the SketchUp API; 00/10/20/50 must stay headless-loadable.
 - `registry/cesar/` — the catalog AS DATA. `_manifest.json` (grammar,
   hardware, external specs) + one JSON file per catalog section
-  (`base_h78.json`: 80 codes, 7 unit types; `sink_base_h78.json`: 20, 4;
+  (`base_h78.json`: 85 codes, 9 unit types; `sink_base_h78.json`: 20, 4;
   `appliance_h78.json`: 3, 1). One extracted catalog page =
   one section file = one commit. Loader merges + mtime-caches.
 - `docs/` — Object Contract, Roadmap (see §7/§7.1 for current milestones),
@@ -107,7 +107,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 117 checks. Run after every change; keep it green. New pure
+  currently 122 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -128,13 +128,13 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.19.0. Working: registry-driven generator (build by code, floor
+Core v0.20.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 117 green checks.
+hinge side), dashed opening symbols on two hideable tags, 122 green checks.
 
-Registry: 103 codes in three sections of family H.78 — base units (80, printed
-p.36 complete, p.39, p.40), sink bases (20, printed p.44) and the
+Registry: 108 codes in three sections of family H.78 — base units (85, printed
+p.36, p.39 and p.40 complete), sink bases (20, printed p.44) and the
 fully-integrated dishwasher door (3, printed p.47). M1.7 proved the
 intent: a new section file unfolded new picker levels with zero changes in
 core/. What the catalog contains but we have not extracted is recorded in
