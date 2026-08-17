@@ -43,7 +43,7 @@ for any section we extract — a good future test, not yet written.
 | 28-31 | Base units H. 48 | not extracted |
 | 32-34 | Base units H. 58.5 | not extracted |
 | 35 | Sink base units H. 58.5 | not extracted |
-| 36-43 | **Base units H. 78** | partial |
+| 36-43 | **Base units H. 78** | partial (p.36, p.40 done) |
 | 44-46 | **Sink base units H. 78** | partial |
 | 47-48 | Base units H. 78 \| for household appliances | p.47 mixed (3 excluded, dishwasher door planned), p.48 planned |
 | 49-52 | Base units H. 84 | not extracted |
@@ -58,7 +58,7 @@ the H.78 mapping.
 
 | Printed | Unit types on the page | Codes | Status |
 |---|---|---|---|
-| 36 | pull-out door · laundry basket · **door** · **doors** | 26 | partial (20 held) |
+| 36 | **pull-out door · laundry basket · door · doors** | 26 | extracted |
 | 37 | door for interior drawer + jumbo kit · w/door and pull-out table ×2 · drawer and door | 12 | not extracted |
 | 38 | drawer and doors · drawer and door · jumbo drawer and interior drawers | 16 | not extracted |
 | 39 | jumbo drawer for P-One waste · pull-out XL waste · **drawers and jumbo drawer** | 23 | partial (18 held) |
@@ -72,7 +72,9 @@ the H.78 mapping.
 | 47 | fridge/freezer housings · dishwasher door · washing machine door | 8 | 3 positions **excluded**, dishwasher door **planned** |
 | 48 | door for integrated dishwasher | 6 | **planned** |
 
-Held: 94 of 231 codes in this block.
+Held: 100 of 231 codes in this block. Printed p.36 was completed on 2026-08-17 — the
+pull-out door (B70100, B80100, B80300, B80400) and the laundry basket
+(B80614, B90614), the six codes the first pass had skipped.
 
 ### Caution — printed p.41
 

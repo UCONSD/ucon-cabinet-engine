@@ -85,7 +85,7 @@ project-specific choice harden into a global standard.
   touch the SketchUp API; 00/10/20/50 must stay headless-loadable.
 - `registry/cesar/` — the catalog AS DATA. `_manifest.json` (grammar,
   hardware, external specs) + one JSON file per catalog section
-  (`base_h78.json`: 74 codes, 5 unit types). One extracted catalog page =
+  (`base_h78.json`: 80 codes, 7 unit types; `sink_base_h78.json`: 20, 4). One extracted catalog page =
   one section file = one commit. Loader merges + mtime-caches.
 - `docs/` — Object Contract, Roadmap (see §7/§7.1 for current milestones),
   Elda open questions + email drafts, project notes.
@@ -96,7 +96,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 77 checks. Run after every change; keep it green. New pure
+  currently 102 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -117,14 +117,17 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.14.0. Working: registry-driven generator (build by code, floor
+Core v0.15.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 84 green checks.
+hinge side), dashed opening symbols on two hideable tags, 102 green checks.
 
-Registry: 94 codes in two sections of family H.78 — base units (74, printed
-p.36/39/40) and sink bases (20, printed p.44). M1.7 proved the intent: a new
-section file unfolded new picker levels with zero changes in core/.
+Registry: 100 codes in two sections of family H.78 — base units (80, printed
+p.36 complete, p.39, p.40) and sink bases (20, printed p.44). M1.7 proved the
+intent: a new section file unfolded new picker levels with zero changes in
+core/. What the catalog contains but we have not extracted is recorded in
+`_manifest.json` → `catalog_map` and shown as grey rows in the picker, so a
+gap is never mistaken for an oversight.
 
 Next milestones (roadmap §7): M1.6 project defaults → M1.8 appearance layer
 → M1.9 Elda round one → M1.10 exporter.

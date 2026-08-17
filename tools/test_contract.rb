@@ -192,9 +192,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 94 codes (74 base + 20 sink base)') do
+check('registry loads and holds 100 codes (80 base + 20 sink base)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 94
+  raise "got #{n}" unless n == 100
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -351,9 +351,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 94 rows, each with code/dims/description/source') do
+check('registry catalog: 100 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 94
+  raise cat.length.to_s unless cat.length == 100
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
     c['description'] && c['source_ref'] && c['type_key']
@@ -472,6 +472,46 @@ check('the aluminium tray is recorded as interior, never drawn') do
   raise u['interior_confirmed'].inspect unless u['interior_confirmed'].include?('1 aluminium tray')
   attrs = Generator.attributes_for(u)
   raise attrs['notes'].to_s unless attrs['notes'].to_s.include?('aluminium tray')
+end
+
+puts "\nprinted p.36 completed (pull-out door + laundry basket)"
+check('the two remaining p.36 types are in: 4 pull-out door codes, 2 laundry') do
+  by_type = Registry.catalog.group_by { |c| c['type_key'] }.transform_values(&:length)
+  raise by_type.inspect unless by_type['base_pull_out_door'] == 4 && by_type['base_laundry_basket'] == 2
+end
+check('EVERY p.36 code yields contract-valid attributes') do
+  %w[B70100 B80100 B80300 B80400 B80614 B90614].each do |code|
+    Contract.validate!(Generator.attributes_for(Registry.lookup(code)))
+  end
+end
+check('B80300 and B80400 are the same size and differ only by content') do
+  a = Registry.lookup('B80300')
+  b = Registry.lookup('B80400')
+  raise [a, b].inspect unless [a['width_mm'], a['depth_mm']] == [b['width_mm'], b['depth_mm']]
+  raise 'both must be 300 wide at d.62' unless [a['width_mm'], a['depth_mm']] == [300, 620]
+  # The width field lies here: B80400 reads as "04" yet measures 300. This is
+  # the manifest's warning made concrete - explicit rows are the authority.
+  raise 'the bread-bag variant must be recorded' unless
+    Registry.data['families']['H.78']['unit_types']['base_pull_out_door']['notes'].include?('bread bag')
+end
+check('the laundry unit records a bottom hinge axis and is not handed') do
+  u = Registry.lookup('B80614')
+  raise u.inspect unless u['handed'] == false
+  raise u['front_layout'].inspect unless u['front_layout']['hinge_axis'] == 'bottom'
+end
+check('neither new type would draw a swing symbol: no hinge_side is ever offered') do
+  # 70_symbols draws a single leaf only when a hinge_side is given, and the
+  # panel never offers one for an unhanded unit - so an unimplemented rule
+  # draws nothing rather than something wrong.
+  %w[B80400 B80614].each do |code|
+    u = Registry.lookup(code)
+    raise code unless u['handed'] == false
+    raise code unless u['front_layout']['kind'] == 'single'
+  end
+end
+check('the pull-out door is marked as a mechanism, not a swinging leaf') do
+  u = Registry.lookup('B80300')
+  raise u['front_layout'].inspect unless u['front_layout']['mechanism'] == 'pull_out_door'
 end
 
 puts "\ncatalog map + picker gaps (what the printed index says exists)"

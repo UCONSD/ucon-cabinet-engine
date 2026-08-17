@@ -7,7 +7,7 @@
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
-  "scope_note": "Page numbers here are PRINTED pages (PDF = printed + 2), verified against the page footers. Covers H.78 hinged-door, two-door, drawers+jumbo (printed p.36, p.39), jumbo-drawers and drawer+jumbo units (printed p.40), and straight sink bases (printed p.44). NOT yet in this registry: sink bases with fixed front + jumbo drawer (printed p.45), corner sink bases (printed p.46), corner base units (printed p.42-43), appliance housings (printed p.47-48), waste and remaining drawer variants - extend only after reading their pages. Earlier editions of this note cited PDF numbers as if they were printed pages; corrected 2026-08-17.",
+  "scope_note": "Page numbers here are PRINTED pages (PDF = printed + 2), verified against the page footers. Covers H.78 hinged-door, two-door, drawers+jumbo (printed p.36, p.39), jumbo-drawers and drawer+jumbo units (printed p.40), straight sink bases (printed p.44), and the pull-out door and laundry basket types that completed printed p.36. NOT yet in this registry: sink bases with fixed front + jumbo drawer (printed p.45), corner sink bases (printed p.46), corner base units (printed p.42-43), appliance housings (printed p.47-48), waste and remaining drawer variants - extend only after reading their pages. Earlier editions of this note cited PDF numbers as if they were printed pages; corrected 2026-08-17.",
   "catalog_map": {
     "source_ref": "printed p.19 chapter index (Maxima e Intarsio) for sections; page headers p.36-48 for the unit types inside H.78; visual D x W index printed p.20-22",
     "verified_on": "2026-08-17",
@@ -19,9 +19,9 @@
       { "class": "base", "family": "H.58.5", "section": "Sink base units H. 58.5", "printed_pages": "35", "status": "not_extracted" },
       { "class": "base", "family": "H.78", "section": "Base units H. 78", "printed_pages": "36-43", "status": "partial",
         "pages": [
-          { "printed": 36, "status": "partial",
+          { "printed": 36, "status": "extracted",
             "types": ["Base unit with pull-out door", "Base unit with laundry basket", "Base unit with door", "Base unit with doors"],
-            "note": "door and doors extracted; pull-out door and laundry basket rows are not (B70100, B80100, B80300, B80400, B80614, B90614)" },
+            "note": "complete since 2026-08-17 - all four types, 26 codes" },
           { "printed": 37, "status": "not_extracted",
             "types": ["Base unit with door for interior drawer and jumbo drawer kit", "Base unit w/door and pull-out table", "Base unit with drawer and door"] },
           { "printed": 38, "status": "not_extracted",

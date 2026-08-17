@@ -2,7 +2,7 @@
   "section": "Base units H. 78",
   "class": "base",
   "family": "H.78",
-  "source_pages": "printed p.36-43 / PDF 38-45 (subset extracted: p.36, p.39, p.40)",
+  "source_pages": "printed p.36-43 / PDF 38-45 (subset extracted: p.36 complete, p.39, p.40)",
   "data": {
     "height_mm": 780,
     "depths_mm": [
@@ -16,6 +16,70 @@
     ],
     "source_ref": "CESAR - 2 Kitchen System.pdf printed p.36-43 / PDF 38-45",
     "unit_types": {
+      "base_pull_out_door": {
+        "description": "Base unit with pull-out door - 1 door, 1 soft-close pull-out door, no Push-pull device",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 soft-close pull-out door"
+        ],
+        "source_ref": "printed p.36 / PDF 38",
+        "codes": [
+          {
+            "code": "B70100",
+            "width_mm": 150,
+            "depth_mm": 350
+          },
+          {
+            "code": "B80100",
+            "width_mm": 150,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80300",
+            "width_mm": 300,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80400",
+            "width_mm": 300,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "B80300 and B80400 are the SAME size (W300, d.62) and differ only in content: the source states 'for code B80400 with bread bag on the right'. So the width field does not decode here - B80400 reads as width 04 yet measures 300. Explicit rows are the authority, exactly as the manifest warns. No d.67 row on the page; the source never calls this door rh or lh, so it is not recorded as handed.",
+        "front_layout": {
+          "kind": "single",
+          "mechanism": "pull_out_door",
+          "note": "One full-height front carried by a pull-out mechanism (see printed p.512), not a swinging leaf. Slab geometry is that of a single door; the opening SYMBOL is deliberately not drawn yet - a swing V would be a lie and the pull-out travel of this mechanism is not in the catalog. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
+        }
+      },
+      "base_laundry_basket": {
+        "description": "Base unit with laundry basket - 1 bottom-hung door, 1 laundry bag, no Push-pull",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [
+          "1 laundry bag"
+        ],
+        "source_ref": "printed p.36 / PDF 38",
+        "codes": [
+          {
+            "code": "B80614",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90614",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
+        ],
+        "notes": "The source states '1 bottom-hung door': the hinge axis is a catalog fact of this type, not a per-order choice, so hinge_side (rh/lh) does not apply and handed stays false. W600 only.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "bottom",
+          "note": "One full-height front hinged along its BOTTOM edge. Per docs/Drawing_Spec_v0.1.md the elevation symbol is the inverted V - base on the hinge axis, apex at the opening edge - and the plan shows the leaf fallen to horizontal, projecting forward by the front height. Not rendered yet: 70_symbols.rb draws a single leaf only when a hinge_side is given, so nothing is drawn rather than something wrong."
+        }
+      },
       "base_door": {
         "description": "Base unit with door - 1 rh or lh door, 1 shelf",
         "opening": "door",
