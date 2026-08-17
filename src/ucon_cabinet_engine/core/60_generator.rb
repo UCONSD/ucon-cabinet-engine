@@ -42,6 +42,12 @@ module UCON
 
       def build(code, model = Sketchup.active_model)
         unit = Registry.lookup(code)
+        unless unit.fetch('buildable', true)
+          raise ArgumentError,
+                "#{code} is in the registry but cannot be built yet.\n\n" \
+                "#{unit['not_buildable_reason']}"
+        end
+
         s    = Standards
         w    = unit['width_mm']
         h    = unit['height_mm']
@@ -286,16 +292,16 @@ module UCON
       end
 
       def attributes_for(unit)
+        corner = unit['geometry_kind'] == 'corner'
         attrs = {
           'schema_version'  => Contract::SCHEMA_VERSION,
           'object_class'    => unit['object_class'] || 'cabinet',
           'manufacturer'    => unit['manufacturer'],
           'family'          => unit['family'],
           'unit_type'       => unit['description'],
-          'geometry_kind'   => 'linear',
+          'geometry_kind'   => corner ? 'corner' : 'linear',
           'height_mm'       => unit['height_mm'],
           'depth_mm'        => unit['depth_mm'],
-          'width_mm'        => unit['width_mm'],
           'opening'         => unit['opening'],
           'opening_method'  => 'handle',
           'front_height_mm' => unit['height_mm'],
@@ -305,6 +311,13 @@ module UCON
           'source_ref'      => unit['source_ref'],
           'notes'           => notes_for(unit)
         }
+        # A corner unit is dimensioned by its corner geometry, not by a single
+        # width — Contract §1.1 requires exactly one of the two.
+        if corner
+          attrs['corner_geometry'] = unit['corner_geometry']
+        else
+          attrs['width_mm'] = unit['width_mm']
+        end
         companions = companion_refs_for(unit)
         attrs['companion_refs'] = companions if companions
         attrs

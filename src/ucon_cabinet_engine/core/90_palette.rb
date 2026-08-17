@@ -82,7 +82,8 @@ module UCON
         'sink_base_doors'         => 'Sink units, two doors',
         'sink_base_jumbo_drawer'  => 'Sink units, jumbo drawer',
         'sink_base_jumbo_drawers' => 'Sink units, two jumbo drawers',
-        'appliance_dishwasher_door' => 'Dishwasher door'
+        'appliance_dishwasher_door' => 'Dishwasher door',
+        'base_corner'             => 'Corner units'
       }.freeze
 
       # JSON that is safe to paste inside an inline <script>: a literal
@@ -198,6 +199,22 @@ module UCON
                   ts.forEach(function(t){
                     var n = CAT.filter(function(c){return c.section===st.sec && c.type_key===t;}).length;
                     var d = CAT.find(function(c){return c.type_key===t;});
+                    // A type whose geometry is not implemented is listed but
+                    // never clickable: the codes must be findable, and a build
+                    // that cannot be honest must not be offered.
+                    if(d.buildable === false){
+                      var g = document.createElement('div'); g.className='ghost';
+                      g.innerHTML = row((TYP[t]||t) + ' <small>· ' + n + ' codes</small>', 'not buildable') +
+                        '<small>' + esc(d.description) + '</small>' +
+                        (d.not_buildable_reason ? '<br><small>' + esc(d.not_buildable_reason) + '</small>' : '') +
+                        '<div class="page">' + CAT.filter(function(c){
+                          return c.section===st.sec && c.type_key===t; })
+                          .map(function(c){ return '<small>' + esc(c.code) +
+                            (c.corner_geometry ? ' — ' + esc(c.corner_geometry) + ' mm' : '') +
+                            '</small>'; }).join('<br>') + '</div>';
+                      el.appendChild(g);
+                      return;
+                    }
                     var b = document.createElement('button'); b.className='item';
                     b.innerHTML = (TYP[t]||t) + ' <small>· ' + n + ' codes</small><br><small>' +
                                   d.description + '</small>';
@@ -298,9 +315,18 @@ module UCON
                   return c.code.indexOf(q) >= 0 ||
                          c.description.toUpperCase().indexOf(q) >= 0;
                 }).slice(0, 20).forEach(function(c){
+                  var size = c.buildable === false && c.corner_geometry
+                    ? c.corner_geometry + ' mm · d.' + (c.depth_mm/10)
+                    : c.width_mm + '×' + c.height_mm + '×' + c.depth_mm;
+                  if(c.buildable === false){
+                    var g = document.createElement('div'); g.className='ghost';
+                    g.innerHTML = row(esc(c.code) + ' <small>— ' + esc(size) + '</small>', 'not buildable') +
+                                  '<small>' + esc(c.description) + '</small>';
+                    el.appendChild(g);
+                    return;
+                  }
                   var b = document.createElement('button'); b.className='item';
-                  b.innerHTML = c.code + ' <small>— ' + c.width_mm + '×' + c.height_mm + '×' +
-                                c.depth_mm + ' · ' + c.description + '</small>';
+                  b.innerHTML = c.code + ' <small>— ' + size + ' · ' + c.description + '</small>';
                   b.onclick = function(){
                     document.getElementById('search').value='';
                     st = { cls:c['class'], sec:c.section, typ:c.type_key, code:c.code };

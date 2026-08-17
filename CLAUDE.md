@@ -107,7 +107,7 @@ project-specific choice harden into a global standard.
 ## Workflow
 
 - **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 122 checks. Run after every change; keep it green. New pure
+  currently 128 checks. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
@@ -128,14 +128,17 @@ project-specific choice harden into a global standard.
 
 ## Current state (2026-08-17)
 
-Core v0.20.0. Working: registry-driven generator (build by code, floor
+Core v0.21.0. Working: registry-driven generator (build by code, floor
 snap, build-next-to-selected continues a run), cascading catalog picker
 with search, unit properties panel (78/75, gola profile lines, handles,
-hinge side), dashed opening symbols on two hideable tags, 122 green checks.
+hinge side), dashed opening symbols on two hideable tags, 128 green checks.
 
-Registry: 108 codes in three sections of family H.78 — base units (85, printed
-p.36, p.39 and p.40 complete), sink bases (20, printed p.44) and the
-fully-integrated dishwasher door (3, printed p.47). M1.7 proved the
+Registry: 117 codes in three sections of family H.78 — base units (94, printed
+p.36, p.39 and p.40 complete, plus the nine corner codes of p.42), sink bases
+(20, printed p.44) and the fully-integrated dishwasher door (3, printed p.47).
+A unit type may be `buildable: false` — in the registry, findable and orderable,
+but not drawn, because its geometry is not implemented honestly yet. Corners are
+the first case. M1.7 proved the
 intent: a new section file unfolded new picker levels with zero changes in
 core/. What the catalog contains but we have not extracted is recorded in
 `_manifest.json` → `catalog_map` and shown as grey rows in the picker, so a

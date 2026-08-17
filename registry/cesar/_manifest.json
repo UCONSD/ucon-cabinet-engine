@@ -34,9 +34,12 @@
           { "printed": 41, "status": "not_extracted",
             "types": ["Base unit with drawer and jumbo drawer", "Base unit for built-in oven H. 60"],
             "note": "CAUTION: codes on this page (B78566, B88566, B98566 ...) do NOT decode with the p.36 width lookup, and the elevation reads 19,5 + 55,5 = 750, not 780. Read this page's grammar from scratch before extracting; do not assume." },
-          { "printed": 42, "status": "not_extracted",
-            "types": ["Base unit for built-in oven H. 60", "Corner base unit", "Corner base unit with Magicorner pull-out mechanism"],
-            "note": "corner units need M2.2 placement" },
+          { "printed": 42, "status": "partial",
+            "types": [
+              { "title": "Base unit for built-in oven H. 60", "status": "not_extracted" },
+              { "title": "Corner base unit", "status": "extracted", "note": "9 codes extracted 2026-08-17 as DATA only - geometry_kind corner, buildable=false until M2.2. The hand is inside the code (D/S) and the W notation is not yet decoded." },
+              { "title": "Corner base unit with Magicorner pull-out mechanism", "status": "not_extracted" }
+            ] },
           { "printed": 43, "status": "not_extracted",
             "types": ["Corner base unit with Slidecorner pull-out mechanism", "Corner base unit"],
             "note": "corner units need M2.2 placement" }

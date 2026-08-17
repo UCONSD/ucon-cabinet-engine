@@ -100,6 +100,12 @@ module UCON
             'interior_confirmed' => unit_type['interior_confirmed'] || [],
             'front_layout'       => unit_type['front_layout'],
             'object_class'       => unit_type['object_class'] || 'cabinet',
+            'geometry_kind'      => unit_type['geometry_kind'] || 'linear',
+            'buildable'          => unit_type.fetch('buildable', true),
+            'not_buildable_reason' => unit_type['not_buildable_reason'],
+            'corner_geometry'    => row['corner_geometry'],
+            'door_width_mm'      => row['door_width_mm'],
+            'carcass_length_mm'  => row['carcass_length_mm'],
             'companions'         => unit_type['companions'] || [],
             'source_ref'         => "#{reg['source_pdf']} #{unit_type['source_ref']}",
             'registry_status'    => reg['registry_status']
@@ -118,7 +124,11 @@ module UCON
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],
             'source_ref' => unit_type['source_ref'],
-            'section' => unit_type['section'], 'class' => unit_type['class'] }
+            'section' => unit_type['section'], 'class' => unit_type['class'],
+            'geometry_kind' => unit_type['geometry_kind'] || 'linear',
+            'buildable' => unit_type.fetch('buildable', true),
+            'not_buildable_reason' => unit_type['not_buildable_reason'],
+            'corner_geometry' => row['corner_geometry'] }
         end
       end
 

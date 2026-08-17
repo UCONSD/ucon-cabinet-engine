@@ -725,6 +725,89 @@
           }
         ],
         "notes": "No Push-pull device per source."
+      },
+      "base_corner": {
+        "description": "Corner base unit - 1 rh or lh door, 8x8 fixed corner front panel, 1 shelf",
+        "geometry_kind": "corner",
+        "buildable": false,
+        "not_buildable_reason": "Corner placement is M2.2: how a run turns 90 degrees off another run is not implemented, and the W notation on the page is not yet decoded (see notes). The codes are here so they can be found, searched and ordered; the geometry waits.",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "8x8 fixed corner front panel"
+        ],
+        "source_ref": "printed p.42 / PDF 44",
+        "codes": [
+          {
+            "code": "B7091D/S",
+            "corner_geometry": "1000x430",
+            "depth_mm": 350,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "B7110D/S",
+            "corner_geometry": "1150x430",
+            "depth_mm": 350,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "B7125D/S",
+            "corner_geometry": "1300x430",
+            "depth_mm": 350,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          },
+          {
+            "code": "AU090D/S",
+            "corner_geometry": "1000x700",
+            "depth_mm": 620,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AU110D/S",
+            "corner_geometry": "1150x700",
+            "depth_mm": 620,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AU125D/S",
+            "corner_geometry": "1300x700",
+            "depth_mm": 620,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          },
+          {
+            "code": "AW090D/S",
+            "corner_geometry": "1050x750",
+            "depth_mm": 670,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AW110D/S",
+            "corner_geometry": "1200x750",
+            "depth_mm": 670,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AW125D/S",
+            "corner_geometry": "1350x750",
+            "depth_mm": 670,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          }
+        ],
+        "notes": "THE HAND IS PART OF THE CODE HERE. Every row is printed as '...D/S' - Destra / Sinistra - so an order carries AU090D or AU090S, not AU090D/S. This is the first place in the registry where handedness lives INSIDE the article code instead of beside it as the per-order hinge_side axis; the generator must resolve the suffix from the chosen hand and must never emit the D/S template as an orderable code. Printed rules, verbatim: W.100/105 unit with 30 cm door - 90 cm carcass; W.115/120 unit with 45 cm door - 90 cm carcass; W.130/135 unit with 60 cm door - 120 cm carcass. UNDECODED: what the two numbers of the W notation measure. Evidence so far - the second number is always depth + 80 mm (350->430, 620->700, 670->750), which matches the 8x8 fixed corner panel; the first is 1000/1150/1300 at d.35 and d.62 but 1050/1200/1350 at d.67, i.e. +50 with the depth, which a simple carcass+panel sum does not explain. Do not model a footprint from a guess.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door of 300/450/600 plus an 8x8 fixed corner front panel; the rest of the carcass front is blind, behind the perpendicular run. Not drawn until the corner footprint is decoded and M2.2 places it."
+        }
       }
     }
   }

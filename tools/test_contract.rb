@@ -195,9 +195,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 108 codes (85 base + 20 sink + 3 appliance)') do
+check('registry loads and holds 117 codes (94 base + 20 sink + 3 appliance)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 108
+  raise "got #{n}" unless n == 117
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -354,11 +354,13 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 108 rows, each with code/dims/description/source') do
+check('registry catalog: 117 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 108
+  raise cat.length.to_s unless cat.length == 117
+  # A corner row is dimensioned by corner_geometry instead of a single width.
   raise 'incomplete row' unless cat.all? { |c|
-    c['code'] && c['width_mm'] && c['height_mm'] && c['depth_mm'] &&
+    c['code'] && c['height_mm'] && c['depth_mm'] &&
+    (c['width_mm'] || c['corner_geometry']) &&
     c['description'] && c['source_ref'] && c['type_key']
   }
 end
@@ -517,6 +519,47 @@ end
 check('the pull-out door is marked as a mechanism, not a swinging leaf') do
   u = Registry.lookup('B80300')
   raise u['front_layout'].inspect unless u['front_layout']['mechanism'] == 'pull_out_door'
+end
+
+puts "\ncorner base units (printed p.42) - data now, geometry at M2.2"
+check('nine corner codes are in, dimensioned by corner_geometry') do
+  rows = Registry.catalog.select { |c| c['type_key'] == 'base_corner' }
+  raise rows.length.to_s unless rows.length == 9
+  raise 'a corner row must not carry a single width' if rows.any? { |r| r['width_mm'] }
+  raise 'every corner row needs its corner geometry' unless rows.all? { |r| r['corner_geometry'] }
+end
+check('EVERY corner code yields contract-valid attributes') do
+  Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
+    a = Generator.attributes_for(Registry.lookup(row['code']))
+    raise a.inspect unless a['geometry_kind'] == 'corner'
+    raise 'width must be absent on a corner' if a.key?('width_mm')
+    Contract.validate!(a)
+  end
+end
+check('the second W number is always depth + 80 (the 8x8 corner panel)') do
+  Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
+    u = Registry.lookup(row['code'])
+    second = u['corner_geometry'].split('x').last.to_i
+    raise "#{row['code']}: #{second} vs #{u['depth_mm']}" unless second == u['depth_mm'] + 80
+  end
+end
+check('the hand lives INSIDE a corner code, so the D/S template is never orderable') do
+  codes = Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.map { |c| c['code'] }
+  raise codes.inspect unless codes.all? { |c| c.end_with?('D/S') }
+  notes = Registry.data['families']['H.78']['unit_types']['base_corner']['notes']
+  raise 'the D/S rule must be recorded' unless notes.include?('THE HAND IS PART OF THE CODE')
+end
+check('a corner unit refuses to build, and says why') do
+  begin
+    Generator.build('AU090D/S', nil)
+    raise 'expected a refusal'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('cannot be built yet') && e.message.include?('M2.2')
+  end
+end
+check('every other type is still buildable') do
+  not_buildable = Registry.catalog.reject { |c| c['buildable'] }.map { |c| c['type_key'] }.uniq
+  raise not_buildable.inspect unless not_buildable == ['base_corner']
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
