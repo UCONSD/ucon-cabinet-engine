@@ -215,6 +215,29 @@ CLAUDE.md.)
   free-sized cabinets, pretty pictures, manual translation to a factory
   order) is the opposite of ours (article-coded, source-verified,
   order-ready) - UX patterns borrowed, data model deliberately not.
+- **Catalog section map + picker gaps — DONE 2026-08-17.**
+  `_manifest.json` → `catalog_map` records what the printed index says exists
+  (sections from printed p.19, unit types only for pages we have opened), and
+  `Registry.gaps` turns the difference against the registry into inert grey
+  rows in the picker. Readable copy: `docs/Catalog_Section_Map_H78.md`.
+  Held: 94 of 231 codes in the H.78 block. Rule established: a placeholder may
+  only be shown at a level we have actually read in the source.
+- **Dishwasher placeholder + printed p.48 — ONE task, not two.** The page holds
+  the door for an integrated dishwasher (V88559…V88669, 6 codes); the machine
+  is the client's. Build the appliance placeholder
+  (`object_class=appliance_front`, sixth tier of the spectrum in
+  `docs/Bespoke_Elements_Design_Spec_v0.1.md`) together with the section
+  extraction, so the order line (the Cesar door) and the stand-in (the
+  appliance) land at once. Demand-driven: build when a kitchen has a dishwasher.
+- **Printed p.47 excluded by decision (2026-08-17).** Cesar appliance housings
+  (fridge/freezer housing, built-in fridge-freezer, fully-integrated dishwasher
+  and washing-machine doors) are not extracted because no current project
+  orders them. Recorded as a decision at PLANNING trust so it does not read as
+  an oversight later; reversible on demand.
+- **Printed p.41 needs its grammar read from scratch** before extraction: its
+  codes (B78566, B88566, B98566 …) do not decode with the p.36 width lookup and
+  its elevation sums to 750, not 780. Flagged in the map; do not extract by
+  inertia.
 - **Registry loader hardening — small, do before the next section lands
   (found 2026-08-17 while adding the sink section).** `core/50_registry.rb`
   merges every non-`unit_types` key from a section file into its FAMILY, last
