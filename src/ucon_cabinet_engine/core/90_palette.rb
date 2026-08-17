@@ -108,8 +108,13 @@ module UCON
                    font-size:13px;cursor:default}
             .ghost small{color:#b0b0b0}
             .ghost .page{margin:6px 0 0 10px;padding-left:8px;border-left:2px solid #e6e6e6}
-            .tag{float:right;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
-                 color:#9a9a9a;border:1px solid #e0e0e0;border-radius:4px;padding:1px 5px;background:#fff}
+            /* Each line is its own flex row so a badge stays pinned right and
+               a long title wraps beside it instead of flowing underneath. */
+            .ghost .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+            .ghost .row span{min-width:0}
+            .tag{flex:none;white-space:nowrap;font-size:10px;letter-spacing:.04em;
+                 text-transform:uppercase;color:#9a9a9a;border:1px solid #e0e0e0;
+                 border-radius:4px;padding:1px 5px;background:#fff}
             .drow{display:flex;align-items:center;gap:4px;margin-bottom:6px}
             .dlab{width:44px;color:#555;font-size:12px}
             .wbtn{flex:1;padding:6px 0;border:1px solid #d4d4d4;border-radius:5px;background:#fff;
@@ -202,28 +207,29 @@ module UCON
               // that position — p.47 excludes the fridge housings but keeps the
               // dishwasher door. Reasons live in the tooltip so the row stays a
               // row and not a paragraph.
+              function row(inner, status, tip){
+                return '<div class="row"' + (tip ? ' title="' + esc(tip) + '"' : '') + '>' +
+                       '<span>' + inner + '</span>' + (status ? badge(status) : '') + '</div>';
+              }
               function typeLines(types, parentStatus){
                 return (types||[]).map(function(t){
                   var own = t.status && t.status !== parentStatus;
-                  return '<small' + (t.note ? ' title="' + esc(t.note) + '"' : '') + '>' +
-                         (own ? badge(t.status) : '') + esc(t.title) + '</small>';
-                }).join('<br>');
+                  return row('<small>' + esc(t.title) + '</small>', own ? t.status : null, t.note);
+                }).join('');
               }
               function ghosts(el, keep, title){
                 GAPS.filter(keep).forEach(function(g){
                   var d = document.createElement('div'); d.className='ghost';
-                  var html = badge(g.status) + esc(title(g)) +
-                    (g.level==='type' ? '' : ' <small>· ' + esc(g.printed) + '</small>');
-                  if(g.note) html += '<br><small>' + esc(g.note) + '</small>';
-                  var own = typeLines(g.types, g.status);
-                  if(own) html += '<br>' + own;
+                  var html = row(esc(title(g)) +
+                    (g.level==='type' ? '' : ' <small>· ' + esc(g.printed) + '</small>'), g.status);
+                  if(g.note) html += '<small>' + esc(g.note) + '</small>';
+                  html += typeLines(g.types, g.status);
                   // Pages we have read, nested under their section — the index
                   // names a section once, so the picker shows it once.
                   (g.pages||[]).forEach(function(p){
-                    html += '<div class="page">' + badge(p.status) + '<small>' + esc(p.printed) + '</small>' +
-                            (p.note ? '<br><small>' + esc(p.note) + '</small>' : '') +
-                            (p.types && p.types.length ? '<br>' + typeLines(p.types, p.status) : '') +
-                            '</div>';
+                    html += '<div class="page">' + row('<small>' + esc(p.printed) + '</small>', p.status) +
+                            (p.note ? '<small>' + esc(p.note) + '</small>' : '') +
+                            typeLines(p.types, p.status) + '</div>';
                   });
                   d.innerHTML = html;
                   el.appendChild(d);
