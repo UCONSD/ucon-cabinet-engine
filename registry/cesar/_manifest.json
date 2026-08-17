@@ -37,7 +37,7 @@
           { "printed": 42, "status": "partial",
             "types": [
               { "title": "Base unit for built-in oven H. 60", "status": "not_extracted" },
-              { "title": "Corner base unit", "status": "extracted", "note": "Extracted and BUILDABLE since 2026-08-17: 9 sizes x 2 executions = 18 articles. The letter is the execution (S = door at the left end, D mirrored), the door hand (LH/RH) stays the per-order hinge_side. W notation decoded: second number = depth + 80 (the 8x8 filler), first = nominal length along the door wall; nominal minus carcass = wasted space, drawn as edges only. Corner PLACEMENT (how a run turns) is still M2.2." },
+              { "title": "Corner base unit", "status": "extracted", "note": "Extracted and BUILDABLE since 2026-08-17: 9 sizes x 2 executions = 18 articles. The letter is the execution (S = door at the left end, D mirrored), the door hand (LH/RH) stays the per-order hinge_side. W notation decoded: second number = depth + 80 (the 8x8 filler), first = nominal length along the door wall; nominal minus carcass = wasted space, drawn as edges only. Corner PLACEMENT (how a run turns) is still M2.2. GAP found on printed p.10 (2026-08-17): the technical page lists a THIRD corner depth - 95x65 / 110x65 / 125x65, i.e. d.57, since 65 = 57 + 80 - which p.42 does not price and whose own page we have not located. Not extracted, not invented. d.57 is outside the H.78 depth grammar (7=d.35, 8=d.62, 9=d.67), so it is recorded here rather than as a phantom section: a gap row may only appear at a level we have actually read." },
               { "title": "Corner base unit with Magicorner pull-out mechanism", "status": "not_extracted" }
             ] },
           { "printed": 43, "status": "not_extracted",

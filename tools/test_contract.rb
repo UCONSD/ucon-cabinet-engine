@@ -598,6 +598,28 @@ check('the corner symbol follows hinge_side, not the execution letter') do
   raise lh.inspect unless lh[:front][0][0][0].zero?          # hinged on the left edge
   raise rh.inspect unless rh[:front][0][0][0] == 450.0       # hinged on the right edge
 end
+check('printed p.10 confirms the corner model, and RH there means D') do
+  notes = Registry.data['families']['H.78']['unit_types']['base_corner']['notes']
+  raise 'the p.10 confirmation must be recorded' unless notes.include?('printed p.10')
+  raise 'the RH = D mapping must be recorded' unless notes.include?('RH (as drawn on p.10 and p.11) = D')
+  # The two pages disagree on which hand they draw, so the hand is never read
+  # off a picture. That caution must travel with the data.
+  raise 'the drawing caution must be recorded' unless notes.include?('NEVER be read off a picture')
+end
+check('the d.57 corner depth is recorded as a gap, not invented') do
+  sec = Registry.map_sections.find { |s| s['family'] == 'H.78' && s['section'] == 'Base units H. 78' }
+  page = sec['pages'].find { |p| p['printed'].to_s.include?('42') }
+  ct = page['types'].find { |t| t['title'] == 'Corner base unit' }
+  raise ct.inspect unless ct && ct['note'].include?('d.57')
+  raise 'the gap must say where it came from' unless ct['note'].include?('printed p.10')
+  # d.57 has no digit in the H.78 depth grammar, which is why it cannot be a
+  # phantom section row: 7 = d.35, 8 = d.62, 9 = d.67.
+  depths = Registry.data['families']['H.78']['code_grammar']['depth_digit'] rescue nil
+  raise 'd.57 must not have leaked into the H.78 grammar' if depths && depths.values.include?(570)
+  raise 'no corner article may claim d.57' if
+    Registry.catalog.select { |c| c['type_key'] == 'base_corner' }
+            .any? { |c| Registry.lookup(c['code'])['depth_mm'] == 570 }
+end
 check('REGRESSION: a corner front slab has a real width at BOTH door versions') do
   # The bug: front_slabs read unit['width_mm'], which a corner does not have,
   # so changing the door version in the properties panel produced
