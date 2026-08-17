@@ -172,6 +172,23 @@ extraction workflow is being exercised page by page instead.
   the exception editor.
 - **M1.7 — Sink base H.78 section** (printed p.46-48): first proof that a new
   section file unfolds new picker levels with zero code changes. P1 units.
+- **M1.7a — Registry-drawn picker thumbnails** (paired with M1.7, from the
+  EasySketch review 2026-08-16). Inline SVG mini-elevations generated in the
+  picker from front_layout data - our own drawing convention (dashed V /
+  diagonals), real proportions: type tiles get a schematic, the result card
+  gets the actual code's W:H. NO static image assets ever - thumbnails derive
+  from the registry, so every new section draws its own. Corner types will
+  render a plan-view schematic (geometry_kind=corner); appliance/sink
+  pictogram hints become an optional registry field when those sections are
+  extracted. Cost: ~60-80 lines JS in picker_html + front_layout passthrough
+  in Registry.catalog. Also adopted from that review, unscheduled: Smart
+  Right Click (context menu on a unit: panel / flip hinge / door version)
+  and saved unit variants (code + options preset, extends M1.6 defaults).
+  Rejected from it: static asset libraries, door animations (a wireframe
+  LayOut sheet needs symbols, not motion). EasySketch's model (generic
+  free-sized cabinets, pretty pictures, manual translation to a factory
+  order) is the opposite of ours (article-coded, source-verified,
+  order-ready) - UX patterns borrowed, data model deliberately not.
 - **M1.8 — Appearance layer.** registry/ucon_appearance.json working palette
   + UCONAppearance dictionary on units (outside the Contract namespace);
   front/carcass finish from the panel.
