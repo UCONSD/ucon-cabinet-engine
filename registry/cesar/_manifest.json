@@ -9,8 +9,8 @@
   "verified_on": "2026-08-16",
   "scope_note": "Page numbers here are PRINTED pages (PDF = printed + 2), verified against the page footers. Covers H.78 hinged-door, two-door, drawers+jumbo (printed p.36, p.39), jumbo-drawers and drawer+jumbo units (printed p.40), straight sink bases (printed p.44), and the pull-out door and laundry basket types that completed printed p.36. NOT yet in this registry: sink bases with fixed front + jumbo drawer (printed p.45), corner sink bases (printed p.46), corner base units (printed p.42-43), appliance housings (printed p.47-48), waste and remaining drawer variants - extend only after reading their pages. Earlier editions of this note cited PDF numbers as if they were printed pages; corrected 2026-08-17.",
   "catalog_map": {
-    "source_ref": "printed p.19 chapter index (Maxima e Intarsio) for sections; page headers p.36-48 for the unit types inside H.78; visual D x W index printed p.20-22",
-    "verified_on": "2026-08-17",
+    "source_ref": "printed p.19 chapter index (Maxima e Intarsio) for sections; page headers p.36-48 for the unit types inside H.78; visual D x W index printed p.20-22; wall units from the chapter's own contents index at printed p.205 (visual D x W index p.206-210), page headers p.211-212, p.228 and p.238 for the unit types on the four wall pages we have opened",
+    "verified_on": "2026-08-18",
     "note": "The catalog's own hierarchy is: collection (Maxima/Intarsio, Tangram, Unit, N_Elle...) > element class (base/wall/tall) > height family (H.39/H.48/H.58.5/H.78/H.84) > family variant (plain / sink / for household appliances) > unit type > depth x width. Our picker mirrors class > section (family+variant) > type > size. RULE: a placeholder may only be shown at a level we have actually read in the source - sections come from the printed index, unit types only from pages we have opened. Statuses: extracted | partial | not_extracted | planned | excluded.",
     "sections": [
       { "class": "base", "family": "H.39", "section": "Base units H. 39", "printed_pages": "24-27", "status": "not_extracted" },
@@ -83,7 +83,72 @@
       { "class": "base", "family": "H.84", "section": "Base units H. 84", "printed_pages": "49-52", "status": "not_extracted",
         "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78" },
       { "class": "base", "family": "H.84", "section": "Sink base units H. 84", "printed_pages": "53-54", "status": "not_extracted" },
-      { "class": "base", "family": "H.84", "section": "Base units H. 84 | for household appliances", "printed_pages": "55-56", "status": "not_extracted" }
+      { "class": "base", "family": "H.84", "section": "Base units H. 84 | for household appliances", "printed_pages": "55-56", "status": "not_extracted" },
+      { "class": "wall", "family": "H.36", "section": "Wall units H. 36", "printed_pages": "211-212", "status": "not_extracted",
+        "note": "CODE GRAMMAR IS NEW AND MUST NOT BE CARRIED OVER FROM H.78. Read from the source 2026-08-18: P + family letter + width index + type suffix. Family letters confirmed by direct read ONLY for PB = H.36 (printed p.211), PE = H.72 (p.228), PG = H.84 (p.238). The width index is a LOOKUP with irregular rounding (15=01, 30=03, 45=05, 60=06, 75=07, 90=09, 105=10, 120=12, 150=15, 180=18, 240=24) - never compute it. The type suffix is not stable even inside one family: 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84, and 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
+        "pages": [
+          { "printed": 211, "status": "not_extracted",
+            "types": [
+            "Wall unit with top-hung door",
+            "Wall unit with push-up door",
+            "Wall unit with bottom-hung door"
+            ],
+            "note": "NEXT EXTRACTION TARGET. Read 2026-08-18: 17 codes, all d.35, no side-hinged door anywhere on the page - which is why the printed p.11 five-centimetre closing-strip rule does not bite here at all, the page IS that rule's stated alternative. Push-up is NOT a hinged door and the hinge-axis symbol rule does not describe it; its convention is still open." },
+          { "printed": 212, "status": "not_extracted",
+            "types": [
+            "Compound wall unit with top-hung door (2 modules)",
+            "Compound wall unit with top-hung door (3 compartments)",
+            "Compound wall unit with push-up door (3 compartments)"
+            ],
+            "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes." }
+        ] },
+      { "class": "wall", "family": "H.36", "section": "Dish-drainer units H. 36", "printed_pages": "213", "status": "not_extracted" },
+      { "class": "wall", "family": "H.48", "section": "Wall units H. 48", "printed_pages": "214-216", "status": "not_extracted",
+        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+      { "class": "wall", "family": "H.48", "section": "Dish-drainer units H. 48", "printed_pages": "217-218", "status": "not_extracted" },
+      { "class": "wall", "family": "H.48", "section": "Wall units H. 48 with Virgola hood", "printed_pages": "219-220", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.60", "section": "Wall units H. 60", "printed_pages": "221-223", "status": "not_extracted",
+        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+      { "class": "wall", "family": "H.60", "section": "Dish-drainer units H. 60", "printed_pages": "224-225", "status": "not_extracted" },
+      { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola hood", "printed_pages": "226", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola No Drop hood", "printed_pages": "227", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.72", "section": "Wall units H. 72", "printed_pages": "228-231", "status": "not_extracted",
+        "pages": [
+          { "printed": 228, "status": "not_extracted",
+            "types": [
+            "Wall unit with pull-out door",
+            "Wall unit with door",
+            "Wall unit with doors",
+            "Wall unit with top-hung doors"
+            ],
+            "note": "Read 2026-08-18, not extracted. PE0130 (pull-out, W.15); PE0131 one rh or lh door + 1 shelf, W.15/30/45/60; PE0630/PE0930 two doors, W.60/90; PE..04 two stacked top-hung doors split 36+36, W.45-120. This is where the printed p.11 closing-strip rule first bites, because rh/lh doors appear." }
+        ] },
+      { "class": "wall", "family": "H.72", "section": "Dish-drainer units H. 72", "printed_pages": "232-233", "status": "not_extracted" },
+      { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola hood", "printed_pages": "234-235", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola No Drop hood", "printed_pages": "236-237", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.84", "section": "Wall units H. 84", "printed_pages": "238-240", "status": "not_extracted",
+        "pages": [
+          { "printed": 238, "status": "not_extracted",
+            "types": [
+            "Wall unit with pull-out door",
+            "Wall unit with door",
+            "Wall unit with doors",
+            "Wall unit with top-hung doors"
+            ],
+            "note": "Read 2026-08-18, not extracted. Structurally identical to printed p.228 with the letter PG and two shelves instead of one: PG0130; PG0131 W.15/30/45/60; PG0630/PG0930; PG..04 two stacked top-hung doors split 36+48, W.45-120." }
+        ] },
+      { "class": "wall", "family": "H.84", "section": "Dish-drainer units H. 84", "printed_pages": "241-242", "status": "not_extracted" },
+      { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola hood", "printed_pages": "243", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola No Drop hood", "printed_pages": "244", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.96", "section": "Wall units H. 96", "printed_pages": "245-247", "status": "not_extracted",
+        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+      { "class": "wall", "family": "H.96", "section": "Dish-drainer units H. 96", "printed_pages": "248-249", "status": "not_extracted" },
+      { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola hood", "printed_pages": "250", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola No Drop hood", "printed_pages": "251", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.120", "section": "Wall units H. 120", "printed_pages": "252-254", "status": "not_extracted",
+        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+      { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola hood", "printed_pages": "255", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola No Drop hood", "printed_pages": "256", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." }
     ]
   },
   "code_grammar": {

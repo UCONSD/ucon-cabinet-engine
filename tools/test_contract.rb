@@ -908,6 +908,56 @@ check('p.41 carries its grammar warning into the gap row') do
   g = gap_page('p.41')
   raise g.inspect unless g && g['note'].to_s.include?('do NOT decode')
 end
+puts "\nwall units chapter (map only - printed p.205 index, nothing extracted yet)"
+def wall_sections
+  Registry.map_sections.select { |s| s['class'] == 'wall' }
+end
+
+check('the wall chapter is in the map: 24 sections read from the printed p.205 index') do
+  raise wall_sections.size.inspect unless wall_sections.size == 24
+  families = wall_sections.map { |s| s['family'] }.uniq
+  raise families.inspect unless families == %w[H.36 H.48 H.60 H.72 H.84 H.96 H.120]
+  first = wall_sections.first
+  raise first.inspect unless first['section'] == 'Wall units H. 36' &&
+                             first['printed_pages'] == '211-212'
+  raise wall_sections.last.inspect unless wall_sections.last['printed_pages'] == '256'
+end
+
+check('a hood variant is excluded by decision, dated, with its reason') do
+  hoods = wall_sections.select { |s| s['section'].include?('Virgola') }
+  raise hoods.size.inspect unless hoods.size == 11
+  hoods.each do |h|
+    raise h.inspect unless h['status'] == 'excluded' && h['decided_on'] == '2026-08-18'
+    raise h.inspect unless h['note'].include?('per POSITION')
+  end
+  # The rest of the chapter is an ordinary gap, not a decision.
+  rest = wall_sections - hoods
+  raise rest.map { |s| s['status'] }.uniq.inspect unless
+    rest.map { |s| s['status'] }.uniq == ['not_extracted']
+end
+
+check('the wall grammar warning travels with the chapter, not with our memory of H.78') do
+  h36 = wall_sections.first
+  %w[PB PE PG LOOKUP].each do |frag|
+    raise "#{frag} missing from the H.36 note" unless h36['note'].to_s.include?(frag)
+  end
+  unread = wall_sections.select { |s| s['note'].to_s.include?('Family letter not read') }
+  raise unread.map { |s| s['family'] }.inspect unless
+    unread.map { |s| s['family'] } == %w[H.48 H.60 H.96 H.120]
+end
+
+check('we hold no wall units, so every wall row is a SECTION gap carrying its pages') do
+  wall = Registry.gaps.select { |g| g['class'] == 'wall' }
+  raise wall.size.inspect unless wall.size == 24
+  raise 'a wall gap must sit at section level' unless wall.all? { |g| g['level'] == 'section' }
+  h36 = wall.first
+  raise h36.inspect unless h36['pages'].map { |p| p['printed'] } == %w[p.211 p.212]
+  raise 'p.211 must name the three opening kinds we read' unless
+    h36['pages'][0]['types'].map { |t| t['title'] }.size == 3
+  raise 'push-up must be flagged as an unsolved symbol' unless
+    h36['pages'][0]['note'].downcase.include?('push-up is not a hinged door')
+end
+
 if defined?(UCON::CabinetEngine::Palette)
   Palette = UCON::CabinetEngine::Palette
   check('picker HTML renders gaps as inert rows, never as buttons') do
@@ -917,6 +967,17 @@ if defined?(UCON::CabinetEngine::Palette)
     raise 'a gap row must not be clickable' if ghost_js.include?('onclick')
     raise 'gaps not injected' unless html.include?('var GAPS =')
     %w[p.37 H.\ 84].each { |frag| raise "missing #{frag}" unless html.include?(frag.delete('\\')) }
+  end
+  check('the picker offers a class we hold nothing in') do
+    # Without this the wall chapter is invisible: the class level used to be
+    # derived from the registry alone, so a class with no extracted unit was
+    # skipped by autoAdvance and its grey rows were unreachable.
+    html = Palette.picker_html(Registry.catalog, Registry.gaps)
+    raise 'class level still derived from CAT alone' unless html.include?('function classes()')
+    raise 'the class list must merge the map' unless
+      html.include?("GAPS.map(function(g){return g['class'];})")
+    raise 'a class we hold nothing in must say so' unless html.include?("'catalog only'")
+    raise 'the wall chapter never reached the dialog' unless html.include?('Wall units H. 36')
   end
   check('picker HTML escapes gap text (it comes from a data file)') do
     html = Palette.picker_html([], [{ 'level' => 'section', 'class' => 'base',

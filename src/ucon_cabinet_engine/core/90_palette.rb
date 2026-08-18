@@ -154,6 +154,21 @@ module UCON
               var st = { cls:null, sec:null, typ:null, code:null };
 
               function uniq(a){ return a.filter(function(v,i){ return a.indexOf(v)===i; }); }
+              // The class level is the one place the picker cannot be derived
+              // from the registry alone. A whole element class we have not
+              // started - the wall chapter, the tall chapter - exists only in
+              // the catalog map, and if the class list came from CAT alone the
+              // picker would auto-advance straight past it and its grey rows
+              // would be unreachable. So: classes we HOLD first, then classes
+              // the map names and we hold nothing in.
+              function classes(){
+                var have = uniq(CAT.map(function(c){return c['class'];}));
+                return have.concat(uniq(GAPS.map(function(g){return g['class'];}))
+                  .filter(function(v){ return v && have.indexOf(v) < 0; }));
+              }
+              function holds(cls){
+                return CAT.some(function(c){ return c['class'] === cls; });
+              }
               function rows(){ return CAT.filter(function(c){
                 return (!st.cls || c['class']===st.cls) && (!st.sec || c.section===st.sec) &&
                        (!st.typ || c.type_key===st.typ); }); }
@@ -163,7 +178,7 @@ module UCON
                 autoAdvance(); render();
               }
               function autoAdvance(){
-                if(!st.cls){ var cs = uniq(CAT.map(function(c){return c['class'];}));
+                if(!st.cls){ var cs = classes();
                              if(cs.length===1) st.cls = cs[0]; else return; }
                 if(!st.sec){ var ss = uniq(rows().map(function(c){return c.section;}));
                              if(ss.length===1) st.sec = ss[0]; else return; }
@@ -187,8 +202,9 @@ module UCON
                 var el = document.getElementById('content'); el.innerHTML='';
                 document.getElementById('card').style.display='none';
                 document.getElementById('buildBtn').style.display='none';
-                if(!st.cls){ list(uniq(CAT.map(function(c){return c['class'];})),
-                  function(v){return CLS[v]||v;}, function(v){ setLevel(v,null,null); }); return; }
+                if(!st.cls){ list(classes(),
+                  function(v){return CLS[v]||v;}, function(v){ setLevel(v,null,null); },
+                  function(v){ return holds(v) ? null : 'catalog only'; }); return; }
                 if(!st.sec){ list(uniq(rows().map(function(c){return c.section;})),
                   function(v){return v;}, function(v){ setLevel(st.cls,v,null); });
                   ghosts(el, function(g){ return g.level==='section' && g['class']===st.cls; },
@@ -265,11 +281,16 @@ module UCON
                   el.appendChild(d);
                 });
               }
-              function list(vals, lab, go){
+              // A class row stays a BUTTON even when we hold nothing in it:
+              // it is navigation, not a catalog entry. What is inert is what
+              // lies inside - the section rows are ghosts and stay ghosts. The
+              // badge says plainly that there is nothing behind this door yet.
+              function list(vals, lab, go, tag){
                 var el = document.getElementById('content');
                 vals.forEach(function(v){
                   var b = document.createElement('button'); b.className='item';
-                  b.textContent = lab(v);
+                  var t = tag ? tag(v) : null;
+                  b.innerHTML = esc(lab(v)) + (t ? ' ' + badge(t) : '');
                   b.onclick = function(){ go(v); };
                   el.appendChild(b);
                 });
