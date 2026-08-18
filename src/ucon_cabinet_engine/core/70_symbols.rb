@@ -125,11 +125,31 @@ module UCON
       #   :plan_rect — the leaf fallen to horizontal: the front width by its own
       #                height, projecting forward from the front face
       def bottom_hung_marks(width_mm, z0_mm, door_h_mm, y_face_mm)
-        apex = [width_mm / 2.0, y_face_mm, z0_mm + door_h_mm]
+        hung_marks(width_mm, z0_mm, door_h_mm, y_face_mm, 'bottom')
+      end
+
+      # The mirror, and nothing more. A top-hung door hangs on its TOP edge, so
+      # the base of the figure moves to the top edge and the apex drops to the
+      # opening edge below: the same rule read the other way up, an inverted
+      # Λ rather than a new symbol.
+      #
+      # The PLAN is identical for both, and deliberately so: the rectangle is
+      # the footprint the leaf sweeps through on its way to horizontal. A
+      # bottom-hung leaf ends horizontal below, a top-hung one ends horizontal
+      # above, and both pass through exactly the same forward projection - the
+      # front width by the front's own height. One rule, one rectangle.
+      def top_hung_marks(width_mm, z0_mm, door_h_mm, y_face_mm)
+        hung_marks(width_mm, z0_mm, door_h_mm, y_face_mm, 'top')
+      end
+
+      def hung_marks(width_mm, z0_mm, door_h_mm, y_face_mm, axis)
+        hinge_z = axis == 'top' ? z0_mm + door_h_mm : z0_mm
+        apex_z  = axis == 'top' ? z0_mm : z0_mm + door_h_mm
+        apex    = [width_mm / 2.0, y_face_mm, apex_z]
         {
           front: [
-            [[0.0, y_face_mm, z0_mm], apex],
-            [[width_mm.to_f, y_face_mm, z0_mm], apex]
+            [[0.0, y_face_mm, hinge_z], apex],
+            [[width_mm.to_f, y_face_mm, hinge_z], apex]
           ],
           plan_rect: [
             [0.0, y_face_mm],
@@ -167,7 +187,10 @@ module UCON
         kind   = layout['kind'] || 'single'
 
         s  = Standards
-        z0 = s::PLINTH_H_MM
+        # Symbols must start where the carcass starts. A hung unit has no
+        # plinth, so its zero is the hanging height, not PLINTH_H_MM - asked
+        # of the generator so there is exactly one answer in the engine.
+        z0 = Generator.wall_hung?(unit) ? Generator.mount_bottom_mm(unit) : s::PLINTH_H_MM
         w  = unit['width_mm']
         h  = unit['height_mm']
         y_face = -(s::FRONT_GAP_MM + s::FRONT_T_MM) - 1
@@ -241,18 +264,19 @@ module UCON
         # an inverted V. In plan the leaf falls flat, projecting forward by its
         # own height. No hinge_side is involved: the axis is a fact of the type
         # (a laundry unit) or a constant of the class (an appliance panel).
-        if layout['hinge_axis'] == 'bottom'
-          marks = bottom_hung_marks(w, z0, front_height_mm || h, y_face)
+        if %w[bottom top].include?(layout['hinge_axis'].to_s)
+          axis  = layout['hinge_axis'].to_s
+          marks = hung_marks(w, z0, front_height_mm || h, y_face, axis)
 
           g = definition.entities.add_group
-          g.name = 'SYM_FRONT_BOTTOM_HUNG'
+          g.name = axis == 'top' ? 'SYM_FRONT_TOP_HUNG' : 'SYM_FRONT_BOTTOM_HUNG'
           marks[:front].each do |a, b|
             g.entities.add_line([a[0].mm, a[1].mm, a[2].mm], [b[0].mm, b[1].mm, b[2].mm])
           end
           finalize(g, front_tag, mat)
 
           g = definition.entities.add_group
-          g.name = 'SYM_PLAN_BOTTOM_HUNG'
+          g.name = axis == 'top' ? 'SYM_PLAN_TOP_HUNG' : 'SYM_PLAN_BOTTOM_HUNG'
           dashed_rect(g, marks[:plan_rect], PLAN_Z_MM.mm)
           finalize(g, plan_tag, mat)
           return

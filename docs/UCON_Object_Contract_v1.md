@@ -1,7 +1,7 @@
 # UCON Object Contract — v1
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v1 (revision v1.4) · **Date:** 2026-08-17 · **Status:** Locked (change only via versioned migration)
+**Version:** v1 (revision v1.5) · **Date:** 2026-08-18 · **Status:** Locked (change only via versioned migration)
 
 This document defines the data foundation every other part of the Cabinet Engine depends
 on: the attribute namespace written onto model objects, the component structure, the
@@ -45,6 +45,8 @@ exporter reads it off any object without knowing what the object is.
 | `depth_mm` | number | cond. | integer mm | Required when `geometry_kind = linear`/`corner` |
 | `width_mm` | number | cond. | integer mm | The chosen width (required for `linear`) |
 | `corner_geometry` | string | cond. | e.g. `1000x400`, `750x750` | Required when `geometry_kind = corner` (replaces a single width) |
+| `mounting` | string | no | `floor` · `wall_hung` | How the object meets the room — see §1.3 |
+| `mount_bottom_mm` | number | cond. | integer mm above finished floor | Height of the object's underside. Required when `mounting = wall_hung`; forbidden otherwise |
 | `opening` | string | no | e.g. `door` · `doors` · `top-hung` · `push-up` · `pull-out` · `bottom-hung` · `folding` | Front / opening configuration (door type) |
 | `opening_method` | string | no | `handle` · `push_to_open` · `gola` | How the front is opened — a separate axis from `code` (see §4.1) |
 | `front_height_mm` | number | no | integer mm | Visible front height; derived from family + `opening_method` (`gola` = family door − 30) |
@@ -63,6 +65,30 @@ exporter reads it off any object without knowing what the object is.
 
 **Conditional-required** keys are required only in the situation named in the Meaning
 column; otherwise they may be omitted.
+
+### 1.3 Mounting (added v1.5)
+
+A base unit's height above the floor is not information: it stands on its plinth,
+and the plinth height is already a standard. A wall unit's is. Nothing in the
+catalog says how high a wall unit hangs — Cesar prices the box — so the number
+comes from the project, and if it is not written onto the object it exists only
+as a coordinate in a model, unreadable by the exporter and unquotable on a sheet.
+
+Hence:
+
+- `mounting = wall_hung` **requires** `mount_bottom_mm`, and it must be positive.
+  An object that hangs at an unstated height is under-specified.
+- `mounting = floor` **forbids** `mount_bottom_mm`. A hanging height on something
+  that stands on the floor is a number nobody can honour, and silently ignoring
+  it would let a wrong value survive in the model.
+- `mounting` itself is optional for backward compatibility, but the generator
+  states it on every cabinet it builds — including `floor` — so that an absent
+  key means "nobody asked", never "it stands on the floor".
+
+`mount_bottom_mm` is a PROJECT decision at trust level PLANNING, never a catalog
+fact. Until M1.6 (project defaults) exists, the generator takes it from
+`Standards::WALL_MOUNT_BOTTOM_MM`, whose `STATUS` entry is deliberately weaker
+than every other constant in that file.
 
 ### 1.2 Reserved / forbidden
 
@@ -265,6 +291,13 @@ These hold across every tool and document:
 
 ## 7. Change log
 
+- **v1.5 (2026-08-18)** — Additive, non-breaking. Added `mounting`
+  (`floor` / `wall_hung`) and `mount_bottom_mm`, with the conditional rules in
+  §1.3. Prompted by the wall-unit chapter (printed p.211): the engine had no way
+  to say that an object hangs, and `z0` was hard-coded to the plinth height in
+  both the generator and the symbol renderer. No existing key changed meaning;
+  every object built under v1.0-v1.4 stays valid, since both keys are optional
+  and their absence is what those objects already meant.
 - **v1.4 (2026-08-17)** — Additive, non-breaking. `object_class` gains `appliance`:
   the client's machine itself, as opposed to `appliance_front`, the Cesar panel that
   hides it. The two are deliberately separate objects with opposite natures — the panel

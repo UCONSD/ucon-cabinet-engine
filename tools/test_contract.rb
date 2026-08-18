@@ -195,9 +195,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 126 codes (103 base + 20 sink + 3 appliance)') do
+check('registry loads and holds 138 codes (103 base + 20 sink + 3 appliance + 12 wall)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 126
+  raise "got #{n}" unless n == 138
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -354,9 +354,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 126 rows, each with code/dims/description/source') do
+check('registry catalog: 138 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 126
+  raise cat.length.to_s unless cat.length == 138
   # A corner row is dimensioned by corner_geometry instead of a single width.
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['height_mm'] && c['depth_mm'] &&
@@ -426,8 +426,10 @@ check('split storage: every catalog row is stamped with its section and class') 
   sections = cat.map { |c| c['section'] }.uniq.sort
   raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
-                                             'Sink base units H. 78']
-  raise cat.map { |c| c['class'] }.uniq.inspect unless cat.map { |c| c['class'] }.uniq == ['base']
+                                             'Sink base units H. 78',
+                                             'Wall units H. 36']
+  raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
+    cat.map { |c| c['class'] }.uniq.sort == %w[base wall]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -751,11 +753,26 @@ if defined?(UCON::CabinetEngine::Symbols)
     raise m[:front].inspect unless m[:front].all? { |(_, apex)| apex[2] == 850 }
     raise m[:plan_rect].inspect unless m[:plan_rect][2] == [600.0, -775]
   end
-  check('the two bottom-hung fronts we hold are the laundry unit and the panel') do
-    hung = Registry.catalog.map { |c| Registry.lookup(c['code']) }
-                   .select { |u| (u['front_layout'] || {})['hinge_axis'] == 'bottom' }
-                   .map { |u| u['code'] }.sort
-    raise hung.inspect unless hung == %w[B80614 B90614 V80530 V80630 V80730]
+def hung_codes(axis)
+  Registry.catalog.map { |c| Registry.lookup(c['code']) }
+          .select { |u| (u['front_layout'] || {})['hinge_axis'] == axis }
+          .map { |u| u['code'] }.sort
+  end
+  check('the hinge axis is one rule read both ways: top-hung is the mirror') do
+    down = hung_codes('bottom')
+    raise down.inspect unless down ==
+      %w[B80614 B90614 PB0525 PB0625 PB0725 PB0925 PB1025 PB1225 V80530 V80630 V80730]
+    up = hung_codes('top')
+    raise up.inspect unless up == %w[PB0500 PB0600 PB0700 PB0900 PB1000 PB1200]
+
+    # Same unit, both ways up: the two figures are reflections of each other in
+    # the mid-height plane, and the plan footprint is identical because the leaf
+    # sweeps the same rectangle whichever way it swings.
+    b = Symbols.bottom_hung_marks(600, 1400, 360, -25)
+    t = Symbols.top_hung_marks(600, 1400, 360, -25)
+    raise b[:front].inspect unless b[:front].all? { |(base, apex)| base[2] == 1400 && apex[2] == 1760 }
+    raise t[:front].inspect unless t[:front].all? { |(base, apex)| base[2] == 1760 && apex[2] == 1400 }
+    raise 'the plan rectangle must not differ' unless b[:plan_rect] == t[:plan_rect]
   end
 end
 
@@ -908,10 +925,57 @@ check('p.41 carries its grammar warning into the gap row') do
   g = gap_page('p.41')
   raise g.inspect unless g && g['note'].to_s.include?('do NOT decode')
 end
+puts "\nwall units H. 36 (printed p.211) - Contract v1.5 mounting"
+check('a hung object must say how high it hangs; a floor object must not') do
+  base = Generator.attributes_for(Registry.lookup('B80601'))
+  raise base.inspect unless base['mounting'] == 'floor'
+  raise 'a floor unit must not carry a hanging height' if base.key?('mount_bottom_mm')
+
+  wall = Generator.attributes_for(Registry.lookup('PB0600'))
+  raise wall.inspect unless wall['mounting'] == 'wall_hung'
+  raise wall.inspect unless wall['mount_bottom_mm'] == Standards::WALL_MOUNT_BOTTOM_MM
+  Contract.validate!(wall)
+end
+
+rejects('a hung object with no hanging height',
+        with('mounting' => 'wall_hung', 'mount_bottom_mm' => nil), 'requires mount_bottom_mm')
+rejects('a hanging height on something that stands on the floor',
+        with('mounting' => 'floor', 'mount_bottom_mm' => 1400), 'only meaningful')
+rejects('a mounting outside the enum', with('mounting' => 'ceiling'), 'is not one of')
+rejects('a hung object at a non-positive height',
+        with('mounting' => 'wall_hung', 'mount_bottom_mm' => 0), 'must be positive')
+
+check('the wall section is 12 codes in two types, six widths each, all d.35') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 36' }
+  raise rows.length.to_s unless rows.length == 12
+  raise rows.map { |r| r['height_mm'] }.uniq.inspect unless rows.map { |r| r['height_mm'] }.uniq == [360]
+  raise rows.map { |r| r['depth_mm'] }.uniq.inspect unless rows.map { |r| r['depth_mm'] }.uniq == [350]
+  widths = rows.map { |r| r['width_mm'] }.uniq.sort
+  raise widths.inspect unless widths == [450, 600, 750, 900, 1050, 1200]
+  raise 'push-up must not have leaked in' if Registry.codes.include?('PB0610')
+end
+
+check('the width index is a lookup: no code decodes arithmetically') do
+  # 45 rounds UP to 05 while 75 and 105 round DOWN to 07 and 10. Anything that
+  # tries to compute a width from the digits gets two of these wrong.
+  { 'PB0500' => 450, 'PB0700' => 750, 'PB1000' => 1050, 'PB1200' => 1200 }.each do |code, w|
+    raise code unless Registry.lookup(code)['width_mm'] == w
+  end
+end
+
+check('a wall unit is one full-height front and no plinth in the geometry') do
+  slabs = Generator.front_slabs(Registry.lookup('PB1200'))
+  raise slabs.inspect unless slabs.length == 1
+  raise slabs.inspect unless slabs[0][:w_mm] == 1200 && slabs[0][:h_mm] == 360
+  raise 'a wall unit must be hung' unless Generator.wall_hung?(Registry.lookup('PB1200'))
+  raise 'a base unit must not be' if Generator.wall_hung?(Registry.lookup('B80601'))
+end
+
 puts "\nwall units chapter (map only - printed p.205 index, nothing extracted yet)"
 def wall_sections
   Registry.map_sections.select { |s| s['class'] == 'wall' }
 end
+
 
 check('the wall chapter is in the map: 24 sections read from the printed p.205 index') do
   raise wall_sections.size.inspect unless wall_sections.size == 24
@@ -930,10 +994,10 @@ check('a hood variant is excluded by decision, dated, with its reason') do
     raise h.inspect unless h['status'] == 'excluded' && h['decided_on'] == '2026-08-18'
     raise h.inspect unless h['note'].include?('per POSITION')
   end
-  # The rest of the chapter is an ordinary gap, not a decision.
-  rest = wall_sections - hoods
-  raise rest.map { |s| s['status'] }.uniq.inspect unless
-    rest.map { |s| s['status'] }.uniq == ['not_extracted']
+  # The rest of the chapter is an ordinary gap, not a decision - except the
+  # one section we have started, which is partial.
+  rest = (wall_sections - hoods).map { |s| s['status'] }.uniq.sort
+  raise rest.inspect unless rest == %w[not_extracted partial]
 end
 
 check('the wall grammar warning travels with the chapter, not with our memory of H.78') do
@@ -946,16 +1010,30 @@ check('the wall grammar warning travels with the chapter, not with our memory of
     unread.map { |s| s['family'] } == %w[H.48 H.60 H.96 H.120]
 end
 
-check('we hold no wall units, so every wall row is a SECTION gap carrying its pages') do
+check('the section we started reports pages; the 23 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
-  raise wall.size.inspect unless wall.size == 24
-  raise 'a wall gap must sit at section level' unless wall.all? { |g| g['level'] == 'section' }
-  h36 = wall.first
-  raise h36.inspect unless h36['pages'].map { |p| p['printed'] } == %w[p.211 p.212]
-  raise 'p.211 must name the three opening kinds we read' unless
-    h36['pages'][0]['types'].map { |t| t['title'] }.size == 3
-  raise 'push-up must be flagged as an unsolved symbol' unless
-    h36['pages'][0]['note'].downcase.include?('push-up is not a hinged door')
+  sections = wall.select { |g| g['level'] == 'section' }
+  raise sections.size.inspect unless sections.size == 23
+  raise 'a section we hold must not also be a section gap' if
+    sections.any? { |g| g['section'] == 'Wall units H. 36' }
+
+  # Wall units H. 36 is held, so its unextracted pages surface as TYPE rows.
+  pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
+  raise pages.inspect unless pages == %w[p.211 p.212]
+end
+
+check('p.211 is partial by POSITION: push-up is a gap inside a page we hold') do
+  g = gap_page('p.211')
+  raise g.inspect unless g && g['status'] == 'partial'
+  by_title = g['types'].to_h { |t| [t['title'], t['status']] }
+  raise by_title.inspect unless by_title == {
+    'Wall unit with top-hung door'    => 'extracted',
+    'Wall unit with push-up door'     => 'not_extracted',
+    'Wall unit with bottom-hung door' => 'extracted'
+  }
+  push = g['types'].find { |t| t['title'].include?('push-up') }
+  raise 'the reason must survive into the row' unless
+    push['note'].include?('not hinged') && push['note'].include?('PB0610')
 end
 
 if defined?(UCON::CabinetEngine::Palette)

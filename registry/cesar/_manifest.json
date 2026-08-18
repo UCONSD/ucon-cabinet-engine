@@ -1,7 +1,7 @@
 {
   "manufacturer": "cesar",
   "schema_version": "1",
-  "contract_revision": "1.2",
+  "contract_revision": "1.5",
   "catalog_edition": "2021 price list (later update notation)",
   "source_pdf": "CESAR - 2 Kitchen System.pdf",
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
@@ -84,21 +84,25 @@
         "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78" },
       { "class": "base", "family": "H.84", "section": "Sink base units H. 84", "printed_pages": "53-54", "status": "not_extracted" },
       { "class": "base", "family": "H.84", "section": "Base units H. 84 | for household appliances", "printed_pages": "55-56", "status": "not_extracted" },
-      { "class": "wall", "family": "H.36", "section": "Wall units H. 36", "printed_pages": "211-212", "status": "not_extracted",
+      { "class": "wall", "family": "H.36", "section": "Wall units H. 36", "printed_pages": "211-212", "status": "partial",
         "note": "CODE GRAMMAR IS NEW AND MUST NOT BE CARRIED OVER FROM H.78. Read from the source 2026-08-18: P + family letter + width index + type suffix. Family letters confirmed by direct read ONLY for PB = H.36 (printed p.211), PE = H.72 (p.228), PG = H.84 (p.238). The width index is a LOOKUP with irregular rounding (15=01, 30=03, 45=05, 60=06, 75=07, 90=09, 105=10, 120=12, 150=15, 180=18, 240=24) - never compute it. The type suffix is not stable even inside one family: 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84, and 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
         "pages": [
-          { "printed": 211, "status": "not_extracted",
+          { "printed": 211, "status": "partial",
+            "note": "Extracted 2026-08-18, but not whole: the page's decisions are per POSITION. Two of three opening kinds are in; the third is a recorded gap, not an oversight. No side-hinged door appears anywhere on this page, which is why the printed p.11 five-centimetre closing-strip rule does not bite here - the page IS that rule's stated alternative.",
             "types": [
-            "Wall unit with top-hung door",
-            "Wall unit with push-up door",
-            "Wall unit with bottom-hung door"
-            ],
-            "note": "NEXT EXTRACTION TARGET. Read 2026-08-18: 17 codes, all d.35, no side-hinged door anywhere on the page - which is why the printed p.11 five-centimetre closing-strip rule does not bite here at all, the page IS that rule's stated alternative. Push-up is NOT a hinged door and the hinge-axis symbol rule does not describe it; its convention is still open." },
+              { "title": "Wall unit with top-hung door", "status": "extracted",
+                "note": "PB0500/0600/0700/0900/1000/1200, W.45-120, d.35. Symbol derived by mirroring the existing hinge-axis rule, not by inventing a second one." },
+              { "title": "Wall unit with push-up door", "status": "not_extracted",
+                "decided_on": "2026-08-18",
+                "note": "PB0610, PB0710, PB0910, PB1010, PB1210 (W.60-120). NOT extracted by decision: a push-up door is not hinged, so the Drawing_Spec hinge-axis rule does not describe it and there is no honest symbol yet. Extract together with its convention, not before. The page also states: interior Valencia handle, no Push-pull device." },
+              { "title": "Wall unit with bottom-hung door", "status": "extracted",
+                "note": "PB0525/0625/0725/0925/1025/1225, W.45-120, d.35. Reuses the figure built for the laundry unit and the dishwasher panel." }
+            ] },
           { "printed": 212, "status": "not_extracted",
             "types": [
-            "Compound wall unit with top-hung door (2 modules)",
-            "Compound wall unit with top-hung door (3 compartments)",
-            "Compound wall unit with push-up door (3 compartments)"
+              "Compound wall unit with top-hung door (2 modules)",
+              "Compound wall unit with top-hung door (3 compartments)",
+              "Compound wall unit with push-up door (3 compartments)"
             ],
             "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes." }
         ] },
@@ -152,6 +156,26 @@
     ]
   },
   "code_grammar": {
+    "wall_units": {
+      "shape": "P + family_letter + width_index + type_suffix, e.g. PB0500",
+      "source_ref": "printed p.211 (PB), p.228 (PE), p.238 (PG), read 2026-08-18",
+      "family_letter": {
+        "note": "FAMILY-SPECIFIC and read only where we have opened the page. Never extrapolate alphabetically.",
+        "B": "H.36",
+        "E": "H.72",
+        "G": "H.84",
+        "unread": "H.48, H.60, H.96, H.120"
+      },
+      "width_index": {
+        "note": "A LOOKUP, not arithmetic - the rounding is irregular (45 rounds up to 05, 75 rounds down to 07, 105 rounds down to 10). Read a width from the row, never from the digits.",
+        "01": 150, "03": 300, "05": 450, "06": 600, "07": 750,
+        "09": 900, "10": 1050, "12": 1200, "15": 1500, "18": 1800, "24": 2400
+      },
+      "type_suffix": {
+        "note": "NOT STABLE, not even inside one family. 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84; 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
+        "H.36_read": { "00": "top-hung door", "10": "push-up door", "25": "bottom-hung door", "04": "compound, 2 modules", "34": "compound, 3 compartments, top-hung", "44": "compound, 3 compartments, push-up" }
+      }
+    },
     "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
     "depth_digit": {
       "note": "FAMILY-SPECIFIC. Verified for H.78: 7=d.35, 8=d.62, 9=d.67 (printed p.36/PDF 38). H.58.5 differs: 6=d.47, 4=d.62 (printed p.35/PDF 37). Never reuse one family's mapping for another.",

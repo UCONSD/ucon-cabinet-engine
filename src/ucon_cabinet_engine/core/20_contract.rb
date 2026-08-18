@@ -2,7 +2,7 @@
 #
 # UCON Cabinet Engine — core/20_contract.rb
 #
-# Implements UCON Object Contract v1 (revision v1.1) — docs/UCON_Object_Contract_v1.md.
+# Implements UCON Object Contract v1 (revision v1.5) — docs/UCON_Object_Contract_v1.md.
 #
 # `validate!` is pure Ruby with no SketchUp dependency, so the entire rule set
 # runs headlessly:  ruby tools/test_contract.rb
@@ -23,6 +23,7 @@ module UCON
         schema_version object_class manufacturer collection family
         unit_category unit_type geometry_kind
         height_mm depth_mm width_mm corner_geometry
+        mounting mount_bottom_mm
         opening opening_method front_height_mm hinge_side
         hardware_ref hardware_source companion_refs
         code code_status pricing_group_ref
@@ -36,6 +37,7 @@ module UCON
       ENUMS = {
         'object_class'    => %w[cabinet worktop panel filler accessory appliance appliance_front corner_unit],
         'geometry_kind'   => %w[linear corner non_dim],
+        'mounting'        => %w[floor wall_hung],
         'code_status'     => %w[PRELIMINARY CONFIRMED],
         'status'          => %w[SOURCE CONTROL PLANNING CONFIRMED],
         'opening_method'  => %w[handle push_to_open gola],
@@ -104,6 +106,25 @@ module UCON
           require_keys!(a, %w[height_mm depth_mm width_mm], 'geometry_kind = linear')
         when 'corner'
           require_keys!(a, %w[height_mm depth_mm corner_geometry], 'geometry_kind = corner')
+        end
+
+        # §1.3 (v1.5) — how the object meets the room. A floor object's height
+        # above the floor is its plinth and is already implied; a hung object's
+        # is not derivable from anything the catalog says, so it must be stated
+        # or the object is under-specified. The reverse is equally a bug: a
+        # hanging height on a floor unit is a number nobody can honour.
+        if a['mounting'].to_s == 'wall_hung'
+          unless present?(a['mount_bottom_mm'])
+            raise ArgumentError,
+                  'mounting = wall_hung requires mount_bottom_mm (§1.3)'
+          end
+          if a['mount_bottom_mm'].to_f <= 0
+            raise ArgumentError,
+                  "mount_bottom_mm must be positive, got #{a['mount_bottom_mm'].inspect} (§1.3)"
+          end
+        elsif present?(a['mount_bottom_mm'])
+          raise ArgumentError,
+                'mount_bottom_mm is only meaningful with mounting = wall_hung (§1.3)'
         end
 
         # §4 — a code cannot outrank the object carrying it.

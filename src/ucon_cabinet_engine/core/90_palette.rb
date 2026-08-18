@@ -83,7 +83,9 @@ module UCON
         'sink_base_jumbo_drawer'  => 'Sink units, jumbo drawer',
         'sink_base_jumbo_drawers' => 'Sink units, two jumbo drawers',
         'appliance_dishwasher_door' => 'Dishwasher door',
-        'base_corner'             => 'Corner units'
+        'base_corner'             => 'Corner units',
+        'wall_top_hung_door'      => 'Top-hung door units',
+        'wall_bottom_hung_door'   => 'Bottom-hung door units'
       }.freeze
 
       # JSON that is safe to paste inside an inline <script>: a literal

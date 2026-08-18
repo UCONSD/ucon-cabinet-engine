@@ -91,6 +91,10 @@ module UCON
             'manufacturer'       => reg['manufacturer'],
             'family'             => family_name,
             'height_mm'          => family['height_mm'],
+            # How the family meets the room. Catalog-level, not per code: every
+            # unit in the wall chapter hangs. Absent means floor, so no existing
+            # section file has to say anything.
+            'mounting'           => family['mounting'] || 'floor',
             'width_mm'           => row['width_mm'],
             'depth_mm'           => row['depth_mm'],
             'unit_type'          => type_key,

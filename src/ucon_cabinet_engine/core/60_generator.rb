@@ -112,7 +112,13 @@ module UCON
         w    = unit['width_mm']
         h    = unit['height_mm']
         d    = unit['depth_mm']
-        z0   = s::PLINTH_H_MM
+        # A base unit stands on its plinth; a wall unit hangs and has neither
+        # plinth nor contact with the floor. Everything below is written in
+        # terms of z0, so the difference is this one line and the skipped
+        # plinth box - the front line, the symbols and build-next-to-selected
+        # need no special case.
+        wall = wall_hung?(unit)
+        z0   = wall ? mount_bottom_mm(unit) : s::PLINTH_H_MM
 
         model.start_operation("UCON: build #{code}", true)
         begin
@@ -216,12 +222,14 @@ module UCON
             return instance
           end
 
-          plinth = Geometry.box(
-            e, 'PLINTH',
-            0, s::PLINTH_SETBACK_MM, 0,
-            w, s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
-          )
-          Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+          unless wall
+            plinth = Geometry.box(
+              e, 'PLINTH',
+              0, s::PLINTH_SETBACK_MM, 0,
+              w, s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
+            )
+            Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+          end
 
           Geometry.box(e, 'CARCASS', 0, 0, z0, w, d, h, carcass_mat)
 
@@ -397,6 +405,23 @@ module UCON
         nil
       end
 
+      # Does this unit hang? Catalog-level fact, carried by the registry
+      # family. Asked in one place so nothing downstream has to know the
+      # spelling.
+      def wall_hung?(unit)
+        unit['mounting'].to_s == 'wall_hung'
+      end
+
+      # How high the bottom of a hung unit sits above the finished floor.
+      # A PROJECT decision, never a catalog fact - Cesar prices the box and
+      # says nothing about the wall. This method is the seam M1.6 will take
+      # over; until then every wall unit in the model gets the same number,
+      # and it is written into the object so the drawing can be dimensioned
+      # from data rather than from a measurement.
+      def mount_bottom_mm(_unit)
+        Standards::WALL_MOUNT_BOTTOM_MM
+      end
+
       def attributes_for(unit)
         corner = unit['geometry_kind'] == 'corner'
         attrs = {
@@ -423,6 +448,15 @@ module UCON
           attrs['corner_geometry'] = unit['corner_geometry']
         else
           attrs['width_mm'] = unit['width_mm']
+        end
+        # Stated on every object, not only the hung ones: "floor" is a fact
+        # about a base unit, and leaving it out would make the absence of the
+        # key mean two different things (floor, or nobody asked).
+        if wall_hung?(unit)
+          attrs['mounting']        = 'wall_hung'
+          attrs['mount_bottom_mm'] = mount_bottom_mm(unit)
+        else
+          attrs['mounting'] = 'floor'
         end
         companions = companion_refs_for(unit)
         attrs['companion_refs'] = companions if companions

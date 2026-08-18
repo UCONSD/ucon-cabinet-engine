@@ -1,0 +1,59 @@
+{
+  "section": "Wall units H. 36",
+  "class": "wall",
+  "family": "Wall H.36",
+  "source_pages": "printed p.211-212 / PDF 213-214 (subset extracted: p.211, and on p.211 only two of the three types)",
+  "family_naming_note": "The catalog calls this family 'H. 36' inside the wall chapter, and calls a DIFFERENT family 'H. 36' nowhere else - but H.48, H.60, H.84 and H.96 name both a base family and a wall family. The registry merges section files by family NAME, so wall families are namespaced 'Wall H.xx' to keep two unrelated families from merging into one. The catalog's own wording is preserved in 'section'.",
+  "extraction_note": "printed p.211 only, and only its top-hung and bottom-hung types. The page's third type, the push-up door (PB0610, PB0710, PB0910, PB1010, PB1210), is deliberately NOT extracted: a push-up door is not hinged, the Drawing_Spec hinge-axis rule does not describe it, and drawing it as a hinged door would be an assertion we cannot back. It is recorded as a position-level gap in catalog_map, exactly like the excluded types on printed p.47. printed p.212 (compound units) is deferred - internal partitions are new geometry.",
+  "data": {
+    "height_mm": 360,
+    "mounting": "wall_hung",
+    "mounting_note": "Catalog-level fact: every unit in the wall chapter hangs. HOW HIGH it hangs is not in the catalog and is not here - the generator takes it from Standards::WALL_MOUNT_BOTTOM_MM, a project default awaiting M1.6, and writes it onto the object as mount_bottom_mm (Contract v1.5).",
+    "overall_height_n_elle_mm": 382,
+    "n_elle_note": "Each wall page carries a second elevation labelled 'N- Elle' at H + 2,2 (38,2 here). N_Elle is its own chapter, printed p.321. RECORDED, NOT IMPLEMENTED: the +22 mm belongs to that front programme and must not be baked into this family's height.",
+    "unit_types": {
+      "wall_top_hung_door": {
+        "description": "Wall unit with top-hung door - 1 top-hung door",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.211 / PDF 213",
+        "codes": [
+          { "code": "PB0500", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PB0600", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PB0700", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PB0900", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PB1000", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PB1200", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "The page lists Servo Drive mechanism and Power adapter as surcharges. They are NOT recorded as companion_refs: the page prices them but gives them no article code, and inventing one would break the rule that a companion is resolved from the registry, never typed. Open for Elda.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge. Symbol: the mirror of the bottom-hung figure - base on the top edge, apex at the bottom, plan rectangle identical."
+        }
+      },
+      "wall_bottom_hung_door": {
+        "description": "Wall unit with bottom-hung door - 1 bottom-hung door",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.211 / PDF 213",
+        "codes": [
+          { "code": "PB0525", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PB0625", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PB0725", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PB0925", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PB1025", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PB1225", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Same width set as the top-hung type. The page states no Push-pull device for this type and no interior configuration.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "bottom",
+          "note": "Hinged along its bottom edge - the same figure already built for the laundry unit and the dishwasher panel."
+        }
+      }
+    }
+  }
+}
