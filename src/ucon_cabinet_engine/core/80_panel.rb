@@ -36,6 +36,16 @@ module UCON
         gola = payload['door_version'] == '75'
         method = gola ? 'gola' : payload['opening_method']
         raise ArgumentError, 'Door 78 cannot use gola profile logic' if method == 'gola' && !gola
+        # The door-version axis is FAMILY-SCOPED - the manifest says "each
+        # base-unit page shows door heights 78 and 75". A family that declares
+        # no versions has no choice to make, and a wall unit 360 tall cannot be
+        # given a 750 front. Checked here and not only in the dialog, because a
+        # rule that lives only in HTML is not a rule.
+        if gola && !gola_available?(unit)
+          raise ArgumentError,
+                "#{unit['code']} (#{unit['family']}, H #{unit['height_mm']}) has no gola door " \
+                'version: its family does not declare one.'
+        end
         raise ArgumentError, 'opening_method is required' if method.nil? || method.empty?
 
         h = unit['height_mm']
@@ -89,6 +99,12 @@ module UCON
       # worktop, so only position=undercounter profiles apply (GOL001 L-shaped,
       # GOL005 straight); intermediate profiles join stacked front zones and
       # offering them here would invite a wrong order line.
+      # Does this unit's family print a second, shortened door height?
+      def gola_available?(unit)
+        versions = unit && unit['door_versions']
+        !!(versions && versions['gola_mm'])
+      end
+
       def gola_options(unit = nil)
         rows = (Registry.data['hardware'] || {})['gola_profiles'] || []
         kind = unit && (unit['front_layout'] || {})['kind']
@@ -175,7 +191,8 @@ module UCON
             attrs = Contract.read(inst.definition)
             unit  = Registry.lookup(attrs['code']) rescue nil
             { 'attrs' => attrs, 'handed' => unit && unit['handed'],
-              'desc' => unit && unit['description'] }
+              'desc' => unit && unit['description'],
+              'door_versions' => unit && unit['door_versions'] }
           else
             {}
           end
@@ -258,9 +275,11 @@ module UCON
           <div id="empty">Select a UCON unit in the model</div>
           <div id="form" style="display:none">
             <h3 id="code"></h3><div class="muted" id="desc"></div>
-            <fieldset><legend>Door height</legend>
-              <label><input type="radio" name="dv" value="78" checked onchange="rules()"> 78 — full front</label>
-              <label><input type="radio" name="dv" value="75" onchange="rules()"> 75 — gola (−30 mm)</label>
+            <fieldset id="dvFs"><legend>Door height</legend>
+              <label><input type="radio" name="dv" value="78" checked onchange="rules()">
+                <span id="dvFull">full front</span></label>
+              <label><input type="radio" name="dv" value="75" onchange="rules()">
+                <span id="dvGola">gola</span></label>
             </fieldset>
             <fieldset><legend>Opening</legend>
               <select id="om" onchange="rules()">
@@ -310,6 +329,19 @@ module UCON
               document.getElementById('form').style.display=has?'':'none';
               if(!has)return;
               HANDED=!!st.handed;
+              // A family that declares no door versions gets no door-version
+              // control - and the labels are written from the declared heights,
+              // so nothing in this dialog hard-codes 78 or 75.
+              var dv = st.door_versions;
+              document.getElementById('dvFs').style.display = dv ? '' : 'none';
+              if(dv){
+                document.getElementById('dvFull').textContent =
+                  (dv.full_mm/10) + ' — full front';
+                document.getElementById('dvGola').textContent =
+                  (dv.gola_mm/10) + ' — gola (−' + (dv.full_mm - dv.gola_mm) + ' mm)';
+              } else {
+                document.querySelector('input[name=dv][value="78"]').checked = true;
+              }
               var dims = st.attrs.corner_geometry
                 ? st.attrs.corner_geometry.replace('x','×')+' mm node · H '+st.attrs.height_mm+' · D '+st.attrs.depth_mm
                 : st.attrs.width_mm+'×'+st.attrs.height_mm+'×'+st.attrs.depth_mm;

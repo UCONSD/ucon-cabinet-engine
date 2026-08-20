@@ -5,6 +5,12 @@
   "source_pages": "printed p.36-43 / PDF 38-45 (subset extracted: p.36 complete, p.39, p.40)",
   "data": {
     "height_mm": 780,
+    "door_versions": {
+      "full_mm": 780,
+      "gola_mm": 750,
+      "source_ref": "printed p.36 / PDF 38",
+      "note": "The two door heights printed over a single code table: 78 full, 75 when the top 30 mm goes to the gola profile. FAMILY-SCOPED - the manifest's door_version axis says 'each base-unit page', and a family that does not declare this key has no such choice. Wall H.36 is 360 tall and 78/75 means nothing there."
+    },
     "depths_mm": [
       350,
       620,

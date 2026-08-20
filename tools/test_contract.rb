@@ -1039,6 +1039,40 @@ check('p.211 is partial by POSITION: push-up is a gap inside a page we hold') do
     push['note'].include?('not hinged') && push['note'].include?('PB0610')
 end
 
+puts "\ndoor version is family-scoped, not universal"
+check('a family declares its own door versions, or has none') do
+  base = Registry.lookup('B80601')['door_versions']
+  raise base.inspect unless base && base['full_mm'] == 780 && base['gola_mm'] == 750
+  raise 'the fact must cite its page' unless base['source_ref'].include?('p.36')
+
+  # H.36 wall units are 360 tall. "78 or 75" is not a choice there, it is
+  # nonsense - and the manifest always said the axis was per base-unit page.
+  wall = Registry.lookup('PB0625')
+  raise wall['door_versions'].inspect unless wall['door_versions'].nil?
+  raise wall['height_mm'].to_s unless wall['height_mm'] == 360
+end
+
+check('gola is refused for a family that declares no gola version') do
+  begin
+    Panel.attributes_patch(Registry.lookup('PB0625'),
+                           { 'door_version' => '75', 'hardware_ref' => 'GOL001' })
+    raise 'a 750 front was accepted on a 360 tall wall unit'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('no gola door version')
+  end
+  # And a wall unit still takes an ordinary handle.
+  p = Panel.attributes_patch(Registry.lookup('PB0625'),
+                             { 'door_version' => '78', 'opening_method' => 'handle',
+                               'hardware_mode' => 'factory', 'hardware_ref' => 'M00001' })
+  raise p.inspect unless p['front_height_mm'] == 360 && p['opening_method'] == 'handle'
+end
+
+check('the base family is untouched: 75 still shortens the front to 750') do
+  p = Panel.attributes_patch(Registry.lookup('B80601'),
+                             { 'door_version' => '75', 'hardware_ref' => 'GOL001' })
+  raise p.inspect unless p['front_height_mm'] == 750 && p['opening_method'] == 'gola'
+end
+
 puts "\nplacement rules (core/22_placement.rb - no SketchUp)"
 Placement = UCON::CabinetEngine::Placement
 
@@ -1148,6 +1182,13 @@ if defined?(UCON::CabinetEngine::Palette)
       html.include?("GAPS.map(function(g){return g['class'];})")
     raise 'a class we hold nothing in must say so' unless html.include?("'catalog only'")
     raise 'the wall chapter never reached the dialog' unless html.include?('Wall units H. 36')
+  end
+  check('the properties dialog does not hard-code 78 and 75') do
+    html = Panel.html
+    raise 'a literal door height is still written into the HTML' if
+      html.include?('78 — full front') || html.include?('75 — gola')
+    raise 'the fieldset must be addressable so it can be hidden' unless
+      html.include?('id="dvFs"')
   end
   check('picker HTML escapes gap text (it comes from a data file)') do
     html = Palette.picker_html([], [{ 'level' => 'section', 'class' => 'base',

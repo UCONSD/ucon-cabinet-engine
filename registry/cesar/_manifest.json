@@ -209,7 +209,7 @@
         "gola_750"
       ],
       "contract_key": "opening_method",
-      "note": "Each base-unit page shows door heights 78 and 75 over a single code table; gola takes the top 30 mm. Object Contract 4.1. Verified printed p.36/PDF 38.",
+      "note": "Each base-unit page shows door heights 78 and 75 over a single code table; gola takes the top 30 mm. Object Contract 4.1. Verified printed p.36/PDF 38. FAMILY-SCOPED: the two heights are declared per family as data.door_versions, and a family that declares none offers no such choice - a wall unit 360 tall has no 78/75 to pick. The properties dialog reads that key; it hard-codes neither number.",
       "elda_open": "Order notation for the chosen version - Elda_Open_Questions Q1"
     },
     "hinge_side": {

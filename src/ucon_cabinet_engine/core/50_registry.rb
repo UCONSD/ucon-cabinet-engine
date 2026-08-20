@@ -95,6 +95,10 @@ module UCON
             # unit in the wall chapter hangs. Absent means floor, so no existing
             # section file has to say anything.
             'mounting'           => family['mounting'] || 'floor',
+            # Which door heights this FAMILY offers, or nil when it offers no
+            # such choice. The 78/75 pair belongs to the base pages; a wall
+            # unit 360 tall has no version to pick.
+            'door_versions'      => family['door_versions'],
             'width_mm'           => row['width_mm'],
             'depth_mm'           => row['depth_mm'],
             'unit_type'          => type_key,
