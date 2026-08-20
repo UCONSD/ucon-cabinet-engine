@@ -32,7 +32,13 @@ module UCON
         end
         return Geom::Transformation.new unless sel
 
-        width = sel.definition.get_attribute(Contract::DICTIONARY, 'width_mm').to_f
+        width = run_extent_mm(sel.definition)
+        # Nothing we can measure: land at the origin, where it is obvious the
+        # run was not continued. The old code read the missing width as 0.0 and
+        # dropped the new unit exactly on top of the selected one - a lie that
+        # looked like a placement.
+        return Geom::Transformation.new unless width
+
         t = sel.transformation
         shifted = t * Geom::Transformation.translation(Geom::Vector3d.new(width.mm, 0, 0))
         # pin to the floor regardless of where the selected unit sits
@@ -63,6 +69,28 @@ module UCON
       #     stay free, not something we sell.
       WASTED_TAG = 'UCON — Wasted space'
       FILLER_MM  = 80
+
+      # Reach of the selected unit along its own +x, in millimetres, or nil.
+      # A corner carries no width by contract, so its reach comes from the
+      # registry: the node it occupies, read through the execution letter.
+      def run_extent_mm(definition)
+        attrs = Contract.read(definition)
+        return attrs['width_mm'].to_f if attrs['width_mm']
+        return nil unless attrs['code']
+
+        unit = begin
+          Registry.lookup(attrs['code'])
+        rescue StandardError
+          nil
+        end
+        return nil unless unit && unit['corner_geometry']
+
+        Placement.run_extent_mm(
+          carcass_mm: unit['carcass_length_mm'],
+          nominal_mm: unit['corner_geometry'].to_s.split('x').first.to_i,
+          execution:  unit['execution']
+        )
+      end
 
       def corner_parts(unit, front_height_mm = nil)
         s        = Standards

@@ -1095,6 +1095,37 @@ end
 puts "\nplacement rules (core/22_placement.rb - no SketchUp)"
 Placement = UCON::CabinetEngine::Placement
 
+check('continuing a run past a corner steps over the node, not the carcass') do
+  # A straight unit reaches its width.
+  raise 'straight' unless Placement.run_extent_mm(width_mm: 600) == 600.0
+
+  # B7091S and B7091D are the same 1000x430 node with a 900 carcass: 100 mm of
+  # unreachable corner. The execution letter decides which side that 100 mm is
+  # on, and therefore how far the next unit has to step.
+  s_unit = Registry.lookup('B7091S')
+  d_unit = Registry.lookup('B7091D')
+  raise 'fixture drift' unless s_unit['execution'] == 'left' &&
+                               d_unit['execution'] == 'right' &&
+                               s_unit['carcass_length_mm'] == 900 &&
+                               s_unit['corner_geometry'] == '1000x430'
+
+  left = Placement.run_extent_mm(carcass_mm: 900, nominal_mm: 1000, execution: 'left')
+  raise left.to_s unless left == 1000.0   # wasted space sits on +x: step over it
+
+  right = Placement.run_extent_mm(carcass_mm: 900, nominal_mm: 1000, execution: 'right')
+  raise right.to_s unless right == 900.0  # wasted space sits on -x: carcass is the reach
+end
+
+check('a reach that cannot be measured is nil, never zero') do
+  # The bug: width_mm is absent on a corner unit by contract, and .to_f turned
+  # that into 0.0, so the next unit landed exactly on top of the corner one.
+  raise 'nil.to_f is still 0.0 - that is the trap' unless nil.to_f.zero?
+  raise 'must be nil' unless Placement.run_extent_mm(carcass_mm: 900).nil?
+  raise 'must be nil' unless Placement.run_extent_mm.nil?
+  raise 'must be nil' unless
+    Placement.run_extent_mm(nominal_mm: 1000, execution: 'left').nil?
+end
+
 check('a corner unit is refused for what it IS, not for missing data') do
   corner = Generator.attributes_for(Registry.lookup('B7091D'))
   reason = Placement.refusal_for(corner)

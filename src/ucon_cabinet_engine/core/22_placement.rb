@@ -118,6 +118,30 @@ module UCON
         add(o, scale(f[:x], -width_mm))
       end
 
+      # ---- how far a unit reaches, for continuing a run --------------------
+
+      # How far a unit reaches along its own +x, INCLUDING space that must stay
+      # free. Used to drop the next unit of a run clear of this one.
+      #
+      # A straight unit reaches its width. A corner unit does not: it occupies a
+      # NODE longer than its carcass, and the difference is the unreachable
+      # corner depth that has to stay empty. Which side of the carcass that
+      # empty space falls on is decided by the execution letter - so the letter,
+      # not the box, decides how far to step.
+      #
+      #   left  execution: carcass [0, carcass], wasted [carcass, nominal]
+      #   right execution: wasted [-wasted, 0],  carcass [0, carcass]
+      #
+      # Returns nil when there is not enough to say. Callers must NOT turn that
+      # into a zero: reading a missing width as 0.0 is what used to drop a new
+      # unit exactly on top of a corner one, silently.
+      def run_extent_mm(width_mm: nil, carcass_mm: nil, nominal_mm: nil, execution: nil)
+        return width_mm.to_f if width_mm
+        return nil unless carcass_mm && nominal_mm && execution
+
+        execution.to_s == 'left' ? nominal_mm.to_f : carcass_mm.to_f
+      end
+
       # ---- what this tool will and will not place --------------------------
 
       # nil when the unit can be placed, otherwise the reason - phrased for the
