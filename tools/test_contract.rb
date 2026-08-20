@@ -31,6 +31,13 @@ Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
 B80601    = UCON::CabinetEngine::Units::B80601
 
+# The interpreter is part of the result. macOS still ships Ruby 2.6, the Linux
+# side of the device bridge had 3.0, and SketchUp 2025 runs 3.2 - so the same
+# suite can pass on one machine and fail on another for reasons that have
+# nothing to do with the engine. Printing the version means a divergence names
+# itself the first time two people paste different numbers.
+puts "ruby #{RUBY_VERSION} (#{RUBY_PLATFORM})"
+
 $failures = 0
 $checks   = 0
 

@@ -366,7 +366,11 @@ module UCON
       # user, never guessed. Returns a comma-separated string, or nil when the
       # unit has no companions, so the key stays absent rather than empty.
       def companion_refs_for(unit)
-        refs = (unit['companions'] || []).filter_map do |c|
+        # map + compact, not filter_map: filter_map is Ruby 2.7 and the headless
+        # harness has to run on the Ruby macOS actually ships, which is still
+        # 2.6. SketchUp's own Ruby is far newer, so this only ever showed up as
+        # nineteen failures on one machine and none on the other.
+        refs = (unit['companions'] || []).map do |c|
           if c['by'] == 'width'
             (c['map'] || {})[unit['width_mm'].to_s]
           elsif c['applies_to_widths_mm']
@@ -375,6 +379,7 @@ module UCON
             c['code']
           end
         end
+        refs = refs.compact
         refs.empty? ? nil : refs.join(',')
       end
 
