@@ -1095,6 +1095,23 @@ end
 puts "\nplacement rules (core/22_placement.rb - no SketchUp)"
 Placement = UCON::CabinetEngine::Placement
 
+check('a corner unit is refused for what it IS, not for missing data') do
+  corner = Generator.attributes_for(Registry.lookup('B7091D'))
+  reason = Placement.refusal_for(corner)
+  raise 'a corner unit must be refused' unless reason
+  raise reason unless reason.include?('corner unit') && reason.include?('two walls')
+  # The old message blamed the data. B7091D has its dimensions - it simply
+  # carries corner_geometry instead of a width, exactly as the contract requires.
+  raise reason if reason.include?('carries no width')
+  raise corner.inspect unless corner['corner_geometry'] && corner['width_mm'].nil?
+
+  # An ordinary unit is not refused, and a component with no contract at all is.
+  raise 'a straight unit must be placeable' unless
+    Placement.refusal_for(Generator.attributes_for(Registry.lookup('B80601'))).nil?
+  raise 'a bare component must be refused' unless
+    Placement.refusal_for({ 'code' => 'X', 'geometry_kind' => 'linear' })
+end
+
 check('a wall is a horizontal normal, a floor is a vertical one') do
   # The three normals actually measured in SketchUp during the probes.
   raise 'side face' unless Placement.wall?([1.0, 0.0, 0.0])

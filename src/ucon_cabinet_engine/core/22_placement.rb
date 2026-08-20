@@ -118,6 +118,32 @@ module UCON
         add(o, scale(f[:x], -width_mm))
       end
 
+      # ---- what this tool will and will not place --------------------------
+
+      # nil when the unit can be placed, otherwise the reason - phrased for the
+      # person holding the mouse, not for the log.
+      #
+      # A corner unit is refused on purpose and not for want of data: it is
+      # dimensioned by its corner geometry rather than a single width (Contract
+      # 1.1), its footprint is not its box, and it needs TWO walls at once.
+      # Seating it against one wall would produce a plan that looks right and is
+      # not, which is worse than refusing - the same rule the picker follows
+      # when it lists a type it cannot honestly build.
+      def refusal_for(attrs)
+        code = attrs['code'] || 'This component'
+        if attrs['geometry_kind'].to_s == 'corner'
+          return "#{code} is a corner unit: its footprint is not its box and it " \
+                 'needs two walls at once, so this tool does not place it yet ' \
+                 "(roadmap M2.2). Use SketchUp's own Move tool for now."
+        end
+        unless attrs['width_mm'] && attrs['depth_mm']
+          return "#{code} carries no width and depth in the contract, so there is " \
+                 'nothing to seat against a wall.'
+        end
+
+        nil
+      end
+
       # ---- how a unit meets its neighbour ----------------------------------
 
       # Does this neighbour belong to the same row? All three must hold. Without

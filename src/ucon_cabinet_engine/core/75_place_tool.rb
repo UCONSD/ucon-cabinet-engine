@@ -50,9 +50,10 @@ module UCON
           return nil
         end
 
-        attrs = Contract.read(instance.definition)
-        unless attrs['width_mm'] && attrs['depth_mm']
-          UI.messagebox("#{attrs['code']} carries no width/depth - it cannot be placed by this tool.")
+        attrs   = Contract.read(instance.definition)
+        refusal = Placement.refusal_for(attrs)
+        if refusal
+          UI.messagebox(refusal)
           return nil
         end
 
