@@ -1039,6 +1039,25 @@ check('p.211 is partial by POSITION: push-up is a gap inside a page we hold') do
     push['note'].include?('not hinged') && push['note'].include?('PB0610')
 end
 
+puts "\nwhere a unit's geometry starts - one answer, asked not recomputed"
+check('base_z_mm is the plinth for a floor unit and the hanging height for a hung one') do
+  raise Generator.base_z_mm(Registry.lookup('B80601')).to_s unless
+    Generator.base_z_mm(Registry.lookup('B80601')) == Standards::PLINTH_H_MM
+  raise Generator.base_z_mm(Registry.lookup('PB0625')).to_s unless
+    Generator.base_z_mm(Registry.lookup('PB0625')) == Standards::WALL_MOUNT_BOTTOM_MM
+end
+
+check('the symbol renderer and the panel ask for it instead of working it out') do
+  # The bug this guards: when wall units arrived, the generator and the symbol
+  # renderer learned that a hung unit starts at its hanging height and the
+  # properties panel did not - so re-applying a handle rebuilt a hanging front
+  # down at plinth level. Three copies of a rule is three chances to update two.
+  %w[70_symbols 80_panel].each do |file|
+    src = File.read(File.expand_path("../src/ucon_cabinet_engine/core/#{file}.rb", __dir__))
+    raise "#{file} computes the base height itself" if src.include?('::PLINTH_H_MM')
+  end
+end
+
 puts "\ndoor version is family-scoped, not universal"
 check('a family declares its own door versions, or has none') do
   base = Registry.lookup('B80601')['door_versions']

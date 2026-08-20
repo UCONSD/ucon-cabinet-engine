@@ -241,9 +241,13 @@ module UCON
         defn.entities.erase_entities(doomed) unless doomed.empty?
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
         front_y   = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
+        # Where the fronts start is the generator's answer, not ours. Asking it
+        # is the whole fix: this method used to add PLINTH_H_MM itself, so
+        # re-applying a handle to a hanging unit rebuilt its front on the floor.
+        z0 = Generator.base_z_mm(unit)
         effective_slabs(unit, gola).each do |slab|
           Geometry.box(defn.entities, slab[:name],
-                       slab[:x_mm], front_y, s::PLINTH_H_MM + slab[:z_mm],
+                       slab[:x_mm], front_y, z0 + slab[:z_mm],
                        slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat)
         end
 
@@ -251,7 +255,7 @@ module UCON
           front_h = effective_slabs(unit, gola).first[:h_mm]
           parts   = Generator.corner_parts(unit, front_h)
           Geometry.prism(defn.entities, 'FILLER_8X8', parts[:filler_plan],
-                         s::PLINTH_H_MM, front_h, front_mat)
+                         z0, front_h, front_mat)
         end
 
         # Gola (door 75): the 30 mm zone above the shortened door stays EMPTY

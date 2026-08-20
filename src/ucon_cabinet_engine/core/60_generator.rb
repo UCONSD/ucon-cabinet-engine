@@ -118,7 +118,7 @@ module UCON
         # plinth box - the front line, the symbols and build-next-to-selected
         # need no special case.
         wall = wall_hung?(unit)
-        z0   = wall ? mount_bottom_mm(unit) : s::PLINTH_H_MM
+        z0   = base_z_mm(unit)
 
         model.start_operation("UCON: build #{code}", true)
         begin
@@ -420,6 +420,18 @@ module UCON
       # from data rather than from a measurement.
       def mount_bottom_mm(_unit)
         Standards::WALL_MOUNT_BOTTOM_MM
+      end
+
+      # Where this unit's carcass starts above the floor: the plinth for
+      # something that stands, the hanging height for something that hangs.
+      #
+      # It lives HERE and only here. It used to be recomputed independently in
+      # the generator, the symbol renderer and the properties panel, and when
+      # wall units arrived two of the three were updated - so re-applying a
+      # handle dropped a hanging front to plinth height. Three copies of a rule
+      # is three chances to update two of them.
+      def base_z_mm(unit)
+        wall_hung?(unit) ? mount_bottom_mm(unit) : Standards::PLINTH_H_MM
       end
 
       def attributes_for(unit)

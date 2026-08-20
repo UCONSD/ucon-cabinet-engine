@@ -187,10 +187,9 @@ module UCON
         kind   = layout['kind'] || 'single'
 
         s  = Standards
-        # Symbols must start where the carcass starts. A hung unit has no
-        # plinth, so its zero is the hanging height, not PLINTH_H_MM - asked
-        # of the generator so there is exactly one answer in the engine.
-        z0 = Generator.wall_hung?(unit) ? Generator.mount_bottom_mm(unit) : s::PLINTH_H_MM
+        # Symbols must start where the carcass starts - asked of the generator,
+        # never worked out again here.
+        z0 = Generator.base_z_mm(unit)
         w  = unit['width_mm']
         h  = unit['height_mm']
         y_face = -(s::FRONT_GAP_MM + s::FRONT_T_MM) - 1
