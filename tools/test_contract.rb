@@ -10,6 +10,9 @@
 
 require_relative '../src/ucon_cabinet_engine/core/10_standards'
 require_relative '../src/ucon_cabinet_engine/core/20_contract'
+# 22_placement is the placement RULE SET and has no SketchUp in it at all -
+# that is the whole point of splitting it away from 75_place_tool.
+require_relative '../src/ucon_cabinet_engine/core/22_placement'
 # 40_unit_b80601 touches the SketchUp API only inside build, so the unit's
 # metadata and derived dimensions are reachable from here. 30_geometry is the
 # one core file that genuinely needs SketchUp and is deliberately not loaded.
@@ -1034,6 +1037,95 @@ check('p.211 is partial by POSITION: push-up is a gap inside a page we hold') do
   push = g['types'].find { |t| t['title'].include?('push-up') }
   raise 'the reason must survive into the row' unless
     push['note'].include?('not hinged') && push['note'].include?('PB0610')
+end
+
+puts "\nplacement rules (core/22_placement.rb - no SketchUp)"
+Placement = UCON::CabinetEngine::Placement
+
+check('a wall is a horizontal normal, a floor is a vertical one') do
+  # The three normals actually measured in SketchUp during the probes.
+  raise 'side face' unless Placement.wall?([1.0, 0.0, 0.0])
+  raise 'other wall' unless Placement.wall?([0.0, -1.0, 0.0])
+  raise 'top face'   unless Placement.floor?([0.0, 0.0, 1.0])
+  raise 'a floor must not read as a wall' if Placement.wall?([0.0, 0.0, 1.0])
+  # A 45-degree roof is neither, and must not be mistaken for either.
+  slope = [0.0, Math.sqrt(0.5), Math.sqrt(0.5)]
+  raise 'slope' if Placement.wall?(slope) || Placement.floor?(slope)
+end
+
+check('the frame is orthonormal and right-handed at any wall angle') do
+  [[0.0, -1.0, 0.0], [1.0, 0.0, 0.0], [0.6, 0.8, 0.0], [-0.3, 0.9, 0.0]].each do |n|
+    f = Placement.frame(n)
+    x, y, z = f[:x], f[:y], f[:z]
+    [[x, y], [y, z], [x, z]].each do |a, b|
+      raise "#{n.inspect} not orthogonal" unless Placement.dot(a, b).abs < 1e-9
+    end
+    [x, y, z].each do |v|
+      raise "#{n.inspect} not unit" unless (Placement.dot(v, v) - 1.0).abs < 1e-9
+    end
+    # x cross y must be z, not minus z - a left-handed frame would mirror the
+    # unit and put its front against the wall.
+    handed = Placement.cross(x, y)
+    raise "#{n.inspect} left-handed" unless
+      Placement.sub(handed, z).all? { |c| c.abs < 1e-9 }
+    # The depth axis points INTO the wall.
+    raise "#{n.inspect} depth axis" unless Placement.dot(y, Placement.normalize(n)) < -0.999
+  end
+end
+
+check('the back plane lands on the wall and the RIGHT end sits at the cursor') do
+  wall_pt = [0.0, 2000.0, 0.0]
+  normal  = [0.0, -1.0, 0.0]
+  depth   = 620.0
+  width   = 600.0
+
+  o = Placement.origin_on_wall(wall_pt, normal, depth, width)
+  f = Placement.frame(normal)
+
+  # The far-right corner of the carcass: local (width, depth, 0).
+  corner = Placement.add(Placement.add(o, Placement.scale(f[:x], width)),
+                         Placement.scale(f[:y], depth))
+  raise corner.inspect unless Placement.sub(corner, wall_pt).all? { |c| c.abs < 1e-9 }
+
+  # And the whole back edge is on the wall plane, not just that corner.
+  back_left = Placement.add(o, Placement.scale(f[:y], depth))
+  raise back_left.inspect unless (back_left[1] - 2000.0).abs < 1e-9
+
+  # The unit extends to the LEFT of the held corner, never to the right.
+  raise o.inspect unless o[0] < corner[0]
+end
+
+check('a joint closes to the nearest end, from either side') do
+  # Neighbour occupying 0..600 along the wall; we sit at 700..1300.
+  raise 'left end onto their right' unless
+    Placement.pull(700.0, 1300.0, [[0.0, 600.0]]) == -100.0
+  # Mirrored: they are to our right.
+  raise 'right end onto their left' unless
+    Placement.pull(700.0, 1300.0, [[1400.0, 2000.0]]) == 100.0
+  # Two candidates, both in range: the smaller correction wins.
+  best = Placement.pull(680.0, 1280.0, [[0.0, 600.0], [1350.0, 2000.0]])
+  raise best.inspect unless best == 70.0
+  # Out of range is nil, not zero - "no joint" must not read as "already flush".
+  raise 'too far' unless Placement.pull(1000.0, 1600.0, [[0.0, 600.0]]).nil?
+  raise 'no neighbours' unless Placement.pull(0.0, 600.0, []).nil?
+end
+
+check('a neighbour has to earn it: mounting, direction and wall plane') do
+  raise 'same row' unless Placement.same_row?('floor', 'floor', 1.0, 5.0)
+  raise 'a wall unit must not butt a base unit' if
+    Placement.same_row?('wall_hung', 'floor', 1.0, 0.0)
+  raise 'a return wall must not pull the row' if
+    Placement.same_row?('floor', 'floor', 0.5, 0.0)
+  raise 'another run at another depth must not pull the row' if
+    Placement.same_row?('floor', 'floor', 1.0, 120.0)
+  # Symbol vs string must not decide a geometric question.
+  raise 'string/symbol' unless Placement.same_row?(:floor, 'floor', 1.0, 0.0)
+end
+
+check('the rule set stays free of SketchUp') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/22_placement.rb', __dir__))
+  offenders = src.scan(/\b(?:Sketchup|Geom|UI)\b/).uniq
+  raise offenders.inspect unless offenders.empty?
 end
 
 if defined?(UCON::CabinetEngine::Palette)

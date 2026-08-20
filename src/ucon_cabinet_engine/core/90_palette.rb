@@ -22,6 +22,14 @@ module UCON
         @dialog.set_html(html)
         @dialog.add_action_callback('build_by_code') { |_| show_picker }
         @dialog.add_action_callback('panel')  { |_| Panel.show }
+        # The tool lives in core, so it arrives with a Reload core - no restart.
+        @dialog.add_action_callback('place') do |_|
+          begin
+            PlaceTool.start
+          rescue StandardError => e
+            UI.messagebox("Placement failed:\n\n#{e.message}")
+          end
+        end
         @dialog.add_action_callback('symbols') do |_, mode|
           Symbols.show_mode(Sketchup.active_model, mode.to_sym)
         end
@@ -414,6 +422,7 @@ module UCON
             .seg{flex:1;margin:0;padding:6px 2px;text-align:center;font-size:12px}
           </style></head><body>
             <button class="primary" onclick="sketchup.build_by_code()">Build by code…</button>
+            <button onclick="sketchup.place()">Place selected unit…</button>
             <button onclick="sketchup.panel()">Unit Properties panel</button>
             <button onclick="sketchup.reload()">Reload core</button>
             <div class="grp">Opening symbols</div>
