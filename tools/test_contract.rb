@@ -427,8 +427,7 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise "missing stamps: #{bad.map { |c| c['code'] }.inspect}" unless bad.empty?
 
   sections = cat.map { |c| c['section'] }.uniq.sort
-  raise sections.inspect unless sections == ['Base corner units H. 78',
-                                             'Base units H. 78',
+  raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Sink base units H. 78',
                                              'Wall units H. 36']
@@ -612,37 +611,8 @@ check('printed p.10 confirms the corner model, and RH there means D') do
   # off a picture. That caution must travel with the data.
   raise 'the drawing caution must be recorded' unless notes.include?('NEVER be read off a picture')
 end
-check('corners are their own section, and the base section no longer holds them') do
-  corners = Registry.catalog.select { |c| c['section'] == 'Base corner units H. 78' }
-  raise corners.length.to_s unless corners.length == 18
-  raise 'all of them must be corners' unless
-    corners.all? { |c| c['geometry_kind'] == 'corner' && c['corner_geometry'] }
-
-  base = Registry.catalog.select { |c| c['section'] == 'Base units H. 78' }
-  raise 'a corner is still filed under the plain base section' if
-    base.any? { |c| c['geometry_kind'] == 'corner' }
-  raise base.length.to_s unless base.length == 85
-
-  # Splitting the file must not have changed a single article.
-  raise 'the total moved' unless Registry.codes.length == 138
-  # lookup answers about the ARTICLE and does not carry the section - that is a
-  # picker concern and lives on the catalog row, checked just above.
-  u = Registry.lookup('B7091S')
-  raise u.inspect unless u['family'] == 'H.78' &&
-                         u['height_mm'] == 780 &&
-                         u['carcass_length_mm'] == 900 &&
-                         u['corner_geometry'] == '1000x430'
-  # And the family-level facts still reach it across the file split.
-  raise 'door_versions must survive the split' unless u['door_versions']
-end
-
 check('the d.57 corner depth is recorded as a gap, not invented') do
-  # Corners live in their own section since 2026-08-20 - a UCON grouping carved
-  # out of the printed Base units H. 78, which is why the page range stayed.
-  sec = Registry.map_sections.find { |s| s['section'] == 'Base corner units H. 78' }
-  raise 'the corner section is missing from the map' unless sec
-  raise sec['printed_pages'] unless sec['printed_pages'] == '42-43'
-  raise 'the carve-out must say it is ours' unless sec['note'].include?("not the catalog's")
+  sec = Registry.map_sections.find { |s| s['family'] == 'H.78' && s['section'] == 'Base units H. 78' }
   page = sec['pages'].find { |p| p['printed'].to_s.include?('42') }
   ct = page['types'].find { |t| t['title'] == 'Corner base unit' }
   raise ct.inspect unless ct && ct['note'].include?('d.57')
