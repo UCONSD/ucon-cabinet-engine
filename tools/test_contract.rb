@@ -614,9 +614,13 @@ check('printed p.10 confirms the corner model, and RH there means D') do
   notes = Registry.data['families']['H.78']['unit_types']['base_corner']['notes']
   raise 'the p.10 confirmation must be recorded' unless notes.include?('printed p.10')
   raise 'the RH = D mapping must be recorded' unless notes.include?('RH (as drawn on p.10 and p.11) = D')
-  # The two pages disagree on which hand they draw, so the hand is never read
-  # off a picture. That caution must travel with the data.
-  raise 'the drawing caution must be recorded' unless notes.include?('NEVER be read off a picture')
+  # The two pages disagree on which hand they draw, so on THIS page the hand
+  # cannot be read off a picture. The GENERAL form of that rule died on
+  # 2026-08-20 against the factory estimate (see the estimate section at the
+  # end); what must travel with the data is the page-scoped caution, not a law.
+  raise 'the drawing caution must be recorded' unless
+    notes.include?('p.10/p.11 draw the node RH while p.42 draws the same article LH')
+  raise 'the caution must be scoped to this page' unless notes.include?('on THIS page')
 end
 check('the d.57 corner depth is recorded as a gap, not invented') do
   sec = Registry.map_sections.find { |s| s['family'] == 'H.78' && s['section'] == 'Base units H. 78' }
@@ -1017,7 +1021,11 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   end
   unread = wall_sections.select { |s| s['note'].to_s.include?('Family letter not read') }
   raise unread.map { |s| s['family'] }.inspect unless
-    unread.map { |s| s['family'] } == %w[H.48 H.60 H.96 H.120]
+    unread.map { |s| s['family'] } == %w[H.48 H.96 H.120]
+  # H.60 left that list on 2026-08-20 - not by being read, but by turning up in
+  # a factory order. The section stays not_extracted: a letter is not a page.
+  h60 = wall_sections.find { |x| x['section'] == 'Wall units H. 60' }
+  raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'not_extracted'
 end
 
 check('the section we started reports pages; the 23 we have not are single rows') do
@@ -1428,6 +1436,75 @@ if defined?(UCON::CabinetEngine::Palette)
                                       'status' => 'not_extracted', 'types' => [], 'note' => nil }])
     raise 'unescaped section title reached the HTML' if html.include?('<script>x</script>')
   end
+end
+
+
+# --------------------------------------------------------------------------
+# Factory estimate 2026/30829-30830 (CONFIRMED). Not a catalog reading: this
+# is what Cesar's own order system emitted for a real project. Where it
+# disagrees with the registry it wins, so the facts it settled are pinned
+# here rather than left in a document nobody re-reads.
+# --------------------------------------------------------------------------
+puts "\nfactory estimate 30829/30830 - what the order taught the registry"
+
+check('the wall family letter D = H.60 is recorded, and no letter was extrapolated') do
+  letters = Registry.data['code_grammar']['wall_units']['family_letter']
+  raise letters.inspect unless letters['B'] == 'H.36' && letters['D'] == 'H.60' &&
+                               letters['E'] == 'H.72' && letters['G'] == 'H.84'
+  raise "H.60 must no longer be listed unread: #{letters['unread'].inspect}" unless
+    letters['unread'] == 'H.48, H.96, H.120'
+  # B/D/E/G against 36/60/72/84 is not a sequence - if it were, G would be H.96.
+  raise 'the letter must be recorded as a lookup, not a sequence' unless
+    letters['note'].downcase.include?('not a sequence')
+end
+
+check('knowing the letter is not the same as having read the page') do
+  sec = Registry.map_sections.find { |x| x['section'] == 'Wall units H. 60' }
+  raise sec.inspect unless sec && sec['status'] == 'not_extracted'
+  raise 'the section must say where PD came from' unless sec['note'].include?('30829')
+end
+
+check('SENTINEL: no wall family carries two codes for the two hands of one unit') do
+  # Rows 15/18/25/27 of the estimate: PD0631 ships with OPENING DIRECTION Left
+  # AND Right. One code, both hands. Nothing is wrong today - printed p.211 has
+  # no side-hinged door at all - so this check exists to FIRE the moment H.72 or
+  # H.84 is extracted and someone splits a ..31 into an rh code and an lh code.
+  wall  = Registry.catalog.select { |c| c['class'] == 'wall' }
+  dupes = wall.group_by { |c| [c['type_key'], c['width_mm']] }
+              .select { |_size, rows| rows.length > 1 }
+  raise "two codes for one wall size: #{dupes.keys.inspect}" unless dupes.empty?
+  handed = wall.reject { |c| c['execution'].nil? }
+  raise "a wall unit must not carry an execution letter: #{handed.map { |c| c['code'] }.inspect}" unless
+    handed.empty?
+end
+
+check('the corner hand rule is recorded as corner-scoped, not as a catalog-wide law') do
+  note = Registry.data['families']['H.78']['unit_types']['base_corner']['notes']
+  raise 'the wall-unit refutation is not recorded' unless note.include?('PD0631')
+  raise 'the rule must name its own scope' unless note.include?('corner')
+  raise 'Q7 must stay open in its narrow form' unless note.include?('Q7b')
+  # The general claim must not still be standing anywhere in the note.
+  raise 'the dead general rule is still asserted' if
+    note.include?('the hand can NEVER be read off a picture')
+end
+
+check('RECONCILIATION R1: 995626 is a bin kit, never a unit code') do
+  # The hand-assembled package ordered 995626 where the factory ordered B80665.
+  # The registry already had this right; pinning it stops the drift.
+  raise '995626 must not be orderable as a unit' if Registry.codes.include?('995626')
+  raise 'B80665 must be the unit' unless Registry.codes.include?('B80665')
+  raise 'and 995626 must be its companion' unless
+    Generator.attributes_for(Registry.lookup('B80665'))['companion_refs'] == '995626'
+end
+
+check('RECONCILIATION R2: the invented prefixes UI / UH are nowhere in the registry') do
+  # 13 of 26 manual rows carried a wrong code and 9 of those differed from the
+  # factory's only by a prefix that was made up. The registry supplies the real
+  # one, so every one of those rows would have been correct by construction.
+  bad = Registry.codes.select { |c| c.start_with?('UI', 'UH') }
+  raise bad.inspect unless bad.empty?
+  raise 'B80657 must be present exactly once' unless Registry.codes.count('B80657') == 1
+  raise 'B71200 must be present exactly once' unless Registry.codes.count('B71200') == 1
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

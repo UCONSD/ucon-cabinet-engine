@@ -7,6 +7,23 @@
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
+  "factory_confirmations": [
+    { "source": "ESTIMATE 2026 / 30829 and 30830, Cesar order system v2.66, printed 2026-08-07 (Dadvar Residence), via Elda Chiara Lesca",
+      "trust": "CONFIRMED",
+      "recorded_on": "2026-08-20",
+      "note": "Factory output, not a catalog reading and not our hypothesis. Where it contradicts anything in this registry, it wins. Teardown: docs/Cesar_Estimate_Teardown_v0.1.md. Input/output comparison against the hand-assembled package: docs/Reconciliation_Round1_v0.1.md.",
+      "confirms": [
+        "wall family letter PD = H.60 (PD0631, 600 x 600 x 350)",
+        "wall family letters PB = H.36 and PG = H.84, previously read from the page only",
+        "H.78 depth digit 8 = d.62 and 7 = d.35, now verified against a real order (B80657 600 x 780 x 620; B71200 1200 x 780 x 350)",
+        "the hand of a ..31 wall unit is an order variant, never a second code (Elda Q7a, closed)",
+        "the 78/75 door-version axis does not appear in an order at all (Elda Q1, closed)",
+        "nothing orders a gola profile: GOL001 / GOL002 are their own rows priced per linear metre, a property of the RUN (Elda Q6, closed - the premise was wrong)"
+      ],
+      "no_contradiction": "No row in registry/cesar/ was found wrong by this estimate. The 13 wrong codes in the reconciliation all came from a hand-assembled package that invented prefixes the registry already holds correctly.",
+      "not_answered_here": "Q3 modification limits, Q4 p.45 sinks, Q5 the 75 cm dishwasher, Q7b the corner execution letter, Q8 Servo Drive article codes. This composition contains no corner unit, no p.45 sink, no lift-up wall door and no modification via 989346, so it could not have shown them."
+    }
+  ],
   "scope_note": "Page numbers here are PRINTED pages (PDF = printed + 2), verified against the page footers. Covers H.78 hinged-door, two-door, drawers+jumbo (printed p.36, p.39), jumbo-drawers and drawer+jumbo units (printed p.40), straight sink bases (printed p.44), and the pull-out door and laundry basket types that completed printed p.36. NOT yet in this registry: sink bases with fixed front + jumbo drawer (printed p.45), corner sink bases (printed p.46), corner base units (printed p.42-43), appliance housings (printed p.47-48), waste and remaining drawer variants - extend only after reading their pages. Earlier editions of this note cited PDF numbers as if they were printed pages; corrected 2026-08-17.",
   "catalog_map": {
     "source_ref": "printed p.19 chapter index (Maxima e Intarsio) for sections; page headers p.36-48 for the unit types inside H.78; visual D x W index printed p.20-22; wall units from the chapter's own contents index at printed p.205 (visual D x W index p.206-210), page headers p.211-212, p.228 and p.238 for the unit types on the four wall pages we have opened",
@@ -108,11 +125,11 @@
         ] },
       { "class": "wall", "family": "H.36", "section": "Dish-drainer units H. 36", "printed_pages": "213", "status": "not_extracted" },
       { "class": "wall", "family": "H.48", "section": "Wall units H. 48", "printed_pages": "214-216", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+        "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
       { "class": "wall", "family": "H.48", "section": "Dish-drainer units H. 48", "printed_pages": "217-218", "status": "not_extracted" },
       { "class": "wall", "family": "H.48", "section": "Wall units H. 48 with Virgola hood", "printed_pages": "219-220", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60", "printed_pages": "221-223", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+        "note": "Family letter CONFIRMED as PD from factory estimate 2026/30829 (PD0631, 1 door wall unit, 600 x 600 x 350). That is the ONLY thing known about this section: the page has not been opened, so widths, types and suffixes are still unread. A letter is not an extraction." },
       { "class": "wall", "family": "H.60", "section": "Dish-drainer units H. 60", "printed_pages": "224-225", "status": "not_extracted" },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola hood", "printed_pages": "226", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola No Drop hood", "printed_pages": "227", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
@@ -145,12 +162,12 @@
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola hood", "printed_pages": "243", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola No Drop hood", "printed_pages": "244", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96", "printed_pages": "245-247", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+        "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
       { "class": "wall", "family": "H.96", "section": "Dish-drainer units H. 96", "printed_pages": "248-249", "status": "not_extracted" },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola hood", "printed_pages": "250", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola No Drop hood", "printed_pages": "251", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120", "printed_pages": "252-254", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues PB/PE/PG alphabetically." },
+        "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola hood", "printed_pages": "255", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola No Drop hood", "printed_pages": "256", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." }
     ]
@@ -158,13 +175,14 @@
   "code_grammar": {
     "wall_units": {
       "shape": "P + family_letter + width_index + type_suffix, e.g. PB0500",
-      "source_ref": "printed p.211 (PB), p.228 (PE), p.238 (PG), read 2026-08-18",
+      "source_ref": "printed p.211 (PB), p.228 (PE), p.238 (PG), read 2026-08-18; PD = H.60 from factory estimate 2026/30829 rows 15/18/25/27 (PD0631, 600 x 600 x 350), CONFIRMED 2026-08-20 - the letter comes from the order, the page itself is still unread",
       "family_letter": {
-        "note": "FAMILY-SPECIFIC and read only where we have opened the page. Never extrapolate alphabetically.",
+        "note": "FAMILY-SPECIFIC, and recorded only where we have opened the page or seen the letter in factory output. Never extrapolate alphabetically: B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence over the catalog's height list - if it were, G would be H.96. The letter is a lookup, exactly like the width index.",
         "B": "H.36",
+        "D": "H.60",
         "E": "H.72",
         "G": "H.84",
-        "unread": "H.48, H.60, H.96, H.120"
+        "unread": "H.48, H.96, H.120"
       },
       "width_index": {
         "note": "A LOOKUP, not arithmetic - the rounding is irregular (45 rounds up to 05, 75 rounds down to 07, 105 rounds down to 10). Read a width from the row, never from the digits.",
@@ -218,7 +236,7 @@
         "lh"
       ],
       "contract_key": "hinge_side",
-      "note": "Source states '1 rh or lh door' with one code per width; hinge side is a per-order choice. Contract v1.2. Verified printed p.36/PDF 38."
+      "note": "Source states '1 rh or lh door' with one code per width; hinge side is a per-order choice. Contract v1.2. Verified printed p.36/PDF 38. CONFIRMED for WALL units 2026-08-20 by factory estimate 2026/30829: PD0631 is ordered with OPENING DIRECTION: Left (rows 15, 25) and with Right (rows 18, 27) - one code, both hands, the hand carried as a variant line and never as a second code. This closes Elda Q7a and REFUTES the general form of 'the hand is read from the code letter, never from a drawing'. What survives is narrower and still open as Q7b: on the corner pages the letter S/D names the cabinet's EXECUTION, which is a different claim - see families.H.78.unit_types.base_corner.notes."
     }
   },
   "pricing_groups": {
