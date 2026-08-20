@@ -118,6 +118,66 @@ module UCON
         add(o, scale(f[:x], -width_mm))
       end
 
+      # ---- corners: two walls, one node ------------------------------------
+      #
+      # A corner unit is not a wider cabinet. It occupies a NODE spanning both
+      # walls, and the difference between the node and the carcass is the
+      # unreachable corner depth that must stay EMPTY. Everything below follows
+      # from one sentence: the wasted space belongs in the angle.
+
+      # Where two vertical walls meet, as [x, y, 0]. Both planes are vertical,
+      # so the whole thing collapses to a 2x2 solve in plan. nil when they do
+      # not cross - two nearly parallel walls are the same wall seen twice, not
+      # a corner, and pretending otherwise would put a unit in mid-air.
+      def corner_point(point_a, normal_a, point_b, normal_b)
+        na = normalize(normal_a)
+        nb = normalize(normal_b)
+        det = na[0] * nb[1] - na[1] * nb[0]
+        return nil if det.abs < 1e-9
+
+        da = na[0] * point_a[0] + na[1] * point_a[1]
+        db = nb[0] * point_b[0] + nb[1] * point_b[1]
+        [(da * nb[1] - db * na[1]) / det,
+         (na[0] * db - nb[0] * da) / det,
+         0.0]
+      end
+
+      # WHICH ARTICLE this wall demands. Not a preference and not a mirror: S
+      # and D are different articles, and a U-shaped kitchen needs both letters
+      # of one size (Andriy, 2026-08-20: "on the other side it does not go, and
+      # it should not - for the other wall, a different cabinet").
+      #
+      # The letter is decided by something simpler than the door: WHICH WAY THE
+      # WALL RUNS from the corner. The unit can only lie where the wall
+      # actually continues, so if the wall runs along +x from the corner the
+      # node starts at the corner and the wasted space is at the near end -
+      # that is the right execution. If it runs the other way, the node ends at
+      # the corner and the wasted space is at the far end - the left one.
+      #
+      # `wall_run` is the signed extent of the wall along the unit's x axis,
+      # measured from the corner. Positive means the wall continues in +x.
+      def execution_for(wall_run)
+        return nil if wall_run.nil? || wall_run.zero?
+
+        wall_run.positive? ? 'right' : 'left'
+      end
+
+      # Origin of a corner unit whose node is seated in the angle.
+      #
+      #   left  execution: carcass [0, carcass], wasted [carcass, nominal]
+      #                    -> the corner is the FAR end,  origin = corner - nominal
+      #   right execution: wasted [-wasted, 0],  carcass [0, carcass]
+      #                    -> the corner is the NEAR end, origin = corner + wasted
+      #
+      # Off the wall it is the ordinary rule: step forward by the carcass depth
+      # so the back plane lands on it.
+      def corner_origin(corner, normal, depth_mm, carcass_mm, nominal_mm, execution)
+        n = normalize(normal)
+        f = frame(normal)
+        slide = execution.to_s == 'left' ? -nominal_mm : (nominal_mm - carcass_mm)
+        add(add(corner, scale(n, depth_mm)), scale(f[:x], slide))
+      end
+
       # ---- how far a unit reaches, for continuing a run --------------------
 
       # How far a unit reaches along its own +x, INCLUDING space that must stay

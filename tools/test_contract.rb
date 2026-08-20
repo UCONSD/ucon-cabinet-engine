@@ -1095,6 +1095,61 @@ end
 puts "\nplacement rules (core/22_placement.rb - no SketchUp)"
 Placement = UCON::CabinetEngine::Placement
 
+check('two vertical walls give a corner; two parallel ones give nothing') do
+  # Walls at y = 0 and x = 0, both facing into the room.
+  c = Placement.corner_point([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
+                             [0.0, 0.0, 0.0], [-1.0, 0.0, 0.0])
+  raise c.inspect unless c.map { |v| v.round(6) } == [0.0, 0.0, 0.0]
+
+  # Offset walls: y = 2000 and x = 3000 cross at (3000, 2000).
+  c = Placement.corner_point([0.0, 2000.0, 0.0], [0.0, -1.0, 0.0],
+                             [3000.0, 0.0, 0.0], [-1.0, 0.0, 0.0])
+  raise c.inspect unless c.map { |v| v.round(6) } == [3000.0, 2000.0, 0.0]
+
+  # A wall at 45 degrees still crosses, because nothing here assumes a right
+  # angle - the same reason the straight-unit frame works on any wall.
+  d = Math.sqrt(0.5)
+  c = Placement.corner_point([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
+                             [1000.0, 0.0, 0.0], [-d, d, 0.0])
+  raise c.inspect unless c.map { |v| v.round(3) } == [1000.0, 0.0, 0.0]
+
+  # Parallel walls are not a corner, and must not be forced into one.
+  raise 'parallel' unless Placement.corner_point([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
+                                                 [0.0, 600.0, 0.0], [0.0, 1.0, 0.0]).nil?
+end
+
+check('the wall, not the door, decides which article the corner takes') do
+  # The unit can only lie where the wall continues from the corner.
+  raise 'wall runs +x' unless Placement.execution_for(2400.0) == 'right'
+  raise 'wall runs -x' unless Placement.execution_for(-2400.0) == 'left'
+  raise 'no run is no answer' unless Placement.execution_for(0.0).nil?
+  raise 'no run is no answer' unless Placement.execution_for(nil).nil?
+end
+
+check('the node seats in the angle, and the wasted space is what goes in it') do
+  # Reproduces the probe exactly: corner at the origin, wall facing -y,
+  # B7091D (right, carcass 900, node 1000x430, d.350) seated at x=100 y=-350.
+  o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
+                              350.0, 900.0, 1000.0, 'right')
+  raise o.inspect unless o.map { |v| v.round(6) } == [100.0, -350.0, 0.0]
+
+  # Its sibling on the other wall of the same corner runs the other way.
+  o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
+                              350.0, 900.0, 1000.0, 'left')
+  raise o.inspect unless o.map { |v| v.round(6) } == [-1000.0, -350.0, 0.0]
+
+  # And the invariant that all of it exists for: whichever execution, the end
+  # of the node that touches the corner is the WASTED end, never the carcass.
+  f = Placement.frame([0.0, -1.0, 0.0])
+  { 'right' => [-100.0, 0.0], 'left' => [900.0, 1000.0] }.each do |exec, (lo, hi)|
+    o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
+                                350.0, 900.0, 1000.0, exec)
+    wasted_edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]) }
+    raise "#{exec}: wasted is not against the corner" unless
+      wasted_edges.map { |v| v.round(6) }.include?(0.0)
+  end
+end
+
 check('continuing a run past a corner steps over the node, not the carcass') do
   # A straight unit reaches its width.
   raise 'straight' unless Placement.run_extent_mm(width_mm: 600) == 600.0
