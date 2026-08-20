@@ -1099,6 +1099,38 @@ check('the base family is untouched: 75 still shortens the front to 750') do
   raise p.inspect unless p['front_height_mm'] == 750 && p['opening_method'] == 'gola'
 end
 
+puts "\nthe shell stays cold (src/ucon_cabinet_engine/main.rb)"
+check('the menu is an entry point, not a control panel') do
+  shell = File.read(File.expand_path('../src/ucon_cabinet_engine/main.rb', __dir__))
+  items = shell.scan(/menu\.add_item\('([^']+)'/).flatten
+  # SketchUp cannot remove a menu item once added, so every one of these is
+  # permanent for the session and costs a restart to change. The palette is the
+  # day-to-day surface; the menu opens it and says what version this is.
+  raise items.inspect unless items == ['Palette…', 'About']
+
+  # Assert on what the shell CALLS, not on what it says: the comment explaining
+  # the removals mentions the old items by name, and a prose match would fail on
+  # its own explanation.
+  %w[Units::B80601 Generator. Panel. Symbols.].each do |leak|
+    raise "the shell reaches into #{leak}" if shell.include?(leak)
+  end
+end
+
+check('the toolbar is one button, and its icons exist') do
+  shell = File.read(File.expand_path('../src/ucon_cabinet_engine/main.rb', __dir__))
+  raise 'no toolbar' unless shell.include?('UI::Toolbar.new')
+  raise 'more than one toolbar button' unless shell.scan('toolbar.add_item').length == 1
+  raise 'the toolbar must be restored or it never appears' unless
+    shell.include?('toolbar.restore')
+
+  # A missing icon file makes SketchUp drop the button silently.
+  %w[ucon_24.png ucon_32.png].each do |icon|
+    path = File.expand_path("../src/ucon_cabinet_engine/icons/#{icon}", __dir__)
+    raise "missing icon #{icon}" unless File.exist?(path)
+    raise "#{icon} is not a PNG" unless File.binread(path, 8) == "\x89PNG\r\n\x1A\n".b
+  end
+end
+
 puts "\nplacement rules (core/22_placement.rb - no SketchUp)"
 Placement = UCON::CabinetEngine::Placement
 
