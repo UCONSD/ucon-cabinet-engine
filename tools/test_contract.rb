@@ -1141,6 +1141,33 @@ check('the symbol renderer and the panel ask for it instead of working it out') 
   end
 end
 
+check('row_datum_mm is a DIFFERENT question from base_z_mm, and answers it once') do
+  # base_z_mm: where does the CARCASS begin (a floor unit begins on its plinth).
+  # row_datum_mm: where does the ROW begin (the floor, or the hanging height).
+  # For a floor unit the two deliberately disagree.
+  floor = Registry.lookup('B80601')
+  hung  = Registry.lookup('PD0631')
+  raise Generator.row_datum_mm(floor).to_s unless Generator.row_datum_mm(floor) == 0
+  raise Generator.row_datum_mm(hung).to_s unless
+    Generator.row_datum_mm(hung) == Standards::WALL_MOUNT_BOTTOM_MM
+  raise 'a floor unit must not confuse the two' if
+    Generator.row_datum_mm(floor) == Generator.base_z_mm(floor)
+end
+
+check('a plan symbol rides with its row, and one line decides that') do
+  # The bug: PLAN_Z_MM was an absolute height above the FLOOR, correct while
+  # every unit stood on the floor. With two rows, a base unit and the wall unit
+  # above it drew their swing arcs on the same millimetre, and the hung unit's
+  # bounding box stretched to the floor to reach its own symbol.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'a plan symbol is still placed at an absolute height' if src.include?('PLAN_Z_MM.mm')
+  raise 'the datum must be asked of the generator' unless src.include?('Generator.row_datum_mm')
+  # Twice and no more: the constant's definition, and the ONE line that adds it
+  # to the datum. A third occurrence is a second place deciding the same thing.
+  raise "PLAN_Z_MM appears #{src.scan('PLAN_Z_MM').length} times" unless
+    src.scan('PLAN_Z_MM').length == 2
+end
+
 puts "\ndoor version is family-scoped, not universal"
 check('a family declares its own door versions, or has none') do
   base = Registry.lookup('B80601')['door_versions']

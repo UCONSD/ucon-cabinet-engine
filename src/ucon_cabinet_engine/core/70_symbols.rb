@@ -29,11 +29,15 @@ module UCON
       TAG_FRONT = 'UCON — Opening (front)'
       TAG_PLAN  = 'UCON — Opening (plan)'
 
-      # Plan symbols are drawn just above the FLOOR, not above the unit.
-      # Drawn at cabinet top they float over the worktops of the neighbours,
-      # and any plan view cut below the worktop loses them entirely — the one
-      # view they exist for. At the floor they sit under every section cut and
-      # read against the run's footprint, which is what a plan shows.
+      # How far a plan symbol sits above the bottom of ITS OWN ROW. Not above
+      # the floor: that was the rule while every unit stood on the floor, and
+      # it broke the moment a second row existed — a base unit and the wall
+      # unit above it drew their swing arcs on the same millimetre, and the
+      # hung unit's bounding box hung down to the floor to reach its own
+      # symbol. Just above the row's bottom keeps the original reason intact
+      # (under the section cut that shows that row, read against its footprint)
+      # and lets the two rows be told apart. The datum comes from
+      # Generator.row_datum_mm — asked, never worked out again here.
       PLAN_Z_MM = 1
 
       # Plan symbol: drawer runner lines drawn inset from the unit sides.
@@ -190,6 +194,9 @@ module UCON
         # Symbols must start where the carcass starts - asked of the generator,
         # never worked out again here.
         z0 = Generator.base_z_mm(unit)
+        # Every plan symbol in this method uses this one height. There is no
+        # second place that decides it.
+        z_plan = (Generator.row_datum_mm(unit) + PLAN_Z_MM).mm
         w  = unit['width_mm']
         h  = unit['height_mm']
         y_face = -(s::FRONT_GAP_MM + s::FRONT_T_MM) - 1
@@ -222,7 +229,6 @@ module UCON
             xi = RUNNER_INSET_MM
             g = definition.entities.add_group
             g.name = 'SYM_PLAN_PULLOUT'
-            z_plan = PLAN_Z_MM.mm
             [[[xi, y0], [xi, yb]], [[w - xi, y0], [w - xi, yb]]].each do |a, b|
               g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
             end
@@ -251,7 +257,7 @@ module UCON
           g = definition.entities.add_group
           g.name = 'SYM_PLAN_CORNER'
           a, b = marks[:plan_leaf]
-          g.entities.add_line([a[0].mm, a[1].mm, PLAN_Z_MM.mm], [b[0].mm, b[1].mm, PLAN_Z_MM.mm])
+          g.entities.add_line([a[0].mm, a[1].mm, z_plan], [b[0].mm, b[1].mm, z_plan])
           finalize(g, plan_tag, mat)
           return
         end
@@ -276,7 +282,7 @@ module UCON
 
           g = definition.entities.add_group
           g.name = axis == 'top' ? 'SYM_PLAN_TOP_HUNG' : 'SYM_PLAN_BOTTOM_HUNG'
-          dashed_rect(g, marks[:plan_rect], PLAN_Z_MM.mm)
+          dashed_rect(g, marks[:plan_rect], z_plan)
           finalize(g, plan_tag, mat)
           return
         end
@@ -307,7 +313,6 @@ module UCON
 
           g = definition.entities.add_group
           g.name = "SYM_PLAN_#{i + 1}"
-          z_plan  = PLAN_Z_MM.mm
           center  = [hinge_x.mm, y_face.mm, z_plan]
           r       = leaf[:w].mm
 

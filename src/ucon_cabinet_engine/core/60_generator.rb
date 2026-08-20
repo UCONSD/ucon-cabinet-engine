@@ -511,6 +511,19 @@ module UCON
         wall_hung?(unit) ? mount_bottom_mm(unit) : Standards::PLINTH_H_MM
       end
 
+      # WHERE THE UNIT'S ROW STARTS - a different question from base_z_mm, and
+      # the two must not be confused. base_z_mm answers "where does the carcass
+      # begin" (a floor unit begins on top of its plinth). row_datum_mm answers
+      # "where does the row this unit belongs to begin" - the floor for a floor
+      # unit, the hanging height for a hung one.
+      #
+      # It exists because plan symbols must ride with their row. Drawn at one
+      # global height they collide: a base unit and the wall unit above it put
+      # their swing arcs on the same millimetre and neither can be read.
+      def row_datum_mm(unit)
+        wall_hung?(unit) ? mount_bottom_mm(unit) : 0
+      end
+
       def attributes_for(unit)
         corner = unit['geometry_kind'] == 'corner'
         attrs = {
