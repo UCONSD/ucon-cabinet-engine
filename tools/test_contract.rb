@@ -205,9 +205,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 138 codes (103 base + 20 sink + 3 appliance + 12 wall)') do
+check('registry loads and holds 158 codes (103 base + 20 sink + 3 appliance + 32 wall)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 138
+  raise "got #{n}" unless n == 158
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -364,9 +364,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 138 rows, each with code/dims/description/source') do
+check('registry catalog: 158 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 138
+  raise cat.length.to_s unless cat.length == 158
   # A corner row is dimensioned by corner_geometry instead of a single width.
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['height_mm'] && c['depth_mm'] &&
@@ -437,7 +437,8 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Sink base units H. 78',
-                                             'Wall units H. 36']
+                                             'Wall units H. 36',
+                                             'Wall units H. 60']
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
     cat.map { |c| c['class'] }.uniq.sort == %w[base wall]
 end
@@ -777,7 +778,10 @@ def hung_codes(axis)
     raise down.inspect unless down ==
       %w[B80614 B90614 PB0525 PB0625 PB0725 PB0925 PB1025 PB1225 V80530 V80630 V80730]
     up = hung_codes('top')
-    raise up.inspect unless up == %w[PB0500 PB0600 PB0700 PB0900 PB1000 PB1200]
+    raise up.inspect unless up == %w[PB0500 PB0600 PB0700 PB0900 PB1000 PB1200
+                                     PD0500 PD0600 PD0700 PD0900 PD1000 PD1200]
+    # H.60 has no bottom-hung type at all, so the down list is unchanged by it.
+    # Two families, one rule, no second implementation.
 
     # Same unit, both ways up: the two figures are reflections of each other in
     # the mid-height plane, and the plan footprint is identical because the leaf
@@ -959,14 +963,63 @@ rejects('a mounting outside the enum', with('mounting' => 'ceiling'), 'is not on
 rejects('a hung object at a non-positive height',
         with('mounting' => 'wall_hung', 'mount_bottom_mm' => 0), 'must be positive')
 
-check('the wall section is 12 codes in two types, six widths each, all d.35') do
+check('H.36 is now the whole page: 17 codes in three types, all d.35') do
   rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 36' }
-  raise rows.length.to_s unless rows.length == 12
+  raise rows.length.to_s unless rows.length == 17
   raise rows.map { |r| r['height_mm'] }.uniq.inspect unless rows.map { |r| r['height_mm'] }.uniq == [360]
   raise rows.map { |r| r['depth_mm'] }.uniq.inspect unless rows.map { |r| r['depth_mm'] }.uniq == [350]
-  widths = rows.map { |r| r['width_mm'] }.uniq.sort
-  raise widths.inspect unless widths == [450, 600, 750, 900, 1050, 1200]
-  raise 'push-up must not have leaked in' if Registry.codes.include?('PB0610')
+  by_type = rows.group_by { |r| r['type_key'] }.map { |k, v| [k, v.length] }.sort
+  raise by_type.inspect unless by_type == [['wall_bottom_hung_door', 6],
+                                           ['wall_push_up_door', 5],
+                                           ['wall_top_hung_door', 6]]
+  # The push-up type is NARROWER: W.60-120, no W.45.
+  push = rows.select { |r| r['type_key'] == 'wall_push_up_door' }.map { |r| r['width_mm'] }.sort
+  raise push.inspect unless push == [600, 750, 900, 1050, 1200]
+end
+
+check('H.60 is 15 codes in four types, all d.35, and it hangs') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 60' }
+  raise rows.length.to_s unless rows.length == 15
+  raise rows.map { |r| r['height_mm'] }.uniq.inspect unless rows.map { |r| r['height_mm'] }.uniq == [600]
+  raise rows.map { |r| r['depth_mm'] }.uniq.inspect unless rows.map { |r| r['depth_mm'] }.uniq == [350]
+  by_type = rows.group_by { |r| r['type_key'] }.map { |k, v| [k, v.length] }.sort
+  raise by_type.inspect unless by_type == [['wall_door', 3],
+                                           ['wall_push_up_door', 5],
+                                           ['wall_top_hung_door', 6],
+                                           ['wall_two_doors', 1]]
+  rows.each { |r| Contract.validate!(Generator.attributes_for(Registry.lookup(r['code']))) }
+  raise 'every H.60 unit must hang' unless
+    rows.all? { |r| Generator.wall_hung?(Registry.lookup(r['code'])) }
+end
+
+check('the registry reproduces a real factory order line') do
+  # Estimate 2026/30829 rows 15/18/25/27. This is the first time the registry
+  # can be checked against Cesar's own output rather than against a page.
+  u = Registry.lookup('PD0631')
+  raise u.inspect unless u['width_mm'] == 600 && u['height_mm'] == 600 && u['depth_mm'] == 350
+  raise 'the ..31 type must be handed' unless u['handed'] == true
+  raise u['mounting'] unless u['mounting'] == 'wall_hung'
+end
+
+check('H.60 is the first wall page with a side-hinged door, and it says so') do
+  # printed p.11: an rh/lh wall unit next to a tall unit or a wall wants a 5 cm
+  # closing strip. p.211 was that rule's own escape hatch; p.221 is not.
+  obs = Registry.data['families']['Wall H.60']['page_observations'].join(' ')
+  raise 'the closing-strip consequence must be recorded' unless obs.include?('closing-strip')
+  raise 'the missing W.30 must be recorded' unless obs.include?('no W.30')
+  raise 'the absent pull-out type must be recorded' unless obs.include?('NO PULL-OUT DOOR TYPE')
+end
+
+check('a push-up door ships as data and draws NOTHING') do
+  %w[PB0610 PD1210].each do |code|
+    fl = Registry.lookup(code)['front_layout']
+    raise "#{code}: a push-up door must not claim a hinge axis" if fl.key?('hinge_axis')
+    raise "#{code}: #{fl.inspect}" unless fl['mechanism'] == 'push_up'
+    raise "#{code} must not be handed" unless Registry.lookup(code)['handed'] == false
+  end
+  # Same shape as the pull-out door on printed p.36 - one precedent, not two.
+  raise 'the precedent must still hold' unless
+    Registry.lookup('B80300')['front_layout']['mechanism'] == 'pull_out_door'
 end
 
 check('the width index is a lookup: no code decodes arithmetically') do
@@ -1025,33 +1078,48 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   # H.60 left that list on 2026-08-20 - not by being read, but by turning up in
   # a factory order. The section stays not_extracted: a letter is not a page.
   h60 = wall_sections.find { |x| x['section'] == 'Wall units H. 60' }
-  raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'not_extracted'
+  raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'partial'
 end
 
-check('the section we started reports pages; the 23 we have not are single rows') do
+check('the two sections we hold report pages; the 22 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 23
+  raise sections.size.inspect unless sections.size == 22
   raise 'a section we hold must not also be a section gap' if
-    sections.any? { |g| g['section'] == 'Wall units H. 36' }
+    sections.any? { |g| ['Wall units H. 36', 'Wall units H. 60'].include?(g['section']) }
 
-  # Wall units H. 36 is held, so its unextracted pages surface as TYPE rows.
+  # Both held sections surface their unextracted pages as TYPE rows, in the
+  # order the catalog prints them. p.211 and p.221 are gone: they are whole.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
-  raise pages.inspect unless pages == %w[p.211 p.212]
+  raise pages.inspect unless pages == %w[p.212 p.222 p.223]
 end
 
-check('p.211 is partial by POSITION: push-up is a gap inside a page we hold') do
-  g = gap_page('p.211')
-  raise g.inspect unless g && g['status'] == 'partial'
-  by_title = g['types'].to_h { |t| [t['title'], t['status']] }
-  raise by_title.inspect unless by_title == {
-    'Wall unit with top-hung door'    => 'extracted',
-    'Wall unit with push-up door'     => 'not_extracted',
-    'Wall unit with bottom-hung door' => 'extracted'
-  }
-  push = g['types'].find { |t| t['title'].include?('push-up') }
-  raise 'the reason must survive into the row' unless
-    push['note'].include?('not hinged') && push['note'].include?('PB0610')
+check('p.211 and p.221 are whole pages now, push-up included') do
+  %w[211 221].each do |n|
+    page = Registry.map_sections.flat_map { |sec| sec['pages'] || [] }
+                   .find { |pg| pg['printed'].to_s == n }
+    raise "p.#{n}: #{page.inspect}" unless page && page['status'] == 'extracted'
+    push = page['types'].find { |t| t['title'].to_s.include?('push-up') }
+    raise "p.#{n}: no push-up row" unless push
+    raise "p.#{n}: #{push.inspect}" unless push['status'] == 'extracted'
+    # The decision must carry its own date - it reversed an earlier one.
+    raise "p.#{n}: the reversal must be dated" unless push['decided_on'] == '2026-08-20'
+  end
+end
+
+check('the corner wall units on p.223 are RECORDED, not invented') do
+  page = Registry.map_sections.flat_map { |sec| sec['pages'] || [] }
+                 .find { |pg| pg['printed'].to_s == '223' }
+  raise page.inspect unless page && page['status'] == 'not_extracted'
+  types = page['types'].join(' | ')
+  raise types unless types.include?('PD094D/S') && types.include?('OD0713')
+  # Neither grammar may leak into the catalog before a corner page is extracted.
+  bad = Registry.codes.select { |c| c.start_with?('OD') || c.start_with?('PD094') }
+  raise bad.inspect unless bad.empty?
+  # And the note must say WHY, including the Q7b link - a wall family carrying
+  # the same D/S letter as the base corners is evidence, not a coincidence.
+  raise 'the Q7b link must be recorded' unless page['note'].include?('Q7b')
+  raise 'the 5x5 filler difference must be recorded' unless page['note'].include?('5X5')
 end
 
 puts "\nwhere a unit's geometry starts - one answer, asked not recomputed"
@@ -1458,10 +1526,16 @@ check('the wall family letter D = H.60 is recorded, and no letter was extrapolat
     letters['note'].downcase.include?('not a sequence')
 end
 
-check('knowing the letter is not the same as having read the page') do
+check('the estimate named PD before any page we held could have') do
+  # Recorded because the ORDER of arrival is the point: the letter came out of
+  # a factory order on 2026-08-20, and printed p.221 was opened the same day
+  # and agreed. Had the page come first this would be an ordinary extraction.
   sec = Registry.map_sections.find { |x| x['section'] == 'Wall units H. 60' }
-  raise sec.inspect unless sec && sec['status'] == 'not_extracted'
-  raise 'the section must say where PD came from' unless sec['note'].include?('30829')
+  raise sec.inspect unless sec && sec['note'].include?('30829')
+  raise 'the sequence must be recorded, not just the fact' unless
+    sec['note'].include?('BEFORE the page was opened')
+  obs = Registry.data['families']['Wall H.60']['page_observations']
+  raise 'page observations missing' unless obs.is_a?(Array) && obs.length >= 4
 end
 
 check('SENTINEL: no wall family carries two codes for the two hands of one unit') do
@@ -1469,8 +1543,11 @@ check('SENTINEL: no wall family carries two codes for the two hands of one unit'
   # AND Right. One code, both hands. Nothing is wrong today - printed p.211 has
   # no side-hinged door at all - so this check exists to FIRE the moment H.72 or
   # H.84 is extracted and someone splits a ..31 into an rh code and an lh code.
+  # FAMILY is part of the key. Without it PB0600 and PD0600 - the same type at
+  # the same width in two different families - read as a split pair, and the
+  # sentinel fires on correct data. Found the moment H.60 landed.
   wall  = Registry.catalog.select { |c| c['class'] == 'wall' }
-  dupes = wall.group_by { |c| [c['type_key'], c['width_mm']] }
+  dupes = wall.group_by { |c| [c['family'], c['type_key'], c['width_mm']] }
               .select { |_size, rows| rows.length > 1 }
   raise "two codes for one wall size: #{dupes.keys.inspect}" unless dupes.empty?
   handed = wall.reject { |c| c['execution'].nil? }

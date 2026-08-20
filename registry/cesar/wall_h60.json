@@ -1,0 +1,98 @@
+{
+  "section": "Wall units H. 60",
+  "class": "wall",
+  "family": "Wall H.60",
+  "source_pages": "printed p.221-223 / PDF 223-225 (subset extracted: p.221 only, and on p.221 all four types)",
+  "family_naming_note": "Namespaced 'Wall H.60' for the same reason as 'Wall H.36': the registry merges section files by family NAME, and the catalog uses 'H. 60' for both a base family and a wall family. The catalog's own wording is preserved in 'section'.",
+  "extraction_note": "printed p.221 only - the section's first page, taken whole. printed p.222 (compound units, 2 and 3 modules) and p.223 (compound push-up, plus TWO kinds of corner wall unit) are recorded as page-level gaps in catalog_map, not extracted: compound units carry internal partitions and the corner units are new geometry with a code grammar of their own.",
+  "letter_note": "PD = H.60 was CONFIRMED from factory estimate 2026/30829 (PD0631) BEFORE this page was opened, and the page now agrees: PD0631, W.60, d.35, H.60. That is the order in which the two sources arrived, and it is worth remembering - the estimate named a letter no page we had read could have given us.",
+  "data": {
+    "height_mm": 600,
+    "mounting": "wall_hung",
+    "mounting_note": "Catalog-level fact: every unit in the wall chapter hangs. HOW HIGH it hangs is not in the catalog and is not here - the generator takes it from Standards::WALL_MOUNT_BOTTOM_MM, a project default awaiting M1.6, and writes it onto the object as mount_bottom_mm (Contract v1.5).",
+    "overall_height_n_elle_mm": 622,
+    "n_elle_note": "The second elevation on this page is labelled 'N- Elle' at 62,2 = H + 2,2, the same +22 mm seen at H.36 (38,2), H.72 (74,2) and H.84 (86,2). N_Elle is its own chapter, printed p.321. RECORDED, NOT IMPLEMENTED.",
+    "page_observations": [
+      "THIS PAGE IS THE FIRST WALL PAGE WITH A SIDE-HINGED DOOR. printed p.211 (H.36) had none, which is why the printed p.11 five-centimetre closing-strip rule did not bite there. It bites here: PD0131, PD0531 and PD0631 are 'rh or lh' doors, so a run that puts one against a tall unit or a wall, with a 'D' handle, wants a closing strip of at least 5 cm. Warn, never auto-insert.",
+      "THERE IS NO PULL-OUT DOOR TYPE ON THIS PAGE. H.72 and H.84 both open with one (PE0130 / PG0130 at W.15); H.60 does not. The W.15 slot here is PD0131, an ordinary door. One more reason the suffix cannot be decoded across families.",
+      "THE WIDTH SET OF THE ONE-DOOR TYPE IS 15 / 45 / 60 - there is no W.30, although H.72 and H.84 both list one. Widths are per type per family, read from the row.",
+      "Suffix 30 appears exactly once on this page, at W.90, and means TWO DOORS. Suffix 31 means ONE door. At H.72 the same 30 means a pull-out door at W.15 and two doors at W.60/W.90."
+    ],
+    "unit_types": {
+      "wall_door": {
+        "description": "Wall unit with door - 1 rh or lh door - 1 shelf",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.221 / PDF 223",
+        "codes": [
+          { "code": "PD0131", "width_mm": 150, "depth_mm": 350 },
+          { "code": "PD0531", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PD0631", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "ONE CODE, BOTH HANDS - and for once this is not a reading, it is CONFIRMED. Factory estimate 2026/30829 orders PD0631 with OPENING DIRECTION: Left (rows 15, 25) and with Right (rows 18, 27). The hand is an order variant carried on the line, never a second article. Anything that splits one of these into an rh code and an lh code is wrong, and tools/test_contract.rb fails if it happens.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. Which edge is hinge_side, chosen per order and never guessed."
+        }
+      },
+      "wall_two_doors": {
+        "description": "Wall unit with doors - 2 doors - 1 shelf",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.221 / PDF 223",
+        "codes": [
+          { "code": "PD0930", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "The only code of its type on the page. A pair of doors is not handed: both leaves exist, so there is nothing to choose.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension - the same treatment as base_doors on printed p.36."
+        }
+      },
+      "wall_top_hung_door": {
+        "description": "Wall unit with top-hung door - 1 top-hung door - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.221 / PDF 223",
+        "codes": [
+          { "code": "PD0500", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PD0600", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PD0700", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PD0900", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PD1000", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PD1200", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Same width set and same suffix 00 as the H.36 top-hung type, which is a coincidence of this pair of pages and not a rule. The page lists Servo Drive mechanism 554 and Power adapter 224 as surcharges with NO article code - not recorded as companion_refs, because a companion is resolved from the registry and never typed. Open for Elda (Q8).",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge - the mirror of the bottom-hung figure, plan rectangle identical."
+        }
+      },
+      "wall_push_up_door": {
+        "description": "Wall unit with push-up door - 1 push-up door - 1 shelf - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 shelf", "interior Valencia handle"],
+        "source_ref": "printed p.221 / PDF 223",
+        "codes": [
+          { "code": "PD0610", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PD0710", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PD0910", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PD1010", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PD1210", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Extracted as DATA with no opening symbol, decided 2026-08-20. A push-up door is not hinged, so the Drawing_Spec hinge-axis rule does not describe it and there is no honest figure yet. front_layout therefore carries a mechanism and NO hinge_axis, which is exactly how base_pull_out_door is handled on printed p.36: 70_symbols draws a leaf only when it is told an axis, so an unwritten rule draws NOTHING rather than something wrong. The convention is a task of its own, not a blocker on the codes. The page also lists Valencia handle 23, Servo Drive mechanism 554 and Power adapter 224 as surcharges without article codes.",
+        "front_layout": {
+          "kind": "single",
+          "mechanism": "push_up",
+          "note": "One full-front leaf carried by a push-up mechanism. Deliberately NO hinge_axis: the travel is not a swing about an edge and the catalog does not state it. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
+        }
+      }
+    }
+  }
+}

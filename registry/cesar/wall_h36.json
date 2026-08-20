@@ -2,9 +2,9 @@
   "section": "Wall units H. 36",
   "class": "wall",
   "family": "Wall H.36",
-  "source_pages": "printed p.211-212 / PDF 213-214 (subset extracted: p.211, and on p.211 only two of the three types)",
+  "source_pages": "printed p.211-212 / PDF 213-214 (subset extracted: p.211 whole; p.212 deferred)",
   "family_naming_note": "The catalog calls this family 'H. 36' inside the wall chapter, and calls a DIFFERENT family 'H. 36' nowhere else - but H.48, H.60, H.84 and H.96 name both a base family and a wall family. The registry merges section files by family NAME, so wall families are namespaced 'Wall H.xx' to keep two unrelated families from merging into one. The catalog's own wording is preserved in 'section'.",
-  "extraction_note": "printed p.211 only, and only its top-hung and bottom-hung types. The page's third type, the push-up door (PB0610, PB0710, PB0910, PB1010, PB1210), is deliberately NOT extracted: a push-up door is not hinged, the Drawing_Spec hinge-axis rule does not describe it, and drawing it as a hinged door would be an assertion we cannot back. It is recorded as a position-level gap in catalog_map, exactly like the excluded types on printed p.47. printed p.212 (compound units) is deferred - internal partitions are new geometry.",
+  "extraction_note": "printed p.211, now WHOLE - all three opening kinds. The push-up type was held back on 2026-08-18 for want of a drawing convention; on 2026-08-20 that was judged the wrong shape of blocker. The codes are catalog FACT and the missing symbol is a drawing question, so the data ships and front_layout carries a mechanism with NO hinge_axis - 70_symbols draws a leaf only when told an axis, so nothing is drawn rather than something wrong. Same treatment as base_pull_out_door on printed p.36. printed p.212 (compound units) is still deferred - internal partitions are new geometry.",
   "data": {
     "height_mm": 360,
     "mounting": "wall_hung",
@@ -52,6 +52,26 @@
           "kind": "single",
           "hinge_axis": "bottom",
           "note": "Hinged along its bottom edge - the same figure already built for the laundry unit and the dishwasher panel."
+        }
+      },
+      "wall_push_up_door": {
+        "description": "Wall unit with push-up door - 1 push-up door - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["interior Valencia handle"],
+        "source_ref": "printed p.211 / PDF 213",
+        "codes": [
+          { "code": "PB0610", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PB0710", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PB0910", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PB1010", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PB1210", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Narrower width set than the other two types on this page: W.60-120, with no W.45. Extracted as DATA with no opening symbol, decided 2026-08-20 - see extraction_note. The page lists Valencia handle 23, Servo Drive mechanism 554 and Power adapter 224 as surcharges with no article code; not recorded as companion_refs (Elda Q8).",
+        "front_layout": {
+          "kind": "single",
+          "mechanism": "push_up",
+          "note": "One full-front leaf carried by a push-up mechanism. Deliberately NO hinge_axis: the travel is not a swing about an edge and the catalog does not state it. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
         }
       }
     }

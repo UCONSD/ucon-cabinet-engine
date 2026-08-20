@@ -104,14 +104,14 @@
       { "class": "wall", "family": "H.36", "section": "Wall units H. 36", "printed_pages": "211-212", "status": "partial",
         "note": "CODE GRAMMAR IS NEW AND MUST NOT BE CARRIED OVER FROM H.78. Read from the source 2026-08-18: P + family letter + width index + type suffix. Family letters confirmed by direct read ONLY for PB = H.36 (printed p.211), PE = H.72 (p.228), PG = H.84 (p.238). The width index is a LOOKUP with irregular rounding (15=01, 30=03, 45=05, 60=06, 75=07, 90=09, 105=10, 120=12, 150=15, 180=18, 240=24) - never compute it. The type suffix is not stable even inside one family: 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84, and 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
         "pages": [
-          { "printed": 211, "status": "partial",
-            "note": "Extracted 2026-08-18, but not whole: the page's decisions are per POSITION. Two of three opening kinds are in; the third is a recorded gap, not an oversight. No side-hinged door appears anywhere on this page, which is why the printed p.11 five-centimetre closing-strip rule does not bite here - the page IS that rule's stated alternative.",
+          { "printed": 211, "status": "extracted",
+            "note": "Extracted whole 2026-08-20 (started 2026-08-18). All three opening kinds are in. The push-up type was a recorded gap for two days for want of a drawing convention; that was judged the wrong shape of blocker - the codes are catalog fact, the symbol is a drawing question, and the two do not have to travel together. No side-hinged door appears anywhere on this page, which is why the printed p.11 five-centimetre closing-strip rule does not bite here - the page IS that rule's stated alternative.",
             "types": [
               { "title": "Wall unit with top-hung door", "status": "extracted",
                 "note": "PB0500/0600/0700/0900/1000/1200, W.45-120, d.35. Symbol derived by mirroring the existing hinge-axis rule, not by inventing a second one." },
-              { "title": "Wall unit with push-up door", "status": "not_extracted",
-                "decided_on": "2026-08-18",
-                "note": "PB0610, PB0710, PB0910, PB1010, PB1210 (W.60-120). NOT extracted by decision: a push-up door is not hinged, so the Drawing_Spec hinge-axis rule does not describe it and there is no honest symbol yet. Extract together with its convention, not before. The page also states: interior Valencia handle, no Push-pull device." },
+              { "title": "Wall unit with push-up door", "status": "extracted",
+                "decided_on": "2026-08-20",
+                "note": "PB0610, PB0710, PB0910, PB1010, PB1210 (W.60-120, no W.45). Held back on 2026-08-18 pending a drawing convention, extracted on 2026-08-20 as DATA WITHOUT A SYMBOL: front_layout carries mechanism push_up and NO hinge_axis, so 70_symbols draws nothing rather than something wrong - the same treatment base_pull_out_door has had since printed p.36. The push-up drawing convention is still owed and is now a task of its own, not a gate on the codes. The page also states: interior Valencia handle, no Push-pull device." },
               { "title": "Wall unit with bottom-hung door", "status": "extracted",
                 "note": "PB0525/0625/0725/0925/1025/1225, W.45-120, d.35. Reuses the figure built for the laundry unit and the dishwasher panel." }
             ] },
@@ -128,8 +128,37 @@
         "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
       { "class": "wall", "family": "H.48", "section": "Dish-drainer units H. 48", "printed_pages": "217-218", "status": "not_extracted" },
       { "class": "wall", "family": "H.48", "section": "Wall units H. 48 with Virgola hood", "printed_pages": "219-220", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.60", "section": "Wall units H. 60", "printed_pages": "221-223", "status": "not_extracted",
-        "note": "Family letter CONFIRMED as PD from factory estimate 2026/30829 (PD0631, 1 door wall unit, 600 x 600 x 350). That is the ONLY thing known about this section: the page has not been opened, so widths, types and suffixes are still unread. A letter is not an extraction." },
+      { "class": "wall", "family": "H.60", "section": "Wall units H. 60", "printed_pages": "221-223", "status": "partial",
+        "note": "Family letter PD was CONFIRMED from factory estimate 2026/30829 (PD0631, 600 x 600 x 350) on 2026-08-20, BEFORE the page was opened; the page was opened the same day and agrees. First wall section to carry a side-hinged door, so this is where the printed p.11 five-centimetre closing-strip rule first bites. It is also the first section to show CORNER wall units, on p.223, in two kinds with two different code grammars - recorded there, not extracted.",
+        "pages": [
+          { "printed": 221, "status": "extracted",
+            "note": "Read and extracted whole 2026-08-20: four types, 15 codes, all d.35. Push-up extracted as data with no symbol, same rule as p.211.",
+            "types": [
+              { "title": "Wall unit with door", "status": "extracted",
+                "note": "PD0131 / PD0531 / PD0631, W.15/45/60 - NO W.30, although H.72 and H.84 both list one. One rh or lh door, 1 shelf. The hand is an ORDER VARIANT: estimate 2026/30829 ships PD0631 both ways on the one code. This is the first side-hinged wall door in the registry." },
+              { "title": "Wall unit with doors", "status": "extracted",
+                "note": "PD0930 only, W.90, 2 doors, 1 shelf. Suffix 30 means two doors here; at H.72 the same 30 is a pull-out door at W.15. There is NO pull-out door type on this page at all, unlike H.72 and H.84." },
+              { "title": "Wall unit with top-hung door", "status": "extracted",
+                "note": "PD0500/0600/0700/0900/1000/1200, W.45-120. Same width set and suffix as the H.36 top-hung type - a coincidence of two pages, not a rule." },
+              { "title": "Wall unit with push-up door", "status": "extracted",
+                "decided_on": "2026-08-20",
+                "note": "PD0610/0710/0910/1010/1210, W.60-120. Data without a symbol, exactly as on p.211." }
+            ] },
+          { "printed": 222, "status": "not_extracted",
+            "types": [
+              "Compound wall unit with top-hung door (2 modules): PD0904 90, PD1004 105, PD1204 120, PD1504 150*, PD1804 180*",
+              "Compound wall unit with push-up door (2 modules): PD0908 90, PD1208 120",
+              "Compound wall unit with top-hung door (3 modules): PD1234 120, PD1534 150*, PD1834 180*, PD2434 240*"
+            ],
+            "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Module splits are printed per row (45+45, 60+45, 60+60, 60+90, 90+90; 30+60+30, 30+90+30, 45+90+45, 60+120+60). Asterisked widths restrict door finishes. Servo Drive is split by width on these pages: 554 at <=120, 1.107 above." },
+          { "printed": 223, "status": "not_extracted",
+            "types": [
+              "Compound wall unit with push-up door (3 compartments): PD1244 120, PD1544 150*, PD1844 180*, PD2444 240*",
+              "Straight corner wall unit: PD094D/S, W. 100x40, 1 rh or lh 60 cm door, 1 shelf, corner filler 5X5",
+              "90 degree corner wall unit: OD0713 70x70, OD0715 75x75, 2 doors, 1 shelf, 3 fixings, 155 degree hinges"
+            ],
+            "note": "NOT EXTRACTED, and the reason is worth stating: this page holds the first CORNER WALL UNITS, in two kinds that do not share a grammar. The straight corner is PD094D/S - the same D/S execution letter as the base corners on printed p.42, on a wall family, which bears directly on Elda Q7b. The 90 degree corner is OD07xx, a prefix that is NOT P + family letter at all and is not decoded. Its filler is 5X5, not the 8x8 of the base corner. Geometry, grammar and the Q7b answer are all open, so nothing here is guessed." }
+        ] },
       { "class": "wall", "family": "H.60", "section": "Dish-drainer units H. 60", "printed_pages": "224-225", "status": "not_extracted" },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola hood", "printed_pages": "226", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola No Drop hood", "printed_pages": "227", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
@@ -175,7 +204,7 @@
   "code_grammar": {
     "wall_units": {
       "shape": "P + family_letter + width_index + type_suffix, e.g. PB0500",
-      "source_ref": "printed p.211 (PB), p.228 (PE), p.238 (PG), read 2026-08-18; PD = H.60 from factory estimate 2026/30829 rows 15/18/25/27 (PD0631, 600 x 600 x 350), CONFIRMED 2026-08-20 - the letter comes from the order, the page itself is still unread",
+      "source_ref": "printed p.211 (PB), p.228 (PE), p.238 (PG), read 2026-08-18; PD = H.60 first from factory estimate 2026/30829 rows 15/18/25/27 (PD0631, 600 x 600 x 350), CONFIRMED 2026-08-20, then read on printed p.221 the same day - the order named the letter before any page we held could have",
       "family_letter": {
         "note": "FAMILY-SPECIFIC, and recorded only where we have opened the page or seen the letter in factory output. Never extrapolate alphabetically: B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence over the catalog's height list - if it were, G would be H.96. The letter is a lookup, exactly like the width index.",
         "B": "H.36",
@@ -189,9 +218,15 @@
         "01": 150, "03": 300, "05": 450, "06": 600, "07": 750,
         "09": 900, "10": 1050, "12": 1200, "15": 1500, "18": 1800, "24": 2400
       },
+      "corner_wall_units": {
+        "note": "READ, NOT DECODED. printed p.223 (H.60) shows TWO kinds of corner wall unit that do not share a grammar, and neither is extracted. (1) Straight corner: PD094D/S - P + family letter, but the width field 09 does NOT read as the 100x40 footprint printed beside it, and the trailing D/S is the same execution letter the BASE corners carry on printed p.42. That makes it direct evidence for Elda Q7b. (2) 90 degree corner: OD0713 / OD0715 at 70x70 and 75x75 - the prefix is not P + family letter at all and is not decoded here. Its corner filler is 5X5, where the base corner uses 8x8. Do not extend the wall grammar to cover these until a corner page is actually extracted.",
+        "source_ref": "printed p.223 / PDF 225, read 2026-08-20"
+      },
       "type_suffix": {
         "note": "NOT STABLE, not even inside one family. 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84; 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
-        "H.36_read": { "00": "top-hung door", "10": "push-up door", "25": "bottom-hung door", "04": "compound, 2 modules", "34": "compound, 3 compartments, top-hung", "44": "compound, 3 compartments, push-up" }
+        "H.36_read": { "00": "top-hung door", "10": "push-up door", "25": "bottom-hung door", "04": "compound, 2 modules", "34": "compound, 3 compartments, top-hung", "44": "compound, 3 compartments, push-up" },
+        "H.60_read": { "31": "1 rh or lh door", "30": "2 doors (at W.90; the same 30 is a PULL-OUT door at W.15 in H.72)", "00": "top-hung door", "10": "push-up door", "04": "compound, 2 modules, top-hung", "08": "compound, 2 modules, push-up", "34": "compound, 3 modules, top-hung", "44": "compound, 3 compartments, push-up" },
+        "cross_family_warning": "Compare H.36_read with H.60_read before trusting any suffix: 04 is a two-module compound in both, but 34 is '3 compartments' at H.36 and '3 modules' at H.60, and H.60 has an 08 that H.36 does not. H.60 has no pull-out door type at all while H.72 and H.84 open with one."
       }
     },
     "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
