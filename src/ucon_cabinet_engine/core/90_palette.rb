@@ -318,16 +318,21 @@ module UCON
                   lab.textContent = geom.replace('x',' × ') + ' mm · door ' + any.door_width_mm +
                                     ' · carcass ' + any.carcass_length_mm + ' · d.' + (any.depth_mm/10);
                   el.appendChild(lab);
+                  // ONE button per size, not one per execution. S and D are
+                  // different articles, but which one this is follows from the
+                  // wall it gets placed against - the placement tool swaps it
+                  // and rewrites the code. Asking here would be asking a
+                  // question whose answer is not yet knowable.
+                  var mates = rs.filter(function(c){return c.corner_geometry===geom;})
+                                .sort(function(a,b){return a.execution < b.execution ? -1 : 1;});
+                  var pick = mates[0];
                   var row = document.createElement('div'); row.className='drow';
-                  rs.filter(function(c){return c.corner_geometry===geom;})
-                    .sort(function(a,b){return a.execution < b.execution ? -1 : 1;})
-                    .forEach(function(c){
-                      var b = document.createElement('button'); b.className='wbtn';
-                      if(st.code===c.code) b.className += ' sel';
-                      b.innerHTML = c.code + '<br><small>' + c.execution + '</small>';
-                      b.onclick = function(){ st.code = c.code; render(); };
-                      row.appendChild(b);
-                    });
+                  var b = document.createElement('button'); b.className='wbtn';
+                  if(mates.some(function(c){return st.code===c.code;})) b.className += ' sel';
+                  b.style.width = 'auto';
+                  b.innerHTML = pick.code + '<br><small>the wall picks the hand</small>';
+                  b.onclick = function(){ st.code = pick.code; render(); };
+                  row.appendChild(b);
                   el.appendChild(row);
                 });
                 if(st.code) showCard(CAT.find(function(c){return c.code===st.code;}));

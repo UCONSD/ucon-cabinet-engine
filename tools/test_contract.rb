@@ -1157,6 +1157,68 @@ check('the node seats in the angle, and the wasted space is what goes in it') do
   end
 end
 
+check('a wall runs one dominant way from the corner, and that picks the article') do
+  # A wall from x=0 to x=3000 with the corner at 0: it runs +3000.
+  raise Placement.wall_run(0.0, 0.0, 3000.0).to_s unless
+    Placement.wall_run(0.0, 0.0, 3000.0) == 3000.0
+  # Mirrored.
+  raise Placement.wall_run(0.0, -3000.0, 0.0).to_s unless
+    Placement.wall_run(0.0, -3000.0, 0.0) == -3000.0
+  # A wall overhanging its corner by its own thickness must not flip the answer:
+  # the DOMINANT side wins, not merely a non-zero one.
+  raise Placement.wall_run(0.0, -100.0, 3000.0).to_s unless
+    Placement.wall_run(0.0, -100.0, 3000.0) == 3000.0
+  raise 'a corner outside the wall has no run' unless
+    Placement.wall_run(5000.0, 0.0, 3000.0).nil?
+
+  raise 'the run must choose the article' unless
+    Placement.execution_for(Placement.wall_run(0.0, -100.0, 3000.0)) == 'right'
+  raise 'the run must choose the article' unless
+    Placement.execution_for(Placement.wall_run(0.0, -3000.0, 100.0)) == 'left'
+end
+
+check('one measure of what a unit occupies serves both the run and the snap') do
+  raise 'straight' unless Placement.span_mm(width_mm: 600) == [0.0, 600.0]
+  # The corner's node, not its carcass: the wasted end is space that must stay
+  # free, so a neighbour has to begin past it.
+  raise 'left' unless Placement.span_mm(carcass_mm: 900, nominal_mm: 1000,
+                                        execution: 'left') == [0.0, 1000.0]
+  raise 'right' unless Placement.span_mm(carcass_mm: 900, nominal_mm: 1000,
+                                         execution: 'right') == [-100.0, 900.0]
+  raise 'unknown is nil' unless Placement.span_mm(carcass_mm: 900).nil?
+  # run_extent_mm is now the high end of the same span - one rule, two callers.
+  %w[left right].each do |exec|
+    span = Placement.span_mm(carcass_mm: 900, nominal_mm: 1000, execution: exec)
+    raise exec unless Placement.run_extent_mm(carcass_mm: 900, nominal_mm: 1000,
+                                              execution: exec) == span[1]
+  end
+end
+
+check('the sibling article is looked up, never spelled') do
+  raise 'S->D' unless Registry.sibling_execution_code('B7091S') == 'B7091D'
+  raise 'D->S' unless Registry.sibling_execution_code('B7091D') == 'B7091S'
+  raise 'a straight unit has no sibling' unless
+    Registry.sibling_execution_code('B80601').nil?
+
+  # Every corner article must have one: a U-shaped kitchen needs both letters of
+  # a size, so a size with only one execution would be a hole in the catalog.
+  corners = Registry.catalog.select { |c| c['corner_geometry'] }
+  raise corners.length.to_s unless corners.length == 18
+  corners.each do |c|
+    twin = Registry.sibling_execution_code(c['code'])
+    raise "#{c['code']} has no sibling" unless twin
+
+    a = Registry.lookup(c['code'])
+    b = Registry.lookup(twin)
+    raise "#{c['code']} sibling differs in size" unless
+      a['corner_geometry'] == b['corner_geometry'] &&
+      a['carcass_length_mm'] == b['carcass_length_mm'] &&
+      a['door_width_mm'] == b['door_width_mm'] &&
+      a['execution'] != b['execution']
+    raise "#{c['code']} is its own sibling" if twin == c['code']
+  end
+end
+
 check('continuing a run past a corner steps over the node, not the carcass') do
   # A straight unit reaches its width.
   raise 'straight' unless Placement.run_extent_mm(width_mm: 600) == 600.0
@@ -1188,17 +1250,18 @@ check('a reach that cannot be measured is nil, never zero') do
     Placement.run_extent_mm(nominal_mm: 1000, execution: 'left').nil?
 end
 
-check('a corner unit is refused for what it IS, not for missing data') do
+check('a corner is placeable now, and refused only if it is under-specified') do
   corner = Generator.attributes_for(Registry.lookup('B7091D'))
-  reason = Placement.refusal_for(corner)
-  raise 'a corner unit must be refused' unless reason
-  raise reason unless reason.include?('corner unit') && reason.include?('two walls')
-  # The old message blamed the data. B7091D has its dimensions - it simply
-  # carries corner_geometry instead of a width, exactly as the contract requires.
-  raise reason if reason.include?('carries no width')
+  # Until 2026-08-20 this was refused for being a corner. It is now placed - it
+  # needs a corner rather than a wall, and the wall decides which article it is.
+  raise Placement.refusal_for(corner).to_s unless Placement.refusal_for(corner).nil?
   raise corner.inspect unless corner['corner_geometry'] && corner['width_mm'].nil?
 
-  # An ordinary unit is not refused, and a component with no contract at all is.
+  # A corner with nothing to seat is still refused, and says why.
+  bare = { 'code' => 'X', 'geometry_kind' => 'corner' }
+  raise 'a corner with no geometry must be refused' unless
+    Placement.refusal_for(bare).to_s.include?('no corner_geometry')
+
   raise 'a straight unit must be placeable' unless
     Placement.refusal_for(Generator.attributes_for(Registry.lookup('B80601'))).nil?
   raise 'a bare component must be refused' unless
@@ -1311,6 +1374,14 @@ if defined?(UCON::CabinetEngine::Palette)
       html.include?("GAPS.map(function(g){return g['class'];})")
     raise 'a class we hold nothing in must say so' unless html.include?("'catalog only'")
     raise 'the wall chapter never reached the dialog' unless html.include?('Wall units H. 36')
+  end
+  check('the corner picker offers a size, not a hand') do
+    html = Palette.picker_html(Registry.catalog, Registry.gaps)
+    # The execution used to be a button of its own: 9 sizes x 2 letters = 18.
+    raise 'the picker still offers the execution as a choice' if
+      html.include?("'<br><small>' + c.execution")
+    raise 'the size button must say what decides the hand' unless
+      html.include?('the wall picks the hand')
   end
   check('the properties dialog does not hard-code 78 and 75') do
     html = Panel.html

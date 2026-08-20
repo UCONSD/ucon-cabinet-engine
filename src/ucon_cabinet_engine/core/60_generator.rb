@@ -128,6 +128,73 @@ module UCON
           wasted: wasted, wasted_x: wasted_x, nominal: nominal }
       end
 
+      # Every part of a corner unit, drawn into a definition. Extracted from
+      # build so that CHANGING the execution redraws it by the same path -
+      # a second copy of this would be a second chance to update only one.
+      def draw_corner(definition, unit, model)
+        s = Standards
+        e = definition.entities
+        p = corner_parts(unit)
+        z0 = base_z_mm(unit)
+
+        plinth = Geometry.box(
+          e, 'PLINTH', 0, s::PLINTH_SETBACK_MM, 0,
+          p[:carcass], s::PLINTH_T_MM, s::PLINTH_H_MM,
+          Geometry.material(model, 'UCON_Plinth_White', [245, 245, 245])
+        )
+        Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+
+        front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
+        Geometry.box(e, 'CARCASS', 0, 0, z0, p[:carcass], p[:depth],
+                     unit['height_mm'],
+                     Geometry.material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+        Geometry.box(e, 'FRONT', p[:door_x], p[:front_y], z0,
+                     p[:door], s::FRONT_T_MM, p[:front_h], front_mat)
+        Geometry.prism(e, 'FILLER_8X8', p[:filler_plan], z0, p[:front_h], front_mat)
+
+        return unless p[:wasted].positive?
+
+        g = Geometry.wire_box(
+          e, 'WASTED_SPACE', p[:wasted_x], 0, z0,
+          p[:wasted], p[:depth], unit['height_mm'],
+          Geometry.material(model, 'UCON_Placeholder_Gray', [138, 138, 138])
+        )
+        tag = model.layers[WASTED_TAG] || model.layers.add(WASTED_TAG)
+        g.layer = tag
+        g.entities.grep(Sketchup::Edge).each { |ed| ed.layer = tag }
+      end
+
+      # Turn a corner unit into its sibling article - the same node with the
+      # door and the 8x8 at the other end.
+      #
+      # The letter belongs to the WALL, so placement decides it and does not
+      # ask (Andriy, 2026-08-20). Silent applies to the GESTURE only: the code,
+      # the name and the notes are all rewritten, so nothing reaches an order
+      # that the model does not state plainly. A mirror of the instance would
+      # not do - the carcass is not symmetric, and it is a different article.
+      def swap_corner_execution!(instance, model = Sketchup.active_model)
+        attrs   = Contract.read(instance.definition)
+        sibling = Registry.sibling_execution_code(attrs['code'].to_s)
+        return nil unless sibling
+
+        # Attributes live on the DEFINITION. If two instances share it, editing
+        # in place would silently re-article the other one too.
+        instance.make_unique if instance.definition.count_instances > 1
+
+        unit = Registry.lookup(sibling)
+        definition = instance.definition
+        definition.entities.clear!
+        draw_corner(definition, unit, model)
+
+        new_attrs = attributes_for(unit)
+        new_attrs['notes'] = "#{new_attrs['notes']} Execution chosen by placement " \
+                             "from the wall, not by the picker: #{attrs['code']} -> #{sibling}."
+        Contract.write!(definition, new_attrs)
+        Symbols.draw(model, definition, unit, attrs['hinge_side'])
+        instance.name = "Cesar #{sibling} — #{unit['description']}"
+        sibling
+      end
+
       def build(code, model = Sketchup.active_model)
         unit = Registry.lookup(code)
         unless unit.fetch('buildable', true)
@@ -214,30 +281,7 @@ module UCON
           end
 
           if unit['geometry_kind'] == 'corner'
-            p = corner_parts(unit)
-            plinth = Geometry.box(
-              e, 'PLINTH',
-              0, s::PLINTH_SETBACK_MM, 0,
-              p[:carcass], s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
-            )
-            Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
-
-            Geometry.box(e, 'CARCASS', 0, 0, z0, p[:carcass], p[:depth], h, carcass_mat)
-            Geometry.box(e, 'FRONT', p[:door_x], p[:front_y], z0,
-                         p[:door], s::FRONT_T_MM, p[:front_h], front_mat)
-            Geometry.prism(e, 'FILLER_8X8', p[:filler_plan], z0, p[:front_h], front_mat)
-
-            if p[:wasted].positive?
-              g = Geometry.wire_box(
-                e, 'WASTED_SPACE', p[:wasted_x], 0, z0,
-                p[:wasted], p[:depth], h,
-                Geometry.material(model, 'UCON_Placeholder_Gray', [138, 138, 138])
-              )
-              tag = model.layers[WASTED_TAG] || model.layers.add(WASTED_TAG)
-              g.layer = tag
-              g.entities.grep(Sketchup::Edge).each { |ed| ed.layer = tag }
-            end
-
+            draw_corner(definition, unit, model)
             Contract.write!(definition, attributes_for(unit))
             Symbols.draw(model, definition, unit, nil)
 

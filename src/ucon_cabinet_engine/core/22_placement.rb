@@ -156,6 +156,26 @@ module UCON
       #
       # `wall_run` is the signed extent of the wall along the unit's x axis,
       # measured from the corner. Positive means the wall continues in +x.
+      # Which way, and how far, the wall runs from the corner - measured along
+      # the unit's x axis. A wall usually overhangs its corner a little on the
+      # far side (its own thickness, a sloppy join), so the answer is the
+      # DOMINANT side, not merely a non-zero one.
+      # The corner must lie ON this wall. Two planes cross wherever they like,
+      # including far past the end of either face - that is a crossing, not a
+      # corner, and a unit seated there would hang off the end of the wall.
+      CORNER_ON_WALL_TOL_MM = 50
+
+      def wall_run(corner_at, wall_lo, wall_hi)
+        return nil if corner_at < wall_lo - CORNER_ON_WALL_TOL_MM
+        return nil if corner_at > wall_hi + CORNER_ON_WALL_TOL_MM
+
+        forward = wall_hi - corner_at
+        back    = corner_at - wall_lo
+        return nil if forward <= 0 && back <= 0
+
+        forward >= back ? forward : -back
+      end
+
       def execution_for(wall_run)
         return nil if wall_run.nil? || wall_run.zero?
 
@@ -180,8 +200,10 @@ module UCON
 
       # ---- how far a unit reaches, for continuing a run --------------------
 
-      # How far a unit reaches along its own +x, INCLUDING space that must stay
-      # free. Used to drop the next unit of a run clear of this one.
+      # What a unit OCCUPIES along its own x, as [low, high], including space
+      # that must stay free. One measure serves two jobs: dropping the next unit
+      # of a run clear of this one (the high end), and telling a neighbour snap
+      # where this one really begins and ends (both).
       #
       # A straight unit reaches its width. A corner unit does not: it occupies a
       # NODE longer than its carcass, and the difference is the unreachable
@@ -195,11 +217,18 @@ module UCON
       # Returns nil when there is not enough to say. Callers must NOT turn that
       # into a zero: reading a missing width as 0.0 is what used to drop a new
       # unit exactly on top of a corner one, silently.
-      def run_extent_mm(width_mm: nil, carcass_mm: nil, nominal_mm: nil, execution: nil)
-        return width_mm.to_f if width_mm
+      def span_mm(width_mm: nil, carcass_mm: nil, nominal_mm: nil, execution: nil)
+        return [0.0, width_mm.to_f] if width_mm
         return nil unless carcass_mm && nominal_mm && execution
 
-        execution.to_s == 'left' ? nominal_mm.to_f : carcass_mm.to_f
+        wasted = nominal_mm.to_f - carcass_mm.to_f
+        execution.to_s == 'left' ? [0.0, nominal_mm.to_f] : [-wasted, carcass_mm.to_f]
+      end
+
+      def run_extent_mm(width_mm: nil, carcass_mm: nil, nominal_mm: nil, execution: nil)
+        span = span_mm(width_mm: width_mm, carcass_mm: carcass_mm,
+                       nominal_mm: nominal_mm, execution: execution)
+        span && span[1]
       end
 
       # ---- what this tool will and will not place --------------------------
@@ -216,9 +245,12 @@ module UCON
       def refusal_for(attrs)
         code = attrs['code'] || 'This component'
         if attrs['geometry_kind'].to_s == 'corner'
-          return "#{code} is a corner unit: its footprint is not its box and it " \
-                 'needs two walls at once, so this tool does not place it yet ' \
-                 "(roadmap M2.2). Use SketchUp's own Move tool for now."
+          # Corners have been placeable since 2026-08-20. They need a CORNER
+          # rather than a wall, and the article follows from the wall, but the
+          # tool no longer refuses them for being what they are.
+          return nil if attrs['corner_geometry'] && attrs['depth_mm']
+
+          return "#{code} is a corner unit but carries no corner_geometry."
         end
         unless attrs['width_mm'] && attrs['depth_mm']
           return "#{code} carries no width and depth in the contract, so there is " \

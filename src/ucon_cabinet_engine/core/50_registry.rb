@@ -125,6 +125,27 @@ module UCON
               codes(manufacturer).sort.join(', ')
       end
 
+      # The same corner article in the other execution: same node, same door,
+      # same depth - the other end carrying the door and the 8x8.
+      #
+      # This is a LOOKUP, never a string edit. The letter happens to be the last
+      # character today, but a code is an opaque catalog fact and building one by
+      # swapping a character is exactly the habit the registry exists to prevent.
+      def sibling_execution_code(code, manufacturer = 'cesar')
+        me = lookup(code, manufacturer)
+        return nil unless me['corner_geometry'] && me['execution']
+
+        each_code(data(manufacturer)) do |row, _fam_name, _fam, _type_key, _unit_type|
+          next if row['code'] == code
+          next unless row['corner_geometry'] == me['corner_geometry']
+          next unless row['execution'] && row['execution'] != me['execution']
+          next unless row['door_width_mm'] == me['door_width_mm']
+
+          return row['code']
+        end
+        nil
+      end
+
       # Flat catalog for pickers: every code with its type, dims and source.
       def catalog(manufacturer = 'cesar')
         each_code(data(manufacturer)).map do |row, family_name, family, type_key, unit_type|
