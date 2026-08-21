@@ -14,10 +14,21 @@ module UCON
 
       def show
         @dialog&.close rescue nil
+        # RESIZABLE, and tall enough for its own content. It was fixed at
+        # 240x360 and not resizable, which was fine until the palette grew a
+        # row: the buttons fell off the bottom and there was no way to get them
+        # back. A window that cannot be resized has to be right forever, and
+        # nothing here is finished enough for that.
+        #
+        # The preferences_key is bumped with the size. SketchUp remembers the
+        # last geometry PER KEY, so a stale 240x360 would be restored over any
+        # new default and the fix would look like it had not worked.
         @dialog = UI::HtmlDialog.new(
-          dialog_title: 'UCON Cabinet Engine', preferences_key: 'UCONPalette',
-          style: UI::HtmlDialog::STYLE_UTILITY, width: 240, height: 360,
-          resizable: false
+          dialog_title: 'UCON Cabinet Engine', preferences_key: 'UCONPalette2',
+          style: UI::HtmlDialog::STYLE_UTILITY,
+          width: 260, height: 470,
+          min_width: 230, min_height: 260,
+          resizable: true
         )
         @dialog.set_html(html)
         @dialog.add_action_callback('build_by_code') { |_| show_picker }

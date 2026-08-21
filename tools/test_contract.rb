@@ -1107,6 +1107,22 @@ if defined?(UCON::CabinetEngine::Symbols)
   end
 end
 
+check('the palette window can grow, because the palette does') do
+  # It was fixed at 240x360 and not resizable. Adding one row of buttons
+  # pushed the rest off the bottom with no way to get them back. The lesson is
+  # not "pick a taller number" - it is that a panel still being designed must
+  # not be locked to a size.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'the palette must be resizable' unless src.include?('resizable: true')
+  raise 'a fixed-size palette has come back' if src.include?('resizable: false')
+  h = src[/height:\s*(\d+)/, 1].to_i
+  raise "declared height #{h} is too short for the buttons" unless h >= 440
+  # The remembered geometry is per preferences_key: a stale key would restore
+  # the old cramped size over any new default.
+  raise 'the size changed but the preferences key did not' unless
+    src.include?("preferences_key: 'UCONPalette2'")
+end
+
 check('the palette offers the open door as its own switch') do
   html = UCON::CabinetEngine::Palette.html
   raise 'no Open door button' unless html.include?(">Open door<")
