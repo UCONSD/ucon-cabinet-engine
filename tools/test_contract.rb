@@ -1646,7 +1646,66 @@ if defined?(UCON::CabinetEngine::Palette)
     raise 'the fieldset must be addressable so it can be hidden' unless
       html.include?('id="dvFs"')
   end
-  check('picker HTML escapes gap text (it comes from a data file)') do
+  puts "\ninches are a way of READING a size, never of storing one"
+
+check('the picker carries a units switch, and the palette does not') do
+  html = Palette.picker_html(Registry.catalog, Registry.gaps)
+  raise 'no units button' unless html.include?('id="units"')
+  raise 'the switch must sit beside the search field' unless html.include?('class="srow"')
+  raise 'the switch must be remembered on the Ruby side' unless
+    html.include?("sketchup.units(INCH ? 'on' : 'off')")
+  # The palette is a different dialog with a different job. A stray reference
+  # there would throw on load, where nothing would report it.
+  raise 'the units switch leaked into the palette' if Palette.html.include?('id="units"')
+end
+
+check('the switch has an initial state, so reopening does not forget it') do
+  off = Palette.picker_html(Registry.catalog, Registry.gaps, false)
+  on  = Palette.picker_html(Registry.catalog, Registry.gaps, true)
+  raise 'INITIAL_INCH not injected' unless off.include?('var INITIAL_INCH = false')
+  raise 'INITIAL_INCH not injected' unless on.include?('var INITIAL_INCH = true')
+  raise 'the button must arrive already lit' unless
+    on.include?("if(INCH) document.getElementById('units').className = 'on'")
+end
+
+check('a NOMINAL inch size is read, a converted one is marked') do
+  # The rule the whole feature turns on. 610 mm is the catalog's rounding of
+  # 24 inches (609,6); converting it back gives 24 1/16", which is not what
+  # anyone ordered. So a nominal is LOOKED UP and returns before any
+  # arithmetic happens - the same rule as the width index.
+  html = Palette.picker_html(Registry.catalog, Registry.gaps, true)
+  a = html.index('function inchLabel')
+  b = html.index('function toggleUnits')
+  raise 'inchLabel missing' unless a && b && b > a
+
+  js = html[a...b]
+  nominal_at = js.index('String(nominal)')
+  convert_at = js.index('25.4')
+  raise 'the nominal branch must come FIRST' unless nominal_at && convert_at &&
+                                                    nominal_at < convert_at
+  raise 'a conversion must carry a tilde' unless js.include?("\u2248")
+  # ...and the nominal branch must not.
+  raise 'a nominal must not be marked approximate' if
+    js[0...nominal_at].include?("\u2248")
+  raise 'the double prime must be a real character, not an entity' unless
+    js.include?("\u2033")
+end
+
+check('any nominal a row declares must actually BE that size') do
+  # Vacuous today - the USA elements chapter (printed 409-432) is not
+  # extracted, so nothing declares one and every inch label is a conversion.
+  # The moment a US row lands this stops being vacuous.
+  Registry.catalog.each do |c|
+    n = c['nominal_in']
+    next unless n
+
+    raise "#{c['code']}: nominal_in must be a number" unless n.is_a?(Numeric)
+    raise "#{c['code']}: #{c['width_mm']} mm is not #{n} inches" unless
+      (c['width_mm'] - (n * 25.4)).abs <= 1.0
+  end
+end
+
+check('picker HTML escapes gap text (it comes from a data file)') do
     html = Palette.picker_html([], [{ 'level' => 'section', 'class' => 'base',
                                       'section' => '<script>x</script>', 'printed' => 'p.1',
                                       'status' => 'not_extracted', 'types' => [], 'note' => nil }])

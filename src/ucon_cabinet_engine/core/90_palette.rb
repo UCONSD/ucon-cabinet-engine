@@ -69,7 +69,12 @@ module UCON
           style: UI::HtmlDialog::STYLE_UTILITY, width: 360, height: 470,
           resizable: true
         )
-        @picker.set_html(picker_html(Registry.catalog, Registry.gaps))
+        @picker.set_html(picker_html(Registry.catalog, Registry.gaps, @picker_inches))
+        # The switch survives a reopen. Nothing about it reaches the model or
+        # an order - it is a way of READING sizes, not a property of them.
+        @picker.add_action_callback('units') do |_, on|
+          @picker_inches = (on == 'on')
+        end
         @picker.add_action_callback('build') do |_, code|
           begin
             Generator.build(code)
@@ -125,15 +130,20 @@ module UCON
       # ones, so the picker shows the whole printed catalog and is honest about
       # what is missing. They come from the registry map — nothing about them
       # is hardcoded here.
-      def picker_html(catalog, gaps = [])
+      def picker_html(catalog, gaps = [], inches = false)
         require 'json'
         <<~HTML
           <!DOCTYPE html><html><head><meta charset="utf-8"><style>
             body{font:13px -apple-system,Helvetica,Arial;margin:0;padding:12px;background:#f5f5f4;color:#222}
             #crumb{font-size:11px;color:#666;margin-bottom:8px;min-height:14px}
             #crumb a{color:#2563eb;cursor:pointer;text-decoration:none}
-            #search{width:100%;box-sizing:border-box;padding:5px 8px;margin-bottom:8px;
+            .srow{display:flex;gap:6px;margin-bottom:8px}
+            #search{flex:1;min-width:0;box-sizing:border-box;padding:5px 8px;
                     border:1px solid #ccc;border-radius:6px;font-size:12px}
+            #units{flex:none;width:34px;padding:5px 0;border:1px solid #ccc;border-radius:6px;
+                   background:#fff;color:#555;font-size:13px;cursor:pointer;line-height:1}
+            #units:hover{background:#eef2ff;border-color:#93b4f5}
+            #units.on{background:#2563eb;color:#fff;border-color:#2563eb}
             .item{display:block;width:100%;text-align:left;margin:0 0 6px;padding:8px 10px;
                   border:1px solid #d4d4d4;border-radius:6px;background:#fff;font-size:13px;cursor:pointer}
             .item:hover{background:#eef2ff;border-color:#93b4f5}
@@ -156,13 +166,19 @@ module UCON
                   font-size:11px;cursor:pointer;text-align:center}
             .wbtn:hover{background:#eef2ff}
             .wbtn.sel{background:#2563eb;color:#fff;border-color:#2563eb}
+            .wbtn small{display:block;color:#8a8a8a;font-size:10px;line-height:1.2;margin-top:1px}
+            .wbtn.sel small{color:rgba(255,255,255,.85)}
             #card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;margin:8px 0;
                   font-size:12px;line-height:1.5;display:none}
             #card b{font-size:13px} .src{color:#888;font-size:11px}
             #buildBtn{width:100%;padding:9px;border:0;border-radius:6px;background:#2563eb;color:#fff;
                       font-size:13px;cursor:pointer;display:none}
           </style></head><body>
-            <input id="search" placeholder="Search code or description…" oninput="doSearch()">
+            <div class="srow">
+              <input id="search" placeholder="Search code or description…" oninput="doSearch()">
+              <button id="units" onclick="toggleUnits()"
+                      title="Also show sizes in inches">&#8243;</button>
+            </div>
             <div id="crumb"></div>
             <div id="content"></div>
             <div id="card"></div>
@@ -170,11 +186,50 @@ module UCON
             <script>
               var CAT = #{script_json(catalog)};
               var GAPS = #{script_json(gaps)};
+              var INITIAL_INCH = #{inches ? 'true' : 'false'};
               var CLS = #{script_json(CLASS_LABELS)};
               var TYP = #{script_json(TYPE_LABELS)};
               var st = { cls:null, sec:null, typ:null, code:null };
 
               function uniq(a){ return a.filter(function(v,i){ return a.indexOf(v)===i; }); }
+
+              // ---- inches -------------------------------------------------
+              // Millimetres are the truth: the catalog is metric, INCLUDING
+              // its US sizes, which it prints as centimetres (W. 76.2 = 30").
+              // Inches here are a way of READING a size, never of storing one.
+              //
+              // A NOMINAL size is one the catalog itself built to an inch
+              // figure. It is exact by definition and carries no tilde. Its
+              // value is READ FROM THE ROW, never computed - 610 mm is the
+              // catalog's rounding of 24" (609,6), so converting it back gives
+              // 24 1/16" and that is not what anyone ordered. Same rule as the
+              // width index: a lookup, never arithmetic.
+              //
+              // Everything else is a CONVERSION and says so with a tilde,
+              // because 600 mm is NOT 24" - it is a centimetre short of it,
+              // and a bare "23 5/8" would read as a size somebody chose.
+              var INCH = INITIAL_INCH;
+              function frac16(v){
+                var whole = Math.floor(v);
+                var n = Math.round((v - whole) * 16);
+                if(n === 16){ whole += 1; n = 0; }
+                if(n === 0) return String(whole);
+                var d = 16;
+                while(n % 2 === 0){ n = n / 2; d = d / 2; }
+                return whole + ' ' + n + '/' + d;
+              }
+              function inchLabel(mm, nominal){
+                if(nominal !== undefined && nominal !== null && nominal !== '')
+                  return String(nominal) + '\u2033';
+                return '\u2248' + frac16(mm / 25.4) + '\u2033';
+              }
+              function toggleUnits(){
+                INCH = !INCH;
+                document.getElementById('units').className = INCH ? 'on' : '';
+                if(window.sketchup && sketchup.units) sketchup.units(INCH ? 'on' : 'off');
+                var q = document.getElementById('search').value.trim();
+                if(q.length >= 2){ doSearch(); } else { render(); }
+              }
               // The class level is the one place the picker cannot be derived
               // from the registry alone. A whole element class we have not
               // started - the wall chapter, the tall chapter - exists only in
@@ -362,7 +417,10 @@ module UCON
                     .forEach(function(c){
                       var b = document.createElement('button'); b.className='wbtn';
                       if(st.code===c.code) b.className += ' sel';
-                      b.textContent = c.width_mm;
+                      b.innerHTML = INCH
+                        ? esc(String(c.width_mm)) + '<small>' +
+                          esc(inchLabel(c.width_mm, c.nominal_in)) + '</small>'
+                        : esc(String(c.width_mm));
                       b.onclick = function(){ st.code = c.code; render(); };
                       row.appendChild(b);
                     });
@@ -378,7 +436,11 @@ module UCON
                     c.carcass_length_mm + ' × ' + c.depth_mm + ' · door ' + c.door_width_mm +
                     '<br><i>' + c.execution + ' execution — the mirror is a different code; ' +
                     'the door hand is set in the properties panel</i>'
-                  : 'W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm';
+                  : 'W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm' +
+                    (INCH ? '<br><span class="src">' +
+                            esc(inchLabel(c.width_mm, c.nominal_in)) + ' × ' +
+                            esc(inchLabel(c.height_mm, c.nominal_h_in)) + ' × ' +
+                            esc(inchLabel(c.depth_mm, c.nominal_d_in)) + '</span>' : '');
                 el.innerHTML = '<b>' + c.code + '</b> · ' + c.family + '<br>' + c.description +
                   '<br>' + dims + '<br>' +
                   '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
@@ -417,7 +479,10 @@ module UCON
                 });
               }
               function doBuild(){ if(st.code) sketchup.build(st.code); }
-              window.onload = function(){ setLevel(null, null, null); };
+              window.onload = function(){
+                if(INCH) document.getElementById('units').className = 'on';
+                setLevel(null, null, null);
+              };
             </script>
           </body></html>
         HTML
