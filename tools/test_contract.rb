@@ -1785,15 +1785,16 @@ check('the height needs no customisation, and the note carries the arithmetic') 
     notes.include?('66,4') && notes.include?('NOT extracted')
 end
 
-check('the open-door projection is PARKED, and says so in those words') do
-  # It was briefly written as settled. For the ORDER it is settled; for the
-  # DRAWING it waits on appliances being modelled. A question recorded as
-  # answered is a question nobody comes back to.
+check('the swing PROJECTION is parked, while the hand itself is drawn') do
+  # Three different things, and only the middle one is settled:
+  #   the ORDER  - no hand, ever. The factory has no part in it.
+  #   the HAND   - drawn, in the elevation, because nothing else can carry it.
+  #   the SWING  - parked until appliances are modelled; it is the machine's.
   n = Registry.data['families']['USA Tall H.210']['unit_types']['usa_fridge_door']['notes']
-  raise 'the two halves must be told apart' unless
-    n.include?('For the ORDER that is the final answer')
-  raise 'the drawing half must be parked, not closed' unless
-    n.include?('PARKED question, not a closed one')
+  raise 'the order half must be explicit' unless n.include?('THE ORDER CARRIES NO HAND')
+  raise 'the drawing half must be explicit' unless
+    n.include?('THE DRAWING MUST CARRY IT ANYWAY')
+  raise 'the projection must stay parked' unless n.include?('stays PARKED')
   raise 'a parked question needs a date' unless n.include?('Parked 2026-08-21')
 end
 
@@ -1810,24 +1811,33 @@ check('a fridge door is a PANEL, and its depth is a thickness') do
   end
 end
 
-check('a US appliance panel has NO hand, and the note says why not') do
-  # Not a gap in the source. Europe builds the fridge INSIDE a cabinet, so the
-  # cabinet carries the hinges and its door is linked to the appliance door by
-  # a bracket - the hand is the cabinet's and the factory must be told it.
-  # America stands the fridge in a housing between cabinets or panels and
-  # mounts the panel straight onto the machine, so the hand is the appliance's
-  # business. "1 door" is therefore the COMPLETE description of the article.
+check('a US fridge panel shows its hand in the ELEVATION and nowhere else') do
+  # The hand cannot reach the installer any other way: the estimate has no
+  # field for it, and fridges hinge one way while freezers hinge the other, so
+  # a swapped pair is discovered on site with the hinges on the wrong edge.
+  # The elevation is the only place the information can live.
   u = Registry.lookup('CR9700')
-  raise 'must not claim a hand that does not exist' unless u['handed'] == false
-  raise 'no hinge axis may be invented either' if u['front_layout'].key?('hinge_axis')
+  raise 'the drawing must be able to state a hand' unless u['handed'] == true
+  raise 'no hinge axis may be invented' if u['front_layout'].key?('hinge_axis')
+  raise 'the hand must be elevation-only' unless
+    u['front_layout']['hand_shown'] == 'elevation_only'
   n = Registry.data['families']['USA Tall H.210']['unit_types']['usa_fridge_door']['notes']
-  raise 'the reason must be recorded, not just the fact' unless
-    n.include?('NOT FOR WANT OF INFORMATION')
   raise 'both markets must be described' unless
     n.include?('INSIDE a cabinet') && n.include?('DIRECTLY on the appliance')
-  # The instruction matters as much as the explanation: someone will otherwise
-  # "fix" this by adding a hinge_side or by putting it to an estimate.
-  raise 'the instruction must be explicit' unless n.include?('do NOT ask an estimate')
+  raise 'the real-world reason must survive' unless
+    n.include?('freezers') && n.include?('hinges have to be moved')
+end
+
+check('elevation-only means the plan and the open leaf are BOTH skipped') do
+  # Two places had to be taught it, and a symbol that leaks into the plan
+  # asserts a swing path we do not know.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise "the rule must be honoured twice, found #{src.scan("'elevation_only'").length}" unless
+    src.scan("'elevation_only'").length == 2
+  raise 'the open leaf must bail out' unless
+    src.include?("return if layout['hand_shown'] == 'elevation_only'")
+  raise 'the plan symbol must bail out' unless
+    src.include?("next if layout['hand_shown'] == 'elevation_only'")
 end
 
 check('the hinge_side axis records where it does NOT apply') do
@@ -1835,13 +1845,13 @@ check('the hinge_side axis records where it does NOT apply') do
   raise 'the US exception is not recorded beside the axis' unless
     n.include?('DOES NOT EXIST AT ALL FOR A US APPLIANCE PANEL')
   raise 'the rule must be actionable' unless
-    n.include?('never be offered on an appliance_front')
-  # An object_class of appliance_front must never be handed, in either chapter.
-  handed = Registry.catalog.select { |c| c['code'] }.select do |c|
-    u = Registry.lookup(c['code'])
-    u['object_class'] == 'appliance_front' && u['handed']
-  end
-  raise "a panel claiming a hand: #{handed.map { |c| c['code'] }.inspect}" unless handed.empty?
+    n.include?('never be ORDERED for an appliance_front')
+  # Absent from the ORDER, present on the DRAWING - and the note must say both,
+  # or the next reader will delete one of them as a contradiction.
+  raise 'the drawing half must sit beside the order half' unless
+    n.include?('THE DRAWING IS A SEPARATE MATTER')
+  # The dishwasher panel is bottom-hung: it has no left or right to state.
+  raise 'the dishwasher panel must not be handed' if Registry.lookup('V80730')['handed']
 end
 
 check('the two unmodelled restrictions on the wine cooler door survive') do

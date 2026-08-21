@@ -454,8 +454,14 @@ module UCON
       NICHE_DEFAULT_DEPTH_MM = 620
       PLACEHOLDER_TAG        = 'UCON — Placeholder (not ours)'
 
-      def niche_height_mm
-        Standards::PLINTH_H_MM + 780
+      # HOW TALL THE APPLIANCE'S SPACE IS - asked of the object, not assumed.
+      # It was PLINTH_H_MM + 780, hard-wired to a dishwasher under a worktop,
+      # and it drew an 880-tall box behind a 2100 fridge panel: a phantom base
+      # cabinet standing where the fridge is. The rule that replaces it gives
+      # the SAME 880 for the dishwasher, because a dishwasher panel really does
+      # run from the plinth to the worktop underside.
+      def niche_height_mm(unit)
+        base_z_mm(unit) + unit['height_mm']
       end
 
       def niche_attributes_for(unit, depth_mm = nil, inherited = false)
@@ -468,14 +474,15 @@ module UCON
           'geometry_kind'  => 'linear',
           'width_mm'       => unit['width_mm'],
           'depth_mm'       => d,
-          'height_mm'      => niche_height_mm,
+          'height_mm'      => niche_height_mm(unit),
           'code_status'    => 'PRELIMINARY',
           'status'         => 'PLANNING',
           'source_ref'     => unit['source_ref'],
           'notes'          => 'Placeholder for the client-supplied appliance: the SPACE it ' \
                               'occupies in the run, not the machine. Width from the Cesar door ' \
-                              "code #{unit['code']}; height = plinth + carcass (the appliance " \
-                              'stands on the floor, the plinth in front of it is cut away); ' \
+                              "code #{unit['code']}; height = floor to the top of the panel " \
+                              '(the appliance stands on the floor and the panel covers its ' \
+                              'opening, so the two share a top); ' \
                               "depth #{inherited ? 'inherited from the neighbouring unit' : 'defaulted to d.62 - no neighbour was selected'}. " \
                               'Never an order line: the machine is not a Cesar object. The ' \
                               "page's 'cutout for plinth 40' is recorded as unresolved and is not drawn."

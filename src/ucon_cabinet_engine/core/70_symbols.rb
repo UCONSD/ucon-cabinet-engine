@@ -277,6 +277,13 @@ module UCON
         fh = front_height_mm || h
         kind = layout['kind'] || 'single'
 
+        # ELEVATION ONLY. Some objects show which side opens but must not
+        # assert HOW it opens: an appliance panel is hung on the client's
+        # machine, so the swing path is the machine's and not ours. The hand
+        # still has to reach the drawing - the order cannot carry it - so it
+        # is drawn in the elevation and nowhere else.
+        return if layout['hand_shown'] == 'elevation_only'
+
         if (ol = layout['open_leaf'])
           # Catalog geometry, printed per family. NEVER derived: the two
           # push-up systems move differently and only the page knows how.
@@ -467,6 +474,9 @@ module UCON
           g.entities.add_line([hinge_x.mm, y_face.mm, z0.mm], apex)
           g.entities.add_line([hinge_x.mm, y_face.mm, (z0 + door_h).mm], apex)
           finalize(g, front_tag, mat)
+
+          # Same rule as the open leaf: an elevation-only hand stops here.
+          next if layout['hand_shown'] == 'elevation_only'
 
           g = definition.entities.add_group
           g.name = "SYM_PLAN_#{i + 1}"
