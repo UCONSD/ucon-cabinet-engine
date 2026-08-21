@@ -71,7 +71,15 @@
         "front_layout": {
           "kind": "single",
           "mechanism": "push_up",
-          "note": "One full-front leaf carried by a push-up mechanism. Deliberately NO hinge_axis: the travel is not a swing about an edge and the catalog does not state it. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
+          "system": "vertical_push_up",
+          "note": "One full-front leaf carried by a push-up mechanism. Deliberately NO hinge_axis: the travel is not a swing about an edge, so the Drawing_Spec hinge rule cannot describe it and no elevation V is ever drawn. What IS drawn is open_leaf below - the front itself, dashed, where it ends up.",
+          "open_leaf": {
+            "frame": "y from the FRONT FACE (negative = in front of it), z from the CARCASS BASE. Both mm. The two entries are the leaf's long edges; the slab is swept across the full unit width and thickened on its outer face.",
+            "upper_mm": [-150, 695],
+            "free_mm": [-150, 335],
+            "source_ref": "printed p.560 / PDF 562, 'Vertical push-up door system h. 36'",
+            "note": "VERTICAL system: the leaf does not rotate at all, it rides up on parallel arms and stays vertical. Printed 33,5 / 15 / 21 / 36 - top edge 335 above the carcass top, 150 in front of the face, so the bottom edge sits 25 BELOW the top. The swept maximum during travel is 210, wider than the final 150; recorded here, not drawn."
+          }
         }
       }
     }

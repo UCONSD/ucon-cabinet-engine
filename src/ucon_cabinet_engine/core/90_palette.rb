@@ -434,6 +434,9 @@ module UCON
             <div class="row">
               <button class="seg" onclick="sketchup.symbols('plan')">Plan</button>
               <button class="seg" onclick="sketchup.symbols('front')">Elevation</button>
+              <button class="seg" onclick="sketchup.symbols('door')">Open door</button>
+            </div>
+            <div class="row" style="margin-top:4px">
               <button class="seg" onclick="sketchup.symbols('all')">All</button>
               <button class="seg" onclick="sketchup.symbols('off')">Off</button>
             </div>

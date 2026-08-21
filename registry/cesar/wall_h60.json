@@ -90,7 +90,15 @@
         "front_layout": {
           "kind": "single",
           "mechanism": "push_up",
-          "note": "One full-front leaf carried by a push-up mechanism. Deliberately NO hinge_axis: the travel is not a swing about an edge and the catalog does not state it. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
+          "system": "oblique_push_up",
+          "note": "One full-front leaf carried by a push-up mechanism. NO hinge_axis: no elevation V is ever drawn for this type. What IS drawn is open_leaf below - the front itself, dashed, where it ends up. NOTE THE SYSTEM DIFFERS FROM H.36: printed p.560 calls H.36/H.48 VERTICAL and p.561 calls H.60/H.72 OBLIQUE. Same word on the unit page, two different motions.",
+          "open_leaf": {
+            "frame": "y from the FRONT FACE (negative = in front of it), z from the CARCASS BASE. Both mm. The two entries are the leaf's long edges; the slab is swept across the full unit width and thickened on its outer face.",
+            "upper_mm": [96, 780],
+            "free_mm": [-470, 581],
+            "source_ref": "printed p.561 / PDF 563, 'Oblique push-up door system h. 60'",
+            "note": "OBLIQUE system: the leaf tips outward. Printed 82 / 25,4 / 18 with a 60 leaf close with NO residue - 82 - 25,4 = 56,6 of run, drop = sqrt(60^2 - 56,6^2) = 19,9, giving a length of 60,0. The PICTURE draws the leaf at 32,8 degrees; the NUMBERS give 19,4. The numbers win, which is the same rule that governs the corner hand. The upper edge lands 96 mm INSIDE the cabinet footprint - not visible in the picture at all."
+          }
         }
       }
     }

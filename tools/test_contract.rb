@@ -1010,7 +1010,7 @@ check('H.60 is the first wall page with a side-hinged door, and it says so') do
   raise 'the absent pull-out type must be recorded' unless obs.include?('NO PULL-OUT DOOR TYPE')
 end
 
-check('a push-up door ships as data and draws NOTHING') do
+check('a push-up door never claims a hinge axis, and never will') do
   %w[PB0610 PD1210].each do |code|
     fl = Registry.lookup(code)['front_layout']
     raise "#{code}: a push-up door must not claim a hinge axis" if fl.key?('hinge_axis')
@@ -1020,6 +1020,111 @@ check('a push-up door ships as data and draws NOTHING') do
   # Same shape as the pull-out door on printed p.36 - one precedent, not two.
   raise 'the precedent must still hold' unless
     Registry.lookup('B80300')['front_layout']['mechanism'] == 'pull_out_door'
+end
+
+check('push-up is TWO motions, and the two families say which') do
+  # printed p.560 heads H.36/H.48 "Vertical", p.561 heads H.60/H.72 "Oblique".
+  # The unit pages call both of them "push-up" - the difference is only in the
+  # mechanism chapter, and one symbol for both would be wrong half the time.
+  raise 'H.36 must be the vertical system' unless
+    Registry.lookup('PB0610')['front_layout']['system'] == 'vertical_push_up'
+  raise 'H.60 must be the oblique system' unless
+    Registry.lookup('PD0610')['front_layout']['system'] == 'oblique_push_up'
+end
+
+check('the printed push-up numbers close: an open leaf IS its own door') do
+  # The whole reason the catalog can be trusted over its own picture.
+  # H.60: 82 - 25,4 = 56,6 of run; a 60 leaf then drops sqrt(60^2 - 56,6^2)
+  # = 19,9; length 60,0. Four printed numbers, no residue.
+  { 'PB0610' => 360, 'PD0610' => 600 }.each do |code, door_h|
+    ol = Registry.lookup(code)['front_layout']['open_leaf']
+    dy = ol['free_mm'][0] - ol['upper_mm'][0]
+    dz = ol['free_mm'][1] - ol['upper_mm'][1]
+    len = Math.sqrt((dy * dy) + (dz * dz))
+    raise "#{code}: leaf #{len.round(1)} but the door is #{door_h}" unless
+      (len - door_h).abs < 1.0
+    raise "#{code}: source_ref missing" unless ol['source_ref'].to_s.include?('printed')
+  end
+end
+
+check('the forward reach is the number that matters, and it comes from the page') do
+  reach = lambda do |code|
+    ol = Registry.lookup(code)['front_layout']['open_leaf']
+    -[ol['upper_mm'][0], ol['free_mm'][0]].min
+  end
+  # A top-hung H.36 sweeps 360 into the room; a vertical push-up only 150.
+  # That difference is WHY a push-up is specified, and until now we drew zero.
+  raise reach.call('PB0610').to_s unless reach.call('PB0610') == 150
+  raise reach.call('PD0610').to_s unless reach.call('PD0610') == 470
+end
+
+if defined?(UCON::CabinetEngine::Symbols)
+  Symbols = UCON::CabinetEngine::Symbols unless defined?(Symbols)
+
+  check('the open leaf is the real front slab, thickened AWAY from the cabinet') do
+    ol = Registry.lookup('PD0610')['front_layout']['open_leaf']
+    rings = Symbols.open_leaf_slab(600, ol['upper_mm'], ol['free_mm'],
+                                   Standards::FRONT_T_MM)
+    raise rings.inspect unless rings && rings.length == 2 &&
+                               rings.all? { |r| r.length == 4 }
+    inner, outer = rings
+    raise 'the inner face must be exactly the printed edge' unless
+      inner[0][1] == ol['upper_mm'][0] && inner[0][2] == ol['upper_mm'][1]
+    raise 'thickness grew INTO the cabinet' unless outer[0][1] < inner[0][1]
+    d = Math.sqrt(((outer[0][1] - inner[0][1])**2) + ((outer[0][2] - inner[0][2])**2))
+    raise "thickness #{d}" unless (d - Standards::FRONT_T_MM).abs < 0.001
+  end
+
+  check('an open door is the same slab as the same door closed') do
+    # A door that changes thickness by opening is the model contradicting
+    # itself. There is one front thickness and it is Standards::FRONT_T_MM.
+    src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+    raise 'a second thickness constant has appeared' if src =~ /(THICK|LEAF_T)_MM/
+    raise 'the open leaf must ask Standards for the front thickness' unless
+      src.include?('t  = Standards::FRONT_T_MM')
+  end
+
+  check('one swing quad feeds BOTH the plan symbol and the 3-D leaf') do
+    # They used to be two copies of the same trigonometry. Two copies is two
+    # chances to update one.
+    src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+    raise 'swing_quad is not shared' unless src.scan('swing_quad(').length >= 3
+    q = Symbols.swing_quad(0, -25, 600, 'lh', 22)
+    raise q.inspect unless q.length == 4
+    raise 'the hinge corner must sit on the hinge' unless q[0] == [0, -25]
+    # 85 degrees, not 90: the far corner is still short of the side plane.
+    raise q.inspect unless q[2][1] < -500
+  end
+
+  check('a leaf that swings about a vertical edge is that quad, lifted') do
+    q = Symbols.swing_quad(0, -25, 600, 'lh', 22)
+    lo, hi = Symbols.open_leaf_prism(q, 0, 780)
+    raise lo.inspect unless lo.length == 4 && hi.length == 4
+    raise 'the lift must be the door height' unless
+      hi.map { |p| p[2] }.uniq == [780] && lo.map { |p| p[2] }.uniq == [0]
+    raise 'plan footprint must be identical top and bottom' unless
+      lo.map { |p| p[0, 2] } == hi.map { |p| p[0, 2] }
+  end
+end
+
+check('the palette offers the open door as its own switch') do
+  html = UCON::CabinetEngine::Palette.html
+  raise 'no Open door button' unless html.include?(">Open door<")
+  raise 'the door mode must be wired' unless html.include?("sketchup.symbols('door')")
+  %w[plan front all off].each do |m|
+    raise "the #{m} switch went missing" unless html.include?("sketchup.symbols('#{m}')")
+  end
+end
+
+check('three tags, and the third is not a flat convention') do
+  raise 'TAG_DOOR missing' unless defined?(UCON::CabinetEngine::Symbols::TAG_DOOR)
+  tags = [UCON::CabinetEngine::Symbols::TAG_FRONT,
+          UCON::CabinetEngine::Symbols::TAG_PLAN,
+          UCON::CabinetEngine::Symbols::TAG_DOOR]
+  raise tags.inspect unless tags.uniq.length == 3
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'show_mode must switch all three' unless
+    src.include?('door.visible  = %i[door all].include?(mode)')
 end
 
 check('the width index is a lookup: no code decodes arithmetically') do

@@ -2,7 +2,10 @@
 #
 # UCON Cabinet Engine — core/70_symbols.rb
 #
-# Dashed opening symbols on two hideable tags:
+# Dashed opening symbols on three hideable tags. The first two are FLAT
+# CONVENTIONS — abstractions that live in one view and say what a door does.
+# The third is not a convention at all: it is the front itself, dashed, where
+# it ends up. That distinction is the reason there are three and not two.
 #
 #   TAG_FRONT — elevation: dashed V per door leaf (base at the hinge edge,
 #               apex at the opening edge); one diagonal per drawer front,
@@ -28,6 +31,11 @@ module UCON
     module Symbols
       TAG_FRONT = 'UCON — Opening (front)'
       TAG_PLAN  = 'UCON — Opening (plan)'
+      # The open leaf in space. Not a symbol: real geometry, true in EVERY
+      # view including iso and section, which is why push-up gets one at all.
+      # A push-up leaf has no hinge axis, so no elevation V can describe it and
+      # this is the only honest thing that can be drawn for it.
+      TAG_DOOR  = 'UCON — Opening (door)'
 
       # How far a plan symbol sits above the bottom of ITS OWN ROW. Not above
       # the floor: that was the rule while every unit stood on the floor, and
@@ -55,8 +63,10 @@ module UCON
       def show_mode(model, mode)
         front = tag(model, TAG_FRONT)
         plan  = tag(model, TAG_PLAN)
+        door  = tag(model, TAG_DOOR)
         front.visible = %i[front all].include?(mode)
         plan.visible  = %i[plan all].include?(mode)
+        door.visible  = %i[door all].include?(mode)
         model.active_view.invalidate
         mode
       end
@@ -175,6 +185,78 @@ module UCON
         group.entities.grep(Sketchup::Face).each(&:erase!)
       end
 
+      # ---- the open leaf ---------------------------------------------------
+      #
+      # THE FRONT SLAB IS THE FRONT SLAB. Thickness is Standards::FRONT_T_MM,
+      # the same 22 the closed front is built with — an open door that is a
+      # different thickness from the same door closed would be the model
+      # contradicting itself. If US fronts ever become 19, that is one change
+      # in Standards and every front follows, this one included.
+
+      # The open leaf's footprint in plan: the real front slab swung out by
+      # DOOR_OPEN_ANGLE_DEG about its hinge edge, as four [x, y] pairs.
+      # ONE definition, used by the plan symbol AND by the 3-D leaf, so the two
+      # can never drift apart.
+      def swing_quad(hinge_x, y_face, leaf_w, hinge, thickness)
+        open_rad = DOOR_OPEN_ANGLE_DEG * Math::PI / 180
+        u_ang = hinge == 'lh' ? -open_rad : Math::PI + open_rad
+        v_ang = hinge == 'lh' ? u_ang + Math::PI / 2 : u_ang - Math::PI / 2
+        ux = Math.cos(u_ang)
+        uy = Math.sin(u_ang)
+        vx = Math.cos(v_ang)
+        vy = Math.sin(v_ang)
+        t = thickness
+        l = leaf_w
+        [[hinge_x, y_face],
+         [hinge_x + (t * vx), y_face + (t * vy)],
+         [hinge_x + (t * vx) + (l * ux), y_face + (t * vy) + (l * uy)],
+         [hinge_x + (l * ux), y_face + (l * uy)]]
+      end
+
+      # A leaf that swings about a VERTICAL edge: the plan quad lifted from
+      # z_lo to z_hi. Returns two rings of four [x, y, z].
+      def open_leaf_prism(quad, z_lo, z_hi)
+        [quad.map { |x, y| [x, y, z_lo] }, quad.map { |x, y| [x, y, z_hi] }]
+      end
+
+      # A leaf that moves in the SIDE plane — hung, or a push-up mechanism.
+      # upper and free are its two long edges as [y_mm, z_mm]; the slab is swept
+      # across the width and thickened on the outer face. The normal (dz, -dy)
+      # points away from the cabinet for every motion the catalog prints.
+      def open_leaf_slab(width_mm, upper, free, thickness)
+        dy  = free[0] - upper[0]
+        dz  = free[1] - upper[1]
+        len = Math.sqrt((dy * dy) + (dz * dz))
+        return nil unless len > 0
+
+        ny = dz / len * thickness
+        nz = -dy / len * thickness
+        face = lambda do |oy, oz|
+          [[0,         upper[0] + oy, upper[1] + oz],
+           [width_mm,  upper[0] + oy, upper[1] + oz],
+           [width_mm,  free[0] + oy,  free[1] + oz],
+           [0,         free[0] + oy,  free[1] + oz]]
+        end
+        [face.call(0, 0), face.call(ny, nz)]
+      end
+
+      # Twelve edges from two rings of four. z is relative to the carcass base.
+      def draw_box(group, rings, z0)
+        a, b = rings
+        [a, b].each do |ring|
+          ring.each_with_index do |p, i|
+            q = ring[(i + 1) % 4]
+            group.entities.add_line([p[0].mm, p[1].mm, (z0 + p[2]).mm],
+                                    [q[0].mm, q[1].mm, (z0 + q[2]).mm])
+          end
+        end
+        a.each_with_index do |p, i|
+          q = b[i]
+          group.entities.add_line([p[0].mm, p[1].mm, (z0 + p[2]).mm],
+                                  [q[0].mm, q[1].mm, (z0 + q[2]).mm])
+        end
+      end
+
       def clear(definition)
         doomed = definition.entities.grep(Sketchup::Group)
                            .select { |g| g.name.start_with?('SYM_') }
@@ -185,6 +267,72 @@ module UCON
       # front_height_mm: the ACTUAL door height (780 handle / 750 gola) —
       # the elevation V outlines the real leaf, not the family height.
       # nil falls back to the family height (handle default).
+      # Draws the open leaf for whatever kind of door this is, on TAG_DOOR.
+      # Every branch of draw() returns early, so this runs FIRST and once.
+      # Drawer stacks fall through and get nothing: a drawer front is not a
+      # leaf, and its travel is already in the plan symbol.
+      def draw_open_leaf(definition, unit, layout, w, h, z0,
+                         front_height_mm, y_face, hinge_side, door_tag, mat)
+        t  = Standards::FRONT_T_MM
+        fh = front_height_mm || h
+        kind = layout['kind'] || 'single'
+
+        if (ol = layout['open_leaf'])
+          # Catalog geometry, printed per family. NEVER derived: the two
+          # push-up systems move differently and only the page knows how.
+          rings = open_leaf_slab(w, ol['upper_mm'], ol['free_mm'], t)
+          return draw_leaf_group(definition, rings, z0, 'SYM_DOOR_MECHANISM', door_tag, mat)
+        end
+
+        if %w[bottom top].include?(layout['hinge_axis'].to_s)
+          axis = layout['hinge_axis'].to_s
+          z    = axis == 'top' ? fh : 0
+          rings = open_leaf_slab(w, [0, z], [-fh, z], t)
+          return draw_leaf_group(definition, rings, z0,
+                                 "SYM_DOOR_#{axis.upcase}_HUNG", door_tag, mat)
+        end
+
+        if unit['geometry_kind'] == 'corner'
+          return unless hinge_side
+
+          p  = Generator.corner_parts(unit, front_height_mm)
+          hx = hinge_side == 'lh' ? p[:door_x] : p[:door_x] + p[:door]
+          quad = swing_quad(hx, y_face, p[:door], hinge_side, t)
+          return draw_leaf_group(definition, open_leaf_prism(quad, 0, p[:front_h]),
+                                 z0, 'SYM_DOOR_CORNER', door_tag, mat)
+        end
+
+        return unless %w[single vertical_split].include?(kind)
+
+        leaves =
+          if kind == 'single'
+            return unless hinge_side
+
+            [{ x: 0, w: w, hinge: hinge_side }]
+          else
+            [{ x: 0, w: w / 2.0, hinge: 'lh' },
+             { x: w / 2.0, w: w / 2.0, hinge: 'rh' }]
+          end
+
+        leaves.each_with_index do |leaf, i|
+          hx = leaf[:hinge] == 'lh' ? leaf[:x] : leaf[:x] + leaf[:w]
+          quad = swing_quad(hx, y_face, leaf[:w], leaf[:hinge], t)
+          draw_leaf_group(definition, open_leaf_prism(quad, 0, fh), z0,
+                          "SYM_DOOR_#{i + 1}", door_tag, mat)
+        end
+        nil
+      end
+
+      def draw_leaf_group(definition, rings, z0, name, door_tag, mat)
+        return nil unless rings
+
+        g = definition.entities.add_group
+        g.name = name
+        draw_box(g, rings, z0)
+        finalize(g, door_tag, mat)
+        nil
+      end
+
       def draw(model, definition, unit, hinge_side, front_height_mm = nil, slabs = nil)
         clear(definition)
         layout = unit['front_layout'] || {}
@@ -203,8 +351,14 @@ module UCON
 
         front_tag = tag(model, TAG_FRONT)
         plan_tag  = tag(model, TAG_PLAN)
+        door_tag  = tag(model, TAG_DOOR)
         mat       = symbol_material(model)
         enable_material_edges(model)
+
+        # The leaf where it ends up. Drawn for every kind of door and before
+        # any branch returns, so no type can quietly miss out.
+        draw_open_leaf(definition, unit, layout, w, h, z0,
+                       front_height_mm, y_face, hinge_side, door_tag, mat)
 
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'
@@ -316,27 +470,12 @@ module UCON
           center  = [hinge_x.mm, y_face.mm, z_plan]
           r       = leaf[:w].mm
 
-          # Open leaf drawn as the actual 22 mm front slab, dashed, at
-          # DOOR_OPEN_ANGLE_DEG from closed. Thickness points into the swing
-          # region (toward where the arc comes from).
-          t = s::FRONT_T_MM
+          # Open leaf drawn as the actual front slab, dashed, at
+          # DOOR_OPEN_ANGLE_DEG from closed - the SAME quad the 3-D leaf is
+          # built from, so the plan and the door can never disagree.
           open_rad = DOOR_OPEN_ANGLE_DEG * Math::PI / 180
-          if leaf[:hinge] == 'lh'
-            u_ang = -open_rad                      # closed along +x, swings to -y
-            a1, a2 = -open_rad, 0
-          else
-            u_ang = Math::PI + open_rad            # closed along -x
-            a1, a2 = Math::PI, Math::PI + open_rad
-          end
-          ux, uy = Math.cos(u_ang), Math.sin(u_ang)
-          v_ang = leaf[:hinge] == 'lh' ? u_ang + Math::PI / 2 : u_ang - Math::PI / 2
-          vx, vy = Math.cos(v_ang), Math.sin(v_ang)
-          l = leaf[:w]
-          dashed_rect(g,
-                      [[hinge_x, y_face],
-                       [hinge_x + t * vx, y_face + t * vy],
-                       [hinge_x + t * vx + l * ux, y_face + t * vy + l * uy],
-                       [hinge_x + l * ux, y_face + l * uy]],
+          a1, a2 = leaf[:hinge] == 'lh' ? [-open_rad, 0] : [Math::PI, Math::PI + open_rad]
+          dashed_rect(g, swing_quad(hinge_x, y_face, leaf[:w], leaf[:hinge], s::FRONT_T_MM),
                       z_plan)
           g.entities.add_arc(Geom::Point3d.new(*center), Geom::Vector3d.new(1, 0, 0),
                              Geom::Vector3d.new(0, 0, 1), r, a1, a2, 12)
