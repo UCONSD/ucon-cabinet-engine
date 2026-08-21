@@ -1734,17 +1734,38 @@ check('a fridge door is a PANEL, and its depth is a thickness') do
   end
 end
 
-check('handed is false because the PAGE says so, and the note admits the doubt') do
-  # Every handed unit in this catalog is described "1 rh or lh door". This page
-  # says "1 door". So the hand is not recorded - even though a full-height
-  # American fridge door plainly has one. Recording the doubt is the point:
-  # this is a new open question, not a settled fact.
+check('a US appliance panel has NO hand, and the note says why not') do
+  # Not a gap in the source. Europe builds the fridge INSIDE a cabinet, so the
+  # cabinet carries the hinges and its door is linked to the appliance door by
+  # a bracket - the hand is the cabinet's and the factory must be told it.
+  # America stands the fridge in a housing between cabinets or panels and
+  # mounts the panel straight onto the machine, so the hand is the appliance's
+  # business. "1 door" is therefore the COMPLETE description of the article.
   u = Registry.lookup('CR9700')
-  raise 'must not claim a hand the page does not state' unless u['handed'] == false
+  raise 'must not claim a hand that does not exist' unless u['handed'] == false
   raise 'no hinge axis may be invented either' if u['front_layout'].key?('hinge_axis')
   n = Registry.data['families']['USA Tall H.210']['unit_types']['usa_fridge_door']['notes']
-  raise 'the wording evidence must be recorded' unless n.include?("NOT '1 rh or lh door'")
-  raise 'the doubt must be flagged as open' unless n.include?('NEW OPEN QUESTION')
+  raise 'the reason must be recorded, not just the fact' unless
+    n.include?('NOT FOR WANT OF INFORMATION')
+  raise 'both markets must be described' unless
+    n.include?('INSIDE a cabinet') && n.include?('DIRECTLY on the appliance')
+  # The instruction matters as much as the explanation: someone will otherwise
+  # "fix" this by adding a hinge_side or by putting it to an estimate.
+  raise 'the instruction must be explicit' unless n.include?('do NOT ask an estimate')
+end
+
+check('the hinge_side axis records where it does NOT apply') do
+  n = Registry.data['order_axes_outside_code']['hinge_side']['note']
+  raise 'the US exception is not recorded beside the axis' unless
+    n.include?('DOES NOT EXIST AT ALL FOR A US APPLIANCE PANEL')
+  raise 'the rule must be actionable' unless
+    n.include?('never be offered on an appliance_front')
+  # An object_class of appliance_front must never be handed, in either chapter.
+  handed = Registry.catalog.select { |c| c['code'] }.select do |c|
+    u = Registry.lookup(c['code'])
+    u['object_class'] == 'appliance_front' && u['handed']
+  end
+  raise "a panel claiming a hand: #{handed.map { |c| c['code'] }.inspect}" unless handed.empty?
 end
 
 check('the two unmodelled restrictions on the wine cooler door survive') do
