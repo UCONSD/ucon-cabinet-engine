@@ -1691,6 +1691,37 @@ check('a NOMINAL inch size is read, a converted one is marked') do
     js.include?("\u2033")
 end
 
+check('a fabrication limit carries its source and its SCOPE, not just a number') do
+  # 1200 mm came from Elda in writing, about one panel on one cabinet. Recording
+  # the number without recording what she was looking at is how a caution turns
+  # into a law - the same mistake the corner hand rule made.
+  fl = Registry.data['fabrication_limits']
+  raise 'fabrication_limits missing' unless fl
+
+  w = fl['front_panel_max_width_mm']
+  raise w.inspect unless w['value'] == 1200
+  raise 'trust level missing' unless w['trust'] == 'CONTROL'
+  raise 'the source must be named' unless w['source'].include?('2026-08-07')
+  raise 'her words must survive verbatim' unless w['verbatim'].include?('max 1200mm wide')
+  raise 'the open scope must be recorded' unless w['scope_open'].include?('hood cabinet')
+  # It is NOT enforced anywhere yet, and the note must say so rather than let
+  # someone assume the generator is already checking.
+  raise 'the status must admit it is not wired' unless
+    fl['status_note'].include?('NOT WIRED')
+end
+
+check('the two 2026-08-07 limits are not confused with each other') do
+  fl = Registry.data['fabrication_limits']
+  d  = fl['floor_to_ceiling_swing_door_max_mm']
+  raise d.inspect unless d['width'] == 850 && d['height'] == 2780
+  raise 'it must say it is a different product' unless
+    d['note'].include?('different product')
+  # A cabinet front and a floor-to-ceiling swing panel are both "panels" in
+  # conversation and neither limit applies to the other.
+  raise 'the two limits must not share a number' if
+    d['width'] == fl['front_panel_max_width_mm']['value']
+end
+
 check('a nominal inch size is LOOKED UP, never computed') do
   n = ->(mm) { Registry.nominal_in(mm) }
   { 457 => 18, 610 => 24, 762 => 30, 914 => 36, 1067 => 42, 1219 => 48 }.each do |mm, inch|

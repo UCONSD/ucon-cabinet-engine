@@ -431,6 +431,24 @@
       "note": "Cross-section from the extract (printed p.615/620): upper dimension 30 fills the gola zone above the 750 door; full grip zone 57 below worktop, profile depth 27. Preliminary drawing shows the visible 30 mm strip at the front plane with front thickness; true section stays recorded here. Do not add to carcass height."
     }
   },
+  "fabrication_limits": {
+    "status_note": "What the factory can physically make. CONTROL level: stated by Elda Chiara Lesca (DzineElements) in writing, not read from the price list - the book prints none of these. NOT WIRED to anything yet; these become pre-export validation rules, and a rule that only warns is still worth having before one that silently produces an unmakeable drawing.",
+    "front_panel_max_width_mm": {
+      "value": 1200,
+      "trust": "CONTROL",
+      "source": "Elda Chiara Lesca, email 2026-08-07, on the Dadvar composition",
+      "verbatim": "The only thing I had to change was the front panel for the hood cabinet, since these panels are max 1200mm wide. This can be two hinged doors instead, which would make that storage space more accessible.",
+      "scope_open": "She said it of the hood cabinet's front panel. Whether 1200 is the limit for EVERY front or for that panel type is not stated, and it matters: as a universal rule it would forbid a single door on any 1500 or 1800 compound wall unit, and printed p.212 and p.222 list those widths without a warning. Ask before enforcing.",
+      "remedy": "Two hinged doors instead of one - her suggestion, and it is a design answer rather than a refusal."
+    },
+    "floor_to_ceiling_swing_door_max_mm": {
+      "width": 850,
+      "height": 2780,
+      "trust": "CONTROL",
+      "source": "Elda Chiara Lesca, email 2026-08-07",
+      "note": "For the Cesar swing mechanism used for floor-to-ceiling installation and pantry-side cladding, priced per square metre on the same 22 mm panels as the kitchen sides. A different product from a cabinet front; recorded here so the two limits are not confused."
+    }
+  },
   "external_specs": {
     "legrabox_runners": {
       "provenance": "Blum LEGRABOX runner table, provided by Andriy 2026-08-16. NOT a Cesar source fact - kept outside the four-level trust model; Cesar confirmation tracked as Elda Q2.",
