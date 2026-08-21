@@ -198,7 +198,44 @@
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120", "printed_pages": "252-254", "status": "not_extracted",
         "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola hood", "printed_pages": "255", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola No Drop hood", "printed_pages": "256", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." }
+      { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola No Drop hood", "printed_pages": "256", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
+      { "class": "base", "collection": "USA elements", "family": "H.78", "section": "USA elements | for base units H. 78", "printed_pages": "414", "status": "not_extracted",
+        "pages": [
+          { "printed": 414, "status": "not_extracted",
+            "types": [
+              "Base unit for built-in oven (custom fixed front + oven niche + custom jumbo drawer + divider): B86199 / B87699 at d.62, B96199 / B97699 at d.67, W. 61 and 76.2",
+              "Doors for USA fridge for base unit H. 78 (2 custom-sized fronts): B87657 W.76.2, B89657 W.91.4",
+              "Base unit for built-in oven (custom fixed front + oven niche + 1 cm metal bottom panel): B86197 / B87697 at d.62, B96197 / B97697 at d.67, W. 61 and 76.2",
+              "Base unit for countertop hob (custom jumbo + jumbo): B87650 / B89150 / B82150 / B82250 at d.62, B97650 / B99150 / B92150 / B92250 at d.67, W. 76.2 / 91.4 / 106.7 / 121.9"
+            ],
+            "note": "READ IN FULL 2026-08-20, not extracted. This page is where the width field stops being decodable - see code_grammar.usa_elements. Nearly every type here is CUSTOM-SIZED and several carry suffix 99, the customisable carcass the factory estimate showed being priced with WIDTH REDUCTION. Surcharges for LEGRABOX finishes are printed in the margin and Servo Drive points at printed p.567." }
+        ] },
+      { "class": "base", "collection": "USA elements", "family": "H.84", "section": "USA elements | for base units H. 84", "printed_pages": "415", "status": "not_extracted",
+        "note": "Structurally the twin of p.414 with NEW family letters: BL at d.62 and BM at d.67 (BL7699, BL7657, BL9657, BL6197, BL7697, BM6197, BM7697, BL7650, BL9150, BL2150, BL2250, BM7650, BM9150). Same width set 61 / 76.2 / 91.4 / 106.7 / 121.9. The letters are read, the page is not extracted." },
+      { "class": "base", "collection": "USA elements", "family": "Unit H.66", "section": "USA elements | for Unit base units H. 66", "printed_pages": "416", "status": "not_extracted",
+        "note": "Family letters Y4 and Y7 (Y46199, Y47699, Y76199, Y77699), W. 61 and 76.2. Belongs to the Unit collection, printed p.257, which is not mapped at all." },
+      { "class": "base", "collection": "USA elements", "family": "N_Elle H.78", "section": "USA elements | for N_Elle base units H. 78", "printed_pages": "416", "status": "not_extracted" },
+      { "class": "base", "collection": "USA elements", "family": "N_Elle H.84", "section": "USA elements | for N_Elle base units H. 84", "printed_pages": "416", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "H.198", "section": "USA elements | for tall units H. 198", "printed_pages": "417", "status": "not_extracted",
+        "note": "Family letter C8 (C87757 tall oven unit H.60, C87743 tall oven and microwave/double oven unit), both W.76.2 at d.62, both with custom-sized doors." },
+      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210", "printed_pages": "418", "status": "not_extracted",
+        "pages": [
+          { "printed": 418, "status": "not_extracted",
+            "types": [
+              "Door for USA fridge (1 door): CR9400 W.45.7 / CR9600 W.61 / CR9700 W.76.2 / CR9900 W.91.4",
+              "Door for USA fridge (1 wine cooler door, stainless steel protection): CR9401 / CR9601 / CR9701 / CR9901, same four widths"
+            ],
+            "note": "THE PAGE THAT SETTLES THE UNITS QUESTION. It prints a column of INCHES beside the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4 - inches FIRST. The nominal inch size is printed catalog data, not a conversion we invented, and this is the only chapter that states it." }
+        ] },
+      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210 for base unit H. 78", "printed_pages": "419-421", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210 for base unit H. 84", "printed_pages": "422", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "H.222", "section": "USA elements | for tall units H. 222", "printed_pages": "423-426", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "H.222", "section": "USA elements | for tall units H. 222 for base unit H. 84", "printed_pages": "427", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "Unit H.198", "section": "USA elements | for Unit tall units H. 198", "printed_pages": "428", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.210", "section": "USA elements | for N_Elle tall units H. 210 for base unit H. 78", "printed_pages": "429", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.210", "section": "USA elements | for N_Elle tall units H. 210 for base unit H. 84", "printed_pages": "430", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.222", "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 78", "printed_pages": "431", "status": "not_extracted" },
+      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.222", "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 84", "printed_pages": "432", "status": "not_extracted" }
     ]
   },
   "code_grammar": {
@@ -228,6 +265,11 @@
         "H.60_read": { "31": "1 rh or lh door", "30": "2 doors (at W.90; the same 30 is a PULL-OUT door at W.15 in H.72)", "00": "top-hung door", "10": "push-up door", "04": "compound, 2 modules, top-hung", "08": "compound, 2 modules, push-up", "34": "compound, 3 modules, top-hung", "44": "compound, 3 compartments, push-up" },
         "cross_family_warning": "Compare H.36_read with H.60_read before trusting any suffix: 04 is a two-module compound in both, but 34 is '3 compartments' at H.36 and '3 modules' at H.60, and H.60 has an 08 that H.36 does not. H.60 has no pull-out door type at all while H.72 and H.84 open with one."
       }
+    },
+    "usa_elements": {
+      "note": "THE WIDTH FIELD IS NOT DECODABLE IN THIS CHAPTER, and unlike the wall chapter this is not a caution - it is demonstrated. W. 91,4 appears as THREE different fields on two pages: B89657 (field 96), B89150 (field 91) and CR9900 (field 99). Two of those are on the same page under different types. Any code in this chapter must be read from an explicit row. New family letters, read but not extracted: BL / BM (base H.84), Y4 / Y7 (Unit base H.66), C8 (tall H.198), CR (fridge doors, tall H.210).",
+      "source_ref": "printed p.414 and p.418 / PDF 416 and 420, read in full 2026-08-20",
+      "character": "The chapter exists because American appliances do. Most of its types are CUSTOM-SIZED and several carry suffix 99, the customisable carcass the factory estimate showed being priced with a WIDTH REDUCTION line. Depths stay metric: a US-width unit at d.62 is normal."
     },
     "shape": "B + depth_digit + width_field + config_suffix, e.g. B80601",
     "depth_digit": {
@@ -273,6 +315,12 @@
       "contract_key": "hinge_side",
       "note": "Source states '1 rh or lh door' with one code per width; hinge side is a per-order choice. Contract v1.2. Verified printed p.36/PDF 38. CONFIRMED for WALL units 2026-08-20 by factory estimate 2026/30829: PD0631 is ordered with OPENING DIRECTION: Left (rows 15, 25) and with Right (rows 18, 27) - one code, both hands, the hand carried as a variant line and never as a second code. This closes Elda Q7a and REFUTES the general form of 'the hand is read from the code letter, never from a drawing'. What survives is narrower and still open as Q7b: on the corner pages the letter S/D names the cabinet's EXECUTION, which is a different claim - see families.H.78.unit_types.base_corner.notes."
     }
+  },
+  "nominal_widths_in": {
+    "note": "SIZES THAT EXIST BECAUSE INCHES DO. printed p.418 prints an INCH column beside the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4, inches FIRST - so the nominal is catalog data, not a conversion. 42\" and 48\" are read from the width column on printed p.414 (106.7 and 121.9). LOOK THIS UP, NEVER COMPUTE IT: 610 is the catalog rounding 24\" (609,6) to the centimetre, and converting 610 back gives 24 1/16\", which is not a size anyone ordered. Same rule as the width index. No metric width in this catalog collides with any of these six, so a width is enough to resolve the nominal.",
+    "source_ref": "printed p.418 / PDF 420 (18/24/30/36 printed as inches); printed p.414 / PDF 416 (106.7 and 121.9)",
+    "verified_on": "2026-08-20",
+    "mm_to_in": { "457": 18, "610": 24, "762": 30, "914": 36, "1067": 42, "1219": 48 }
   },
   "pricing_groups": {
     "note": "Code tables carry price columns for groups 1-11. Group labels are structure only; no price is ever extracted (Object Contract 1.2)."

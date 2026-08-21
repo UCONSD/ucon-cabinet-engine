@@ -1691,6 +1691,63 @@ check('a NOMINAL inch size is read, a converted one is marked') do
     js.include?("\u2033")
 end
 
+check('a nominal inch size is LOOKED UP, never computed') do
+  n = ->(mm) { Registry.nominal_in(mm) }
+  { 457 => 18, 610 => 24, 762 => 30, 914 => 36, 1067 => 42, 1219 => 48 }.each do |mm, inch|
+    raise "#{mm} -> #{n.call(mm).inspect}" unless n.call(mm) == inch
+  end
+  # Every metric width in the catalog must resolve to NOTHING. If one ever
+  # collided, a metric unit would start claiming an inch size it never had.
+  colliding = Registry.catalog.map { |c| c['width_mm'] }.compact.uniq.select { |w| n.call(w) }
+  raise "metric widths claiming a nominal: #{colliding.inspect}" unless colliding.empty?
+  # And the lookup must not be a division in disguise. 610 / 25,4 is 24 1/16.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/50_registry.rb', __dir__))
+  body = src[src.index('def nominal_in')...src.index('def catalog(')]
+  raise 'the nominal is being computed' if body.include?('25.4')
+end
+
+check('the six nominal widths are catalog data, with the page that prints them') do
+  nw = Registry.data['nominal_widths_in']
+  raise 'nominal_widths_in missing' unless nw && nw['mm_to_in']
+  raise nw['mm_to_in'].inspect unless nw['mm_to_in'].length == 6
+  # printed p.418 is the only page in the book that prints inches at all.
+  raise 'the source page must be named' unless nw['source_ref'].include?('418')
+  raise 'the rule must travel with the data' unless nw['note'].include?('NEVER COMPUTE')
+end
+
+check('the USA chapter is in the map: 16 sections, none extracted') do
+  usa = Registry.map_sections.select { |x| x['collection'] == 'USA elements' }
+  raise usa.length.to_s unless usa.length == 16
+  raise 'nothing here is extracted yet' unless usa.map { |x| x['status'] }.uniq == ['not_extracted']
+  # It is a COLLECTION, not a class: the printed general index lists it beside
+  # Maxima e Intarsio. Its sections keep their real class so the picker files
+  # them where a person would look.
+  raise usa.map { |x| x['class'] }.uniq.sort.inspect unless
+    usa.map { |x| x['class'] }.uniq.sort == %w[base tall]
+end
+
+check('the USA width field is recorded as UNDECODABLE, with the evidence') do
+  g = Registry.data['code_grammar']['usa_elements']
+  raise 'usa_elements grammar note missing' unless g
+  # Three different fields for one width, two of them on the same page.
+  %w[B89657 B89150 CR9900].each do |code|
+    raise "the #{code} counter-example is missing" unless g['note'].include?(code)
+  end
+  raise 'the new family letters must be recorded' unless
+    g['note'].include?('BL') && g['note'].include?('CR')
+  # None of it may leak into the catalog before a page is extracted.
+  bad = Registry.codes.select { |c| c.start_with?('BL', 'BM', 'CR', 'C8', 'Y4', 'Y7') }
+  raise bad.inspect unless bad.empty?
+end
+
+check('printed p.418 is recorded as the page that prints inches') do
+  page = Registry.map_sections.flat_map { |x| x['pages'] || [] }
+                 .find { |pg| pg['printed'].to_s == '418' }
+  raise 'p.418 not in the map' unless page
+  raise 'the inch column must be recorded' unless page['note'].include?('INCH')
+  raise 'the four sizes must be recorded' unless page['note'].include?('45.7')
+end
+
 check('any nominal a row declares must actually BE that size') do
   # Vacuous today - the USA elements chapter (printed 409-432) is not
   # extracted, so nothing declares one and every inch label is a conversion.

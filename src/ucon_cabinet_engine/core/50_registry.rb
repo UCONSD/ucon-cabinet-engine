@@ -147,9 +147,23 @@ module UCON
       end
 
       # Flat catalog for pickers: every code with its type, dims and source.
+      # THE INCH SIZE A WIDTH WAS BUILT TO, or nil. Looked up, never computed:
+      # 610 is the catalog rounding 24 inches (609,6) to the centimetre, so
+      # dividing 610 back by 25,4 gives 24 1/16 - a size nobody ordered. The
+      # six values are catalog data; printed p.418 prints them as their own
+      # INCH column beside the centimetres. No metric width in this catalog
+      # collides with any of them, so the width alone resolves it.
+      def nominal_in(width_mm, manufacturer = 'cesar')
+        return nil unless width_mm
+
+        table = (data(manufacturer)['nominal_widths_in'] || {})['mm_to_in'] || {}
+        table[width_mm.to_i.to_s]
+      end
+
       def catalog(manufacturer = 'cesar')
         each_code(data(manufacturer)).map do |row, family_name, family, type_key, unit_type|
           { 'code' => row['code'], 'width_mm' => row['width_mm'],
+            'nominal_in' => nominal_in(row['width_mm'], manufacturer),
             'depth_mm' => row['depth_mm'], 'height_mm' => family['height_mm'],
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],

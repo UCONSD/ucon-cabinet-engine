@@ -141,7 +141,7 @@ module UCON
             #search{flex:1;min-width:0;box-sizing:border-box;padding:5px 8px;
                     border:1px solid #ccc;border-radius:6px;font-size:12px}
             #units{flex:none;width:34px;padding:5px 0;border:1px solid #ccc;border-radius:6px;
-                   background:#fff;color:#555;font-size:13px;cursor:pointer;line-height:1}
+                   background:#fff;color:#555;font-size:12px;cursor:pointer;line-height:1}
             #units:hover{background:#eef2ff;border-color:#93b4f5}
             #units.on{background:#2563eb;color:#fff;border-color:#2563eb}
             .item{display:block;width:100%;text-align:left;margin:0 0 6px;padding:8px 10px;
@@ -177,7 +177,7 @@ module UCON
             <div class="srow">
               <input id="search" placeholder="Search code or description…" oninput="doSearch()">
               <button id="units" onclick="toggleUnits()"
-                      title="Also show sizes in inches">&#8243;</button>
+                      title="Also show sizes in inches">in</button>
             </div>
             <div id="crumb"></div>
             <div id="content"></div>
