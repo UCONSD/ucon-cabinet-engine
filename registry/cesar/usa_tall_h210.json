@@ -1,0 +1,53 @@
+{
+  "section": "USA elements | for tall units H. 210",
+  "class": "tall",
+  "collection": "USA elements",
+  "family": "USA Tall H.210",
+  "source_pages": "printed p.418 / PDF 420 (extracted whole: both types)",
+  "family_naming_note": "Namespaced 'USA Tall H.210' for the same reason as 'Wall H.36': the registry merges section files by family NAME, and 'H.210' also names a metric tall family in the Maxima chapter (printed p.111-131) which is a different thing. The catalog's own wording is preserved in 'section'. This is the registry's first TALL-class family and its first USA elements row.",
+  "extraction_note": "printed p.418 taken whole - four widths x two types, eight codes. This page was chosen as the first USA extraction over printed p.414 for one reason: p.414's four types are ALL custom-sized ('1 custom-sized fixed front', '1 custom-sized jumbo drawer'), and the Object Contract cannot yet say that a front's width comes from the opening rather than from the code. p.418 states plain fixed widths, so it extracts honestly today.",
+  "inch_note": "THIS IS THE PAGE THAT PRINTS INCHES. It carries an inch column to the LEFT of the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4 - the only place in the 634-page book that states an inch size at all. The nominal is resolved from the width by _manifest.json nominal_widths_in, which is why no nominal field appears on the rows here: a lookup, never arithmetic, and never duplicated.",
+  "data": {
+    "height_mm": 2100,
+    "unit_types": {
+      "usa_fridge_door": {
+        "description": "Door for USA fridge - 1 door",
+        "object_class": "appliance_front",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.418 / PDF 420",
+        "codes": [
+          { "code": "CR9400", "width_mm": 457, "depth_mm": 22 },
+          { "code": "CR9600", "width_mm": 610, "depth_mm": 22 },
+          { "code": "CR9700", "width_mm": 762, "depth_mm": 22 },
+          { "code": "CR9900", "width_mm": 914, "depth_mm": 22 }
+        ],
+        "notes": "A PANEL, not a cabinet - it faces the client's own fridge, the same relationship the dishwasher door has to its machine on printed p.47. depth_mm is the front thickness (22, the UCON standard), not a carcass depth. HANDED IS FALSE BECAUSE THE PAGE SAYS SO, NOT BECAUSE WE BELIEVE IT: the description reads '1 door' and NOT '1 rh or lh door', which is the wording every handed unit in this catalog uses. A full-height American fridge door plainly opens to one side in reality, so either the hand is carried somewhere the page does not print, or it follows the appliance. NEW OPEN QUESTION - put it to an estimate, do not guess. Until it is answered no swing symbol is drawn, because 70_symbols draws a leaf only when given a hinge_side.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One full-height panel, 2100 tall. No hinge_axis: this is not a hung door, and the vertical hinge it must really have is not stated by the source - see notes. Nothing is drawn rather than something wrong."
+        }
+      },
+      "usa_wine_cooler_door": {
+        "description": "Door for USA fridge - 1 wine cooler door",
+        "object_class": "appliance_front",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.418 / PDF 420",
+        "codes": [
+          { "code": "CR9401", "width_mm": 457, "depth_mm": 22 },
+          { "code": "CR9601", "width_mm": 610, "depth_mm": 22 },
+          { "code": "CR9701", "width_mm": 762, "depth_mm": 22 },
+          { "code": "CR9901", "width_mm": 914, "depth_mm": 22 }
+        ],
+        "notes": "Same four widths as the plain fridge door, one suffix apart (00 -> 01). Carries a cutout on the front, so it is not simply the other door in a different finish. The page prints two restrictions that are NOT modelled and must not be lost: (1) a surcharge of 234 points for the stainless steel protection for the wine cooler door, with NO article code - recorded here, never invented as a companion, the same treatment Servo Drive gets on the wall pages; (2) a prohibition mark against 'Maxima 2.2 with framed door' and 'Metal doors', and a positive instruction to use melamine, Technomat, Unicolor or Fenix. Finish is a composition-level axis the engine does not model at all yet (M1.6), so this restriction has nowhere to live but this note.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One full-height panel, 2100 tall, with a cutout the catalog does not dimension. Envelope-only: the cutout is recorded in notes and not drawn. No hinge_axis, for the same reason as the plain fridge door."
+        }
+      }
+    }
+  }
+}

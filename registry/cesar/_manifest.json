@@ -218,9 +218,10 @@
       { "class": "base", "collection": "USA elements", "family": "N_Elle H.84", "section": "USA elements | for N_Elle base units H. 84", "printed_pages": "416", "status": "not_extracted" },
       { "class": "tall", "collection": "USA elements", "family": "H.198", "section": "USA elements | for tall units H. 198", "printed_pages": "417", "status": "not_extracted",
         "note": "Family letter C8 (C87757 tall oven unit H.60, C87743 tall oven and microwave/double oven unit), both W.76.2 at d.62, both with custom-sized doors." },
-      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210", "printed_pages": "418", "status": "not_extracted",
+      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210", "printed_pages": "418", "status": "extracted",
+        "note": "EXTRACTED 2026-08-21 - the first USA elements page in the registry, and the first tall-class family. Chosen ahead of printed p.414 because p.414's four types are all custom-sized and the contract cannot yet express a front whose width comes from the opening; this page states plain fixed widths.",
         "pages": [
-          { "printed": 418, "status": "not_extracted",
+          { "printed": 418, "status": "extracted",
             "types": [
               "Door for USA fridge (1 door): CR9400 W.45.7 / CR9600 W.61 / CR9700 W.76.2 / CR9900 W.91.4",
               "Door for USA fridge (1 wine cooler door, stainless steel protection): CR9401 / CR9601 / CR9701 / CR9901, same four widths"

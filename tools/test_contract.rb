@@ -205,9 +205,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 158 codes (103 base + 20 sink + 3 appliance + 32 wall)') do
+check('registry loads and holds 166 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 158
+  raise "got #{n}" unless n == 166
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -364,9 +364,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 158 rows, each with code/dims/description/source') do
+check('registry catalog: 166 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 158
+  raise cat.length.to_s unless cat.length == 166
   # A corner row is dimensioned by corner_geometry instead of a single width.
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['height_mm'] && c['depth_mm'] &&
@@ -437,10 +437,12 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Sink base units H. 78',
+                                             'USA elements | for tall units H. 210',
                                              'Wall units H. 36',
                                              'Wall units H. 60']
+  # tall arrived 2026-08-21 with printed p.418 - the first non base/wall class.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
-    cat.map { |c| c['class'] }.uniq.sort == %w[base wall]
+    cat.map { |c| c['class'] }.uniq.sort == %w[base tall wall]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -1691,6 +1693,73 @@ check('a NOMINAL inch size is read, a converted one is marked') do
     js.include?("\u2033")
 end
 
+puts "\nUSA elements, printed p.418 - the first US article and the first tall row"
+
+check('p.418 is extracted whole: 8 codes, two types, four widths') do
+  rows = Registry.catalog.select { |c| c['section'] == 'USA elements | for tall units H. 210' }
+  raise rows.length.to_s unless rows.length == 8
+  by_type = rows.group_by { |r| r['type_key'] }.map { |k, v| [k, v.length] }.sort
+  raise by_type.inspect unless by_type == [['usa_fridge_door', 4], ['usa_wine_cooler_door', 4]]
+  raise rows.map { |r| r['width_mm'] }.uniq.sort.inspect unless
+    rows.map { |r| r['width_mm'] }.uniq.sort == [457, 610, 762, 914]
+  raise 'every one is 2100 tall' unless rows.map { |r| r['height_mm'] }.uniq == [2100]
+  rows.each { |r| Contract.validate!(Generator.attributes_for(Registry.lookup(r['code']))) }
+end
+
+check('the inch switch finally has real data behind it') do
+  # Until this page landed, nothing in the registry carried a nominal and every
+  # inch label was a conversion with a tilde. These eight are the first sizes
+  # the catalog itself states in inches.
+  rows = Registry.catalog.select { |c| c['section'] == 'USA elements | for tall units H. 210' }
+  raise 'a US row without a nominal' unless rows.all? { |r| r['nominal_in'] }
+  raise rows.map { |r| r['nominal_in'] }.uniq.sort.inspect unless
+    rows.map { |r| r['nominal_in'] }.uniq.sort == [18, 24, 30, 36]
+  # And each nominal must match its own width, not just be present.
+  rows.each do |r|
+    raise "#{r['code']}: #{r['width_mm']} is not #{r['nominal_in']} in" unless
+      (r['width_mm'] - (r['nominal_in'] * 25.4)).abs <= 1.0
+  end
+end
+
+check('a fridge door is a PANEL, and its depth is a thickness') do
+  # Same relationship the dishwasher door has to its machine: it faces the
+  # client's appliance. depth_mm is the front thickness, NOT a carcass depth,
+  # and a 2100 x 914 object with a 620 depth would be a fiction.
+  rows = Registry.catalog.select { |c| c['section'] == 'USA elements | for tall units H. 210' }
+  raise rows.map { |r| r['depth_mm'] }.uniq.inspect unless
+    rows.map { |r| r['depth_mm'] }.uniq == [Standards::FRONT_T_MM]
+  rows.each do |r|
+    a = Generator.attributes_for(Registry.lookup(r['code']))
+    raise "#{r['code']}: #{a['object_class']}" unless a['object_class'] == 'appliance_front'
+  end
+end
+
+check('handed is false because the PAGE says so, and the note admits the doubt') do
+  # Every handed unit in this catalog is described "1 rh or lh door". This page
+  # says "1 door". So the hand is not recorded - even though a full-height
+  # American fridge door plainly has one. Recording the doubt is the point:
+  # this is a new open question, not a settled fact.
+  u = Registry.lookup('CR9700')
+  raise 'must not claim a hand the page does not state' unless u['handed'] == false
+  raise 'no hinge axis may be invented either' if u['front_layout'].key?('hinge_axis')
+  n = Registry.data['families']['USA Tall H.210']['unit_types']['usa_fridge_door']['notes']
+  raise 'the wording evidence must be recorded' unless n.include?("NOT '1 rh or lh door'")
+  raise 'the doubt must be flagged as open' unless n.include?('NEW OPEN QUESTION')
+end
+
+check('the two unmodelled restrictions on the wine cooler door survive') do
+  n = Registry.data['families']['USA Tall H.210']['unit_types']['usa_wine_cooler_door']['notes']
+  # A surcharge with no article code - never invented as a companion, the same
+  # treatment Servo Drive gets on the wall pages.
+  raise 'the 234 surcharge is lost' unless n.include?('234 points')
+  raise 'it must say it has no code' unless n.include?('NO article code')
+  # A finish prohibition, and finish is a level the engine does not model.
+  raise 'the finish prohibition is lost' unless n.include?('Metal doors')
+  raise 'M1.6 must be named as its future home' unless n.include?('M1.6')
+  raise 'no companion may have been invented for the surcharge' unless
+    Generator.attributes_for(Registry.lookup('CR9701'))['companion_refs'].nil?
+end
+
 check('a fabrication limit carries its source and its SCOPE, not just a number') do
   # 1200 mm came from Elda in writing, about one panel on one cabinet. Recording
   # the number without recording what she was looking at is how a caution turns
@@ -1729,8 +1798,12 @@ check('a nominal inch size is LOOKED UP, never computed') do
   end
   # Every metric width in the catalog must resolve to NOTHING. If one ever
   # collided, a metric unit would start claiming an inch size it never had.
-  colliding = Registry.catalog.map { |c| c['width_mm'] }.compact.uniq.select { |w| n.call(w) }
+  usa    = Registry.catalog.select { |c| c['section'].to_s.start_with?('USA elements') }
+  metric = Registry.catalog - usa
+  colliding = metric.map { |c| c['width_mm'] }.compact.uniq.select { |w| n.call(w) }
   raise "metric widths claiming a nominal: #{colliding.inspect}" unless colliding.empty?
+  # ...and every USA row must actually get one, or the switch is decorative.
+  raise 'a USA row without a nominal' unless usa.any? && usa.all? { |c| c['nominal_in'] }
   # And the lookup must not be a division in disguise. 610 / 25,4 is 24 1/16.
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/50_registry.rb', __dir__))
   body = src[src.index('def nominal_in')...src.index('def catalog(')]
@@ -1746,10 +1819,11 @@ check('the six nominal widths are catalog data, with the page that prints them')
   raise 'the rule must travel with the data' unless nw['note'].include?('NEVER COMPUTE')
 end
 
-check('the USA chapter is in the map: 16 sections, none extracted') do
+check('the USA chapter is in the map: 16 sections, one of them extracted') do
   usa = Registry.map_sections.select { |x| x['collection'] == 'USA elements' }
   raise usa.length.to_s unless usa.length == 16
-  raise 'nothing here is extracted yet' unless usa.map { |x| x['status'] }.uniq == ['not_extracted']
+  done = usa.select { |x| x['status'] == 'extracted' }.map { |x| x['printed_pages'] }
+  raise done.inspect unless done == ['418']
   # It is a COLLECTION, not a class: the printed general index lists it beside
   # Maxima e Intarsio. Its sections keep their real class so the picker files
   # them where a person would look.
@@ -1767,7 +1841,9 @@ check('the USA width field is recorded as UNDECODABLE, with the evidence') do
   raise 'the new family letters must be recorded' unless
     g['note'].include?('BL') && g['note'].include?('CR')
   # None of it may leak into the catalog before a page is extracted.
-  bad = Registry.codes.select { |c| c.start_with?('BL', 'BM', 'CR', 'C8', 'Y4', 'Y7') }
+  # CR left this list on 2026-08-21: printed p.418 is extracted. The rest are
+  # read but not extracted, and must not appear in the catalog.
+  bad = Registry.codes.select { |c| c.start_with?('BL', 'BM', 'C8', 'Y4', 'Y7') }
   raise bad.inspect unless bad.empty?
 end
 
