@@ -347,7 +347,10 @@ module UCON
         z_plan = (Generator.row_datum_mm(unit) + PLAN_Z_MM).mm
         w  = unit['width_mm']
         h  = unit['height_mm']
-        y_face = -(s::FRONT_GAP_MM + s::FRONT_T_MM) - 1
+        # 1 mm proud of the front line, and the LINE is asked for, not
+        # recomputed - a symbol that drifts off its own front is worse than no
+        # symbol at all.
+        y_face = Generator.front_y_mm - 1
 
         front_tag = tag(model, TAG_FRONT)
         plan_tag  = tag(model, TAG_PLAN)

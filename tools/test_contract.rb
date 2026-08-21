@@ -1721,6 +1721,82 @@ check('the inch switch finally has real data behind it') do
   end
 end
 
+check('there is ONE front line, and everything in a run asks for it') do
+  # A panel is flush with its neighbours because both ask front_y_mm, not
+  # because two expressions happen to agree. It was written out twice in
+  # 60_generator and a third time in 70_symbols.
+  raise 'front_y_mm missing' unless Generator.respond_to?(:front_y_mm)
+  raise Generator.front_y_mm.to_s unless
+    Generator.front_y_mm == -(Standards::FRONT_GAP_MM + Standards::FRONT_T_MM)
+  # Four copies existed: two in 60_generator, one in 70_symbols, one in
+  # 80_panel. The definition itself is the only place the sum may be written.
+  %w[60_generator 70_symbols 80_panel].each do |file|
+    src = File.read(File.expand_path("../src/ucon_cabinet_engine/core/#{file}.rb", __dir__))
+    longhand = src.scan(/FRONT_GAP_MM \+ (?:s::|Standards::)FRONT_T_MM/).length
+    allowed  = file == '60_generator' ? 1 : 0
+    raise "#{file} writes the front line out longhand #{longhand} time(s)" unless
+      longhand == allowed
+  end
+end
+
+check('the plinth carries on under a fridge panel, and stops at a dishwasher') do
+  # OURS, not the catalog's: nothing on printed p.418 mentions a plinth. It is
+  # drawn so the plinth line does not BREAK on the drawing where a fridge
+  # stands in the run. The dishwasher gets none - the plinth in front of that
+  # machine really is cut away - which is why this is a per-family flag and
+  # not a rule about appliance panels.
+  raise 'a US fridge panel must carry the run plinth' unless
+    Registry.lookup('CR9700')['plinth_continues'] == true
+  raise 'the dishwasher panel must NOT' if Registry.lookup('V80730')['plinth_continues']
+  # An ordinary cabinet never needs the flag: it gets a plinth by standing on
+  # the floor, and saying so twice would be two places to disagree.
+  raise 'a cabinet must not need the flag' if Registry.lookup('B80601')['plinth_continues']
+
+  note = Registry.data['families']['USA Tall H.210']['plinth_note']
+  raise 'the decision must admit whose it is' unless note.include?("OURS, NOT THE CATALOG'S")
+  raise 'the reason must be the drawing, not the joinery' unless note.include?('BREAK')
+  raise 'the dishwasher exception must travel with it' unless note.include?('p.47')
+end
+
+check('a front is drawn NOMINAL: no reveal is ever deducted') do
+  # A 600 base unit is drawn with a 600 door; a 30-inch panel is drawn 762.
+  # The real panel is slightly narrower and the shortfall is set by the
+  # APPLIANCE's specification, not by Cesar - so it is not ours to draw. These
+  # are not manufacturing drawings, and a nominal run reads cleanly in LayOut.
+  %w[CR9700 CR9901 B80601 V80730].each do |code|
+    u = Registry.lookup(code)
+    slabs = Generator.front_slabs(u)
+    raise "#{code}: #{slabs.inspect}" unless slabs.length == 1
+    raise "#{code}: front #{slabs.first[:w_mm]} vs unit #{u['width_mm']}" unless
+      slabs.first[:w_mm] == u['width_mm']
+  end
+end
+
+check('the height needs no customisation, and the note carries the arithmetic') do
+  notes = Registry.data['families']['USA Tall H.210']['representation_notes'].join(' ')
+  raise 'the reveal rule is not recorded' unless notes.include?('NEVER NET')
+  raise "the appliance must be named as the reveal's owner" unless
+    notes.include?("APPLIANCE'S OWN SPECIFICATION")
+  # 84 in = 2133,6; a tall unit is 2100 + 100 plinth = 2200; the unit is TALLER
+  # than the appliance, so the door needs nothing done to it.
+  raise 'the 84-inch figure is missing' unless notes.include?('2133,6')
+  raise 'the 2200 overall is missing' unless notes.include?('2200')
+  raise 'the leftover must point at the closing panel, not the door' unless
+    notes.include?('66,4') && notes.include?('NOT extracted')
+end
+
+check('the open-door projection is PARKED, and says so in those words') do
+  # It was briefly written as settled. For the ORDER it is settled; for the
+  # DRAWING it waits on appliances being modelled. A question recorded as
+  # answered is a question nobody comes back to.
+  n = Registry.data['families']['USA Tall H.210']['unit_types']['usa_fridge_door']['notes']
+  raise 'the two halves must be told apart' unless
+    n.include?('For the ORDER that is the final answer')
+  raise 'the drawing half must be parked, not closed' unless
+    n.include?('PARKED question, not a closed one')
+  raise 'a parked question needs a date' unless n.include?('Parked 2026-08-21')
+end
+
 check('a fridge door is a PANEL, and its depth is a thickness') do
   # Same relationship the dishwasher door has to its machine: it faces the
   # client's appliance. depth_mm is the front thickness, NOT a carcass depth,

@@ -99,7 +99,7 @@ module UCON
         depth    = unit['depth_mm']
         nominal  = unit['corner_geometry'].to_s.split('x').first.to_i
         front_h  = front_height_mm || unit['height_mm']
-        front_y  = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
+        front_y  = front_y_mm
         back_y   = front_y + s::FRONT_T_MM
         out_y    = back_y - FILLER_MM
         wasted   = nominal - carcass
@@ -227,20 +227,33 @@ module UCON
           e = definition.entities
 
           # An appliance front is a PANEL, not a cabinet: it bolts onto the
-          # machine's own door. No carcass, no plinth — the box behind it is
-          # the client's appliance, not a Cesar object, and it is not drawn
-          # until the placeholder task. The panel sits on the same front line
-          # and at the same height as any other front in the run.
+          # machine's own door. No carcass — the box behind it is the client's
+          # appliance, not a Cesar object. The panel sits on the same front
+          # line and at the same height as any other front in the run.
+          #
+          # A PLINTH only where the registry says the run's plinth carries on
+          # under it. A dishwasher gets none: the plinth in front of that
+          # machine really is cut away. A US fridge housing gets one, so the
+          # plinth line does not break on the drawing where the fridge stands.
           if unit['object_class'] == 'appliance_front'
             niche_depth = selected_depth_mm(model)
             placement   = placement_transform(model)
+
+            if unit['plinth_continues']
+              plinth = Geometry.box(
+                e, 'PLINTH',
+                0, s::PLINTH_SETBACK_MM, 0,
+                w, s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
+              )
+              Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+            end
             # Built through the ordinary front_slabs path and named FRONT…, so
             # the properties panel rebuilds it like any other front: choosing
             # door version 75 shortens the panel to 750 with no special case.
             front_slabs(unit).each do |slab|
               Geometry.box(
                 e, slab[:name],
-                slab[:x_mm], -(s::FRONT_GAP_MM + s::FRONT_T_MM), z0 + slab[:z_mm],
+                slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
                 slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat
               )
             end
@@ -305,7 +318,7 @@ module UCON
 
           Geometry.box(e, 'CARCASS', 0, 0, z0, w, d, h, carcass_mat)
 
-          front_y = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
+          front_y = front_y_mm
           front_slabs(unit).each do |slab|
             Geometry.box(
               e, slab[:name],
@@ -507,6 +520,15 @@ module UCON
       # wall units arrived two of the three were updated - so re-applying a
       # handle dropped a hanging front to plinth height. Three copies of a rule
       # is three chances to update two of them.
+      # THE FRONT LINE. Every front in a run stands on it, whatever is behind
+      # it - a carcass, or a client's fridge. It was written out twice in build
+      # and a third time in 70_symbols, which is three chances to move two.
+      # A panel is flush with its neighbours BECAUSE they ask the same method,
+      # not because two expressions happen to agree.
+      def front_y_mm
+        -(Standards::FRONT_GAP_MM + Standards::FRONT_T_MM)
+      end
+
       def base_z_mm(unit)
         wall_hung?(unit) ? mount_bottom_mm(unit) : Standards::PLINTH_H_MM
       end

@@ -95,6 +95,11 @@ module UCON
             # unit in the wall chapter hangs. Absent means floor, so no existing
             # section file has to say anything.
             'mounting'           => family['mounting'] || 'floor',
+            # Whether the run's plinth carries on under this object. Only a
+            # panel ever needs to say so: a cabinet gets one by standing on the
+            # floor, and a panel gets one only where the drawing would
+            # otherwise show a break. Absent means no.
+            'plinth_continues'   => family['plinth_continues'] ? true : false,
             # Which door heights this FAMILY offers, or nil when it offers no
             # such choice. The 78/75 pair belongs to the base pages; a wall
             # unit 360 tall has no version to pick.

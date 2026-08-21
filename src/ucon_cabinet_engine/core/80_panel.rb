@@ -240,7 +240,7 @@ module UCON
         end
         defn.entities.erase_entities(doomed) unless doomed.empty?
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
-        front_y   = -(s::FRONT_GAP_MM + s::FRONT_T_MM)
+        front_y   = Generator.front_y_mm
         # Where the fronts start is the generator's answer, not ours. Asking it
         # is the whole fix: this method used to add PLINTH_H_MM itself, so
         # re-applying a handle to a hanging unit rebuilt its front on the floor.
