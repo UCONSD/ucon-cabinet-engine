@@ -40,19 +40,23 @@ module UCON
       # 5 mm shim foot is modelled, by decision (Andriy, 2026-08-22:
       # "ножку 5 мм высотой считаем за ноль").
       #
-      # WHAT THAT FOOT ACTUALLY IS, because the catalog's "adjustable feet
-      # H. 5 mm" reads like a contradiction until you see one: it is a disc
-      # on a threaded stud. The stud screws into an insert sunk in the bottom
-      # panel and disappears, so the only part left under the cabinet is the
-      # disc - and the disc is the 5. It is BOTH a height and adjustable: 5 mm
-      # is the MINIMUM, reached with the stud wound fully in, and it grows as
-      # the stud is wound out to level the run.
+      # WHAT THAT FOOT IS, and why zero is the right number rather than a
+      # convenient one. It is a disc on a threaded stud: the stud screws into
+      # an insert sunk in the bottom panel and disappears, so nothing of it
+      # shows. Its range, as UCON specifies it (Andriy, 2026-08-22):
       #
-      # So zero here is not a rounding of exactly 5. It is a deliberate
-      # simplification of "at least 5, set on site with a spirit level" - and
-      # that is precisely why the drawing must not promise a number. A
-      # schematic elevation that dimensioned this would be lying with more
-      # confidence than the installer has.
+      #   * minimum design height  0 mm  - the panel sits FLAT ON THE FLOOR
+      #   * maximum                5 mm  - and that 5 is TRAVEL, there to take
+      #                                    out unevenness in the floor
+      #
+      # So the 5 is a tolerance the fitter spends on site, not a height the
+      # cabinet is designed to stand at. **The drawing shows zero: panel on
+      # the floor, no gap.** Anything else would dimension the installer's
+      # allowance as if it were a design intent.
+      #
+      # This is a DECISION, not a Cesar statement, and the scope matters
+      # (rule 4): the catalog prints only the phrase "adjustable feet H. 5 mm"
+      # and never says where in that range a cabinet is meant to sit.
       #
       # The 5 is therefore not written down anywhere: a number we have decided
       # not to draw is not a number we store. For anyone who needs the
