@@ -2175,5 +2175,69 @@ check('one place turns a slab into geometry, and every caller goes through it') 
     panel.include?('slab[:w_mm]')
 end
 
+puts "\nthe glass in it"
+# Andriy, 2026-08-22: draw the glass, do not leave a hole. A void reads as a
+# missing part on an elevation. So the PANE is geometry inside the front and
+# the draftsman's diagonals are a symbol on the elevation tag - the same split
+# the three tags are built on.
+
+check('the hatch stays inside its pane and every line is 45 degrees') do
+  u = Registry.lookup('CR9601')
+  slab  = Generator.front_slabs(u).first
+  r     = Generator.cutout_rails(u, slab)
+  x0, z0 = r[:left], r[:bottom]
+  gw = slab[:w_mm] - r[:left] - r[:right]
+  gh = slab[:h_mm] - r[:bottom] - r[:top]
+  lines = Symbols.glass_hatch(x0, z0, gw, gh)
+  raise 'a pane this size must carry a hatch' if lines.length < 4
+  lines.each do |a, b|
+    raise "outside: #{a.inspect} #{b.inspect}" unless
+      [a, b].all? { |pt| pt[0] >= x0 - 0.01 && pt[0] <= x0 + gw + 0.01 &&
+                         pt[1] >= z0 - 0.01 && pt[1] <= z0 + gh + 0.01 }
+    dx = b[0] - a[0]
+    dz = b[1] - a[1]
+    raise "not 45 degrees: #{dx} #{dz}" unless (dx - dz).abs < 0.01
+  end
+end
+
+check('the diagonals come in PAIRS - a lone one reads as a section cut') do
+  lines = Symbols.glass_hatch(0, 0, 400, 1600)
+  raise "odd number of lines: #{lines.length}" unless lines.length.even?
+  # within a pair the two intercepts differ by the pair gap, not by the spacing
+  c = lines.map { |a, _b| a[1] - a[0] }
+  c.each_slice(2) do |first, second|
+    raise "pair gap #{second - first}" unless
+      (second - first - Symbols::HATCH_PAIR_GAP_MM).abs < 0.01
+  end
+end
+
+check('only a front with an aperture gets glass') do
+  raise 'the plain fridge door must have no pane' unless
+    Symbols.glass_hatch(0, 0, 0, 0).empty?
+  u = Registry.lookup('CR9600')
+  raise 'CR9600 must not reach the glass path' if
+    Generator.cutout_rails(u, Generator.front_slabs(u).first)
+end
+
+check('the pane is geometry and the hatch is a symbol - neither does the other job') do
+  core = File.expand_path('../src/ucon_cabinet_engine/core', __dir__)
+  gen  = File.read(File.join(core, '60_generator.rb'))
+  sym  = File.read(File.join(core, '70_symbols.rb'))
+  raise 'the generator must build the pane' unless gen.include?('_GLASS"')
+  raise 'symbols must not build solids' if sym.include?('Geometry.box')
+  raise 'the hatch must live on the elevation tag' unless
+    sym.include?('draw_glass_hatch(definition, unit, z0, y_face, front_tag')
+end
+
+check('a rebuilt front takes its glass with it') do
+  panel = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  # The pane is named FRONT_GLASS precisely so this prefix sweep catches it.
+  # An exact-match refactor here would leave stale glass floating in a rebuilt
+  # unit, so the prefix is pinned rather than assumed.
+  raise 'the front sweep must be a PREFIX match' unless
+    panel.include?("g.name.start_with?('FRONT')")
+  raise 'FRONT_GLASS must be caught by it' unless 'FRONT_GLASS'.start_with?('FRONT')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

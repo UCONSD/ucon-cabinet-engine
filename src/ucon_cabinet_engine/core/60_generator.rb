@@ -74,6 +74,10 @@ module UCON
       # times so a search for it finds every place the claim is made.
       CUTOUT_LABEL = '(cutout: INDICATIVE)'
 
+      # CAD glass: a cool grey that is plainly not the front's white and is
+      # plainly not transparent.
+      GLASS_RGB = [205, 214, 218].freeze
+
       # Reach of the selected unit along its own +x, in millimetres, or nil.
       # A corner carries no width by contract, so its reach comes from the
       # registry: the node it occupies, read through the execution letter.
@@ -403,11 +407,32 @@ module UCON
         # THE NAME CARRIES THE WARNING. Whoever opens the outliner is the
         # person who can still catch this before it reaches a drawing, and the
         # notes on the definition are one click further away than the tree.
-        Geometry.framed_slab(
+        frame = Geometry.framed_slab(
           entities, "#{slab[:name]} #{CUTOUT_LABEL}",
           slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
           slab[:w_mm], t, slab[:h_mm], rails, material
         )
+
+        # AND THE GLASS IS DRAWN, not left as a hole (Andriy, 2026-08-22). A
+        # void reads as a missing part on an elevation - the pane reads as what
+        # it is. Opaque and flat, the CAD convention: a transparent material
+        # would show the room through a cabinet in every rendered view, and the
+        # draftsman's diagonals live on the elevation tag in 70_symbols.
+        #
+        # Full front thickness, flush both faces. A thinner pane would be more
+        # like the real thing and would need a number no source gives us; the
+        # one thickness in play is already in dispute (Cesar 22 against the
+        # appliance planning's 19), and inventing a third is how that argument
+        # gets lost.
+        Geometry.box(
+          entities, "#{slab[:name]}_GLASS",
+          slab[:x_mm] + rails[:left], front_y_mm,
+          z0 + slab[:z_mm] + rails[:bottom],
+          slab[:w_mm] - rails[:left] - rails[:right], t,
+          slab[:h_mm] - rails[:bottom] - rails[:top],
+          Geometry.material(entities.model, 'UCON_Glass_Gray', GLASS_RGB)
+        )
+        frame
       end
 
       # THE APERTURE, OR NOTHING.

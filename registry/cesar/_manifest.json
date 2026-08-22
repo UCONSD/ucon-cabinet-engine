@@ -542,7 +542,21 @@
       "consequence_for_the_datum": "The aperture is dimensioned from the bottom edge by habit, but the bottom rail is the unstable one - so anchoring at the bottom moves the whole hole when the guess is wrong, while anchoring at the top and the sides leaves only the aperture's lower edge undetermined. Recorded because it inverts the obvious choice.",
       "tolerance": "Both makers state the aperture as a window, not a point: Thermador allows the lateral rail anywhere between 74 and 82 mm, Miele prints its aperture width as '383 max'. Being a few millimetres out is inside the makers' own latitude - which is why an indicative rectangle is worth drawing at all.",
       "what_is_still_open": "Panel heights are 1762 and 2029; a Cesar CR94xx front is 2100. So where the appliance's own panel rectangle sits inside our front is not settled. Parked with the appliance model, beside the fridge door swing projection.",
-      "width_cross_check": "Thermador's 24 inch panel is 603 wide and Cesar's CR9601 is 610; the 18 inch pair is 451 against 457. The 6-7 mm is the reveal we decided not to draw, so the Cesar width is the NICHE and our decision to draw the nominal is confirmed from the appliance side."
+      "width_cross_check": "Thermador's 24 inch panel is 603 wide and Cesar's CR9601 is 610; the 18 inch pair is 451 against 457. The 6-7 mm is the reveal we decided not to draw, so the Cesar width is the NICHE and our decision to draw the nominal is confirmed from the appliance side.",
+      "panel_thickness_conflict": {
+        "raised_by": "Andriy, 2026-08-22, on the drawing: a thicker door swings wider, and the leaf can foul its neighbour.",
+        "cesar": "2.2 cm. Standards::FRONT_T_MM = 22, elda_confirmed. Not changed by any of this.",
+        "thermador": "'The drawing is based on a door panel thickness of 3/4\" (19 mm)', and the maximum panel dimensions are computed from a 1/8\" (3 mm) clearance. 19 is stated flat, with no alternative offered.",
+        "miele": "16 to 22 mm are all permitted, and the maker answers the swing question directly: a table of MINIMUM GAP X to the ADJOINING HOUSING UNIT DOOR, by panel thickness and by the panel's edge radius B.",
+        "miele_gap_table_mm": [
+          { "panel_thickness": "16 to 19", "gap_by_edge_radius": { "R0": 3, "R1.2": 3, "R2": 3, "R3": 3 } },
+          { "panel_thickness": "20 to 21", "gap_by_edge_radius": { "R0": "5 to 5.5", "R1.2": "4 to 5", "R2": "4 to 4.5", "R3": "3.5 to 4" } },
+          { "panel_thickness": "22", "gap_by_edge_radius": { "R0": 6.5, "R1.2": 6, "R2": 5.5, "R3": 4 } }
+        ],
+        "what_it_means": "A 22 mm Cesar front is not forbidden - Miele explicitly allows it - but it costs gap: 6.5 mm beside it instead of 3, unless the front carries an edge radius. Thermador does not offer the choice at all, which is the real risk: its clearances are planned around 19. So this is a QUESTION FOR THE FACTORY, not a number to change here.",
+        "elda_question": "Can the USA appliance panels (CR94xx / CR96xx and their siblings) be supplied at 19 mm instead of 22, or is 2.2 cm the only thickness? If 22 is fixed, what edge radius do they carry, so the required gap can be read off the appliance maker's table?",
+        "not_done": "Standards::FRONT_T_MM stays 22 and the open leaf is still drawn at 22. 70_symbols already carries the note that a 19 mm US front would be one change in one place - it is not made on a suspicion."
+      }
     }
   },
   "storage_note": "Catalog is stored as one file per catalog section in registry/cesar/. _manifest.json holds shared facts (grammar, hardware, external specs); section files hold unit types and codes. The loader merges them; one extracted catalog page = one file = one commit.",

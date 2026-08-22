@@ -54,6 +54,15 @@ module UCON
       # Plan symbol: doors drawn open at this angle, not fully at 90.
       DOOR_OPEN_ANGLE_DEG = 85
 
+      # GLASS, THE WAY A DRAFTSMAN DRAWS IT. Pairs of parallel 45 degree lines
+      # across the pane. Pairs and not singles because that is the convention
+      # on the drawings this engine has to sit beside, and one lone diagonal
+      # reads as a section cut instead. Drawing choices, like the 85 above -
+      # no catalog states them and none ever will.
+      HATCH_ANGLE_DEG   = 45
+      HATCH_SPACING_MM  = 250
+      HATCH_PAIR_GAP_MM = 25
+
       SYMBOL_RGB = [128, 128, 128].freeze
 
       module_function
@@ -176,6 +185,69 @@ module UCON
 
       # Closed dashed rectangle at height z; the auto-created face is erased
       # so plans get four lines, not a fill.
+      # The hatch, in the pane's own rectangle, in millimetres. Pure: returns
+      # [[x1, z1], [x2, z2]] pairs and touches nothing. A 45 degree line is
+      # v = u + c in pane coordinates, so the whole job is choosing c and
+      # clipping u to the pane - which is why this needs no trigonometry and
+      # no SketchUp.
+      def glass_hatch(x0_mm, z0_mm, w_mm, h_mm,
+                      spacing_mm = HATCH_SPACING_MM, gap_mm = HATCH_PAIR_GAP_MM)
+        out = []
+        c = -w_mm.to_f
+        while c < h_mm
+          pair = [c, c + gap_mm].map do |cc|
+            u_lo = [0.0, -cc].max
+            u_hi = [w_mm.to_f, h_mm - cc].min
+            next nil unless u_hi - u_lo > 0.5
+
+            [[x0_mm + u_lo, z0_mm + u_lo + cc],
+             [x0_mm + u_hi, z0_mm + u_hi + cc]]
+          end
+          # BOTH OR NEITHER. At the two corners one member of a pair clips away
+          # entirely, and a single surviving diagonal is the very thing the
+          # pairs exist to avoid being mistaken for.
+          out.concat(pair) if pair.all?
+          c += spacing_mm
+        end
+        out
+      end
+
+      # The pane outline plus its hatch, on the elevation tag.
+      #
+      # THE PANE ITSELF IS GEOMETRY AND LIVES IN THE FRONT, NOT HERE. That
+      # split is the same one the three tags are built on: the thing that is
+      # really there is modelled, the convention that describes it is a symbol.
+      # So the glass stays visible when the elevation tag is off, and the
+      # draftsman's hatch comes and goes with the rest of the elevation.
+      def draw_glass_hatch(definition, unit, z0, y_face, layer, mat, slabs)
+        (slabs || Generator.front_slabs(unit)).each_with_index do |slab, i|
+          rails = Generator.cutout_rails(unit, slab)
+          next unless rails
+
+          x0 = slab[:x_mm] + rails[:left]
+          zz = z0 + slab[:z_mm] + rails[:bottom]
+          gw = slab[:w_mm] - rails[:left] - rails[:right]
+          gh = slab[:h_mm] - rails[:bottom] - rails[:top]
+          next unless gw > 0 && gh > 0
+
+          g = definition.entities.add_group
+          g.name = "SYM_FRONT_GLASS_#{i + 1}"
+          rect = [[x0, zz], [x0 + gw, zz], [x0 + gw, zz + gh], [x0, zz + gh]]
+          rect.each_index do |j|
+            a = rect[j]
+            b = rect[(j + 1) % rect.length]
+            g.entities.add_line([a[0].mm, y_face.mm, a[1].mm],
+                                [b[0].mm, y_face.mm, b[1].mm])
+          end
+          glass_hatch(x0, zz, gw, gh).each do |a, b|
+            g.entities.add_line([a[0].mm, y_face.mm, a[1].mm],
+                                [b[0].mm, y_face.mm, b[1].mm])
+          end
+          g.entities.grep(Sketchup::Face).each(&:erase!)
+          finalize(g, layer, mat)
+        end
+      end
+
       def dashed_rect(group, corners, z)
         corners.each_index do |i|
           a = corners[i]
@@ -369,6 +441,11 @@ module UCON
         # any branch returns, so no type can quietly miss out.
         draw_open_leaf(definition, unit, layout, w, h, z0,
                        front_height_mm, y_face, hinge_side, door_tag, mat)
+
+        # Glass, for the same reason and in the same place: every branch below
+        # returns, so anything that must apply to all door types is drawn here
+        # or it is quietly missed by one of them.
+        draw_glass_hatch(definition, unit, z0, y_face, front_tag, mat, slabs)
 
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'
