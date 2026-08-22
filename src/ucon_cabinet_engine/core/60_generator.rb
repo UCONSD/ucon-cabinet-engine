@@ -723,14 +723,79 @@ module UCON
         !wall_hung?(unit) && plinth_h_mm(unit) > 0
       end
 
+      # Does this unit hang BY NATURE, because its family does? A wall unit
+      # does. A base unit does not, however it has been configured - and that
+      # is the distinction, not whether it happens to be hanging right now.
+      def hangs_by_nature?(unit)
+        (unit || {})['mounting_default'].to_s == 'wall_hung'
+      end
+
       # How high the bottom of a hung unit sits above the finished floor.
-      # A PROJECT decision, never a catalog fact - Cesar prices the box and
-      # says nothing about the wall. This method is the seam M1.6 will take
-      # over; until then every wall unit in the model gets the same number,
-      # and it is written into the object so the drawing can be dimensioned
-      # from data rather than from a measurement.
-      def mount_bottom_mm(_unit)
-        Standards::WALL_MOUNT_BOTTOM_MM
+      # TWO DIFFERENT QUESTIONS WEARING ONE NAME, and until 0.52 this method
+      # answered only the first:
+      #
+      #   * A WALL unit hangs because that is what it is, and how high is a
+      #     PROJECT decision Cesar says nothing about. That is the seam M1.6
+      #     takes over; until then every wall unit gets the same number.
+      #
+      #   * A BASE or TALL unit that has been CHOSEN to hang is a different
+      #     case entirely. Its worktop is the same worktop as its neighbours',
+      #     so its bottom is not free: it sits exactly where its plinth would
+      #     have put it. The gap that opens underneath is then the plinth
+      #     height, and that gap IS what the option is bought for. Returning
+      #     1400 here would have hung a base unit at wall-cabinet height.
+      #
+      # Derived, not invented: the number comes from the family's own plinth.
+      def mount_bottom_mm(unit)
+        return Standards::WALL_MOUNT_BOTTOM_MM if hangs_by_nature?(unit)
+
+        plinth_h_mm(unit)
+      end
+
+      # ---- the wall-hung option (printed p.548) -------------------------
+      #
+      # A standing catalog option, not an exception: nearly every base and
+      # tall price table prints "Surch. for wall-hung version on page 548" in
+      # its margin. It is the FIRST option in this engine that nobody can
+      # infer from the article code - the same code is ordered either way and
+      # the difference travels as a surcharge line - which makes it the first
+      # true `origin: chosen` companion Contract v2 was built to carry.
+      #
+      # Three ways to be unavailable, and they are not the same:
+      #   * the unit already hangs, so there is nothing to choose;
+      #   * it is not a cabinet - an appliance FRONT bolts to the client's
+      #     machine and is never fixed to a wall;
+      #   * the page says so. Three types in the whole book print "not
+      #     available wall hung" (printed p.34 and p.37) and NONE of them is
+      #     in this registry, because those pages are not extracted. The flag
+      #     is read anyway, so extracting them later is a data change and not
+      #     a code change.
+      def wall_hung_available?(unit)
+        u = unit || {}
+        return false if hangs_by_nature?(u)
+        return false if u['wall_hung'] == false
+        return false unless (u['object_class'] || 'cabinet') == 'cabinet'
+
+        %w[base tall].include?(u['unit_class'].to_s)
+      end
+
+      # The order line the choice produces. ORIGIN: CHOSEN - a person decided
+      # this and no rule can rederive it, which is exactly the distinction
+      # Contract v2 4.2 draws against an implied line: an implied line is
+      # recomputed on every apply, a chosen one is not.
+      #
+      # Two fixings for a base, four for a tall, and the catalog prices them
+      # as two different articles. qty is 1 - one surcharge per unit, not per
+      # fixing; p.548 prices the pair.
+      def wall_hung_ref(unit)
+        return nil unless wall_hung_available?(unit)
+
+        row = ((Registry.data['modifications'] || {})['codes'] || {})['wall_hung'] || {}
+        entry = row[(unit || {})['unit_class'].to_s]
+        return nil unless entry && entry['code']
+
+        { 'code' => entry['code'], 'qty' => 1, 'um' => 'PZ', 'origin' => 'chosen',
+          'source_ref' => 'printed p.548 - wall-hung version, fixings 240 kg per pair' }
       end
 
       # Where this unit's carcass starts above the floor: the plinth for

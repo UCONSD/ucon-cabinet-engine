@@ -95,6 +95,17 @@ module UCON
             # unit in the wall chapter hangs. Absent means floor, so no existing
             # section file has to say anything.
             'mounting'           => family['mounting'] || 'floor',
+            # THE SAME VALUE UNDER A SECOND NAME, and the duplication is the
+            # point. 'mounting' is what this object currently IS, and a chosen
+            # wall-hung option overwrites it; 'mounting_default' is what the
+            # FAMILY says and never moves. Telling the two apart is what lets a
+            # wall unit take the project hanging height while a base unit
+            # somebody CHOSE to hang keeps its run's worktop line instead.
+            'mounting_default'   => family['mounting'] || 'floor',
+            # base | wall | tall, stamped onto the unit type by the loader from
+            # its section file. The wall-hung fixing article differs by it: two
+            # fixings for a base, four for a tall.
+            'unit_class'         => unit_type['class'],
             # How tall this family's plinth is. A FAMILY fact, exactly like
             # 'mounting' above: H.78 stands on 100, H.84 on 60, and the
             # factory drawings print it. Absent means the family has not said

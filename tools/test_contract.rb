@@ -1290,6 +1290,106 @@ check('base_z_mm is the plinth for a floor unit and the hanging height for a hun
     Generator.base_z_mm(Registry.lookup('PB0625')) == Standards::WALL_MOUNT_BOTTOM_MM
 end
 
+puts "\nthe wall-hung option - printed p.548 (0.52.0)"
+
+check('the family default is kept apart from what the object currently is') do
+  # Same value in the registry row; they diverge only once somebody chooses.
+  # Without the second name there is no way to tell a wall unit from a base
+  # unit that has been hung, and the hanging height differs completely.
+  base = Registry.lookup('B80601')
+  wall = Registry.lookup('PB0625')
+  raise base.inspect unless base['mounting'] == 'floor' && base['mounting_default'] == 'floor'
+  raise wall.inspect unless wall['mounting'] == 'wall_hung' && wall['mounting_default'] == 'wall_hung'
+  raise 'a wall unit hangs by nature' unless Generator.hangs_by_nature?(wall)
+  raise 'a base unit never does' if Generator.hangs_by_nature?(base)
+end
+
+check('A CHOSEN HANG KEEPS THE RUN\'S WORKTOP LINE - it does not go up to 1400') do
+  # The bug this exists to prevent: mount_bottom_mm ignored its argument and
+  # returned WALL_MOUNT_BOTTOM_MM, so hanging a base unit would have put it at
+  # wall-cabinet height. Its worktop is its neighbours\' worktop, so its bottom
+  # sits where the plinth would have - and the gap that opens underneath, equal
+  # to the plinth, is the whole point of the option.
+  hung_base = Registry.lookup('B80601').merge('mounting' => 'wall_hung')
+  raise Generator.mount_bottom_mm(hung_base).to_s unless
+    Generator.mount_bottom_mm(hung_base) == Generator.plinth_h_mm(hung_base)
+  raise 'and that is 100 for H.78' unless Generator.mount_bottom_mm(hung_base) == 100
+  raise 'the carcass starts there too' unless Generator.base_z_mm(hung_base) == 100
+  # A real wall unit is untouched by any of this.
+  raise 'a wall unit still takes the project height' unless
+    Generator.mount_bottom_mm(Registry.lookup('PB0625')) == Standards::WALL_MOUNT_BOTTOM_MM
+end
+
+check('a hung base unit is drawn with NO plinth, at the same height it had') do
+  floor = Registry.lookup('B80601')
+  hung  = floor.merge('mounting' => 'wall_hung')
+  raise 'standing, it has a plinth' unless Generator.plinth?(floor)
+  raise 'hung, it has none' if Generator.plinth?(hung)
+  raise 'and the carcass does not move' unless
+    Generator.base_z_mm(hung) == Generator.base_z_mm(floor)
+end
+
+check('who may be offered the option, and the three reasons for no') do
+  raise 'a base cabinet may' unless Generator.wall_hung_available?(Registry.lookup('B80601'))
+  raise 'a tall cabinet may'  unless Generator.wall_hung_available?(Registry.lookup('CR0631'))
+  # 1 - it already hangs, so there is nothing to choose.
+  raise 'a wall unit already hangs' if Generator.wall_hung_available?(Registry.lookup('PB0625'))
+  # 2 - an appliance FRONT bolts to the client machine; it is fixed to no wall.
+  raise 'a dishwasher door is not hung' if Generator.wall_hung_available?(Registry.lookup('V80730'))
+  raise 'nor is a US fridge panel' if Generator.wall_hung_available?(Registry.lookup('CR9601'))
+  raise 'nil must not blow up' if Generator.wall_hung_available?(nil)
+end
+
+check('THE PAGE CAN FORBID IT, and the flag is read even though nothing sets it') do
+  # printed p.34 and p.37 print "not available wall hung" on three types -
+  # a compact-oven base with a sheet-metal bottom, and the two 97 cm pull-out
+  # table types. NONE of them is in this registry: those pages are not
+  # extracted and rule 1 forbids inventing the rows. The mechanism is proved
+  # here on a synthetic unit instead, so extracting the pages later is a data
+  # change and not a code change.
+  forbidden = Registry.lookup('B80601').merge('wall_hung' => false)
+  raise 'the page must win' if Generator.wall_hung_available?(forbidden)
+  # And it must be the explicit false that forbids, not merely a missing key.
+  raise 'absence is not a prohibition' unless
+    Generator.wall_hung_available?(Registry.lookup('B80601').merge('wall_hung' => nil))
+end
+
+check('THE FIRST CHOSEN COMPANION THIS ENGINE CAN PRODUCE') do
+  # Contract v2 has carried origin: chosen since 17c20dd with nothing able to
+  # make one. This is the first article that qualifies: the SAME code is
+  # ordered whether the unit stands or hangs, and the difference travels as a
+  # separate surcharge line - so no rule can rederive it, only a person.
+  #
+  # It does NOT contradict the sweep over all 180 codes further down, which
+  # asserts that attributes_for never emits a chosen line. That check is about
+  # what the generator produces BY ITSELF, and it must stay true: a chosen
+  # line appears only when this method is asked, and asking is a decision.
+  line = Generator.wall_hung_ref(Registry.lookup('B80601'))
+  raise line.inspect unless line['code'] == '989410'
+  raise 'it is CHOSEN, not implied' unless line['origin'] == 'chosen'
+  raise 'one surcharge per unit, not per fixing' unless line['qty'] == 1 && line['um'] == 'PZ'
+  raise 'it must cite its page' unless line['source_ref'].include?('548')
+  # Four fixings for a tall, and the catalog prices it as a different article.
+  raise 'a tall takes 989411' unless
+    Generator.wall_hung_ref(Registry.lookup('CR0631'))['code'] == '989411'
+  # Nothing that cannot hang produces a line.
+  raise 'a wall unit orders no fixings' unless
+    Generator.wall_hung_ref(Registry.lookup('PB0625')).nil?
+end
+
+check('the surcharge codes are the ones the page prints') do
+  wh = Registry.data['modifications']['codes']['wall_hung']
+  raise wh.inspect unless wh['base']['code'] == '989410' && wh['tall']['code'] == '989411'
+  raise 'the source page must be cited' unless wh['source_ref'].include?('p.548')
+  # A wall-hung base is NOT "without feet" - p.39 of the Project Guidelines is
+  # explicit, and the drawing shows the foot bearing against the WALL. Losing
+  # that sentence would invite a model with nothing at the bottom rear.
+  raise 'the foot must be recorded' unless
+    wh['construction_note'].include?('foot to stabilise')
+  raise 'and the exception must say it is unenforced' unless
+    wh['not_available_on']['enforcement'].include?('NOT ENFORCED')
+end
+
 puts "\nplinth height is a FAMILY fact, not a global constant (0.51.0)"
 
 check('the family states its plinth, and the generator asks the object') do

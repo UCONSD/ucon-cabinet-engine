@@ -708,6 +708,13 @@
         "points": 22
       },
       "wall_hung": {
+        "source_ref": "CESAR - 2 Kitchen System.pdf printed p.548 / PDF 550, read 2026-08-22: 'Wall-hung base and tall units - with fixings, 240 Kg capacity per pair'. Almost every base and tall price table in the book prints 'Surch. for wall-hung version on page 548' in its margin - Maxima, Intarsio, N_Elle, Unit and the glass display cabinets alike - so this is a STANDING OPTION, not an exception.",
+        "construction_note": "A wall-hung base unit is NOT 'without feet'. CESAR - 1 Project Guidelines.pdf printed p.39: 'Wall-hung base units are always provided with fixings and a foot to stabilise them and determine their inclination.' The rendered drawing (sources/factory/pg-p39-wallhung.png) shows the fixing at the top rear and the foot at the BOTTOM REAR bearing against the WALL, where it sets the tilt; it never touches the floor. So: no floor contact and no plinth, but a foot exists and it occupies clearance behind the carcass.",
+        "not_available_on": {
+          "phrase": "not available wall hung",
+          "occurrences": "THREE in 634 pages, all base units. printed p.34: 'Base unit for built-in compact oven ... bottom panel lined with sheet metal' (B48698 / B48999). printed p.37, twice: 'Base unit w/door and pull-out table ... no Push-pull device on top front, no intermediate grip recess' - the 97 cm pull-out table types, around B80672 / B80972.",
+          "enforcement": "NOT ENFORCED, because NO CODE IN THIS REGISTRY IS SUBJECT TO IT: printed p.34 and p.37 are not extracted and none of those codes is held. The mechanism exists - Generator.wall_hung_available? returns false for any unit_type carrying wall_hung: false, and a test proves it with a synthetic unit. Set the flag on the real types when those pages are extracted; do NOT invent the rows before then (rule 1)."
+        },
         "base": {
           "code": "989410",
           "points": 42,
