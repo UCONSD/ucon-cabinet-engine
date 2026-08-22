@@ -85,15 +85,42 @@ module UCON
           raise ArgumentError, "Unknown opening_method #{method.inspect}"
         end
 
+        # MOUNTING IS A CHOICE NOW (printed p.548), and the patch must be able
+        # to take it back as well as make it - the contract reconciles, so a
+        # unit returned to the floor gets mount_bottom_mm DELETED rather than
+        # left behind at its old hanging height.
+        hang = payload['wall_hung'] ? true : false
+        if hang && !Generator.wall_hung_available?(unit)
+          raise ArgumentError,
+                "#{unit['code']} cannot be ordered wall-hung: " \
+                "#{Generator.hangs_by_nature?(unit) ? 'it already hangs' : 'the catalog does not offer it for this type'}."
+        end
+        # Two ways to be hanging and they must not be confused: a wall unit
+        # hangs whatever the checkbox says, a base unit only if it was ticked.
+        hung = hang || Generator.hangs_by_nature?(unit)
+        patch['mounting'] = hung ? 'wall_hung' : 'floor'
+        patch['mount_bottom_mm'] =
+          hung ? Generator.mount_bottom_mm(unit.merge('mounting' => 'wall_hung')) : nil
+
         # COMPANIONS ARE RE-RESOLVED ON EVERY APPLY, gola profiles included.
         # They are IMPLIED lines and an implied line is recomputed, never
         # inherited (Contract v2 §4.2 rule 3) - which is also what takes the
         # profiles away again when a front stops being gola. Leaving them
         # behind would order a grip recess for a door that now opens with a
         # handle, and until 0.44.0 the contract could not even erase it.
-        patch['companion_refs'] = Generator.companion_refs_for(
+        lines = Generator.companion_refs_for(
           unit, method == 'gola' ? payload['gola_system'].to_s : nil
-        )
+        ) || []
+        # ...AND THE CHOSEN ONE IS ADDED BACK, not preserved. That looks like a
+        # violation of "a chosen line is never recomputed" and is not: the
+        # checkbox IS the record of the choice, so re-deriving the line from it
+        # reproduces exactly what the person decided. Preserving the old line
+        # instead would keep ordering fixings for a unit somebody has just put
+        # back on the floor. When a chosen option arrives that has no control
+        # of its own to be read from, THAT is when the lines must be merged.
+        wall_hung_line = hang ? Generator.wall_hung_ref(unit) : nil
+        lines << wall_hung_line if wall_hung_line
+        patch['companion_refs'] = lines.empty? ? nil : lines
 
         hinge = payload['hinge_side'].to_s
         if unit['handed']
@@ -229,6 +256,13 @@ module UCON
           else
             {}
           end
+        # Whether this cabinet may be hung at all, and what it would order.
+        # Computed here, in the pure half, because a rule that lives only in
+        # the HTML is not a rule - the same reason gola_available? is checked
+        # in attributes_patch and not only in the dialog.
+        state['wall_hung_available'] = Generator.wall_hung_available?(unit)
+        ref = Generator.wall_hung_ref(unit)
+        state['wall_hung_ref'] = ref && ref['code']
         hw = Registry.data['hardware'] || {}
         state['gola_profiles'] = gola_options(unit)
         state['gola_system']   = gola_system_of(attrs)
@@ -256,13 +290,20 @@ module UCON
         attrs = Contract.read(defn)
         unit  = Registry.lookup(attrs['code'])
         patch = attributes_patch(unit, payload)
+        # THE REGISTRY ROW IS NOT THIS OBJECT. Everything below asks the
+        # generator where geometry goes, and the generator must be asked about
+        # the unit AS CHOSEN - otherwise a base unit somebody has just hung is
+        # redrawn standing on its plinth, and the drawing tells a lie the
+        # order does not. Same shape as the gola pairing that went missing.
+        chosen = Generator.effective(unit, attrs.merge(patch))
 
         model.start_operation('UCON: apply unit properties', true)
         begin
           Contract.write!(defn, attrs.merge(patch))
           gola = patch['opening_method'] == 'gola'
-          rebuild_fronts(model, defn, unit, gola)
-          Symbols.draw(model, defn, unit,
+          rebuild_fronts(model, defn, chosen, gola)
+          rebuild_plinth(model, defn, chosen)
+          Symbols.draw(model, defn, chosen,
                        patch['hinge_side'] || attrs['hinge_side'],
                        patch['front_height_mm'],
                        effective_slabs(unit, gola))
@@ -274,6 +315,19 @@ module UCON
         push_selection
       rescue StandardError => e
         UI.messagebox("Apply failed:\n\n#{e.message}")
+      end
+
+      # A plinth appears and disappears with the mounting choice, so it is
+      # erased and redrawn unconditionally - draw_plinth answers nil when this
+      # unit has none, which is what makes that safe. HOW one is built is the
+      # generator's answer and not ours: this method deliberately holds no
+      # dimension, no material and no setback.
+      def rebuild_plinth(model, defn, unit)
+        doomed = defn.entities.grep(Sketchup::Group).select { |g| g.name == 'PLINTH' }
+        defn.entities.erase_entities(doomed) unless doomed.empty?
+        return if unit['object_class'] == 'appliance_front' && !unit['plinth_continues']
+
+        Generator.draw_plinth(defn.entities, unit, model)
       end
 
       def rebuild_fronts(model, defn, unit, gola)
@@ -352,10 +406,14 @@ module UCON
                 <option value="rh">Right (hinges right)</option>
               </select>
             </fieldset>
+            <fieldset id="mountFs"><legend>Mounting</legend>
+              <label><input type="checkbox" id="wallHung" onchange="rules()"> Wall-hung (no plinth)</label>
+              <div id="mountNote" class="muted" style="margin:2px 0 0"></div>
+            </fieldset>
             <button onclick="apply()">Apply</button>
           </div>
           <script>
-            var HANDED=false;
+            var HANDED=false, WALL_HUNG_REF='';
             function opt(s,items,sel){s.innerHTML='';items.forEach(function(it){
               var v=(it.value!==undefined&&it.value!==null)?it.value:it.code;
               var o=document.createElement('option');o.value=v;
@@ -372,6 +430,14 @@ module UCON
               document.getElementById('handle').style.display=
                 document.getElementById('hmode').value==='factory'?'':'none';
               document.getElementById('hingeFs').style.display=HANDED?'':'none';
+              // The surcharge article is shown only while the option is on, so
+              // the code on screen is always the code that will be ordered.
+              var wh=document.getElementById('wallHung').checked;
+              document.getElementById('mountNote').textContent=
+                wh?('Orders '+(WALL_HUNG_REF||'the wall-hung surcharge')+
+                    ' — fixings, 240 kg per pair. The plinth is removed and the '+
+                    'carcass keeps its worktop line.')
+                  :'Stands on its plinth.';
             }
             function render(st){
               var has=st.attrs&&st.attrs.code;
@@ -379,6 +445,15 @@ module UCON
               document.getElementById('form').style.display=has?'':'none';
               if(!has)return;
               HANDED=!!st.handed;
+              // Offered only where the catalog offers it. A wall unit already
+              // hangs and an appliance front is bolted to the machine, so for
+              // those the whole fieldset goes away rather than showing a
+              // control that cannot be used.
+              WALL_HUNG_REF=st.wall_hung_ref||'';
+              document.getElementById('mountFs').style.display=
+                st.wall_hung_available?'':'none';
+              document.getElementById('wallHung').checked=
+                (st.attrs.mounting==='wall_hung');
               // A family that declares no door versions gets no door-version
               // control - and the labels are written from the declared heights,
               // so nothing in this dialog hard-codes 78 or 75.
@@ -415,7 +490,8 @@ module UCON
                      gola_system:gola?document.getElementById('gol').value:'',
                      hardware_ref:(!gola&&document.getElementById('hmode').value==='factory')
                                         ?document.getElementById('handle').value:'',
-                     hinge_side:HANDED?document.getElementById('hinge').value:''};
+                     hinge_side:HANDED?document.getElementById('hinge').value:'',
+                     wall_hung:document.getElementById('wallHung').checked};
               sketchup.apply(JSON.stringify(p));
             }
             window.onload=function(){sketchup.ready();};

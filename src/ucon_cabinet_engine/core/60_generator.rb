@@ -145,14 +145,7 @@ module UCON
         p = corner_parts(unit)
         z0 = base_z_mm(unit)
 
-        if plinth?(unit)
-          plinth = Geometry.box(
-            e, 'PLINTH', 0, s::PLINTH_SETBACK_MM, 0,
-            p[:carcass], s::PLINTH_T_MM, plinth_h_mm(unit),
-            Geometry.material(model, 'UCON_Plinth_White', [245, 245, 245])
-          )
-          Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
-        end
+        draw_plinth(e, unit, model)
 
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
         Geometry.box(e, 'CARCASS', 0, 0, z0, p[:carcass], p[:depth],
@@ -245,7 +238,6 @@ module UCON
         begin
           carcass_mat = Geometry.material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216])
           front_mat   = Geometry.material(model, 'UCON_Front_White',        [245, 245, 245])
-          plinth_mat  = Geometry.material(model, 'UCON_Plinth_White',       [245, 245, 245])
 
           definition = model.definitions.add(
             "CESAR_#{code}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
@@ -265,14 +257,7 @@ module UCON
             niche_depth = selected_depth_mm(model)
             placement   = placement_transform(model)
 
-            if unit['plinth_continues'] && plinth?(unit)
-              plinth = Geometry.box(
-                e, 'PLINTH',
-                0, s::PLINTH_SETBACK_MM, 0,
-                w, s::PLINTH_T_MM, plinth_h_mm(unit), plinth_mat
-              )
-              Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
-            end
+            draw_plinth(e, unit, model) if unit['plinth_continues']
             # Built through the ordinary front_slabs path and named FRONT…, so
             # the properties panel rebuilds it like any other front: choosing
             # door version 75 shortens the panel to 750 with no special case.
@@ -329,14 +314,7 @@ module UCON
             return instance
           end
 
-          if plinth?(unit)
-            plinth = Geometry.box(
-              e, 'PLINTH',
-              0, s::PLINTH_SETBACK_MM, 0,
-              w, s::PLINTH_T_MM, plinth_h_mm(unit), plinth_mat
-            )
-            Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
-          end
+          draw_plinth(e, unit, model)
 
           Geometry.box(e, 'CARCASS', 0, 0, z0, w, d, h, carcass_mat)
 
@@ -723,6 +701,33 @@ module UCON
         !wall_hung?(unit) && plinth_h_mm(unit) > 0
       end
 
+      # How wide the plinth is. A corner unit is not dimensioned by a width, so
+      # it answers from its own footprint.
+      def plinth_width_mm(unit)
+        unit['geometry_kind'] == 'corner' ? corner_parts(unit)[:carcass] : unit['width_mm']
+      end
+
+      # THE ONE WRITER OF A PLINTH. It was written out three times in this file
+      # and the panel could not draw one at all, which stopped mattering the
+      # moment mounting became a choice: switching a unit to wall-hung has to
+      # take its plinth away, and switching back has to bring it. Four copies
+      # of that would have been four chances to update three.
+      #
+      # Returns nil when this unit has no plinth, so a caller can erase and
+      # redraw unconditionally.
+      def draw_plinth(entities, unit, model)
+        return nil unless plinth?(unit)
+
+        s = Standards
+        plinth = Geometry.box(
+          entities, 'PLINTH', 0, s::PLINTH_SETBACK_MM, 0,
+          plinth_width_mm(unit), s::PLINTH_T_MM, plinth_h_mm(unit),
+          Geometry.material(model, 'UCON_Plinth_White', [245, 245, 245])
+        )
+        Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+        plinth
+      end
+
       # Does this unit hang BY NATURE, because its family does? A wall unit
       # does. A base unit does not, however it has been configured - and that
       # is the distinction, not whether it happens to be hanging right now.
@@ -747,9 +752,36 @@ module UCON
       #
       # Derived, not invented: the number comes from the family's own plinth.
       def mount_bottom_mm(unit)
+        # A value already written onto the object wins: it is what the drawing
+        # was made from, and recomputing it would quietly move geometry the
+        # next time anything is re-applied. This is also the seam M1.6 needs.
+        stated = (unit || {})['mount_bottom_mm']
+        return stated.to_f unless stated.nil?
         return Standards::WALL_MOUNT_BOTTOM_MM if hangs_by_nature?(unit)
 
         plinth_h_mm(unit)
+      end
+
+      # THE REGISTRY ROW AS THIS INSTANCE HAS IT: catalog facts overlaid with
+      # the choices made on one object.
+      #
+      # Every geometry question must be asked of this and never of the bare
+      # registry row, and the reason is a bug we have already paid for once.
+      # Panel.apply looks the code up afresh, so a choice stored on the object
+      # was invisible to the rebuild - the same shape as the gola pairing that
+      # was lost for weeks because the dialog and the helper disagreed. A base
+      # unit somebody hung would have been redrawn standing on its plinth.
+      #
+      # Only keys a PERSON can set are overlaid. Dimensions, codes and family
+      # facts stay the catalog's - an object may not out-vote the registry
+      # about what article it is.
+      INSTANCE_KEYS = %w[mounting mount_bottom_mm].freeze
+
+      def effective(unit, attrs)
+        u = (unit || {}).dup
+        a = attrs || {}
+        INSTANCE_KEYS.each { |k| u[k] = a[k] unless a[k].nil? }
+        u
       end
 
       # ---- the wall-hung option (printed p.548) -------------------------

@@ -206,6 +206,19 @@ check('notes record the envelope-only representation') do
   raise 'envelope not mentioned' unless B80601.notes.downcase.include?('envelope')
 end
 
+# A SketchUp entity's attribute dictionary, headless. Defined here rather than
+# beside the contract checks that first needed it, because a round trip through
+# a real write! is the only honest way to prove that a key was ERASED and not
+# merely skipped - and by 0.52 three separate sections want to prove exactly
+# that. A helper used in three places belongs above all three.
+class StubEntity
+  def initialize; @d = {}; end
+  def set_attribute(dict, key, value); (@d[dict] ||= {})[key] = value; true; end
+  def get_attribute(dict, key); (@d[dict] || {})[key]; end
+  def delete_attribute(dict, key); (@d[dict] || {}).delete(key); true; end
+  def stored; (@d[Contract::DICTIONARY] || {}); end
+end
+
 puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
@@ -1388,6 +1401,124 @@ check('the surcharge codes are the ones the page prints') do
     wh['construction_note'].include?('foot to stabilise')
   raise 'and the exception must say it is unenforced' unless
     wh['not_available_on']['enforcement'].include?('NOT ENFORCED')
+end
+
+puts "\nthe wall-hung option reaches geometry and the order (0.53.0)"
+
+def hang_patch(code, on, extra = {})
+  u = Registry.lookup(code)
+  Panel.attributes_patch(u, { 'door_version' => '78', 'opening_method' => 'handle',
+                              'hardware_mode' => 'client', 'wall_hung' => on }.merge(extra))
+end
+
+check('ticking it hangs the unit and orders the fixings') do
+  patch = hang_patch('B80601', true)
+  raise patch.inspect unless patch['mounting'] == 'wall_hung'
+  raise 'it keeps the run worktop line' unless patch['mount_bottom_mm'] == 100
+  line = patch['companion_refs'].find { |l| l['code'] == '989410' }
+  raise patch['companion_refs'].inspect unless line
+  raise 'and it is a CHOSEN line' unless line['origin'] == 'chosen'
+end
+
+check('UNTICKING IT PUTS THE UNIT BACK AND ERASES THE HANGING HEIGHT') do
+  # The contract reconciles, so a key whose value goes away is DELETED. If it
+  # were merely skipped, a unit put back on the floor would keep its old
+  # mount_bottom_mm and the next rebuild would hang it again - the exact
+  # accumulation bug 1932f20 was about, one layer up.
+  patch = hang_patch('B80601', false)
+  raise patch.inspect unless patch['mounting'] == 'floor'
+  raise 'the hanging height must go' unless patch['mount_bottom_mm'].nil?
+  raise 'and so must the fixings' if
+    (patch['companion_refs'] || []).any? { |l| l['code'] == '989410' }
+
+  # Proved through a real write/read round trip, not just on the patch hash.
+  e = StubEntity.new
+  Contract.write!(e, Generator.attributes_for(Registry.lookup('B80601'))
+                              .merge(hang_patch('B80601', true)))
+  raise 'it should be stored while hung' unless
+    Contract.read(e)['mount_bottom_mm'] == 100
+  Contract.write!(e, Contract.read(e).merge(hang_patch('B80601', false)))
+  raise Contract.read(e).inspect unless Contract.read(e)['mount_bottom_mm'].nil?
+  raise 'and the object says floor' unless Contract.read(e)['mounting'] == 'floor'
+end
+
+check('the panel REFUSES to hang what the catalog will not hang') do
+  begin
+    hang_patch('PB0625', true)
+    raise 'a wall unit was allowed to be hung again'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('already hangs')
+  end
+  # A rule that lives only in the dialog is not a rule (rule 14): the refusal
+  # is here, in the pure half, and not merely a hidden checkbox.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'the check must be in the patch, not only in HTML' unless
+    src.include?('Generator.wall_hung_available?(unit)')
+end
+
+check('a wall unit is untouched by the checkbox it never sees') do
+  patch = Panel.attributes_patch(Registry.lookup('PB0625'),
+                                 'door_version' => '78', 'opening_method' => 'handle',
+                                 'hardware_mode' => 'client', 'wall_hung' => false)
+  raise patch.inspect unless patch['mounting'] == 'wall_hung'
+  raise 'and it keeps the project hanging height' unless
+    patch['mount_bottom_mm'] == Standards::WALL_MOUNT_BOTTOM_MM
+end
+
+check('THE REBUILD ASKS ABOUT THE CHOSEN UNIT, NOT THE CATALOG ROW') do
+  # The bug this prevents: Panel.apply looks the code up afresh, so a choice
+  # stored on the object is invisible to the rebuild and a hung base unit is
+  # redrawn standing on its plinth. Same shape as the gola pairing that was
+  # lost for weeks.
+  unit  = Registry.lookup('B80601')
+  attrs = Generator.attributes_for(unit).merge(hang_patch('B80601', true))
+  eff   = Generator.effective(unit, attrs)
+  raise 'the overlay must carry the choice' unless eff['mounting'] == 'wall_hung'
+  raise 'no plinth is drawn for it' if Generator.plinth?(eff)
+  raise 'and the carcass keeps its height' unless Generator.base_z_mm(eff) == 100
+  raise 'while the registry row is untouched' unless unit['mounting'] == 'floor'
+  # Only what a PERSON can set is overlaid - an object may not out-vote the
+  # registry about what article it is.
+  liar = Generator.effective(unit, 'code' => 'NOPE', 'width_mm' => 9999)
+  raise 'the catalog must win on facts' unless
+    liar['code'] == 'B80601' && liar['width_mm'] == 600
+  raise 'nil unit must not blow up' unless Generator.effective(nil, {}).is_a?(Hash)
+end
+
+check('the plinth has ONE writer, and the panel is not it') do
+  # rebuild_plinth erases and redraws unconditionally; draw_plinth answers nil
+  # when there is no plinth, which is what makes that safe. The panel must
+  # hold no dimension, no material and no setback of its own - it used to add
+  # PLINTH_H_MM itself, and that is how a rebuilt hanging front ended up on
+  # the floor.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  code = src.lines.reject { |l| l =~ /^\s*#/ }.join
+  %w[PLINTH_SETBACK_MM PLINTH_T_MM PLINTH_H_MM].each do |const|
+    raise "the panel computes the plinth itself (#{const})" if code.include?(const)
+  end
+  raise 'it must ask the generator' unless code.include?('Generator.draw_plinth')
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  builders = gen.lines.reject { |l| l =~ /^\s*#/ }.join.scan(/'PLINTH'/).size
+  raise "the plinth box is built in #{builders} places, expected 1" unless builders == 1
+end
+
+check('the dialog is handed what it may offer, and what it would order') do
+  st = Panel.selection_state(Registry.lookup('B80601'),
+                             Generator.attributes_for(Registry.lookup('B80601')))
+  raise 'a base unit may be hung' unless st['wall_hung_available']
+  raise st['wall_hung_ref'].inspect unless st['wall_hung_ref'] == '989410'
+  wall = Panel.selection_state(Registry.lookup('PB0625'),
+                               Generator.attributes_for(Registry.lookup('PB0625')))
+  raise 'a wall unit is offered nothing' if wall['wall_hung_available']
+  raise 'and names no article' unless wall['wall_hung_ref'].nil?
+end
+
+check('and it reaches the ORDER as a chosen line') do
+  attrs = Generator.attributes_for(Registry.lookup('B80601')).merge(hang_patch('B80601', true))
+  row = Export.rows([attrs]).find { |r| r['code'] == '989410' }
+  raise 'the surcharge must be an order line' unless row
+  raise row.inspect unless row['qty'] == 1 && row['um'] == 'PZ'
+  raise 'the order must say a person chose it' unless row['note'].to_s.include?('chosen')
 end
 
 puts "\nplinth height is a FAMILY fact, not a global constant (0.51.0)"
@@ -2623,13 +2754,6 @@ puts "\nthe dictionary IS the object - Contract.write! reconciles (0.44.0)"
 # headless. Nothing tested that round trip before, which is exactly why the
 # erasure bug below shipped: every existing check exercised
 # Panel.attributes_patch in isolation, where the answer was always correct.
-class StubEntity
-  def initialize; @d = {}; end
-  def set_attribute(dict, key, value); (@d[dict] ||= {})[key] = value; true; end
-  def get_attribute(dict, key); (@d[dict] || {})[key]; end
-  def delete_attribute(dict, key); (@d[dict] || {}).delete(key); true; end
-  def stored; (@d[Contract::DICTIONARY] || {}); end
-end
 
 check('write! then read returns exactly what was written') do
   e = StubEntity.new
