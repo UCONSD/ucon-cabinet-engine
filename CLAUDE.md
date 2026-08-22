@@ -86,11 +86,16 @@ project-specific choice harden into a global standard.
    (`appliance`, `manufacturer=client`) is drawn and never ordered. Keep them
    separate — that separation is what lets the exporter emit one and skip the
    other.
-9. **A choice can mandate companion codes** (Contract v1.3 §4.2,
+9. **A choice can oblige or offer companion order lines** (Contract v2 §4.2,
    `companion_refs`): gola forces its `GOL` profile, a dishwasher door forces
    the filler profile and — at W75 — `GBBF01`. Companions are resolved from
    the registry, never typed by hand, and the exporter must emit them all.
-   Being drawn is a separate question from being ordered.
+   Being drawn is a separate question from being ordered. Since v2 a companion
+   is a LINE, not a code in a string: it carries `qty`, `um`, and `origin`
+   (`implied` — the article obliges it, recomputed on every rebuild — or
+   `chosen` — a person asked for it, and it survives one), and it may carry
+   `variants` of its own, because the catalog prices an uncoded finish on a
+   companion. One level deep, never recursive.
 
 ## Layout
 

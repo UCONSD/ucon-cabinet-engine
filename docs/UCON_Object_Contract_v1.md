@@ -3,6 +3,11 @@
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
 **Version:** v1 (revision v1.5) · **Date:** 2026-08-18 · **Status:** Locked (change only via versioned migration)
 
+> **SUPERSEDED 2026-08-22 by `docs/UCON_Object_Contract_v2.md`.** This file is the
+> historical record and is not edited further. v2 exists because `companion_refs` changed
+> from a string to a list of order lines, which §0 below makes a major version rather than
+> a revision. The migration from this document to v2 is v2 §7.
+
 This document defines the data foundation every other part of the Cabinet Engine depends
 on: the attribute namespace written onto model objects, the component structure, the
 rules-registry format, and the trust vocabulary. It is deliberately small and stable.

@@ -71,7 +71,7 @@ def rejects(description, attrs, expected_fragment)
 end
 
 VALID = {
-  'schema_version' => '1',
+  'schema_version' => '2',
   'object_class'   => 'cabinet',
   'manufacturer'   => 'cesar',
   'geometry_kind'  => 'linear',
@@ -101,7 +101,7 @@ accepts('symbol keys normalize to strings',
 accepts('a corner unit with corner_geometry instead of width_mm',
         with('geometry_kind' => 'corner', 'corner_geometry' => '1000x400').reject { |k, _| k == 'width_mm' })
 accepts('a non_dim accessory needing no dimensions',
-        { 'schema_version' => '1', 'object_class' => 'accessory', 'manufacturer' => 'cesar',
+        { 'schema_version' => '2', 'object_class' => 'accessory', 'manufacturer' => 'cesar',
           'geometry_kind' => 'non_dim', 'code_status' => 'PRELIMINARY', 'status' => 'SOURCE',
           'source_ref' => 'CESAR - 2 Kitchen System.pdf p.201' })
 accepts('a fully confirmed object may carry a confirmed code',
@@ -114,7 +114,9 @@ rejects('a missing required key', without('manufacturer'), 'Missing required key
 rejects('a missing source_ref', without('source_ref'), 'source_ref is required')
 rejects('a bad status value', with('status' => 'DRAFT'), 'is not one of')
 rejects('a bad object_class', with('object_class' => 'kitchen'), 'is not one of')
-rejects('the wrong schema_version', with('schema_version' => '2'), 'schema_version must be')
+# v1 is now the WRONG version to write. Reading one is a different matter:
+# Contract.read migrates it (v2 §7), and that is checked in the v2 section.
+rejects('the wrong schema_version', with('schema_version' => '1'), 'schema_version must be')
 rejects('linear geometry without width_mm', without('width_mm'), 'geometry_kind = linear requires')
 rejects('corner geometry without corner_geometry',
         with('geometry_kind' => 'corner'), 'geometry_kind = corner requires')
@@ -692,15 +694,22 @@ check('EVERY waste code yields contract-valid attributes') do
     Contract.validate!(Generator.attributes_for(Registry.lookup(code)))
   end
 end
+# v2: companion_refs is a list of LINES. Most checks care about which codes got
+# resolved, so this pulls them out; the SHAPE is checked once, hard, further down.
+def companion_codes(code)
+  lines = Generator.attributes_for(Registry.lookup(code))['companion_refs'] || []
+  lines.map { |l| l['code'] }
+end
+
 check('each waste unit orders the bin kit for its own width') do
-  refs = ->(code) { Generator.attributes_for(Registry.lookup(code))['companion_refs'] }
+  refs = ->(code) { companion_codes(code) }
   # P-One, printed p.524: W450 -> 2 bins, W600 -> 3 bins.
-  raise refs.call('B80565').inspect unless refs.call('B80565') == '995625'
-  raise refs.call('B80665').inspect unless refs.call('B80665') == '995626'
+  raise refs.call('B80565').inspect unless refs.call('B80565') == %w[995625]
+  raise refs.call('B80665').inspect unless refs.call('B80665') == %w[995626]
   # Envi Space XL, printed p.525: one kit per width, 30/45/60.
-  raise refs.call('B80366').inspect unless refs.call('B80366') == '995603'
-  raise refs.call('B80566').inspect unless refs.call('B80566') == '995605'
-  raise refs.call('B80666').inspect unless refs.call('B80666') == '995606'
+  raise refs.call('B80366').inspect unless refs.call('B80366') == %w[995603]
+  raise refs.call('B80566').inspect unless refs.call('B80566') == %w[995605]
+  raise refs.call('B80666').inspect unless refs.call('B80666') == %w[995606]
 end
 check('a waste unit is a full-height pull-out front, gola 750') do
   u = Registry.lookup('B80666')
@@ -728,12 +737,12 @@ check('the door is never handed: its hinges belong to the machine') do
   raise 'a panel must not carry hinge_side' if Generator.attributes_for(u).key?('hinge_side')
 end
 check('companion refs resolve per width: 45/60 take a filler, 75 adds GBBF01') do
-  refs = ->(code) { Generator.attributes_for(Registry.lookup(code))['companion_refs'] }
-  raise refs.call('V80530').inspect unless refs.call('V80530') == '995945'
-  raise refs.call('V80630').inspect unless refs.call('V80630') == '995946'
+  refs = ->(code) { companion_codes(code) }
+  raise refs.call('V80530').inspect unless refs.call('V80530') == %w[995945]
+  raise refs.call('V80630').inspect unless refs.call('V80630') == %w[995946]
   # 60 + 15 = 75: the appliance behind a 75 door is still 60 wide, so the
   # filler is the W60 one and GBBF01 makes up the difference.
-  raise refs.call('V80730').inspect unless refs.call('V80730') == '995946,GBBF01'
+  raise refs.call('V80730').inspect unless refs.call('V80730') == %w[995946 GBBF01]
 end
 check('a cabinet carries no companion key at all') do
   %w[B80601 B81087 B80614].each do |code|
@@ -746,9 +755,12 @@ check('EVERY appliance code yields contract-valid attributes') do
     Contract.validate!(Generator.attributes_for(Registry.lookup(row['code'])))
   end
 end
-check('companion_refs is a contract key (v1.3) and rejects nothing valid') do
+check('companion_refs is a contract key (v2 §4.2) and rejects nothing valid') do
   raise 'key missing from the contract' unless Contract::KEYS.include?('companion_refs')
-  Contract.validate!(VALID.merge('companion_refs' => '995946,GBBF01'))
+  Contract.validate!(VALID.merge('companion_refs' => [
+    { 'code' => '995946', 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' },
+    { 'code' => 'GBBF01', 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' }
+  ]))
 end
 
 if defined?(UCON::CabinetEngine::Symbols)
@@ -2050,7 +2062,7 @@ check('RECONCILIATION R1: 995626 is a bin kit, never a unit code') do
   raise '995626 must not be orderable as a unit' if Registry.codes.include?('995626')
   raise 'B80665 must be the unit' unless Registry.codes.include?('B80665')
   raise 'and 995626 must be its companion' unless
-    Generator.attributes_for(Registry.lookup('B80665'))['companion_refs'] == '995626'
+    companion_codes('B80665') == %w[995626]
 end
 
 check('RECONCILIATION R2: the invented prefixes UI / UH are nowhere in the registry') do
@@ -2457,8 +2469,9 @@ check('an empty LIST is absent too - the ordering rule v1.6 will rely on') do
   # erase the key; encoding it first would make '[]' a non-empty String and
   # present? would happily persist it. Decide presence on the LOGICAL value.
   e = StubEntity.new
-  Contract.write!(e, VALID.merge('companion_refs' => '995626'))
-  raise 'setup failed' unless Contract.read(e)['companion_refs'] == '995626'
+  one = [{ 'code' => '995626', 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' }]
+  Contract.write!(e, VALID.merge('companion_refs' => one))
+  raise 'setup failed' unless Contract.read(e)['companion_refs'] == one
   Contract.write!(e, VALID.merge('companion_refs' => []))
   raise 'an empty list must erase the key' if Contract.read(e).key?('companion_refs')
 end
@@ -2618,6 +2631,186 @@ check('the three files that share family H.78 really do share it') do
   # collision check would be passing on nothing and nobody would notice.
   fams = registry_section_files.map { |f| JSON.parse(File.read(f))['family'] }
   raise fams.inspect unless fams.count('H.78') >= 2
+end
+
+
+puts "\nObject Contract v2 - companion LINES, variants, and the v1 lift"
+
+def v1_entity
+  e = StubEntity.new
+  VALID.each { |k, v| e.set_attribute(Contract::DICTIONARY, k, v) }
+  e.set_attribute(Contract::DICTIONARY, 'schema_version', '1')
+  e.set_attribute(Contract::DICTIONARY, 'companion_refs', '995946,GBBF01')
+  e
+end
+
+LINE = { 'code' => '996PL6', 'qty' => 1, 'um' => 'PZ', 'origin' => 'chosen' }.freeze
+
+check('the v1 string is refused on WRITE, and the refusal names the way in') do
+  begin
+    Contract.validate!(VALID.merge('companion_refs' => '995946,GBBF01'))
+    raise 'accepted the v1 shape'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('list of lines')
+    raise 'the message must point at the migration' unless e.message.include?('Contract.read')
+  end
+end
+
+check('a line is checked field by field') do
+  bad = {
+    'not a hash'        => ['996PL6'],
+    'unknown key'       => [LINE.merge('role' => 'kit')],
+    'qty zero'          => [LINE.merge('qty' => 0)],
+    'qty not a number'  => [LINE.merge('qty' => 'one')],
+    'bad um'            => [LINE.merge('um' => 'EA')],
+    'bad origin'        => [LINE.merge('origin' => 'default')],
+    'no origin'         => [{ 'code' => 'X', 'qty' => 1, 'um' => 'PZ' }],
+    'code not a string' => [LINE.merge('code' => 996)]
+  }
+  bad.each do |why, value|
+    begin
+      Contract.validate!(VALID.merge('companion_refs' => value))
+      raise "accepted: #{why}"
+    rescue ArgumentError
+      nil
+    end
+  end
+end
+
+check('a line may carry NO code - the unresolvable chosen option (§4.2 rule 4)') do
+  # W.750 has no kit on printed p.569 at all. Rule 7 applied to articles:
+  # unknown is nil, not a stale code quietly kept and not a silent deletion.
+  Contract.validate!(VALID.merge('companion_refs' => [LINE.merge('code' => nil)]))
+end
+
+check('ONE variant schema, used on the object and on a line alike') do
+  v = { 'key' => 'FINISH', 'value' => 'Stainless steel' }
+  Contract.validate!(VALID.merge('variants' => [v]))
+  Contract.validate!(VALID.merge('companion_refs' => [LINE.merge('variants' => [v])]))
+  %w[key value].each do |missing|
+    begin
+      Contract.validate!(VALID.merge('variants' => [v.reject { |k, _| k == missing }]))
+      raise "accepted a variant with no #{missing}"
+    rescue ArgumentError => e
+      raise e.message unless e.message.include?(missing)
+    end
+  end
+end
+
+check('a variant may not carry what it costs, and the error says why') do
+  # printed p.569 prints "Stainless steel 387" - the 387 is exactly what must
+  # NOT come along. §1.2 reaches inside the structured keys.
+  begin
+    Contract.validate!(VALID.merge('variants' => [
+      { 'key' => 'FINISH', 'value' => 'Stainless steel', 'surcharge' => 387 }
+    ]))
+    raise 'accepted a priced variant'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('§1.2')
+    raise 'the message should say what a variant records' unless e.message.include?('never what it costs')
+  end
+end
+
+check('NO RECURSION: a line may not contain lines') do
+  begin
+    Contract.validate!(VALID.merge('companion_refs' => [
+      LINE.merge('companion_refs' => [LINE])
+    ]))
+    raise 'accepted a nested companion'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('companion_refs')
+  end
+end
+
+check('structured keys are stored as JSON TEXT and come back as structure') do
+  e = StubEntity.new
+  attrs = VALID.merge('companion_refs' => [LINE.merge('variants' => [
+                        { 'key' => 'FINISH', 'value' => 'Stainless steel' }])],
+                      'variants' => [{ 'key' => 'OPENING DIRECTION', 'value' => 'Left' }])
+  Contract.write!(e, attrs)
+  Contract::STRUCTURED_KEYS.each do |k|
+    raise "#{k} must be stored as text" unless e.stored[k].is_a?(String)
+    raise "#{k} must be JSON" unless e.stored[k].start_with?('[')
+  end
+  back = Contract.read(e)
+  raise back['companion_refs'].inspect unless back['companion_refs'] == attrs['companion_refs']
+  raise back['variants'].inspect unless back['variants'] == attrs['variants']
+end
+
+check('an empty structured value is ABSENT, decided before encoding') do
+  e = StubEntity.new
+  Contract.write!(e, VALID.merge('companion_refs' => [LINE], 'variants' => [
+                    { 'key' => 'K', 'value' => 'V' }]))
+  raise 'setup failed' unless Contract.read(e)['companion_refs']
+  Contract.write!(e, VALID.merge('companion_refs' => [], 'variants' => []))
+  raise 'an empty list must not be stored as "[]"' if e.stored.key?('companion_refs')
+  raise 'an empty list must not be stored as "[]"' if e.stored.key?('variants')
+end
+
+check('THE v1 LIFT: an old object reads as v2') do
+  back = Contract.read(v1_entity)
+  raise back['schema_version'].inspect unless back['schema_version'] == '2'
+  raise back['companion_refs'].inspect unless back['companion_refs'] == [
+    { 'code' => '995946', 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' },
+    { 'code' => 'GBBF01', 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' }
+  ]
+end
+
+check('and an old object stays EDITABLE - read, merge, write, no raise') do
+  # The real path: someone opens the 545 Avenida model and changes one thing in
+  # the panel. If the lift produced a shape validate! rejects, that fails here.
+  e = v1_entity
+  Contract.write!(e, Contract.read(e).merge('hinge_side' => 'rh'))
+  back = Contract.read(e)
+  raise back['schema_version'].inspect unless back['schema_version'] == '2'
+  raise back['hinge_side'].inspect unless back['hinge_side'] == 'rh'
+  raise 'the codes must survive the round trip' unless
+    back['companion_refs'].map { |l| l['code'] } == %w[995946 GBBF01]
+  raise 'and the entity now stores v2' unless e.stored['schema_version'] == '2'
+end
+
+check('a bare legacy code is never parsed as a NUMBER') do
+  # JSON.parse('995626') returns the Integer 995626 in modern json. The lift
+  # keys off the leading bracket precisely so a single-code v1 value cannot be
+  # silently turned into a number.
+  e = StubEntity.new
+  VALID.each { |k, v| e.set_attribute(Contract::DICTIONARY, k, v) }
+  e.set_attribute(Contract::DICTIONARY, 'schema_version', '1')
+  e.set_attribute(Contract::DICTIONARY, 'companion_refs', '995626')
+  line = Contract.read(e)['companion_refs'].first
+  raise line.inspect unless line['code'] == '995626'
+  raise 'the code must stay a STRING' unless line['code'].is_a?(String)
+end
+
+check('the generator emits implied lines, sourced from the registry rule') do
+  lines = Generator.attributes_for(Registry.lookup('V80730'))['companion_refs']
+  raise lines.inspect unless lines.map { |l| l['code'] } == %w[995946 GBBF01]
+  raise 'every generated line is implied' unless lines.all? { |l| l['origin'] == 'implied' }
+  raise 'qty/um must be resolved values' unless lines.all? { |l| l['qty'] == 1 && l['um'] == 'PZ' }
+  # The rule carries the page; the line inherits it rather than restating it.
+  raise 'source_ref must come from the registry rule' unless
+    lines.all? { |l| l['source_ref'].to_s.include?('printed p.') }
+  # Nothing the generator produces is ever chosen: that needs a person.
+  Registry.codes.each do |code|
+    (Generator.attributes_for(Registry.lookup(code))['companion_refs'] || []).each do |l|
+      raise "#{code} produced a chosen line" if l['origin'] == 'chosen'
+    end
+  end
+end
+
+check('the contract implements the document that outranks it') do
+  root = File.expand_path('..', __dir__)
+  v2 = File.join(root, 'docs', 'UCON_Object_Contract_v2.md')
+  v1 = File.join(root, 'docs', 'UCON_Object_Contract_v1.md')
+  raise 'the v2 document is missing' unless File.exist?(v2)
+  raise 'schema_version disagrees with the document' unless
+    File.read(v2).include?('**Version:** v2')
+  raise 'v1 must be marked superseded, not edited away' unless
+    File.read(v1).include?('SUPERSEDED')
+  raise 'the code must cite the document it implements' unless
+    File.read(File.join(root, 'src', 'ucon_cabinet_engine', 'core', '20_contract.rb'))
+        .include?('docs/UCON_Object_Contract_v2.md')
+  raise Contract::SCHEMA_VERSION unless Contract::SCHEMA_VERSION == '2'
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

@@ -1,7 +1,7 @@
 {
   "manufacturer": "cesar",
-  "schema_version": "1",
-  "contract_revision": "1.5",
+  "schema_version": "2",
+  "contract_revision": "2",
   "catalog_edition": "2021 price list (later update notation)",
   "source_pdf": "CESAR - 2 Kitchen System.pdf",
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
@@ -115,7 +115,7 @@
             "types": [
               { "title": "Tall unit with door", "status": "extracted", "note": "CQ0331/0531/0631/0731 at d.35 and CR0331/0531/0631/0731 at d.62, W.30/45/60/75. 1 rh or lh door, 4 shelves, 1 divider. One code, both hands - the page prices one article and hinge_side stays per-order. The only type on the page whose margin offers a wall-hung version." },
               { "title": "Tall unit with doors", "status": "extracted", "note": "CQ0930/CQ1230 at d.35 and CR0930/CR1230 at d.62, W.90/120. 2 doors side by side over the full 2100, 4 shelves, 1 divider. Not handed." },
-              { "title": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section", "status": "extracted", "note": "CR0535/CR0635, W.45/60, d.62 ONLY - there is no CQ counterpart, so a d.35 tall unit cannot take the bottom-section kit. 1 rh or lh door with 155 degree hinges, 2 shelves, 1 divider. The kit (page 569) is CHOSEN and the hinges are IMPLIED; companion_refs can express neither, so neither is recorded - both wait on Contract v1.6 and registry/cesar/options/." }
+              { "title": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section", "status": "extracted", "note": "CR0535/CR0635, W.45/60, d.62 ONLY - there is no CQ counterpart, so a d.35 tall unit cannot take the bottom-section kit. 1 rh or lh door with 155 degree hinges, 2 shelves, 1 divider. The kit (page 569) is CHOSEN and the hinges are IMPLIED; Contract v2 CAN now express both - companion_refs is a list of lines and a line carries origin implied or chosen - but neither is recorded yet, because a chosen companion needs a catalog to resolve from (registry/cesar/options/, p.568-569) and a person to choose it (the panel). Recorded gap, not a silent default." }
             ] },
           { "printed": 112, "status": "not_extracted", "types": ["Tall unit with pull-out door: CR0350/0550/0650", "Dispensa tall unit with pull-out door: CR0385/0585", "Tandem tall unit with pull-out shelves: CR0586/0686"],
             "note": "Deferred: every type on this page is defined by an interior mechanism that the page names but does not code - Arena Style Plus pull-out doors and trays, and an ETOUCH electrical opening with a power adapter priced in the margin with no article. The envelope is a box with one front and could be drawn today; what cannot be recorded honestly is the mechanism, and extracting the carcass while dropping the thing the article IS would misrepresent it. Waits on registry/cesar/options/." },

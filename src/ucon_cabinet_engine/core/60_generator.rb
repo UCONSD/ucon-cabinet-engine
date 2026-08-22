@@ -497,33 +497,50 @@ module UCON
         row && row['travel_mm']
       end
 
-      # Registry row -> Object Contract v1.2 attributes. Pure; tested headless
+      # Registry row -> Object Contract v2 attributes. Pure; tested headless
       # for every code in the registry.
       #
       # opening_method defaults to handle per the Q1 disposition (model the
       # full-height front; gola is a separate non-default option).
       # hinge_side is NOT set here even for handed units — it is a
       # per-placement order choice, and guessing it would violate §6.4.
-      # Codes the catalog mandates alongside this one (Contract v1.3 §4.2).
+      # Order lines the catalog obliges alongside this one (Contract v2 §4.2).
       # Resolved from the registry for THIS code's width — never typed by a
-      # user, never guessed. Returns a comma-separated string, or nil when the
+      # user, never guessed. Returns a list of LINES (§1.4), or nil when the
       # unit has no companions, so the key stays absent rather than empty.
+      #
+      # Every line here is origin = implied: the article obliges it, nobody
+      # chose it, and it is therefore recomputed on every rebuild. A CHOSEN
+      # companion cannot arise in this method at all — it needs an input from a
+      # person, which the panel does not yet collect.
+      #
+      # qty 1 / um PZ is not a guess about the catalog: one companion RULE in
+      # the registry resolves to one order line for one piece, which is exactly
+      # what the v1 string could express. When registry/cesar/options/ exists,
+      # quantity comes from the rule — including the printed calculation rules,
+      # like the one that says how many Servo Drive kits a composition needs.
       def companion_refs_for(unit)
         # map + compact, not filter_map: filter_map is Ruby 2.7 and the headless
         # harness has to run on the Ruby macOS actually ships, which is still
         # 2.6. SketchUp's own Ruby is far newer, so this only ever showed up as
         # nineteen failures on one machine and none on the other.
-        refs = (unit['companions'] || []).map do |c|
-          if c['by'] == 'width'
-            (c['map'] || {})[unit['width_mm'].to_s]
-          elsif c['applies_to_widths_mm']
-            c['code'] if c['applies_to_widths_mm'].include?(unit['width_mm'])
-          else
-            c['code']
-          end
+        lines = (unit['companions'] || []).map do |c|
+          code =
+            if c['by'] == 'width'
+              (c['map'] || {})[unit['width_mm'].to_s]
+            elsif c['applies_to_widths_mm']
+              c['code'] if c['applies_to_widths_mm'].include?(unit['width_mm'])
+            else
+              c['code']
+            end
+          next nil unless code
+
+          line = { 'code' => code, 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' }
+          line['source_ref'] = c['source_ref'] if c['source_ref']
+          line
         end
-        refs = refs.compact
-        refs.empty? ? nil : refs.join(',')
+        lines = lines.compact
+        lines.empty? ? nil : lines
       end
 
       # The volume an appliance occupies in the run, NOT the machine itself.

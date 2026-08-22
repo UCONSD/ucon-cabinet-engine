@@ -2,7 +2,8 @@
 #
 # UCON Cabinet Engine — core/20_contract.rb
 #
-# Implements UCON Object Contract v1 (revision v1.5) — docs/UCON_Object_Contract_v1.md.
+# Implements UCON Object Contract v2 — docs/UCON_Object_Contract_v2.md.
+# (v1, revision v1.5, is kept unedited as the historical record.)
 #
 # `validate!` is pure Ruby with no SketchUp dependency, so the entire rule set
 # runs headlessly:  ruby tools/test_contract.rb
@@ -11,11 +12,13 @@
 # The contract is load-bearing. If a rule here disagrees with the document,
 # the document wins and this file is the bug.
 
+require 'json'
+
 module UCON
   module CabinetEngine
     module Contract
       DICTIONARY     = 'CabinetEngine'
-      SCHEMA_VERSION = '1'
+      SCHEMA_VERSION = '2'
 
       # §1.1 — the complete key set. A key outside this list is a contract
       # violation (§1.2), not merely an unusual choice.
@@ -25,7 +28,7 @@ module UCON
         height_mm depth_mm width_mm corner_geometry
         mounting mount_bottom_mm
         opening opening_method front_height_mm hinge_side
-        hardware_ref hardware_source companion_refs
+        hardware_ref hardware_source companion_refs variants
         code code_status pricing_group_ref
         status priority source_ref restrictions notes
       ].freeze
@@ -45,6 +48,23 @@ module UCON
         'hardware_source' => %w[factory client],
         'priority'        => %w[P1 P2 P3]
       }.freeze
+
+      # §1.4 — the two keys that hold structure rather than a scalar. They are
+      # LISTS, one level deep: a line may not contain lines. SketchUp attribute
+      # values may not be Hashes, so these are stored as JSON text and the
+      # encoding lives here and nowhere else.
+      STRUCTURED_KEYS = %w[companion_refs variants].freeze
+
+      # §1.4 — a companion LINE. source_ref is deliberately optional: a resolved
+      # code's provenance lives in the registry row that produced it, and a
+      # second copy is a second thing to keep true.
+      LINE_KEYS    = %w[code qty um origin source_ref variants].freeze
+      VARIANT_KEYS = %w[key value source_ref].freeze
+      COMPANION_UMS = %w[PZ ML MQ].freeze
+      # §4.2 rule 3 — behavioural, not descriptive. An implied line is recomputed
+      # on every rebuild; a chosen one survives, because a hinge-side change must
+      # not evaporate somebody's kit.
+      ORIGINS = %w[implied chosen].freeze
 
       # §3 — canonical order, deliberately not alphabetical. Tools sort by this.
       STATUS_ORDER = %w[SOURCE CONTROL PLANNING CONFIRMED].freeze
@@ -99,6 +119,15 @@ module UCON
           raise ArgumentError,
                 "#{key} = #{a[key].inspect} is not one of: #{allowed.join(' / ')}"
         end
+
+        # §1.4 — the structured keys. Validation always runs on the LOGICAL form
+        # (real lists and hashes); encoding happens later, at the storage
+        # boundary. The validators return the normalized value so that what is
+        # written and what is read back have the same shape.
+        a['companion_refs'] = validate_companions!(a['companion_refs']) if
+          present?(a['companion_refs'])
+        a['variants'] = validate_variants!(a['variants'], 'variants') if
+          present?(a['variants'])
 
         # §1.1 — dimensional requirements depend on geometry_kind.
         case a['geometry_kind']
@@ -174,7 +203,10 @@ module UCON
         KEYS.each do |key|
           value = validated[key]
           if present?(value)
-            entity.set_attribute(DICTIONARY, key, value)
+            # Presence is decided on the LOGICAL value and encoding happens
+            # after (§1.4). Encode-then-test would persist an empty list,
+            # because '[]' is a perfectly non-empty String.
+            entity.set_attribute(DICTIONARY, key, encode_for_storage(key, value))
           elsif !entity.get_attribute(DICTIONARY, key).nil?
             entity.delete_attribute(DICTIONARY, key)
           end
@@ -185,9 +217,117 @@ module UCON
       # Read the dictionary back off an entity. Tools must derive meaning only
       # from this — never from the component's name, layer, or nesting (§2).
       def read(entity)
-        KEYS.each_with_object({}) do |key, out|
+        raw = KEYS.each_with_object({}) do |key, out|
           value = entity.get_attribute(DICTIONARY, key)
-          out[key] = value unless value.nil?
+          out[key] = decode_from_storage(key, value) unless value.nil?
+        end
+        migrate(raw)
+      end
+
+      # §7 — read() is the migration boundary, so a model built under v1 keeps
+      # opening and self-heals as objects are rebuilt. Nothing here is a guess:
+      # v1 had no way to express a chosen companion, and one code in its string
+      # meant one line of one piece. That is a statement about the old format's
+      # expressive power, not a claim about the catalog.
+      def migrate(attrs)
+        out = attrs.dup
+        out['schema_version'] = SCHEMA_VERSION if out.key?('schema_version')
+        legacy = out['companion_refs']
+        if legacy.is_a?(String)
+          out['companion_refs'] =
+            legacy.split(',').map { |c| c.strip }.reject { |c| c.empty? }.map do |code|
+              { 'code' => code, 'qty' => 1, 'um' => 'PZ', 'origin' => 'implied' }
+            end
+        end
+        out
+      end
+
+      def encode_for_storage(key, value)
+        return value unless STRUCTURED_KEYS.include?(key)
+
+        JSON.generate(value)
+      end
+
+      # A v1 companion_refs is a comma-joined list of codes and can never start
+      # with '[', so the bracket is what tells the two apart. Do NOT hand a bare
+      # legacy value to JSON.parse hoping it fails: modern json parses a bare
+      # scalar happily, and '995626' would come back as the Integer 995626.
+      def decode_from_storage(key, value)
+        return value unless STRUCTURED_KEYS.include?(key) && value.is_a?(String)
+        return value unless value.lstrip.start_with?('[')
+
+        begin
+          JSON.parse(value)
+        rescue JSON::ParserError => e
+          raise ArgumentError,
+                "#{key} holds text that is neither the v1 shape nor valid JSON " \
+                "(#{e.message}): #{value.inspect}"
+        end
+      end
+
+      # §1.4 — a list of companion LINES, one level deep.
+      def validate_companions!(value)
+        unless value.is_a?(Array)
+          raise ArgumentError,
+                'companion_refs must be a list of lines (§1.4). A comma-joined string ' \
+                'is the v1 shape; Contract.read lifts it and nothing else may write it.'
+        end
+
+        value.each_with_index.map do |line, i|
+          at = "companion_refs[#{i}]"
+          raise ArgumentError, "#{at} must be a hash (§1.4)" unless line.is_a?(Hash)
+
+          l = normalize(line)
+          unknown = l.keys - LINE_KEYS
+          unless unknown.empty?
+            raise ArgumentError, "#{at}: keys outside §1.4: #{unknown.sort.join(', ')}"
+          end
+          # §4.2 rule 4 — code MAY be nil: a chosen line whose article no longer
+          # resolves goes to nil and warns, rather than keeping a stale code.
+          unless l['code'].nil? || l['code'].is_a?(String)
+            raise ArgumentError, "#{at}: code must be a string or nil"
+          end
+          unless l['qty'].is_a?(Numeric) && l['qty'].to_f > 0
+            raise ArgumentError, "#{at}: qty must be a positive number, got #{l['qty'].inspect}"
+          end
+          unless COMPANION_UMS.include?(l['um'].to_s)
+            raise ArgumentError, "#{at}: um must be one of #{COMPANION_UMS.join(' / ')}"
+          end
+          unless ORIGINS.include?(l['origin'].to_s)
+            raise ArgumentError, "#{at}: origin must be one of #{ORIGINS.join(' / ')}"
+          end
+          l['variants'] = validate_variants!(l['variants'], "#{at}.variants") if
+            present?(l['variants'])
+          l
+        end
+      end
+
+      # §1.4 — one variant schema, used on the object and on a companion alike.
+      def validate_variants!(value, where)
+        raise ArgumentError, "#{where} must be a list (§1.4)" unless value.is_a?(Array)
+
+        value.each_with_index.map do |variant, i|
+          at = "#{where}[#{i}]"
+          raise ArgumentError, "#{at} must be a hash (§1.4)" unless variant.is_a?(Hash)
+
+          v = normalize(variant)
+          # Checked before the unknown-key sweep for the same reason as §1.2 at
+          # the top level: an unknown key is usually a typo, a price key is a
+          # scope breach, and the error should say which.
+          commercial = v.keys.select { |k| COMMERCIAL_MARKERS.any? { |m| k.include?(m) } }
+          unless commercial.empty?
+            raise ArgumentError,
+                  "#{at}: commercial data is forbidden (§1.2): #{commercial.join(', ')}. " \
+                  'A variant records THAT stainless steel was chosen, never what it costs.'
+          end
+          unknown = v.keys - VARIANT_KEYS
+          unless unknown.empty?
+            raise ArgumentError, "#{at}: keys outside §1.4: #{unknown.sort.join(', ')}"
+          end
+          %w[key value].each do |k|
+            raise ArgumentError, "#{at}: #{k} is required (§1.4)" unless present?(v[k])
+          end
+          v
         end
       end
 
