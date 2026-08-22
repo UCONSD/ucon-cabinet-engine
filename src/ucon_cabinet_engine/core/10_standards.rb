@@ -38,11 +38,27 @@ module UCON
       # A THIRD VALUE IS LEGAL AND IS NOT A HEIGHT: **zero**. It means the
       # carcass stands on the floor and no plinth is drawn - which is how the
       # 5 mm shim foot is modelled, by decision (Andriy, 2026-08-22:
-      # "ножку 5 мм высотой считаем за ноль"). The 5 is deliberately not
-      # written down: a number we have decided not to draw is not a number we
-      # store. For anyone who needs the article, it is 989053 on printed p.548
-      # of the price list, and the same foot is sold as 990408 on printed
-      # p.214 of Linear Elements ("Adjustable foot H. 0.5 cm").
+      # "ножку 5 мм высотой считаем за ноль").
+      #
+      # WHAT THAT FOOT ACTUALLY IS, because the catalog's "adjustable feet
+      # H. 5 mm" reads like a contradiction until you see one: it is a disc
+      # on a threaded stud. The stud screws into an insert sunk in the bottom
+      # panel and disappears, so the only part left under the cabinet is the
+      # disc - and the disc is the 5. It is BOTH a height and adjustable: 5 mm
+      # is the MINIMUM, reached with the stud wound fully in, and it grows as
+      # the stud is wound out to level the run.
+      #
+      # So zero here is not a rounding of exactly 5. It is a deliberate
+      # simplification of "at least 5, set on site with a spirit level" - and
+      # that is precisely why the drawing must not promise a number. A
+      # schematic elevation that dimensioned this would be lying with more
+      # confidence than the installer has.
+      #
+      # The 5 is therefore not written down anywhere: a number we have decided
+      # not to draw is not a number we store. For anyone who needs the
+      # article, it is 989053 on printed p.548 of the price list, and the same
+      # foot is sold as 990408 on printed p.214 of Linear Elements
+      # ("Adjustable foot H. 0.5 cm", with the note "0.5-cm high feet").
       #
       # The catalog sells exactly two plinth heights and the height is IN the
       # code: printed p.625, front plinth ZOCC001 = H.6 and ZOCC011 = H.10.
