@@ -9,13 +9,15 @@
   "inch_note": "THIS IS THE PAGE THAT PRINTS INCHES. It carries an inch column to the LEFT of the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4 - the only place in the 634-page book that states an inch size at all. The nominal is resolved from the width by _manifest.json nominal_widths_in, which is why no nominal field appears on the rows here: a lookup, never arithmetic, and never duplicated.",
   "data": {
     "height_mm": 2100,
+    "plinth_h_mm": 100,
+    "plinth_h_note": "100, as base H.78 and metric tall H.210. A US fridge housing stands in the same run and its plinth line must not step. Named plinth_h_NOTE and not plinth_note because this file already carries a plinth_note about whether a plinth is drawn here at all - two different questions, and the first draft of this line collided with it. The duplicate-key guard in tools/test_contract.rb caught it; JSON.parse would have kept the last silently.",
     "plinth_continues": true,
     "appliance_niche": {
       "bottom": "plinth_top",
       "top_mm": 2133.6,
       "trust": "indicative",
       "source": "appliance",
-      "bottom_note": "The housing starts at the TOP of the plinth, not on the floor (Andriy, 2026-08-22, off the model: the phantom was coming out from under the plinth). The number itself is not stored here - it is Standards::PLINTH_H_MM, and a second copy of 100 would be a second thing to change.",
+      "bottom_note": "The housing starts at the TOP of the plinth, not on the floor (Andriy, 2026-08-22, off the model: the phantom was coming out from under the plinth). The number itself is not stored here - it is Standards::PLINTH_H_MM, and a second copy of 100 would be a second thing to change. CORRECTION 2026-08-22: it is now this family's own plinth_h_mm, read by Generator.plinth_h_mm; Standards::PLINTH_H_MM is only the fallback for a family that does not state one. The point of the sentence stands - the number is written once and asked for, never copied.",
       "top_note": "84 in = 2133,6. Both Thermador panel-ready wine columns print 'Required Cutout Size (HxWxD): 84\" x 18\" x 25\"' and '84\" x 24\" x 25\"' - the same 84 whatever the width, which is what makes it a housing standard rather than a model dimension. Measured table: _manifest.json external_specs.us_appliance_housing_cutouts.",
       "why_it_matters": "Our front runs 100 to 2200 and the housing runs 100 to 2133,6, so 66,4 is left over ABOVE the appliance and INSIDE the housing. That gap is already written up in representation_notes as the thing that will need a custom closing panel - drawing the niche to the real cutout is what makes it visible instead of merely recorded."
     },

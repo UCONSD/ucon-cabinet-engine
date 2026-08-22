@@ -5,6 +5,8 @@
   "source_pages": "printed p.36-43 / PDF 38-45 (subset extracted: p.36 complete, p.39, p.40)",
   "data": {
     "height_mm": 780,
+    "plinth_h_mm": 100,
+    "plinth_note": "PLINTH HEIGHT IS A FAMILY FACT, not a global standard. CESAR - 1 Project Guidelines.pdf prints the dimension chain '78 H. Cesar door' over '10 Plinth H.' on printed p.73 (handles) and again on p.82 (grip recesses, where the door reads 75 and the plinth still 10), giving 780 + 100 = 880 to the worktop underside. H.84 prints 6 on printed p.90 and N_Elle repeats both pairings on p.175 and p.186 - so it tracks the HEIGHT FAMILY, not the collection. DECLARED HERE AND NOWHERE ELSE for family H.78: the loader merges non-unit_types keys last-file-wins across the three files that share this family name (appliance_h78, base_h78, sink_base_h78), so a second copy would be both a second thing to change and a silent clobber if the two ever disagreed. tools/test_contract.rb reads it back through Registry.lookup for a code out of each of the three files.",
     "door_versions": {
       "full_mm": 780,
       "gola_mm": 750,

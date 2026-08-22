@@ -9,6 +9,8 @@
   "cr_collision_note": "CR NOW SERVES THREE PRINTED SECTIONS: printed p.111-115 (this file), printed p.126-131 (H.210 for base unit H.84, not extracted), and printed p.418 (USA fridge and wine-cooler doors, held in usa_tall_h210.json). The codes do not collide, because the four-digit tail differs in every case - this file uses width indices 03/05/06/07/09/12, p.126-131 uses 05/06/07/09/15/16/19/26/27/29/36, and p.418 uses the USA indices 94/96/97/99. tools/test_contract.rb pins that disjointness. It is worth stating plainly: the USA chapter is not a grammar of its own, it is the SAME family letters carrying USA width indices.",
   "data": {
     "height_mm": 2100,
+    "plinth_h_mm": 100,
+    "plinth_note": "Same 100 as base H.78, and for the same reason: this chapter's units stand in a run with them and their fronts have to line up. The type notes in this file already said '2100 tall on a 100 plinth' in prose; this is that sentence made readable by code.",
     "depths_mm": [
       350,
       620

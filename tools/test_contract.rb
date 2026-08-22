@@ -1290,6 +1290,84 @@ check('base_z_mm is the plinth for a floor unit and the hanging height for a hun
     Generator.base_z_mm(Registry.lookup('PB0625')) == Standards::WALL_MOUNT_BOTTOM_MM
 end
 
+puts "\nplinth height is a FAMILY fact, not a global constant (0.51.0)"
+
+check('the family states its plinth, and the generator asks the object') do
+  # Project Guidelines printed p.73 and p.82: "78 H. Cesar door" over
+  # "10 Plinth H." H.84 prints 6 on p.90. So 100 is not a standard, it is
+  # what THIS family happens to stand on, and Standards::PLINTH_H_MM is now
+  # only the fallback for a family that has not said.
+  raise 'H.78 must state its own plinth' unless
+    Registry.lookup('B80601')['plinth_h_mm'] == 100
+  raise 'and the generator must read it' unless
+    Generator.plinth_h_mm(Registry.lookup('B80601')) == 100
+  raise 'tall H.210 stands in the same run' unless
+    Generator.plinth_h_mm(Registry.lookup('CR0631')) == 100
+end
+
+check('a family that says NOTHING falls back to the UCON standard, not to nil') do
+  # Rule 7 says unknown is nil - but this is not unknown, it is undeclared,
+  # and PLINTH_H_MM is a confirmed UCON decision that answers for it. Same
+  # shape as `mounting || floor` one line above it in the lookup.
+  raise Generator.plinth_h_mm({}).to_s unless
+    Generator.plinth_h_mm({}) == Standards::PLINTH_H_MM
+  raise 'nil must not blow it up' unless
+    Generator.plinth_h_mm(nil) == Standards::PLINTH_H_MM
+end
+
+check('IT SURVIVES THE MERGE - three files share family H.78 and only one declares it') do
+  # The loader merges non-unit_types keys LAST-FILE-WINS across every file
+  # naming the same family (appliance_h78, base_h78, sink_base_h78 - and they
+  # merge in that alphabetical order). plinth_h_mm is declared in base_h78
+  # alone, deliberately, so there is one place to change it. This check is
+  # what makes that safe: read it back through a code out of EACH file.
+  {
+    'B80601' => 'base_h78',
+    'B80503' => 'sink_base_h78',
+    'V80730' => 'appliance_h78'
+  }.each do |code, file|
+    got = Registry.lookup(code)['plinth_h_mm']
+    raise "#{code} (#{file}) lost the family plinth: #{got.inspect}" unless got == 100
+  end
+end
+
+check('ZERO IS A HEIGHT, and it means the carcass stands on the floor') do
+  # Andriy, 2026-08-22: "ножку 5 мм высотой считаем за ноль." A shim-footed
+  # base has no plinth and no gap worth drawing, so plinth_h_mm 0 must not be
+  # mistaken for "not stated" - which is exactly what `|| Standards` would
+  # have done, and why the fallback tests nil rather than truthiness.
+  shim = Registry.lookup('B80601').merge('plinth_h_mm' => 0)
+  raise 'zero must survive as zero' unless Generator.plinth_h_mm(shim) == 0
+  raise 'nothing is drawn under it' if Generator.plinth?(shim)
+  raise 'and the carcass sits on the floor' unless Generator.base_z_mm(shim) == 0
+end
+
+check('plinth? answers NO for two different reasons and the drawing cannot tell') do
+  floor = Registry.lookup('B80601')
+  hung  = Registry.lookup('PB0625')
+  raise 'a floor unit on a stated plinth has one' unless Generator.plinth?(floor)
+  raise 'a hung unit never meets the floor' if Generator.plinth?(hung)
+  raise 'a shim-footed one meets it directly' if
+    Generator.plinth?(floor.merge('plinth_h_mm' => 0))
+end
+
+check('the housing behind a panel starts at THIS family plinth, not at a global 100') do
+  # niche_bottom_mm used to return Standards::PLINTH_H_MM outright, with a
+  # comment saying the plinth height "is a standard and stays one". The H.84
+  # drawings say it does not.
+  u = Registry.lookup('CR9601').merge('plinth_h_mm' => 60)
+  raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 60
+end
+
+check('nothing outside the asker reaches for the constant any more') do
+  # The 100 was written out in five places in the generator. Exactly one may
+  # name the constant now, and it is the fallback inside plinth_h_mm.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  code = src.lines.reject { |l| l =~ /^\s*#/ }.join
+  hits = code.scan(/Standards::PLINTH_H_MM|s::PLINTH_H_MM/).size
+  raise "the constant is read in #{hits} places, expected 1" unless hits == 1
+end
+
 check('the symbol renderer and the panel ask for it instead of working it out') do
   # The bug this guards: when wall units arrived, the generator and the symbol
   # renderer learned that a hung unit starts at its hanging height and the

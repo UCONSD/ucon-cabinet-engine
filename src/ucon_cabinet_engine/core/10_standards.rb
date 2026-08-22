@@ -20,6 +20,32 @@ module UCON
       FRONT_REVEAL_MM   = 1.5   # front reveal, per side
       PLINTH_H_MM       = 100   # default plinth height
       PLINTH_H_ALT_MM   = 60    # alternate plinth height, special request only
+      #
+      # CORRECTION, 2026-08-22 (rule 9: dated and added, the lines above are
+      # left standing). The two numbers are right and the comment on the
+      # second one is wrong. 60 is NOT a special request: it is the DEFAULT
+      # plinth of the H.84 family, printed on p.90 of the factory Project
+      # Guidelines exactly as 100 is printed for H.78 on p.73 and p.82.
+      # N_Elle repeats both pairings, so it follows the HEIGHT FAMILY and not
+      # the collection.
+      #
+      # Consequently PLINTH_H_MM is no longer the authority, only the
+      # FALLBACK: the registry family states its own `plinth_h_mm` and
+      # Generator.plinth_h_mm asks the object. This constant answers only for
+      # a family that has not said. When M1.6 lands, a project override sits
+      # between the two.
+      #
+      # A THIRD VALUE IS LEGAL AND IS NOT A HEIGHT: **zero**. It means the
+      # carcass stands on the floor and no plinth is drawn - which is how the
+      # 5 mm shim foot is modelled, by decision (Andriy, 2026-08-22:
+      # "ножку 5 мм высотой считаем за ноль"). The 5 is deliberately not
+      # written down: a number we have decided not to draw is not a number we
+      # store. For anyone who needs the article, it is 989053 on printed p.548
+      # of the price list, and the same foot is sold as 990408 on printed
+      # p.214 of Linear Elements ("Adjustable foot H. 0.5 cm").
+      #
+      # The catalog sells exactly two plinth heights and the height is IN the
+      # code: printed p.625, front plinth ZOCC001 = H.6 and ZOCC011 = H.10.
       PLINTH_T_MM       = 18    # plinth thickness
       PLINTH_SETBACK_MM = 45    # plinth setback from the front face
 

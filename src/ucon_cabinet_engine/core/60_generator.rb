@@ -145,12 +145,14 @@ module UCON
         p = corner_parts(unit)
         z0 = base_z_mm(unit)
 
-        plinth = Geometry.box(
-          e, 'PLINTH', 0, s::PLINTH_SETBACK_MM, 0,
-          p[:carcass], s::PLINTH_T_MM, s::PLINTH_H_MM,
-          Geometry.material(model, 'UCON_Plinth_White', [245, 245, 245])
-        )
-        Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+        if plinth?(unit)
+          plinth = Geometry.box(
+            e, 'PLINTH', 0, s::PLINTH_SETBACK_MM, 0,
+            p[:carcass], s::PLINTH_T_MM, plinth_h_mm(unit),
+            Geometry.material(model, 'UCON_Plinth_White', [245, 245, 245])
+          )
+          Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
+        end
 
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
         Geometry.box(e, 'CARCASS', 0, 0, z0, p[:carcass], p[:depth],
@@ -232,8 +234,12 @@ module UCON
         # terms of z0, so the difference is this one line and the skipped
         # plinth box - the front line, the symbols and build-next-to-selected
         # need no special case.
-        wall = wall_hung?(unit)
-        z0   = base_z_mm(unit)
+        #
+        # There used to be a `wall` local here, read only by `unless wall`
+        # around the plinth. Since 0.51 that question is `plinth?`, which
+        # answers no for a hung unit AND for a shim-footed one, so the local
+        # had one reader left and it was the wrong question.
+        z0 = base_z_mm(unit)
 
         model.start_operation("UCON: build #{code}", true)
         begin
@@ -259,11 +265,11 @@ module UCON
             niche_depth = selected_depth_mm(model)
             placement   = placement_transform(model)
 
-            if unit['plinth_continues']
+            if unit['plinth_continues'] && plinth?(unit)
               plinth = Geometry.box(
                 e, 'PLINTH',
                 0, s::PLINTH_SETBACK_MM, 0,
-                w, s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
+                w, s::PLINTH_T_MM, plinth_h_mm(unit), plinth_mat
               )
               Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
             end
@@ -323,11 +329,11 @@ module UCON
             return instance
           end
 
-          unless wall
+          if plinth?(unit)
             plinth = Geometry.box(
               e, 'PLINTH',
               0, s::PLINTH_SETBACK_MM, 0,
-              w, s::PLINTH_T_MM, s::PLINTH_H_MM, plinth_mat
+              w, s::PLINTH_T_MM, plinth_h_mm(unit), plinth_mat
             )
             Geometry.hide_vertical_edges(plinth) if s::HIDE_PLINTH_VERTICAL_EDGES
           end
@@ -608,9 +614,13 @@ module UCON
       def niche_bottom_mm(unit)
         niche = unit['appliance_niche']
         return 0 unless niche
-        # The plinth height is a standard and stays one. A second copy of 100
-        # sitting in a JSON file is a second thing to change.
-        return Standards::PLINTH_H_MM if niche['bottom'] == 'plinth_top'
+        # The top of the plinth - THIS unit's plinth, which since 0.51 is a
+        # family fact rather than a global 100. The older comment here said
+        # "the plinth height is a standard and stays one"; the factory
+        # drawings say otherwise for H.84, so it is asked of the object like
+        # everything else (rule 5). Still no second copy of the number: the
+        # family states it once and this reads it.
+        return plinth_h_mm(unit) if niche['bottom'] == 'plinth_top'
 
         niche['bottom_mm'].to_f
       end
@@ -685,6 +695,34 @@ module UCON
         unit['mounting'].to_s == 'wall_hung'
       end
 
+      # HOW TALL THIS UNIT'S PLINTH IS - asked of the object, never assumed.
+      #
+      # It was Standards::PLINTH_H_MM, one global 100, in five places. The
+      # factory drawings say it is a property of the HEIGHT FAMILY: H.78
+      # stands on 100 (Project Guidelines printed p.73 and p.82), H.84 on 60
+      # (p.90), and N_Elle repeats both pairings, so it follows the height
+      # family and not the collection. A constant chosen when there was one
+      # family is rule 6 waiting for the second, and the H.84 chapter is
+      # already mapped in catalog_map.
+      #
+      # ZERO IS A REAL VALUE, NOT A MISSING ONE: it means the carcass stands
+      # on the floor and nothing is drawn beneath it. That is how the 5 mm
+      # shim foot is modelled - see the note in 10_standards.rb for the
+      # decision and the article numbers.
+      #
+      # Absent means the family has not said, and the UCON standard answers.
+      def plinth_h_mm(unit)
+        stated = (unit || {})['plinth_h_mm']
+        stated.nil? ? Standards::PLINTH_H_MM : stated.to_f
+      end
+
+      # Is there anything to draw down there at all? Two different reasons for
+      # no, and the drawing cannot tell them apart: a hung unit never meets the
+      # floor, and a shim-footed one meets it directly.
+      def plinth?(unit)
+        !wall_hung?(unit) && plinth_h_mm(unit) > 0
+      end
+
       # How high the bottom of a hung unit sits above the finished floor.
       # A PROJECT decision, never a catalog fact - Cesar prices the box and
       # says nothing about the wall. This method is the seam M1.6 will take
@@ -713,7 +751,7 @@ module UCON
       end
 
       def base_z_mm(unit)
-        wall_hung?(unit) ? mount_bottom_mm(unit) : Standards::PLINTH_H_MM
+        wall_hung?(unit) ? mount_bottom_mm(unit) : plinth_h_mm(unit)
       end
 
       # WHERE THE UNIT'S ROW STARTS - a different question from base_z_mm, and

@@ -95,6 +95,12 @@ module UCON
             # unit in the wall chapter hangs. Absent means floor, so no existing
             # section file has to say anything.
             'mounting'           => family['mounting'] || 'floor',
+            # How tall this family's plinth is. A FAMILY fact, exactly like
+            # 'mounting' above: H.78 stands on 100, H.84 on 60, and the
+            # factory drawings print it. Absent means the family has not said
+            # and Standards::PLINTH_H_MM is the fallback. ZERO IS NOT ABSENT -
+            # it means the carcass stands on the floor with no plinth.
+            'plinth_h_mm'        => family['plinth_h_mm'],
             # Whether the run's plinth carries on under this object. Only a
             # panel ever needs to say so: a cabinet gets one by standing on the
             # floor, and a panel gets one only where the drawing would
