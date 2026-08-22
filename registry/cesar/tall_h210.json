@@ -1,0 +1,101 @@
+{
+  "section": "Tall units H. 210",
+  "class": "tall",
+  "family": "Tall H.210",
+  "source_pages": "printed p.111-115 / PDF 113-117 (subset extracted: p.111 only, and on p.111 all three types)",
+  "family_naming_note": "Namespaced 'Tall H.210' for the same reason as 'Wall H.36' and 'USA Tall H.210': the registry merges section files by family NAME. Three different things in this catalog answer to 'H. 210' - this metric section (printed p.111-115), 'Tall units H. 210 | for base unit H. 78' (printed p.116-125), and the USA fridge doors (printed p.418) already held as 'USA Tall H.210'. The catalog's own wording is preserved in 'section'.",
+  "extraction_note": "printed p.111 only - the section's first page, taken whole: three types, 14 codes, both depths. printed p.112-115 are recorded as page-level gaps in catalog_map with their reasons - interior pull-out mechanisms with no article code on the page (p.112-113), corner tall units carrying the D/S execution letter (p.113-114), and fridge units that belong to the appliance module (p.115). Same shape as printed p.211 and p.221 in the wall chapter.",
+  "letter_note": "THE TALL FAMILY LETTER IS A PAIR, AND THE PAIR IS A LOOKUP. Every tall section prints two two-character prefixes, the first for d.35 and the second for d.62: here CQ = d.35 and CR = d.62. Read across the whole chapter the pairs are C1/C2 (H.138), CE/CF (H.198), C7/C8 (H.198 for base H.78), CQ/CR (H.210), C5/C6 (H.210 for base H.78), CQ/CR (H.210 for base H.84), CG/CH (H.222), C3/C4 (H.222 for base H.78), CI/CK (H.222 for base H.84), C0/C9 (H.234), C0/C9 (H.234 for base H.78), CW/CX (H.234 for base H.84). Not a sequence, not derivable, and NOT one prefix per section: CQ/CR serves two printed sections and C0/C9 serves two others, while H.198 and H.222 give their 'for base unit' sections their own letters. Read the row.",
+  "cr_collision_note": "CR NOW SERVES THREE PRINTED SECTIONS: printed p.111-115 (this file), printed p.126-131 (H.210 for base unit H.84, not extracted), and printed p.418 (USA fridge and wine-cooler doors, held in usa_tall_h210.json). The codes do not collide, because the four-digit tail differs in every case - this file uses width indices 03/05/06/07/09/12, p.126-131 uses 05/06/07/09/15/16/19/26/27/29/36, and p.418 uses the USA indices 94/96/97/99. tools/test_contract.rb pins that disjointness. It is worth stating plainly: the USA chapter is not a grammar of its own, it is the SAME family letters carrying USA width indices.",
+  "data": {
+    "height_mm": 2100,
+    "depths_mm": [
+      350,
+      620
+    ],
+    "collections": [
+      "Maxima",
+      "Intarsio"
+    ],
+    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.111 / PDF 113",
+    "wall_fixing_note": "The chapter notice on printed p.79 states: 'IMPORTANT: 35 cm deep tall units must be fixed to the wall'. That applies to every CQ code in this file. It is a fact about installation, not about geometry, and it does NOT reach the object today - the contract has a 'restrictions' key but nothing yet writes this into it. Recorded here so that when restrictions are populated the source is already cited, and so nobody re-derives it from the depth.",
+    "no_door_versions_note": "This family declares NO door_versions, and the absence is read from the page rather than assumed. The base pages print a 78/75 pair over their code tables; printed p.111 prints a single elevation dimension, 210. The gola question for a tall unit is not answered anywhere on this page, so it is not answered here.",
+    "page_observations": [
+      "THE WIDTH INDEX MATCHES THE WALL LOOKUP EXACTLY on this page - 30=03, 45=05, 60=06, 75=07, 90=09, 120=12 - and that is a coincidence of two chapters, not a rule. The corner units two pages later break it beyond repair: CQ152D/S is W.115, CQ180D/S is W.120 and CQ157D/S is W.130, so the field is neither the width nor an index into any ordered list. Read the row.",
+      "SUFFIX 31 IS ONE DOOR AND 30 IS TWO DOORS, the same meanings they carry at wall H.60 - and, again, a coincidence. At wall H.72 the same 30 is a pull-out door at W.15. Nothing decodes a suffix across families.",
+      "SUFFIX 35 EXISTS ONLY AT d.62. The third type on this page (door plus optional drawer/jumbo kit) is priced for CR0535 and CR0635 and has no CQ counterpart at all - a d.35 tall unit cannot be fitted with the bottom-section kit. Widths and depths are per type, read from the row.",
+      "THE ONE-DOOR TYPE CARRIES A W.75 THAT THE VISUAL INDEX DOES NOT LIST, and this was verified as a PICTURE because a text dump could not settle it. The D x W index on printed p.82 shows this type as 'D. 35 W. 30, 45, 60 / D. 62 W. 30, 45, 60', while the price table on printed p.111 prints CQ0731 and CR0731 at W.75 with a full price row. pdftotext -bbox-layout was then found to DROP digits silently inside that same index block - several captions came back as bare 'D. | W.' with no numbers at all - so an absence in extracted text is not evidence of an absence on the page. The page was rendered instead (pdftoppm -r 300, cropped: sources/factory/p82-084-tall-h210-caption.png) and read as an image: the caption really does stop at 60. THE PRICE TABLE IS THE AUTHORITY - it prints the article - and W.75 is extracted. The index is a navigation aid. Same lesson as printed p.561: when a reading matters, leave the text layer.",
+      "THE WALL-HUNG SURCHARGE IS PER TYPE, NOT PER PAGE. 'Surch. for wall-hung version on page 548' is printed in the margin of the one-door type and of both fridge units on printed p.115, and is ABSENT from the two-door type and the kit-ready type. Recorded verbatim; nothing here is modelled as wall_hung, and mounting stays floor for the whole family.",
+      "EVERY TYPE ON THIS PAGE CARRIES A DIVIDER. '1 divider' appears in all three descriptions, and four shelves in the first two against two in the third. Envelope-only geometry draws none of them; they are recorded in interior_confirmed because they are what the price includes."
+    ],
+    "unit_types": {
+      "tall_door": {
+        "description": "Tall unit with door - 1 rh or lh door - 4 shelves - 1 divider",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "4 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.111 / PDF 113",
+        "codes": [
+          { "code": "CQ0331", "width_mm": 300, "depth_mm": 350 },
+          { "code": "CQ0531", "width_mm": 450, "depth_mm": 350 },
+          { "code": "CQ0631", "width_mm": 600, "depth_mm": 350 },
+          { "code": "CQ0731", "width_mm": 750, "depth_mm": 350 },
+          { "code": "CR0331", "width_mm": 300, "depth_mm": 620 },
+          { "code": "CR0531", "width_mm": 450, "depth_mm": 620 },
+          { "code": "CR0631", "width_mm": 600, "depth_mm": 620 },
+          { "code": "CR0731", "width_mm": 750, "depth_mm": 620 }
+        ],
+        "notes": "The first floor-standing full-height cabinet in the registry, and the widest single front it has yet drawn: 2100 tall on a 100 plinth, so the front runs from z=100 to z=2200. ONE CODE, BOTH HANDS - the page says 'rh or lh door' and prices one article, exactly as wall H.60 does for PD0631, where the factory estimate later CONFIRMED that the hand travels as an order variant. That confirmation is scoped to PD0631 and is not claimed here; what is claimed is only what this page prints. hinge_side stays per-order and is never guessed. This type is also the only one on the page whose margin offers a wall-hung version.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full 2100 front, hinged on a vertical edge. Which edge is hinge_side, chosen per order."
+        }
+      },
+      "tall_two_doors": {
+        "description": "Tall unit with doors - 2 doors - 4 shelves - 1 divider",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": [
+          "4 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.111 / PDF 113",
+        "codes": [
+          { "code": "CQ0930", "width_mm": 900, "depth_mm": 350 },
+          { "code": "CQ1230", "width_mm": 1200, "depth_mm": 350 },
+          { "code": "CR0930", "width_mm": 900, "depth_mm": 620 },
+          { "code": "CR1230", "width_mm": 1200, "depth_mm": 620 }
+        ],
+        "notes": "A pair of doors is not handed: both leaves exist, so there is nothing to choose. Note that these are TWO doors side by side over the full 2100 height, not the stacked pair a wall unit's suffix 04 describes - the page draws one elevation dimension, 210, and no horizontal split. The 1200 codes are the first units in the registry wide enough to meet the front-panel 1200 mm fabrication limit whose NUMBER is recorded in _manifest.json and whose SCOPE is still an open question for Elda; at 600 per leaf they are nowhere near it, which is why nothing here is flagged.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension - the same treatment as base_doors on printed p.36 and wall_two_doors on printed p.221."
+        }
+      },
+      "tall_door_kit_ready": {
+        "description": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section - 1 rh or lh door with 155 degree hinges - 2 shelves - 1 divider",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "2 shelves",
+          "1 divider",
+          "155 degree hinges"
+        ],
+        "source_ref": "printed p.111 / PDF 113",
+        "codes": [
+          { "code": "CR0535", "width_mm": 450, "depth_mm": 620 },
+          { "code": "CR0635", "width_mm": 600, "depth_mm": 620 }
+        ],
+        "notes": "THIS IS THE LIVE CASE THE OPTIONS NOTE WAS WRITTEN ABOUT. claude/options-architecture-2026-08-20.md took its worked example from printed p.97, the H.198 twin of this type, because one printed row carries an option that is CHOSEN and an option that is IMPLIED at the same time. Here it is again: 'See kit on page 569' is a kit the customer may or may not order, while '155 degree hinges' comes with the article whether anyone asks or not. companion_refs today is a comma-joined string and can express neither, so NEITHER is recorded as a companion - a companion is resolved from the registry and never typed, and half an answer written into a string is worse than a recorded gap. Both wait on Contract v1.6 and registry/cesar/options/. The two shelves against the other types' four are what makes room for the kit; the code is the same article with or without it.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full 2100 front. The bottom-section kit, if ordered, sits BEHIND this door and changes nothing the envelope draws - which is exactly why the kit can be an option rather than a second article."
+        }
+      }
+    }
+  }
+}

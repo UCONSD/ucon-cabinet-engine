@@ -205,9 +205,9 @@ puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 166 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall)') do
+check('registry loads and holds 180 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall + 14 tall)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 166
+  raise "got #{n}" unless n == 180
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -364,9 +364,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 166 rows, each with code/dims/description/source') do
+check('registry catalog: 180 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 166
+  raise cat.length.to_s unless cat.length == 180
   # A corner row is dimensioned by corner_geometry instead of a single width.
   raise 'incomplete row' unless cat.all? { |c|
     c['code'] && c['height_mm'] && c['depth_mm'] &&
@@ -437,6 +437,7 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Sink base units H. 78',
+                                             'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 36',
                                              'Wall units H. 60']
@@ -2237,6 +2238,167 @@ check('a rebuilt front takes its glass with it') do
   raise 'the front sweep must be a PREFIX match' unless
     panel.include?("g.name.start_with?('FRONT')")
   raise 'FRONT_GLASS must be caught by it' unless 'FRONT_GLASS'.start_with?('FRONT')
+end
+
+
+puts "\ntall units H. 210 (printed p.111 / PDF 113) - the metric tall chapter opens"
+def tall_sections
+  Registry.map_sections.select { |s| s['class'] == 'tall' && s['collection'].nil? }
+end
+
+check('the tall chapter is in the map: 16 sections read from the printed p.79 index') do
+  raise tall_sections.size.inspect unless tall_sections.size == 16
+  first = tall_sections.first
+  raise first.inspect unless first['section'] == 'Tall units H. 138' &&
+                             first['printed_pages'] == '90-96'
+  raise tall_sections.last.inspect unless tall_sections.last['printed_pages'] == '173'
+  # The USA elements rows are also class tall and must NOT be swept in here:
+  # they are a collection, filed under their own sections.
+  usa = Registry.map_sections.select { |s| s['class'] == 'tall' && s['collection'] }
+  raise usa.size.inspect if usa.empty?
+end
+
+check('printed p.111 holds three types and 14 codes, both depths') do
+  codes = Registry.catalog.select { |c| c['section'] == 'Tall units H. 210' }
+  raise codes.length.to_s unless codes.length == 14
+  raise codes.map { |c| c['type_key'] }.uniq.sort.inspect unless
+    codes.map { |c| c['type_key'] }.uniq.sort ==
+      %w[tall_door tall_door_kit_ready tall_two_doors]
+  raise 'every tall code is 2100 tall' unless codes.all? { |c| c['height_mm'] == 2100 }
+  raise codes.map { |c| c['depth_mm'] }.uniq.sort.inspect unless
+    codes.map { |c| c['depth_mm'] }.uniq.sort == [350, 620]
+end
+
+check('THE PREFIX IS THE DEPTH: every CQ is d.35 and every CR in this section is d.62') do
+  Registry.catalog.select { |c| c['section'] == 'Tall units H. 210' }.each do |c|
+    want = c['code'].start_with?('CQ') ? 350 : 620
+    raise "#{c['code']} is d.#{c['depth_mm']}" unless c['depth_mm'] == want
+  end
+  # The pair is a LOOKUP and it is recorded as one. If someone ever "tidies"
+  # the two shared pairs apart, this fails and sends them back to the page.
+  fl = Registry.data['code_grammar']['tall_units']['family_letter']
+  raise 'CQ/CR is shared by two printed sections' unless
+    fl['H.210'] == fl['H.210_for_base_H.84']
+  raise 'C0/C9 is shared by two printed sections' unless
+    fl['H.234'] == fl['H.234_for_base_H.78']
+end
+
+check('CR spans three printed sections and no code collides') do
+  cr = Registry.catalog.select { |c| c['code'].start_with?('CR') }
+  metric = cr.select { |c| c['section'] == 'Tall units H. 210' }.map { |c| c['code'] }
+  usa    = cr.select { |c| c['section'] != 'Tall units H. 210' }.map { |c| c['code'] }
+  raise 'both sides must be populated' if metric.empty? || usa.empty?
+  raise (metric & usa).inspect unless (metric & usa).empty?
+  # Metric width indices are 03/05/06/07/09/12; the USA ones are 94/96/97/99.
+  m = metric.map { |c| c[2, 2] }.uniq.sort
+  u = usa.map    { |c| c[2, 2] }.uniq.sort
+  raise (m & u).inspect unless (m & u).empty?
+end
+
+check('nothing from the pages we did NOT take has leaked in') do
+  # printed p.112-115: uncoded interior mechanisms, corner tall units carrying
+  # the D/S execution letter, and the fridge units. Recorded in catalog_map,
+  # absent from the registry - and this fires the day one is pasted in.
+  deferred = %w[CR0350 CR0550 CR0650 CR0385 CR0585 CR0586 CR0686 CR0688
+                CR1512 CR1612 CR4611 CR4712]
+  present = deferred & Registry.codes
+  raise present.inspect unless present.empty?
+  ds = Registry.codes.select { |c| c.start_with?('CQ', 'CR') && c.end_with?('D/S') }
+  raise ds.inspect unless ds.empty?
+end
+
+check('a tall unit stands on the floor, on its plinth, and asks for no hanging height') do
+  u = Registry.lookup('CR0631')
+  raise 'a tall unit must not hang' if Generator.wall_hung?(u)
+  raise Generator.base_z_mm(u).to_s unless
+    Generator.base_z_mm(u) == Standards::PLINTH_H_MM
+  attrs = Generator.attributes_for(u)
+  raise attrs.inspect unless attrs['mounting'] == 'floor'
+  raise 'a floor unit may not carry mount_bottom_mm' if attrs['mount_bottom_mm']
+end
+
+check('the 2100 front is one slab, and the two-door unit is two') do
+  one = Generator.front_slabs(Registry.lookup('CR0631'))
+  raise one.inspect unless one.length == 1 && one.first[:h_mm] == 2100
+  two = Generator.front_slabs(Registry.lookup('CR1230'))
+  raise two.inspect unless two.length == 2
+  raise 'the two leaves must be equal' unless two[0][:w_mm] == two[1][:w_mm]
+end
+
+check('this family offers no 78/75 door version, and says so from the page') do
+  raise 'H.210 must declare no door_versions' if Registry.lookup('CR0631')['door_versions']
+  # The base family does offer one - so the absence above is a fact, not a hole.
+  raise 'H.78 must still offer one' unless Registry.lookup('B80601')['door_versions']
+end
+
+check('the kit-ready type records NEITHER its chosen kit NOR its implied hinges') do
+  u = Registry.lookup('CR0535')
+  raise 'a companion may not be typed before options/ exists' unless
+    u['companions'].empty?
+  raise '155 degree hinges belong in interior_confirmed' unless
+    u['interior_confirmed'].include?('155 degree hinges')
+  raise 'the kit-ready type is d.62 only' unless
+    Registry.catalog.select { |c| c['type_key'] == 'tall_door_kit_ready' }
+                    .map { |c| c['depth_mm'] }.uniq == [620]
+end
+
+check('the USA chapter reuses metric family letters - recorded, not left as "new"') do
+  usa = Registry.data['code_grammar']['usa_elements']
+  raise 'the correction must be recorded' unless usa['family_letters_are_not_new']
+  raise 'it must name the metric sections it came from' unless
+    usa['family_letters_are_not_new'].include?('printed p.111-115')
+end
+
+puts "\nthe housing behind the panel"
+# Andriy, 2026-08-22, off the model: the phantom was coming out from under the
+# plinth. It ran floor to the top of the front - right for a dishwasher, wrong
+# for a housing at BOTH ends.
+
+check('the US housing starts on the plinth and stops at the appliance cutout') do
+  u = Registry.lookup('CR9601')
+  raise Generator.niche_bottom_mm(u).to_s unless
+    Generator.niche_bottom_mm(u) == Standards::PLINTH_H_MM
+  # 84 in. Measured, not converted from anything of ours.
+  raise Generator.niche_top_mm(u).to_s unless Generator.niche_top_mm(u) == 2133.6
+  raise Generator.niche_height_mm(u).to_s unless Generator.niche_height_mm(u) == 2033.6
+end
+
+check('the 66,4 leftover is now a fact of the model, not only of a note') do
+  u = Registry.lookup('CR9601')
+  front_top = Generator.base_z_mm(u) + u['height_mm']
+  raise front_top.to_s unless front_top == 2200
+  leftover = front_top - Generator.niche_top_mm(u)
+  raise leftover.to_s unless (leftover - 66.4).abs < 0.001
+  # The same number the registry already wrote down before anything drew it.
+  notes = Registry.data['families']['USA Tall H.210']['representation_notes'].join(' ')
+  raise 'the note and the geometry must agree' unless notes.include?('66,4')
+end
+
+check('the old rule survives untouched for a family that states no housing') do
+  u = Registry.lookup('V80730')
+  raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 0
+  raise Generator.niche_height_mm(u).to_s unless
+    Generator.niche_height_mm(u) == Standards::PLINTH_H_MM + 780
+end
+
+check('the plinth height is not copied into the registry') do
+  section = File.read(File.expand_path('../registry/cesar/usa_tall_h210.json', __dir__))
+  niche = Registry.data['families']['USA Tall H.210']['appliance_niche']
+  raise 'the bottom must be named, not numbered' unless niche['bottom'] == 'plinth_top'
+  raise 'a second copy of the plinth height has appeared' if niche.key?('bottom_mm')
+  raise 'the section file must point at the measured table' unless
+    section.include?('us_appliance_housing_cutouts')
+end
+
+check('the housing says on itself that it came from the appliance, not from Cesar') do
+  n = Generator.niche_attributes_for(Registry.lookup('CR9601'))
+  Contract.validate!(n)
+  raise n['notes'] unless n['notes'].include?('INDICATIVE')
+  raise n['notes'] unless n['notes'].include?('2133.6')
+  raise n['height_mm'].to_s unless n['height_mm'] == 2033.6
+  # and a dishwasher still says nothing of the kind
+  d = Generator.niche_attributes_for(Registry.lookup('V80730'))
+  raise d['notes'] if d['notes'].include?('Housing drawn')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
