@@ -21,6 +21,10 @@
 #   - the door version 78/75 is a DRAWING axis and appears in no order at all,
 #     so nothing is emitted for it. The gola profile it implies is a separate
 #     order line, and that one IS emitted.
+#   - a PZ handle is counted ONE PER OPENING FRONT, read off the registry's
+#     front_layout. Eight single-front cabinets put eight handles in the
+#     warehouse; a two-door tall unit puts two. OUR reading, and every such
+#     row says so.
 #   - a row is a TREE: variant lines and child rows sit under a numbered row.
 #     `level` says how deep. Only numbered rows get a `row`.
 #
@@ -129,18 +133,89 @@ module UCON
 
         row = hardware_lookup(code)
         um  = row && row['um']
+        # QUANTITY IS NOT A PROPERTY OF THE ARTICLE. But it is not equally
+        # unknowable for both kinds: a PZ handle is quantified by how many
+        # fronts the unit opens on, and that IS readable from one object,
+        # because front_layout has described the fronts since the geometry
+        # needed them. An ML profile is quantified by the RUN it travels
+        # along, across joints between units, and no single object can see a
+        # run. So one of the two open quantities closes here; the other waits
+        # for M2.1a and says so.
+        layout = um == 'PZ' ? front_layout_for(a) : nil
+        qty    = um == 'PZ' ? fronts_in(layout) : nil
         blank.merge(
           'level' => 1, 'code' => code,
           'description' => row && row['name'],
           'um' => um,
-          # QUANTITY IS NOT A PROPERTY OF THE ARTICLE, so it is not invented.
-          # An ML profile is quantified by the RUN it travels along, across
-          # joints between units; a PZ handle by how many fronts the unit has.
-          # Neither is readable from one object, so the cell stays empty and
-          # says why. Rule 7 applied to an order line.
-          'qty' => nil,
-          'note' => hardware_qty_note(um)
+          'qty' => qty,
+          'note' => hardware_qty_note(um, qty, layout)
         )
+      end
+
+      # ---- how many handles a cabinet takes ------------------------------
+      #
+      # The rule in Andriy's words: "если у нас есть 8 шкафов и 8 ручек - на
+      # складе лежит 8." Eight cabinets, eight handles waiting in the
+      # warehouse.
+      #
+      # Every cabinet in that example carries ONE front, so the example by
+      # itself does not say whether the count follows the CABINET or the
+      # FRONT. The registry does. `front_layout` already describes the fronts
+      # of every type we hold - a two-door tall unit says `vertical_split,
+      # count 2`, a drawer stack lists its front heights top to bottom - and
+      # two doors are two things a hand opens. So the rule implemented is ONE
+      # HANDLE PER OPENING FRONT. It reproduces 8 -> 8 exactly on the units
+      # that produced the example, and it does not have to be rewritten the
+      # first time somebody orders CR1230.
+      #
+      # SCOPE, and it is the whole of rule 4: THIS IS OUR READING, NOT A CESAR
+      # STATEMENT. The catalog nowhere prints how many handles an article
+      # takes; the manifest already records handle `um: PZ` the same way. The
+      # note on every such row says so, and position 14 of the estimate now
+      # with Elda is the first order line that could confirm or refute it.
+      #
+      # Two cases that look like exceptions and are not:
+      #   - a GOLA front has no handle at all, it has a profile. Such a unit
+      #     carries no `hardware_ref`, so it never reaches here.
+      #   - an 8x8 corner filler is FIXED and opens on nothing, so a corner
+      #     unit takes one handle, for its one door.
+      def fronts_in(front_layout)
+        fl = front_layout || {}
+        case fl['kind']
+        when 'single', 'corner_door' then 1
+        when 'vertical_split'        then positive_int(fl['count'])
+        when 'horizontal'            then horizontal_fronts(fl)
+        end
+      end
+
+      # A drawer stack states its fronts twice - the handle version as heights
+      # top to bottom, the gola version as a stack of fronts and recess zones.
+      # Every type we hold agrees between the two, and the handle version is
+      # the one that applies here by definition, so it is read first.
+      def horizontal_fronts(fl)
+        heights = fl['heights_mm_top_to_bottom']
+        return heights.size if heights.is_a?(Array) && !heights.empty?
+
+        stack = Array(fl['gola_stack_top_to_bottom']).select { |e| e['kind'] == 'front' }
+        stack.empty? ? nil : stack.size
+      end
+
+      def positive_int(value)
+        n = value.to_i
+        n > 0 ? n : nil
+      end
+
+      # front_layout is a catalog fact, so it is asked of the registry rather
+      # than copied onto the object - exactly as the handle's name and um are.
+      # A code the registry no longer knows must not blow an export up: rule 7
+      # says the answer is nil, and the note then says the count is unknown.
+      def front_layout_for(attrs)
+        code = (attrs || {})['code'].to_s
+        return nil if code.empty?
+
+        Registry.lookup(code)['front_layout']
+      rescue ArgumentError
+        nil
       end
 
       # An EMPTY quantity is not a gap in the export, it is the honest state of
@@ -155,13 +230,16 @@ module UCON
         end
       end
 
-      def hardware_qty_note(um)
-        return 'qty = one per front; not derived here until an estimate shows the row' if
-          um == 'PZ'
+      def hardware_qty_note(um, qty = nil, layout = nil)
         return 'qty and um both unknown - this article carries no um in the registry' if
           um.to_s.empty?
+        return qty_note(um) unless um == 'PZ'
+        return 'qty = one per opening front; this article has no front_layout to count' if
+          qty.nil?
 
-        qty_note(um)
+        "qty = one per opening front (front_layout: #{(layout || {})['kind']}); OUR " \
+        'reading, not a Cesar statement - estimate position 14 is the first order ' \
+        'line that could confirm it'
       end
 
       def companion_row(line)

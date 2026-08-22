@@ -3013,14 +3013,76 @@ check('a gola front orders its profile, in ML, with the quantity left OPEN') do
   raise row['note'].inspect unless row['note'].include?('run')
 end
 
-check('a factory handle is PZ, and its count is honestly unknown too') do
+def handle_row(code, handle = 'M00001')
+  Export.rows([export_attrs(code, 'hardware_ref' => handle)])
+        .find { |r| r['code'] == handle }
+end
+
+check('a factory handle is PZ, and it comes through the panel that way') do
   h = export_attrs('B80601').merge(
     Panel.attributes_patch(Registry.lookup('B80601'),
                            'door_version' => '78', 'opening_method' => 'handle',
                            'hardware_mode' => 'factory', 'hardware_ref' => 'M00001'))
   row = Export.rows([h]).find { |r| r['code'] == 'M00001' }
   raise row.inspect unless row['um'] == 'PZ'
-  raise 'one per front is a guess until an estimate shows it' unless row['qty'].nil?
+  raise 'a single-door unit takes one handle' unless row['qty'] == 1
+end
+
+check('EIGHT CABINETS, EIGHT HANDLES - the stated rule, reproduced') do
+  # The rule as Andriy gave it. Eight single-front cabinets, and the warehouse
+  # holds eight handles. This is the check that must never go red without
+  # somebody deciding it should.
+  eight = Array.new(8) { export_attrs('CR0631', 'hardware_ref' => 'M00001') }
+  total = Export.rows(eight).select { |r| r['code'] == 'M00001' }
+               .map { |r| r['qty'] }.reduce(0) { |a, b| a + b.to_i }
+  raise "expected 8 handles, got #{total.inspect}" unless total == 8
+end
+
+check('TWO DOORS TAKE TWO HANDLES - the case that proves it is not per cabinet') do
+  # 8 -> 8 alone cannot tell "one per cabinet" from "one per front": every
+  # cabinet in that example has one front. CR1230 is where the two rules
+  # disagree, and the registry already says which is right - vertical_split,
+  # count 2. Two doors are two things a hand opens.
+  raise 'a two-door tall unit takes two handles' unless handle_row('CR1230')['qty'] == 2
+end
+
+check('a drawer stack takes one handle per drawer front') do
+  # 2 drawers + 1 jumbo = three fronts, read off heights_mm_top_to_bottom.
+  raise 'three fronts, three handles' unless handle_row('B80653')['qty'] == 3
+end
+
+check("a corner unit's fixed 8x8 filler opens on nothing, so it takes one") do
+  raise 'a corner takes one handle, for its one door' unless handle_row('AU110D')['qty'] == 1
+end
+
+check('THE COUNT IS OUR READING, AND THE ROW SAYS SO') do
+  # Rule 4 in its enforceable form. The catalog never prints how many handles
+  # an article takes. If this ever silently becomes a claim about Cesar, the
+  # note is where the lie would live, so the note is what is pinned.
+  note = handle_row('CR0631')['note'].to_s
+  raise note.inspect unless note.include?('OUR reading')
+  raise 'it must name what could confirm it' unless note =~ /position 14|estimate/
+  raise 'it must say what the count is per' unless note.include?('per opening front')
+end
+
+check('an unknown front_layout gives nil, never a plausible number') do
+  # Rule 7 at the exporter boundary, twice: a shape nobody has taught it, and
+  # a code the registry has never heard of. Neither may guess 1.
+  raise 'an unteachable layout must be nil' unless
+    Export.fronts_in('kind' => 'origami').nil?
+  raise 'a missing layout must be nil' unless Export.fronts_in(nil).nil?
+  raise 'an unknown code must not blow up an export' unless
+    Export.front_layout_for('code' => 'NOSUCH').nil?
+end
+
+check('a gola unit never reaches the handle count at all') do
+  # It has no handle - it has a profile. The guard is that no hardware row is
+  # emitted, not that the count comes out right.
+  gola = export_attrs('B80601').merge(
+    Panel.attributes_patch(Registry.lookup('B80601'),
+                           'door_version' => '75', 'gola_system' => 'L-shaped'))
+  handles = Export.rows([gola]).select { |r| r['code'].to_s.start_with?('M000') }
+  raise handles.inspect unless handles.empty?
 end
 
 check('companions become child rows carrying their own qty and um') do
