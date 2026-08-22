@@ -2401,5 +2401,57 @@ check('the housing says on itself that it came from the appliance, not from Cesa
   raise d['notes'] if d['notes'].include?('Housing drawn')
 end
 
+puts "\nthe housing behind the panel"
+# Andriy, 2026-08-22, off the model: the phantom was coming out from under the
+# plinth. It ran floor to the top of the front - right for a dishwasher, wrong
+# for a housing at BOTH ends.
+
+check('the US housing starts on the plinth and stops at the appliance cutout') do
+  u = Registry.lookup('CR9601')
+  raise Generator.niche_bottom_mm(u).to_s unless
+    Generator.niche_bottom_mm(u) == Standards::PLINTH_H_MM
+  # 84 in. Measured, not converted from anything of ours.
+  raise Generator.niche_top_mm(u).to_s unless Generator.niche_top_mm(u) == 2133.6
+  raise Generator.niche_height_mm(u).to_s unless Generator.niche_height_mm(u) == 2033.6
+end
+
+check('the 66,4 leftover is now a fact of the model, not only of a note') do
+  u = Registry.lookup('CR9601')
+  front_top = Generator.base_z_mm(u) + u['height_mm']
+  raise front_top.to_s unless front_top == 2200
+  leftover = front_top - Generator.niche_top_mm(u)
+  raise leftover.to_s unless (leftover - 66.4).abs < 0.001
+  # The same number the registry already wrote down before anything drew it.
+  notes = Registry.data['families']['USA Tall H.210']['representation_notes'].join(' ')
+  raise 'the note and the geometry must agree' unless notes.include?('66,4')
+end
+
+check('the old rule survives untouched for a family that states no housing') do
+  u = Registry.lookup('V80730')
+  raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 0
+  raise Generator.niche_height_mm(u).to_s unless
+    Generator.niche_height_mm(u) == Standards::PLINTH_H_MM + 780
+end
+
+check('the plinth height is not copied into the registry') do
+  section = File.read(File.expand_path('../registry/cesar/usa_tall_h210.json', __dir__))
+  niche = Registry.data['families']['USA Tall H.210']['appliance_niche']
+  raise 'the bottom must be named, not numbered' unless niche['bottom'] == 'plinth_top'
+  raise 'a second copy of the plinth height has appeared' if niche.key?('bottom_mm')
+  raise 'the section file must point at the measured table' unless
+    section.include?('us_appliance_housing_cutouts')
+end
+
+check('the housing says on itself that it came from the appliance, not from Cesar') do
+  n = Generator.niche_attributes_for(Registry.lookup('CR9601'))
+  Contract.validate!(n)
+  raise n['notes'] unless n['notes'].include?('INDICATIVE')
+  raise n['notes'] unless n['notes'].include?('2133.6')
+  raise n['height_mm'].to_s unless n['height_mm'] == 2033.6
+  # and a dishwasher still says nothing of the kind
+  d = Generator.niche_attributes_for(Registry.lookup('V80730'))
+  raise d['notes'] if d['notes'].include?('Housing drawn')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

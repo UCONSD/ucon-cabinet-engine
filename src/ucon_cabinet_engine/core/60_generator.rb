@@ -279,7 +279,7 @@ module UCON
             # are selling. See Geometry.wire_box.
             Geometry.wire_box(
               niche_def.entities, 'APPLIANCE_NICHE',
-              0, 0, 0,
+              0, 0, niche_bottom_mm(unit),
               niche_attrs['width_mm'], niche_attrs['depth_mm'], niche_attrs['height_mm'],
               Geometry.material(model, 'UCON_Placeholder_Gray', [138, 138, 138])
             )
@@ -534,8 +534,45 @@ module UCON
       # cabinet standing where the fridge is. The rule that replaces it gives
       # the SAME 880 for the dishwasher, because a dishwasher panel really does
       # run from the plinth to the worktop underside.
+      # A niche has a BOTTOM as well as a top, and until 0.43 it had neither of
+      # its own. Floor to the top of the panel is right for a dishwasher: the
+      # machine stands on the floor and the panel covers its opening. For a US
+      # fridge housing it was wrong at both ends - the phantom came out from
+      # under the plinth, and it ran 66,4 past the real cutout at the top.
+      #
+      # Both ends now come from the registry when the family states them, and
+      # the old rule stands unchanged for every family that does not.
+      def niche_bottom_mm(unit)
+        niche = unit['appliance_niche']
+        return 0 unless niche
+        # The plinth height is a standard and stays one. A second copy of 100
+        # sitting in a JSON file is a second thing to change.
+        return Standards::PLINTH_H_MM if niche['bottom'] == 'plinth_top'
+
+        niche['bottom_mm'].to_f
+      end
+
+      def niche_top_mm(unit)
+        niche = unit['appliance_niche']
+        return base_z_mm(unit) + unit['height_mm'] unless niche
+
+        niche['top_mm'].to_f
+      end
+
       def niche_height_mm(unit)
-        base_z_mm(unit) + unit['height_mm']
+        niche_top_mm(unit) - niche_bottom_mm(unit)
+      end
+
+      # Said on the object, because both numbers come from outside Cesar and
+      # nobody reading the model would otherwise know where to argue with them.
+      def niche_span_note(unit)
+        return '' unless unit['appliance_niche']
+
+        "Housing drawn #{niche_bottom_mm(unit).round(1)} to " \
+        "#{niche_top_mm(unit).round(1)} above the floor - the appliance maker's " \
+        'required cutout, not a Cesar dimension, so INDICATIVE like the ' \
+        'aperture. The front runs past it at the top, and that leftover is the ' \
+        'closing panel inside the housing - not this article. '
       end
 
       def niche_attributes_for(unit, depth_mm = nil, inherited = false)
@@ -556,8 +593,10 @@ module UCON
                               'occupies in the run, not the machine. Width from the Cesar door ' \
                               "code #{unit['code']}; height = floor to the top of the panel " \
                               '(the appliance stands on the floor and the panel covers its ' \
-                              'opening, so the two share a top); ' \
+                              'opening, so the two share a top - unless the family states a ' \
+                              'housing of its own); ' \
                               "depth #{inherited ? 'inherited from the neighbouring unit' : 'defaulted to d.62 - no neighbour was selected'}. " \
+                              "#{niche_span_note(unit)}" \
                               'Never an order line: the machine is not a Cesar object. The ' \
                               "page's 'cutout for plinth 40' is recorded as unresolved and is not drawn."
         }

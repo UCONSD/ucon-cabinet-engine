@@ -10,6 +10,15 @@
   "data": {
     "height_mm": 2100,
     "plinth_continues": true,
+    "appliance_niche": {
+      "bottom": "plinth_top",
+      "top_mm": 2133.6,
+      "trust": "indicative",
+      "source": "appliance",
+      "bottom_note": "The housing starts at the TOP of the plinth, not on the floor (Andriy, 2026-08-22, off the model: the phantom was coming out from under the plinth). The number itself is not stored here - it is Standards::PLINTH_H_MM, and a second copy of 100 would be a second thing to change.",
+      "top_note": "84 in = 2133,6. Both Thermador panel-ready wine columns print 'Required Cutout Size (HxWxD): 84\" x 18\" x 25\"' and '84\" x 24\" x 25\"' - the same 84 whatever the width, which is what makes it a housing standard rather than a model dimension. Measured table: _manifest.json external_specs.us_appliance_housing_cutouts.",
+      "why_it_matters": "Our front runs 100 to 2200 and the housing runs 100 to 2133,6, so 66,4 is left over ABOVE the appliance and INSIDE the housing. That gap is already written up in representation_notes as the thing that will need a custom closing panel - drawing the niche to the real cutout is what makes it visible instead of merely recorded."
+    },
     "plinth_note": "OURS, NOT THE CATALOG'S. The plinth belongs to the RUN, not to this article - nothing on printed p.418 mentions one. We draw it under this panel so the plinth line does not BREAK on the drawing wherever a fridge stands in the run. Decided by Andriy 2026-08-21: draw exactly the plinth a base cabinet gets, so it is not lost on the sheet. The dishwasher door on printed p.47 deliberately gets NONE - the plinth in front of that machine really is cut away - which is why this is a per-family flag and not a rule about appliance panels.",
     "representation_notes": [
       "WIDTH IS DRAWN NOMINAL, NEVER NET. A 30-inch panel is drawn 762 wide, although the panel actually supplied is a little narrower - and how much narrower is set by the APPLIANCE'S OWN SPECIFICATION, not by Cesar. This is the rule already in force for cabinet fronts: a 600 base unit is drawn with a 600 door and no reveal deducted. We are not producing manufacturing drawings. A run of nominal fronts reads cleanly in LayOut; a run of net fronts with reveals drawn would read as noise AND still be wrong, because the reveal is not ours to set. Confirmed by Andriy 2026-08-21.",

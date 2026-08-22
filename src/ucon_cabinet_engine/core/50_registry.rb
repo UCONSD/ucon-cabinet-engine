@@ -100,6 +100,10 @@ module UCON
             # floor, and a panel gets one only where the drawing would
             # otherwise show a break. Absent means no.
             'plinth_continues'   => family['plinth_continues'] ? true : false,
+            # Where the client's machine really begins and ends, when the
+            # family knows. Absent means the old rule: floor to the top of the
+            # panel, which is right for a dishwasher and wrong for a housing.
+            'appliance_niche'    => family['appliance_niche'],
             # Which door heights this FAMILY offers, or nil when it offers no
             # such choice. The 78/75 pair belongs to the base pages; a wall
             # unit 360 tall has no version to pick.

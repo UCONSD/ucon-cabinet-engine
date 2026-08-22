@@ -598,6 +598,18 @@
       "the_leftover": "Our front runs 100 to 2200 and the housing 100 to 2133,6, so 66,4 mm is left over above the appliance and inside the housing. That is the closing panel already described in usa_tall_h210.json representation_notes - drawing the niche to the real cutout is what makes it visible instead of merely recorded.",
       "depth_not_wired": "25 in = 635 is recorded and deliberately not used: the niche still inherits the depth of the run it is placed into, which is a drawing decision and a better one. Wire this only if a real kitchen shows the two disagreeing."
     },
+    "us_appliance_housing_cutouts": {
+      "provenance": "Thermador Freedom Collection specification sheets 12/25, supplied by Andriy 2026-08-22, the same two documents as the aperture table. NOT Cesar facts.",
+      "why_it_is_here": "The niche we draw behind an appliance front is the space the machine needs, and the machine's maker is the only one who states it. Cesar states the FRONT and nothing about the opening behind it.",
+      "rows": [
+        { "model": "Thermador T18IW100SP", "required_cutout_in": "84 x 18 x 25", "required_cutout_mm": "2133.6 x 457 x 635" },
+        { "model": "Thermador T24IW100SP", "required_cutout_in": "84 x 24 x 25", "required_cutout_mm": "2133.6 x 610 x 635" }
+      ],
+      "the_constant": "84 in whatever the width - which is what makes it a housing standard and not a model dimension. The appliance itself is adjustable 83 9/16 to 85 1/2 in, so 84 is the planning figure and the machine takes up the slack.",
+      "how_it_is_used": "registry/cesar/usa_tall_h210.json data.appliance_niche takes top_mm 2133.6 from here and starts the housing at the top of the plinth. The bottom is NOT stored there - it is Standards::PLINTH_H_MM, and a second copy of 100 would be a second thing to change.",
+      "the_leftover": "Our front runs 100 to 2200 and the housing 100 to 2133,6, so 66,4 mm is left over above the appliance and inside the housing. That is the closing panel already described in usa_tall_h210.json representation_notes - drawing the niche to the real cutout is what makes it visible instead of merely recorded.",
+      "depth_not_wired": "25 in = 635 is recorded and deliberately not used: the niche still inherits the depth of the run it is placed into, which is a drawing decision and a better one. Wire this only if a real kitchen shows the two disagreeing."
+    },
     "wine_cooler_panel_apertures": {
       "provenance": "Three manufacturer specification sheets supplied by Andriy 2026-08-22. NOT Cesar facts - kept outside the four-level trust model, exactly like the LEGRABOX table. Cesar dimensions the aperture nowhere; these are what the appliance makers publish.",
       "why_it_is_here": "A panel-ready wine cooler needs a hole in its front, and the hole belongs to the MACHINE, not to the article. This table is the seed of the appliance module: when appliances are modelled, a wine cooler brings its three rails with it and the front stops guessing. Until then registry/cesar/usa_tall_h210.json takes a default from here and marks it indicative.",
