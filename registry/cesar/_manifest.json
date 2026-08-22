@@ -405,6 +405,7 @@
     "gola_profiles": [
       {
         "code": "GOL001",
+        "um": "ML",
         "name": "L-shaped grip recess - undercounter horizontal",
         "source_ref": "printed p.615 / PDF 617",
         "position": "undercounter",
@@ -412,6 +413,7 @@
       },
       {
         "code": "GOL002",
+        "um": "ML",
         "name": "L-shaped grip recess - intermediate horizontal",
         "source_ref": "printed p.615 / PDF 617",
         "position": "intermediate",
@@ -419,6 +421,7 @@
       },
       {
         "code": "GOL005",
+        "um": "ML",
         "name": "Straight grip recess - undercounter horizontal",
         "source_ref": "printed p.620 / PDF 622",
         "position": "undercounter",
@@ -426,6 +429,7 @@
       },
       {
         "code": "GOL006",
+        "um": "ML",
         "name": "Straight grip recess - intermediate horizontal",
         "source_ref": "printed p.620 / PDF 622",
         "position": "intermediate",
@@ -435,41 +439,49 @@
     "handles": [
       {
         "code": "M00001",
+        "um": "PZ",
         "name": "Eero",
         "source_ref": "printed p.584"
       },
       {
         "code": "M00003",
+        "um": "PZ",
         "name": "Filo",
         "source_ref": "printed p.590"
       },
       {
         "code": "M00004",
+        "um": "PZ",
         "name": "Line",
         "source_ref": "printed p.600"
       },
       {
         "code": "M00005",
+        "um": "PZ",
         "name": "Ouverture",
         "source_ref": "printed p.592"
       },
       {
         "code": "M00007",
+        "um": "PZ",
         "name": "Knurled Pipe",
         "source_ref": "printed p.594"
       },
       {
         "code": "M00008",
+        "um": "PZ",
         "name": "Shell",
         "source_ref": "printed p.588"
       },
       {
         "code": "M00009",
+        "um": "PZ",
         "name": "Titanium",
         "source_ref": "printed p.597"
       },
       {
         "code": "M00014",
+        "um": "PZ",
         "name": "Lume",
         "source_ref": "printed p.587 / PDF 589",
         "note": "ONE CODE, TWO SIZES: printed p.587 prices A (W.5) and B (W.20) on the same article M00014, and position tables decide which size goes where - separately for base units and for tall units. So the size is NOT in the code and would have to travel as an order variant, the same shape as the door hand. Not modelled either way: no handle is drawn.",
@@ -505,6 +517,7 @@
       "code": null,
       "note": "Device exists (printed p.613) but no article code found in source; P3 - needs Elda confirmation. Selecting push_to_open leaves hardware_ref empty with hardware_source=factory."
     },
+    "um_note": "UNIT OF MEASURE, added 2026-08-22 for the exporter. The factory estimate uses three: PZ (piece), ML (linear metre), MQ (square metre), and a quantity of 1 means one piece, one metre's worth or one square metre's worth depending on the row - so an exporter that assumes 1 = one thing is wrong on a large part of the sheet. THE TWO ENTRIES HERE DO NOT HAVE THE SAME AUTHORITY. ML on the gola profiles is CONFIRMED: estimate 2026/30829 prices GOL001 and GOL002 per linear metre, and factory output outranks the price list. PZ on the handles is OUR READING at CONTROL: the estimate's UM table names PZ for units, fronts, tops and plinth and does not mention handles at all; a handle is plainly a piece, but nobody has shown us the row. The estimate now going to Elda will show both directly. QUANTITY IS A SEPARATE QUESTION and is deliberately not answered here: an ML line is quantified by the RUN, not by the cabinet, and a PZ handle line by how many fronts the unit has - neither is a property of the article, so the exporter emits those quantities as nil rather than inventing a 1.",
     "gola_note": "position=undercounter profiles (GOL001 L-shaped / GOL005 straight) are the valid choice for a base-unit front under the worktop; intermediate profiles join stacked front zones and are NOT offered for single-door base units. Source: 'Do not add 57 to carcass height' - the profile lives in the 30 mm gola zone, the carcass does not grow. Cross-restriction: handle Lume M00014 - held as DATA in hardware.handles M00014.requires, with its page and its scope. It is deliberately not restated here: a restriction written in two places is a restriction that goes stale in one of them.",
     "gola_profile_body": {
       "upper_dim_mm": 30,

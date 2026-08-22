@@ -18,6 +18,9 @@ require_relative '../src/ucon_cabinet_engine/core/22_placement'
 # one core file that genuinely needs SketchUp and is deliberately not loaded.
 require_relative '../src/ucon_cabinet_engine/core/40_unit_b80601'
 require_relative '../src/ucon_cabinet_engine/core/50_registry'
+# 85_export is the order schedule and is PURE - no SketchUp at all, which is
+# what lets it be checked against a real factory estimate headlessly.
+require_relative '../src/ucon_cabinet_engine/core/85_export'
 require_relative '../src/ucon_cabinet_engine/core/60_generator'
 # 70_symbols touches the SketchUp API only when drawing; the geometry rules
 # themselves are pure and are checked here.
@@ -205,6 +208,7 @@ end
 
 puts "\nregistry + generator (M1.4 integration)"
 Registry  = UCON::CabinetEngine::Registry
+Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
 check('registry loads and holds 180 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall + 14 tall)') do
@@ -2916,6 +2920,135 @@ check('SENTINEL: the picker still offers Lume, and the reason is recorded') do
   scope = handles.find { |h| h['code'] == 'M00014' }['requires']['scope']
   raise 'the scope must say it is composition-level' unless scope.include?('COMPOSITION')
   raise 'and must name what it waits on' unless scope.include?('M1.6')
+end
+
+
+puts "\nexporter level 1 - order rows, not a cut list (M1.10)"
+
+def export_attrs(code, extra = {})
+  Generator.attributes_for(Registry.lookup(code)).merge(extra)
+end
+
+check('85_export is PURE - the model walk lives outside it') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/85_export.rb', __dir__))
+  offenders = src.gsub(/^\s*#.*$/, '').scan(/\b(?:Sketchup|Geom|UI)\b/).uniq
+  raise "SketchUp leaked into the exporter: #{offenders.inspect}" unless offenders.empty?
+end
+
+check('a unit becomes one numbered PZ row carrying its dimensions') do
+  r = Export.rows([export_attrs('CR0631')]).first
+  raise r.inspect unless r['row'] == 1 && r['level'] == 0
+  raise r.inspect unless r['code'] == 'CR0631' && r['um'] == 'PZ' && r['qty'] == 1
+  raise r.inspect unless [r['l_mm'], r['h_mm'], r['p_mm']] == [600, 2100, 620]
+  raise r['description'].inspect unless r['description'].include?('Tall unit with door')
+  raise r.inspect unless r['status'] == 'PLANNING' && r['code_status'] == 'PRELIMINARY'
+end
+
+check('a corner unit is dimensioned by its footprint, not by a width') do
+  r = Export.rows([export_attrs('AU110D')]).first
+  raise r.inspect unless r['corner'] == '1150x700'
+  raise 'a corner has no single width to print' unless r['l_mm'].nil?
+end
+
+check('THE HAND BECOMES A VARIANT LINE, because that is what an order carries') do
+  # The object keeps hinge_side as a first-class key - the symbol renderer
+  # reads it. The ORDER has no such column: estimate 2026/30829 ships one code
+  # with OPENING DIRECTION: Left / Right underneath it. Translating between the
+  # two models is the exporter's job, and this is the first case of it.
+  rows = Export.rows([export_attrs('CR0631', 'hinge_side' => 'rh')])
+  hand = rows.find { |r| r['description'].to_s.start_with?('OPENING DIRECTION') }
+  raise 'no hand line emitted' unless hand
+  raise hand['description'].inspect unless hand['description'] == 'OPENING DIRECTION: Right'
+  raise 'it hangs under the unit row' unless hand['level'] == 1 && hand['row'].nil?
+  raise 'a variant line orders no article' unless hand['code'].nil?
+  # And lh must not silently become the same thing.
+  lh = Export.rows([export_attrs('CR0631', 'hinge_side' => 'lh')])
+             .find { |r| r['description'].to_s.start_with?('OPENING DIRECTION') }
+  raise lh['description'].inspect unless lh['description'] == 'OPENING DIRECTION: Left'
+end
+
+check('the 78/75 door version reaches the order NOWHERE') do
+  # It is a drawing axis. A base page prints both heights over ONE code table,
+  # and no order line distinguishes them.
+  gola = export_attrs('B80601').merge(
+    Panel.attributes_patch(Registry.lookup('B80601'),
+                           'door_version' => '75', 'hardware_ref' => 'GOL001'))
+  text = Export.csv(Export.rows([gola]))
+  raise 'a door version leaked into the order' if text =~ /\b78\b|\bdoor_version\b/
+  raise 'front_height_mm is not an order column' if Export::COLUMNS.include?('front_height_mm')
+end
+
+check('a gola front orders its profile, in ML, with the quantity left OPEN') do
+  gola = export_attrs('B80601').merge(
+    Panel.attributes_patch(Registry.lookup('B80601'),
+                           'door_version' => '75', 'hardware_ref' => 'GOL001'))
+  row = Export.rows([gola]).find { |r| r['code'] == 'GOL001' }
+  raise 'the profile must be an order line' unless row
+  raise row['um'].inspect unless row['um'] == 'ML'
+  # NOT 1. A linear-metre line is quantified by the run it travels along,
+  # across joints between units, and one object cannot know that.
+  raise 'quantity must not be invented' unless row['qty'].nil?
+  raise row['note'].inspect unless row['note'].include?('run')
+end
+
+check('a factory handle is PZ, and its count is honestly unknown too') do
+  h = export_attrs('B80601').merge(
+    Panel.attributes_patch(Registry.lookup('B80601'),
+                           'door_version' => '78', 'opening_method' => 'handle',
+                           'hardware_mode' => 'factory', 'hardware_ref' => 'M00001'))
+  row = Export.rows([h]).find { |r| r['code'] == 'M00001' }
+  raise row.inspect unless row['um'] == 'PZ'
+  raise 'one per front is a guess until an estimate shows it' unless row['qty'].nil?
+end
+
+check('companions become child rows carrying their own qty and um') do
+  rows = Export.rows([export_attrs('V80730')])
+  kids = rows.select { |r| r['level'] == 1 && r['code'] }
+  raise kids.map { |k| k['code'] }.inspect unless
+    kids.map { |k| k['code'] } == %w[995946 GBBF01]
+  raise 'a child row carries no Riga number' unless kids.all? { |k| k['row'].nil? }
+  raise kids.first.inspect unless kids.first['um'] == 'PZ' && kids.first['qty'] == 1
+  raise 'the note should say why the line is there' unless
+    kids.first['note'].include?('implied')
+end
+
+check('a variant on a COMPANION nests one level deeper') do
+  a = export_attrs('CR0631').merge('companion_refs' => [
+    { 'code' => '996PL6', 'qty' => 1, 'um' => 'PZ', 'origin' => 'chosen',
+      'variants' => [{ 'key' => 'FINISH', 'value' => 'Stainless steel' }] }
+  ])
+  rows = Export.rows([a])
+  kit = rows.find { |r| r['code'] == '996PL6' }
+  fin = rows.find { |r| r['description'] == 'FINISH: Stainless steel' }
+  raise 'the kit must be a child of the unit' unless kit['level'] == 1
+  raise 'its finish must be a child of the KIT' unless fin && fin['level'] == 2
+  raise 'a chosen line must say so' unless kit['note'].include?('chosen')
+end
+
+check('an unresolved companion is SHOWN, not swallowed') do
+  a = export_attrs('CR0631').merge('companion_refs' => [
+    { 'code' => nil, 'qty' => 1, 'um' => 'PZ', 'origin' => 'chosen' }
+  ])
+  row = Export.rows([a]).find { |r| r['level'] == 1 }
+  raise 'the row must still appear' unless row
+  raise row['description'].inspect unless row['description'].to_s.include?('UNRESOLVED')
+end
+
+check('the schedule carries no commercial column, and CSV quotes what it must') do
+  bad = Export::COLUMNS.select { |c| Contract::COMMERCIAL_MARKERS.any? { |m| c.include?(m) } }
+  raise bad.inspect unless bad.empty?
+  text = Export.csv(Export.rows([export_attrs('B80601')]))
+  head = text.lines.first.chomp
+  raise head unless head == Export::COLUMNS.join(',')
+  # The description holds commas; a naive join would shift every later column.
+  raise 'a comma-bearing field must be quoted' unless text.include?('"Base unit with door - 1 rh or lh door, 1 shelf"')
+end
+
+check('numbering is per OBJECT, and children never take a number') do
+  rows = Export.rows([export_attrs('B80601'), export_attrs('V80730')])
+  numbered = rows.select { |r| r['row'] }
+  raise numbered.map { |r| r['row'] }.inspect unless numbered.map { |r| r['row'] } == [1, 2]
+  raise 'every numbered row is a top-level one' unless numbered.all? { |r| r['level'] == 0 }
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
