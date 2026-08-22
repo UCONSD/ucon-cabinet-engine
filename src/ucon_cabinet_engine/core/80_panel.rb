@@ -183,13 +183,22 @@ module UCON
         end
       end
 
-      def push_selection
-        return unless @dialog&.visible?
-        inst = selected_unit_instance
+      # EVERYTHING the dialog is handed, built from the selected unit. PURE -
+      # no SketchUp - so the suite can check what the dialog actually receives
+      # instead of what a helper would have returned had it been asked properly.
+      #
+      # That distinction is the whole reason this method exists. push_selection
+      # used to call gola_options with NO unit, because `unit` was scoped inside
+      # the branch above the call. A gola drawer unit was therefore offered a
+      # single undercounter profile instead of the undercounter+intermediate
+      # PAIR - and the order silently lost the profile that joins its stacked
+      # front zones, which is exactly what pairing them was for. The suite was
+      # green throughout: its check called gola_options(unit) directly and never
+      # went through the caller. A pure layer being right proves nothing about
+      # the thing that calls it.
+      def selection_state(unit, attrs)
         state =
-          if inst
-            attrs = Contract.read(inst.definition)
-            unit  = Registry.lookup(attrs['code']) rescue nil
+          if attrs
             { 'attrs' => attrs, 'handed' => unit && unit['handed'],
               'desc' => unit && unit['description'],
               'door_versions' => unit && unit['door_versions'] }
@@ -197,9 +206,20 @@ module UCON
             {}
           end
         hw = Registry.data['hardware'] || {}
-        state['gola_profiles'] = gola_options
+        state['gola_profiles'] = gola_options(unit)
         state['handles']       = hw['handles'] || []
-        @dialog.execute_script("render(#{state.to_json})")
+        state
+      end
+
+      # SketchUp glue only: find the selection, read it, hand it over. Any rule
+      # that appears here instead of in selection_state is a rule the headless
+      # suite cannot see.
+      def push_selection
+        return unless @dialog&.visible?
+        inst  = selected_unit_instance
+        attrs = inst && Contract.read(inst.definition)
+        unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
+        @dialog.execute_script("render(#{selection_state(unit, attrs).to_json})")
       end
 
       def apply(payload)

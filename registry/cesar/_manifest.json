@@ -470,8 +470,15 @@
       },
       {
         "code": "M00014",
-        "name": "Lume - with straight grip recess system only",
-        "source_ref": "printed p.587"
+        "name": "Lume",
+        "source_ref": "printed p.587 / PDF 589",
+        "note": "ONE CODE, TWO SIZES: printed p.587 prices A (W.5) and B (W.20) on the same article M00014, and position tables decide which size goes where - separately for base units and for tall units. So the size is NOT in the code and would have to travel as an order variant, the same shape as the door hand. Not modelled either way: no handle is drawn.",
+        "requires": {
+          "gola_system": "straight",
+          "verbatim": "With straight grip recess system only",
+          "source_ref": "printed p.587 / PDF 589",
+          "scope": "COMPOSITION, NOT UNIT - and this is why no filter was built. The grip system is chosen once for the whole kitchen: estimate 2026/30829 sets it in the header ('L-Shaped' grip horizontal in Matt Aluminium). So whether Lume may be offered is a property of the PROJECT, not of the selected cabinet, and a per-unit filter would be a rule generalising past its evidence. Even the tempting case - a family that declares no gola version at all, like Tall H.210 - is not decided by the page, which never says a handle unit cannot sit in a straight-grip composition. This waits on M1.6 project defaults, which is where the composition axes live. Recorded as DATA so the filter has something to read the day M1.6 lands; until then the picker offers Lume like every other handle, and that gap is deliberate and pinned by a test."
+        }
       }
     ],
     "handles_excluded": [
@@ -484,13 +491,13 @@
       {
         "code": "M00015",
         "name": "Oi / Cloe",
-        "reason": "Extract shows the same code on two different handles - conflict, verify before offering",
+        "reason": "Extract shows the same code on two different handles - conflict, verify before offering. The printed p.577 index names p.612 as 'Additional handles', so p.612 is the page to read to resolve it.",
         "source_ref": "printed p.578 / p.612"
       },
       {
         "code": "M00016",
         "name": "Accento / Barchetta",
-        "reason": "Same-code conflict in extract - verify before offering",
+        "reason": "Same-code conflict in extract - verify before offering. As with M00015, the printed p.577 index names p.612 as 'Additional handles' - read that page to resolve it.",
         "source_ref": "printed p.581 / p.612"
       }
     ],
@@ -498,7 +505,7 @@
       "code": null,
       "note": "Device exists (printed p.613) but no article code found in source; P3 - needs Elda confirmation. Selecting push_to_open leaves hardware_ref empty with hardware_source=factory."
     },
-    "gola_note": "position=undercounter profiles (GOL001 L-shaped / GOL005 straight) are the valid choice for a base-unit front under the worktop; intermediate profiles join stacked front zones and are NOT offered for single-door base units. Source: 'Do not add 57 to carcass height' - the profile lives in the 30 mm gola zone, the carcass does not grow. Cross-restriction: handle Lume M00014 pairs with the straight system only.",
+    "gola_note": "position=undercounter profiles (GOL001 L-shaped / GOL005 straight) are the valid choice for a base-unit front under the worktop; intermediate profiles join stacked front zones and are NOT offered for single-door base units. Source: 'Do not add 57 to carcass height' - the profile lives in the 30 mm gola zone, the carcass does not grow. Cross-restriction: handle Lume M00014 - held as DATA in hardware.handles M00014.requires, with its page and its scope. It is deliberately not restated here: a restriction written in two places is a restriction that goes stale in one of them.",
     "gola_profile_body": {
       "upper_dim_mm": 30,
       "zone_height_mm": 57,

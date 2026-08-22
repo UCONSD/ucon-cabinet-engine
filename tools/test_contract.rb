@@ -2813,5 +2813,110 @@ check('the contract implements the document that outranks it') do
   raise Contract::SCHEMA_VERSION unless Contract::SCHEMA_VERSION == '2'
 end
 
+
+puts "\nwhat the DIALOG is handed (0.46.0 - the pairing that never arrived)"
+
+check('a gola drawer unit is handed profile PAIRS, through the real path') do
+  # The regression, found 2026-08-22 off a screenshot: push_selection called
+  # gola_options with NO unit, because `unit` was scoped inside the branch
+  # above the call. So the pairing was computed correctly, tested directly, and
+  # never reached the dialog - and the order lost the intermediate profile that
+  # joins a drawer unit's stacked front zones, which is the one thing pairing
+  # them was for. This checks the STATE the dialog receives, not the helper it
+  # is built from.
+  drawer = Registry.lookup('B81253')
+  codes  = Panel.selection_state(drawer, Generator.attributes_for(drawer))['gola_profiles']
+                .map { |r| r['code'] }
+  raise codes.inspect unless codes == %w[GOL001+GOL002 GOL005+GOL006]
+end
+
+check('and a single-door unit is still handed single profiles') do
+  door  = Registry.lookup('B80601')
+  codes = Panel.selection_state(door, Generator.attributes_for(door))['gola_profiles']
+               .map { |r| r['code'] }
+  raise codes.inspect unless codes == %w[GOL001 GOL005]
+end
+
+check('the state carries the unit facts the dialog renders') do
+  u  = Registry.lookup('CR0631')
+  st = Panel.selection_state(u, Generator.attributes_for(u))
+  raise 'handed must reach the dialog' unless st['handed'] == true
+  # A family that declares no gola version must offer no door version, and the
+  # tall chapter is the first family where that is true of a CABINET.
+  raise 'no door version may be offered here' unless st['door_versions'].nil?
+  raise st['desc'].inspect unless st['desc'].include?('Tall unit with door')
+end
+
+check('nothing selected still yields a renderable state') do
+  st = Panel.selection_state(nil, nil)
+  raise 'must not invent an attrs block' if st.key?('attrs')
+  raise 'the dialog still needs its lists' unless st['gola_profiles'] && st['handles']
+end
+
+check('push_selection is glue, and selection_state stays pure') do
+  src  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  body = src[/def push_selection.*?\n      end\n/m]
+  raise 'push_selection not found' unless body
+  raise 'the state must be built by selection_state' unless body.include?('selection_state(')
+  raise 'no option list may be computed in the glue again' if body.include?('gola_options')
+  raise 'nor the hardware table' if body.include?("Registry.data['hardware']")
+
+  state = src[/def selection_state.*?\n      end\n/m]
+  raise 'selection_state not found' unless state
+  offenders = state.scan(/\b(?:Sketchup|Geom|UI|@dialog)\b/).uniq
+  raise "selection_state must stay pure: #{offenders.inspect}" unless offenders.empty?
+end
+
+
+puts "\nhandle restrictions: data, not prose (printed p.587)"
+
+def handles
+  Registry.data['hardware']['handles'] || []
+end
+
+check('Lume carries its restriction as DATA with a page, not inside its name') do
+  lume = handles.find { |h| h['code'] == 'M00014' }
+  raise 'M00014 is missing' unless lume
+  raise lume['name'].inspect unless lume['name'] == 'Lume'
+  r = lume['requires']
+  raise 'the restriction must be structured' unless r
+  raise r['gola_system'].inspect unless r['gola_system'] == 'straight'
+  raise 'the page must travel with it' unless r['source_ref'].to_s.include?('p.587')
+  raise 'the wording must be preserved verbatim' unless
+    r['verbatim'] == 'With straight grip recess system only'
+end
+
+check('NO handle smuggles a restriction inside its display name') do
+  # The name is what the dropdown shows. A rule written there is a rule no code
+  # can read and no test can check - it was "Lume - with straight grip recess
+  # system only" until printed p.587 was actually opened.
+  bad = handles.select { |h| h['name'] =~ /\bonly\b|recess|system/i }
+  raise bad.map { |h| h['code'] }.inspect unless bad.empty?
+  raise 'every handle needs a page' unless handles.all? { |h| h['source_ref'].to_s =~ /p\.\d+/ }
+end
+
+check('the restriction lives in ONE place') do
+  note = Registry.data['hardware']['gola_note'].to_s
+  raise 'gola_note must not restate the rule' if note =~ /straight system only/
+  raise 'gola_note must point at the data instead' unless note.include?('M00014.requires')
+end
+
+check('SENTINEL: the picker still offers Lume, and the reason is recorded') do
+  # A DELIBERATE gap, not an oversight. The restriction is COMPOSITION-scoped -
+  # one grip system per kitchen, set once in the estimate header - so a
+  # per-unit filter would be a rule generalising past its evidence (rule 4).
+  # Not even the tempting case decides it: Tall H.210 declares no gola version
+  # at all, and printed p.587 still never says a handle unit cannot stand in a
+  # straight-grip composition. If someone adds a per-unit filter anyway, this
+  # fails and the scope note explains why that is the wrong shape.
+  u  = Registry.lookup('CR0631')
+  st = Panel.selection_state(u, Generator.attributes_for(u))
+  raise 'Lume is expected in the list until M1.6 lands' unless
+    st['handles'].map { |h| h['code'] }.include?('M00014')
+  scope = handles.find { |h| h['code'] == 'M00014' }['requires']['scope']
+  raise 'the scope must say it is composition-level' unless scope.include?('COMPOSITION')
+  raise 'and must name what it waits on' unless scope.include?('M1.6')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
