@@ -2062,5 +2062,118 @@ check('RECONCILIATION R2: the invented prefixes UI / UH are nowhere in the regis
   raise 'B71200 must be present exactly once' unless Registry.codes.count('B71200') == 1
 end
 
+puts "\nthe wine cooler aperture (drawn, and drawn as a guess)"
+# Cesar never dimensions this hole. The rails come from appliance specs, which
+# makes them the first numbers in the registry that no Cesar page backs - so
+# every guard below is about keeping that visible rather than about the shape.
+
+CUTOUT_TYPES = Registry.data['families'].flat_map do |fam_name, fam|
+  (fam['unit_types'] || {}).map { |k, t| [fam_name, k, t] }
+end.select { |_f, _k, t| (t['front_layout'] || {})['cutout'] }
+
+check('exactly one unit type in the registry carries a cutout, and it is the wine cooler') do
+  keys = CUTOUT_TYPES.map { |_f, k, _t| k }
+  raise keys.inspect unless keys == ['usa_wine_cooler_door']
+end
+
+check('every cutout is marked indicative and sourced from the appliance') do
+  CUTOUT_TYPES.each do |fam, key, type|
+    c = type['front_layout']['cutout']
+    raise "#{fam}/#{key} trust"  unless c['trust']  == 'indicative'
+    raise "#{fam}/#{key} source" unless c['source'] == 'appliance'
+  end
+end
+
+check('the aperture is DERIVED - no width row may store one') do
+  CUTOUT_TYPES.each do |_f, key, type|
+    c = type['front_layout']['cutout']
+    stored = c.keys.grep(/aperture/).reject { |k| k == 'aperture_note' }
+    raise "#{key} stores an aperture: #{stored.inspect}" unless stored.empty?
+    type['codes'].each do |row|
+      raise "#{row['code']} stores an aperture" if row.keys.any? { |k| k.include?('aperture') }
+    end
+  end
+end
+
+check('every wine cooler width leaves a positive aperture') do
+  %w[CR9401 CR9601 CR9701 CR9901].each do |code|
+    u = Registry.lookup(code)
+    slab = Generator.front_slabs(u).first
+    r = Generator.cutout_rails(u, slab)
+    raise "#{code}: no rails" unless r
+    w = slab[:w_mm] - r[:left] - r[:right]
+    h = slab[:h_mm] - r[:bottom] - r[:top]
+    raise "#{code}: #{w} x #{h}" unless w > 0 && h > 0
+  end
+end
+
+check('the plain fridge door gets no aperture - one suffix apart, and that is the difference') do
+  raise 'CR9400 must have no rails' if
+    Generator.cutout_rails(Registry.lookup('CR9400'),
+                           Generator.front_slabs(Registry.lookup('CR9400')).first)
+end
+
+check('a split front gets no aperture rather than a guessed one') do
+  u = Registry.lookup('CR9601')
+  split = { name: 'FRONT_1_OF_2', x_mm: 0, z_mm: 0, w_mm: u['width_mm'] / 2, h_mm: u['height_mm'] }
+  raise 'half a front must not take a hole' if Generator.cutout_rails(u, split)
+  raise 'the whole front still must' unless
+    Generator.cutout_rails(u, Generator.front_slabs(u).first)
+end
+
+check('no default rail is invented: each one is a value the measured table actually shows') do
+  table = Registry.data['external_specs']['wine_cooler_panel_apertures']['rows']
+  c = Registry.lookup('CR9601')['front_layout']['cutout']
+  sides   = table.map { |r| r['rail_side_mm'] }
+  tops    = table.map { |r| r['rail_top_mm'] }
+  bottoms = table.map { |r| r['rail_bottom_mm'] }
+  # side and top CONVERGE, so a default inside their range is defensible.
+  raise "side #{c['rail_side_mm']} outside #{sides.inspect}" unless
+    c['rail_side_mm'].between?(sides.min, sides.max)
+  raise "top #{c['rail_top_mm']} outside #{tops.inspect}" unless
+    c['rail_top_mm'].between?(tops.min, tops.max)
+  # the bottom does NOT converge, so a midpoint would be a number nobody makes.
+  # It must be one of the observed values, not an average of them.
+  raise "bottom #{c['rail_bottom_mm']} is not a measured value: #{bottoms.inspect}" unless
+    bottoms.include?(c['rail_bottom_mm'])
+end
+
+check('the measured table lives in the manifest and nowhere else') do
+  section = File.read(File.expand_path('../registry/cesar/usa_tall_h210.json', __dir__))
+  manifest = File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__))
+  # 1762 is the Miele panel height - a fact about a machine, not about a Cesar
+  # article. If it appears in the section file the table has been copied.
+  raise 'the appliance table has been copied into the section file' if section.include?('1762')
+  raise 'the appliance table is missing from the manifest' unless manifest.include?('1762')
+  raise 'the section file must point at the table' unless
+    section.include?('wine_cooler_panel_apertures')
+end
+
+check('the warning is spelled once and reaches both the outliner and the notes') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the label must be written out exactly once' unless
+    src.scan('(cutout: INDICATIVE)').length == 1
+  raise 'the label must be used, not merely declared' unless
+    src.scan('CUTOUT_LABEL').length >= 3
+  wine  = Generator.notes_for(Registry.lookup('CR9601'))
+  plain = Generator.notes_for(Registry.lookup('CR9600'))
+  raise wine  unless wine.include?('INDICATIVE')
+  raise plain if plain.include?('INDICATIVE')
+end
+
+check('one place turns a slab into geometry, and every caller goes through it') do
+  core = File.expand_path('../src/ucon_cabinet_engine/core', __dir__)
+  gen   = File.read(File.join(core, '60_generator.rb'))
+  panel = File.read(File.join(core, '80_panel.rb'))
+  # 1 definition + 2 calls in build, 1 call in the properties panel.
+  raise 'the generator must define it and use it twice' unless
+    gen.scan('draw_front_slab').length == 3
+  raise 'the properties panel must rebuild through it' unless
+    panel.scan('Generator.draw_front_slab').length == 1
+  # and must no longer keep its own copy of the box call
+  raise 'the properties panel still builds its own front slab' if
+    panel.include?('slab[:w_mm]')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

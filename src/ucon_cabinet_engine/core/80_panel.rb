@@ -232,7 +232,6 @@ module UCON
       end
 
       def rebuild_fronts(model, defn, unit, gola)
-        s = Standards
         # The 8x8 corner filler shares the door's height, so it is rebuilt with
         # the fronts, not left behind at the old one.
         doomed = defn.entities.grep(Sketchup::Group).select do |g|
@@ -240,15 +239,15 @@ module UCON
         end
         defn.entities.erase_entities(doomed) unless doomed.empty?
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
-        front_y   = Generator.front_y_mm
         # Where the fronts start is the generator's answer, not ours. Asking it
         # is the whole fix: this method used to add PLINTH_H_MM itself, so
         # re-applying a handle to a hanging unit rebuilt its front on the floor.
         z0 = Generator.base_z_mm(unit)
+        # HOW a slab becomes geometry is the generator's answer too. This used
+        # to be its own copy of the box call, which is how a rebuilt wine
+        # cooler front would have come back without its hole.
         effective_slabs(unit, gola).each do |slab|
-          Geometry.box(defn.entities, slab[:name],
-                       slab[:x_mm], front_y, z0 + slab[:z_mm],
-                       slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat)
+          Generator.draw_front_slab(defn.entities, slab, unit, z0, front_mat)
         end
 
         if unit['geometry_kind'] == 'corner'

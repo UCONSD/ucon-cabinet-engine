@@ -70,6 +70,10 @@ module UCON
       WASTED_TAG = 'UCON — Wasted space'
       FILLER_MM  = 80
 
+      # Said once, in the group name and in the notes, spelled the same both
+      # times so a search for it finds every place the claim is made.
+      CUTOUT_LABEL = '(cutout: INDICATIVE)'
+
       # Reach of the selected unit along its own +x, in millimetres, or nil.
       # A corner carries no width by contract, so its reach comes from the
       # registry: the node it occupies, read through the execution letter.
@@ -251,11 +255,7 @@ module UCON
             # the properties panel rebuilds it like any other front: choosing
             # door version 75 shortens the panel to 750 with no special case.
             front_slabs(unit).each do |slab|
-              Geometry.box(
-                e, slab[:name],
-                slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
-                slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat
-              )
+              draw_front_slab(e, slab, unit, z0, front_mat)
             end
             Contract.write!(definition, attributes_for(unit))
             Symbols.draw(model, definition, unit, nil)
@@ -318,13 +318,8 @@ module UCON
 
           Geometry.box(e, 'CARCASS', 0, 0, z0, w, d, h, carcass_mat)
 
-          front_y = front_y_mm
           front_slabs(unit).each do |slab|
-            Geometry.box(
-              e, slab[:name],
-              slab[:x_mm], front_y, z0 + slab[:z_mm],
-              slab[:w_mm], s::FRONT_T_MM, slab[:h_mm], front_mat
-            )
+            draw_front_slab(e, slab, unit, z0, front_mat)
           end
 
           Contract.write!(definition, attributes_for(unit))
@@ -388,6 +383,60 @@ module UCON
         else
           [{ name: 'FRONT', x_mm: 0, z_mm: 0, w_mm: w, h_mm: h }]
         end
+      end
+
+      # ONE PLACE THAT TURNS A SLAB INTO GEOMETRY. This loop stood written out
+      # three times - twice in build and once in the properties panel - and a
+      # front with a hole in it is exactly the change that gets made in two of
+      # the three. Same lesson as front_y_mm, learned the same way.
+      def draw_front_slab(entities, slab, unit, z0, material)
+        t     = Standards::FRONT_T_MM
+        rails = cutout_rails(unit, slab)
+        unless rails
+          return Geometry.box(
+            entities, slab[:name],
+            slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
+            slab[:w_mm], t, slab[:h_mm], material
+          )
+        end
+
+        # THE NAME CARRIES THE WARNING. Whoever opens the outliner is the
+        # person who can still catch this before it reaches a drawing, and the
+        # notes on the definition are one click further away than the tree.
+        Geometry.framed_slab(
+          entities, "#{slab[:name]} #{CUTOUT_LABEL}",
+          slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
+          slab[:w_mm], t, slab[:h_mm], rails, material
+        )
+      end
+
+      # THE APERTURE, OR NOTHING.
+      #
+      # The wine cooler front is a solid panel with a rectangular hole in it.
+      # Cesar never dimensions that hole - not on the unit page, not in the
+      # mechanisms chapter, not in Modifications - and prices it as a flat
+      # +50 % variant, which is a price for "this is the wine cooler front",
+      # not for a piece of machining of a given size. So the numbers cannot
+      # come from the catalog and come from the appliance instead.
+      #
+      # Three specifications (Miele KWT 6722 iS, Thermador T18IW100SP and
+      # T24IW100SP) agree closely on two of the three rails and not at all on
+      # the third; the registry records that, and this reads it. Nothing is
+      # computed here - see registry/cesar/_manifest.json appliance_apertures.
+      #
+      # It applies to a WHOLE front only. A slab that is one of several is a
+      # split front, and no aperture in this catalog crosses a joint, so a
+      # split gets no hole rather than a guessed one.
+      def cutout_rails(unit, slab)
+        cutout = (unit['front_layout'] || {})['cutout']
+        return nil unless cutout
+        return nil unless slab[:w_mm] == unit['width_mm']
+
+        side = cutout['rail_side_mm'].to_f
+        { left:   side,
+          right:  side,
+          bottom: cutout['rail_bottom_mm'].to_f,
+          top:    cutout['rail_top_mm'].to_f }
       end
 
       # Largest LEGRABOX nominal length that fits a carcass depth, from the
@@ -603,8 +652,20 @@ module UCON
             "Source confirms interior: #{interior.join(', ')} — deliberately not drawn (envelope-only representation)."
           end
         handed_note = unit['handed'] ? ' Handed unit: hinge_side is chosen per order and is not set by the generator.' : ''
+        # The aperture is the one thing on this object that no Cesar page
+        # states. Saying so on the object itself is the difference between a
+        # placeholder and a wrong drawing.
+        cutout_note =
+          if (unit['front_layout'] || {})['cutout']
+            " Aperture #{CUTOUT_LABEL}: the catalog never dimensions it. " \
+            'Rails are carried from appliance specifications and must be ' \
+            'checked against the actual machine before this leaves the office.'
+          else
+            ''
+          end
         "Generated from registry/cesar.json (#{unit['registry_status']}). " \
-        "#{interior_note}#{handed_note} Front drawn flush; 1.5 mm reveal recorded, not drawn."
+        "#{interior_note}#{handed_note} Front drawn flush; 1.5 mm reveal recorded, not drawn." \
+        "#{cutout_note}"
       end
     end
   end

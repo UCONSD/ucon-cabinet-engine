@@ -54,7 +54,24 @@
         "front_layout": {
           "kind": "single",
           "hand_shown": "elevation_only",
-          "note": "One full-height panel, 2100 tall, with a cutout the catalog does not dimension. Envelope-only: the cutout is recorded in notes and not drawn. Hand in the front elevation only, for the same reasons as the plain fridge door."
+          "note": "One full-height panel, 2100 tall, with a rectangular aperture through it. The catalog dimensions neither the aperture nor its position, so the rails below are carried from appliance specifications and the hole is drawn INDICATIVE - see cutout.trust. Hand in the front elevation only, for the same reasons as the plain fridge door.",
+          "cutout": {
+            "kind": "rectangular_aperture",
+            "trust": "indicative",
+            "source": "appliance",
+            "rail_side_mm": 80,
+            "rail_top_mm": 156,
+            "rail_bottom_mm": 243,
+            "centred_horizontally": true,
+            "aperture_note": "The aperture is DERIVED, never stored: width = panel width - 2 x rail_side, height = panel height - rail_top - rail_bottom. Every appliance maker dimensions the RAILS and lets the aperture follow, because the rails are what stay constant when the panel width changes. Storing the aperture instead would need a row per width and would disagree with itself the first time a width was added.",
+            "evidence": {
+              "measured_table": "_manifest.json external_specs.wine_cooler_panel_apertures - three manufacturer specifications, read 2026-08-22. The numbers live there and only there: this article takes a default from that table, it does not keep a second copy of it.",
+              "why_these_defaults": "rail_side and rail_top CONVERGE across two unrelated makers (79/79/84 and 155/158/158), so 80 and 156 are defensible. rail_bottom does not converge at all (111 against 243) and 243 is taken because these are US widths meeting US appliances, while the Miele figure belongs to a 60 cm European column that never carries a 2100 front. That third number is the guess, and it is why the WHOLE aperture is marked indicative rather than only its lower edge.",
+              "cesar_side": "Cesar prices this front at exactly x1.5 of the plain fridge door in every width and every finish column - 200->300, 323->484, 528->791, 665->999, 1333->2001 on CR9700/CR9701, and the same ratio on CR9400/9401, CH9700/9701, CH4640/4651. A multiplier that ignores the size of the hole is a price for the VARIANT, not for a piece of machining - the catalog's own evidence that it holds no geometry for it. Nor is there a cutout article: printed p.548 and p.554-556 list no machining line for a front. What does exist is a paid engineering service on printed p.541 (989394, 108 points, 'Feasibility study regarding cutouts and positioning'), which is the mechanism by which dimensions travel from us to the factory.",
+              "the_drawing_is_not_a_drawing": "The p.418 elevation was compared vector by vector against the plain door above it (pdftocairo -svg): the SAME artwork, differing by exactly two line segments. Its frame reads 12-15 % of width at the sides and 5-6 % of height top and bottom, but the panel is drawn at 1:2.83 while the real widths run 1:2.30 to 1:3.44. Not to scale, and the left-hand view labelled 210 is a side view with no aperture at all.",
+              "open_with_elda": "Whether the factory wants the aperture dimensions from us or takes them from the appliance model named in the order. One line, still unsent, in the mini-order request."
+            }
+          }
         }
       }
     }

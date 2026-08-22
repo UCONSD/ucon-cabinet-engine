@@ -511,6 +511,38 @@
           "travel_mm": 648
         }
       ]
+    },
+    "wine_cooler_panel_apertures": {
+      "provenance": "Three manufacturer specification sheets supplied by Andriy 2026-08-22. NOT Cesar facts - kept outside the four-level trust model, exactly like the LEGRABOX table. Cesar dimensions the aperture nowhere; these are what the appliance makers publish.",
+      "why_it_is_here": "A panel-ready wine cooler needs a hole in its front, and the hole belongs to the MACHINE, not to the article. This table is the seed of the appliance module: when appliances are modelled, a wine cooler brings its three rails with it and the front stops guessing. Until then registry/cesar/usa_tall_h210.json takes a default from here and marks it indicative.",
+      "form": "Every maker dimensions the RAILS - the frame left of, right of, above and below the hole - and lets the aperture follow. Rails are what stay constant when the panel width changes, which is why the aperture is derived and never stored.",
+      "columns": "panel_w_mm / panel_h_mm / rail_side_mm / rail_top_mm / rail_bottom_mm / aperture_mm (derived)",
+      "rows": [
+        { "model": "Miele KWT 6722 iS", "material_no": "11329860", "niche_mm": 560,
+          "panel_w_mm": 551, "panel_h_mm": 1762,
+          "rail_side_mm": 84, "rail_top_mm": 155, "rail_bottom_mm": 111,
+          "aperture_mm": "383 x 1496",
+          "source": "Miele USA spec sheet 2020-02-13, 'Custom Panel for Inset Design'",
+          "note": "Aperture width printed as '383 max' - a ceiling, not a point. A 60 cm European column; its panel is 1762 tall and never carries a 2100 front." },
+        { "model": "Thermador T18IW100SP", "line": "Freedom Collection, panel-ready", "niche_mm": 457,
+          "panel_w_mm": 451, "panel_h_mm": 2029,
+          "rail_side_mm": 79, "rail_top_mm": 158, "rail_bottom_mm": 243,
+          "aperture_mm": "293 x 1628",
+          "source": "Thermador specification 12/25, page 4 PANEL DIMENSIONS",
+          "note": "Lateral rail explicitly a RANGE: 74 to 82 mm. Panel thickness 19." },
+        { "model": "Thermador T24IW100SP", "line": "Freedom Collection, panel-ready", "niche_mm": 610,
+          "panel_w_mm": 603, "panel_h_mm": 2029,
+          "rail_side_mm": 79, "rail_top_mm": 158, "rail_bottom_mm": 243,
+          "aperture_mm": "445 x 1628",
+          "source": "Thermador specification 12/25, page 4 PANEL DIMENSIONS",
+          "note": "Identical rails to the 18 inch unit - only the panel width changes. So the rails are a property of the PRODUCT LINE, not of the width." }
+      ],
+      "what_converges": "rail_side 79 / 79 / 84 and rail_top 155 / 158 / 158, across two unrelated makers, as absolute millimetres and not as proportions of the panel (84/551 = 15.2 %, 79/451 = 17.5 %, 79/603 = 13.1 %). Two numbers that agree to within 5 mm.",
+      "what_does_not": "rail_bottom: 111 against 243, a factor of 2.2. That is where the machine compartment and the presenter drawer sit, and it is genuinely per-appliance. It is the one number that must come from the machine.",
+      "consequence_for_the_datum": "The aperture is dimensioned from the bottom edge by habit, but the bottom rail is the unstable one - so anchoring at the bottom moves the whole hole when the guess is wrong, while anchoring at the top and the sides leaves only the aperture's lower edge undetermined. Recorded because it inverts the obvious choice.",
+      "tolerance": "Both makers state the aperture as a window, not a point: Thermador allows the lateral rail anywhere between 74 and 82 mm, Miele prints its aperture width as '383 max'. Being a few millimetres out is inside the makers' own latitude - which is why an indicative rectangle is worth drawing at all.",
+      "what_is_still_open": "Panel heights are 1762 and 2029; a Cesar CR94xx front is 2100. So where the appliance's own panel rectangle sits inside our front is not settled. Parked with the appliance model, beside the fridge door swing projection.",
+      "width_cross_check": "Thermador's 24 inch panel is 603 wide and Cesar's CR9601 is 610; the 18 inch pair is 451 against 457. The 6-7 mm is the reveal we decided not to draw, so the Cesar width is the NICHE and our decision to draw the nominal is confirmed from the appliance side."
     }
   },
   "storage_note": "Catalog is stored as one file per catalog section in registry/cesar/. _manifest.json holds shared facts (grammar, hardware, external specs); section files hold unit types and codes. The loader merges them; one extracted catalog page = one file = one commit.",

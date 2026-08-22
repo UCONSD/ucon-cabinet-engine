@@ -86,6 +86,66 @@ module UCON
         group
       end
 
+      # A FRONT WITH A HOLE THROUGH IT.
+      #
+      # An aperture is not a box. `box` extrudes a FOOTPRINT upwards, so the
+      # hole it could make would run top to bottom; the wine cooler door needs
+      # one that runs through the THICKNESS. So this one is built the other way
+      # round - the front face in the x-z plane, an inner loop dropped out of
+      # it, and the remaining ring extruded backwards by the front thickness.
+      #
+      # Rails are measured from the panel's own four edges. That is how every
+      # appliance maker dimensions the panel, and it is the only form in which
+      # the numbers can be carried from one machine to another.
+      def framed_slab(entities, name, x_mm, y_mm, z_mm, w_mm, d_mm, h_mm,
+                      rails, material)
+        left   = rails[:left].to_f
+        right  = rails[:right].to_f
+        bottom = rails[:bottom].to_f
+        top    = rails[:top].to_f
+        ap_w   = w_mm - left - right
+        ap_h   = h_mm - bottom - top
+        unless ap_w > 0 && ap_h > 0
+          raise ArgumentError,
+                "Aperture for #{name} is not positive: #{ap_w} x #{ap_h}. " \
+                "Rails l#{left} r#{right} b#{bottom} t#{top} do not fit " \
+                "#{w_mm} x #{h_mm}."
+        end
+
+        group = entities.add_group
+        group.name = name
+        y = y_mm.mm
+        outer = [[x_mm, z_mm], [x_mm + w_mm, z_mm],
+                 [x_mm + w_mm, z_mm + h_mm], [x_mm, z_mm + h_mm]]
+        face = group.entities.add_face(outer.map { |a, b| [a.mm, y, b.mm] })
+        raise "Face creation failed for #{name}" unless face
+
+        ax = x_mm + left
+        az = z_mm + bottom
+        hole = [[ax, az], [ax + ap_w, az],
+                [ax + ap_w, az + ap_h], [ax, az + ap_h]]
+        inner = group.entities.add_face(hole.map { |a, b| [a.mm, y, b.mm] })
+        # Erasing the FACE leaves its edges behind - they bound the ring too -
+        # which is exactly the hole we want. A nil here would leave a solid
+        # slab with a rectangle drawn on it, which looks close enough to right
+        # to survive a glance, so it is an error and not a fallback.
+        raise "Inner loop failed for #{name}" unless inner
+
+        inner.erase!
+
+        ring = group.entities.grep(Sketchup::Face).first
+        raise "Aperture cut failed for #{name}" unless ring
+
+        # The slab must end up occupying y .. y + d, exactly where a box would.
+        # Which way that is depends on which way the face came out facing, so
+        # ask it rather than assume.
+        ring.pushpull(ring.normal.y < 0 ? -d_mm.mm : d_mm.mm)
+        group.material = material
+        edge_mat = Geometry.material(group.model, 'UCON_Edge_Black', [0, 0, 0])
+        group.entities.grep(Sketchup::Edge).each { |e| e.material = edge_mat }
+        group
+      end
+
       # A box with no faces: the twelve edges only.
       #
       # Convention (Drawing_Spec): a Cesar object has surfaces, a stand-in for
