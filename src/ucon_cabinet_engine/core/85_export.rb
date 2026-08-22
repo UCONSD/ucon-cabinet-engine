@@ -48,9 +48,23 @@ module UCON
       # ours.
       HAND_TO_ORDER = { 'rh' => 'Right', 'lh' => 'Left' }.freeze
 
+      # ORDERABLE = carries a code. One test, and it is not a convenience.
+      # An appliance niche is DRAWN AND NEVER ORDERED - it is the space the
+      # client's machine occupies - and the generator deliberately gives it no
+      # code and manufacturer = client. Contract §2 says tools derive meaning
+      # only from the dictionary, so this is the dictionary answering.
+      #
+      # The filter lives HERE, in the pure module, and not in the glue that
+      # walks the model. A rule that sits in the glue is a rule the headless
+      # suite cannot see - which is how a drawer unit came to be offered a
+      # single gola profile for weeks.
+      def orderable?(attrs)
+        !(attrs || {})['code'].to_s.empty?
+      end
+
       def rows(objects)
         number = 0
-        Array(objects).each_with_object([]) do |attrs, out|
+        Array(objects).select { |o| orderable?(o) }.each_with_object([]) do |attrs, out|
           a = attrs || {}
           number += 1
           out << unit_row(number, a)

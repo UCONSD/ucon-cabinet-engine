@@ -33,6 +33,10 @@ module UCON
         @dialog.set_html(html)
         @dialog.add_action_callback('build_by_code') { |_| show_picker }
         @dialog.add_action_callback('panel')  { |_| Panel.show }
+        # Named export_order, not export: `export` is a reserved word in
+        # JavaScript, and sketchup.export() is the kind of thing that works
+        # until a browser engine decides it should not.
+        @dialog.add_action_callback('export_order') { |_| ExportRun.run }
         # The tool lives in core, so it arrives with a Reload core - no restart.
         @dialog.add_action_callback('place') do |_|
           begin
@@ -505,6 +509,7 @@ module UCON
             <button class="primary" onclick="sketchup.build_by_code()">Build by code…</button>
             <button onclick="sketchup.place()">Place selected unit…</button>
             <button onclick="sketchup.panel()">Unit Properties panel</button>
+            <button onclick="sketchup.export_order()">Order schedule (CSV)…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             <div class="grp">Opening symbols</div>
             <div class="row">

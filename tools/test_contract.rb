@@ -3051,5 +3051,58 @@ check('numbering is per OBJECT, and children never take a number') do
   raise 'every numbered row is a top-level one' unless numbered.all? { |r| r['level'] == 0 }
 end
 
+
+puts "\nthe model walk: a rule in the pure module, a click in the glue"
+
+check('ORDERABLE means carries a code - and the niche is why') do
+  # An appliance niche is drawn and never ordered. It is not skipped by a
+  # special case in the walk; it simply has no code, because the generator
+  # gives it none and marks it manufacturer = client. Contract §2: the
+  # dictionary is what tools read, so the dictionary answers.
+  niche = Generator.niche_attributes_for(Registry.lookup('V80730'), 600, true)
+  raise 'a niche must not be orderable' if Export.orderable?(niche)
+  raise 'and it must not be orderable because of its class, but its code' unless
+    niche['code'].to_s.empty?
+  raise 'a cabinet must be' unless Export.orderable?(Generator.attributes_for(Registry.lookup('B80601')))
+  raise 'nil must not blow up the walk' if Export.orderable?(nil)
+end
+
+check('the FILTER lives in the pure module, so no caller can lose it') do
+  # If this test only checked the glue, the guarantee would live where the
+  # headless suite cannot see it - exactly how the gola pairing was lost.
+  niche = Generator.niche_attributes_for(Registry.lookup('V80730'), 600, true)
+  mixed = [Generator.attributes_for(Registry.lookup('B80601')), niche,
+           Generator.attributes_for(Registry.lookup('CR0631'))]
+  rows  = Export.rows(mixed)
+  codes = rows.select { |r| r['level'].zero? }.map { |r| r['code'] }
+  raise codes.inspect unless codes == %w[B80601 CR0631]
+  raise 'numbering must not skip the object it refused' unless
+    rows.select { |r| r['row'] }.map { |r| r['row'] } == [1, 2]
+end
+
+check('86_export_run is GLUE - it holds no rules') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/86_export_run.rb', __dir__))
+  code = src.gsub(/^\s*#.*$/, '')
+  # It may TOUCH SketchUp - that is its whole reason to exist - but the
+  # decisions must be borrowed, not made here.
+  raise 'the orderable rule must come from Export' unless code.include?('Export.orderable?')
+  raise 'row shaping must come from Export' unless code.include?('Export.rows')
+  raise 'CSV rendering must come from Export' unless code.include?('Export.csv')
+  raise 'no row shape may be built in the glue' if code =~ /'level'\s*=>|"level"\s*=>/
+  raise 'no unit of measure may be decided in the glue' if code =~ /\bPZ\b|\bML\b|\bMQ\b/
+end
+
+check('the palette actually offers it, under a name JavaScript allows') do
+  pal = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'no callback' unless pal.include?("add_action_callback('export_order')")
+  raise 'no button' unless pal.include?('sketchup.export_order()')
+  # `export` is a reserved word in JavaScript, so a button calling it is a trap
+  # that works until an engine decides it should not. Match the BUTTON form,
+  # not the bare substring: this file explains itself in prose, and prose that
+  # names the thing it warns about is not the thing. (It failed exactly that
+  # way on the first run - for the second time today.)
+  raise 'do not wire a button to export()' if pal =~ /onclick="sketchup\.export\(\)"/
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
