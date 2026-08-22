@@ -150,14 +150,34 @@ module UCON
         a
       end
 
-      # Validate, then write every present key into the CabinetEngine
-      # dictionary on the given entity (a ComponentDefinition per §2).
+      # Validate, then RECONCILE the CabinetEngine dictionary on the given
+      # entity (a ComponentDefinition per §2) so that it holds exactly the
+      # validated attribute set - present keys written, absent keys DELETED.
+      #
+      # The deletion half is not a refinement, it is the point. §2 says tools
+      # must derive meaning only from this dictionary; if the dictionary can
+      # keep a key the contract no longer carries, that sentence is false. The
+      # earlier version skipped absent values instead of deleting them, and
+      # because every caller works read-merge-write, a value that became empty
+      # simply survived: switching a front from a gola profile to a
+      # client-provided handle left hardware_ref = "GOL001" on an object whose
+      # hardware_source said "client". A code nobody chose reached the record.
+      #
+      # Safe to reconcile because set_attribute on DICTIONARY exists in exactly
+      # one place - this method. Everything else in the source only reads, and
+      # only 'code'. Verified 2026-08-22; a second writer would break this.
+      #
+      # The get_attribute guard means an absent key that was never written
+      # costs nothing: no delete call, no model dirtied, no undo entry.
       def write!(entity, attrs)
         validated = validate!(attrs)
-        validated.each do |key, value|
-          next unless present?(value)
-
-          entity.set_attribute(DICTIONARY, key, value)
+        KEYS.each do |key|
+          value = validated[key]
+          if present?(value)
+            entity.set_attribute(DICTIONARY, key, value)
+          elsif !entity.get_attribute(DICTIONARY, key).nil?
+            entity.delete_attribute(DICTIONARY, key)
+          end
         end
         validated
       end

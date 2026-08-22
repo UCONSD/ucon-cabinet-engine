@@ -197,6 +197,18 @@ module UCON
         new_attrs = attributes_for(unit)
         new_attrs['notes'] = "#{new_attrs['notes']} Execution chosen by placement " \
                              "from the wall, not by the picker: #{attrs['code']} -> #{sibling}."
+        # THE HAND SURVIVES THE SWAP, and now it survives on purpose. The line
+        # below draws the symbol with the OLD hinge_side, so the record has to
+        # agree with it; attributes_for deliberately never carries a hand, so
+        # without this the two would disagree the moment Contract.write!
+        # started reconciling (it used to leave the stale value behind, which
+        # made them agree by accident). Everything else on this object IS
+        # rebuilt from the article a few lines up - draw_corner has just
+        # redrawn the geometry - so a panel choice that is not re-applied
+        # reverts in the drawing and in the record together. That is the
+        # honest outcome; it is not the same as silently keeping it.
+        new_attrs['hinge_side'] = attrs['hinge_side'] if
+          attrs['hinge_side'] && !attrs['hinge_side'].to_s.empty?
         Contract.write!(definition, new_attrs)
         Symbols.draw(model, definition, unit, attrs['hinge_side'])
         instance.name = "Cesar #{sibling} — #{unit['description']}"

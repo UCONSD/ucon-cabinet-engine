@@ -2401,56 +2401,102 @@ check('the housing says on itself that it came from the appliance, not from Cesa
   raise d['notes'] if d['notes'].include?('Housing drawn')
 end
 
-puts "\nthe housing behind the panel"
-# Andriy, 2026-08-22, off the model: the phantom was coming out from under the
-# plinth. It ran floor to the top of the front - right for a dishwasher, wrong
-# for a housing at BOTH ends.
 
-check('the US housing starts on the plinth and stops at the appliance cutout') do
-  u = Registry.lookup('CR9601')
-  raise Generator.niche_bottom_mm(u).to_s unless
-    Generator.niche_bottom_mm(u) == Standards::PLINTH_H_MM
-  # 84 in. Measured, not converted from anything of ours.
-  raise Generator.niche_top_mm(u).to_s unless Generator.niche_top_mm(u) == 2133.6
-  raise Generator.niche_height_mm(u).to_s unless Generator.niche_height_mm(u) == 2033.6
+puts "\nthe dictionary IS the object - Contract.write! reconciles (0.44.0)"
+
+# 20_contract.rb is pure Ruby apart from the entity it writes to, so a stub
+# stands in for a ComponentDefinition and the whole write/read ROUND TRIP runs
+# headless. Nothing tested that round trip before, which is exactly why the
+# erasure bug below shipped: every existing check exercised
+# Panel.attributes_patch in isolation, where the answer was always correct.
+class StubEntity
+  def initialize; @d = {}; end
+  def set_attribute(dict, key, value); (@d[dict] ||= {})[key] = value; true; end
+  def get_attribute(dict, key); (@d[dict] || {})[key]; end
+  def delete_attribute(dict, key); (@d[dict] || {}).delete(key); true; end
+  def stored; (@d[Contract::DICTIONARY] || {}); end
 end
 
-check('the 66,4 leftover is now a fact of the model, not only of a note') do
-  u = Registry.lookup('CR9601')
-  front_top = Generator.base_z_mm(u) + u['height_mm']
-  raise front_top.to_s unless front_top == 2200
-  leftover = front_top - Generator.niche_top_mm(u)
-  raise leftover.to_s unless (leftover - 66.4).abs < 0.001
-  # The same number the registry already wrote down before anything drew it.
-  notes = Registry.data['families']['USA Tall H.210']['representation_notes'].join(' ')
-  raise 'the note and the geometry must agree' unless notes.include?('66,4')
+check('write! then read returns exactly what was written') do
+  e = StubEntity.new
+  Contract.write!(e, VALID)
+  back = Contract.read(e)
+  raise back.inspect unless back == VALID.reject { |_, v| v.nil? }
 end
 
-check('the old rule survives untouched for a family that states no housing') do
-  u = Registry.lookup('V80730')
-  raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 0
-  raise Generator.niche_height_mm(u).to_s unless
-    Generator.niche_height_mm(u) == Standards::PLINTH_H_MM + 780
+check('REGRESSION: switching to a client handle erases the factory ref') do
+  # The shipped bug, 2026-08-22: present? is false for '', and write! used to
+  # SKIP such a key instead of deleting it. Every caller is read-merge-write,
+  # so "GOL001" survived on an object whose hardware_source said "client" -
+  # a code nobody chose, sitting on the record the exporter reads.
+  u = Registry.lookup('B80601')
+  e = StubEntity.new
+  Contract.write!(e, Generator.attributes_for(u).merge(
+    Panel.attributes_patch(u, 'door_version' => '75', 'hardware_ref' => 'GOL001')))
+  raise 'setup failed' unless Contract.read(e)['hardware_ref'] == 'GOL001'
+
+  patch = Panel.attributes_patch(u, 'door_version' => '78',
+                                    'opening_method' => 'handle',
+                                    'hardware_mode' => 'client')
+  Contract.write!(e, Contract.read(e).merge(patch))
+  after = Contract.read(e)
+  raise "hardware_ref #{after['hardware_ref'].inspect} survived" if after.key?('hardware_ref')
+  raise after['hardware_source'].inspect unless after['hardware_source'] == 'client'
 end
 
-check('the plinth height is not copied into the registry') do
-  section = File.read(File.expand_path('../registry/cesar/usa_tall_h210.json', __dir__))
-  niche = Registry.data['families']['USA Tall H.210']['appliance_niche']
-  raise 'the bottom must be named, not numbered' unless niche['bottom'] == 'plinth_top'
-  raise 'a second copy of the plinth height has appeared' if niche.key?('bottom_mm')
-  raise 'the section file must point at the measured table' unless
-    section.include?('us_appliance_housing_cutouts')
+check('an absent value never CREATES a key') do
+  e = StubEntity.new
+  Contract.write!(e, VALID.merge('notes' => ''))
+  raise 'an empty value must not be stored' if Contract.read(e).key?('notes')
+  raise 'nothing else may be invented' unless
+    Contract.read(e).keys.sort == VALID.keys.sort
 end
 
-check('the housing says on itself that it came from the appliance, not from Cesar') do
-  n = Generator.niche_attributes_for(Registry.lookup('CR9601'))
-  Contract.validate!(n)
-  raise n['notes'] unless n['notes'].include?('INDICATIVE')
-  raise n['notes'] unless n['notes'].include?('2133.6')
-  raise n['height_mm'].to_s unless n['height_mm'] == 2033.6
-  # and a dishwasher still says nothing of the kind
-  d = Generator.niche_attributes_for(Registry.lookup('V80730'))
-  raise d['notes'] if d['notes'].include?('Housing drawn')
+check('an empty LIST is absent too - the ordering rule v1.6 will rely on') do
+  # v1.6 stores companion_refs as a list. [] means "no companions" and must
+  # erase the key; encoding it first would make '[]' a non-empty String and
+  # present? would happily persist it. Decide presence on the LOGICAL value.
+  e = StubEntity.new
+  Contract.write!(e, VALID.merge('companion_refs' => '995626'))
+  raise 'setup failed' unless Contract.read(e)['companion_refs'] == '995626'
+  Contract.write!(e, VALID.merge('companion_refs' => []))
+  raise 'an empty list must erase the key' if Contract.read(e).key?('companion_refs')
+end
+
+check('write! is idempotent, and leaves no key outside the contract') do
+  e = StubEntity.new
+  Contract.write!(e, VALID)
+  first = e.stored.dup
+  Contract.write!(e, VALID)
+  raise 'not idempotent' unless e.stored == first
+  raise 'a key outside KEYS reached the dictionary' unless
+    (e.stored.keys - Contract::KEYS).empty?
+end
+
+check('a stale key left by an older write does not survive the next one') do
+  e = StubEntity.new
+  Contract.write!(e, VALID.merge('hinge_side' => 'rh'))
+  raise 'setup failed' unless Contract.read(e)['hinge_side'] == 'rh'
+  Contract.write!(e, VALID)
+  raise 'the dictionary must equal the contract' if Contract.read(e).key?('hinge_side')
+end
+
+check('a corner swap puts the hand on the RECORD, not only into the symbol') do
+  # Needs SketchUp to run, so it is checked at the source - the same technique
+  # the front-line and slab-loop checks use. attributes_for deliberately never
+  # carries a hand; Symbols.draw two lines later is passed the OLD one. Before
+  # write! reconciled, the stale value made those agree BY ACCIDENT.
+  gen  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  swap = gen[/def swap_corner_execution!.*?\n      end\n/m]
+  raise 'swap_corner_execution! not found' unless swap
+  # Comments legitimately name the code they explain, so strip them before
+  # asking about ORDER - otherwise a sentence mentioning Contract.write! above
+  # the assignment fails a test about the assignment. (It did, first run.)
+  code = swap.lines.reject { |l| l.strip.start_with?('#') }.join
+  raise 'the hand must be written, not only drawn' unless
+    code.include?("new_attrs['hinge_side'] = attrs['hinge_side']")
+  raise 'the carry-forward must precede the write' unless
+    code.index("new_attrs['hinge_side']") < code.index('Contract.write!')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
