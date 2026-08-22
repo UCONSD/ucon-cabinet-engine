@@ -2499,5 +2499,126 @@ check('a corner swap puts the hand on the RECORD, not only into the symbol') do
     code.index("new_attrs['hinge_side']") < code.index('Contract.write!')
 end
 
+
+puts "\nregistry duplicates - the class of loss that no parser reports"
+
+# THREE WAYS THE REGISTRY CAN LOSE DATA IN SILENCE, and none of them is an
+# error anywhere today:
+#
+#   1. a duplicated JSON key      - legal JSON, the last one wins
+#   2. a duplicated article code  - lookup returns whichever it meets first
+#   3. two files claiming the same unit_type in one family - the loader
+#      merges by key, so the second file DELETES the first
+#
+# (1) reached HEAD on 2026-08-22: us_appliance_housing_cutouts sat twice in
+# _manifest.json, the copies differing by one word, because an edit was pasted
+# instead of replacing. json.load said nothing, and neither did this suite.
+
+class DupKeyHash < Hash
+  class << self; attr_accessor :found; end
+  def []=(key, value)
+    (self.class.found ||= []) << key if key?(key)
+    super
+  end
+end
+
+def duplicate_keys_in(path)
+  DupKeyHash.found = []
+  JSON.parse(File.read(path), object_class: DupKeyHash)
+  DupKeyHash.found.uniq.sort
+end
+
+def registry_json_files
+  Dir.glob(File.join(File.expand_path('..', __dir__), 'registry', '**', '*.json')).sort
+end
+
+def registry_section_files
+  registry_json_files.reject { |f| File.basename(f) == '_manifest.json' }
+end
+
+check('THE DETECTOR PROVES ITSELF before any file is trusted to it') do
+  # A guard that can quietly stop working is worse than no guard: it turns an
+  # unchecked file into a file everyone believes is checked. If a future Ruby
+  # or json ever ignores object_class, THIS fails - loudly - instead of every
+  # registry file passing in silence.
+  DupKeyHash.found = []
+  JSON.parse('{"a": 1, "b": {"c": 2, "c": 3}, "a": 4}', object_class: DupKeyHash)
+  raise "detector is blind: #{DupKeyHash.found.inspect}" unless
+    DupKeyHash.found.uniq.sort == %w[a c]
+
+  DupKeyHash.found = []
+  JSON.parse('{"a": 1, "b": {"c": 2}, "d": [{"e": 1}, {"e": 2}]}',
+             object_class: DupKeyHash)
+  raise "false positive: #{DupKeyHash.found.inspect}" unless DupKeyHash.found.empty?
+end
+
+check('no registry JSON file carries a duplicated key') do
+  files = registry_json_files
+  raise 'no registry files found - the glob is wrong' if files.empty?
+  bad = files.map { |f| [f, duplicate_keys_in(f)] }.reject { |_, d| d.empty? }
+  raise bad.map { |f, d|
+    "#{File.basename(f)}: #{d.join(', ')} - find it with " \
+    "grep -n '\"#{d.first}\"' registry/**/#{File.basename(f)}"
+  }.join(' | ') unless bad.empty?
+end
+
+check('no article code appears twice anywhere in the registry') do
+  # Read from the FILES, not from Registry.codes: the loader is itself lossy
+  # (see the next check), so asking it would hide exactly what we are looking
+  # for.
+  seen = {}
+  dups = []
+  registry_section_files.each do |f|
+    sec = JSON.parse(File.read(f))
+    ((sec['data'] || {})['unit_types'] || {}).each do |type_key, unit_type|
+      (unit_type['codes'] || []).each do |row|
+        where = "#{File.basename(f)}:#{type_key}"
+        if seen[row['code']]
+          dups << "#{row['code']} in #{seen[row['code']]} and #{where}"
+        else
+          seen[row['code']] = where
+        end
+      end
+    end
+  end
+  raise dups.join(' | ') unless dups.empty?
+  # And the scan must not be able to pass by reading NOTHING. Tying the raw
+  # file count to the loader's own count does double duty: it fails if the glob
+  # ever goes blind, and it fails if the loader silently merged a unit_type
+  # away - the very loss the next check is about.
+  raise "files hold #{seen.size} codes, the loader reports " \
+        "#{Registry.codes.length} - something was merged away" unless
+    seen.size == Registry.codes.length
+end
+
+check('two section files never claim the same unit_type inside one family') do
+  # 50_registry merges each file's unit_types INTO the family by key, last file
+  # winning by filename sort - so a collision does not raise, it DELETES. This
+  # is not theoretical: base_h78, sink_base_h78 and appliance_h78 all merge
+  # into family H.78 today, and tall_h210 / usa_tall_h210 are kept apart only
+  # by their deliberately namespaced family names.
+  owner   = {}
+  clashes = []
+  registry_section_files.each do |f|
+    sec = JSON.parse(File.read(f))
+    ((sec['data'] || {})['unit_types'] || {}).each_key do |type_key|
+      key = [sec['family'], type_key]
+      if owner[key]
+        clashes << "#{sec['family']} / #{type_key}: #{owner[key]} and #{File.basename(f)}"
+      else
+        owner[key] = File.basename(f)
+      end
+    end
+  end
+  raise clashes.join(' | ') unless clashes.empty?
+end
+
+check('the three files that share family H.78 really do share it') do
+  # Guards the guard above: if the fixtures ever stop overlapping, the
+  # collision check would be passing on nothing and nobody would notice.
+  fams = registry_section_files.map { |f| JSON.parse(File.read(f))['family'] }
+  raise fams.inspect unless fams.count('H.78') >= 2
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
