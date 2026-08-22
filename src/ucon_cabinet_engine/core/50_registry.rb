@@ -55,6 +55,9 @@ module UCON
 
         merged = JSON.parse(File.read(manifest_path))
         merged['families'] ||= {}
+        # Which file declared each family-level key, so the collision guard can
+        # name BOTH sides of a disagreement instead of just complaining.
+        origin = {}
         (files - [manifest_path]).each do |file|
           sec = JSON.parse(File.read(file))
           fam_name = sec['family']
@@ -67,11 +70,52 @@ module UCON
             unit_type['class']   = sec['class'] if sec['class']
             (fam['unit_types'] ||= {})[key] = unit_type
           end
-          payload.each { |k, v| fam[k] = v unless k == 'unit_types' }
+          merge_family_keys!(fam, payload, fam_name, File.basename(file),
+                             origin[fam_name] ||= {})
         end
 
         @cache[manufacturer] = { stamps: stamps, data: merged }
         merged
+      end
+
+      # FAMILY-LEVEL KEYS MERGE ACROSS FILES, AND USED TO DO IT SILENTLY.
+      #
+      # Several section files may name the same family - three of them say
+      # "H.78" - and everything outside unit_types was merged last-file-wins
+      # with no complaint. Two files stating a family fact differently meant
+      # one of them simply never happened, and alphabetical order decided
+      # which. That is the same class of loss as a duplicated JSON key: no
+      # parser reports it and nothing downstream looks wrong.
+      #
+      # It came within one line of biting on 2026-08-22. plinth_h_mm is a
+      # family fact and three files could have carried it; it survived only
+      # because it was deliberately declared in ONE of them and a test read it
+      # back through a code out of each. That test defends one key. This
+      # defends all of them.
+      #
+      # AGREEMENT IS FINE and must stay fine: every H.78 file states
+      # height_mm 780, and saying the same thing twice is redundant rather
+      # than wrong. Only a DISAGREEMENT raises, and the message names both
+      # files, because the hard part of this bug was never the fix.
+      def merge_family_keys!(fam, payload, fam_name, file, origin)
+        payload.each do |k, v|
+          next if k == 'unit_types'
+
+          first = origin[k]
+          if first && fam[k] != v
+            raise "Registry conflict: family #{fam_name.inspect} gets #{k.inspect} " \
+                  "from two section files that disagree - #{first} says " \
+                  "#{fam[k].inspect} and #{file} says #{v.inspect}. A family fact " \
+                  'belongs in ONE file; the other must drop it, not restate it.'
+          end
+          fam[k] = v
+          # ||=, not =. The useful name in the error is the file that FIRST
+          # stated the fact, because that is where it lives and where a reader
+          # will go looking; a third file agreeing must not quietly become the
+          # answer to "who says this".
+          origin[k] ||= file
+        end
+        fam
       end
 
       # All codes across every family and unit type.

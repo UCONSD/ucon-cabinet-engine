@@ -2902,6 +2902,43 @@ check('no registry JSON file carries a duplicated key') do
   }.join(' | ') unless bad.empty?
 end
 
+check('THE COLLISION GUARD PROVES ITSELF before the real files are trusted to it') do
+  # Rule 12. Run it against the defect it exists for, on a fixture, so that a
+  # green suite means the guard works and not merely that today's files happen
+  # to agree.
+  fam = {}
+  origin = {}
+  Registry.merge_family_keys!(fam, { 'height_mm' => 780, 'unit_types' => { 'x' => 1 } },
+                              'H.78', 'first.json', origin)
+  raise fam.inspect unless fam == { 'height_mm' => 780 }
+  raise 'unit_types must not be merged as a family key' if fam.key?('unit_types')
+
+  # Saying the same thing twice is redundant, not wrong - and every H.78 file
+  # really does state height_mm 780, so this must stay legal.
+  Registry.merge_family_keys!(fam, { 'height_mm' => 780 }, 'H.78', 'second.json', origin)
+  raise 'agreement must not raise' unless fam['height_mm'] == 780
+
+  # Disagreement is the silent loss this exists to stop.
+  begin
+    Registry.merge_family_keys!(fam, { 'height_mm' => 840 }, 'H.78', 'third.json', origin)
+    raise 'two files disagreed and nothing complained'
+  rescue RuntimeError => e
+    raise e.message unless e.message.include?('first.json') && e.message.include?('third.json')
+    raise 'the message must name the key' unless e.message.include?('height_mm')
+    raise 'and both values' unless e.message.include?('780') && e.message.include?('840')
+  end
+end
+
+check('the real registry loads clean, and one key really is shared') do
+  # Not a tautology: three files name family H.78 and all three state
+  # height_mm. If the guard were wrong about agreement, this would raise.
+  raise 'H.78 must be shared by three files' unless
+    Registry.data['families']['H.78']['height_mm'] == 780
+  # And the fact that was nearly lost is still where it was put.
+  raise 'plinth_h_mm survived' unless
+    Registry.data['families']['H.78']['plinth_h_mm'] == 100
+end
+
 check('no article code appears twice anywhere in the registry') do
   # Read from the FILES, not from Registry.codes: the loader is itself lossy
   # (see the next check), so asking it would hide exactly what we are looking
