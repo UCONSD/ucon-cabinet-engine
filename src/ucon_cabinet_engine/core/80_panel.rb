@@ -56,18 +56,17 @@ module UCON
 
         case method
         when 'gola'
-          ref = payload['hardware_ref'].to_s
+          system = payload['gola_system'].to_s
           # A cabinet front in the 75 version orders its own GOL profile.
           # An APPLIANCE panel is not a cabinet front: the profile above it
           # belongs to the run, and the source never gives the panel a profile
           # line of its own. Whether one is nevertheless ordered is Elda Q6, so
           # the profile is optional here rather than invented or demanded.
           appliance = unit['object_class'] == 'appliance_front'
-          if ref.empty?
-            raise ArgumentError, 'Gola (door 75) requires a grip-recess profile (GOL…) — it is a separate order line' unless appliance
-          else
-            patch['hardware_ref']    = ref
-            patch['hardware_source'] = 'factory'
+          if system.empty?
+            raise ArgumentError, 'Gola (door 75) requires a grip-recess SYSTEM — its profiles are separate order lines' unless appliance
+          elsif Generator.gola_profile_refs(unit, system).empty?
+            raise ArgumentError, "No grip-recess profile is registered for system #{system.inspect}"
           end
         when 'handle'
           if payload['hardware_mode'] == 'client'
@@ -85,6 +84,16 @@ module UCON
         else
           raise ArgumentError, "Unknown opening_method #{method.inspect}"
         end
+
+        # COMPANIONS ARE RE-RESOLVED ON EVERY APPLY, gola profiles included.
+        # They are IMPLIED lines and an implied line is recomputed, never
+        # inherited (Contract v2 §4.2 rule 3) - which is also what takes the
+        # profiles away again when a front stops being gola. Leaving them
+        # behind would order a grip recess for a door that now opens with a
+        # handle, and until 0.44.0 the contract could not even erase it.
+        patch['companion_refs'] = Generator.companion_refs_for(
+          unit, method == 'gola' ? payload['gola_system'].to_s : nil
+        )
 
         hinge = payload['hinge_side'].to_s
         if unit['handed']
@@ -105,21 +114,36 @@ module UCON
         !!(versions && versions['gola_mm'])
       end
 
+      # THE CHOICE IS A SYSTEM, NOT A CODE. It used to be a code, and for a
+      # drawer stack - which needs undercounter AND intermediate - the two were
+      # joined into "GOL001+GOL002" so the dropdown could hold them in one
+      # value. That string then reached hardware_ref, and the first real export
+      # run printed it into an order schedule as an article that does not
+      # exist. So the option carries the SYSTEM and the codes are resolved from
+      # the registry where every other companion is resolved.
+      #
+      # `value` is what gets stored; `name` shows which profiles it will order,
+      # so the person choosing still sees them.
       def gola_options(unit = nil)
         rows = (Registry.data['hardware'] || {})['gola_profiles'] || []
-        kind = unit && (unit['front_layout'] || {})['kind']
-        if kind == 'horizontal'
-          # A drawer stack needs BOTH profiles (undercounter + intermediate,
-          # same system) - offered as a pair so the order can't lose one.
-          %w[L-shaped straight].map do |sys|
-            pair = rows.select { |row| row['system'] == sys }
-                       .sort_by { |row| row['position'] == 'undercounter' ? 0 : 1 }
-            { 'code' => pair.map { |row| row['code'] }.join('+'),
-              'name' => "#{sys} system (#{pair.map { |row| row['code'] }.join(' + ')})" }
-          end
-        else
-          rows.select { |row| row['position'] == 'undercounter' }
+        positions = Generator.gola_positions_for(unit || {})
+        rows.map { |row| row['system'] }.compact.uniq.map do |system|
+          codes = positions.map do |position|
+            found = rows.find { |r| r['system'] == system && r['position'] == position }
+            found && found['code']
+          end.compact
+          { 'value' => system, 'name' => "#{system} system (#{codes.join(' + ')})" }
         end
+      end
+
+      # Which grip-recess system this object is on, read back from the profile
+      # lines it carries. Stored as codes, derived as a system: the same "store
+      # the code, look the rest up" rule the whole contract runs on.
+      def gola_system_of(attrs)
+        codes = Array((attrs || {})['companion_refs']).map { |l| l['code'] }
+        rows  = (Registry.data['hardware'] || {})['gola_profiles'] || []
+        row   = rows.find { |r| codes.include?(r['code']) }
+        row && row['system']
       end
 
       # Effective slab list for a door version (gola shortens door slabs by 30,
@@ -207,6 +231,7 @@ module UCON
           end
         hw = Registry.data['hardware'] || {}
         state['gola_profiles'] = gola_options(unit)
+        state['gola_system']   = gola_system_of(attrs)
         state['handles']       = hw['handles'] || []
         state
       end
@@ -309,7 +334,7 @@ module UCON
                 <option value="handle">Handle</option>
                 <option value="push_to_open">Push-to-open</option>
               </select>
-              <div id="golaNote" class="warn" style="display:none">Door 75 opens by gola only. A grip-recess profile is required (separate order line):</div>
+              <div id="golaNote" class="warn" style="display:none">Door 75 opens by gola only. Its grip-recess profiles are separate order lines — a drawer stack needs two:</div>
               <select id="gol" style="display:none"></select>
               <div id="handleBlock">
                 <select id="hmode" onchange="rules()">
@@ -332,8 +357,10 @@ module UCON
           <script>
             var HANDED=false;
             function opt(s,items,sel){s.innerHTML='';items.forEach(function(it){
-              var o=document.createElement('option');o.value=it.code;o.text=it.code+' — '+it.name;
-              if(it.code===sel)o.selected=true;s.add(o);});}
+              var v=(it.value!==undefined&&it.value!==null)?it.value:it.code;
+              var o=document.createElement('option');o.value=v;
+              o.text=it.code?(it.code+' — '+it.name):it.name;
+              if(v===sel)o.selected=true;s.add(o);});}
             function rules(){
               var gola=document.querySelector('input[name=dv]:checked').value==='75';
               document.getElementById('om').style.display=gola?'none':'';
@@ -370,7 +397,7 @@ module UCON
                 : st.attrs.width_mm+'×'+st.attrs.height_mm+'×'+st.attrs.depth_mm;
               document.getElementById('code').textContent=st.attrs.code+'  ('+dims+')';
               document.getElementById('desc').textContent=(st.desc||'')+' · '+st.attrs.code_status+' / '+st.attrs.status;
-              opt(document.getElementById('gol'),st.gola_profiles,st.attrs.hardware_ref);
+              opt(document.getElementById('gol'),st.gola_profiles,st.gola_system);
               opt(document.getElementById('handle'),st.handles,st.attrs.hardware_ref);
               var m=st.attrs.opening_method||'handle';
               if(m==='gola'){document.querySelector('input[name=dv][value="75"]').checked=true;}
@@ -385,9 +412,9 @@ module UCON
               var p={door_version:gola?'75':'78',
                      opening_method:gola?'gola':document.getElementById('om').value,
                      hardware_mode:document.getElementById('hmode').value,
-                     hardware_ref:gola?document.getElementById('gol').value
-                                      :(document.getElementById('hmode').value==='factory'
-                                        ?document.getElementById('handle').value:''),
+                     gola_system:gola?document.getElementById('gol').value:'',
+                     hardware_ref:(!gola&&document.getElementById('hmode').value==='factory')
+                                        ?document.getElementById('handle').value:'',
                      hinge_side:HANDED?document.getElementById('hinge').value:''};
               sketchup.apply(JSON.stringify(p));
             }

@@ -519,7 +519,41 @@ module UCON
       # what the v1 string could express. When registry/cesar/options/ exists,
       # quantity comes from the rule — including the printed calculation rules,
       # like the one that says how many Servo Drive kits a composition needs.
-      def companion_refs_for(unit)
+      # THE GOLA PROFILES ARE ORDER LINES, and since 0.49.0 they are companion
+      # LINES rather than a single hardware_ref string. The reason is concrete:
+      # a drawer stack needs TWO profiles, undercounter plus intermediate, and
+      # one string cannot hold two codes. The panel used to join them into
+      # "GOL001+GOL002", which reads fine in a dropdown and reaches an order as
+      # an article that does not exist - the first real export run printed it.
+      #
+      # qty is nil ON PURPOSE (Contract v2.1). A profile is bought by the metre
+      # along the RUN, which crosses joints between units, so no single cabinet
+      # can state the number.
+      def gola_profile_refs(unit, system)
+        return [] if system.to_s.empty?
+
+        rows = ((Registry.data['hardware'] || {})['gola_profiles'] || [])
+               .select { |r| r['system'] == system }
+        gola_positions_for(unit).map do |position|
+          row = rows.find { |r| r['position'] == position }
+          next nil unless row
+
+          { 'code' => row['code'], 'qty' => nil, 'um' => row['um'] || 'ML',
+            'origin' => 'implied', 'source_ref' => row['source_ref'] }
+        end.compact
+      end
+
+      # An undercounter profile closes the front under the worktop; an
+      # intermediate one joins stacked front zones, so only a horizontal stack
+      # needs the second. Same rule the picker used to apply to its dropdown -
+      # moved here, where companions are resolved, because a rule in the UI is
+      # a rule the order cannot rely on.
+      def gola_positions_for(unit)
+        kind = (unit['front_layout'] || {})['kind']
+        kind == 'horizontal' ? %w[undercounter intermediate] : %w[undercounter]
+      end
+
+      def companion_refs_for(unit, gola_system = nil)
         # map + compact, not filter_map: filter_map is Ruby 2.7 and the headless
         # harness has to run on the Ruby macOS actually ships, which is still
         # 2.6. SketchUp's own Ruby is far newer, so this only ever showed up as
@@ -539,7 +573,7 @@ module UCON
           line['source_ref'] = c['source_ref'] if c['source_ref']
           line
         end
-        lines = lines.compact
+        lines = lines.compact + gola_profile_refs(unit, gola_system)
         lines.empty? ? nil : lines
       end
 

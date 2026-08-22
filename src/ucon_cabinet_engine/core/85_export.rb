@@ -143,20 +143,35 @@ module UCON
         )
       end
 
-      def hardware_qty_note(um)
+      # An EMPTY quantity is not a gap in the export, it is the honest state of
+      # the object (Contract v2.1 made qty nullable for exactly this). Say which
+      # kind of unknown it is, so a reader can tell "nobody worked it out yet"
+      # from "nothing at this level could".
+      def qty_note(um)
         case um
         when 'ML' then 'qty = running length of the run, not of this unit (needs M2.1a)'
-        when 'PZ' then 'qty = one per front; not derived here until an estimate shows the row'
-        else 'qty and um both unknown - this article carries no um in the registry'
+        when 'MQ' then 'qty = area; not derivable from one object'
+        else 'qty not determinable from a single object'
         end
+      end
+
+      def hardware_qty_note(um)
+        return 'qty = one per front; not derived here until an estimate shows the row' if
+          um == 'PZ'
+        return 'qty and um both unknown - this article carries no um in the registry' if
+          um.to_s.empty?
+
+        qty_note(um)
       end
 
       def companion_row(line)
         l = line || {}
+        note = [l['origin'], l['source_ref']].compact
+        note << qty_note(l['um']) if l['qty'].nil?
         blank.merge(
           'level' => 1, 'code' => l['code'],
           'um' => l['um'], 'qty' => l['qty'],
-          'note' => [l['origin'], l['source_ref']].compact.join(' · '),
+          'note' => note.join(' · '),
           # §4.2 rule 4: a chosen line whose article stopped resolving carries
           # no code, and the order must show that rather than swallow it.
           'description' => l['code'].nil? ? 'UNRESOLVED companion - no article for this size' : nil

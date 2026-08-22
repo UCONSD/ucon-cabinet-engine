@@ -1,7 +1,7 @@
 # UCON Object Contract — v2
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v2 · **Date:** 2026-08-22 · **Status:** Locked (change only via versioned migration)
+**Version:** v2 (revision v2.1) · **Date:** 2026-08-22 · **Status:** Locked (change only via versioned migration)
 **Supersedes:** `docs/UCON_Object_Contract_v1.md` (revision v1.5), which is kept as the
 historical record and must not be edited.
 
@@ -120,7 +120,7 @@ VARIANT        : { key, value, source_ref }
 | Field | Type | Required | Allowed | Meaning |
 |---|---|:--:|---|---|
 | `code` | string | yes* | article code as printed | The companion article. *May be `null` — see the unresolvable case in §4.2 |
-| `qty` | number | yes | > 0 | How many. A resolved NUMBER, never a rule |
+| `qty` | number | no | > 0, or **null** | How many. A resolved NUMBER, never a rule. **Null means the quantity is not determinable from this object** — a linear-metre profile is measured along the RUN, a handle count follows the fronts. Forcing a number there would make the model state something nobody knows (v2.1) |
 | `um` | string | yes | `PZ` · `ML` · `MQ` | Unit of measure |
 | `origin` | string | yes | `implied` · `chosen` | Whether the article obliges this line, or a person asked for it — see §4.2 |
 | `source_ref` | string | no | page reference | Where the rule was read. **Optional on purpose**: a resolved code's provenance lives in the registry row that produced it, and a second copy is a second thing to keep true — the same argument that kept a `role` field out |
@@ -344,6 +344,14 @@ its v1 attributes on disk and reads correctly forever.
 
 ## 8. Change log
 
+- **v2.1 (2026-08-22)** — Additive, non-breaking. `qty` on a companion line may
+  be **null**, meaning the quantity is not determinable from this object. Driven
+  by the first real export run: gola grip-recess profiles are ordered by the
+  linear metre along a RUN that crosses joints between units, so no single
+  cabinet can state the number. Requiring a positive number there forced a
+  choice between a lie and an unrepresentable fact. Loosening a constraint
+  invalidates no existing data — every line written under v2 carries a qty and
+  stays valid — so §0 makes this a revision rather than a major version.
 - **v2 (2026-08-22)** — MAJOR. `companion_refs` changes from a comma-separated string to a
   list of order lines, and `variants` is added. Driven by printed p.111 + p.569: the first
   article the registry holds whose option is CHOSEN rather than implied, and whose chosen

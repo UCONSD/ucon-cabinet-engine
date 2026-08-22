@@ -276,17 +276,25 @@ puts "\npanel logic (door version / opening / hardware rules)"
 Panel = UCON::CabinetEngine::Panel
 U = Registry.lookup('B80601')
 
-check('door 75 -> gola, front 750, GOL profile required and recorded') do
-  p = Panel.attributes_patch(U, { 'door_version' => '75', 'hardware_ref' => 'GOL001' })
-  raise p.inspect unless p['opening_method'] == 'gola' && p['front_height_mm'] == 750 &&
-                         p['hardware_ref'] == 'GOL001' && p['hardware_source'] == 'factory'
+check('door 75 -> gola, front 750, and the profile is an ORDER LINE') do
+  # 0.49.0: the profile stopped being a hardware_ref string. One string cannot
+  # hold the two profiles a drawer stack needs, and joining them into
+  # "GOL001+GOL002" put an article that does not exist into a real export.
+  p = Panel.attributes_patch(U, { 'door_version' => '75', 'gola_system' => 'L-shaped' })
+  raise p.inspect unless p['opening_method'] == 'gola' && p['front_height_mm'] == 750
+  raise 'the profile is no longer opening hardware' if p['hardware_ref']
+  line = p['companion_refs'].find { |l| l['code'] == 'GOL001' }
+  raise p['companion_refs'].inspect unless line
+  raise line.inspect unless line['um'] == 'ML' && line['origin'] == 'implied'
+  # Bought by the metre along a run that crosses joints - no cabinet knows it.
+  raise 'an ML quantity must stay open' unless line['qty'].nil?
 end
 check('door 75 without a GOL profile is refused') do
   begin
-    Panel.attributes_patch(U, { 'door_version' => '75', 'hardware_ref' => '' })
+    Panel.attributes_patch(U, { 'door_version' => '75', 'gola_system' => '' })
     raise 'accepted'
   rescue ArgumentError => e
-    raise e.message unless e.message.include?('GOL')
+    raise e.message unless e.message.include?('SYSTEM')
   end
 end
 check('door 78 + factory handle -> M-code recorded') do
@@ -319,7 +327,7 @@ end
 check('every patched attribute set stays contract-valid') do
   base = Generator.attributes_for(U)
   [
-    { 'door_version' => '75', 'hardware_ref' => 'GOL001' },
+    { 'door_version' => '75', 'gola_system' => 'L-shaped' },
     { 'door_version' => '78', 'opening_method' => 'handle', 'hardware_mode' => 'client', 'hinge_side' => 'rh' },
     { 'door_version' => '78', 'opening_method' => 'push_to_open' }
   ].each do |payload|
@@ -355,9 +363,13 @@ check('internal depth math uses UCON standards (620 - 20 - 4 = 596 < 603)') do
 end
 
 puts "\ngola profile filtering (base unit front = undercounter only)"
-check('panel offers exactly GOL001 and GOL005') do
-  codes = Panel.gola_options.map { |r| r['code'] }.sort
-  raise codes.inspect unless codes == %w[GOL001 GOL005]
+check('the panel offers SYSTEMS, and names the profiles each one orders') do
+  opts = Panel.gola_options
+  raise opts.inspect unless opts.map { |r| r['value'] }.sort == ['L-shaped', 'straight']
+  # No option value may look like an article code, because it is not one.
+  raise 'an option value must not be a code' if opts.any? { |r| r['value'] =~ /^GOL/ }
+  raise 'the person choosing must still see what gets ordered' unless
+    opts.all? { |r| r['name'] =~ /GOL\d+/ }
 end
 check('registry rows carry position and system') do
   rows = Registry.data['hardware']['gola_profiles']
@@ -387,14 +399,22 @@ check('gola slabs: 360 at 0, 180 at 390, 180 at 570 (zones 30 above jumbo-joint 
   got = slabs.map { |sl| [sl[:h_mm], sl[:z_mm]] }
   raise got.inspect unless got == [[360.0, 0.0], [180.0, 390.0], [180.0, 570.0]]
 end
-check('gola drawer unit is offered profile PAIRS, both systems') do
-  opts = Panel.gola_options(Registry.lookup('B81253'))
-  codes = opts.map { |o| o['code'] }.sort
-  raise codes.inspect unless codes == ['GOL001+GOL002', 'GOL005+GOL006']
+check('a drawer stack names TWO profiles per system, a door names one') do
+  drawer = Panel.gola_options(Registry.lookup('B81253'))
+  raise drawer.inspect unless drawer.map { |o| o['name'] }.sort ==
+    ['L-shaped system (GOL001 + GOL002)', 'straight system (GOL005 + GOL006)']
+  door = Panel.gola_options(Registry.lookup('B80601'))
+  raise door.inspect unless door.map { |o| o['name'] }.sort ==
+    ['L-shaped system (GOL001)', 'straight system (GOL005)']
 end
-check('door unit still gets single undercounter profiles') do
-  codes = Panel.gola_options(Registry.lookup('B80601')).map { |o| o['code'] }.sort
-  raise codes.inspect unless codes == %w[GOL001 GOL005]
+
+check('and the ORDER gets the same two, as real codes') do
+  # This is what the joined pseudo-code used to hide.
+  p = Panel.attributes_patch(Registry.lookup('B81253'),
+                             { 'door_version' => '75', 'gola_system' => 'L-shaped' })
+  codes = p['companion_refs'].map { |l| l['code'] }
+  raise codes.inspect unless codes == %w[GOL001 GOL002]
+  raise 'no composite may survive anywhere' if codes.any? { |c| c.include?('+') }
 end
 check('a broken stack that does not sum to 780 raises') do
   u = Registry.lookup('B81253')
@@ -1338,7 +1358,7 @@ end
 
 check('the base family is untouched: 75 still shortens the front to 750') do
   p = Panel.attributes_patch(Registry.lookup('B80601'),
-                             { 'door_version' => '75', 'hardware_ref' => 'GOL001' })
+                             { 'door_version' => '75', 'gola_system' => 'L-shaped' })
   raise p.inspect unless p['front_height_mm'] == 750 && p['opening_method'] == 'gola'
 end
 
@@ -2448,8 +2468,9 @@ check('REGRESSION: switching to a client handle erases the factory ref') do
   u = Registry.lookup('B80601')
   e = StubEntity.new
   Contract.write!(e, Generator.attributes_for(u).merge(
-    Panel.attributes_patch(u, 'door_version' => '75', 'hardware_ref' => 'GOL001')))
-  raise 'setup failed' unless Contract.read(e)['hardware_ref'] == 'GOL001'
+    Panel.attributes_patch(u, 'door_version' => '78', 'opening_method' => 'handle',
+                              'hardware_mode' => 'factory', 'hardware_ref' => 'M00001')))
+  raise 'setup failed' unless Contract.read(e)['hardware_ref'] == 'M00001'
 
   patch = Panel.attributes_patch(u, 'door_version' => '78',
                                     'opening_method' => 'handle',
@@ -2829,16 +2850,17 @@ check('a gola drawer unit is handed profile PAIRS, through the real path') do
   # them was for. This checks the STATE the dialog receives, not the helper it
   # is built from.
   drawer = Registry.lookup('B81253')
-  codes  = Panel.selection_state(drawer, Generator.attributes_for(drawer))['gola_profiles']
-                .map { |r| r['code'] }
-  raise codes.inspect unless codes == %w[GOL001+GOL002 GOL005+GOL006]
+  names  = Panel.selection_state(drawer, Generator.attributes_for(drawer))['gola_profiles']
+                .map { |r| r['name'] }
+  raise names.inspect unless names == ['L-shaped system (GOL001 + GOL002)',
+                                       'straight system (GOL005 + GOL006)']
 end
 
 check('and a single-door unit is still handed single profiles') do
   door  = Registry.lookup('B80601')
-  codes = Panel.selection_state(door, Generator.attributes_for(door))['gola_profiles']
-               .map { |r| r['code'] }
-  raise codes.inspect unless codes == %w[GOL001 GOL005]
+  names = Panel.selection_state(door, Generator.attributes_for(door))['gola_profiles']
+               .map { |r| r['name'] }
+  raise names.inspect unless names == ['L-shaped system (GOL001)', 'straight system (GOL005)']
 end
 
 check('the state carries the unit facts the dialog renders') do
@@ -2972,7 +2994,7 @@ check('the 78/75 door version reaches the order NOWHERE') do
   # and no order line distinguishes them.
   gola = export_attrs('B80601').merge(
     Panel.attributes_patch(Registry.lookup('B80601'),
-                           'door_version' => '75', 'hardware_ref' => 'GOL001'))
+                           'door_version' => '75', 'gola_system' => 'L-shaped'))
   text = Export.csv(Export.rows([gola]))
   raise 'a door version leaked into the order' if text =~ /\b78\b|\bdoor_version\b/
   raise 'front_height_mm is not an order column' if Export::COLUMNS.include?('front_height_mm')
@@ -2981,7 +3003,7 @@ end
 check('a gola front orders its profile, in ML, with the quantity left OPEN') do
   gola = export_attrs('B80601').merge(
     Panel.attributes_patch(Registry.lookup('B80601'),
-                           'door_version' => '75', 'hardware_ref' => 'GOL001'))
+                           'door_version' => '75', 'gola_system' => 'L-shaped'))
   row = Export.rows([gola]).find { |r| r['code'] == 'GOL001' }
   raise 'the profile must be an order line' unless row
   raise row['um'].inspect unless row['um'] == 'ML'
@@ -3102,6 +3124,56 @@ check('the palette actually offers it, under a name JavaScript allows') do
   # names the thing it warns about is not the thing. (It failed exactly that
   # way on the first run - for the second time today.)
   raise 'do not wire a button to export()' if pal =~ /onclick="sketchup\.export\(\)"/
+end
+
+
+puts "\nthe gola profile as an ORDER LINE (0.49.0)"
+
+check('leaving gola takes the profiles away with it') do
+  # The half nobody would have noticed: a front that stops being gola must stop
+  # ordering a grip recess. Before 0.44.0 the contract could not even erase the
+  # key, so this is two fixes meeting.
+  u = Registry.lookup('B81253')
+  gola = Generator.attributes_for(u).merge(
+    Panel.attributes_patch(u, 'door_version' => '75', 'gola_system' => 'L-shaped'))
+  raise 'setup failed' unless gola['companion_refs'].map { |l| l['code'] } == %w[GOL001 GOL002]
+
+  back = gola.merge(Panel.attributes_patch(u, 'door_version' => '78',
+                                              'opening_method' => 'handle',
+                                              'hardware_mode' => 'client'))
+  raise back['companion_refs'].inspect unless back['companion_refs'].nil?
+
+  e = StubEntity.new
+  Contract.write!(e, gola)
+  Contract.write!(e, back)
+  raise 'a grip recess must not survive on a handled door' if
+    Contract.read(e).key?('companion_refs')
+end
+
+check('the system is read back off the codes, never stored twice') do
+  u = Registry.lookup('B80601')
+  attrs = Generator.attributes_for(u).merge(
+    Panel.attributes_patch(u, 'door_version' => '75', 'gola_system' => 'straight'))
+  raise Panel.gola_system_of(attrs).inspect unless Panel.gola_system_of(attrs) == 'straight'
+  raise 'the dialog must preselect it' unless
+    Panel.selection_state(u, attrs)['gola_system'] == 'straight'
+  # Storing the system alongside the codes would be a second copy to keep true.
+  raise 'the system must not become a key of its own' if attrs.key?('gola_system')
+  raise 'and it is not a contract key at all' if Contract::KEYS.include?('gola_system')
+end
+
+check('SENTINEL: no joined pseudo-code may reach an object or an order') do
+  # "GOL001+GOL002" read fine in a dropdown and reached a real export as an
+  # article that does not exist. It cannot come back through any door.
+  u = Registry.lookup('B81253')
+  attrs = Generator.attributes_for(u).merge(
+    Panel.attributes_patch(u, 'door_version' => '75', 'gola_system' => 'L-shaped'))
+  text = Export.csv(Export.rows([attrs]))
+  raise 'a composite code is in the schedule' if text =~ /GOL\d+\+/
+  raise 'a composite code is on the object' if
+    attrs['companion_refs'].any? { |l| l['code'].to_s.include?('+') }
+  raise 'and the panel must not offer one' if
+    Panel.gola_options(u).any? { |o| o['value'].to_s.include?('+') }
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

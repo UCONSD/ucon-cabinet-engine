@@ -2,7 +2,7 @@
 #
 # UCON Cabinet Engine — core/20_contract.rb
 #
-# Implements UCON Object Contract v2 — docs/UCON_Object_Contract_v2.md.
+# Implements UCON Object Contract v2 (revision v2.1) — docs/UCON_Object_Contract_v2.md.
 # (v1, revision v1.5, is kept unedited as the historical record.)
 #
 # `validate!` is pure Ruby with no SketchUp dependency, so the entire rule set
@@ -287,8 +287,15 @@ module UCON
           unless l['code'].nil? || l['code'].is_a?(String)
             raise ArgumentError, "#{at}: code must be a string or nil"
           end
-          unless l['qty'].is_a?(Numeric) && l['qty'].to_f > 0
-            raise ArgumentError, "#{at}: qty must be a positive number, got #{l['qty'].inspect}"
+          # v2.1: qty MAY be nil, and that is not a loophole. A linear-metre
+          # profile is measured along the RUN it travels; a handle count
+          # follows the fronts. Neither is determinable from one object, and
+          # the contract requiring a number there would force the model to
+          # state something nobody knows. Same rule as a code that stops
+          # resolving: unknown is nil, never a plausible 1.
+          unless l['qty'].nil? || (l['qty'].is_a?(Numeric) && l['qty'].to_f > 0)
+            raise ArgumentError,
+                  "#{at}: qty must be a positive number or nil, got #{l['qty'].inspect}"
           end
           unless COMPANION_UMS.include?(l['um'].to_s)
             raise ArgumentError, "#{at}: um must be one of #{COMPANION_UMS.join(' / ')}"
