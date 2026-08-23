@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 220 codes (103 base + 20 sink + 3 appliance + 66 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 256 codes (103 base + 20 sink + 3 appliance + 102 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 220
+  raise "got #{n}" unless n == 256
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 220 rows, each with code/dims/description/source') do
+check('registry catalog: 256 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 220
+  raise cat.length.to_s unless cat.length == 256
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -499,6 +499,8 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Closing strips and fillers for Maxima and Intarsio',
+                                             'Dish-drainer units H. 36',
+                                             'Dish-drainer units H. 48',
                                              'Sink base units H. 78',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
@@ -859,29 +861,45 @@ def hung_codes(axis)
           .map { |u| u['code'] }.sort
   end
   check('the hinge axis is one rule read both ways: top-hung is the mirror') do
-    down = hung_codes('bottom')
-    raise down.inspect unless down ==
-      %w[B80614 B90614 PB0525 PB0625 PB0725 PB0925 PB1025 PB1225
-         PC0525 PC0625 PC0725 PC0925 PC1025 PC1225 V80530 V80630 V80730]
-    up = hung_codes('top')
-    raise up.inspect unless up == %w[PB0500 PB0600 PB0700 PB0900 PB1000 PB1200
-                                     PC0500 PC0600 PC0700 PC0900 PC0904 PC1000
-                                     PC1004 PC1200 PC1204 PC1234 PC1504 PC1534
-                                     PC1804 PC1834 PC2434
-                                     PD0500 PD0600 PD0700 PD0900 PD1000 PD1200]
-    # H.60 has no bottom-hung type at all. H.48 (2026-08-23) has both, and it
-    # brings the COMPOUND top-hung types with it - one door across two or three
-    # carcass modules is still one top-hung leaf, so it belongs in this list.
-    # Three families, one rule, no second implementation.
+    # WAS AN INVENTORY, NOW AN INVARIANT (2026-08-23). This check used to pin
+    # two literal code lists. They reached 17 and 49 entries in one day of wall
+    # extraction, and a list that has to be retyped on every commit stops being
+    # read - which is exactly how rule 18's invariant went unnoticed. What the
+    # check is actually about is that ONE rule decides the axis, everywhere.
+    axis_of = lambda { |u| (u['front_layout'] || {})['hinge_axis'] }
+    units = Registry.catalog.map { |c| Registry.lookup(c['code']) }
 
-    # AND THE PUSH-UP TYPES ARE IN NEITHER LIST, in all three families. A
-    # push-up door is its own opening type in this catalog and nothing we have
-    # read says its leaf sweeps a top-hung figure. A symbol we cannot justify is
-    # not drawn - so hinge_axis is absent, not guessed.
-    push = Registry.catalog.map { |c| Registry.lookup(c['code']) }
-                   .select { |u| u['opening'] == 'push-up' }
+    top = units.select { |u| u['description'].to_s.downcase.include?('top-hung') }
+    raise 'no top-hung types at all' if top.empty?
+    bad = top.reject { |u| axis_of.call(u) == 'top' }
+    raise "top-hung without a top axis: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
+
+    bottom = units.select { |u| u['description'].to_s.downcase.include?('bottom-hung') }
+    raise 'no bottom-hung types at all' if bottom.empty?
+    bad = bottom.reject { |u| axis_of.call(u) == 'bottom' }
+    raise "bottom-hung without a bottom axis: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
+
+    # AND THE CONVERSE, which is the half an inventory could never state: no
+    # CABINET gets an axis its description did not ask for.
+    #
+    # The dishwasher doors are the stated exception and the reason is worth
+    # keeping: V80530 / V80630 / V80730 read 'Door for fully-integrated
+    # dishwasher' and never say bottom-hung, because the axis is the MACHINE's
+    # and not the catalog's wording. That is object_class appliance_front, the
+    # one class whose geometry is decided by something Cesar does not sell. Any
+    # OTHER object_class carrying an unexplained axis is a bug.
+    stray = units.select { |u| axis_of.call(u) } - top - bottom
+    bad = stray.reject { |u| u['object_class'] == 'appliance_front' }
+    raise "an axis nobody asked for: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
+    raise 'the appliance-front exception has lost its subject' if stray.empty?
+
+    # PUSH-UP IS IN NEITHER LIST, in every family. It is its own opening type in
+    # this catalog and nothing we have read says its leaf sweeps a top-hung
+    # figure. A symbol we cannot justify is not drawn - so hinge_axis is absent,
+    # not guessed.
+    push = units.select { |u| u['opening'] == 'push-up' }
     raise 'no push-up types to check' if push.empty?
-    bad = push.reject { |u| (u['front_layout'] || {})['hinge_axis'].nil? }
+    bad = push.reject { |u| axis_of.call(u).nil? }
     raise bad.map { |u| u['code'] }.inspect unless bad.empty?
 
     # Same unit, both ways up: the two figures are reflections of each other in
@@ -1284,9 +1302,17 @@ check('a hood variant is excluded by decision, dated, with its reason') do
     raise h.inspect unless h['note'].include?('per POSITION')
   end
   # The rest of the chapter is an ordinary gap, not a decision - except the
-  # one section we have started, which is partial.
+  # sections we have opened. 'extracted' joined the set on 2026-08-23 with the
+  # two dish-drainer sections, which are the first WHOLE sections in this
+  # chapter: a section is extracted only when nothing of it is held back.
   rest = (wall_sections - hoods).map { |s| s['status'] }.uniq.sort
-  raise rest.inspect unless rest == %w[not_extracted partial]
+  raise rest.inspect unless rest == %w[extracted not_extracted partial]
+  whole = (wall_sections - hoods).select { |s| s['status'] == 'extracted' }
+  raise whole.map { |s| s['section'] }.inspect unless
+    whole.map { |s| s['section'] }.sort ==
+      ['Dish-drainer units H. 36', 'Dish-drainer units H. 48']
+  raise 'a whole section still says when it was read' unless
+    whole.all? { |s| s['extracted_on'] == '2026-08-23' }
 end
 
 check('the wall grammar warning travels with the chapter, not with our memory of H.78') do
@@ -1312,13 +1338,14 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   end
 end
 
-check('the three sections we hold report pages; the 21 we have not are single rows') do
+check('the five wall sections we hold report pages; the 19 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 21
+  raise sections.size.inspect unless sections.size == 19
   raise 'a section we hold must not also be a section gap' if
     sections.any? { |g|
-      ['Wall units H. 36', 'Wall units H. 48', 'Wall units H. 60'].include?(g['section'])
+      ['Wall units H. 36', 'Wall units H. 48', 'Wall units H. 60',
+       'Dish-drainer units H. 36', 'Dish-drainer units H. 48'].include?(g['section'])
     }
 
   # Both held sections surface their unextracted pages as TYPE rows, in the
@@ -3789,24 +3816,31 @@ check('the section holds 34 codes in nine types, and the corner is not one of th
     rows.all? { |c| c['code'].start_with?('PC') }
 end
 
-check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width') do
+def registry_files
+  Dir[File.expand_path('../registry/cesar/*.json', __dir__)].reject { |f|
+    File.basename(f).start_with?('_')
+  }.sort
+end
+
+check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width, everywhere') do
   # The best arithmetic check a transcription can have: the page states both the
   # overall width and the module split beside every compound row, so a mistyped
-  # digit in either one shows up here and nowhere else.
-  file = File.expand_path('../registry/cesar/wall_h48.json', __dir__)
-  types = JSON.parse(File.read(file))['data']['unit_types']
+  # digit in either shows up here and nowhere else. Scans EVERY registry file -
+  # written against wall_h48 and earning its keep the same day, when the two
+  # dish-drainer sections brought ten more compound rows.
   checked = 0
-  types.each_value do |t|
-    t['codes'].each do |row|
-      mods = row['modules_mm']
-      next unless mods
+  registry_files.each do |file|
+    JSON.parse(File.read(file))['data']['unit_types'].each_value do |t|
+      t['codes'].each do |row|
+        next unless row['modules_mm']
 
-      checked += 1
-      raise "#{row['code']}: #{mods.inspect} != #{row['width_mm']}" unless
-        mods.sum == row['width_mm']
+        checked += 1
+        raise "#{row['code']}: #{row['modules_mm'].inspect} != #{row['width_mm']}" unless
+          row['modules_mm'].sum == row['width_mm']
+      end
     end
   end
-  raise "expected 14 compound rows, checked #{checked}" unless checked == 14
+  raise "expected 25 compound rows, checked #{checked}" unless checked == 25
 end
 
 check('a compound is ONE front, not a split - the modules are carcass') do
@@ -3821,10 +3855,11 @@ check('a compound is ONE front, not a split - the modules are carcass') do
 end
 
 check('the finish restrictions are RECORDED and say they are not enforced') do
-  file = File.expand_path('../registry/cesar/wall_h48.json', __dir__)
-  types = JSON.parse(File.read(file))['data']['unit_types']
-  blocks = types.each_value.map { |t| t['finish_restrictions'] }.compact
-  raise blocks.length.to_s unless blocks.length == 4
+  blocks = registry_files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types'].each_value
+        .map { |t| t['finish_restrictions'] }.compact
+  }
+  raise blocks.length.to_s unless blocks.length == 9
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
@@ -3835,6 +3870,89 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'finish_restrictions must have no reader yet' if
     ruby.any? { |f| File.read(f).include?('finish_restrictions') }
+end
+
+check('a width restriction is recorded where the page prints it, and read nowhere') do
+  # 'cannot be reduced in width' is printed inside the same prohibition block as
+  # the finishes, under the same symbol, on the four SIMPLE dish-drainer
+  # positions of H.48 and both of H.36 - and on NONE of the compounds. It is one
+  # of the ten facts waiting on `restrictions`, so it is stored with its page
+  # and nothing acts on it.
+  fixed = registry_files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types']
+        .select { |_, t| t['cannot_be_reduced_in_width'] }.keys
+  }
+  raise fixed.inspect unless fixed.sort == %w[
+    dish_drainer_door dish_drainer_push_up_door dish_drainer_push_up_door
+    dish_drainer_top_hung_door dish_drainer_top_hung_door dish_drainer_two_doors
+  ]
+  ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
+  raise 'it must have no reader yet' if
+    ruby.any? { |f| File.read(f).include?('cannot_be_reduced_in_width') }
+end
+
+puts "\ndish-drainer units H. 36 and H. 48 (printed p.213, 217-218)"
+check('both dish-drainer sections are held WHOLE, 36 codes, nothing gated') do
+  h36 = Registry.catalog.select { |c| c['section'] == 'Dish-drainer units H. 36' }
+  h48 = Registry.catalog.select { |c| c['section'] == 'Dish-drainer units H. 48' }
+  raise h36.length.to_s unless h36.length == 16 && h36.map { |c| c['type_key'] }.uniq.length == 3
+  raise h48.length.to_s unless h48.length == 20 && h48.map { |c| c['type_key'] }.uniq.length == 6
+  raise 'H.36 dish-drainers are PB' unless h36.all? { |c| c['code'].start_with?('PB') }
+  raise 'H.48 dish-drainers are PC' unless h48.all? { |c| c['code'].start_with?('PC') }
+end
+
+check('A SECTION FILE THAT JOINS AN EXISTING FAMILY DECLARES NO FAMILY KEY') do
+  # The rule bc546b2 established, now with four users: three filler files and
+  # two dish-drainer files all name a family another file owns. Height, mounting
+  # and plinth are stated ONCE. A second copy would not raise while it happened
+  # to agree, and would raise the day somebody corrected one.
+  joiners = registry_files.select { |f|
+    File.basename(f).start_with?('fillers_', 'dish_drainer_')
+  }
+  raise 'no joining files found' if joiners.empty?
+  joiners.each do |f|
+    stray = JSON.parse(File.read(f))['data'].keys - ['unit_types']
+    raise "#{File.basename(f)} declares #{stray.join(', ')}" unless stray.empty?
+  end
+end
+
+check('RULE 1 SCOPE: a page the index forgot is mapped as a PAGE, twice now') do
+  # printed p.433 forced the note: the printed index is a SUFFICIENT condition
+  # for a section, not a necessary one. The wall chapter is the second instance
+  # and it is a stronger one, because the omission is inconsistent - every other
+  # height in that chapter gets a dish-drainer entry in the index and H.120 does
+  # not, while printed p.254 is headed 'Dish-drainer units H. 120' on the page.
+  # Both are mapped the same way: as a PAGE of the section whose range contains
+  # them, so no section is ever invented and no page is ever lost.
+  [['Closing strips and fillers for Maxima and Intarsio', 435],
+   ['Wall units H. 120', 254]].each do |section, printed|
+    sec = Registry.map_sections.find { |x| x['section'] == section }
+    raise "#{section} is not mapped" unless sec
+    page = (sec['pages'] || []).find { |pg| pg['printed'] == printed }
+    raise "p.#{printed} is not a page of #{section}" unless page
+    raise "p.#{printed} must say the index forgot it" unless
+      (page['note'].to_s + page['types'].to_s).match?(/ABSENT FROM THE CHAPTER INDEX/i)
+  end
+  # And neither may exist as a section of its own - that is the half rule 1 guards.
+  names = Registry.map_sections.map { |x| x['section'] }
+  raise 'a page was promoted to a section' if
+    names.any? { |n| n.include?('N_Elle and N_Elle with framed door') } ||
+    names.include?('Dish-drainer units H. 120')
+end
+
+check('THE DISH-DRAINER SECTION MIRRORS ITS OWN FAMILY') do
+  # H.36 has no side-hinged wall unit, and its dish-drainer section has no door
+  # type either. H.48 has both. The sections are not independent of the family
+  # they sit in - which is the same fact that makes a filler wait for its family.
+  side_hinged = lambda { |section|
+    Registry.catalog.select { |c| c['section'] == section }
+            .map { |c| Registry.lookup(c['code']) }
+            .any? { |u| %w[door doors].include?(u['opening']) && !u['front_layout']['hinge_axis'] }
+  }
+  raise 'H.36 wall units must have no side-hinged door' if side_hinged.call('Wall units H. 36')
+  raise 'H.36 dish-drainers must have none either' if side_hinged.call('Dish-drainer units H. 36')
+  raise 'H.48 wall units must have one' unless side_hinged.call('Wall units H. 48')
+  raise 'H.48 dish-drainers must have one' unless side_hinged.call('Dish-drainer units H. 48')
 end
 
 check('PC0151 inherits Wall H.48 - it hangs, and it is 480 tall') do

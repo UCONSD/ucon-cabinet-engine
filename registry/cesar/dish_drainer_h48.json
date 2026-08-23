@@ -1,0 +1,137 @@
+{
+  "section": "Dish-drainer units H. 48",
+  "class": "wall",
+  "family": "Wall H.48",
+  "source_pages": "printed p.217-218 / PDF 219-220, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_note": "NO family-level keys - wall_h48.json declares them, and this is a second printed SECTION inside the same family. Same arrangement as dish_drainer_h36.json.",
+  "extraction_note": "The whole section: six positions, 20 codes, nothing held back and nothing gated.",
+  "data": {
+    "unit_types": {
+      "dish_drainer_door": {
+        "description": "Dish-drainer unit with door - 1 rh or lh door - 1 stainless steel rack with drip tray - 155 degree hinges",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "155 degree hinges"],
+        "source_ref": "printed p.217 / PDF 219",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PC0561", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PC0661", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "THE DISH-DRAINER SECTIONS MIRROR THEIR OWN FAMILIES. H.36 has no side-hinged wall unit and its dish-drainer section has no door type either; H.48 has both. The 155 degree hinge is stated here and on the two-door type and nowhere else on these pages - it is an interior fact, recorded, not drawn. ONE CODE, BOTH HANDS: the hand is an order variant, never a second article.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. Which edge is hinge_side, chosen per order and never guessed."
+        }
+      },
+      "dish_drainer_two_doors": {
+        "description": "Dish-drainer unit with doors - 2 doors - 1 stainless steel rack with drip tray - 155 degree hinges",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "155 degree hinges"],
+        "source_ref": "printed p.217 / PDF 219",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PC0960", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "One code, W.90, exactly as the plain wall two-door type of the same family.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
+        }
+      },
+      "dish_drainer_top_hung_door": {
+        "description": "Dish-drainer unit with top-hung door - 1 top-hung door - 1 stainless steel rack with drip tray",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray"],
+        "source_ref": "printed p.217 / PDF 219",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PC0502", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PC0602", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PC0702", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PC0902", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PC1002", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PC1202", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Same six widths and the same suffix 02 as the H.36 dish-drainer top-hung type. Two families agreeing, still not a rule.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge."
+        }
+      },
+      "dish_drainer_push_up_door": {
+        "description": "Dish-drainer unit with push-up door - 1 push-up door - 1 stainless steel rack with drip tray - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "interior Valencia handle"],
+        "source_ref": "printed p.217 / PDF 219",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PC0612", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PC0712", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PC0912", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PC1012", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PC1212", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Starts at W.60, like every push-up type read so far.",
+        "front_layout": {
+          "kind": "single",
+          "note": "NO hinge_axis - see the plain wall push-up type."
+        }
+      },
+      "dish_drainer_compound_2_top_hung": {
+        "description": "Compound dish-drainer unit with top-hung door - 1 top-hung door - 1 stainless steel rack with drip tray",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray"],
+        "source_ref": "printed p.218 / PDF 220",
+        "codes": [
+          { "code": "PC0906", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PC1006", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PC1206", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] },
+          { "code": "PC1506", "width_mm": 1500, "depth_mm": 350, "modules_mm": [600, 900] },
+          { "code": "PC1806", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "Carries the same printed rule as its H.36 twin: 'In compound wall units, the dish-drainer rack is fitted in the widest unit.' NO width restriction on this position, while all four simple positions have one - the compounds are where the catalog stops forbidding it.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.218 / PDF 220, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across both modules, hinged along its top edge."
+        }
+      },
+      "dish_drainer_compound_2_push_up": {
+        "description": "Compound dish-drainer unit with push-up door - 1 push-up door - 1 x 90 cm stainless steel rack with drip tray - 1 shelf - 2 x 90 cm compartments - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 x 90 cm stainless steel rack with drip tray", "1 shelf", "2 x 90 cm compartments", "interior Valencia handle"],
+        "source_ref": "printed p.218 / PDF 220",
+        "codes": [
+          { "code": "PC1811", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "THE ONLY POSITION IN EITHER DISH-DRAINER SECTION THAT SAYS WHICH MODULE THE RACK IS IN, and it says it dimensionally: a 90 cm rack in an 90+90 unit, plus a shelf. Suffix 11 - it is neither the plain push-up compound's 08 nor the top-hung dish-drainer compound's 06, so the two suffix families do not compose.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.218 / PDF 220, read off the render",
+          "for_all_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "note": "RECORDED, NOT ENFORCED - M1.6. No asterisks anywhere in this block, and the position has one width - the same fit the plain compound push-up shows."
+        },
+        "front_layout": {
+          "kind": "single",
+          "note": "One push-up door across both compartments. NO hinge_axis."
+        }
+      }
+    }
+  }
+}

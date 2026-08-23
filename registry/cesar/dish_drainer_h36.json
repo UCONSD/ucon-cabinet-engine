@@ -1,0 +1,94 @@
+{
+  "section": "Dish-drainer units H. 36",
+  "class": "wall",
+  "family": "Wall H.36",
+  "source_pages": "printed p.213 / PDF 215, read whole and verified against a 170-dpi render 2026-08-23",
+  "family_note": "NO family-level keys. This is a second printed SECTION inside a family wall_h36.json already declares, and the loader allows that as long as the two files do not disagree - the rule bc546b2 established and the filler files were the first to use. Height, mounting and the N_Elle overall height are stated once, in wall_h36.json, and read from here through the family.",
+  "extraction_note": "The whole section: three positions, 16 codes, nothing held back. There is no corner here and no Virgola variant, so nothing is gated.",
+  "data": {
+    "unit_types": {
+      "dish_drainer_top_hung_door": {
+        "description": "Dish-drainer unit with top-hung door - 1 top-hung door - 1 stainless steel rack with drip tray",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray"],
+        "source_ref": "printed p.213 / PDF 215",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PB0502", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PB0602", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PB0702", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PB0902", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PB1002", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PB1202", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Suffix 02 against the plain wall unit's 00, same widths, same family letter. Three of the six dish-drainer suffixes look like the wall suffix plus two (00->02, 10->12, 04->06) and the other three do not (31->61, 30->60, 08->11). Read the row.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.213 / PDF 215, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "note": "RECORDED, NOT ENFORCED - M1.6. The width restriction above shares this block and the same prohibition symbol; it is kept as its own key because it is not about finishes."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge. The rack is interior and not drawn."
+        }
+      },
+      "dish_drainer_push_up_door": {
+        "description": "Dish-drainer unit with push-up door - 1 push-up door - 1 stainless steel rack with drip tray - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "interior Valencia handle"],
+        "source_ref": "printed p.213 / PDF 215",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PB0612", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PB0712", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PB0912", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PB1012", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PB1212", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Starts at W.60 while the top-hung type starts at W.45 - the same gap the plain wall units of H.48 show between the two openings.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.213 / PDF 215, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "note": "NO hinge_axis - a push-up door is its own opening type and nothing we have read says its leaf sweeps a top-hung figure."
+        }
+      },
+      "dish_drainer_compound_2_top_hung": {
+        "description": "Compound dish-drainer unit with top-hung door - 1 top-hung door - 1 stainless steel rack with drip tray",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray"],
+        "source_ref": "printed p.213 / PDF 215",
+        "codes": [
+          { "code": "PB0906", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PB1006", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PB1206", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] },
+          { "code": "PB1506", "width_mm": 1500, "depth_mm": 350, "modules_mm": [600, 900] },
+          { "code": "PB1806", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "ONE RACK, TWO MODULES, AND THE PAGE SAYS WHERE IT GOES: 'In compound wall units, the dish-drainer rack is fitted in the widest unit.' That is a rule about the INTERIOR of an asymmetric compound - 60+45, 60+90 - and it is why modules_mm is not decoration. Nothing draws the rack, so nothing acts on it yet; it is recorded with its page. NOTE the width restriction is ABSENT here while both simple positions carry it.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.213 / PDF 215, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across both modules, hinged along its top edge."
+        }
+      }
+    }
+  }
+}
