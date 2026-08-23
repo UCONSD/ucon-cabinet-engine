@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 180 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall + 14 tall)') do
+check('registry loads and holds 185 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall + 14 tall + 5 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 180
+  raise "got #{n}" unless n == 185
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -242,11 +242,26 @@ check('an unknown code raises with the known-code list') do
     raise e.message unless e.message.include?('not in the registry')
   end
 end
-check('EVERY registry code yields contract-valid attributes') do
+check('EVERY BUILDABLE registry code yields contract-valid attributes') do
   Registry.codes.each do |code|
-    attrs = Generator.attributes_for(Registry.lookup(code))
-    Contract.validate!(attrs)
+    u = Registry.lookup(code)
+    # An article the catalog prices by height alone has no width until it is
+    # ordered (printed p.434). The sweep ORDERS one rather than inventing a
+    # column, because the honest claim is "valid once ordered".
+    u = Registry.with_ordered_width(u, u['width_range_mm'][0]) if u['width_range_mm']
+    # And one that is not buildable is not required to be dimensionable: the
+    # front-only fillers have no depth on the page, which is exactly why they
+    # carry buildable false and a reason. Checked on its own below.
+    next unless u.fetch('buildable', true)
+
+    Contract.validate!(Generator.attributes_for(u))
   end
+end
+check('and every code that is NOT buildable says why, in the registry') do
+  unbuildable = Registry.catalog.reject { |c| c['buildable'] }
+  raise 'nothing is unbuildable - this check has lost its subject' if unbuildable.empty?
+  bad = unbuildable.reject { |c| c['not_buildable_reason'].to_s.length > 40 }
+  raise bad.map { |c| c['code'] }.inspect unless bad.empty?
 end
 check('the generator never guesses hinge_side') do
   attrs = Generator.attributes_for(Registry.lookup('B80601'))
@@ -395,13 +410,17 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 180 rows, each with code/dims/description/source') do
+check('registry catalog: 185 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 180
-  # A corner row is dimensioned by corner_geometry instead of a single width.
+  raise cat.length.to_s unless cat.length == 185
+  # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
+  # instead of a width; a filler carries the RANGE the catalog prints instead
+  # of the width it never prints. A depth is required of anything we offer to
+  # build - the front-only fillers have none and do not claim to be buildable.
   raise 'incomplete row' unless cat.all? { |c|
-    c['code'] && c['height_mm'] && c['depth_mm'] &&
-    (c['width_mm'] || c['corner_geometry']) &&
+    c['code'] && c['height_mm'] &&
+    (c['depth_mm'] || !c['buildable']) &&
+    (c['width_mm'] || c['corner_geometry'] || c['width_range_mm']) &&
     c['description'] && c['source_ref'] && c['type_key']
   }
 end
@@ -463,7 +482,11 @@ check('B80650 drawer+jumbo: slabs 585 bottom / 195 top; gola 555/165') do
 end
 check('every new code yields contract-valid attributes') do
   (Registry.codes.select { |c| c.end_with?('57', '50') } - ['B80553']).each do |code|
-    Contract.validate!(Generator.attributes_for(Registry.lookup(code)))
+    u = Registry.lookup(code)
+    # B70150 is the first code this filter has caught that has no width of its
+    # own. Order one, for the reason given in the whole-registry sweep.
+    u = Registry.with_ordered_width(u, u['width_range_mm'][0]) if u['width_range_mm']
+    Contract.validate!(Generator.attributes_for(u))
   end
 end
 
@@ -475,14 +498,18 @@ check('split storage: every catalog row is stamped with its section and class') 
   sections = cat.map { |c| c['section'] }.uniq.sort
   raise sections.inspect unless sections == ['Base units H. 78',
                                              'Base units H. 78 | for household appliances',
+                                             'Closing strips and fillers for Maxima and Intarsio',
                                              'Sink base units H. 78',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 36',
                                              'Wall units H. 60']
   # tall arrived 2026-08-21 with printed p.418 - the first non base/wall class.
+  # 'filler' arrived 2026-08-23 with printed p.434 and is the first class that
+  # is OURS rather than the catalog's - one chapter whose rows are base, wall
+  # and tall at once. catalog_map carries the reasoning.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
-    cat.map { |c| c['class'] }.uniq.sort == %w[base tall wall]
+    cat.map { |c| c['class'] }.uniq.sort == %w[base filler tall wall]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -712,8 +739,13 @@ if defined?(UCON::CabinetEngine::Panel)
   end
 end
 check('every corner article is still buildable and contract-valid') do
+  # This used to assert that NOTHING in the registry was unbuildable, which was
+  # true only because nothing had yet been held that we cannot draw honestly.
+  # printed p.434 ended that: a front-only filler has no depth on the page. The
+  # invariant that matters here was always about corners.
   not_buildable = Registry.catalog.reject { |c| c['buildable'] }
-  raise not_buildable.map { |c| c['code'] }.inspect unless not_buildable.empty?
+                          .map { |c| c['code'] }.sort
+  raise not_buildable.inspect unless not_buildable == %w[B70151 CQ0151]
   Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
     a = Generator.attributes_for(Registry.lookup(row['code']))
     raise a.inspect unless a['geometry_kind'] == 'corner'
@@ -3575,6 +3607,129 @@ check('SENTINEL: no joined pseudo-code may reach an object or an order') do
     attrs['companion_refs'].any? { |l| l['code'].to_s.include?('+') }
   raise 'and the panel must not offer one' if
     Panel.gola_options(u).any? { |o| o['value'].to_s.include?('+') }
+end
+
+# ---- fillers and closing strips, printed p.434 ------------------------
+#
+# The third order axis outside the code, and the first that is a DIMENSION.
+# claude/fillers-recon-2026-08-23.md is the reading these pin.
+
+FILLER_CODES = %w[B70151 B70150 PB0151 PD0151 CQ0151].freeze
+
+check('every filler extracted from printed p.434 is in the registry') do
+  missing = FILLER_CODES.reject { |c| Registry.codes.include?(c) }
+  raise "missing: #{missing.join(', ')}" unless missing.empty?
+end
+
+check('a filler states a width RANGE and no width') do
+  FILLER_CODES.each do |code|
+    u = Registry.lookup(code)
+    raise "#{code} carries a width_mm the catalog never printed" if u['width_mm']
+    raise "#{code} has no width_range_mm" unless u['width_range_mm'] == [23, 150]
+    raise "#{code} is not object_class filler" unless u['object_class'] == 'filler'
+  end
+end
+
+check('a filler cannot be built without the width being asked for') do
+  begin
+    Registry.with_ordered_width(Registry.lookup('B70150'), nil)
+    raise 'a missing width was accepted'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('per order')
+  end
+end
+
+check('a width outside the printed range is refused, and both ends are not') do
+  u = Registry.lookup('B70150')
+  [22, 151].each do |w|
+    begin
+      Registry.with_ordered_width(u, w)
+      raise "#{w} mm was accepted"
+    rescue ArgumentError => e
+      raise "wrong refusal for #{w}" unless e.message.include?('made from 23 to 150')
+    end
+  end
+  raise 'the ends of the range must build' unless
+    Registry.with_ordered_width(u, 23)['width_mm'] == 23 &&
+    Registry.with_ordered_width(u, 150)['width_mm'] == 150
+  raise 'a fractional millimetre is not a width' unless
+    begin
+      Registry.with_ordered_width(u, '60,5')
+      false
+    rescue ArgumentError
+      true
+    end
+end
+
+check('SENTINEL: a width may not be ordered for an article that names its own') do
+  # The other half of Generator::INSTANCE_KEYS - an object may not out-vote the
+  # registry about what article it is. B80601 is 600 wide and that is final; a
+  # narrower one is a MODIFICATION with a surcharge (Elda position 4), never a
+  # number typed into a dialog.
+  begin
+    Registry.with_ordered_width(Registry.lookup('B80601'), 560)
+    raise 'a typed width was allowed to overwrite the catalog'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('states its own width')
+  end
+  raise 'and an unranged article must pass through untouched' unless
+    Registry.with_ordered_width(Registry.lookup('B80601'), nil)['width_mm'] == 600
+end
+
+check('an ordered filler satisfies the contract') do
+  # 120 mm, not 600: the whole article tops out at 15 cm.
+  u = Registry.with_ordered_width(Registry.lookup('B70150'), 120)
+  attrs = Generator.attributes_for(u)
+  raise 'the ordered width did not reach the object' unless attrs['width_mm'] == 120
+  raise 'object_class' unless attrs['object_class'] == 'filler'
+  Contract.validate!(attrs)
+end
+
+check('A FILLER INHERITS ITS FAMILY GROUND, which is why it waits for it') do
+  base = Registry.lookup('B70150')
+  raise 'height' unless base['height_mm'] == 780
+  raise 'a base filler stands on the H.78 plinth' unless base['plinth_h_mm'] == 100
+  raise 'and on the floor' unless base['mounting'] == 'floor'
+  raise 'a wall filler hangs' unless Registry.lookup('PB0151')['mounting'] == 'wall_hung'
+end
+
+check('no filler file declares a family-level key of its own') do
+  # The load-bearing half of the recon: a family fact belongs in ONE file. A
+  # filler file restating height_mm or plinth_h_mm would not raise while it
+  # happened to agree - and would raise on the day somebody corrected one of
+  # the two copies.
+  Dir[File.expand_path('../registry/cesar/fillers_*.json', __dir__)].each do |f|
+    stray = ((JSON.parse(File.read(f))['data'] || {}).keys - ['unit_types'])
+    raise "#{File.basename(f)} declares #{stray.join(', ')}" unless stray.empty?
+  end
+end
+
+check('the front-only fillers are held, not buildable, and say why') do
+  %w[B70151 CQ0151].each do |code|
+    u = Registry.lookup(code)
+    raise "#{code} claims to be buildable" if u.fetch('buildable', true)
+    raise "#{code} gives no reason" unless
+      u['not_buildable_reason'].to_s.downcase.include?('depth')
+  end
+end
+
+check('the ORDER says the width was chosen, not read off a page') do
+  a = Generator.attributes_for(Registry.with_ordered_width(Registry.lookup('B70150'), 96))
+  row = Export.rows([a]).first
+  raise row.inspect unless row['l_mm'] == 96
+  raise 'the schedule does not say the width is ours' unless
+    row['note'].to_s.include?('ORDER choice')
+  # and an ordinary article must NOT carry that note - 600 is the catalog's.
+  plain = Export.rows([Generator.attributes_for(Registry.lookup('B80601'))]).first
+  raise plain.inspect unless plain['note'].nil?
+end
+
+check('a filler is never offered the wall-hung surcharge') do
+  # printed p.548 sells it for base and tall UNITS. wall_hung_available? already
+  # refuses anything that is not a cabinet, so this costs nothing - but the
+  # filler is the first object_class to exercise that arm.
+  raise 'a filler was offered a fixing kit' if
+    Generator.wall_hung_available?(Registry.lookup('B70150'))
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

@@ -107,8 +107,37 @@ module UCON
           'h_mm' => a['height_mm'],
           'p_mm' => a['depth_mm'],
           'um' => UNIT_UM, 'qty' => 1,
-          'status' => a['status'], 'code_status' => a['code_status']
+          'status' => a['status'], 'code_status' => a['code_status'],
+          'note' => ordered_width_note(a)
         )
+      end
+
+      # WHEN THE L COLUMN IS OUR NUMBER AND NOT THE CATALOG'S.
+      #
+      # printed p.434 prices fillers and closing strips by HEIGHT alone: one
+      # article covers every width from 2,3 to 15 cm, so the width on this line
+      # was chosen by whoever placed the object. Nothing in the number says so,
+      # and the difference matters to whoever reads the estimate - quoting a
+      # catalog size and specifying a cut are not the same request.
+      #
+      # Asked of the registry, never trusted from the object: the range is a
+      # catalog fact, the same rule front_layout_for follows and for the same
+      # reason.
+      def ordered_width_note(a)
+        range = width_range_for(a)
+        return nil unless range
+
+        'width is an ORDER choice, not a catalog size: this article is made ' \
+        "from #{range[0]} to #{range[1]} mm (printed p.434)"
+      end
+
+      def width_range_for(attrs)
+        code = (attrs || {})['code'].to_s
+        return nil if code.empty?
+
+        Registry.lookup(code)['width_range_mm']
+      rescue ArgumentError
+        nil
       end
 
       def hand_row(a)

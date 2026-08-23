@@ -1,0 +1,24 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "Tall H.210",
+  "source_pages": "printed p.434 / PDF 436 (subset extracted: the H.210 row of the first position)",
+  "family_note": "No family-level keys - see fillers_h78.json.",
+  "data": {
+    "unit_types": {
+      "filler_front": {
+        "description": "Filler in door finishes from 2,3 to 15 cm - front in door finishes",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.434 / PDF 436",
+        "buildable": false,
+        "not_buildable_reason": "No depth is printed for this position - see fillers_h78.json, same article family, same reason.",
+        "codes": [
+          { "code": "CQ0151", "width_range_mm": [23, 150] }
+        ],
+        "notes": "CQ is the H.210 letter the tall chapter uses, and code_grammar.tall_units records that every tall section prints a PAIR - the first member d.35, the second d.62. This table prints only first members (CE, CQ, CG, C0 and never CF, CR, CH, C9), which is consistent with a front strip having no depth to choose. AN OBSERVATION, NOT A RULE, and one row already breaks it: CH9151 at H.278 uses a d.62 letter that the tall chapter assigns to H.222, and carries the only suffix on the page that is neither 0150 nor 0151. A family letter can be page-scoped exactly as a depth letter can. H.278 appears nowhere else in anything we have read."
+      }
+    }
+  }
+}

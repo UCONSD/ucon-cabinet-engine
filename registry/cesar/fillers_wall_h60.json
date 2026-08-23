@@ -1,0 +1,22 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "Wall H.60",
+  "source_pages": "printed p.434 / PDF 436 (subset extracted: the H.60 row of the third position)",
+  "family_note": "No family-level keys - see fillers_h78.json.",
+  "data": {
+    "unit_types": {
+      "filler_wall_unit": {
+        "description": "Wall unit filler in door finishes from 2,3 to 15 cm - with one-piece bottom",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": ["one-piece bottom"],
+        "source_ref": "printed p.434 / PDF 436",
+        "codes": [
+          { "code": "PD0151", "width_range_mm": [23, 150], "depth_mm": 350 }
+        ],
+        "notes": "THIS IS THE ARTICLE THE FIVE-CENTIMETRE CLOSING-STRIP RULE HAS BEEN ASKING FOR. printed p.11: 'If a rh or lh wall unit with a \"D\" handle is installed adjacent to a tall unit or a wall, it is advisable to fit a closing strip of at least 5 cm so that the wall unit can be fully opened.' wall_h60.json records that the rule bites on PD0131, PD0531 and PD0631 and that we had nothing to fit; PD0151 is the thing, and 50 mm sits inside its 23-150 range. THE POLICY DOES NOT CHANGE: warn, never auto-insert. printed p.10-11 carry FIVE such rules, not one - claude/fillers-recon-2026-08-23.md lists them, and all five turn on the grip system or the handle model, so they belong with the other restrictions waiting on M1.6."
+      }
+    }
+  }
+}

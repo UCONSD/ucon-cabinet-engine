@@ -170,6 +170,13 @@ module UCON
             # unit 360 tall has no version to pick.
             'door_versions'      => family['door_versions'],
             'width_mm'           => row['width_mm'],
+            # THE WIDTH A FILLER IS ORDERED AT IS NOT IN ITS CODE. printed p.434
+            # prices fillers by HEIGHT alone: one article covers every width
+            # from 2,3 to 15 cm. The row states the RANGE and 'width_mm' above
+            # is nil; Registry.with_ordered_width turns the range into a
+            # number. Absent means the ordinary case - the catalog stated the
+            # width and it is right above this line.
+            'width_range_mm'     => row['width_range_mm'],
             'depth_mm'           => row['depth_mm'],
             'unit_type'          => type_key,
             'description'        => unit_type['description'],
@@ -230,9 +237,64 @@ module UCON
         table[width_mm.to_i.to_s]
       end
 
+      # ---- the ordered width (printed p.434) -----------------------------
+      #
+      # THE THIRD ORDER AXIS OUTSIDE THE CODE, after door_version and
+      # hinge_side, and the first that is a DIMENSION rather than a choice from
+      # a list. A filler article covers every width from 2,3 to 15 cm; the
+      # catalog prints the range and declines to print the width, exactly as it
+      # prints "1 rh or lh door" and declines to print the hand.
+      #
+      # DELIBERATELY NOT DONE by widening Generator::INSTANCE_KEYS. That guard
+      # says an object may not out-vote the registry about what article it is,
+      # and it must keep saying so. A filler's width out-votes nothing: there
+      # is nothing to out-vote, because the catalog never stated it.
+      #
+      # Pure, and raises rather than defaulting. A filler silently built at the
+      # bottom of its range would be a drawing nobody could tell was wrong.
+      def with_ordered_width(unit, width_mm)
+        range = unit['width_range_mm']
+
+        if range.nil?
+          return unit if width_mm.nil? || width_mm.to_s.empty?
+
+          raise ArgumentError,
+                "#{unit['code']} states its own width (#{unit['width_mm']} mm). " \
+                'A width is ordered only for an article whose catalog row gives ' \
+                'a range instead of a width.'
+        end
+
+        lo, hi = range
+        if width_mm.nil? || width_mm.to_s.empty?
+          raise ArgumentError,
+                "#{unit['code']} has no width in the catalog: one article covers " \
+                "#{lo} to #{hi} mm and the width is stated per order. Ask for it " \
+                'before building.'
+        end
+
+        w = begin
+          Integer(width_mm)
+        rescue ArgumentError, TypeError
+          nil
+        end
+        if w.nil?
+          raise ArgumentError,
+                "A filler width is a whole number of millimetres; got #{width_mm.inspect}."
+        end
+
+        unless w >= lo && w <= hi
+          raise ArgumentError,
+                "#{unit['code']} is made from #{lo} to #{hi} mm; #{w} is outside " \
+                'that. The range is the catalog\'s, printed on the page the row cites.'
+        end
+
+        unit.merge('width_mm' => w)
+      end
+
       def catalog(manufacturer = 'cesar')
         each_code(data(manufacturer)).map do |row, family_name, family, type_key, unit_type|
           { 'code' => row['code'], 'width_mm' => row['width_mm'],
+            'width_range_mm' => row['width_range_mm'],
             'nominal_in' => nominal_in(row['width_mm'], manufacturer),
             'depth_mm' => row['depth_mm'], 'height_mm' => family['height_mm'],
             'family' => family_name, 'type_key' => type_key,

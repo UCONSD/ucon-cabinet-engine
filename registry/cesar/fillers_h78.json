@@ -1,0 +1,37 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "H.78",
+  "source_pages": "printed p.434 / PDF 436 (subset extracted: the two H.78 rows of the first and second positions)",
+  "family_note": "THIS FILE DECLARES NO FAMILY-LEVEL KEYS ON PURPOSE. A filler is an H.78 element and takes its height, its mounting and its plinth from base_h78.json - it stands on the same 100 mm plinth as the cabinets beside it. Restating any of those here would put one family fact in two files, which the loader raises on since bc546b2, and inheriting is not a workaround: it is the whole reason a filler cannot honestly be extracted ahead of its family. Extracted before base_h78.json existed, this row would have silently taken Standards::PLINTH_H_MM instead of its own ground.",
+  "extraction_note": "printed p.434 carries FOUR positions and 31 codes spread over TWELVE heights and THREE classes - the first page in this catalog that is not a page of one family. Only the rows whose family this registry already holds are extracted, here and in fillers_wall_h36.json, fillers_wall_h60.json and fillers_tall_h210.json. The other 26 codes, the 60-160 degree corner panel (A80150 / AL0150, new geometry) and the whole of printed p.435 (N_Elle, whose chapter is not extracted) are recorded in claude/fillers-recon-2026-08-23.md.",
+  "width_note": "NO CODE ON THIS PAGE NAMES A WIDTH. One article covers every width from 2,3 to 15 cm and the width is stated when the thing is ordered - the THIRD entry in order_axes_outside_code after door_version and hinge_side, and the first that is a DIMENSION rather than a choice from a list. Hence width_range_mm and no width_mm. Registry.with_ordered_width is where the range becomes a number.",
+  "data": {
+    "unit_types": {
+      "filler_front": {
+        "description": "Filler in door finishes from 2,3 to 15 cm - front in door finishes",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.434 / PDF 436",
+        "buildable": false,
+        "not_buildable_reason": "The page prints NO depth for this position - it is a front and nothing else, drawn as a bare strip with no dimensioned section. The front thickness of 2,2 cm is stated all over this catalog and would be the obvious guess, and a guess is exactly what rule 8 forbids: a number no source gives us is not written down. The article is held so it is findable and orderable; the day a depth is confirmed this becomes a data change and not a code change.",
+        "codes": [
+          { "code": "B70151", "width_range_mm": [23, 150] }
+        ],
+        "notes": "The prefix is the height-family letter and it is the same lookup the unit chapters use - B7 = H.78, exactly as in base_h78.json. A RE-CONFIRMATION of the family-letter pattern, not a new grammar. THE SUFFIX IS NOT DECODABLE ACROSS PREFIXES: 0151 here is a front-only strip, while 0151 on a P prefix (see fillers_wall_h36.json) is a wall filler WITH a one-piece bottom. Read the table, not the digits."
+      },
+      "filler_base_unit": {
+        "description": "Base unit filler in door finishes from 2,3 to 15 cm - front in door finishes - sides, bottom and top panel in melamine",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.434 / PDF 436",
+        "codes": [
+          { "code": "B70150", "width_range_mm": [23, 150], "depth_mm": 350 }
+        ],
+        "notes": "A shallow box, not a strip: d.35 even though the base units beside it are d.62. The detail circle on the page is dimensioned 35 / 0,3 / 2,2, which reads as 350 + 3 + 22 = 375, the D.375 finished depth the end-panel pages (printed p.436-449) use throughout - OUR reading of a drawing, not a printed equation, and only depth_mm 350 is recorded here because that is the only one of the three numbers the page labels. The page's warning block applies: if the door is framed the glass/ceramic is applied to the panel and not to the aluminium support; minimum size available also for Groove 5 cm; Trama gets 2 sides with trama and a polished edge."
+      }
+    }
+  }
+}

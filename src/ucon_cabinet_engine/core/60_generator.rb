@@ -210,8 +210,13 @@ module UCON
         sibling
       end
 
-      def build(code, model = Sketchup.active_model)
-        unit = Registry.lookup(code)
+      # width_mm is the ORDERED width, and it is nil for almost everything.
+      # A filler is priced by height alone and its width is stated per order
+      # (printed p.434); with_ordered_width refuses a width for an article that
+      # names its own, and refuses to build one that does not without it. See
+      # _manifest.json -> order_axes_outside_code.filler_width_mm.
+      def build(code, model = Sketchup.active_model, width_mm: nil)
+        unit = Registry.with_ordered_width(Registry.lookup(code), width_mm)
         unless unit.fetch('buildable', true)
           raise ArgumentError,
                 "#{code} is in the registry but cannot be built yet.\n\n" \

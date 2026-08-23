@@ -30,6 +30,28 @@
     "verified_on": "2026-08-18",
     "note": "The catalog's own hierarchy is: collection (Maxima/Intarsio, Tangram, Unit, N_Elle...) > element class (base/wall/tall) > height family (H.39/H.48/H.58.5/H.78/H.84) > family variant (plain / sink / for household appliances) > unit type > depth x width. Our picker mirrors class > section (family+variant) > type > size. RULE: a placeholder may only be shown at a level we have actually read in the source - sections come from the printed index, unit types only from pages we have opened. Statuses: extracted | partial | not_extracted | planned | excluded.",
     "sections": [
+      { "class": "filler", "collection": "Maxima e Intarsio", "section": "Closing strips and fillers for Maxima and Intarsio", "printed_pages": "434-435", "status": "partial",
+        "note": "THE FIRST SECTION IN THIS MAP THAT IS NOT ONE ELEMENT CLASS. printed p.434 spreads 31 codes over twelve heights and over base, wall and tall alike, and a map entry carries one class - so 'filler' is OUR class, chosen because the catalog prints these as their own chapter after every collection, and because a person looking for a closing strip is looking for one thing and not three. The ROWS keep their families and therefore their real ground: a wall filler still hangs, a base filler still stands on the H.78 plinth. Reversible - one field in four data files and one label. Chapter index printed p.433 read 2026-08-23; the chapter runs on to p.456 with end elements and open units, which are deliberately NOT mapped here - see claude/fillers-recon-2026-08-23.md.",
+        "decided_on": "2026-08-23",
+        "pages": [
+          { "printed": 434, "status": "partial",
+            "types": [
+              { "title": "Filler in door finishes from 2,3 to 15 cm", "status": "partial",
+                "note": "12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families." },
+              { "title": "Base unit filler in door finishes from 2,3 to 15 cm", "status": "partial",
+                "note": "10 codes, H.36 to H.138, all d.35. B70150 (H.78) held. Note PJ0150 at H.120: a wall prefix inside the base-unit table." },
+              { "title": "Wall unit filler in door finishes from 2,3 to 15 cm", "status": "partial",
+                "note": "7 codes, H.36 to H.120, all d.35, with a one-piece bottom. PB0151 (H.36) and PD0151 (H.60) held. PD0151 is the article the five-centimetre closing-strip rule of printed p.11 has been asking for." },
+              { "title": "60 to 160 degree base unit corner panel", "status": "not_extracted",
+                "note": "A80150 (H.78) and AL0150 (H.84) - the same two codes at the same prices on p.434 AND p.435, one article serving both collections. New geometry, and its minimum rear size depends on the grip system (printed p.10), so it waits with the other corner work." }
+            ] },
+          { "printed": 435, "status": "not_extracted",
+            "types": [
+              { "title": "Closing strips and fillers for N_Elle and N_Elle with framed door", "status": "not_extracted",
+                "note": "Y00150 / Y30150 / Y60150 and YC0150 / YO0150 / YT0150, d.35, 45 degree front edge, and a band set of their own (5-8/10/11 and 12/13/15). Waits on the N_Elle chapter, printed p.321: a filler may not be held before its family. THE PAGE ALSO CONTRADICTS ITSELF - the first position is headed 'from 2,3 to 15 cm' while its own warning reads 'Minimum size available: 5 cm.' Both are on the render. Open for Elda." }
+            ],
+            "note": "HEADED ON THE PAGE, ABSENT FROM THE CHAPTER INDEX - printed p.433 jumps from 434 to 436. Mapped as a PAGE of the section whose range contains it, so rule 1 is untouched: the section still comes from the printed index." }
+        ] },
       { "class": "base", "family": "H.39", "section": "Base units H. 39", "printed_pages": "24-27", "status": "not_extracted" },
       { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
@@ -373,6 +395,12 @@
     }
   },
   "order_axes_outside_code": {
+    "filler_width_mm": {
+      "values": "a whole number of millimetres inside the article's own width_range_mm",
+      "contract_key": "width_mm",
+      "note": "THE THIRD AXIS, and the first that is a DIMENSION rather than a choice from a list. printed p.434 prices fillers and closing strips by HEIGHT alone: one article covers every width from 2,3 to 15 cm and the code never names one. That is the same shape as hinge_side - the catalog states the article, prints the choice it will accept, and declines to make it - so the width is per-order and never guessed. The range is a catalog fact and lives on the registry row as width_range_mm; Registry.with_ordered_width turns it into a number and refuses anything outside it. NOT implemented by widening Generator::INSTANCE_KEYS: that guard says an object may not out-vote the registry about what article it is, and it must keep saying so. A filler's width out-votes nothing, because the catalog never stated it. Verified printed p.434 / PDF 436 against a 200-dpi render 2026-08-23.",
+      "elda_open": "Whether the width is continuous or quantised. One code covers 23-150 mm and no page says whether the factory takes any millimetre or steps in fives - the warehouse cannot express the position without it. Asked in claude/fillers-recon-2026-08-23.md."
+    },
     "door_version": {
       "values": [
         "handle_or_push_pull_780",
