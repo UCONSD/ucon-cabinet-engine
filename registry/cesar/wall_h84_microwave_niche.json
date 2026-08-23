@@ -1,0 +1,28 @@
+{
+  "section": "Wall units H. 84",
+  "class": "wall",
+  "family": "Wall H.48",
+  "source_pages": "printed p.240 / PDF 242, verified against a 170-dpi render 2026-08-23",
+  "family_note": "NO family-level keys, and the family is Wall H.48 while the section is 'Wall units H. 84' - the second file of this shape, after wall_h72_microwave_niche.json. printed p.240 prints this position inside the H.84 section and dimensions its elevation 48. THE PRINTED DIMENSION OUTRANKS THE DECODED LETTER: PG reads H.84 in code_grammar.wall_units and here it does not. Height and mounting come from wall_h48.json.",
+  "extraction_note": "One position, one code. Its own file for the same reason PE0696 has one: inside wall_h84.json it would have taken the family's 840, which the page contradicts.",
+  "data": {
+    "unit_types": {
+      "wall_microwave_niche": {
+        "description": "Wall unit with top-hung door - 1 top-hung door - 1 adaptable microwave oven niche - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 adaptable microwave oven niche", "1 shelf"],
+        "source_ref": "printed p.240 / PDF 242",
+        "codes": [
+          { "code": "PG0696", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "THE SECOND MICROWAVE-NICHE UNIT, AND THE SECOND TIME IT IS THE SECTION HEIGHT MINUS 360. PE0696 is 360 in the H.72 section, PG0696 is 480 in the H.84 section. Two instances is an OBSERVATION and not a rule - the third family to print one decides. It also gains a shelf that PE0696 does not print. Not object_class appliance_front: the niche is an opening in a Cesar carcass, and the machine that goes in it is the client's and nobody's order line here.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front of a 480-tall box, hinged along its top edge. The niche is interior and is not drawn."
+        }
+      }
+    }
+  }
+}

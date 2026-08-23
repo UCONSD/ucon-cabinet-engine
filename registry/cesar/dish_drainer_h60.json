@@ -121,7 +121,7 @@
           { "code": "PD0914", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
           { "code": "PD1214", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] }
         ],
-        "notes": "SUFFIX 14, AND THE THIRD DIFFERENT ANSWER FOR THE SAME IDEA. A compound push-up dish-drainer is 11 at H.48 (PC1811, one code, 180 wide, 90+90) and 14 here (two codes, 90 in 45+45 and 120 in 60+60); H.36 has no such position at all. Three families, three shapes. It does match this family's own plain compound push-up widths (PD0908 / PD1208) exactly - so within a family the two compounds agree, and across families nothing does. Carries the widest-unit rack rule.",
+        "notes": "SUFFIX 14, AND THE THIRD DIFFERENT ANSWER FOR THE SAME IDEA. A compound push-up dish-drainer is 11 at H.48 (PC1811, one code, 180 wide, 90+90) and 14 here (two codes, 90 in 45+45 and 120 in 60+60); H.36 has no such position at all. Three families, three shapes. It does match this family's own plain compound push-up widths (PD0908 / PD1208) exactly - so within a family the two compounds agree, and across families nothing does. Carries the printed rule: 'In compound wall units, the dish-drainer rack is fitted in the widest unit.'",
         "front_layout": {
           "kind": "single",
           "note": "One push-up door across both modules. NO hinge_axis."

@@ -278,18 +278,30 @@
         ] },
       { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola hood", "printed_pages": "234-235", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola No Drop hood", "printed_pages": "236-237", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.84", "section": "Wall units H. 84", "printed_pages": "238-240", "status": "not_extracted",
+      { "class": "wall", "family": "H.84", "section": "Wall units H. 84", "printed_pages": "238-240", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "Eight of eleven positions, 24 of 28 codes, verified against renders. THE STACK IS UNEQUAL HERE - 48 above, 36 below, both dimensioned - where H.72 splits 36 + 36. A stacked pair is two STATED heights that sum to the family height, never two halves of it. LEFT OUT: both corners (Elda Q7b) and PG0696, which is 480 tall and lives under family Wall H.48 in wall_h84_microwave_niche.json.",
         "pages": [
-          { "printed": 238, "status": "not_extracted",
+          { "printed": 238, "status": "extracted", "types": ["Wall unit with pull-out door", "Wall unit with door", "Wall unit with doors", "Wall unit with top-hung doors (2 STACKED, 48+36)"] },
+          { "printed": 239, "status": "partial",
             "types": [
-            "Wall unit with pull-out door",
-            "Wall unit with door",
-            "Wall unit with doors",
-            "Wall unit with top-hung doors"
-            ],
-            "note": "Read 2026-08-18, not extracted. Structurally identical to printed p.228 with the letter PG and two shelves instead of one: PG0130; PG0131 W.15/30/45/60; PG0630/PG0930; PG..04 two stacked top-hung doors split 36+48, W.45-120." }
+              "Wall unit with horizontally folding doors",
+              "Wall unit with horizontally folding doors, compound (2 modules)",
+              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OG0713 / OG0715. Elda Q7b." },
+              { "title": "Corner wall unit", "status": "not_extracted", "note": "PG094D/S, 100x40, corner filler 5X5. Headed 'Corner wall unit' here and 'Straight corner wall unit' at H.48, H.60 and H.72 - same shape, three headings. Elda Q7b." }
+            ] },
+          { "printed": 240, "status": "extracted",
+            "types": ["Wall unit with top-hung door and microwave niche (PG0696 - H.48, held under family Wall H.48)", "Wall boiler housing, 1 door, d.62", "Wall boiler housing, 2 doors, d.62"] }
         ] },
-      { "class": "wall", "family": "H.84", "section": "Dish-drainer units H. 84", "printed_pages": "241-242", "status": "not_extracted" },
+      { "class": "wall", "family": "H.84", "section": "Dish-drainer units H. 84", "printed_pages": "241-242", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "Five of six positions, 16 of 17 codes, verified against renders. The compound position here has TWO racks, one per module, and is the only compound dish-drainer that does NOT carry the printed 'rack is fitted in the widest unit' rule - because with two racks there is nothing to place. The sixth position is the 90-degree corner dish-drainer OG0745, 75x75 only, the third family to offer one size there. Elda Q7b.",
+        "pages": [
+          { "printed": 241, "status": "extracted", "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung doors (2 stacked, 48+36)", "Dish-drainer unit with horizontally folding doors"] },
+          { "printed": 242, "status": "partial",
+            "types": [
+              "Dish-drainer unit with horizontally folding doors, compound (2 modules, 2 racks)",
+              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OG0745, 75x75 only. Elda Q7b." }
+            ] }
+        ] },
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola hood", "printed_pages": "243", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola No Drop hood", "printed_pages": "244", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96", "printed_pages": "245-247", "status": "not_extracted",
