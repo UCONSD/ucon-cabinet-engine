@@ -126,7 +126,11 @@ module UCON
         'appliance_dishwasher_door' => 'Dishwasher door',
         'base_corner'             => 'Corner units',
         'wall_top_hung_door'      => 'Top-hung door units',
-        'wall_bottom_hung_door'   => 'Bottom-hung door units'
+        'wall_bottom_hung_door'   => 'Bottom-hung door units',
+        'wall_compound_2_top_hung' => 'Compound, 2 modules, top-hung',
+        'wall_compound_2_push_up'  => 'Compound, 2 modules, push-up',
+        'wall_compound_3_top_hung' => 'Compound, 3 modules, top-hung',
+        'wall_compound_3_push_up'  => 'Compound, 3 compartments, push-up'
       }.freeze
 
       # JSON that is safe to paste inside an inline <script>: a literal

@@ -195,8 +195,18 @@
             "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes." }
         ] },
       { "class": "wall", "family": "H.36", "section": "Dish-drainer units H. 36", "printed_pages": "213", "status": "not_extracted" },
-      { "class": "wall", "family": "H.48", "section": "Wall units H. 48", "printed_pages": "214-216", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
+      { "class": "wall", "family": "H.48", "section": "Wall units H. 48", "printed_pages": "214-216", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "Read WHOLE and verified against 170-dpi renders: nine of ten positions, 34 of 35 codes. The family letter was not read when this row was written - the note then said 'do not assume it continues alphabetically', and it was right to: printed p.434 named PC first from the filler table, and these pages confirmed it. The one position left out is the corner.",
+        "pages": [
+          { "printed": 214, "status": "extracted", "types": ["Wall unit with door", "Wall unit with doors", "Wall unit with top-hung door", "Wall unit with push-up door"] },
+          { "printed": 215, "status": "extracted", "types": ["Wall unit with bottom-hung door", "Compound wall unit with top-hung door (2 modules)", "Compound wall unit with push-up door (2 modules)"] },
+          { "printed": 216, "status": "partial",
+            "types": [
+              "Compound wall unit with top-hung door (3 modules)",
+              "Compound wall unit with push-up door (3 compartments)",
+              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PC094D/S, 100x40, 1 rh or lh 60 cm door, corner filler 5x5. Gated on Elda Q7b - the trailing D/S is the same execution letter the base corners carry on printed p.42, and whether it is two articles or one article with a hand variant is exactly what the estimate now with her should answer." }
+            ] }
+        ] },
       { "class": "wall", "family": "H.48", "section": "Dish-drainer units H. 48", "printed_pages": "217-218", "status": "not_extracted" },
       { "class": "wall", "family": "H.48", "section": "Wall units H. 48 with Virgola hood", "printed_pages": "219-220", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60", "printed_pages": "221-223", "status": "partial",
@@ -262,12 +272,12 @@
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola hood", "printed_pages": "243", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola No Drop hood", "printed_pages": "244", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96", "printed_pages": "245-247", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
+        "note": "LETTER READ 2026-08-23, SECTION STILL NOT EXTRACTED - the same shape H.60 was in on 2026-08-20, and the same lesson: a letter is not a page. PF = H.96 was named first by the filler table on printed p.434 (PF0151) and then confirmed by a sweep of printed p.245-247, every code of which begins PF. The original warning is retired, not forgotten: B / C / D / E / G / F / J against 36 / 48 / 60 / 72 / 84 / 96 / 120 is still not a sequence - F is H.96 and G is H.84, so the run goes BACKWARDS across that pair." },
       { "class": "wall", "family": "H.96", "section": "Dish-drainer units H. 96", "printed_pages": "248-249", "status": "not_extracted" },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola hood", "printed_pages": "250", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola No Drop hood", "printed_pages": "251", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120", "printed_pages": "252-254", "status": "not_extracted",
-        "note": "Family letter not read: do not assume it continues alphabetically. B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence - if it were, G would be H.96." },
+        "note": "LETTER READ 2026-08-23, SECTION STILL NOT EXTRACTED - the same shape H.60 was in on 2026-08-20, and the same lesson: a letter is not a page. PJ = H.120 was named first by the filler table on printed p.434 (PJ0151) and then confirmed by a sweep of printed p.252-254, every code of which begins PJ. The original warning is retired, not forgotten: B / C / D / E / G / F / J against 36 / 48 / 60 / 72 / 84 / 96 / 120 is still not a sequence - F is H.96 and G is H.84, so the run goes BACKWARDS across that pair." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola hood", "printed_pages": "255", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola No Drop hood", "printed_pages": "256", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "base", "collection": "USA elements", "family": "H.78", "section": "USA elements | for base units H. 78", "printed_pages": "414", "status": "not_extracted",
@@ -341,10 +351,14 @@
       "family_letter": {
         "note": "FAMILY-SPECIFIC, and recorded only where we have opened the page or seen the letter in factory output. Never extrapolate alphabetically: B / D / E / G against H.36 / H.60 / H.72 / H.84 is not a sequence over the catalog's height list - if it were, G would be H.96. The letter is a lookup, exactly like the width index.",
         "B": "H.36",
+        "C": "H.48",
         "D": "H.60",
         "E": "H.72",
+        "F": "H.96",
         "G": "H.84",
-        "unread": "H.48, H.96, H.120"
+        "J": "H.120",
+        "unread": "none - the run is complete as of 2026-08-23",
+        "completed_2026_08_23": "C, F and J were the three unread letters. printed p.434 named all three FIRST, in the wall-filler table (PC0151 H.48, PF0151 H.96, PJ0151 H.120), and the wall pages then confirmed each on its own: printed p.214-216 carries only PC, p.245-247 only PF, p.252-253 only PJ. TWO PAGES IN TWO DIFFERENT CHAPTERS AGREEING is as close to confirmation as this book gets without factory output. The warning above is now proved by its own completed data: B/C/D/E/G/F/J against 36/48/60/72/84/96/120 is NOT alphabetical - F is H.96 and G is H.84, so the letters run BACKWARDS across that one pair. Never extrapolate."
       },
       "width_index": {
         "note": "A LOOKUP, not arithmetic - the rounding is irregular (45 rounds up to 05, 75 rounds down to 07, 105 rounds down to 10). Read a width from the row, never from the digits.",
@@ -353,6 +367,7 @@
       },
       "corner_wall_units": {
         "note": "READ, NOT DECODED. printed p.223 (H.60) shows TWO kinds of corner wall unit that do not share a grammar, and neither is extracted. (1) Straight corner: PD094D/S - P + family letter, but the width field 09 does NOT read as the 100x40 footprint printed beside it, and the trailing D/S is the same execution letter the BASE corners carry on printed p.42. That makes it direct evidence for Elda Q7b. (2) 90 degree corner: OD0713 / OD0715 at 70x70 and 75x75 - the prefix is not P + family letter at all and is not decoded here. Its corner filler is 5X5, where the base corner uses 8x8. Do not extend the wall grammar to cover these until a corner page is actually extracted.",
+        "correction_2026_08_23": "THE SECOND HALF OF THE NOTE ABOVE IS WRONG AND IS KEPT UNEDITED (rule 9). The 90-degree corner prefix IS the family letter - it is O plus the SAME letter the ordinary units use, and the block sweep of printed p.213-254 shows it in five families at once: OD (H.60), OE (H.72), OG (H.84), OF (H.96), OJ (H.120), every one of them 70x70 and 75x75 at d.35. So P and O are two PREFIXES sharing one family-letter lookup, not two grammars. What is still not decoded is the SUFFIX, and it is worse than unstable: 0713/0715 at H.60, H.72 and H.84, 0723/0725 at H.96, and at H.120 the 70x70 is OJ0716 while the 75x75 is OJ0714 - the two numbers do not even run in the same direction. Read the row. Corners of every class remain NOT extracted, gated on Elda Q7b.",
         "source_ref": "printed p.223 / PDF 225, read 2026-08-20"
       },
       "type_suffix": {

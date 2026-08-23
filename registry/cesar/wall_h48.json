@@ -1,0 +1,221 @@
+{
+  "section": "Wall units H. 48",
+  "class": "wall",
+  "family": "Wall H.48",
+  "source_pages": "printed p.214-216 / PDF 216-218, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_naming_note": "Namespaced 'Wall H.48' for the same reason as 'Wall H.36' and 'Wall H.60': the registry merges section files by family NAME, and the catalog uses 'H. 48' for both a base family and a wall family. The catalog's own wording is preserved in 'section'.",
+  "extraction_note": "The WHOLE section except the corner: nine of its ten positions, 34 of its 35 codes. The tenth is the straight corner wall unit PC094D/S (100x40, 1 rh or lh 60 cm door, corner filler 5x5), left out because every corner in this registry waits on Elda Q7b - the same execution-letter question the base corners raise on printed p.42. Recorded as a type-level gap in catalog_map, not as an oversight. Compound units ARE extracted here, unlike at H.60: a compound carries ONE door across two or three carcass modules, so the envelope and the front are both ordinary and the module split is an interior fact. wall_h60.json's decision to skip them was made before that was read.",
+  "letter_note": "PC = H.48 was named FIRST by the filler table on printed p.434 (PC0151), one of the three wall letters the manifest had listed unread. This page confirms it independently: every code on printed p.214-216 begins PC. Two pages in two different chapters agreeing is as close to confirmation as this book gets without factory output.",
+  "data": {
+    "height_mm": 480,
+    "mounting": "wall_hung",
+    "mounting_note": "Catalog-level fact: every unit in the wall chapter hangs. HOW HIGH it hangs is not in the catalog and is not here - the generator takes it from Standards::WALL_MOUNT_BOTTOM_MM, a project default awaiting M1.6, and writes it onto the object as mount_bottom_mm.",
+    "overall_height_n_elle_mm": 502,
+    "n_elle_note": "The elevation carries a second figure labelled 'N Elle' at 50,2 = 48 + 2,2, the same +22 mm recorded at H.36 (38,2), H.60 (62,2), H.72 (74,2) and H.84 (86,2). READ FROM THE TEXT LAYER: the 170-dpi render does not resolve that annotation, so this one number rests on the extracted text plus a pattern four other families already show. N_Elle is its own chapter, printed p.321. RECORDED, NOT IMPLEMENTED.",
+    "page_observations": [
+      "THE FINISH RESTRICTIONS HAVE A GRAMMAR, AND IT IS ONLY VISIBLE ON THE RENDER. Each compound position carries a block of finish names beside a circle-with-slash symbol, so the block is a PROHIBITION and not an availability list - the text layer gives the names with no sign of which way they point. Within the block some names carry an asterisk and some do not, and the width column carries asterisks too. OUR READING: an asterisked finish is unavailable at the asterisked WIDTHS, an unasterisked finish is unavailable for the whole position. On the two-module push-up (PC1808) nothing is asterisked at all, which fits: it has one width. This is the concrete form of the 'asterisked widths that restrict finishes' fact already waiting on NEXT item 12.",
+      "THE ONE-DOOR TYPE HAS ONLY W.45 AND W.60. No W.15, which H.60 has, and no W.30, which H.72 and H.84 both have. Widths are per type per family, read from the row.",
+      "THE PUSH-UP TYPE HAS NO W.45 while the top-hung and bottom-hung types on the same page both do. Its widths start at 60.",
+      "SUFFIXES 04 / 08 / 34 / 44 CARRY THE SAME MEANINGS HERE AS AT H.60 - 2 modules top-hung, 2 modules push-up, 3 modules top-hung, 3 compartments push-up. That is agreement between two families and NOT a rule: at H.36 the same 34 reads '3 compartments' rather than '3 modules'. The standing warning applies unchanged.",
+      "THE FIVE-CENTIMETRE CLOSING-STRIP RULE BITES ON THIS PAGE. PC0531 and PC0631 are 'rh or lh' doors, so a run that puts one against a tall unit or a wall, with a 'D' handle, wants a closing strip of at least 5 cm (printed p.11). The article now exists - PC0151, same family. Warn, never auto-insert.",
+      "Servo Drive mechanism and Power adapter are priced beside four positions with NO article code (554 / 1.107 by width, and 224). Not recorded as companion_refs: a companion is resolved from the registry and never typed. Same shape as H.60, still Elda Q8."
+    ],
+    "unit_types": {
+      "wall_door": {
+        "description": "Wall unit with door - 1 rh or lh door - 1 shelf",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.214 / PDF 216",
+        "codes": [
+          { "code": "PC0531", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PC0631", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "ONE CODE, BOTH HANDS - the hand is an order variant carried on the line, never a second article. CONFIRMED for this grammar by factory estimate 2026/30829 on the H.60 sibling PD0631; here it is the same suffix 31 in the same chapter, so it is a reading and not a second confirmation.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. Which edge is hinge_side, chosen per order and never guessed."
+        }
+      },
+      "wall_two_doors": {
+        "description": "Wall unit with doors - 2 doors - 1 shelf",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.214 / PDF 216",
+        "codes": [
+          { "code": "PC0930", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "The only code of its type on the page, exactly as at H.60. A pair of doors is not handed: both leaves exist, so there is nothing to choose.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
+        }
+      },
+      "wall_top_hung_door": {
+        "description": "Wall unit with top-hung door - 1 top-hung door - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.214 / PDF 216",
+        "codes": [
+          { "code": "PC0500", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PC0600", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PC0700", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PC0900", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PC1000", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PC1200", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Same width set and same suffix 00 as the H.36 and H.60 top-hung types. Three families agreeing is worth recording and is still not a rule.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge."
+        }
+      },
+      "wall_push_up_door": {
+        "description": "Wall unit with push-up door - 1 push-up door - 1 shelf - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 shelf", "interior Valencia handle"],
+        "source_ref": "printed p.214 / PDF 216",
+        "codes": [
+          { "code": "PC0610", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PC0710", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PC0910", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PC1010", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PC1210", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "The Valencia handle is priced beside the position at 23 with no article code, and 'no Push-pull device' is a printed statement about this type, not a choice. Neither is a companion line: both are stated, neither is coded.",
+        "front_layout": {
+          "kind": "single",
+          "note": "NO hinge_axis, deliberately, and the two older wall files set that precedent: a push-up door is its own opening type in this catalog and we have not established that its leaf sweeps a top-hung figure. A symbol we cannot justify is not drawn."
+        }
+      },
+      "wall_bottom_hung_door": {
+        "description": "Wall unit with bottom-hung door - 1 bottom-hung door",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.215 / PDF 217",
+        "codes": [
+          { "code": "PC0525", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PC0625", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PC0725", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PC0925", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PC1025", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PC1225", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "THE ONLY TYPE ON THESE THREE PAGES THAT LISTS NO SHELF. Every other position states one or more; this one states nothing but the door. Recorded as an empty interior rather than an assumed one - rule 7.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "bottom",
+          "note": "One door covering the full front, hinged along its bottom edge - the mirror of the top-hung figure, plan rectangle identical."
+        }
+      },
+      "wall_compound_2_top_hung": {
+        "description": "Compound wall unit with top-hung door - 1 top-hung door - 2 shelves",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["2 shelves"],
+        "source_ref": "printed p.215 / PDF 217",
+        "codes": [
+          { "code": "PC0904", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PC1004", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PC1204", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] },
+          { "code": "PC1504", "width_mm": 1500, "depth_mm": 350, "modules_mm": [600, 900] },
+          { "code": "PC1804", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "TWO MODULES, ONE DOOR. `modules_mm` is the carcass partition the page states beside each row and NOT a front split - the position reads '1 top-hung door' across the whole width, which is why front_layout is single. Nothing reads modules_mm yet; it is recorded because the page states it. Note 60+45 and 60+90: the modules are NOT equal, so a compound could never have been drawn as an equal vertical split.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.215 / PDF 217, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - there is nowhere to enforce it until finishes exist as a project axis (M1.6). The asterisk-and-symbol reading is OURS; see page_observations."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across both modules, hinged along its top edge."
+        }
+      },
+      "wall_compound_2_push_up": {
+        "description": "Compound wall unit with push-up door - 1 push-up door - 2 shelves - 2 x 90 cm compartments - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["2 shelves", "2 x 90 cm compartments", "interior Valencia handle"],
+        "source_ref": "printed p.215 / PDF 217",
+        "codes": [
+          { "code": "PC1808", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "One code, one width. Its finish block carries NO asterisks, which fits a position with a single width and supports the asterisk reading recorded in page_observations.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.215 / PDF 217, read off the render",
+          "for_all_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "note": "One push-up door across both compartments. NO hinge_axis - see wall_push_up_door."
+        }
+      },
+      "wall_compound_3_top_hung": {
+        "description": "Compound wall unit with top-hung door - 3 modules - 1 top-hung door - 3 shelves",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["3 shelves"],
+        "source_ref": "printed p.216 / PDF 218",
+        "codes": [
+          { "code": "PC1234", "width_mm": 1200, "depth_mm": 350, "modules_mm": [300, 600, 300] },
+          { "code": "PC1534", "width_mm": 1500, "depth_mm": 350, "modules_mm": [300, 900, 300] },
+          { "code": "PC1834", "width_mm": 1800, "depth_mm": 350, "modules_mm": [450, 900, 450] },
+          { "code": "PC2434", "width_mm": 2400, "depth_mm": 350, "modules_mm": [600, 1200, 600] }
+        ],
+        "notes": "THE WIDEST ARTICLE THIS REGISTRY HAS EVER HELD - PC2434 is 2400 mm across. Three modules, still one door.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.216 / PDF 218, read off the render",
+          "for_all_widths": ["Melamine doors W. 240 (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800, 2400],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6. The 'Melamine doors W. 240' entry names a width inside the finish name, which is a shape none of the other blocks has."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across all three modules, hinged along its top edge."
+        }
+      },
+      "wall_compound_3_push_up": {
+        "description": "Compound wall unit with push-up door - 3 compartments - 1 push-up door - 3 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["3 shelves", "3 compartments", "interior Valencia handle"],
+        "source_ref": "printed p.216 / PDF 218",
+        "codes": [
+          { "code": "PC1244", "width_mm": 1200, "depth_mm": 350, "modules_mm": [300, 600, 300] },
+          { "code": "PC1544", "width_mm": 1500, "depth_mm": 350, "modules_mm": [300, 900, 300] },
+          { "code": "PC1844", "width_mm": 1800, "depth_mm": 350, "modules_mm": [450, 900, 450] },
+          { "code": "PC2444", "width_mm": 2400, "depth_mm": 350, "modules_mm": [600, 1200, 600] }
+        ],
+        "notes": "The push-up twin of wall_compound_3_top_hung, same widths and same module splits. The page says '3 compartments' here and '3 modules' there, which is the wording difference that makes suffix 34/44 unreadable across families.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.216 / PDF 218, read off the render",
+          "for_all_widths": ["Melamine doors W. 240 (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800, 2400],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "note": "One push-up door across all three compartments. NO hinge_axis - see wall_push_up_door."
+        }
+      }
+    }
+  }
+}

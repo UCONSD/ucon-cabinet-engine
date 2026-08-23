@@ -1,0 +1,26 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "Wall H.48",
+  "source_pages": "printed p.434 / PDF 436 (subset extracted: the H.48 row of the third position)",
+  "family_note": "No family-level keys - see fillers_h78.json. UNLOCKED 2026-08-23: this row waited only on its family, and printed p.214-216 supplied it the same day. It is the first of the 26 orphan filler codes to be retired, and the mechanism is exactly the one fillers_h78.json describes - a filler may not be extracted before its family exists, so extracting a family retires its fillers.",
+  "data": {
+    "unit_types": {
+      "filler_wall_unit": {
+        "description": "Wall unit filler in door finishes from 2,3 to 15 cm - with one-piece bottom",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": ["one-piece bottom"],
+        "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - a filler does not open. Stated rather than left absent because Panel.effective_slabs and Panel.gola_options both default a missing layout to 'single', and a default is not a source."
+        },
+        "codes": [
+          { "code": "PC0151", "width_range_mm": [23, 150], "depth_mm": 350 }
+        ],
+        "notes": "PC = H.48, and the order of arrival is worth keeping: the FILLER table named this letter before any wall page we held could have, exactly as factory estimate 2026/30829 named PD before printed p.221 was opened. Two independent sources, one letter, twice."
+      }
+    }
+  }
+}

@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 185 codes (103 base + 20 sink + 3 appliance + 32 wall + 8 USA tall + 14 tall + 5 fillers)') do
+check('registry loads and holds 220 codes (103 base + 20 sink + 3 appliance + 66 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 185
+  raise "got #{n}" unless n == 220
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 185 rows, each with code/dims/description/source') do
+check('registry catalog: 220 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 185
+  raise cat.length.to_s unless cat.length == 220
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -503,6 +503,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 36',
+                                             'Wall units H. 48',
                                              'Wall units H. 60']
   # tall arrived 2026-08-21 with printed p.418 - the first non base/wall class.
   # 'filler' arrived 2026-08-23 with printed p.434 and is the first class that
@@ -860,12 +861,28 @@ def hung_codes(axis)
   check('the hinge axis is one rule read both ways: top-hung is the mirror') do
     down = hung_codes('bottom')
     raise down.inspect unless down ==
-      %w[B80614 B90614 PB0525 PB0625 PB0725 PB0925 PB1025 PB1225 V80530 V80630 V80730]
+      %w[B80614 B90614 PB0525 PB0625 PB0725 PB0925 PB1025 PB1225
+         PC0525 PC0625 PC0725 PC0925 PC1025 PC1225 V80530 V80630 V80730]
     up = hung_codes('top')
     raise up.inspect unless up == %w[PB0500 PB0600 PB0700 PB0900 PB1000 PB1200
+                                     PC0500 PC0600 PC0700 PC0900 PC0904 PC1000
+                                     PC1004 PC1200 PC1204 PC1234 PC1504 PC1534
+                                     PC1804 PC1834 PC2434
                                      PD0500 PD0600 PD0700 PD0900 PD1000 PD1200]
-    # H.60 has no bottom-hung type at all, so the down list is unchanged by it.
-    # Two families, one rule, no second implementation.
+    # H.60 has no bottom-hung type at all. H.48 (2026-08-23) has both, and it
+    # brings the COMPOUND top-hung types with it - one door across two or three
+    # carcass modules is still one top-hung leaf, so it belongs in this list.
+    # Three families, one rule, no second implementation.
+
+    # AND THE PUSH-UP TYPES ARE IN NEITHER LIST, in all three families. A
+    # push-up door is its own opening type in this catalog and nothing we have
+    # read says its leaf sweeps a top-hung figure. A symbol we cannot justify is
+    # not drawn - so hinge_axis is absent, not guessed.
+    push = Registry.catalog.map { |c| Registry.lookup(c['code']) }
+                   .select { |u| u['opening'] == 'push-up' }
+    raise 'no push-up types to check' if push.empty?
+    bad = push.reject { |u| (u['front_layout'] || {})['hinge_axis'].nil? }
+    raise bad.map { |u| u['code'] }.inspect unless bad.empty?
 
     # Same unit, both ways up: the two figures are reflections of each other in
     # the mid-height plane, and the plan footprint is identical because the leaf
@@ -1277,26 +1294,39 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   %w[PB PE PG LOOKUP].each do |frag|
     raise "#{frag} missing from the H.36 note" unless h36['note'].to_s.include?(frag)
   end
+  # THE LIST IS NOW EMPTY. H.48, H.96 and H.120 were the last three, and all
+  # three were named by the FILLER table on printed p.434 before any wall page
+  # we held could have given them - then confirmed on their own pages.
   unread = wall_sections.select { |s| s['note'].to_s.include?('Family letter not read') }
-  raise unread.map { |s| s['family'] }.inspect unless
-    unread.map { |s| s['family'] } == %w[H.48 H.96 H.120]
+  raise unread.map { |s| s['family'] }.inspect unless unread.empty?
   # H.60 left that list on 2026-08-20 - not by being read, but by turning up in
   # a factory order. The section stays not_extracted: a letter is not a page.
   h60 = wall_sections.find { |x| x['section'] == 'Wall units H. 60' }
   raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'partial'
+  # H.96 and H.120 are in exactly that shape now, and say so.
+  %w[H.96 H.120].each do |fam|
+    sec = wall_sections.find { |x| x['family'] == fam && x['section'].start_with?('Wall units') }
+    raise "#{fam}: #{sec.inspect}" unless sec['status'] == 'not_extracted'
+    raise "#{fam} must say the letter is read" unless
+      sec['note'].to_s.include?('LETTER READ') && sec['note'].to_s.include?('a letter is not a page')
+  end
 end
 
-check('the two sections we hold report pages; the 22 we have not are single rows') do
+check('the three sections we hold report pages; the 21 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 22
+  raise sections.size.inspect unless sections.size == 21
   raise 'a section we hold must not also be a section gap' if
-    sections.any? { |g| ['Wall units H. 36', 'Wall units H. 60'].include?(g['section']) }
+    sections.any? { |g|
+      ['Wall units H. 36', 'Wall units H. 48', 'Wall units H. 60'].include?(g['section'])
+    }
 
   # Both held sections surface their unextracted pages as TYPE rows, in the
   # order the catalog prints them. p.211 and p.221 are gone: they are whole.
+  # p.216 joined the list on 2026-08-23: H.48 was read whole except its corner,
+  # so the page reports as partial and surfaces one type row, not a page row.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
-  raise pages.inspect unless pages == %w[p.212 p.222 p.223]
+  raise pages.inspect unless pages == %w[p.212 p.216 p.222 p.223]
 end
 
 check('p.211 and p.221 are whole pages now, push-up included') do
@@ -2371,15 +2401,38 @@ end
 # --------------------------------------------------------------------------
 puts "\nfactory estimate 30829/30830 - what the order taught the registry"
 
-check('the wall family letter D = H.60 is recorded, and no letter was extrapolated') do
+check('the wall family letters are COMPLETE, and the run is not alphabetical') do
+  # Was: "D = H.60 is recorded, and nothing was extrapolated", pinning the three
+  # letters still unread. printed p.213-254 read them on 2026-08-23, so the
+  # check now pins the finished lookup - and the one fact that makes it a
+  # lookup rather than a sequence.
   letters = Registry.data['code_grammar']['wall_units']['family_letter']
-  raise letters.inspect unless letters['B'] == 'H.36' && letters['D'] == 'H.60' &&
-                               letters['E'] == 'H.72' && letters['G'] == 'H.84'
-  raise "H.60 must no longer be listed unread: #{letters['unread'].inspect}" unless
-    letters['unread'] == 'H.48, H.96, H.120'
-  # B/D/E/G against 36/60/72/84 is not a sequence - if it were, G would be H.96.
+  want = { 'B' => 'H.36', 'C' => 'H.48', 'D' => 'H.60', 'E' => 'H.72',
+           'F' => 'H.96', 'G' => 'H.84', 'J' => 'H.120' }
+  got = letters.select { |k, _| k.length == 1 }
+  raise got.inspect unless got == want
+  raise "nothing is unread now: #{letters['unread'].inspect}" if
+    letters['unread'].to_s =~ /H\.\d/
+  # THE PROOF that the letter is a lookup: F is H.96 and G is H.84, so the
+  # letters run BACKWARDS across that pair. An alphabetical guess gets it wrong.
+  raise 'F/G must run backwards against the heights' unless
+    letters['F'] == 'H.96' && letters['G'] == 'H.84'
   raise 'the letter must be recorded as a lookup, not a sequence' unless
     letters['note'].downcase.include?('not a sequence')
+end
+
+check('P and O share ONE wall family-letter lookup') do
+  # The manifest used to say the 90-degree corner prefix was "not P + family
+  # letter at all". It is O + the same letter, shown by five families at once.
+  # The correction is recorded beside the original, never instead of it.
+  corner = Registry.data['code_grammar']['wall_units']['corner_wall_units']
+  raise 'the original reading must stay' unless
+    corner['note'].include?('not P + family letter at all')
+  raise 'the correction must be recorded' unless
+    corner['correction_2026_08_23'].to_s.include?('O plus the SAME letter')
+  %w[OD OE OG OF OJ].each do |pre|
+    raise "#{pre} not cited" unless corner['correction_2026_08_23'].include?(pre)
+  end
 end
 
 check('the estimate named PD before any page we held could have') do
@@ -3722,6 +3775,74 @@ check('the ORDER says the width was chosen, not read off a page') do
   # and an ordinary article must NOT carry that note - 600 is the catalog's.
   plain = Export.rows([Generator.attributes_for(Registry.lookup('B80601'))]).first
   raise plain.inspect unless plain['note'].nil?
+end
+
+puts "\nwall units H. 48 (printed p.214-216, read whole 2026-08-23)"
+check('the section holds 34 codes in nine types, and the corner is not one of them') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 48' }
+  raise rows.length.to_s unless rows.length == 34
+  raise rows.map { |c| c['type_key'] }.uniq.length.to_s unless
+    rows.map { |c| c['type_key'] }.uniq.length == 9
+  raise 'the corner must NOT be held - Elda Q7b' if
+    rows.any? { |c| c['code'].to_s.start_with?('PC094') }
+  raise 'every code in this section begins PC' unless
+    rows.all? { |c| c['code'].start_with?('PC') }
+end
+
+check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width') do
+  # The best arithmetic check a transcription can have: the page states both the
+  # overall width and the module split beside every compound row, so a mistyped
+  # digit in either one shows up here and nowhere else.
+  file = File.expand_path('../registry/cesar/wall_h48.json', __dir__)
+  types = JSON.parse(File.read(file))['data']['unit_types']
+  checked = 0
+  types.each_value do |t|
+    t['codes'].each do |row|
+      mods = row['modules_mm']
+      next unless mods
+
+      checked += 1
+      raise "#{row['code']}: #{mods.inspect} != #{row['width_mm']}" unless
+        mods.sum == row['width_mm']
+    end
+  end
+  raise "expected 14 compound rows, checked #{checked}" unless checked == 14
+end
+
+check('a compound is ONE front, not a split - the modules are carcass') do
+  # 60+45 and 60+90 are not equal halves, so a compound could never have been
+  # drawn as an equal vertical split. The page says "1 top-hung door" across the
+  # whole width, and front_layout says single.
+  %w[PC1004 PC1504 PC1234 PC2434].each do |code|
+    fl = Registry.lookup(code)['front_layout']
+    raise "#{code}: #{fl.inspect}" unless fl['kind'] == 'single'
+  end
+  raise 'PC2434 is 2400 wide' unless Registry.lookup('PC2434')['width_mm'] == 2400
+end
+
+check('the finish restrictions are RECORDED and say they are not enforced') do
+  file = File.expand_path('../registry/cesar/wall_h48.json', __dir__)
+  types = JSON.parse(File.read(file))['data']['unit_types']
+  blocks = types.each_value.map { |t| t['finish_restrictions'] }.compact
+  raise blocks.length.to_s unless blocks.length == 4
+  blocks.each do |b|
+    raise b.inspect unless b['kind'] == 'not_available'
+    raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
+    raise 'must say it is not enforced' unless b['note'].to_s.include?('NOT ENFORCED')
+  end
+  # Nothing in the engine reads them. That is the point, and it is checked so
+  # that the day something does, this check is where the decision is recorded.
+  ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
+  raise 'finish_restrictions must have no reader yet' if
+    ruby.any? { |f| File.read(f).include?('finish_restrictions') }
+end
+
+check('PC0151 inherits Wall H.48 - it hangs, and it is 480 tall') do
+  u = Registry.lookup('PC0151')
+  raise u['height_mm'].to_s unless u['height_mm'] == 480
+  raise u['mounting'].to_s unless u['mounting'] == 'wall_hung'
+  raise 'the filler must still carry a range and no width' unless
+    u['width_range_mm'] == [23, 150] && u['width_mm'].nil?
 end
 
 check('a filler states its front_layout instead of letting a default invent one') do
