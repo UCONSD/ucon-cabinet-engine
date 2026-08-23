@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 292 codes (103 base + 20 sink + 3 appliance + 138 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 341 codes (103 base + 20 sink + 3 appliance + 187 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 292
+  raise "got #{n}" unless n == 341
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 292 rows, each with code/dims/description/source') do
+check('registry catalog: 341 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 292
+  raise cat.length.to_s unless cat.length == 341
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -502,12 +502,14 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 36',
                                              'Dish-drainer units H. 48',
                                              'Dish-drainer units H. 60',
+                                             'Dish-drainer units H. 72',
                                              'Sink base units H. 78',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 36',
                                              'Wall units H. 48',
-                                             'Wall units H. 60']
+                                             'Wall units H. 60',
+                                             'Wall units H. 72']
   # tall arrived 2026-08-21 with printed p.418 - the first non base/wall class.
   # 'filler' arrived 2026-08-23 with printed p.434 and is the first class that
   # is OURS rather than the catalog's - one chapter whose rows are base, wall
@@ -870,10 +872,25 @@ def hung_codes(axis)
     axis_of = lambda { |u| (u['front_layout'] || {})['hinge_axis'] }
     units = Registry.catalog.map { |c| Registry.lookup(c['code']) }
 
+    # ONE LEAF TAKES THE AXIS; A STACKED PAIR CANNOT. hinge_axis is a single
+    # value for the whole front, so on a 'top-hung doorS' unit - two leaves of
+    # 360 one above the other, printed p.228 and p.232 - setting it would make
+    # 70_symbols draw ONE 720-tall leaf instead of two. So the rule is scoped to
+    # kind 'single', and the stacked kind must carry no axis at all. That is not
+    # a loophole: it is the check refusing to let an unstated figure be guessed.
     top = units.select { |u| u['description'].to_s.downcase.include?('top-hung') }
     raise 'no top-hung types at all' if top.empty?
-    bad = top.reject { |u| axis_of.call(u) == 'top' }
+    single_top = top.select { |u| (u['front_layout'] || {})['kind'] == 'single' }
+    raise 'no single top-hung type left' if single_top.empty?
+    bad = single_top.reject { |u| axis_of.call(u) == 'top' }
     raise "top-hung without a top axis: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
+    stacked_top = top - single_top
+    raise 'the stacked pairs have vanished' if stacked_top.empty?
+    bad = stacked_top.reject { |u|
+      axis_of.call(u).nil? && (u['front_layout'] || {})['kind'] == 'horizontal' &&
+        (u['front_layout'] || {})['heights_mm_top_to_bottom'] == [360, 360]
+    }
+    raise "a stacked pair must be two 360 fronts and no axis: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
 
     bottom = units.select { |u| u['description'].to_s.downcase.include?('bottom-hung') }
     raise 'no bottom-hung types at all' if bottom.empty?
@@ -889,7 +906,7 @@ def hung_codes(axis)
     # and not the catalog's wording. That is object_class appliance_front, the
     # one class whose geometry is decided by something Cesar does not sell. Any
     # OTHER object_class carrying an unexplained axis is a bug.
-    stray = units.select { |u| axis_of.call(u) } - top - bottom
+    stray = units.select { |u| axis_of.call(u) } - single_top - bottom
     bad = stray.reject { |u| u['object_class'] == 'appliance_front' }
     raise "an axis nobody asked for: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
     raise 'the appliance-front exception has lost its subject' if stray.empty?
@@ -1345,16 +1362,13 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   end
 end
 
-check('the six wall sections we hold report pages; the 18 we have not are single rows') do
+check('the eight wall sections we hold report pages; the 16 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 18
+  raise sections.size.inspect unless sections.size == 16
+  held = Registry.catalog.select { |c| c['class'] == 'wall' }.map { |c| c['section'] }.uniq
   raise 'a section we hold must not also be a section gap' if
-    sections.any? { |g|
-      ['Wall units H. 36', 'Wall units H. 48', 'Wall units H. 60',
-       'Dish-drainer units H. 36', 'Dish-drainer units H. 48',
-       'Dish-drainer units H. 60'].include?(g['section'])
-    }
+    sections.any? { |g| held.include?(g['section']) }
 
   # Both held sections surface their unextracted pages as TYPE rows, in the
   # order the catalog prints them. p.211 and p.221 are gone: they are whole.
@@ -1363,8 +1377,12 @@ check('the six wall sections we hold report pages; the 18 we have not are single
   # transcription. p.216, p.223 and p.225 are complete except for a corner, and
   # every corner in this registry waits on Elda Q7b. p.222 left this list on
   # 2026-08-23 by being finished.
+  # SIX PARTIAL PAGES, and only ONE of them is partial for want of reading:
+  # p.212, the H.36 compounds. The other five - p.216, p.223, p.225, p.230,
+  # p.233 - are complete except for a corner, and every corner in this registry
+  # waits on Elda Q7b. When she answers, five of these six close at once.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
-  raise pages.inspect unless pages == %w[p.212 p.216 p.223 p.225]
+  raise pages.inspect unless pages == %w[p.212 p.216 p.223 p.225 p.230 p.233]
 end
 
 check('p.211 and p.221 are whole pages now, push-up included') do
@@ -3854,7 +3872,7 @@ check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width, everywhere') 
       end
     end
   end
-  raise "expected 47 compound rows, checked #{checked}" unless checked == 47
+  raise "expected 48 compound rows, checked #{checked}" unless checked == 48
 end
 
 check('a compound is ONE front, not a split - the modules are carcass') do
@@ -3873,7 +3891,7 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 13
+  raise blocks.length.to_s unless blocks.length == 14
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
@@ -3934,6 +3952,71 @@ check('H.60 dish-drainers: 21 codes in six types, the corner left out') do
   raise 'all PD' unless rows.all? { |c| c['code'].start_with?('PD') }
   raise 'the corner must stay out - Elda Q7b' if
     Registry.codes.any? { |c| c.start_with?('OD') }
+end
+
+puts "\nwall units H. 72 (printed p.228-233) - three new opening types and the first d.62"
+check('PE0696 IS 360 TALL, PRINTED IN THE H.72 SECTION') do
+  # The sharpest case yet of "the letter is a lookup, read the row". PE reads
+  # H.72 in code_grammar.wall_units; printed p.230 dimensions this elevation 36.
+  # A PRINTED DIMENSION OUTRANKS A DECODED LETTER, so the row belongs to family
+  # Wall H.36 and lives in its own file - putting it in wall_h72.json would have
+  # made the registry state a height the page contradicts.
+  u = Registry.lookup('PE0696')
+  raise u['height_mm'].to_s unless u['height_mm'] == 360
+  raise u['family'].to_s unless u['family'] == 'Wall H.36'
+  row = Registry.catalog.find { |c| c['code'] == 'PE0696' }
+  raise row.inspect unless row['section'] == 'Wall units H. 72'
+  raise 'it is a cabinet, not an appliance panel' unless
+    (u['object_class'] || 'cabinet') == 'cabinet'
+  # And its neighbours in the same SECTION are 720, which is the whole point.
+  others = Registry.catalog.select { |c| c['section'] == 'Wall units H. 72' }
+                   .map { |c| Registry.lookup(c['code'])['height_mm'] }.uniq.sort
+  raise others.inspect unless others == [360, 720]
+end
+
+check('NOT EVERY WALL UNIT IS d.35 - the boiler housings are 620') do
+  # Every wall code held before 2026-08-23 was 350 deep, and a check could
+  # easily have been written asserting it. printed p.230-231 would have broken
+  # it: a boiler housing is as deep as a base unit because a boiler is.
+  deep = Registry.catalog.select { |c| c['class'] == 'wall' && c['depth_mm'] == 620 }
+  raise 'the d.62 wall units have vanished' if deep.empty?
+  raise deep.map { |c| c['code'] }.sort.inspect unless
+    deep.map { |c| c['code'] }.sort == %w[PE0501 PE0600 PE0601 PE0900]
+  raise 'all four must be boiler housings' unless
+    deep.all? { |c| Registry.lookup(c['code'])['description'].include?('boiler housing') }
+end
+
+check('SUFFIX 04 MEANS TWO DIFFERENT THINGS, and both are in the registry') do
+  # The manifest has warned about this since the wall chapter was first read.
+  # Now both readings are held, so the warning is evidence rather than caution.
+  compound = Registry.lookup('PD1204')   # H.60: one door across 60+60
+  stacked  = Registry.lookup('PE1204')   # H.72: two doors, 360 above 360
+  raise 'H.60 04 must be a side-by-side compound' unless
+    compound['front_layout']['kind'] == 'single' && compound['modules_mm'].nil?
+  raise 'H.72 04 must be a stacked pair' unless
+    stacked['front_layout']['kind'] == 'horizontal' &&
+    stacked['front_layout']['heights_mm_top_to_bottom'] == [360, 360]
+  raise 'both are 1200 wide, which is what makes the confusion possible' unless
+    compound['width_mm'] == 1200 && stacked['width_mm'] == 1200
+  # One counts ONE front, the other TWO - so the suffix decides a quantity.
+  raise 'the handle count must differ' unless
+    Export.fronts_in(compound['front_layout']) == 1 &&
+    Export.fronts_in(stacked['front_layout']) == 2
+end
+
+check('the dish-drainer suffix is not the plain one plus a constant') do
+  # 31->61, 30->60, 10->12, 04->07, 89->92: offsets 30, 30, 2, 3, 3. THREE
+  # different answers across five pairs, and no reason for any of them. Written
+  # down so nobody derives a dish-drainer code from a wall code.
+  pairs = { 'PE0631' => 'PE0661', 'PE0930' => 'PE0960', 'PE1210' => 'PE1212',
+            'PE1204' => 'PE1207', 'PE1289' => 'PE1292' }
+  offsets = pairs.map { |plain, dd|
+    raise "#{plain} missing" unless Registry.codes.include?(plain)
+    raise "#{dd} missing" unless Registry.codes.include?(dd)
+    dd[2..].to_i - plain[2..].to_i
+  }
+  raise "the offsets became constant: #{offsets.inspect}" if offsets.uniq.length == 1
+  raise offsets.inspect unless offsets.sort == [2, 3, 3, 30, 30]
 end
 
 check('THE COMPOUND PUSH-UP IS NOT THE SAME ARTICLE FROM FAMILY TO FAMILY') do

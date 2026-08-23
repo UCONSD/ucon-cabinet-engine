@@ -1,0 +1,111 @@
+{
+  "section": "Dish-drainer units H. 72",
+  "class": "wall",
+  "family": "Wall H.72",
+  "source_pages": "printed p.232-233 / PDF 234-235, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_note": "NO family-level keys - wall_h72.json declares them. Fourth dish-drainer section to use the arrangement.",
+  "extraction_note": "Five of six positions, 21 of 22 codes. The sixth is the 90-degree corner dish-drainer OE0745, 75x75 only, gated on Elda Q7b - and 75x75-only is the same shape H.60's OD0745 showed, so a corner dish-drainer offers ONE size where the plain corner offers two. Two families now agree on that.",
+  "data": {
+    "unit_types": {
+      "dish_drainer_door": {
+        "description": "Dish-drainer unit with door - 1 rh or lh door - 1 stainless steel rack with drip tray - 155 degree hinges",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "155 degree hinges"],
+        "source_ref": "printed p.232 / PDF 234",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PE0561", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PE0661", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "Same two widths and the same suffix 61 as H.48 and H.60. Three families agreeing on one type, which is worth noting precisely because so little else on these pages does.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "dish_drainer_two_doors": {
+        "description": "Dish-drainer unit with doors - 2 doors - 1 stainless steel rack with drip tray - 155 degree hinges",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "155 degree hinges"],
+        "source_ref": "printed p.232 / PDF 234",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PE0660", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0960", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "TWO widths where H.48 and H.60 each have one - the same difference the plain two-door type shows in this family. A W.60 pair of doors exists at H.72 and nowhere else.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle."
+        }
+      },
+      "dish_drainer_top_hung_doors_stacked": {
+        "description": "Dish-drainer unit with top-hung doors - 2 top-hung doors - 1 stainless steel rack with drip tray - top door with Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "top door with Push-pull device"],
+        "source_ref": "printed p.232 / PDF 234",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PE0507", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PE0607", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0707", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PE0907", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PE1007", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PE1207", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "SUFFIX 07, where the plain stacked type on printed p.228 is 04. The dish-drainer suffix is not the plain one plus a constant: 31 goes to 61, 30 to 60, 10 to 12, 04 to 07, 89 to 92. Five pairs, four different offsets.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [360, 360],
+          "note": "Two equal fronts, 360 each. NO hinge_axis - see wall_top_hung_doors_stacked for why a single axis key cannot describe a stacked pair."
+        }
+      },
+      "dish_drainer_push_up_door": {
+        "description": "Dish-drainer unit with push-up door - 1 push-up door - 1 stainless steel rack with drip tray - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "interior Valencia handle"],
+        "source_ref": "printed p.232 / PDF 234",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PE0612", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0712", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PE0912", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PE1012", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PE1212", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "FIVE widths, while the PLAIN push-up in the same family has only three. The dish-drainer section is not a subset of the wall section - it has its own width sets, type by type. The rack is one tier here, not the two H.60 prints.",
+        "front_layout": {
+          "kind": "single",
+          "note": "NO hinge_axis and no open_leaf - see wall_push_up_door in this family."
+        }
+      },
+      "dish_drainer_folding_doors": {
+        "description": "Dish-drainer unit with horizontally folding doors - 2 doors - 1 stainless steel rack with drip tray - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "interior Valencia handle"],
+        "source_ref": "printed p.233 / PDF 235",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PE0592", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PE0692", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0792", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PE0992", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PE1092", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PE1292", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Suffix 92 against the plain folding type's 89. Same six widths as its plain twin.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [360, 360],
+          "note": "Two equal fronts, 360 each. NO hinge_axis and no mechanism figure."
+        }
+      }
+    }
+  }
+}

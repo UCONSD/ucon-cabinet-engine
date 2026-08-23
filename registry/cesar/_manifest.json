@@ -249,18 +249,33 @@
         ] },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola hood", "printed_pages": "226", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola No Drop hood", "printed_pages": "227", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.72", "section": "Wall units H. 72", "printed_pages": "228-231", "status": "not_extracted",
+      { "class": "wall", "family": "H.72", "section": "Wall units H. 72", "printed_pages": "228-231", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "Nine of twelve positions, 27 of 31 codes, verified against 170-dpi renders. THE RICHEST WALL SECTION SO FAR: a pull-out door, two STACKED top-hung doors and horizontally folding doors, none of which any other wall family has, plus the first wall units at d.62 - the two boiler housings. LEFT OUT: both corners (Elda Q7b) and PE0696, which is printed here but is 360 TALL, not 720; it lives in wall_h72_microwave_niche.json under family Wall H.36, because the printed dimension outranks the decoded letter. The page-228 note below was written on 2026-08-18 from a reading, and the extraction agrees with it.",
         "pages": [
-          { "printed": 228, "status": "not_extracted",
+          { "printed": 228, "status": "extracted",
+            "types": ["Wall unit with pull-out door", "Wall unit with door", "Wall unit with doors", "Wall unit with top-hung doors (2 STACKED, elevation 36+36)"] },
+          { "printed": 229, "status": "extracted",
+            "types": ["Wall unit with push-up door", "Wall unit with horizontally folding doors", "Compound wall unit with horizontally-folding door"] },
+          { "printed": 230, "status": "partial",
             "types": [
-            "Wall unit with pull-out door",
-            "Wall unit with door",
-            "Wall unit with doors",
-            "Wall unit with top-hung doors"
-            ],
-            "note": "Read 2026-08-18, not extracted. PE0130 (pull-out, W.15); PE0131 one rh or lh door + 1 shelf, W.15/30/45/60; PE0630/PE0930 two doors, W.60/90; PE..04 two stacked top-hung doors split 36+36, W.45-120. This is where the printed p.11 closing-strip rule first bites, because rh/lh doors appear." }
+              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OE0713 / OE0715, 70x70 and 75x75. Elda Q7b." },
+              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PE094D/S, 100x40, corner filler 5X5. Elda Q7b." },
+              "Wall unit with top-hung door and microwave niche - PE0696, H.36, held under family Wall H.36",
+              "Wall boiler housing, 1 door, d.62"
+            ] },
+          { "printed": 231, "status": "extracted", "types": ["Wall boiler housing, 2 doors, d.62"] }
         ] },
-      { "class": "wall", "family": "H.72", "section": "Dish-drainer units H. 72", "printed_pages": "232-233", "status": "not_extracted" },
+      { "class": "wall", "family": "H.72", "section": "Dish-drainer units H. 72", "printed_pages": "232-233", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "Five of six positions, 21 of 22 codes, verified against renders. The sixth is the 90-degree corner dish-drainer OE0745 at 75x75 ONLY - the same one-size shape H.60 showed, so two families now agree that a corner dish-drainer offers one size where the plain corner offers two. Elda Q7b.",
+        "pages": [
+          { "printed": 232, "status": "extracted",
+            "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung doors (2 stacked)", "Dish-drainer unit with push-up door"] },
+          { "printed": 233, "status": "partial",
+            "types": [
+              "Dish-drainer unit with horizontally folding doors",
+              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OE0745, 75x75 only. Elda Q7b." }
+            ] }
+        ] },
       { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola hood", "printed_pages": "234-235", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola No Drop hood", "printed_pages": "236-237", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.84", "section": "Wall units H. 84", "printed_pages": "238-240", "status": "not_extracted",

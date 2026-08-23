@@ -1,0 +1,192 @@
+{
+  "section": "Wall units H. 72",
+  "class": "wall",
+  "family": "Wall H.72",
+  "source_pages": "printed p.228-231 / PDF 230-233, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_naming_note": "Namespaced 'Wall H.72' for the same reason as the other wall families: the registry merges section files by family NAME and the catalog uses 'H. 72' for more than one thing.",
+  "extraction_note": "Nine of twelve positions, 27 of 31 codes. LEFT OUT: the 90-degree corner (OE0713 / OE0715), the straight corner (PE094D/S) - both Elda Q7b - and the microwave-niche unit PE0696, which is NOT 720 tall and therefore not a member of this family at all; it has its own file, wall_h72_microwave_niche.json. See page_observations.",
+  "letter_note": "PE = H.72 was read on printed p.228 on 2026-08-18, before this extraction. The filler table on printed p.434 agrees.",
+  "data": {
+    "height_mm": 720,
+    "mounting": "wall_hung",
+    "mounting_note": "Catalog-level fact: every unit in the wall chapter hangs. HOW HIGH is a project decision and lives in Standards::WALL_MOUNT_BOTTOM_MM until M1.6.",
+    "overall_height_n_elle_mm": 742,
+    "n_elle_note": "The elevation carries 'N Elle' at 74,2 = 72 + 2,2, the same +22 mm as every other wall family. RECORDED, NOT IMPLEMENTED.",
+    "page_observations": [
+      "THE RICHEST WALL SECTION IN THE BOOK SO FAR, and it brings THREE opening types no wall family has shown: a pull-out door (PE0130, W.15), two STACKED top-hung doors, and horizontally folding doors. H.36, H.48 and H.60 have none of the three.",
+      "SUFFIX 04 MEANS SOMETHING ELSE HERE, and this page is the proof the manifest has been warning about. At H.48 and H.60, 04 is a two-module COMPOUND - one door across two carcasses side by side. At H.72 it is TWO STACKED TOP-HUNG DOORS, elevation 36 + 36, one above the other. Same two digits, a horizontal split instead of a vertical one.",
+      "AND SUFFIX 30 MEANS TWO THINGS ON ONE PAGE. PE0130 at W.15 is a PULL-OUT door; PE0630 and PE0930 are TWO DOORS. Printed p.228 carries both, seventy lines apart. The type_suffix warning was written from exactly this page and it is worth restating: decode nothing.",
+      "THE FIRST WALL UNITS AT d.62. Both boiler housings (PE0501 / PE0601 and PE0600 / PE0900) are 620 deep where every other wall unit in this registry is 350. Depth is per CODE and always was; this is the first time a wall page has used that.",
+      "'CUSTOM-SIZED SIDE PANELS' is printed on both boiler housings and on nothing else in the chapter. A stated non-standard property, recorded and not modelled - the envelope is drawn at the catalog width like any other.",
+      "THE ONE-DOOR TYPE HAS FOUR WIDTHS HERE - 15, 30, 45, 60. H.48 has two (45, 60), H.60 has three (15, 45, 60) and no 30. Four families, four different width sets for the same type.",
+      "THE PUSH-UP TYPE DROPS TO THREE WIDTHS - 60, 90, 120. H.48 and H.60 both list five. It also loses the printed open_leaf geometry note: printed p.229 points at 'Servo Drive mechanism on page 567' rather than giving the oblique figures that p.561 gives for H.60."
+    ],
+    "unit_types": {
+      "wall_pull_out_door": {
+        "description": "Wall unit with pull-out door - 1 door - 1 soft-close pull-out door - no push-pull",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": ["1 soft-close pull-out door"],
+        "source_ref": "printed p.228 / PDF 230",
+        "codes": [
+          { "code": "PE0130", "width_mm": 150, "depth_mm": 350 }
+        ],
+        "notes": "THE FIRST PULL-OUT DOOR IN THE WALL CHAPTER, and the same shape base_pull_out_door has on printed p.36 - one narrow front on a mechanism. The source never calls it rh or lh, so it is not recorded as handed.",
+        "front_layout": {
+          "kind": "single",
+          "mechanism": "pull_out_door",
+          "note": "One full-height front carried by a pull-out mechanism, not a swinging leaf. NO hinge_axis and no open_leaf: the travel of this mechanism is not in the catalog, so 70_symbols draws nothing rather than something wrong. Same treatment as base_pull_out_door."
+        }
+      },
+      "wall_door": {
+        "description": "Wall unit with door - 1 rh or lh door - 1 shelf",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.228 / PDF 230",
+        "codes": [
+          { "code": "PE0131", "width_mm": 150, "depth_mm": 350 },
+          { "code": "PE0331", "width_mm": 300, "depth_mm": 350 },
+          { "code": "PE0531", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PE0631", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "Four widths, the widest set this type has in any wall family. ONE CODE, BOTH HANDS.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. Which edge is hinge_side, chosen per order and never guessed."
+        }
+      },
+      "wall_two_doors": {
+        "description": "Wall unit with doors - 2 doors - 1 shelf",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 shelf"],
+        "source_ref": "printed p.228 / PDF 230",
+        "codes": [
+          { "code": "PE0630", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0930", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "TWO widths where H.48 and H.60 each have one, and a W.60 pair of doors is new - the other families start this type at 90.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing."
+        }
+      },
+      "wall_top_hung_doors_stacked": {
+        "description": "Wall unit with top-hung doors - 2 top-hung doors - top door with Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["top door with Push-pull device"],
+        "source_ref": "printed p.228 / PDF 230",
+        "codes": [
+          { "code": "PE0504", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PE0604", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0704", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PE0904", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PE1004", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PE1204", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "TWO DOORS ONE ABOVE THE OTHER, not side by side. The elevation is dimensioned 36 and 36 and the drawing shows two leaves stacked. Only the TOP door carries a Push-pull device, which the page states and nothing derives.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [360, 360],
+          "note": "Two equal fronts, 360 each, summing to the family's 720. NO hinge_axis: the key is a single value and BOTH leaves are top-hung, so setting it would make 70_symbols draw one 720-tall leaf instead of two 360 ones. A figure for a stacked pair is owed in docs/Drawing_Spec_v0.1.md; until it exists nothing is drawn, which is the honest state. The SLABS are correct either way - two of them, which is also what the handle count reads."
+        }
+      },
+      "wall_push_up_door": {
+        "description": "Wall unit with push-up door - 1 push-up door - 1 shelf - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 shelf", "interior Valencia handle"],
+        "source_ref": "printed p.229 / PDF 231",
+        "codes": [
+          { "code": "PE0610", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0910", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PE1210", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Three widths, against five at H.48 and H.60. NO open_leaf geometry recorded: printed p.229 points at 'Servo Drive mechanism on page 567' instead of giving the figures printed p.561 gives for the H.60 oblique system. wall_h60.json's open_leaf is that family's and is NOT carried over - the manifest already notes the two systems differ by height band.",
+        "front_layout": {
+          "kind": "single",
+          "note": "NO hinge_axis and NO open_leaf. Nothing is drawn for this type in this family until the page that dimensions its mechanism is read."
+        }
+      },
+      "wall_folding_doors": {
+        "description": "Wall unit with horizontally folding doors - 2 doors - 1 shelf - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 shelf", "interior Valencia handle"],
+        "source_ref": "printed p.229 / PDF 231",
+        "codes": [
+          { "code": "PE0589", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PE0689", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PE0789", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PE0989", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PE1089", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PE1289", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "A THIRD OPENING TYPE THIS FAMILY INTRODUCES: the two leaves fold against each other and lift as one. Elevation 36 + 36 like the stacked top-hung type, suffix 89.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [360, 360],
+          "note": "Two equal fronts, 360 each. NO hinge_axis and no mechanism figure: a folding pair moves in a way this catalog has not dimensioned anywhere we have read. Slabs correct, symbol withheld."
+        }
+      },
+      "wall_compound_2_folding": {
+        "description": "Compound wall unit with horizontally-folding door - 2 doors - 2 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["2 shelves", "interior Valencia handle"],
+        "source_ref": "printed p.229 / PDF 231",
+        "codes": [
+          { "code": "PE1889", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "BOTH SPLITS AT ONCE - two carcass modules side by side AND two folding leaves one above the other. modules_mm carries the first, front_layout the second, and neither describes the other. Suffix 89 again, same as the simple folding type.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.229 / PDF 231, read off the render",
+          "for_all_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "note": "RECORDED, NOT ENFORCED - M1.6. No asterisks: one width."
+        },
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [360, 360],
+          "note": "Two equal fronts, 360 each, across both modules."
+        }
+      },
+      "wall_boiler_housing_door": {
+        "description": "Wall boiler housing - 1 rh/lh door - custom-sized side panels",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["custom-sized side panels"],
+        "source_ref": "printed p.230 / PDF 232",
+        "codes": [
+          { "code": "PE0501", "width_mm": 450, "depth_mm": 620 },
+          { "code": "PE0601", "width_mm": 600, "depth_mm": 620 }
+        ],
+        "notes": "THE FIRST WALL UNIT AT d.62 in this registry - 620 deep, where every other wall code is 350. It houses a boiler, so it is as deep as a base unit. 'Custom-sized side panels' is printed and recorded; the envelope is still drawn at the catalog width, because the page gives no other number.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "wall_boiler_housing_two_doors": {
+        "description": "Wall boiler housing - 2 doors - custom-sized side panels",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["custom-sized side panels"],
+        "source_ref": "printed p.231 / PDF 233",
+        "codes": [
+          { "code": "PE0600", "width_mm": 600, "depth_mm": 620 },
+          { "code": "PE0900", "width_mm": 900, "depth_mm": 620 }
+        ],
+        "notes": "SUFFIX 00 IS A BOILER HOUSING HERE. At H.36, H.48 and H.60 the same 00 is a top-hung door. Three families said one thing and the fourth says another - read the row. Also note W.60 appears in BOTH boiler types, once as one door (PE0601) and once as two (PE0600): the suffix is doing all the work and the width field none of it.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "section": "Wall units H. 72",
+  "class": "wall",
+  "family": "Wall H.36",
+  "source_pages": "printed p.230 / PDF 232, verified against a 170-dpi render 2026-08-23",
+  "family_note": "NO family-level keys. THE FAMILY IS Wall H.36 AND THE SECTION IS 'Wall units H. 72', and that is not a mistake - it is the whole point of this file. printed p.230 prints this position inside the H.72 section, but its elevation is dimensioned 36, not 72. THE PRINTED DIMENSION OUTRANKS THE DECODED LETTER: PE reads H.72 in code_grammar.wall_units, and here it does not. The letter is a lookup for the SECTION, not a guarantee about the row. Height and mounting therefore come from wall_h36.json, which owns Wall H.36, and this file states none of its own.",
+  "extraction_note": "One position, one code. Held in its own file rather than inside wall_h72.json because that file declares height_mm 720 for its family, and PE0696 is 360 - putting it there would have made the registry state a height the page contradicts.",
+  "data": {
+    "unit_types": {
+      "wall_microwave_niche": {
+        "description": "Wall unit with top-hung door - 1 top-hung door - 1 adaptable microwave oven niche",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 adaptable microwave oven niche"],
+        "source_ref": "printed p.230 / PDF 232",
+        "codes": [
+          { "code": "PE0696", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "THE NICHE IS THE POINT AND IT IS NOT AN APPLIANCE. 'Adaptable' means the opening takes a microwave the client buys - so this is a Cesar carcass with a hole in it, ordered from Cesar, and the machine that goes in it is nobody's line here. It is NOT object_class appliance_front: that class is a PANEL bolted to a machine, and this is a cabinet. The niche itself is interior and is not drawn - envelope-only, like every shelf and divider. Suffix 96 appears nowhere else in the wall chapter.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front of a 360-tall box, hinged along its top edge. The niche sits below it and is interior."
+        }
+      }
+    }
+  }
+}
