@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 473 codes (131 base + 20 sink + 3 appliance + 291 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 479 codes (131 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 473
+  raise "got #{n}" unless n == 479
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 473 rows, each with code/dims/description/source') do
+check('registry catalog: 479 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 473
+  raise cat.length.to_s unless cat.length == 479
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -825,6 +825,33 @@ check('NOT EVERY BASE UNIT CAN BE HUNG, and the page says so in words') do
     Generator.wall_hung_ref(Registry.lookup(base_refused.first['code'])).nil?
 end
 
+check('THE DOOR-VERSION GAP HAS ONE NAME, and everything waiting on it says so') do
+  # Two pages found the same missing axis on the same day. printed p.38 prints
+  # base units whose only elevation is 19,5/55,5 - 750, the gola door height -
+  # and printed p.48 prints dishwasher panels at 36/36 and 16,5/55,5. A handle
+  # execution must sum to 780. So these articles exist at 75 or 72 and not at
+  # 78, and door_versions is a FAMILY key: full_mm and gola_mm are stated once
+  # for H.78 and every article in the family inherits both.
+  #
+  # The point of this check is not the count. It is that a backlog waiting on
+  # ONE decision must not accumulate five different explanations of itself -
+  # when the axis is finally narrowed to an article, whoever does it needs to
+  # find every row in one grep. Rule 18's lesson pointed the other way for
+  # inventories; this one is about a reason, and a reason that drifts is a
+  # reason nobody can act on.
+  waiting = Registry.catalog.reject { |c| c['buildable'] }.select { |c|
+    Registry.lookup(c['code'])['not_buildable_reason'].to_s.include?('door_versions is a FAMILY key')
+  }
+  raise 'the door-version backlog has vanished' if waiting.empty?
+  raise 'it must span more than one section, or it is not an axis problem' unless
+    waiting.map { |c| c['section'] }.uniq.length > 1
+  waiting.each do |row|
+    reason = Registry.lookup(row['code'])['not_buildable_reason']
+    raise "#{row['code']} does not say what it printed" unless reason.match?(/\d+ \+ \d+ = \d+/)
+    raise "#{row['code']} must own the inference" unless reason.include?('rule 4')
+  end
+end
+
 check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do
   # printed p.38 prints 'Base unit with drawer and doors' TWICE, as suffix 40
   # and as suffix 46, at the same widths, the same depths and the same price in
@@ -1192,14 +1219,23 @@ check('decisions are per position: p.47 excludes 3 of 4 types, the dishwasher do
     raise "#{t['title']} has no recorded reason" if t['note'].to_s.empty?
   end
 end
-check('the dishwasher kit is recorded: door and filler planned, hob protection not') do
+check('the dishwasher kit is recorded: door and filler extracted, hob protection not') do
+  # 'planned' became 'extracted' on 2026-08-23. The three door executions are
+  # HELD AND NOT BUILDABLE - two fronts summing to 720 or 750 against a family
+  # door height of 780 - and holding something we cannot draw is allowed as long
+  # as the row says why. The hob protection stays out: it belongs to a hob, and
+  # no hob is held.
   types = gap_page('p.48')['types']
   door   = types.find { |t| t['title'].include?('dish-washer') }
   filler = types.find { |t| t['title'].start_with?('Filler profile') }
   hob    = types.find { |t| t['title'].include?('induction hob') }
-  raise door.inspect unless door && door['status'] == 'planned'
-  raise filler.inspect unless filler && filler['status'] == 'planned'
+  raise door.inspect unless door && door['status'] == 'extracted'
+  raise filler.inspect unless filler && filler['status'] == 'extracted'
   raise hob.inspect unless hob && hob['status'] == 'not_extracted'
+  # And the six codes are in, none of them drawable.
+  rows = Registry.catalog.select { |c| c['code'].to_s.start_with?('V88') }
+  raise rows.length.to_s unless rows.length == 6
+  raise 'a gola-only panel must not be offered for building' if rows.any? { |c| c['buildable'] }
   # The filler is the companion order line; the codes are the source's, and a
   # 75 door takes the 60 filler because the appliance behind it is 60 wide.
   %w[995945 995946].each { |c| raise "filler #{c} missing" unless filler['note'].include?(c) }
@@ -4046,7 +4082,7 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 15
+  raise blocks.length.to_s unless blocks.length == 18
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')

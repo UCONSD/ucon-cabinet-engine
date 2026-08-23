@@ -121,12 +121,12 @@
                 "note": "V80640 (W60). Excluded - rare in the kitchens we build." }
             ] },
           { "printed": 48, "status": "not_extracted",
-            "note": "Three dishwasher door executions plus two accessories; statuses differ per position.",
+            "note": "Three dishwasher door executions plus two accessories; statuses differ per position. EXTRACTED 2026-08-23: the three door executions, 6 codes, all HELD AND NOT BUILDABLE - their two fronts sum to 720 or 750 and the family door height is 780, so they are gola panels and door_versions is a family key. The filler profile was already an order line on the printed p.47 door and is one here too. The hob protection stays out: it belongs to a hob, and no hob is held.",
             "types": [
-              { "title": "Door for integrated dish-washer (three executions)", "status": "planned",
-                "note": "V88559/V88659 (2 fronts, aluminium profile for straight groove), V88566/V88666 and V88569/V88669 (1 front each, differing front split). W45 and W60 only - the 75 version exists on p.47. Planned with the p.47 door and the appliance placeholder." },
-              { "title": "Filler profile between the dishwasher and the top", "status": "planned",
-                "note": "995945 (W45), 995946 (W60). Mandatory companion of a dishwasher door - an order line, not drawn, like a GOL profile. A 75 door takes the W60 filler, because the appliance behind it is 60 wide." },
+              { "title": "Door for integrated dish-washer (three executions)", "status": "extracted", "extracted_on": "2026-08-23",
+                "note": "V88559/V88659 (2 fronts, aluminium profile for straight groove, 36/36), V88566/V88666 (19,5/55,5) and V88569/V88669 (16,5/55,5). W45 and W60 only - the 75 version exists on p.47. THE LAST TWO PRINT THE SAME FOUR LINES, THE SAME WIDTHS AND THE SAME PRICES and differ only in their elevation - the third instance today of one description naming two articles. All three carry the same prohibition block: not available with Maxima 2.2 Shaker door or an L-shaped grip recess, which is what makes them the straight-groove executions." },
+              { "title": "Filler profile between the dishwasher and the top", "status": "extracted", "extracted_on": "2026-08-23",
+                "note": "995945 (W45), 995946 (W60). Mandatory companion of a dishwasher door - an order line, not drawn, like a GOL profile. A 75 door takes the W60 filler, because the appliance behind it is 60 wide. Carried by all four dishwasher-door positions now, the printed p.47 one and the three here." },
               { "title": "Protection under induction hob", "status": "not_extracted",
                 "note": "996466 (W60), 996467 (W75), 996469 (W90), 996460 (W105), 996462 (W120). Custom sizing not available per source. Belongs to a hob, not to the dishwasher kit." }
             ] }

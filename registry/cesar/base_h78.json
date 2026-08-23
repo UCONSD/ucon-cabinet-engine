@@ -1033,7 +1033,7 @@
         "source_ref": "printed p.38 / PDF 40",
         "hob_provisions_depths_mm": [620, 670],
         "buildable": false,
-        "not_buildable_reason": "THE PAGE PRINTS ONE ELEVATION AND IT IS NOT THE FULL-HEIGHT ONE. 19,5 over 55,5 sums to 750, the family's GOLA door height, with the groove drawn between the two fronts and none under the worktop - so this article is printed in the gola execution only, and 780 - 750 = 30 is the single intermediate recess. THAT READING IS OURS (rule 4), forced by arithmetic: a handle execution must sum to 780 and this does not. The engine's door_version axis is FAMILY-scoped - door_versions lives on the family, not the article - so there is no way yet to say 'this code exists at 75 and not at 78'. Held, findable, orderable, and not drawn until that axis can be narrowed to an article.",
+        "not_buildable_reason": "THE PAGE PRINTS ONE ELEVATION AND IT IS NOT THE FULL-HEIGHT ONE: 195 + 555 = 750, the family's GOLA door height, with the groove drawn between the two fronts and none under the worktop, so 780 - 750 = 30 is the single intermediate recess. THAT READING IS OURS (rule 4), forced by arithmetic: a handle execution must sum to 780 and this does not. And door_versions is a FAMILY key - full_mm and gola_mm are stated once for H.78 and every article inherits both - so there is no way yet to say this code exists at 75 and not at 78. Held, findable, orderable, and not drawn until that axis can be narrowed to an article.",
         "codes": [
           { "code": "B70547", "width_mm": 450, "depth_mm": 350 },
           { "code": "B70647", "width_mm": 600, "depth_mm": 350 },
@@ -1063,7 +1063,7 @@
         "hob_provisions_depths_mm": [620, 670],
         "buildable": false,
         "front_layout_incomplete": true,
-        "not_buildable_reason": "BOTH GAPS AT ONCE: the lower band is two doors, which front_layout v2.1 cannot nest, AND the page prints only the 750 elevation, so there is no full-height execution to draw. See base_drawer_doors and base_drawer_door_gola_only.",
+        "not_buildable_reason": "BOTH GAPS AT ONCE. First, the lower band is two doors, which front_layout v2.1 cannot nest - see base_drawer_doors. Second, the page prints one elevation and 195 + 555 = 750 is the gola door height, not the 780 a handle execution must sum to; THAT READING IS OURS (rule 4), and door_versions is a FAMILY key, so there is no way yet to say this code exists at 75 and not at 78.",
         "codes": [
           { "code": "B70946", "width_mm": 900, "depth_mm": 350 },
           { "code": "B80946", "width_mm": 900, "depth_mm": 620 },
