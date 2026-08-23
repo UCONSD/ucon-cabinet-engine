@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 495 codes (131 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 30 tall + 6 fillers)') do
+check('registry loads and holds 537 codes (131 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 495
+  raise "got #{n}" unless n == 537
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 495 rows, each with code/dims/description/source') do
+check('registry catalog: 537 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 495
+  raise cat.length.to_s unless cat.length == 537
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -507,7 +507,10 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 96',
                                              'Sink base units H. 78',
                                              'Tall units H. 138',
+                                             'Tall units H. 198',
                                              'Tall units H. 210',
+                                             'Tall units H. 222',
+                                             'Tall units H. 234',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 120',
                                              'Wall units H. 36',
@@ -905,6 +908,58 @@ check('tall H.138: printed p.90 whole, 16 codes, and the kit-ready door is d.62 
     kit.map { |c| c['depth_mm'] }.uniq == [620]
   raise 'they must come from more than one family' unless
     kit.map { |c| c['section'] }.uniq.length > 1
+end
+
+check('FIVE PLAIN TALL FAMILIES, ONE SHAPE, AND NO AGREEMENT ABOUT HANGING') do
+  # printed p.90, p.97, p.111, p.132 and p.151 print the SAME three positions in
+  # the same order: a door, a pair of doors, and a door that can take the
+  # bottom-section kit. Everything structural about them agrees. Who can be hung
+  # does not, and neither does the door's suffix.
+  #
+  #            door        two doors    kit-ready   door suffix
+  #   H.138    hung        HUNG         no          01
+  #   H.198    hung        no           no          31
+  #   H.210    hung        no           no          31
+  #   H.222    NO          no           no          02
+  #   H.234    NO          no           no          02
+  #
+  # H.222 and H.234 refuse every position - the first whole families the
+  # registry holds that cannot be hung at all - and they are also the two that
+  # renumbered the door. That is a correlation across two families, recorded as
+  # an observation in their files and used for nothing.
+  plain = Registry.catalog.select { |c| c['section'].match?(/\ATall units H\. \d+\z/) }
+  families = plain.map { |c| c['section'] }.uniq
+  raise families.inspect unless families.length == 5
+  families.each do |section|
+    rows = plain.select { |c| c['section'] == section }
+    raise "#{section}: #{rows.length}" unless [14, 16].include?(rows.length)
+    keys = rows.map { |c| c['type_key'] }.uniq.sort
+    raise "#{section}: #{keys.inspect}" unless
+      keys == %w[tall_door tall_door_kit_ready tall_two_doors]
+    kit = rows.select { |c| c['type_key'] == 'tall_door_kit_ready' }
+    raise "#{section}: the kit-ready door must be d.62 only" unless
+      kit.map { |c| c['depth_mm'] }.uniq == [620]
+  end
+
+  # THE DISAGREEMENT, BOTH WAYS ROUND. At least one family hangs something and
+  # at least one hangs nothing; and the plain door - the position most nearly
+  # constant across the chapter - is itself refused somewhere.
+  hangs = families.to_h { |section|
+    [section, plain.select { |c| c['section'] == section }
+                   .any? { |c| Generator.wall_hung_available?(Registry.lookup(c['code'])) }]
+  }
+  raise hangs.inspect unless hangs.values.include?(true) && hangs.values.include?(false)
+  doors = plain.select { |c| c['type_key'] == 'tall_door' }
+  answers = doors.map { |c| Generator.wall_hung_available?(Registry.lookup(c['code'])) }.uniq
+  raise 'even the plain door must disagree with itself across families' unless
+    answers.length == 2
+
+  # AND THE SUFFIX MOVES WITH NOTHING. THREE readings for one position: 01 at
+  # H.138, 31 at H.198 and H.210, 02 at H.222 and H.234. This line was written
+  # expecting two and found three, which is how it caught a note in
+  # tall_h138.json claiming 'the same suffix 31' beside codes reading 01.
+  suffixes = doors.map { |c| c['code'][-2..] }.uniq.sort
+  raise suffixes.inspect unless suffixes.length == 3
 end
 
 check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do

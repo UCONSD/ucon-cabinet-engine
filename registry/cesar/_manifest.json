@@ -148,8 +148,16 @@
             "note": "The uncoded mechanism again, plus the D/S execution letter - the fourth chapter it appears in, after the base corners on printed p.42, the straight corner wall unit on printed p.223 and the tall corners on printed p.113-114. Elda Q7b. The corner width field decodes to nothing here either: C1115D/S is W.115 and C1120D/S is W.130."
             }
         ] },
-      { "class": "tall", "family": "H.198", "section": "Tall units H. 198", "printed_pages": "97-101", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CE = d.35 and CF = d.62. printed p.97 is the page claude/options-architecture-2026-08-20.md takes its worked example from: one printed row carrying an option that is CHOSEN ('See kit on page 569') beside one that is IMPLIED ('1 rh or lh door with 155 degree hinges'). The same type recurs at H.210 on printed p.111 and IS extracted there." },
+      { "class": "tall", "family": "H.198", "section": "Tall units H. 198", "printed_pages": "97-101", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CE = d.35 and CF = d.62. printed p.97 is the page claude/options-architecture-2026-08-20.md takes its worked example from: one printed row carrying an option that is CHOSEN ('See kit on page 569') beside one that is IMPLIED ('1 rh or lh door with 155 degree hinges'). The same type recurs at H.210 on printed p.111 and at H.138 on printed p.90. EXTRACTED 2026-08-23: printed p.97 whole, three types, 14 codes - registry/cesar/tall_h198.json. THE PAGE IS printed p.111 WITH DIFFERENT LETTERS, down to the suffixes and the wall-hung pattern, which is what makes printed p.90 the outlier: H.198 and H.210 hang only the plain door type, H.138 hangs the two-door type as well.",
+        "pages": [
+          { "printed": 97, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": ["Tall unit with door", "Tall unit with doors (NOT offered wall-hung)", "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"] },
+          { "printed": 98, "status": "not_extracted", "types": ["Tall units H. 198 - interior mechanisms"], "note": "Deferred for the reason printed p.91 and printed p.112 are deferred: mechanisms the page names and does not code." },
+          { "printed": 99, "status": "not_extracted", "types": ["Tall units H. 198 - interior mechanisms and corners"], "note": "Mechanisms plus the D/S execution letter. Elda Q7b." },
+          { "printed": 100, "status": "not_extracted", "types": ["Tall units H. 198 - oven and microwave housings"], "note": "Appliance module." },
+          { "printed": 101, "status": "not_extracted", "types": ["Tall units H. 198 - fridge units"], "note": "Appliance module." }
+        ] },
       { "class": "tall", "family": "H.198", "section": "Tall units H. 198 | for base unit H. 78", "printed_pages": "102-110", "status": "not_extracted",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C7 = d.35 and C8 = d.62. C8 is the letter the USA elements recon read on printed p.417 (C87757) and recorded as a NEW letter - it is not new, it is this family. See code_grammar.usa_elements.family_letters_are_not_new." },
       { "class": "tall", "family": "H.210", "section": "Tall units H. 210", "printed_pages": "111-115", "status": "partial",
@@ -175,14 +183,24 @@
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units." },
       { "class": "tall", "family": "H.210", "section": "Tall units H. 210 | for base unit H. 84", "printed_pages": "126-131", "status": "not_extracted",
         "note": "SHARES ITS LETTERS WITH printed p.111-115: CQ = d.35 and CR = d.62 here too. The four-digit tail is what separates them - p.111-115 uses width indices 03/05/06/07/09/12 and this section uses 05/06/07/09/15/16/19/26/27/29/36 - so no code collides, but a loader that keys on the prefix would merge two sections that the book keeps apart. See the registry-loader hardening item on the status doc." },
-      { "class": "tall", "family": "H.222", "section": "Tall units H. 222", "printed_pages": "132-136", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CG = d.35 and CH = d.62. Structurally the twin of printed p.111-115 at a greater height." },
+      { "class": "tall", "family": "H.222", "section": "Tall units H. 222", "printed_pages": "132-136", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CG = d.35 and CH = d.62. Structurally the twin of printed p.111-115 at a greater height - EXCEPT for the wall-hung glyph. EXTRACTED 2026-08-23: printed p.132 whole, three types, 14 codes - registry/cesar/tall_h222.json.",
+        "pages": [
+          { "printed": 132, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": ["Tall unit with door (SUFFIX 02, NOT offered wall-hung)", "Tall unit with doors (NOT offered wall-hung)", "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"],
+            "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout." }
+        ] },
       { "class": "tall", "family": "H.222", "section": "Tall units H. 222 | for base unit H. 78", "printed_pages": "137-145", "status": "not_extracted",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have." },
       { "class": "tall", "family": "H.222", "section": "Tall units H. 222 | for base unit H. 84", "printed_pages": "146-150", "status": "not_extracted",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CI = d.35 and CK = d.62. Note CK, not CJ - the letters are a lookup and nothing skips predictably." },
-      { "class": "tall", "family": "H.234", "section": "Tall units H. 234", "printed_pages": "151-155", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C0 = d.35 and C9 = d.62, shared with printed p.156-164 below in the same way CQ/CR are shared between p.111-115 and p.126-131. The tallest family in the chapter." },
+      { "class": "tall", "family": "H.234", "section": "Tall units H. 234", "printed_pages": "151-155", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C0 = d.35 and C9 = d.62, shared with printed p.156-164 below in the same way CQ/CR are shared between p.111-115 and p.126-131. The tallest family in the chapter. EXTRACTED 2026-08-23: printed p.151 whole, three types, 14 codes - registry/cesar/tall_h234.json. The page is printed p.132 at twelve centimetres more, position for position and suffix for suffix.",
+        "pages": [
+          { "printed": 151, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": ["Tall unit with door (SUFFIX 02, NOT offered wall-hung)", "Tall unit with doors (NOT offered wall-hung)", "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"],
+            "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout." }
+        ] },
       { "class": "tall", "family": "H.234", "section": "Tall units H. 234 | for base unit H. 78", "printed_pages": "156-164", "status": "not_extracted",
         "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter." },
       { "class": "tall", "family": "H.234", "section": "Tall units H. 234 | for base unit H. 84", "printed_pages": "165-169", "status": "not_extracted",
