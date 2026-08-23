@@ -263,6 +263,19 @@ module UCON
         state['wall_hung_available'] = Generator.wall_hung_available?(unit)
         ref = Generator.wall_hung_ref(unit)
         state['wall_hung_ref'] = ref && ref['code']
+        # WHAT THE CHECKBOX SHOULD SHOW, decided HERE and not in the HTML.
+        #
+        # The box records a CHOICE; `mounting` records the RESULT, and for a
+        # wall unit the result is 'wall_hung' whether anybody chose anything or
+        # not. The dialog used to initialise the box straight from `mounting`,
+        # so on a wall unit the hidden box ticked itself, apply sent
+        # wall_hung:true, and attributes_patch refused it - correctly - with
+        # "it already hangs". The Ruby said as much two lines below the guard:
+        # "a wall unit hangs whatever the checkbox says, a base unit only if it
+        # was ticked." The rule was written down and only the HTML did not have
+        # it, which is the whole reason it belongs in the pure half.
+        state['wall_hung_chosen'] =
+          state['wall_hung_available'] && (attrs || {})['mounting'] == 'wall_hung'
         hw = Registry.data['hardware'] || {}
         state['gola_profiles'] = gola_options(unit)
         state['gola_system']   = gola_system_of(attrs)
@@ -456,8 +469,9 @@ module UCON
               WALL_HUNG_REF=st.wall_hung_ref||'';
               document.getElementById('mountFs').style.display=
                 st.wall_hung_available?'':'none';
-              document.getElementById('wallHung').checked=
-                (st.attrs.mounting==='wall_hung');
+              // From the CHOICE, never from the result - selection_state decides,
+              // because a rule that lives only in HTML is not a rule.
+              document.getElementById('wallHung').checked=!!st.wall_hung_chosen;
               // A family that declares no door versions gets no door-version
               // control - and the labels are written from the declared heights,
               // so nothing in this dialog hard-codes 78 or 75.

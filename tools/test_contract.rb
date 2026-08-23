@@ -4012,6 +4012,65 @@ check('SENTINEL: a rebuild may not smuggle a width outside the printed range') d
   end
 end
 
+check('REGRESSION: a unit that hangs BY NATURE must not tick the wall-hung box') do
+  # Found in SketchUp on PC0631: "Apply failed: PC0631 cannot be ordered
+  # wall-hung: it already hangs." The dialog initialised the box from `mounting`
+  # - the RESULT - and a wall unit's result is always wall_hung, so the hidden
+  # box ticked itself and apply asked for something the guard rightly refuses.
+  #
+  # The box is a record of a CHOICE. selection_state decides what it shows.
+  wall = Registry.lookup('PC0631')
+  attrs = Generator.attributes_for(wall)
+  raise 'a wall unit must already be hanging' unless attrs['mounting'] == 'wall_hung'
+  st = Panel.selection_state(wall, attrs)
+  raise 'the option must not be offered at all' if st['wall_hung_available']
+  raise 'and the box must not be ticked' if st['wall_hung_chosen']
+
+  # THE PAYLOAD THE DIALOG WOULD NOW BUILD must go through without raising, and
+  # must leave the unit hanging - by nature, with no chosen line.
+  patch = Panel.attributes_patch(wall, 'opening_method' => 'handle',
+                                       'hardware_mode' => 'factory',
+                                       'hardware_ref' => 'M00001',
+                                       'hinge_side' => 'rh',
+                                       'wall_hung' => st['wall_hung_chosen'])
+  raise patch['mounting'].to_s unless patch['mounting'] == 'wall_hung'
+  raise 'a wall unit must never order the fixing surcharge' if
+    Array(patch['companion_refs']).any? { |l| l['origin'] == 'chosen' }
+  Contract.validate!(attrs.merge(patch))
+
+  # AND THE OLD PAYLOAD IS STILL REFUSED - the guard was right and stays.
+  begin
+    Panel.attributes_patch(wall, 'opening_method' => 'handle',
+                                 'hardware_mode' => 'factory',
+                                 'hardware_ref' => 'M00001',
+                                 'wall_hung' => true)
+    raise 'the guard stopped refusing'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('it already hangs')
+  end
+end
+
+check('a BASE unit chosen to hang still ticks the box, and still orders 989410') do
+  # The other half: for a base unit the box is a real choice, so a unit already
+  # hung must come back ticked or the next apply would silently unhang it.
+  base = Registry.lookup('B80601')
+  hung = Generator.attributes_for(base).merge(
+    Panel.attributes_patch(base, 'opening_method' => 'handle',
+                                 'hardware_mode' => 'client',
+                                 'wall_hung' => true))
+  st = Panel.selection_state(base, hung)
+  raise 'the option must be offered' unless st['wall_hung_available']
+  raise 'the box must come back ticked' unless st['wall_hung_chosen']
+  raise 'the fixing surcharge must be on the line' unless
+    Array(hung['companion_refs']).any? { |l| l['code'] == '989410' && l['origin'] == 'chosen' }
+end
+
+check('the dialog reads the box from selection_state, not from mounting') do
+  html = Panel.html
+  raise 'the HTML must not decide this' if html.include?("mounting==='wall_hung'")
+  raise 'it must read the pure answer' unless html.include?('st.wall_hung_chosen')
+end
+
 check('the picker offers a filler by HEIGHT, with preset widths beside the box') do
   html = Palette.picker_html(Registry.catalog, Registry.gaps, false)
   # Rows are depths and the buttons carry the height - PB0151 and PD0151 are
