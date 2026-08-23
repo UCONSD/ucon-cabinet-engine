@@ -3724,6 +3724,55 @@ check('the ORDER says the width was chosen, not read off a page') do
   raise plain.inspect unless plain['note'].nil?
 end
 
+check('a filler states its front_layout instead of letting a default invent one') do
+  FILLER_CODES.each do |code|
+    fl = Registry.lookup(code)['front_layout']
+    raise "#{code} has no front_layout" unless fl && fl['kind'] == 'single'
+    raise "#{code} claims a hinge axis it has no leaf for" if fl['hinge_axis']
+  end
+end
+
+check('REGRESSION: every rebuild sees the ordered width, or the front collapses') do
+  # 2026-08-23, found in SketchUp and not here: "Non-positive dimension for
+  # FRONT: w=". Panel.apply re-reads the registry row, and a filler row has no
+  # width - THE THIRD INSTANCE OF RULE 11, in the very method written to settle
+  # the second. Every layer involved is pure, so the suite could have caught it
+  # and did not. This is that sweep.
+  Registry.codes.each do |code|
+    row = Registry.lookup(code)
+    next unless row.fetch('buildable', true)
+
+    ordered = row['width_range_mm'] ? Registry.with_ordered_width(row, row['width_range_mm'][0]) : row
+    attrs   = Generator.attributes_for(ordered)
+    # A fresh lookup, exactly as Panel.apply does it - the object is the only
+    # place the ordered width survives.
+    chosen  = Generator.effective(Registry.lookup(code), attrs)
+    [Generator.front_slabs(chosen),
+     Panel.effective_slabs(chosen, false)].each do |slabs|
+      bad = slabs.reject { |sl| sl[:w_mm].to_f > 0 && sl[:h_mm].to_f > 0 }
+      raise "#{code}: #{bad.inspect}" unless bad.empty?
+    end
+  end
+end
+
+check('and the gola version of a filler front is 750 at the ordered width') do
+  attrs  = Generator.attributes_for(Registry.with_ordered_width(Registry.lookup('B70150'), 50))
+  chosen = Generator.effective(Registry.lookup('B70150'), attrs)
+  slabs  = Panel.effective_slabs(chosen, true)
+  raise slabs.inspect unless slabs.length == 1 &&
+                             slabs[0][:w_mm] == 50 && slabs[0][:h_mm] == 750
+end
+
+check('SENTINEL: a rebuild may not smuggle a width outside the printed range') do
+  attrs = Generator.attributes_for(Registry.with_ordered_width(Registry.lookup('B70150'), 50))
+  begin
+    Generator.effective(Registry.lookup('B70150'), attrs.merge('width_mm' => 900))
+    raise 'an edited object widened the article'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('made from 23 to 150')
+  end
+end
+
 check('a filler is never offered the wall-hung surcharge') do
   # printed p.548 sells it for base and tall UNITS. wall_hung_available? already
   # refuses anything that is not a cabinet, so this costs nothing - but the

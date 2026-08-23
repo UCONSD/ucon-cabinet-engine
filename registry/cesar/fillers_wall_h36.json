@@ -12,6 +12,10 @@
         "handed": false,
         "interior_confirmed": ["one-piece bottom"],
         "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - A FILLER DOES NOT OPEN, so 70_symbols draws no leaf, which is the same treatment a US appliance panel gets: it too states a single front it never swings. The kind is STATED rather than left absent because Panel.effective_slabs and Panel.gola_options both default a missing layout to 'single', and a default is not a source. It also means the front shortens to 750 with the rest of the run when the door version is gola - a filler's front line must meet its neighbours' or the drawing breaks."
+        },
         "codes": [
           { "code": "PB0151", "width_range_mm": [23, 150], "depth_mm": 350 }
         ],

@@ -306,7 +306,11 @@ module UCON
           Symbols.draw(model, defn, chosen,
                        patch['hinge_side'] || attrs['hinge_side'],
                        patch['front_height_mm'],
-                       effective_slabs(unit, gola))
+                       # `chosen`, not `unit`: effective_slabs reads the
+                       # width, and on a filler the bare registry row has
+                       # none. The same mistake as the line above it, one
+                       # argument later.
+                       effective_slabs(chosen, gola))
           model.commit_operation
         rescue StandardError
           model.abort_operation

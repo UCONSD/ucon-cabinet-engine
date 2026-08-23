@@ -786,6 +786,18 @@ module UCON
         u = (unit || {}).dup
         a = attrs || {}
         INSTANCE_KEYS.each { |k| u[k] = a[k] unless a[k].nil? }
+        # AND THE ORDERED WIDTH - which is NOT an instance key and must not
+        # become one. The two do opposite things: INSTANCE_KEYS overrides what
+        # the catalog SAID, this restores what the catalog NEVER said. A filler
+        # row carries width_range_mm and no width at all, so every rebuild
+        # re-read a nil width and the front collapsed - which is exactly what
+        # the first filler to meet the properties panel did, with
+        # "Non-positive dimension for FRONT: w=".
+        #
+        # THE THIRD INSTANCE OF RULE 11, and in the very method written to
+        # settle the second one. Validated on the way back in, so an edited
+        # object cannot smuggle a width the article cannot be made at.
+        u = Registry.with_ordered_width(u, a['width_mm']) if u['width_range_mm']
         u
       end
 
