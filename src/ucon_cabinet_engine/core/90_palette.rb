@@ -79,9 +79,13 @@ module UCON
         @picker.add_action_callback('units') do |_, on|
           @picker_inches = (on == 'on')
         end
-        @picker.add_action_callback('build') do |_, code|
+        # The second argument is the ORDERED width, empty for everything the
+        # catalog dimensions itself. Empty becomes nil here and nowhere else,
+        # so Registry.with_ordered_width sees one shape however the dialog
+        # spells "nothing typed".
+        @picker.add_action_callback('build') do |_, code, width|
           begin
-            Generator.build(code)
+            Generator.build(code, width_mm: (width.to_s.strip.empty? ? nil : width.to_s.strip))
           rescue StandardError => e
             UI.messagebox("Build failed:\n\n#{e.message}")
           end
@@ -89,14 +93,23 @@ module UCON
         @picker.show
       end
 
+      # 'filler' is OUR class, not one of the catalog's three element classes.
+      # The book prints closing strips and fillers as their own chapter after
+      # every collection, and their rows are base, wall and tall at once - see
+      # catalog_map, the section note. The FAMILY still decides how each one
+      # meets the room.
       CLASS_LABELS = {
-        'base' => 'Base units', 'wall' => 'Wall units', 'tall' => 'Tall units'
+        'base' => 'Base units', 'wall' => 'Wall units', 'tall' => 'Tall units',
+        'filler' => 'Fillers and closing strips'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The
       # registry keeps the catalog's wording; this map never travels into data
       # or into an order. An unmapped type falls back to its key.
       TYPE_LABELS = {
+        'filler_front'            => 'Filler, front only',
+        'filler_base_unit'        => 'Base unit filler',
+        'filler_wall_unit'        => 'Wall unit filler',
         'base_door'               => 'Door units',
         'base_doors'              => 'Two-door units',
         'base_drawers_jumbo'      => 'Drawer units (2 + jumbo)',
@@ -407,9 +420,66 @@ module UCON
                 });
                 if(st.code) showCard(CAT.find(function(c){return c.code===st.code;}));
               }
+              // A FILLER HAS NO WIDTH IN ITS CODE: one article covers 2,3 to
+              // 15 cm and the number is stated when it is ordered (printed
+              // p.434). So this is not a grid of sizes - it is one button per
+              // article and a box to type the width into. Build stays hidden
+              // until the number is inside the range, which is the same refusal
+              // Registry.with_ordered_width makes in Ruby: the dialog is a
+              // convenience and never the authority.
+              function widthList(el){
+                rows().forEach(function(c){
+                  var row = document.createElement('div'); row.className='drow';
+                  var lab = document.createElement('div'); lab.className='dlab';
+                  lab.textContent = c.depth_mm ? 'd. ' + (c.depth_mm/10) : 'front';
+                  row.appendChild(lab);
+                  var b = document.createElement('button'); b.className='wbtn';
+                  if(st.code===c.code) b.className += ' sel';
+                  b.style.width = 'auto';
+                  b.innerHTML = esc(c.code) + '<small>' + c.width_range_mm[0] +
+                                '\u2013' + c.width_range_mm[1] + ' mm</small>';
+                  b.onclick = function(){ st.w = null; st.code = c.code; render(); };
+                  row.appendChild(b);
+                  el.appendChild(row);
+                });
+                if(!st.code) return;
+                var c = CAT.find(function(x){ return x.code===st.code; });
+                if(!c) return;
+                var wrap = document.createElement('div'); wrap.className='drow';
+                var wlab = document.createElement('div'); wlab.className='dlab';
+                wlab.textContent = 'W mm';
+                var inp = document.createElement('input');
+                inp.type = 'number';
+                inp.value = (st.w == null ? '' : st.w);
+                inp.min = c.width_range_mm[0]; inp.max = c.width_range_mm[1];
+                inp.style.cssText = 'flex:1;padding:8px;border:1px solid #cbd5e1;border-radius:6px';
+                // NO re-render on input - it would take the focus away between
+                // two digits. Only the button and the hint are touched.
+                inp.oninput = function(){ st.w = inp.value; syncBuild(c); };
+                wrap.appendChild(wlab); wrap.appendChild(inp);
+                el.appendChild(wrap);
+                var hint = document.createElement('div');
+                hint.className='src'; hint.id='whint'; hint.style.margin='6px 0 0';
+                el.appendChild(hint);
+                showCard(c);
+                syncBuild(c);
+              }
+              function syncBuild(c){
+                var ok = true;
+                if(c && c.width_range_mm){
+                  var w = parseInt(st.w, 10);
+                  ok = (w >= c.width_range_mm[0] && w <= c.width_range_mm[1]);
+                }
+                document.getElementById('buildBtn').style.display = ok ? 'block' : 'none';
+                var h = document.getElementById('whint');
+                if(h) h.textContent = ok ? '' :
+                  'This article is made from ' + c.width_range_mm[0] + ' to ' +
+                  c.width_range_mm[1] + ' mm \u2014 type the width to order.';
+              }
               function sizeGrid(el){
                 var rs = rows();
                 if(rs.length && rs[0].corner_geometry){ cornerList(el); return; }
+                if(rs.length && rs[0].width_range_mm){ widthList(el); return; }
                 var depths = uniq(rs.map(function(c){return c.depth_mm;})).sort(function(a,b){return a-b;});
                 depths.forEach(function(d){
                   var row = document.createElement('div'); row.className='drow';
@@ -435,7 +505,14 @@ module UCON
               function showCard(c){
                 if(!c) return;
                 var el = document.getElementById('card');
-                var dims = c.corner_geometry
+                var dims = c.width_range_mm
+                  ? 'W ' + c.width_range_mm[0] + '\u2013' + c.width_range_mm[1] +
+                    ' mm, stated per order \u00b7 H ' + c.height_mm + ' mm' +
+                    (c.depth_mm ? ' \u00b7 D ' + c.depth_mm + ' mm'
+                                : ' \u00b7 no depth printed') +
+                    '<br><i>the catalog gives the range and not the width \u2014 ' +
+                    'the same kind of axis as the hinge side</i>'
+                  : c.corner_geometry
                   ? 'node ' + c.corner_geometry.replace('x',' × ') + ' mm · carcass ' +
                     c.carcass_length_mm + ' × ' + c.depth_mm + ' · door ' + c.door_width_mm +
                     '<br><i>' + c.execution + ' execution — the mirror is a different code; ' +
@@ -482,7 +559,12 @@ module UCON
                   el.appendChild(b);
                 });
               }
-              function doBuild(){ if(st.code) sketchup.build(st.code); }
+              function doBuild(){
+                if(!st.code) return;
+                var c = CAT.find(function(x){ return x.code===st.code; });
+                sketchup.build(st.code,
+                  (c && c.width_range_mm) ? String(parseInt(st.w, 10)) : '');
+              }
               window.onload = function(){
                 if(INCH) document.getElementById('units').className = 'on';
                 setLevel(null, null, null);
