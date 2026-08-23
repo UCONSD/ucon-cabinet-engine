@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 422 codes (103 base + 20 sink + 3 appliance + 268 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 445 codes (103 base + 20 sink + 3 appliance + 291 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 422
+  raise "got #{n}" unless n == 445
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 422 rows, each with code/dims/description/source') do
+check('registry catalog: 445 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 422
+  raise cat.length.to_s unless cat.length == 445
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -508,6 +508,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Sink base units H. 78',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
+                                             'Wall units H. 120',
                                              'Wall units H. 36',
                                              'Wall units H. 48',
                                              'Wall units H. 60',
@@ -1343,12 +1344,14 @@ check('a hood variant is excluded by decision, dated, with its reason') do
     raise h.inspect unless h['status'] == 'excluded' && h['decided_on'] == '2026-08-18'
     raise h.inspect unless h['note'].include?('per POSITION')
   end
-  # The rest of the chapter is an ordinary gap, not a decision - except the
-  # sections we have opened. 'extracted' joined the set on 2026-08-23 with the
-  # two dish-drainer sections, which are the first WHOLE sections in this
-  # chapter: a section is extracted only when nothing of it is held back.
+  # AND 'not_extracted' LEFT THE SET ON 2026-08-23. Every one of the thirteen
+  # non-hood wall sections is now extracted or partial - the first chapter in
+  # this book with no unopened section in it. 'extracted' means nothing of the
+  # section is held back; 'partial' here almost always means one corner waiting
+  # on Elda Q7b.
   rest = (wall_sections - hoods).map { |s| s['status'] }.uniq.sort
-  raise rest.inspect unless rest == %w[extracted not_extracted partial]
+  raise rest.inspect unless rest == %w[extracted partial]
+  raise (wall_sections - hoods).length.to_s unless (wall_sections - hoods).length == 13
   whole = (wall_sections - hoods).select { |s| s['status'] == 'extracted' }
   raise whole.map { |s| s['section'] }.inspect unless
     whole.map { |s| s['section'] }.sort ==
@@ -1371,25 +1374,31 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   # a factory order. The section stays not_extracted: a letter is not a page.
   h60 = wall_sections.find { |x| x['section'] == 'Wall units H. 60' }
   raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'partial'
-  # H.96 and H.120 were in exactly that shape on 2026-08-23. H.96 LEFT IT THE
-  # SAME DAY by being read, and the proof that it was read is that its note now
-  # carries both halves: the old 'LETTER READ' warning, kept, and the dated
-  # extraction beside it. H.120 is the last section still holding a letter it
-  # has not spent.
-  h96 = wall_sections.find { |x| x['section'] == 'Wall units H. 96' }
-  raise h96.inspect unless h96['status'] == 'partial' && h96['extracted_on'] == '2026-08-23'
-  raise 'the letter warning must survive the extraction' unless
-    h96['note'].to_s.include?('LETTER READ')
-  h120 = wall_sections.find { |x| x['section'] == 'Wall units H. 120' }
-  raise h120.inspect unless h120['status'] == 'not_extracted'
-  raise 'H.120 must say the letter is read' unless
-    h120['note'].to_s.include?('LETTER READ') && h120['note'].to_s.include?('a letter is not a page')
+  # AND THE 'LETTER READ, PAGE NOT' SHELF IS EMPTY TOO. H.96 and H.120 were the
+  # last two on it and both were read on 2026-08-23. The warnings are KEPT in
+  # their notes rather than deleted (rule 9): each section that spent its letter
+  # now carries both halves - the old 'LETTER READ' caution and the dated
+  # extraction beside it - so the shape of the mistake stays visible after the
+  # mistake is gone.
+  %w[H.96 H.120].each do |fam|
+    sec = wall_sections.find { |x| x['family'] == fam && x['section'].start_with?('Wall units') }
+    raise "#{fam}: #{sec.inspect}" unless
+      sec['status'] == 'partial' && sec['extracted_on'] == '2026-08-23'
+    raise "#{fam} must keep the letter warning it outgrew" unless
+      sec['note'].to_s.include?('LETTER READ') && sec['note'].to_s.include?('a letter is not a page')
+  end
 end
 
-check('the twelve wall sections we hold report pages; the 12 we have not are single rows') do
+check('THE WALL CHAPTER IS OPEN END TO END: thirteen sections held, eleven hood rows left') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
+  # ELEVEN, AND ALL ELEVEN ARE HOODS. When the last ordinary wall section was
+  # opened on 2026-08-23 the only section-level gaps left in this chapter became
+  # the eleven Virgola pages excluded by decision on 2026-08-18. A gap list that
+  # contains only decisions is a chapter that has been read.
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 12
+  raise sections.size.inspect unless sections.size == 11
+  raise 'every wall section gap left is a hood decision' unless
+    sections.all? { |g| g['section'].include?('Virgola') }
   held = Registry.catalog.select { |c| c['class'] == 'wall' }.map { |c| c['section'] }.uniq
   raise 'a section we hold must not also be a section gap' if
     sections.any? { |g| held.include?(g['section']) }
@@ -1405,13 +1414,14 @@ check('the twelve wall sections we hold report pages; the 12 we have not are sin
   # p.212, the H.36 compounds. The other five - p.216, p.223, p.225, p.230,
   # p.233 - are complete except for a corner, and every corner in this registry
   # waits on Elda Q7b. When she answers, five of these six close at once.
-  # TEN PARTIAL PAGES, and only ONE of them is partial for want of reading:
-  # p.212, the H.36 compounds. The other nine are complete except for a corner,
-  # and every corner waits on Elda Q7b. When she answers, nine close at once.
-  # That ratio is the real finding of this chapter: the wall units are READ,
+  # THIRTEEN PARTIAL PAGES, and only ONE of them is partial for want of reading:
+  # p.212, the H.36 compounds. The other twelve are complete except for a
+  # corner, and every corner waits on Elda Q7b. When she answers, twelve close
+  # at once. THAT RATIO IS THE FINDING OF THIS CHAPTER: the wall units are READ,
   # and what is missing is one answer from the factory, not more transcription.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
-  raise pages.inspect unless pages == %w[p.212 p.216 p.223 p.225 p.230 p.233 p.239 p.242 p.246 p.249]
+  raise pages.inspect unless pages ==
+    %w[p.212 p.216 p.223 p.225 p.230 p.233 p.239 p.242 p.246 p.249 p.252 p.253 p.254]
 end
 
 check('p.211 and p.221 are whole pages now, push-up included') do
@@ -4240,6 +4250,87 @@ check('PF0696 IS THE FIRST MICROWAVE NICHE WITH A SIDE-HINGED DOOR') do
     raise "#{code} must stay top-hung" unless
       other['front_layout']['hinge_axis'] == 'top' && other['handed'] == false
   end
+end
+
+puts "\nwall units H. 120 (printed p.252-254) - the family that swapped its suffixes"
+check('the H.120 section holds 23 codes over three pages, and every one of them is PJ') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 120' }
+  raise rows.length.to_s unless rows.length == 23
+  raise 'all PJ' unless rows.all? { |c| c['code'].start_with?('PJ') }
+  raise 'the corners must stay out - Elda Q7b' if
+    Registry.codes.any? { |c| c.start_with?('OJ') }
+  # THE DISH-DRAINERS ARE IN THIS SECTION AND NOT IN ONE OF THEIR OWN. The wall
+  # chapter index never names a dish-drainer section at H.120, so printed p.254
+  # is held as a PAGE of the section whose range contains it - rule 1 untouched.
+  dish = rows.select { |c| c['type_key'].to_s.start_with?('dish_drainer_') }
+  raise dish.length.to_s unless dish.length == 9
+  raise 'the reason must travel with the file, not with our memory of it' unless
+    JSON.parse(File.read(File.expand_path('../registry/cesar/dish_drainer_h120.json', __dir__)))
+        .fetch('section_note').downcase.include?('rule 1')
+  heights = rows.map { |c| Registry.lookup(c['code'])['height_mm'] }.uniq.sort
+  raise heights.inspect unless heights == [840, 1200]
+end
+
+check('A SUFFIX DOES NOT DETERMINE THE DEPTH - and H.120 is why that is written down') do
+  # PF0601 is a boiler housing 620 deep; PJ0601 is an ordinary door 350 deep.
+  # PF0631 is an ordinary door; PJ0631 is a boiler housing. THE DEPTH GOES WITH
+  # THE MEANING, so a reader who derived a suffix would not merely mislabel a
+  # box - it would build it 270 mm out.
+  #
+  # AND THIS CHECK CORRECTED THE NOTE THAT COMMISSIONED IT. H.120 was first
+  # written up as a clean swap of a rule holding everywhere else; asked to list
+  # every ambiguous suffix, the check answered FOUR, and 00 with three readings
+  # - a single top-hung door at H.36/H.48/H.60, a boiler-housing pair at
+  # H.72/H.84/H.96, a plain pair at H.120. There was no rule to swap.
+  #
+  # STRUCTURAL: the claim is not which suffixes swapped, it is that AT LEAST ONE
+  # two-digit suffix carries two different depths in this chapter. While that is
+  # true the suffix cannot be a shortcut. If it ever stops being true, this
+  # fails and somebody re-reads before writing a decoder.
+  by_suffix = Hash.new { |h, k| h[k] = [] }
+  Registry.catalog.select { |c| c['class'] == 'wall' }.each do |c|
+    next unless c['code'].to_s =~ /(\d\d)\z/
+
+    by_suffix[Regexp.last_match(1)] << c
+  end
+  ambiguous = by_suffix.select { |_, rows| rows.map { |c| c['depth_mm'] }.uniq.length > 1 }
+  raise 'no wall suffix carries two depths any more - re-read before deriving one' if
+    ambiguous.empty?
+  # And on every ambiguous suffix the two readings are a boiler housing and
+  # something else, which is the pair that actually costs money.
+  ambiguous.each do |suffix, rows|
+    kinds = rows.map { |c|
+      Registry.lookup(c['code'])['description'].to_s.include?('boiler housing')
+    }.uniq
+    raise "suffix #{suffix} is ambiguous for some other reason: #{rows.map { |c| c['code'] }.inspect}" unless
+      kinds.include?(true) && kinds.include?(false)
+  end
+end
+
+check('THE N_ELLE FIGURES ARE IN THE FILE AND NOT IN THE BOOK') do
+  # Every wall page's text layer carries 'N- Elle' and a figure at H + 2,2, at a
+  # normal 7,5 pt, positioned over the perspective drawing. RENDERING EXACTLY
+  # THAT BOX AT 400 AND 600 DPI SHOWS BLANK PAPER - white text, or a hidden
+  # layer for the N_Elle edition. Four of the five notes that recorded it said
+  # 'the elevation carries', which was wrong, and a fifth blamed the render's
+  # resolution, which was also wrong. Corrected in place and dated 2026-08-23.
+  #
+  # The numbers stay because they are in the document; what is checked is that
+  # every one of them SAYS it is not printed, so nobody quotes it to Elda as a
+  # catalog dimension - and that nothing in the engine reads it.
+  noted = registry_files.map { |f| JSON.parse(File.read(f))['data'] }
+                        .select { |d| d['overall_height_n_elle_mm'] }
+  raise 'the N_Elle figures have vanished' if noted.length < 5
+  noted.each do |d|
+    raise "#{d['overall_height_n_elle_mm']} without its note" if d['n_elle_note'].to_s.empty?
+    raise "#{d['overall_height_n_elle_mm']} must say it is not printed" unless
+      d['n_elle_note'].include?('NOT PRINTED')
+    raise "#{d['overall_height_n_elle_mm']} is not its family height plus 22" unless
+      d['overall_height_n_elle_mm'] == d['height_mm'] + 22
+  end
+  ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
+  raise 'nothing may read the N_Elle height yet' if
+    ruby.any? { |f| File.read(f).include?('n_elle') }
 end
 
 check('A SECTION FILE THAT JOINS AN EXISTING FAMILY DECLARES NO FAMILY KEY') do

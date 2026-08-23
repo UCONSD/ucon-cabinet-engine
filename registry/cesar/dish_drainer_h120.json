@@ -1,0 +1,69 @@
+{
+  "section": "Wall units H. 120",
+  "class": "wall",
+  "family": "Wall H.120",
+  "source_pages": "printed p.254 / PDF 256, read whole and verified against a 170-dpi render 2026-08-23",
+  "family_note": "NO family-level keys - wall_h120.json declares them.",
+  "section_note": "THE SECTION FIELD SAYS 'Wall units H. 120' AND THE PAGE IS HEADED 'Dish-drainer units H. 120'. That is deliberate. The wall chapter index on printed p.205 jumps 252 to 255 and never names a dish-drainer section at this height, though it names one at every other height. Rule 1 says a SECTION is what the printed index prints, so printed p.254 is mapped as a PAGE of the section whose range contains it - exactly as printed p.435 is mapped inside the filler section. The file is still named for what it holds, and the type keys still say dish_drainer_. THE INDEX UNDER-PRINTS TWICE IN THIS BOOK, in two independent chapters, which makes it a pattern and not an accident.",
+  "extraction_note": "Three of four positions, 9 of 10 codes. The fourth is the 90-degree corner dish-drainer OJ0734, 75x75 only - the fifth family to print exactly one size there, and the first to give it suffix 34 instead of 45. Elda Q7b.",
+  "data": {
+    "unit_types": {
+      "dish_drainer_door": {
+        "description": "Dish-drainer unit with door - 1 rh or lh door - 1 stainless steel rack with drip tray - 2 shelves - 155 degree hinges",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "2 shelves", "155 degree hinges"],
+        "source_ref": "printed p.254 / PDF 256",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PJ0561", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PJ0661", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "Same two widths and the same suffix 61 as H.48, H.60, H.72, H.84 and H.96 - SIX families agreeing, and the dish-drainer suffixes are the one part of this page the swap left alone. Two shelves, one more than H.96 prints.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "dish_drainer_two_doors": {
+        "description": "Dish-drainer unit with doors - 2 doors - 1 stainless steel rack with drip tray - 2 shelves - 155 degree hinges",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "2 shelves", "155 degree hinges"],
+        "source_ref": "printed p.254 / PDF 256",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PJ0660", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PJ0960", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "Suffix 60, unswapped, and the same two widths as every family since H.72. NOTE what this means beside its own page: PJ0660 is a dish-drainer at d.35 while PJ0630 is a boiler housing at d.62, in one section, four digits apart.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle."
+        }
+      },
+      "dish_drainer_top_hung_doors_stacked": {
+        "description": "Dish-drainer unit with door - 2 top-hung door - 1 stainless steel rack with drip tray - 2 shelves - 155 degree hinges",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "2 shelves", "155 degree hinges"],
+        "source_ref": "printed p.254 / PDF 256",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PJ0507", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PJ0607", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PJ0707", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PJ0907", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PJ1007", "width_mm": 1050, "depth_mm": 350 }
+        ],
+        "notes": "THE HEADING AND THE DESCRIPTION DISAGREE ON THIS POSITION AND BOTH ARE KEPT. It is headed 'Dish-drainer unit with door' - singular, the heading of the FIRST position on the page - while its own first line reads '2 top-hung door'. The elevation settles it: 60 + 60, two leaves, and the drawing shows two. It also prints '155 degree hinges' on a top-hung pair, where every other family's stacked position prints the Push-pull device instead and no hinge angle at all. Five widths, matching this family's plain stacked pair and stopping at 105.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [600, 600],
+          "note": "600 then 600. NO hinge_axis - see wall_top_hung_doors_stacked."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "section": "Wall units H. 120",
+  "class": "wall",
+  "family": "Wall H.84",
+  "source_pages": "printed p.253 / PDF 255, verified against a 170-dpi render 2026-08-23",
+  "family_note": "NO family-level keys, and the family is Wall H.84 while the section is 'Wall units H. 120' - the fourth file of this shape, after wall_h72, wall_h84 and wall_h96_microwave_niche.json. printed p.253 prints this position inside the H.120 section and dimensions its elevation 84. THE PRINTED DIMENSION OUTRANKS THE DECODED LETTER: PJ reads H.120 in code_grammar.wall_units and here it does not. Height and mounting come from wall_h84.json.",
+  "extraction_note": "One position, one code. Its own file for the same reason PE0696, PG0696 and PF0696 have one: inside wall_h120.json it would have taken the family's 1200, which the page contradicts.",
+  "data": {
+    "unit_types": {
+      "wall_microwave_niche": {
+        "description": "Wall unit with door - 1 rh or sx - 1 microwave oven niche - 2 shelves",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 microwave oven niche", "2 shelves"],
+        "source_ref": "printed p.253 / PDF 255",
+        "codes": [
+          { "code": "PJ0696", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "THE FOURTH MICROWAVE-NICHE UNIT, THE SECOND WITH A SIDE-HINGED DOOR, AND THE SECTION HEIGHT MINUS 360 FOR THE FOURTH TIME (1200 - 360 = 840). Still an observation and still deriving nothing: all four print their own elevation. TWO WORDINGS ARE THIS PAGE'S OWN AND ARE KEPT AS PRINTED. 'rh or sx' mixes English with the Italian sinistra - every other family prints 'rh or lh'. And the niche is '1 microwave oven niche' where PE0696, PG0696 and PF0696 all print '1 ADAPTABLE microwave oven niche'; the registry keeps the catalog's words and does not decide whether the missing adjective means anything. Not object_class appliance_front: the niche is an opening in a Cesar carcass, and the machine that goes in it is the client's and nobody's order line here.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front of an 840-tall box, hinged on a vertical edge. hinge_side per order. NO hinge_axis - this one is not top-hung. The niche is interior and is not drawn."
+        }
+      }
+    }
+  }
+}
