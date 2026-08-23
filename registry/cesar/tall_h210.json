@@ -65,6 +65,8 @@
           "1 divider"
         ],
         "source_ref": "printed p.111 / PDF 113",
+        "wall_hung": false,
+        "wall_hung_note": "CORRECTION 2026-08-23 (rule 9 - added, not erased). This position was extracted on 2026-08-22 with no wall-hung statement, so Generator.wall_hung_available? offered it: the guard derives the answer from unit_class and nothing in the row objected. printed p.111 objects, and it does so twice - the position carries no 'Hung version' glyph on either depth band, and its margin drops the 'Surch. for wall-hung version on page 548' line the plain door type above it carries. The catalog_map note for this page already said it in prose on 2026-08-22 - 'the only type on the page whose margin offers a wall-hung version' - and the observation was written down without being turned into data. THE LESSON IS NOT THAT THE PAGE WAS MISREAD. It was read correctly and the reading stayed in a note. Verified again on a 170-dpi render 2026-08-23, after printed p.90 printed the same shape at H.138.",
         "codes": [
           { "code": "CQ0930", "width_mm": 900, "depth_mm": 350 },
           { "code": "CQ1230", "width_mm": 1200, "depth_mm": 350 },
@@ -88,6 +90,8 @@
           "155 degree hinges"
         ],
         "source_ref": "printed p.111 / PDF 113",
+        "wall_hung": false,
+        "wall_hung_note": "CORRECTION 2026-08-23 (rule 9 - added, not erased). This position was extracted on 2026-08-22 with no wall-hung statement, so Generator.wall_hung_available? offered it: the guard derives the answer from unit_class and nothing in the row objected. printed p.111 objects, and it does so twice - the position carries no 'Hung version' glyph on either depth band, and its margin drops the 'Surch. for wall-hung version on page 548' line the plain door type above it carries. The catalog_map note for this page already said it in prose on 2026-08-22 - 'the only type on the page whose margin offers a wall-hung version' - and the observation was written down without being turned into data. THE LESSON IS NOT THAT THE PAGE WAS MISREAD. It was read correctly and the reading stayed in a note. Verified again on a 170-dpi render 2026-08-23, after printed p.90 printed the same shape at H.138.",
         "codes": [
           { "code": "CR0535", "width_mm": 450, "depth_mm": 620 },
           { "code": "CR0635", "width_mm": 600, "depth_mm": 620 }

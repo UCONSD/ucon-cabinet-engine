@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 479 codes (131 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 495 codes (131 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 30 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 479
+  raise "got #{n}" unless n == 495
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 479 rows, each with code/dims/description/source') do
+check('registry catalog: 495 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 479
+  raise cat.length.to_s unless cat.length == 495
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -506,6 +506,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 84',
                                              'Dish-drainer units H. 96',
                                              'Sink base units H. 78',
+                                             'Tall units H. 138',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 120',
@@ -795,7 +796,7 @@ check('every corner article is still buildable and contract-valid') do
 end
 
 puts "\nbase units H. 78, printed p.37-38 - the pages that were never read"
-check('NOT EVERY BASE UNIT CAN BE HUNG, and the page says so in words') do
+check('NOT EVERY UNIT CAN BE HUNG, and sometimes the page says so only in art') do
   # Generator.wall_hung_available? DERIVES the answer: every base or tall
   # cabinet can be hung unless a row says otherwise. printed p.37 prints two
   # positions whose last line is 'not available wall hung', and whose left
@@ -810,19 +811,51 @@ check('NOT EVERY BASE UNIT CAN BE HUNG, and the page says so in words') do
     (u['object_class'] || 'cabinet') != 'cabinet' ||
       Generator.wall_hung_available?(u)
   }
-  base_refused = refused.select { |c| c['class'] == 'base' }
-  raise 'the printed refusal has vanished' if base_refused.empty?
-  base_refused.each do |row|
-    u = Registry.lookup(row['code'])
-    raise "#{row['code']} is refused for no stated reason" unless
-      u['description'].to_s.include?('not available wall hung')
+  raise 'the printed refusal has vanished' if refused.empty?
+  # EVERY REFUSAL NAMES ITS EVIDENCE, and the evidence is not always a sentence.
+  # printed p.37 refuses two base units in words. printed p.90 and printed p.111
+  # refuse three tall positions with NO prose at all - the statement is the
+  # missing 'Hung version' glyph and the missing margin surcharge, and a fact
+  # that exists only as absent print-art has to be written down or it is lost
+  # the next time somebody reads the page. So the row carries a wall_hung_note
+  # even where the description is silent.
+  files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
+          .reject { |f| File.basename(f).start_with?('_') }
+  noted = files.flat_map { |f|
+    JSON.parse(File.read(f))['data']['unit_types']
+        .select { |_, ty| ty['wall_hung'] == false }
+        .map { |k, ty| [k, ty] }
+  }
+  raise 'nothing refuses the hung version any more' if noted.empty?
+  noted.each do |key, ty|
+    raise "#{key} refuses without saying why" unless
+      ty['wall_hung_note'].to_s.length > 60
+    raise "#{key} must cite the page it read" unless
+      ty['wall_hung_note'].to_s.include?('printed p.')
   end
+  raise 'the refusal must span more than one class' unless
+    refused.map { |c| c['class'] }.uniq.length > 1
+
+  # AND THE ANSWER IS PER POSITION, NOT PER TYPE. The same type_key is hung in
+  # one family and refused in another - tall_two_doors is offered at H.138 and
+  # not at H.210, on facing pages of one chapter. Nothing may derive this from
+  # the type, and while these two disagree nothing can.
+  by_key = Hash.new { |h, k| h[k] = [] }
+  Registry.catalog.each do |c|
+    u = Registry.lookup(c['code'])
+    next unless (u['object_class'] || 'cabinet') == 'cabinet'
+
+    by_key[c['type_key']] << Generator.wall_hung_available?(u)
+  end
+  split = by_key.select { |_, answers| answers.uniq.length > 1 }
+  raise 'no type_key disagrees with itself: re-read before deriving the glyph' if
+    split.empty?
   # And the ordinary case still works, or the flag would be meaningless.
   raise 'a plain base unit must still be hangable' unless
     Generator.wall_hung_available?(Registry.lookup('B80601'))
   # A refused unit must not be handed a surcharge line either.
   raise 'a refused unit was offered the fixing kit' unless
-    Generator.wall_hung_ref(Registry.lookup(base_refused.first['code'])).nil?
+    Generator.wall_hung_ref(Registry.lookup(refused.first['code'])).nil?
 end
 
 check('THE DOOR-VERSION GAP HAS ONE NAME, and everything waiting on it says so') do
@@ -850,6 +883,28 @@ check('THE DOOR-VERSION GAP HAS ONE NAME, and everything waiting on it says so')
     raise "#{row['code']} does not say what it printed" unless reason.match?(/\d+ \+ \d+ = \d+/)
     raise "#{row['code']} must own the inference" unless reason.include?('rule 4')
   end
+end
+
+check('tall H.138: printed p.90 whole, 16 codes, and the kit-ready door is d.62 only') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Tall units H. 138' }
+  raise rows.length.to_s unless rows.length == 16
+  raise rows.map { |c| c['type_key'] }.uniq.length.to_s unless
+    rows.map { |c| c['type_key'] }.uniq.length == 3
+  raise 'C1 is d.35 and C2 is d.62, and nothing else is on this page' unless
+    rows.all? { |c| c['code'].start_with?('C1', 'C2') }
+  rows.each do |c|
+    expected = c['code'].start_with?('C1') ? 350 : 620
+    raise "#{c['code']}: #{c['depth_mm']} against #{expected}" unless
+      c['depth_mm'] == expected
+  end
+  # THE KIT-READY DOOR HAS NO SHALLOW EXECUTION, in either tall family that
+  # prints one. Two pages agreeing, recorded as what they price.
+  kit = Registry.catalog.select { |c| c['type_key'] == 'tall_door_kit_ready' }
+  raise 'the kit-ready doors have vanished' if kit.empty?
+  raise kit.map { |c| c['depth_mm'] }.uniq.inspect unless
+    kit.map { |c| c['depth_mm'] }.uniq == [620]
+  raise 'they must come from more than one family' unless
+    kit.map { |c| c['section'] }.uniq.length > 1
 end
 
 check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do

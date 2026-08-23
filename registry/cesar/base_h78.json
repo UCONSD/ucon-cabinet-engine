@@ -935,7 +935,7 @@
         "interior_confirmed": ["1 front with 97 cm long pull-out table", "1 shelf"],
         "source_ref": "printed p.37 / PDF 39",
         "wall_hung": false,
-        "wall_hung_note": "PRINTED, NOT DERIVED: 'not available wall hung' is the page's own last line, and the left margin of this position omits the 'Surch. for wall-hung version on page 548' that every other base position carries. Generator.wall_hung_available? assumes every base and tall CABINET can be hung and reads this flag as the only way out - so this is the first article in the registry to exercise it. See the page_observations note on the printed pictograms.",
+        "wall_hung_note": "PRINTED, NOT DERIVED - printed p.37 / PDF 39: 'not available wall hung' is the page's own last line, and the left margin of this position omits the 'Surch. for wall-hung version on page 548' that every other base position carries. Generator.wall_hung_available? assumes every base and tall CABINET can be hung and reads this flag as the only way out - so this is the first article in the registry to exercise it. See the page_observations note on the printed pictograms.",
         "codes": [
           { "code": "B80672", "width_mm": 600, "depth_mm": 620 }
         ],
@@ -953,7 +953,7 @@
         "interior_confirmed": ["1 front with 97 cm long pull-out table", "1 shelf"],
         "source_ref": "printed p.37 / PDF 39",
         "wall_hung": false,
-        "wall_hung_note": "PRINTED, NOT DERIVED - see base_door_pull_out_table.",
+        "wall_hung_note": "PRINTED, NOT DERIVED - printed p.37 / PDF 39, the same last line and the same missing margin surcharge as base_door_pull_out_table above it. Both positions on this page state it in words; the tall pages state the same thing only by leaving the glyph off.",
         "buildable": false,
         "front_layout_incomplete": true,
         "not_buildable_reason": "THE FRONT IS A BAND ABOVE A SPLIT AND front_layout HAS NO WORD FOR THAT. This position is one 195 table front across the full width, with TWO doors of 585 below it - a horizontal band whose lower band is itself split vertically. Contract v2.1 offers single, vertical_split, horizontal and corner_door, and none of them nests. Recorded as horizontal [195, 585] so the heights are not lost, and marked incomplete so nothing draws it: Export.fronts_in would count TWO fronts where the page prints THREE, and a handle count that is quietly wrong is worse than one that is refused. THE CONTRACT GAP IS THE FINDING, not this article.",

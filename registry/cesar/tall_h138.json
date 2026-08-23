@@ -1,0 +1,89 @@
+{
+  "section": "Tall units H. 138",
+  "class": "tall",
+  "family": "Tall H.138",
+  "source_pages": "printed p.90 / PDF 92 (subset extracted: p.90 only, and on p.90 all three types)",
+  "family_naming_note": "Namespaced 'Tall H.138' for the same reason as 'Tall H.210' and 'Wall H.36': the registry merges section files by family NAME, and this catalog answers to 'H. 138' in more than one place - this metric section (printed p.90-96) and the Unit collection's tall units (printed p.257-304, not mapped).",
+  "extraction_note": "printed p.90 only - the section's first page, taken whole: three types, 16 codes, both depths. printed p.91-92 are interior mechanisms the page names and does not code (Arena Style Plus pull-out doors and trays, an ETOUCH electrical opening priced in the margin with no article) and corner tall units carrying the D/S execution letter - the same two blockers that hold printed p.112-114 at H.210, recorded there and here as page-level gaps rather than half-extracted.",
+  "letter_note": "C1 = d.35 and C2 = d.62, the pair printed on this page and already recorded in code_grammar.tall_units. The pair is a LOOKUP and never a sequence - see tall_h210.json's letter_note for the whole chapter's map.",
+  "data": {
+    "height_mm": 1380,
+    "plinth_h_mm": 100,
+    "plinth_note": "SAME READING AS tall_h210.json, MADE 2026-08-22, AND FOR THE SAME REASON: a tall unit stands in a run with the base units and its front has to line up with theirs, so it takes the family plinth the Project Guidelines print for the Cesar door chain. printed p.90 itself prints ONE dimension, 138, and no plinth - the number is inherited from the same decision, not read off this page, and it is recorded here rather than left to Standards::PLINTH_H_MM so that the day a tall family prints something else there is one place to correct.",
+    "depths_mm": [350, 620],
+    "collections": ["Maxima", "Intarsio"],
+    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.90 / PDF 92",
+    "no_door_versions_note": "This family declares NO door_versions, read from the page and not assumed: the base pages print a 78/75 pair over their code tables, printed p.90 prints a single elevation dimension, 138. The gola question for a tall unit is not answered here, exactly as it is not answered at H.210.",
+    "wall_fixing_note": "The chapter notice on printed p.79 states: 'IMPORTANT: 35 cm deep tall units must be fixed to the wall'. That applies to every C1 code in this file. A fact about installation, not geometry; it does not reach the object today and is recorded so nobody re-derives it from the depth.",
+    "page_observations": [
+      "THE HUNG PICTOGRAM IS PER POSITION AND THIS PAGE PROVES IT. printed p.19's 'Hung version' glyph sits beside both depth bands of the door and the two-door types, and beside NEITHER band of the kit-ready type - whose margin also drops the 'Surch. for wall-hung version on page 548' line the other two carry. There is no prose anywhere on the page: the glyph and the missing margin line are the whole statement. printed p.37 said the same thing in words for two base units; here it is said only in print-art, which is how it went unread for five days.",
+      "AND THE ANSWER DIFFERS BETWEEN TALL FAMILIES. At H.138 the two-door type IS offered wall-hung; at H.210, printed p.111, it is NOT - only the plain door type is. Same catalog, same chapter, two heights, opposite answers on the same position. Read the row.",
+      "THREE SHELVES HERE, FOUR AND A DIVIDER AT H.210. The shorter column carries one shelf fewer and no divider at all, which is the only interior difference between the two pages' first two positions.",
+      "SUFFIX 05 IS THE KIT-READY DOOR HERE AND 35 IS THE KIT-READY DOOR AT H.210. The same idea, the same d.62-only restriction, the same 'See kit on page 569', two different suffixes - and 05 is also the base-unit kit-ready door on printed p.37 (B80505). So 05 travels between the base and tall chapters and 35 does not. Nothing decodes a suffix across families.",
+      "NO d.35 KIT-READY UNIT, in either tall family. printed p.90 prices C20505/C20605 and no C1 counterpart, exactly as printed p.111 prices CR0535/CR0635 and no CQ counterpart: a 35 cm deep tall unit cannot take the bottom-section kit. Two families agreeing, and it is still recorded as what the pages price rather than as a rule."
+    ],
+    "unit_types": {
+      "tall_door": {
+        "description": "Tall unit with door - 1 rh or lh door - 3 shelves",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["3 shelves"],
+        "source_ref": "printed p.90 / PDF 92",
+        "codes": [
+          { "code": "C10301", "width_mm": 300, "depth_mm": 350 },
+          { "code": "C10501", "width_mm": 450, "depth_mm": 350 },
+          { "code": "C10601", "width_mm": 600, "depth_mm": 350 },
+          { "code": "C10701", "width_mm": 750, "depth_mm": 350 },
+          { "code": "C20301", "width_mm": 300, "depth_mm": 620 },
+          { "code": "C20501", "width_mm": 450, "depth_mm": 620 },
+          { "code": "C20601", "width_mm": 600, "depth_mm": 620 },
+          { "code": "C20701", "width_mm": 750, "depth_mm": 620 }
+        ],
+        "notes": "Four widths at each depth, the same set H.210 prices, and the same suffix 31. ONE CODE, BOTH HANDS. Carries the printed 'Hung version' glyph on both depth bands.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full 1380 front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "tall_two_doors": {
+        "description": "Tall unit with doors - 2 doors - 3 shelves",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["3 shelves"],
+        "source_ref": "printed p.90 / PDF 92",
+        "codes": [
+          { "code": "C10600", "width_mm": 600, "depth_mm": 350 },
+          { "code": "C10900", "width_mm": 900, "depth_mm": 350 },
+          { "code": "C11200", "width_mm": 1200, "depth_mm": 350 },
+          { "code": "C20600", "width_mm": 600, "depth_mm": 620 },
+          { "code": "C20900", "width_mm": 900, "depth_mm": 620 },
+          { "code": "C21200", "width_mm": 1200, "depth_mm": 620 }
+        ],
+        "notes": "THREE widths where H.210 prices two - this family adds a W.60 two-door unit that the taller one does not offer. Suffix 30, as at H.210. AND IT IS OFFERED WALL-HUNG HERE while its H.210 twin is not: the glyph is beside both depth bands and the margin carries the surcharge.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension - the same treatment as every other two-door position."
+        }
+      },
+      "tall_door_kit_ready": {
+        "description": "Tall unit with door for interior drawer and jumbo drawer kit - 1 rh or lh door with 155 degree hinges",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["155 degree hinges"],
+        "source_ref": "printed p.90 / PDF 92",
+        "wall_hung": false,
+        "wall_hung_note": "PRINTED, AND PRINTED ONLY AS ART. This position carries no 'Hung version' glyph on either depth band and its margin drops the 'Surch. for wall-hung version on page 548' line the two positions above it carry. Unlike printed p.37's pull-out tables there is no sentence to quote - the statement is the absence of a symbol, verified on a 170-dpi render of printed p.90. Generator.wall_hung_available? would otherwise offer it, because it derives the answer from unit_class.",
+        "codes": [
+          { "code": "C20505", "width_mm": 450, "depth_mm": 620 },
+          { "code": "C20605", "width_mm": 600, "depth_mm": 620 }
+        ],
+        "notes": "d.62 ONLY - there is no C1 counterpart, so a 35 cm deep tall unit cannot take the bottom-section kit, exactly as at H.210. 'See kit on page 569' is CHOSEN and the 155 degree hinges are IMPLIED; Contract v2 can express both, and NEITHER is recorded, because a chosen companion needs a catalog to resolve from (registry/cesar/options/, printed p.568-569) and a person to choose it. Recorded gap, not a silent default - the same gap tall_door_kit_ready at H.210 and base_door_interior_drawer_kit on printed p.37 are waiting on. THREE positions in three chapters now point at one unread page.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full 1380 front. The kit, if ordered, sits BEHIND this door and changes nothing the envelope draws - which is why the kit can be an option rather than a second article."
+        }
+      }
+    }
+  }
+}
