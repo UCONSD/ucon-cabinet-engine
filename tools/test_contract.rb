@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 445 codes (103 base + 20 sink + 3 appliance + 291 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 473 codes (131 base + 20 sink + 3 appliance + 291 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 445
+  raise "got #{n}" unless n == 473
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 445 rows, each with code/dims/description/source') do
+check('registry catalog: 473 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 445
+  raise cat.length.to_s unless cat.length == 473
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -754,14 +754,130 @@ check('every corner article is still buildable and contract-valid') do
   # true only because nothing had yet been held that we cannot draw honestly.
   # printed p.434 ended that: a front-only filler has no depth on the page. The
   # invariant that matters here was always about corners.
+  #
+  # AND THE REPLACEMENT WAS STILL A ROLL-CALL - %w[B70151 CQ0151] lasted until
+  # printed p.37 and p.38 added thirteen more (rule 18, seventh instance). What
+  # is actually claimed: HOLDING SOMETHING WE CANNOT DRAW IS ALLOWED, SAYING
+  # NOTHING ABOUT WHY IS NOT. Every unbuildable row names its reason, and the
+  # reason is written where the row is, not in a list somebody has to retype.
   not_buildable = Registry.catalog.reject { |c| c['buildable'] }
-                          .map { |c| c['code'] }.sort
-  raise not_buildable.inspect unless not_buildable == %w[B70151 CQ0151]
+  raise 'the unbuildable articles have vanished' if not_buildable.empty?
+  silent = not_buildable.reject { |c|
+    Registry.lookup(c['code'])['not_buildable_reason'].to_s.length > 40
+  }
+  raise "unbuildable without a reason: #{silent.map { |c| c['code'] }.inspect}" unless
+    silent.empty?
+  # AND A LAYOUT WE CANNOT EXPRESS MUST NEVER BE OFFERED. front_layout v2.1 has
+  # no nested kind, so a drawer band above two doors is recorded with its
+  # heights and marked incomplete - Export.fronts_in would say two where the
+  # page prints three. The two flags may not drift apart.
+  # Read from the FILES, not through Registry.lookup: the loader has no reason
+  # to carry a bookkeeping flag into the engine, and a flag the engine cannot
+  # see is a flag the engine cannot act on by accident.
+  # NOTE the Dir glob rather than registry_files: that helper is defined further
+  # down this file and Ruby has not reached it yet when this check runs.
+  files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
+          .reject { |f| File.basename(f).start_with?('_') }
+  incomplete = files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types']
+        .select { |_, ty| ty['front_layout_incomplete'] }
+        .map { |k, ty| [k, ty] }
+  }
+  raise 'the nested-front gap has vanished' if incomplete.empty?
+  drawable = incomplete.reject { |_, ty| ty['buildable'] == false }
+  raise "incomplete layout offered for building: #{drawable.map(&:first).inspect}" unless
+    drawable.empty?
   Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
     a = Generator.attributes_for(Registry.lookup(row['code']))
     raise a.inspect unless a['geometry_kind'] == 'corner'
     Contract.validate!(a)
   end
+end
+
+puts "\nbase units H. 78, printed p.37-38 - the pages that were never read"
+check('NOT EVERY BASE UNIT CAN BE HUNG, and the page says so in words') do
+  # Generator.wall_hung_available? DERIVES the answer: every base or tall
+  # cabinet can be hung unless a row says otherwise. printed p.37 prints two
+  # positions whose last line is 'not available wall hung', and whose left
+  # margin drops the 'Surch. for wall-hung version on page 548' that every
+  # other base position carries. They are the first articles to use the escape
+  # hatch, and until 2026-08-23 nothing did - so the derivation had never been
+  # tested against a page that disagreed with it.
+  # An appliance front is refused for a different and older reason - it is not
+  # a cabinet at all - so only real cabinets are asked here.
+  refused = Registry.catalog.reject { |c|
+    u = Registry.lookup(c['code'])
+    (u['object_class'] || 'cabinet') != 'cabinet' ||
+      Generator.wall_hung_available?(u)
+  }
+  base_refused = refused.select { |c| c['class'] == 'base' }
+  raise 'the printed refusal has vanished' if base_refused.empty?
+  base_refused.each do |row|
+    u = Registry.lookup(row['code'])
+    raise "#{row['code']} is refused for no stated reason" unless
+      u['description'].to_s.include?('not available wall hung')
+  end
+  # And the ordinary case still works, or the flag would be meaningless.
+  raise 'a plain base unit must still be hangable' unless
+    Generator.wall_hung_available?(Registry.lookup('B80601'))
+  # A refused unit must not be handed a surcharge line either.
+  raise 'a refused unit was offered the fixing kit' unless
+    Generator.wall_hung_ref(Registry.lookup(base_refused.first['code'])).nil?
+end
+
+check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do
+  # printed p.38 prints 'Base unit with drawer and doors' TWICE, as suffix 40
+  # and as suffix 46, at the same widths, the same depths and the same price in
+  # every band. 'Base unit with drawer and door' is 41 on printed p.37 and 47
+  # on printed p.38. The words are identical; the ELEVATIONS are not. Anything
+  # that keyed a position by its description would merge articles the factory
+  # sells apart - which is why type_key is ours and the description is theirs.
+  by_desc = Hash.new { |h, k| h[k] = [] }
+  Registry.catalog.each do |c|
+    u = Registry.lookup(c['code'])
+    by_desc[[u['description'], c['section']]] << c['type_key']
+  end
+  shared = by_desc.select { |_, keys| keys.uniq.length > 1 }
+  raise 'the twin descriptions have vanished' if shared.empty?
+  # And where two type keys share a description, their FRONTS must differ -
+  # otherwise they really are one article and the split is ours, not the page's.
+  shared.each do |(desc, _section), keys|
+    layouts = keys.uniq.map { |k|
+      row = Registry.catalog.find { |c| c['type_key'] == k }
+      Registry.lookup(row['code'])['front_layout']
+    }
+    raise "#{desc}: two type keys, one front" unless layouts.uniq.length == layouts.length
+  end
+end
+
+check('the hob pictogram is recorded where it was read, and NOWHERE else') do
+  # printed p.19 gives the legend for two glyphs that sit beside every base
+  # code table: a cabinet-in-bracket is 'Hung version', a flame is 'Provisions
+  # for hob'. Neither had been transcribed until 2026-08-23. The hob mark is
+  # data with no home in the engine yet, so it is stored with its rows and read
+  # by nothing - and it is stored ONLY on the pages actually looked at, because
+  # absence on the others means unread, not absent. The owed sweep is written
+  # into base_h78.json's page_observations rather than left to memory.
+  files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
+          .reject { |f| File.basename(f).start_with?('_') }
+  marked = files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types']
+        .select { |_, ty| ty['hob_provisions_depths_mm'] }
+        .map { |k, ty| [k, ty] }
+  }
+  raise 'the hob marks have vanished' if marked.empty?
+  marked.each do |key, ty|
+    raise "#{key}: a hob mark on a shallow row" unless
+      ty['hob_provisions_depths_mm'].all? { |d| d > 350 }
+    raise "#{key}: recorded without its page" unless
+      ty['source_ref'].to_s.match?(/printed p\.3[78]/)
+  end
+  ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
+  raise 'nothing may read the hob mark yet' if
+    ruby.any? { |f| File.read(f).include?('hob_provisions') }
+  obs = JSON.parse(File.read(File.expand_path('../registry/cesar/base_h78.json', __dir__)))
+            .dig('data', 'page_observations').to_s
+  raise 'the owed sweep must be written down' unless obs.include?('SWEEP')
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"

@@ -188,6 +188,12 @@ module UCON
             'geometry_kind'      => unit_type['geometry_kind'] || 'linear',
             'buildable'          => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
+            # THE GUARD Generator.wall_hung_available? READS. It was written on
+            # 2026-08-22 as the one way a row could refuse the hung version, and
+            # the loader never carried it - so for a day the escape hatch could
+            # not be reached from any data. printed p.37 is the first page that
+            # needs it: 'not available wall hung', in the catalog's own words.
+            'wall_hung'          => unit_type['wall_hung'],
             'corner_geometry'    => row['corner_geometry'],
             'execution'          => row['execution'],
             'door_width_mm'      => row['door_width_mm'],

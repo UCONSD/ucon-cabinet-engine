@@ -56,15 +56,27 @@
       { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Sink base units H. 58.5", "printed_pages": "35", "status": "not_extracted" },
-      { "class": "base", "family": "H.78", "section": "Base units H. 78", "printed_pages": "36-43", "status": "partial",
+      { "class": "base", "family": "H.78", "section": "Base units H. 78", "printed_pages": "36-43", "status": "partial", "extracted_on": "2026-08-23",
         "pages": [
           { "printed": 36, "status": "extracted",
             "types": ["Base unit with pull-out door", "Base unit with laundry basket", "Base unit with door", "Base unit with doors"],
             "note": "complete since 2026-08-17 - all four types, 26 codes" },
-          { "printed": 37, "status": "not_extracted",
-            "types": ["Base unit with door for interior drawer and jumbo drawer kit", "Base unit w/door and pull-out table", "Base unit with drawer and door"] },
-          { "printed": 38, "status": "not_extracted",
-            "types": ["Base unit with drawer and doors", "Base unit with drawer and door", "Base unit with jumbo drawer and interior drawers"] },
+          { "printed": 37, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": [
+              "Base unit with door for interior drawer and jumbo drawer kit (kit on printed p.569 - NOT held, so no companion recorded)",
+              "Base unit w/door and pull-out tabe, 1 door - NOT AVAILABLE WALL HUNG, printed",
+              "Base unit w/door and pull-out tabe, 2 doors - NOT AVAILABLE WALL HUNG, and a drawer band above a split front the contract cannot express",
+              "Base unit with drawer and door (SUFFIX 41 - printed p.38 prints the same words as 47)"
+            ],
+            "note": "The page heading prints 'pull-out tabe' and the line below it 'pull-out table', twice. Both kept as printed." },
+          { "printed": 38, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": [
+              "Base unit with drawer and doors (SUFFIX 40 - band above a split, held not buildable)",
+              "Base unit with drawer and door (SUFFIX 47 - one elevation, 19,5/55,5, gola execution only)",
+              "Base unit with drawer and doors (SUFFIX 46 - the same words as 40, at the same prices, with a different elevation)",
+              "Base unit with jumbo drawer and interior drawers (one front, three drawers)"
+            ],
+            "note": "FOUR POSITIONS, TWO PAIRS OF IDENTICAL DESCRIPTIONS. 40 against 46 and 41 against 47 differ only in the ELEVATION - two printed (handle 19,5/58,5 and gola 16,5/55,5) against one (19,5/55,5, groove between the fronts). A reader keying positions by their printed description would merge articles the factory sells apart." },
           { "printed": 39, "status": "extracted",
             "types": ["Base unit with jumbo drawer for P-One pull-out waste unit", "Base unit with pull-out XL waste unit", "Base unit with drawers and jumbo drawer"],
             "note": "complete since 2026-08-17 - the two waste (Trash & Recycle) units carry their bin kits as companion order lines from printed p.524-525" },
@@ -398,6 +410,15 @@
       { "class": "tall", "collection": "USA elements", "family": "N_Elle H.222", "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 78", "printed_pages": "431", "status": "not_extracted" },
       { "class": "tall", "collection": "USA elements", "family": "N_Elle H.222", "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 84", "printed_pages": "432", "status": "not_extracted" }
     ]
+  },
+  "page_symbols": {
+    "source_ref": "printed p.19 / PDF 21, legend read 2026-08-23 and verified against a 300-dpi crop",
+    "note": "TWO PICTOGRAMS SIT BESIDE EVERY DEPTH BAND IN THE BASE CODE TABLES, and neither had been transcribed until printed p.37 forced the question. They are printed art, not text: pdftotext cannot see them, which is why five days of base and wall extraction went past them. Anything read off a code table from here on records them; anything read before 2026-08-23 does NOT, so their absence on printed p.36, p.39, p.40 and p.42 means unread and never absent.",
+    "symbols": [
+      { "glyph": "cabinet in a bracket", "label": "Hung version", "meaning_note": "The catalog states PER DEPTH ROW which articles can be ordered wall-hung. Generator.wall_hung_available? DERIVES the same answer from unit_class, and printed p.37 is the first page to contradict it - two positions there print 'not available wall hung' in words and drop the wall-hung surcharge from the margin. Recorded on those two articles as wall_hung false." },
+      { "glyph": "flame on a burner", "label": "Provisions for hob", "meaning_note": "Recorded as hob_provisions_depths_mm on the positions of printed p.37 and p.38. On both pages it is on d.62 and d.67 and never on d.35. NOT read by anything in the engine - it is one more fact waiting on restrictions." }
+    ],
+    "sweep_owed": "printed p.36, p.39, p.40 and p.42 were transcribed before the legend was found, and printed p.44-48 and the whole tall chapter have not been checked for these glyphs at all."
   },
   "code_grammar": {
     "tall_units": {
