@@ -3773,6 +3773,19 @@ check('SENTINEL: a rebuild may not smuggle a width outside the printed range') d
   end
 end
 
+check('the picker offers a filler by HEIGHT, with preset widths beside the box') do
+  html = Palette.picker_html(Registry.catalog, Registry.gaps, false)
+  # Rows are depths and the buttons carry the height - PB0151 and PD0151 are
+  # both d.35 and differ only in height, so one row per code read as two
+  # identical rows. The width is not on a button at all; it is typed, with
+  # 5 / 10 / 15 cm offered because printed p.11 asks for AT LEAST 5 cm.
+  raise 'no height buttons' unless html.include?("'H. ' + (c.height_mm/10)")
+  raise 'no width presets' unless html.include?('[50, 100, 150]')
+  raise 'a preset outside the range must not be offered' unless
+    html.include?('mm >= lo && mm <= hi')
+  raise 'the ordered width must still be typeable' unless html.include?("inp.type = 'number'")
+end
+
 check('a filler is never offered the wall-hung surcharge') do
   # printed p.548 sells it for base and tall UNITS. wall_hung_available? already
   # refuses anything that is not a cabinet, so this costs nothing - but the

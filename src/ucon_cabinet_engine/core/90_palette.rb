@@ -420,49 +420,82 @@ module UCON
                 });
                 if(st.code) showCard(CAT.find(function(c){return c.code===st.code;}));
               }
-              // A FILLER HAS NO WIDTH IN ITS CODE: one article covers 2,3 to
-              // 15 cm and the number is stated when it is ordered (printed
-              // p.434). So this is not a grid of sizes - it is one button per
-              // article and a box to type the width into. Build stays hidden
-              // until the number is inside the range, which is the same refusal
-              // Registry.with_ordered_width makes in Ruby: the dialog is a
-              // convenience and never the authority.
+              // A FILLER HAS NO WIDTH IN ITS CODE: one article covers 2,3
+              // to 15 cm and the number is stated when it is ordered (printed
+              // p.434). So the grid is sizeGrid ONE DIMENSION OVER - rows are
+              // still depths, but the buttons carry the HEIGHT, because that
+              // is what varies inside a filler type. The wall filler is the
+              // case that shows it: PB0151 and PD0151 are both d.35 and
+              // differ only in height, so one row per code read as two
+              // identical rows labelled 'd. 35'.
               function widthList(el){
-                rows().forEach(function(c){
+                var rs = rs_by_depth(rows());
+                rs.depths.forEach(function(d){
                   var row = document.createElement('div'); row.className='drow';
                   var lab = document.createElement('div'); lab.className='dlab';
-                  lab.textContent = c.depth_mm ? 'd. ' + (c.depth_mm/10) : 'front';
+                  lab.textContent = d ? 'd. ' + (d/10) : 'front';
                   row.appendChild(lab);
-                  var b = document.createElement('button'); b.className='wbtn';
-                  if(st.code===c.code) b.className += ' sel';
-                  b.style.width = 'auto';
-                  b.innerHTML = esc(c.code) + '<small>' + c.width_range_mm[0] +
-                                '\u2013' + c.width_range_mm[1] + ' mm</small>';
-                  b.onclick = function(){ st.w = null; st.code = c.code; render(); };
-                  row.appendChild(b);
+                  rs.by[d].forEach(function(c){
+                    var b = document.createElement('button'); b.className='wbtn';
+                    if(st.code===c.code) b.className += ' sel';
+                    b.innerHTML = 'H. ' + (c.height_mm/10) +
+                                  '<small>' + esc(c.code) + '</small>';
+                    b.onclick = function(){ st.w = null; st.code = c.code; render(); };
+                    row.appendChild(b);
+                  });
                   el.appendChild(row);
                 });
                 if(!st.code) return;
                 var c = CAT.find(function(x){ return x.code===st.code; });
-                if(!c) return;
+                if(!c || !c.width_range_mm) return;
+                var lo = c.width_range_mm[0], hi = c.width_range_mm[1];
                 var wrap = document.createElement('div'); wrap.className='drow';
                 var wlab = document.createElement('div'); wlab.className='dlab';
                 wlab.textContent = 'W mm';
+                wrap.appendChild(wlab);
+                // PRESETS, then a box for anything else. 5 cm is not a round
+                // number chosen for tidiness: printed p.11 asks for a closing
+                // strip of AT LEAST 5 cm, so it is the size this article is
+                // reached for most. A preset outside the range is not offered.
+                [50, 100, 150].filter(function(mm){ return mm >= lo && mm <= hi; })
+                  .forEach(function(mm){
+                    var pb = document.createElement('button'); pb.className='wbtn';
+                    pb.style.cssText = 'flex:0 0 auto;min-width:52px';
+                    if(parseInt(st.w, 10) === mm) pb.className += ' sel';
+                    pb.textContent = (mm/10) + ' cm';
+                    pb.onclick = function(){ st.w = String(mm); render(); };
+                    wrap.appendChild(pb);
+                  });
                 var inp = document.createElement('input');
                 inp.type = 'number';
                 inp.value = (st.w == null ? '' : st.w);
-                inp.min = c.width_range_mm[0]; inp.max = c.width_range_mm[1];
-                inp.style.cssText = 'flex:1;padding:8px;border:1px solid #cbd5e1;border-radius:6px';
+                inp.min = lo; inp.max = hi;
+                inp.placeholder = lo + '\u2013' + hi;
+                inp.style.cssText = 'flex:1;min-width:60px;padding:6px;font-size:11px;' +
+                                    'border:1px solid #d4d4d4;border-radius:5px;text-align:center';
                 // NO re-render on input - it would take the focus away between
-                // two digits. Only the button and the hint are touched.
+                // two digits. Only the Build button and the hint are touched.
+                // A PRESET may re-render, because the click has already ended.
                 inp.oninput = function(){ st.w = inp.value; syncBuild(c); };
-                wrap.appendChild(wlab); wrap.appendChild(inp);
+                wrap.appendChild(inp);
                 el.appendChild(wrap);
                 var hint = document.createElement('div');
                 hint.className='src'; hint.id='whint'; hint.style.margin='6px 0 0';
                 el.appendChild(hint);
                 showCard(c);
                 syncBuild(c);
+              }
+              // Depths in order, and the codes under each in height order.
+              function rs_by_depth(rs){
+                var by = {}, depths = [];
+                rs.slice().sort(function(a,b){ return a.height_mm-b.height_mm; })
+                  .forEach(function(c){
+                    var d = c.depth_mm || 0;
+                    if(!by[d]){ by[d] = []; depths.push(d); }
+                    by[d].push(c);
+                  });
+                depths.sort(function(a,b){ return a-b; });
+                return { by: by, depths: depths };
               }
               function syncBuild(c){
                 var ok = true;
