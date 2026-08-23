@@ -1,0 +1,108 @@
+{
+  "section": "Dish-drainer units H. 96",
+  "class": "wall",
+  "family": "Wall H.96",
+  "source_pages": "printed p.248-249 / PDF 250-251, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_note": "NO family-level keys - wall_h96.json declares them.",
+  "extraction_note": "Five of six positions, 16 of 17 codes. The sixth is the 90-degree corner dish-drainer OF0745, 75x75 only - the FOURTH family to print exactly one size for a corner dish-drainer while the plain corner gets two. Elda Q7b.",
+  "data": {
+    "unit_types": {
+      "dish_drainer_door": {
+        "description": "Dish-drainer unit with door - 1 rh or lh door - 1 stainless steel rack with drip tray - 1 shelf - 155 degree hinges",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "1 shelf", "155 degree hinges"],
+        "source_ref": "printed p.248 / PDF 250",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PF0561", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PF0661", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "Same two widths and the same suffix 61 as H.48, H.60, H.72 and H.84 - five families agreeing, the longest run in the chapter.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "dish_drainer_two_doors": {
+        "description": "Dish-drainer unit with doors - 2 doors - 1 stainless steel rack with drip tray - 1 shelf - 155 degree hinges",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "1 shelf", "155 degree hinges"],
+        "source_ref": "printed p.248 / PDF 250",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PF0660", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PF0960", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "Two widths, as at H.72 and H.84.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle."
+        }
+      },
+      "dish_drainer_top_hung_doors_stacked": {
+        "description": "Dish-drainer unit with top-hung doors - 2 top-hung doors - 1 shelf - 1 stainless steel rack with drip tray - top door with Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 shelf", "1 stainless steel rack with drip tray", "top door with Push-pull device"],
+        "source_ref": "printed p.248 / PDF 250",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PF0507", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PF0607", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PF0707", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PF0907", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PF1007", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PF1207", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Suffix 07, as at H.72 and H.84, with this family's EQUAL 480/480 split and the plural wording that goes with it.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [480, 480],
+          "note": "480 then 480. NO hinge_axis - see wall_top_hung_doors_stacked."
+        }
+      },
+      "dish_drainer_folding_doors": {
+        "description": "Dish-drainer unit with horizontally folding doors - 2 doors - 1 stainless steel rack with drip tray - 1 shelf - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "1 shelf", "interior Valencia handle"],
+        "source_ref": "printed p.248 / PDF 250",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PF0592", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PF0692", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PF0792", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PF0992", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "Four widths, matching this family's plain folding type and stopping at 90, exactly as at H.84.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [480, 480],
+          "note": "480 then 480. NO hinge_axis and no mechanism figure."
+        }
+      },
+      "dish_drainer_compound_2_folding": {
+        "description": "Dish-drainer unit with horizontally folding doors - 2 doors - 2 stainless steel racks with drip tray - 2 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["2 shelves", "2 stainless steel racks with drip tray", "interior Valencia handle"],
+        "source_ref": "printed p.249 / PDF 251",
+        "cannot_be_reduced_in_width": true,
+        "widest_unit_rack_rule": "printed",
+        "codes": [
+          { "code": "PF1092", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PF1292", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] }
+        ],
+        "notes": "THIS POSITION BREAKS TWO RULES THE REGISTRY HAD DERIVED, AND IT BREAKS THEM ON THE SAME PAGE. (1) It has TWO racks, one per module, AND it prints 'In compound wall units, the dish-drainer rack is fitted in the widest unit' - where PG1092/PG1292, the identically shaped two-rack position at H.84, prints nothing. Same door type, same module splits, same rack count, opposite sentence: the sentence is BOILERPLATE APPLIED UNEVENLY and its presence must be read off each page and never derived. See the dated correction in dish_drainer_h84.json. (2) It carries 'cannot be reduced in width', where every compound dish-drainer read before it does NOT - so 'the compounds are where the catalog stops forbidding it' was a pattern in the pages read so far and not a rule either. See the dated correction in dish_drainer_h48.json.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [480, 480],
+          "note": "480 then 480, across both modules."
+        }
+      }
+    }
+  }
+}

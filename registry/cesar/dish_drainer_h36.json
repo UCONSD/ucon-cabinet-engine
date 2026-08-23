@@ -67,6 +67,7 @@
         "handed": false,
         "interior_confirmed": ["1 stainless steel rack with drip tray"],
         "source_ref": "printed p.213 / PDF 215",
+        "widest_unit_rack_rule": "printed",
         "codes": [
           { "code": "PB0906", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
           { "code": "PB1006", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },

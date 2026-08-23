@@ -1,0 +1,27 @@
+{
+  "section": "Wall units H. 96",
+  "class": "wall",
+  "family": "Wall H.60",
+  "source_pages": "printed p.247 / PDF 249, verified against a 170-dpi render 2026-08-23",
+  "family_note": "NO family-level keys, and the family is Wall H.60 while the section is 'Wall units H. 96' - the third file of this shape, after wall_h72_microwave_niche.json and wall_h84_microwave_niche.json. printed p.247 prints this position inside the H.96 section and dimensions its elevation 60. THE PRINTED DIMENSION OUTRANKS THE DECODED LETTER: PF reads H.96 in code_grammar.wall_units and here it does not. Height and mounting come from wall_h60.json.",
+  "extraction_note": "One position, one code. Its own file for the same reason PE0696 and PG0696 have one: inside wall_h96.json it would have taken the family's 960, which the page contradicts.",
+  "data": {
+    "unit_types": {
+      "wall_microwave_niche": {
+        "description": "Wall unit with door - 1 rh or lh door - 1 shelf - 1 adaptable microwave oven niche",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 shelf", "1 adaptable microwave oven niche"],
+        "source_ref": "printed p.247 / PDF 249",
+        "codes": [
+          { "code": "PF0696", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "THE THIRD MICROWAVE-NICHE UNIT AND THE FIRST WITH A SIDE-HINGED DOOR. PE0696 and PG0696 are both headed 'Wall unit with top-hung door' and are NOT handed; this one is headed 'Wall unit with door - 1 rh or lh door' and IS. The three share a niche and nothing else about their fronts, so 'microwave niche' names an interior and never a door. It is also the section height minus 360 for the third time (960 - 360 = 600) - see the observation in wall_h96.json for why that decides nothing. Not object_class appliance_front: the niche is an opening in a Cesar carcass, and the machine that goes in it is the client's and nobody's order line here.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front of a 600-tall box, hinged on a vertical edge. hinge_side per order. NO hinge_axis - this one is not top-hung, and that is the whole point of the file. The niche is interior and is not drawn."
+        }
+      }
+    }
+  }
+}

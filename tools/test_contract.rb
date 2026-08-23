@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 382 codes (103 base + 20 sink + 3 appliance + 228 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 422 codes (103 base + 20 sink + 3 appliance + 268 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 382
+  raise "got #{n}" unless n == 422
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 382 rows, each with code/dims/description/source') do
+check('registry catalog: 422 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 382
+  raise cat.length.to_s unless cat.length == 422
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -504,6 +504,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 60',
                                              'Dish-drainer units H. 72',
                                              'Dish-drainer units H. 84',
+                                             'Dish-drainer units H. 96',
                                              'Sink base units H. 78',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
@@ -511,7 +512,8 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Wall units H. 48',
                                              'Wall units H. 60',
                                              'Wall units H. 72',
-                                             'Wall units H. 84']
+                                             'Wall units H. 84',
+                                             'Wall units H. 96']
   # tall arrived 2026-08-21 with printed p.418 - the first non base/wall class.
   # 'filler' arrived 2026-08-23 with printed p.434 and is the first class that
   # is OURS rather than the catalog's - one chapter whose rows are base, wall
@@ -899,9 +901,14 @@ def hung_codes(axis)
         hs.is_a?(Array) && hs.length == 2 && hs.sum == u['height_mm']
     }
     raise "a stacked pair must be two fronts summing to the family height, and no axis: #{bad.map { |u| u['code'] }.inspect}" unless bad.empty?
-    # Both shapes are held, and they are NOT the same shape.
-    splits = stacked_top.map { |u| u['front_layout']['heights_mm_top_to_bottom'] }.uniq.sort
-    raise splits.inspect unless splits == [[360, 360], [480, 360]]
+    # Both shapes are held, and they are NOT the same shape. AND THIS LINE WAS
+    # STILL AN INVENTORY: it pinned [[360, 360], [480, 360]] and H.96 broke it
+    # the same day by splitting 480 + 480. What is actually being claimed is
+    # that the registry holds an EQUAL pair and an UNEQUAL one, so that neither
+    # shape can ever be assumed from the family height.
+    splits = stacked_top.map { |u| u['front_layout']['heights_mm_top_to_bottom'] }.uniq
+    raise 'an equal stacked pair must be held' unless splits.any? { |s| s[0] == s[1] }
+    raise 'an UNEQUAL stacked pair must be held' unless splits.any? { |s| s[0] != s[1] }
 
     bottom = units.select { |u| u['description'].to_s.downcase.include?('bottom-hung') }
     raise 'no bottom-hung types at all' if bottom.empty?
@@ -1364,19 +1371,25 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   # a factory order. The section stays not_extracted: a letter is not a page.
   h60 = wall_sections.find { |x| x['section'] == 'Wall units H. 60' }
   raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'partial'
-  # H.96 and H.120 are in exactly that shape now, and say so.
-  %w[H.96 H.120].each do |fam|
-    sec = wall_sections.find { |x| x['family'] == fam && x['section'].start_with?('Wall units') }
-    raise "#{fam}: #{sec.inspect}" unless sec['status'] == 'not_extracted'
-    raise "#{fam} must say the letter is read" unless
-      sec['note'].to_s.include?('LETTER READ') && sec['note'].to_s.include?('a letter is not a page')
-  end
+  # H.96 and H.120 were in exactly that shape on 2026-08-23. H.96 LEFT IT THE
+  # SAME DAY by being read, and the proof that it was read is that its note now
+  # carries both halves: the old 'LETTER READ' warning, kept, and the dated
+  # extraction beside it. H.120 is the last section still holding a letter it
+  # has not spent.
+  h96 = wall_sections.find { |x| x['section'] == 'Wall units H. 96' }
+  raise h96.inspect unless h96['status'] == 'partial' && h96['extracted_on'] == '2026-08-23'
+  raise 'the letter warning must survive the extraction' unless
+    h96['note'].to_s.include?('LETTER READ')
+  h120 = wall_sections.find { |x| x['section'] == 'Wall units H. 120' }
+  raise h120.inspect unless h120['status'] == 'not_extracted'
+  raise 'H.120 must say the letter is read' unless
+    h120['note'].to_s.include?('LETTER READ') && h120['note'].to_s.include?('a letter is not a page')
 end
 
-check('the ten wall sections we hold report pages; the 14 we have not are single rows') do
+check('the twelve wall sections we hold report pages; the 12 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 14
+  raise sections.size.inspect unless sections.size == 12
   held = Registry.catalog.select { |c| c['class'] == 'wall' }.map { |c| c['section'] }.uniq
   raise 'a section we hold must not also be a section gap' if
     sections.any? { |g| held.include?(g['section']) }
@@ -1392,11 +1405,13 @@ check('the ten wall sections we hold report pages; the 14 we have not are single
   # p.212, the H.36 compounds. The other five - p.216, p.223, p.225, p.230,
   # p.233 - are complete except for a corner, and every corner in this registry
   # waits on Elda Q7b. When she answers, five of these six close at once.
-  # EIGHT PARTIAL PAGES, and only ONE of them is partial for want of reading:
-  # p.212, the H.36 compounds. The other seven are complete except for a corner,
-  # and every corner waits on Elda Q7b. When she answers, seven close at once.
+  # TEN PARTIAL PAGES, and only ONE of them is partial for want of reading:
+  # p.212, the H.36 compounds. The other nine are complete except for a corner,
+  # and every corner waits on Elda Q7b. When she answers, nine close at once.
+  # That ratio is the real finding of this chapter: the wall units are READ,
+  # and what is missing is one answer from the factory, not more transcription.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
-  raise pages.inspect unless pages == %w[p.212 p.216 p.223 p.225 p.230 p.233 p.239 p.242]
+  raise pages.inspect unless pages == %w[p.212 p.216 p.223 p.225 p.230 p.233 p.239 p.242 p.246 p.249]
 end
 
 check('p.211 and p.221 are whole pages now, push-up included') do
@@ -3886,7 +3901,7 @@ check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width, everywhere') 
       end
     end
   end
-  raise "expected 53 compound rows, checked #{checked}" unless checked == 53
+  raise "expected 57 compound rows, checked #{checked}" unless checked == 57
 end
 
 check('a compound is ONE front, not a split - the modules are carcass') do
@@ -3920,13 +3935,19 @@ end
 
 check('a width restriction is recorded where the page prints it, and read nowhere') do
   # 'cannot be reduced in width' is printed inside the same prohibition block as
-  # the finishes, under the same symbol, on the four SIMPLE dish-drainer
-  # positions of H.48 and both of H.36 - and on NONE of the compounds. It is one
-  # of the ten facts waiting on `restrictions`, so it is stored with its page
-  # and nothing acts on it.
-  # STRUCTURAL, not a roll-call: the restriction belongs to the SIMPLE
-  # dish-drainer positions and to nothing else. Listing them by name meant
-  # retyping six entries per family, which is the habit rule 18 punished.
+  # the finishes, under the same symbol. It is one of the ten facts waiting on
+  # `restrictions`, so it is stored with its page and nothing acts on it.
+  # STRUCTURAL, not a roll-call: listing the positions by name meant retyping
+  # six entries per family, which is the habit rule 18 punished.
+  #
+  # CORRECTED 2026-08-23. This check used to assert 'a compound must NOT carry
+  # it', which was true of H.36, H.48, H.60, H.72 and H.84 and therefore looked
+  # like a rule. printed p.249 prints it on the H.96 compound. FIVE FAMILIES
+  # AGREEING IS NOT A RULE - it is five pages that happened to agree, and the
+  # sixth is the one that tells you so. What is checked now is that the mark
+  # belongs to dish-drainers, that every SIMPLE dish-drainer carries it, and
+  # that the compounds DISAGREE among themselves - which is the fact that makes
+  # deriving it impossible and reading it necessary.
   fixed = registry_files.flat_map { |file|
     JSON.parse(File.read(file))['data']['unit_types']
         .select { |_, t| t['cannot_be_reduced_in_width'] }.keys
@@ -3934,15 +3955,24 @@ check('a width restriction is recorded where the page prints it, and read nowher
   raise 'nothing carries the restriction' if fixed.empty?
   stray = fixed.uniq.reject { |k| k.start_with?('dish_drainer_') }
   raise "not a dish-drainer: #{stray.inspect}" unless stray.empty?
-  compound = fixed.select { |k| k.include?('compound') }
-  raise "a compound must NOT carry it: #{compound.inspect}" unless compound.empty?
   # Every simple dish-drainer position in every family we hold carries it.
   simple = registry_files.flat_map { |file|
     JSON.parse(File.read(file))['data']['unit_types']
         .select { |k, _| k.start_with?('dish_drainer_') && !k.include?('compound') }.keys
   }
-  raise "#{simple.length} simple positions, #{fixed.length} restricted" unless
-    simple.sort == fixed.sort
+  raise "a simple position without the mark: #{(simple - fixed).inspect}" unless
+    (simple - fixed).empty?
+  # And the compounds go both ways, which is the whole point.
+  compounds = registry_files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types']
+        .select { |k, t| k.include?('compound') && k.start_with?('dish_drainer_') }
+        .map { |k, t| [k, !t['cannot_be_reduced_in_width'].nil?] }
+  }
+  raise 'no compound dish-drainers' if compounds.empty?
+  raise 'a compound carrying the mark must be held - printed p.249' unless
+    compounds.any? { |_, marked| marked }
+  raise 'a compound WITHOUT it must be held too - printed p.218, p.242' unless
+    compounds.any? { |_, marked| !marked }
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'it must have no reader yet' if
     ruby.any? { |f| File.read(f).include?('cannot_be_reduced_in_width') }
@@ -3988,14 +4018,23 @@ check('PE0696 IS 360 TALL, PRINTED IN THE H.72 SECTION') do
   raise others.inspect unless others == [360, 720]
 end
 
-check('THE MICROWAVE-NICHE UNIT IS ITS SECTION HEIGHT MINUS 360 - twice, so far') do
-  # An OBSERVATION with exactly two instances, pinned so a third forces the
-  # decision rather than slipping in as an assumption. PE0696 is 360 in the
-  # H.72 section; PG0696 is 480 in the H.84 section. Each is held under the
-  # family its own HEIGHT names, not the one its letter does.
+check('THE MICROWAVE-NICHE UNIT IS ITS SECTION HEIGHT MINUS 360 - three times, and it derives nothing') do
+  # An OBSERVATION pinned at two instances so that a third would force a
+  # decision rather than slip in as an assumption. THE THIRD ARRIVED on
+  # 2026-08-23 - PF0696 is 600 in the H.96 section - AND THE DECISION IS NO.
+  # It stays an observation and derives nothing, because all three PRINT their
+  # own elevation: a derivation that can only ever agree with a printed number
+  # buys nothing and costs the day a family prints something else. What the
+  # check enforces is the part that is not arithmetic - each one is held under
+  # the family its own HEIGHT names, never the one its letter does.
+  #
+  # And the roll-call is gone with it (rule 18): it read %w[PE0696 PG0696] and
+  # had to be retyped the moment a third turned up.
   niches = Registry.catalog.select { |c| c['code'].to_s.end_with?('96') }
-  raise niches.map { |c| c['code'] }.sort.inspect unless
-    niches.map { |c| c['code'] }.sort == %w[PE0696 PG0696]
+  raise 'the microwave niches have vanished' if niches.length < 3
+  raise 'every niche code is a wall code' unless niches.all? { |c| c['class'] == 'wall' }
+  raise 'a niche must be its own file, never its section family' unless
+    niches.none? { |c| c['family'] == "Wall H.#{c['section'][/H\. (\d+)/, 1]}" }
   niches.each do |row|
     u = Registry.lookup(row['code'])
     section_h = row['section'][/H\. (\d+)/, 1].to_i * 10
@@ -4008,39 +4047,68 @@ check('THE MICROWAVE-NICHE UNIT IS ITS SECTION HEIGHT MINUS 360 - twice, so far'
   end
 end
 
-check('the widest-unit rack rule appears exactly where there is ONE rack') do
-  # printed p.213, p.218, p.225 all print "In compound wall units, the
-  # dish-drainer rack is fitted in the widest unit" beside a position with one
-  # rack. printed p.242 has TWO racks, one per module, and does not print it.
-  # The rule and its absence agree, which is the kind of thing worth a check.
+check('WHERE THE RACK GOES IS READ OFF EACH PAGE - the printed sentence derives nothing') do
+  # THIS CHECK USED TO SAY "the widest-unit rack rule appears exactly where
+  # there is ONE rack", and it was wrong for a day. printed p.213, p.218, p.225
+  # print "In compound wall units, the dish-drainer rack is fitted in the widest
+  # unit" beside positions with one rack; printed p.242 has TWO racks and does
+  # not print it; so the two looked like one fact. printed p.249 then prints the
+  # sentence beside a position that is H.84's twin in every respect - same
+  # folding doors, same 60+45 and 60+60 splits, same TWO racks.
+  #
+  # THE SENTENCE IS BOILERPLATE THE CATALOG APPLIES UNEVENLY. It appears beside
+  # SYMMETRIC modules at H.60 (PD0914 is 45+45), where there is no widest unit
+  # to fit anything in, and it is absent from PC1811 (90+90) where a dimensioned
+  # rack answers instead. So its presence is RECORDED per position, in
+  # widest_unit_rack_rule, off the page - and derived from nothing: not from the
+  # rack count, not from the module split, not from the family.
+  #
+  # Note what the old check did NOT do: it did not fail when p.249 arrived. It
+  # classified the new position as :one_per_module and went green while the note
+  # beside it said something false. A check can only fail on what it looks at,
+  # so the fix is to look at the RECORDED sentence and never at a proxy for it.
   compounds = registry_files.flat_map { |file|
     JSON.parse(File.read(file))['data']['unit_types']
         .select { |k, _| k.start_with?('dish_drainer_') && k.include?('compound') }
         .values
   }
   raise 'no compound dish-drainers' if compounds.empty?
-  # THREE WAYS, and the check found the third. A compound has unequal modules
-  # (60+45, 60+90) so "which one holds the rack" is a real question, and the
-  # catalog answers it three different ways:
-  #   1. it prints the rule - "fitted in the widest unit" (four positions);
-  #   2. it states the rack SIZE against symmetric modules - a 90 cm rack in a
-  #      90+90 unit, where there is nothing to choose (PC1811);
-  #   3. it gives one rack PER module, so nothing is placed at all (PG1092).
-  # Every compound dish-drainer must use one of the three. A fourth that used
-  # none would be a position whose interior nobody can draw.
+
+  # 1. EVERY compound records whether its page prints the sentence. Missing is
+  #    not the same as absent: a position with no field was never read for it.
+  compounds.each do |t|
+    raise "a compound with no widest_unit_rack_rule: #{t['description']}" unless
+      %w[printed absent].include?(t['widest_unit_rack_rule'])
+  end
+
+  # 2. The question the sentence answers - which module holds the rack - is
+  #    still answered for every compound, by one of three means:
+  #      a. the page prints the rule;
+  #      b. the page states the rack SIZE against the modules (PC1811);
+  #      c. there is one rack PER module, so nothing is placed (PG1092).
+  #    A compound answering none of the three would be a position whose
+  #    interior nobody can draw.
   answered = compounds.map { |t|
     racks = t['interior_confirmed'].select { |i| i.include?('rack') }
-    if t['notes'].to_s.include?('widest unit') && racks.none? { |r| r.start_with?('2 ') }
-      :rule
-    elsif racks.any? { |r| r =~ /^1 x \d+ cm/ }
-      :dimensioned
-    elsif racks.any? { |r| r.start_with?('2 ') }
-      :one_per_module
+    if t['widest_unit_rack_rule'] == 'printed' then :rule
+    elsif racks.any? { |r| r =~ /^1 x \d+ cm/ } then :dimensioned
+    elsif racks.any? { |r| r.start_with?('2 ') } then :one_per_module
     end
   }
   raise "a compound with no answer: #{answered.inspect}" if answered.any?(&:nil?)
   raise "all three answers must be in the registry: #{answered.tally.inspect}" unless
     answered.uniq.sort == %i[dimensioned one_per_module rule]
+
+  # 3. AND THE ANTI-DERIVATION CLAUSE, which is what the day cost. Two
+  #    compounds with the SAME rack count disagree about the sentence. While
+  #    that is true, nobody can quietly re-derive it; if it ever stops being
+  #    true, this line fails and somebody re-reads the pages instead.
+  by_racks = compounds.group_by { |t|
+    t['interior_confirmed'].select { |i| i.include?('rack') }
+     .map { |r| r[/^\d+/].to_i }.sum
+  }
+  raise 'the counter-example is gone: re-read before deriving anything' unless
+    by_racks.any? { |_, ts| ts.map { |t| t['widest_unit_rack_rule'] }.uniq.length == 2 }
 end
 
 check('NOT EVERY WALL UNIT IS d.35 - the boiler housings are 620') do
@@ -4137,6 +4205,41 @@ check('the dish-drainer rack gains a second tier at H.60 and nowhere else') do
   raise 'H.60 must have the two-tier rack' unless tiers.call('Dish-drainer units H. 60')
   raise 'H.36 must not' if tiers.call('Dish-drainer units H. 36')
   raise 'H.48 must not' if tiers.call('Dish-drainer units H. 48')
+end
+
+puts "\nwall units H. 96 (printed p.245-249) - the family that broke two derived rules"
+check('the two H.96 sections hold 39 codes, and every one of them is PF') do
+  wall = Registry.catalog.select { |c| c['section'] == 'Wall units H. 96' }
+  dish = Registry.catalog.select { |c| c['section'] == 'Dish-drainer units H. 96' }
+  raise wall.length.to_s unless wall.length == 24
+  raise dish.length.to_s unless dish.length == 16
+  raise 'all PF' unless (wall + dish).all? { |c| c['code'].start_with?('PF') }
+  raise 'the corners must stay out - Elda Q7b' if
+    Registry.codes.any? { |c| c.start_with?('OF') }
+  # 24, not 23: the microwave niche is IN this section and NOT in this family.
+  raise wall.map { |c| c['type_key'] }.uniq.length.to_s unless
+    wall.map { |c| c['type_key'] }.uniq.length == 9
+  heights = wall.map { |c| Registry.lookup(c['code'])['height_mm'] }.uniq.sort
+  raise heights.inspect unless heights == [600, 960]
+end
+
+check('PF0696 IS THE FIRST MICROWAVE NICHE WITH A SIDE-HINGED DOOR') do
+  # Three niche units now, and the third is not the shape of the first two.
+  # PE0696 and PG0696 are headed "Wall unit with top-hung door" and are not
+  # handed; PF0696 is headed "Wall unit with door - 1 rh or lh door" and is.
+  # The name of the position says nothing about its front - which is why the
+  # front is read off the page and never carried across from a twin.
+  u = Registry.lookup('PF0696')
+  raise u['height_mm'].to_s unless u['height_mm'] == 600
+  raise u['family'].to_s unless u['family'] == 'Wall H.60'
+  raise 'it must be handed' unless u['handed'] == true
+  raise 'a side-hinged door takes no hinge_axis' unless
+    u['front_layout']['hinge_axis'].nil? && u['front_layout']['kind'] == 'single'
+  %w[PE0696 PG0696].each do |code|
+    other = Registry.lookup(code)
+    raise "#{code} must stay top-hung" unless
+      other['front_layout']['hinge_axis'] == 'top' && other['handed'] == false
+  end
 end
 
 check('A SECTION FILE THAT JOINS AN EXISTING FAMILY DECLARES NO FAMILY KEY') do

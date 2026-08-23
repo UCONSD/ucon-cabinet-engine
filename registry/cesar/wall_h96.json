@@ -1,0 +1,166 @@
+{
+  "section": "Wall units H. 96",
+  "class": "wall",
+  "family": "Wall H.96",
+  "source_pages": "printed p.245-247 / PDF 247-249, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_naming_note": "Namespaced 'Wall H.96' for the same reason as every other wall family.",
+  "extraction_note": "Eight of eleven positions, 23 of 27 codes. LEFT OUT: the 90-degree corner (OF0723 / OF0725), the corner wall unit (PF094D/S) - both Elda Q7b - and PF0696, which is 600 tall and lives in wall_h96_microwave_niche.json under family Wall H.60.",
+  "letter_note": "PF = H.96 was named by the filler table on printed p.434 (PF0151) and confirmed by a sweep of printed p.245-247. F is H.96 and G is H.84: the letters run BACKWARDS across that pair, which is why they are a lookup and never a sequence.",
+  "data": {
+    "height_mm": 960,
+    "mounting": "wall_hung",
+    "mounting_note": "Catalog-level fact: every unit in the wall chapter hangs. HOW HIGH is a project decision and lives in Standards::WALL_MOUNT_BOTTOM_MM until M1.6.",
+    "page_observations": [
+      "THE STACK IS EQUAL AGAIN - 48 ON TOP, 48 BELOW - AND THE PLURAL WORDING COMES BACK WITH IT. H.72 splits 36 + 36 and prints '2 top-hung doors'; H.84 splits 48 + 36 and prints '1 top-hung door' twice, on separate lines; H.96 splits 48 + 48 and prints '2 top-hung doors' again. THREE families now, and the wording tracks the geometry every time. That is no longer a guess about this catalog's habits - but it is still read off the page and never used to derive a split, because both figures are dimensioned on every elevation.",
+      "THE MICROWAVE-NICHE POSITION CHANGES ITS DOOR. PE0696 (H.72) and PG0696 (H.84) are headed 'Wall unit with top-hung door'; PF0696 is headed 'Wall unit with door - 1 rh or lh door' and is HANDED, hinged on a vertical edge. Only the niche is constant across the three; the door is not. Anything that treated 'microwave niche' as one shape would be wrong here.",
+      "AND IT IS THE SECTION HEIGHT MINUS 360 FOR THE THIRD TIME - 960 - 360 = 600, after 720 - 360 = 360 and 840 - 360 = 480. The H.84 file said the third instance would decide whether this is a rule. IT IS DECIDED AND THE ANSWER IS NO: it stays an observation and derives nothing, because every one of the three PRINTS its own elevation. A derivation that can only ever agree with a printed number buys nothing and costs the day a family prints something else.",
+      "THE FOLDING TYPE STOPS AT W.90, as at H.84 - but its compound has TWO codes here (105, 120) where H.84 has THREE (105, 120, 180). The 180 is gone and so is the finish restriction that hung on it: this compound carries none at all.",
+      "THE CORNER SUFFIX MOVES. The 90-degree corner is OF0723 / OF0725 here against OG0713 / OG0715 at H.84. Both are gated, and the digit pair is recorded so nobody builds a corner code by analogy.",
+      "The two boiler housings are d.62, exactly as at H.72 and H.84. Three families agreeing now.",
+      "The one-door type keeps the 2 shelves H.84 introduced."
+    ],
+    "unit_types": {
+      "wall_pull_out_door": {
+        "description": "Wall unit with pull-out door - 1 door - 1 soft-close pull-out door - no Push-pull device",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": ["1 soft-close pull-out door"],
+        "source_ref": "printed p.245 / PDF 247",
+        "codes": [
+          { "code": "PF0130", "width_mm": 150, "depth_mm": 350 }
+        ],
+        "notes": "One W.15 code, suffix 30, as at H.72 and H.84.",
+        "front_layout": {
+          "kind": "single",
+          "mechanism": "pull_out_door",
+          "note": "One full-height front on a pull-out mechanism. NO hinge_axis and no open_leaf - the travel is not in the catalog."
+        }
+      },
+      "wall_door": {
+        "description": "Wall unit with door - 1 rh or lh door - 2 shelves",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["2 shelves"],
+        "source_ref": "printed p.245 / PDF 247",
+        "codes": [
+          { "code": "PF0131", "width_mm": 150, "depth_mm": 350 },
+          { "code": "PF0331", "width_mm": 300, "depth_mm": 350 },
+          { "code": "PF0531", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PF0631", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "Four widths, the same set as H.72 and H.84, and the same two shelves as H.84. ONE CODE, BOTH HANDS.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "wall_two_doors": {
+        "description": "Wall unit with doors - 2 doors - 2 shelves",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["2 shelves"],
+        "source_ref": "printed p.245 / PDF 247",
+        "codes": [
+          { "code": "PF0630", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PF0930", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "Two widths, as at H.72 and H.84.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle."
+        }
+      },
+      "wall_top_hung_doors_stacked": {
+        "description": "Wall unit with top-hung doors - 2 top-hung doors - 2 shelves - top door with Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["2 shelves", "top door with Push-pull device"],
+        "source_ref": "printed p.245 / PDF 247",
+        "codes": [
+          { "code": "PF0504", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PF0604", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PF0704", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PF0904", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PF1004", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PF1204", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "TWO EQUAL LEAVES - 480 above 480, both dimensioned on the elevation and summing to 960 - and the page goes back to the plural '2 top-hung doors' that H.84's unequal pair gave up. Only the TOP door carries a Push-pull device. Suffix 04, which is a side-by-side compound at H.48 and H.60 and a stacked pair here, at H.72 and at H.84.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [480, 480],
+          "note": "480 then 480, summing to the family's 960. NO hinge_axis: one key cannot carry two leaves. Slabs are correct - two of them, which is also the handle count."
+        }
+      },
+      "wall_folding_doors": {
+        "description": "Wall unit with horizontally folding doors - 2 doors - 2 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["2 shelves", "interior Valencia handle"],
+        "source_ref": "printed p.246 / PDF 248",
+        "codes": [
+          { "code": "PF0589", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PF0689", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PF0789", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PF0989", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "Four widths, stopping at 90 as at H.84. Suffix 89 in all three families. The page prints '2 doors' on one line here, where H.84 prints '1 door' twice - the same wording shift the top-hung position makes, and for the same reason: the leaves are equal again.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [480, 480],
+          "note": "480 then 480. NO hinge_axis and no mechanism figure - a folding pair moves in a way this catalog has not dimensioned."
+        }
+      },
+      "wall_compound_2_folding": {
+        "description": "Wall unit with horizontally folding doors - 2 doors - 4 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["4 shelves", "interior Valencia handle"],
+        "source_ref": "printed p.246 / PDF 248",
+        "codes": [
+          { "code": "PF1089", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PF1289", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] }
+        ],
+        "notes": "TWO codes where H.84 has three - there is no 1800 here. NO finish_restrictions block: the render prints no prohibition symbol on this position, where H.84's carries one. The word 'Compound' appears nowhere; the module splits are what identify it. Four shelves against the simple type's two, one pair per module.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [480, 480],
+          "note": "480 then 480, across both modules."
+        }
+      },
+      "wall_boiler_housing_door": {
+        "description": "Wall boiler housing - 1 rh/lh door - custom-sized side panels",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["custom-sized side panels"],
+        "source_ref": "printed p.247 / PDF 249",
+        "codes": [
+          { "code": "PF0501", "width_mm": 450, "depth_mm": 620 },
+          { "code": "PF0601", "width_mm": 600, "depth_mm": 620 }
+        ],
+        "notes": "d.62, same widths and same suffix 01 as its H.72 and H.84 twins.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
+        }
+      },
+      "wall_boiler_housing_two_doors": {
+        "description": "Wall boiler housing - 2 doors - custom-sized side panels",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["custom-sized side panels"],
+        "source_ref": "printed p.247 / PDF 249",
+        "codes": [
+          { "code": "PF0600", "width_mm": 600, "depth_mm": 620 },
+          { "code": "PF0900", "width_mm": 900, "depth_mm": 620 }
+        ],
+        "notes": "Suffix 00 is a boiler housing in the third family running - and the three families that use those digits that way are the three that have boiler housings at all.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle."
+        }
+      }
+    }
+  }
+}
