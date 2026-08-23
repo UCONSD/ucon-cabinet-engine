@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 256 codes (103 base + 20 sink + 3 appliance + 102 wall + 8 USA tall + 14 tall + 6 fillers)') do
+check('registry loads and holds 292 codes (103 base + 20 sink + 3 appliance + 138 wall + 8 USA tall + 14 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 256
+  raise "got #{n}" unless n == 292
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 256 rows, each with code/dims/description/source') do
+check('registry catalog: 292 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 256
+  raise cat.length.to_s unless cat.length == 292
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -501,6 +501,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Closing strips and fillers for Maxima and Intarsio',
                                              'Dish-drainer units H. 36',
                                              'Dish-drainer units H. 48',
+                                             'Dish-drainer units H. 60',
                                              'Sink base units H. 78',
                                              'Tall units H. 210',
                                              'USA elements | for tall units H. 210',
@@ -1096,13 +1097,19 @@ check('H.36 is now the whole page: 17 codes in three types, all d.35') do
   raise push.inspect unless push == [600, 750, 900, 1050, 1200]
 end
 
-check('H.60 is 15 codes in four types, all d.35, and it hangs') do
+check('H.60 is 30 codes in eight types, all d.35, and it hangs') do
+  # Was four types and 15 codes - the section's first page. printed p.222-223
+  # were read on 2026-08-23 and brought the four compound types.
   rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 60' }
-  raise rows.length.to_s unless rows.length == 15
+  raise rows.length.to_s unless rows.length == 30
   raise rows.map { |r| r['height_mm'] }.uniq.inspect unless rows.map { |r| r['height_mm'] }.uniq == [600]
   raise rows.map { |r| r['depth_mm'] }.uniq.inspect unless rows.map { |r| r['depth_mm'] }.uniq == [350]
   by_type = rows.group_by { |r| r['type_key'] }.map { |k, v| [k, v.length] }.sort
-  raise by_type.inspect unless by_type == [['wall_door', 3],
+  raise by_type.inspect unless by_type == [['wall_compound_2_push_up', 2],
+                                           ['wall_compound_2_top_hung', 5],
+                                           ['wall_compound_3_push_up', 4],
+                                           ['wall_compound_3_top_hung', 4],
+                                           ['wall_door', 3],
                                            ['wall_push_up_door', 5],
                                            ['wall_top_hung_door', 6],
                                            ['wall_two_doors', 1]]
@@ -1338,22 +1345,26 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   end
 end
 
-check('the five wall sections we hold report pages; the 19 we have not are single rows') do
+check('the six wall sections we hold report pages; the 18 we have not are single rows') do
   wall = Registry.gaps.select { |g| g['class'] == 'wall' }
   sections = wall.select { |g| g['level'] == 'section' }
-  raise sections.size.inspect unless sections.size == 19
+  raise sections.size.inspect unless sections.size == 18
   raise 'a section we hold must not also be a section gap' if
     sections.any? { |g|
       ['Wall units H. 36', 'Wall units H. 48', 'Wall units H. 60',
-       'Dish-drainer units H. 36', 'Dish-drainer units H. 48'].include?(g['section'])
+       'Dish-drainer units H. 36', 'Dish-drainer units H. 48',
+       'Dish-drainer units H. 60'].include?(g['section'])
     }
 
   # Both held sections surface their unextracted pages as TYPE rows, in the
   # order the catalog prints them. p.211 and p.221 are gone: they are whole.
-  # p.216 joined the list on 2026-08-23: H.48 was read whole except its corner,
-  # so the page reports as partial and surfaces one type row, not a page row.
+  # FOUR PARTIAL PAGES, and every one of them is partial for the SAME reason:
+  # p.212 (H.36 compounds, not yet read) is the only page here still waiting on
+  # transcription. p.216, p.223 and p.225 are complete except for a corner, and
+  # every corner in this registry waits on Elda Q7b. p.222 left this list on
+  # 2026-08-23 by being finished.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
-  raise pages.inspect unless pages == %w[p.212 p.216 p.222 p.223]
+  raise pages.inspect unless pages == %w[p.212 p.216 p.223 p.225]
 end
 
 check('p.211 and p.221 are whole pages now, push-up included') do
@@ -1372,16 +1383,19 @@ end
 check('the corner wall units on p.223 are RECORDED, not invented') do
   page = Registry.map_sections.flat_map { |sec| sec['pages'] || [] }
                  .find { |pg| pg['printed'].to_s == '223' }
-  raise page.inspect unless page && page['status'] == 'not_extracted'
-  types = page['types'].join(' | ')
+  # p.223 became PARTIAL on 2026-08-23: its compound push-up position was
+  # extracted and only the two corners are still out. The check is about the
+  # CORNERS, and they have not moved.
+  raise page.inspect unless page && page['status'] == 'partial'
+  types = page['types'].map { |t| t.is_a?(Hash) ? "#{t['title']} #{t['note']}" : t }.join(' | ')
   raise types unless types.include?('PD094D/S') && types.include?('OD0713')
   # Neither grammar may leak into the catalog before a corner page is extracted.
   bad = Registry.codes.select { |c| c.start_with?('OD') || c.start_with?('PD094') }
   raise bad.inspect unless bad.empty?
   # And the note must say WHY, including the Q7b link - a wall family carrying
   # the same D/S letter as the base corners is evidence, not a coincidence.
-  raise 'the Q7b link must be recorded' unless page['note'].include?('Q7b')
-  raise 'the 5x5 filler difference must be recorded' unless page['note'].include?('5X5')
+  raise 'the Q7b link must be recorded' unless types.include?('Q7b')
+  raise 'the 5x5 filler difference must be recorded' unless types.include?('5X5')
 end
 
 puts "\nwhere a unit's geometry starts - one answer, asked not recomputed"
@@ -3840,7 +3854,7 @@ check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width, everywhere') 
       end
     end
   end
-  raise "expected 25 compound rows, checked #{checked}" unless checked == 25
+  raise "expected 47 compound rows, checked #{checked}" unless checked == 47
 end
 
 check('a compound is ONE front, not a split - the modules are carcass') do
@@ -3859,7 +3873,7 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 9
+  raise blocks.length.to_s unless blocks.length == 13
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
@@ -3878,14 +3892,25 @@ check('a width restriction is recorded where the page prints it, and read nowher
   # positions of H.48 and both of H.36 - and on NONE of the compounds. It is one
   # of the ten facts waiting on `restrictions`, so it is stored with its page
   # and nothing acts on it.
+  # STRUCTURAL, not a roll-call: the restriction belongs to the SIMPLE
+  # dish-drainer positions and to nothing else. Listing them by name meant
+  # retyping six entries per family, which is the habit rule 18 punished.
   fixed = registry_files.flat_map { |file|
     JSON.parse(File.read(file))['data']['unit_types']
         .select { |_, t| t['cannot_be_reduced_in_width'] }.keys
   }
-  raise fixed.inspect unless fixed.sort == %w[
-    dish_drainer_door dish_drainer_push_up_door dish_drainer_push_up_door
-    dish_drainer_top_hung_door dish_drainer_top_hung_door dish_drainer_two_doors
-  ]
+  raise 'nothing carries the restriction' if fixed.empty?
+  stray = fixed.uniq.reject { |k| k.start_with?('dish_drainer_') }
+  raise "not a dish-drainer: #{stray.inspect}" unless stray.empty?
+  compound = fixed.select { |k| k.include?('compound') }
+  raise "a compound must NOT carry it: #{compound.inspect}" unless compound.empty?
+  # Every simple dish-drainer position in every family we hold carries it.
+  simple = registry_files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types']
+        .select { |k, _| k.start_with?('dish_drainer_') && !k.include?('compound') }.keys
+  }
+  raise "#{simple.length} simple positions, #{fixed.length} restricted" unless
+    simple.sort == fixed.sort
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'it must have no reader yet' if
     ruby.any? { |f| File.read(f).include?('cannot_be_reduced_in_width') }
@@ -3899,6 +3924,58 @@ check('both dish-drainer sections are held WHOLE, 36 codes, nothing gated') do
   raise h48.length.to_s unless h48.length == 20 && h48.map { |c| c['type_key'] }.uniq.length == 6
   raise 'H.36 dish-drainers are PB' unless h36.all? { |c| c['code'].start_with?('PB') }
   raise 'H.48 dish-drainers are PC' unless h48.all? { |c| c['code'].start_with?('PC') }
+end
+
+check('H.60 dish-drainers: 21 codes in six types, the corner left out') do
+  rows = Registry.catalog.select { |c| c['section'] == 'Dish-drainer units H. 60' }
+  raise rows.length.to_s unless rows.length == 21
+  raise rows.map { |c| c['type_key'] }.uniq.length.to_s unless
+    rows.map { |c| c['type_key'] }.uniq.length == 6
+  raise 'all PD' unless rows.all? { |c| c['code'].start_with?('PD') }
+  raise 'the corner must stay out - Elda Q7b' if
+    Registry.codes.any? { |c| c.start_with?('OD') }
+end
+
+check('THE COMPOUND PUSH-UP IS NOT THE SAME ARTICLE FROM FAMILY TO FAMILY') do
+  # The most tempting simplification on these pages, and the pages refuse it.
+  # Anybody who "tidies" these three into one shape breaks this check, which is
+  # the whole point of writing it down.
+  shape = lambda { |section, key|
+    Registry.catalog.select { |c| c['section'] == section && c['type_key'] == key }
+            .map { |c| Registry.lookup(c['code']) }
+            .map { |u| [u['code'], u['width_mm']] }.sort
+  }
+  h48 = shape.call('Wall units H. 48', 'wall_compound_2_push_up')
+  h60 = shape.call('Wall units H. 60', 'wall_compound_2_push_up')
+  raise h48.inspect unless h48 == [['PC1808', 1800]]
+  raise h60.inspect unless h60 == [['PD0908', 900], ['PD1208', 1200]]
+  raise 'the two families must not share a single width' unless
+    (h48.map(&:last) & h60.map(&:last)).empty?
+
+  # And the DISH-DRAINER compound push-up gives a third answer again: absent at
+  # H.36, suffix 11 and one code at H.48, suffix 14 and two codes at H.60.
+  dd48 = shape.call('Dish-drainer units H. 48', 'dish_drainer_compound_2_push_up')
+  dd60 = shape.call('Dish-drainer units H. 60', 'dish_drainer_compound_2_push_up')
+  raise dd48.inspect unless dd48 == [['PC1811', 1800]]
+  raise dd60.inspect unless dd60 == [['PD0914', 900], ['PD1214', 1200]]
+  raise 'H.36 has no compound push-up dish-drainer' unless
+    shape.call('Dish-drainer units H. 36', 'dish_drainer_compound_2_push_up').empty?
+
+  # WITHIN a family the two compounds DO agree on widths - which is the half
+  # that makes the divergence across families look like a rule until you check.
+  raise 'H.60 must agree with itself' unless h60.map(&:last) == dd60.map(&:last)
+  raise 'H.48 must agree with itself' unless h48.map(&:last) == dd48.map(&:last)
+end
+
+check('the dish-drainer rack gains a second tier at H.60 and nowhere else') do
+  tiers = lambda { |section|
+    Registry.catalog.select { |c| c['section'] == section }
+            .map { |c| Registry.lookup(c['code'])['interior_confirmed'] }
+            .flatten.any? { |t| t.to_s.include?('2 tiers') }
+  }
+  raise 'H.60 must have the two-tier rack' unless tiers.call('Dish-drainer units H. 60')
+  raise 'H.36 must not' if tiers.call('Dish-drainer units H. 36')
+  raise 'H.48 must not' if tiers.call('Dish-drainer units H. 48')
 end
 
 check('A SECTION FILE THAT JOINS AN EXISTING FAMILY DECLARES NO FAMILY KEY') do

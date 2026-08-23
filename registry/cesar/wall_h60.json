@@ -2,9 +2,9 @@
   "section": "Wall units H. 60",
   "class": "wall",
   "family": "Wall H.60",
-  "source_pages": "printed p.221-223 / PDF 223-225 (subset extracted: p.221 only, and on p.221 all four types)",
+  "source_pages": "printed p.221-223 / PDF 223-225. p.221 read 2026-08-20; p.222 and p.223 read 2026-08-23 and verified against 170-dpi renders. Everything except the two corner types.",
   "family_naming_note": "Namespaced 'Wall H.60' for the same reason as 'Wall H.36': the registry merges section files by family NAME, and the catalog uses 'H. 60' for both a base family and a wall family. The catalog's own wording is preserved in 'section'.",
-  "extraction_note": "printed p.221 only - the section's first page, taken whole. printed p.222 (compound units, 2 and 3 modules) and p.223 (compound push-up, plus TWO kinds of corner wall unit) are recorded as page-level gaps in catalog_map, not extracted: compound units carry internal partitions and the corner units are new geometry with a code grammar of their own.",
+  "extraction_note": "COMPLETED 2026-08-23 except the corners. The original note said compound units were left out because they 'carry internal partitions' - that reading was wrong and is kept here rather than erased (rule 9). A compound carries ONE door across two or three carcass modules, so the envelope and the front are both ordinary; the modules are an interior fact and travel as modules_mm. wall_h48.json established that the same day and this section follows it. STILL OUT: the straight corner PD094D/S and the 90-degree corner OD0713 / OD0715, both gated on Elda Q7b.",
   "letter_note": "PD = H.60 was CONFIRMED from factory estimate 2026/30829 (PD0631) BEFORE this page was opened, and the page now agrees: PD0631, W.60, d.35, H.60. That is the order in which the two sources arrived, and it is worth remembering - the estimate named a letter no page we had read could have given us.",
   "data": {
     "height_mm": 600,
@@ -99,6 +99,103 @@
             "source_ref": "printed p.561 / PDF 563, 'Oblique push-up door system h. 60'",
             "note": "OBLIQUE system: the leaf tips outward. Printed 82 / 25,4 / 18 with a 60 leaf close with NO residue - 82 - 25,4 = 56,6 of run, drop = sqrt(60^2 - 56,6^2) = 19,9, giving a length of 60,0. The PICTURE draws the leaf at 32,8 degrees; the NUMBERS give 19,4. The numbers win, which is the same rule that governs the corner hand. The upper edge lands 96 mm INSIDE the cabinet footprint - not visible in the picture at all."
           }
+        }
+      },
+      "wall_compound_2_top_hung": {
+        "description": "Compound wall unit with top-hung door - 1 top-hung door - 2 shelves",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["2 shelves"],
+        "source_ref": "printed p.222 / PDF 224",
+        "codes": [
+          { "code": "PD0904", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PD1004", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PD1204", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] },
+          { "code": "PD1504", "width_mm": 1500, "depth_mm": 350, "modules_mm": [600, 900] },
+          { "code": "PD1804", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "Same five widths and the same module splits as the H.48 twin, suffix 04 in both. Two families agreeing, still not a rule.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.222 / PDF 224, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across both modules, hinged along its top edge."
+        }
+      },
+      "wall_compound_2_push_up": {
+        "description": "Compound wall unit with push-up door - 1 push-up door - 2 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["2 shelves", "interior Valencia handle"],
+        "source_ref": "printed p.222 / PDF 224",
+        "codes": [
+          { "code": "PD0908", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PD1208", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] }
+        ],
+        "notes": "THE COMPOUND PUSH-UP IS NOT THE SAME ARTICLE FROM FAMILY TO FAMILY. H.48 offers exactly ONE, PC1808 at 180 wide in 90+90; H.60 offers TWO, at 90 in 45+45 and 120 in 60+60, and no 180 at all. Different widths, different splits, and even the suffix differs from the dish-drainer twins. Read the row. NOTE ALSO: this is the only position on printed p.222-223 with NO prohibition block at all - no symbol, no finish names - while its H.48 counterpart carries a full one.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One push-up door across both modules. NO hinge_axis - see wall_push_up_door, which also carries the printed open_leaf geometry for this family's OBLIQUE system. Not repeated here: the page gives the mechanism once, for the simple type."
+        }
+      },
+      "wall_compound_3_top_hung": {
+        "description": "Compound wall unit with top-hung door - 3 modules - 1 top-hung door - 3 shelves",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["3 shelves"],
+        "source_ref": "printed p.222 / PDF 224",
+        "codes": [
+          { "code": "PD1234", "width_mm": 1200, "depth_mm": 350, "modules_mm": [300, 600, 300] },
+          { "code": "PD1534", "width_mm": 1500, "depth_mm": 350, "modules_mm": [300, 900, 300] },
+          { "code": "PD1834", "width_mm": 1800, "depth_mm": 350, "modules_mm": [450, 900, 450] },
+          { "code": "PD2434", "width_mm": 2400, "depth_mm": 350, "modules_mm": [600, 1200, 600] }
+        ],
+        "notes": "Same widths and splits as the H.48 twin. PD2434 is 2400 mm across, joining PC2434 as the widest articles this registry holds.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.222 / PDF 224, read off the render",
+          "for_all_widths": ["Melamine doors W. 240 (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800, 2400],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across all three modules, hinged along its top edge."
+        }
+      },
+      "wall_compound_3_push_up": {
+        "description": "Compound wall unit with push-up door - 3 compartments - 1 push-up door - 3 shelves - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["3 shelves", "3 compartments", "interior Valencia handle"],
+        "source_ref": "printed p.223 / PDF 225",
+        "codes": [
+          { "code": "PD1244", "width_mm": 1200, "depth_mm": 350, "modules_mm": [300, 600, 300] },
+          { "code": "PD1544", "width_mm": 1500, "depth_mm": 350, "modules_mm": [300, 900, 300] },
+          { "code": "PD1844", "width_mm": 1800, "depth_mm": 350, "modules_mm": [450, 900, 450] },
+          { "code": "PD2444", "width_mm": 2400, "depth_mm": 350, "modules_mm": [600, 1200, 600] }
+        ],
+        "notes": "The push-up twin of wall_compound_3_top_hung. Where the two-module push-up diverges wildly between families, the THREE-module one matches H.48 exactly - four widths, same splits, suffix 44. Agreement in one place and divergence in the other, on the same page pair.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.223 / PDF 225, read off the render",
+          "for_all_widths": ["Melamine doors W. 240 (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800, 2400],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "note": "One push-up door across all three compartments. NO hinge_axis."
         }
       }
     }

@@ -1,0 +1,132 @@
+{
+  "section": "Dish-drainer units H. 60",
+  "class": "wall",
+  "family": "Wall H.60",
+  "source_pages": "printed p.224-225 / PDF 226-227, read whole and verified against 170-dpi renders 2026-08-23",
+  "family_note": "NO family-level keys - wall_h60.json declares them. Third file to use the arrangement, after the fillers and the two other dish-drainer sections.",
+  "extraction_note": "Six of seven positions, 21 of 22 codes. The seventh is the 90-degree corner dish-drainer OD0745, gated on Elda Q7b like every other corner. NOTE IT EXISTS ONLY AT 75x75 - the plain 90-degree corner on printed p.223 comes in 70x70 AND 75x75, this one does not, so the corner sizes are per POSITION and not per family.",
+  "data": {
+    "unit_types": {
+      "dish_drainer_door": {
+        "description": "Dish-drainer unit with door - 1 rh or lh door - 1 stainless steel rack with drip tray - 155 degree hinges",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "155 degree hinges"],
+        "source_ref": "printed p.224 / PDF 226",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PD0561", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PD0661", "width_mm": 600, "depth_mm": 350 }
+        ],
+        "notes": "Same two widths and the same suffix 61 as the H.48 twin. ONE CODE, BOTH HANDS.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. Which edge is hinge_side, chosen per order and never guessed."
+        }
+      },
+      "dish_drainer_two_doors": {
+        "description": "Dish-drainer unit with doors - 2 doors - 1 stainless steel rack with drip tray - 155 degree hinges",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "155 degree hinges"],
+        "source_ref": "printed p.224 / PDF 226",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PD0960", "width_mm": 900, "depth_mm": 350 }
+        ],
+        "notes": "One code, W.90, matching the H.48 twin exactly.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
+        }
+      },
+      "dish_drainer_top_hung_door": {
+        "description": "Dish-drainer unit with top-hung door - 1 top-hung door - 1 stainless steel rack with drip tray 2 tiers",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray 2 tiers"],
+        "source_ref": "printed p.224 / PDF 226",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PD0502", "width_mm": 450, "depth_mm": 350 },
+          { "code": "PD0602", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PD0702", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PD0902", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PD1002", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PD1202", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "THE RACK GAINS A SECOND TIER AT THIS HEIGHT. H.36 and H.48 both print '1 stainless steel rack with drip tray'; H.60 prints '2 tiers' on the two lidded positions - a 600 mm box fits what a 360 or 480 one does not. An interior fact, recorded and not drawn.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge."
+        }
+      },
+      "dish_drainer_push_up_door": {
+        "description": "Dish-drainer unit with push-up door - 1 push-up door - 1 stainless steel rack with drip tray 2 tiers - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray 2 tiers", "interior Valencia handle"],
+        "source_ref": "printed p.224 / PDF 226",
+        "cannot_be_reduced_in_width": true,
+        "codes": [
+          { "code": "PD0612", "width_mm": 600, "depth_mm": 350 },
+          { "code": "PD0712", "width_mm": 750, "depth_mm": 350 },
+          { "code": "PD0912", "width_mm": 900, "depth_mm": 350 },
+          { "code": "PD1012", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "PD1212", "width_mm": 1200, "depth_mm": 350 }
+        ],
+        "notes": "Two-tier rack, like the top-hung twin. Starts at W.60, like every push-up type read so far.",
+        "front_layout": {
+          "kind": "single",
+          "note": "NO hinge_axis. The printed open_leaf geometry for this family's OBLIQUE push-up system is on wall_push_up_door and is not repeated: the page gives the mechanism once."
+        }
+      },
+      "dish_drainer_compound_2_top_hung": {
+        "description": "Dish-drainer unit with top-hung door - 1 top-hung door - 1 stainless steel rack with drip tray - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "1 shelf"],
+        "source_ref": "printed p.225 / PDF 227",
+        "codes": [
+          { "code": "PD0906", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PD1006", "width_mm": 1050, "depth_mm": 350, "modules_mm": [600, 450] },
+          { "code": "PD1206", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] },
+          { "code": "PD1506", "width_mm": 1500, "depth_mm": 350, "modules_mm": [600, 900] },
+          { "code": "PD1806", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
+        ],
+        "notes": "THE HEADING IS MISSING THE WORD 'COMPOUND' AND THE POSITION IS ONE ANYWAY. printed p.225 heads this 'Dish-drainer unit with top-hung door' while the identical position at H.36 and H.48 is headed 'Compound dish-drainer unit with top-hung door' - and this one carries module splits and the compound rule all the same. The description above is the page's own wording (rule: the registry keeps the catalog's), the type key says what it is. Suffix 06 matches both other families. Carries the printed rule: 'In compound wall units, the dish-drainer rack is fitted in the widest unit.' Also gains '1 shelf', which the H.36 and H.48 twins do not print.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.225 / PDF 227, read off the render",
+          "for_all_widths": ["Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [1500, 1800],
+          "for_starred_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors"],
+          "note": "RECORDED, NOT ENFORCED - M1.6."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door across both modules, hinged along its top edge."
+        }
+      },
+      "dish_drainer_compound_2_push_up": {
+        "description": "Compound dish-drainer unit with push-up door - 1 push-up door - 1 stainless steel rack with drip tray - 1 shelf - interior Valencia handle - no Push-pull device",
+        "opening": "push-up",
+        "handed": false,
+        "interior_confirmed": ["1 stainless steel rack with drip tray", "1 shelf", "interior Valencia handle"],
+        "source_ref": "printed p.225 / PDF 227",
+        "codes": [
+          { "code": "PD0914", "width_mm": 900, "depth_mm": 350, "modules_mm": [450, 450] },
+          { "code": "PD1214", "width_mm": 1200, "depth_mm": 350, "modules_mm": [600, 600] }
+        ],
+        "notes": "SUFFIX 14, AND THE THIRD DIFFERENT ANSWER FOR THE SAME IDEA. A compound push-up dish-drainer is 11 at H.48 (PC1811, one code, 180 wide, 90+90) and 14 here (two codes, 90 in 45+45 and 120 in 60+60); H.36 has no such position at all. Three families, three shapes. It does match this family's own plain compound push-up widths (PD0908 / PD1208) exactly - so within a family the two compounds agree, and across families nothing does. Carries the widest-unit rack rule.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One push-up door across both modules. NO hinge_axis."
+        }
+      }
+    }
+  }
+}

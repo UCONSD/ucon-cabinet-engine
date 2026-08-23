@@ -227,22 +227,26 @@
                 "decided_on": "2026-08-20",
                 "note": "PD0610/0710/0910/1010/1210, W.60-120. Data without a symbol, exactly as on p.211." }
             ] },
-          { "printed": 222, "status": "not_extracted",
+          { "printed": 222, "status": "extracted",
+            "types": ["Compound wall unit with top-hung door (2 modules)", "Compound wall unit with push-up door (2 modules)", "Compound wall unit with top-hung door (3 modules)"] },
+          { "printed": 223, "status": "partial",
             "types": [
-              "Compound wall unit with top-hung door (2 modules): PD0904 90, PD1004 105, PD1204 120, PD1504 150*, PD1804 180*",
-              "Compound wall unit with push-up door (2 modules): PD0908 90, PD1208 120",
-              "Compound wall unit with top-hung door (3 modules): PD1234 120, PD1534 150*, PD1834 180*, PD2434 240*"
-            ],
-            "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Module splits are printed per row (45+45, 60+45, 60+60, 60+90, 90+90; 30+60+30, 30+90+30, 45+90+45, 60+120+60). Asterisked widths restrict door finishes. Servo Drive is split by width on these pages: 554 at <=120, 1.107 above." },
-          { "printed": 223, "status": "not_extracted",
-            "types": [
-              "Compound wall unit with push-up door (3 compartments): PD1244 120, PD1544 150*, PD1844 180*, PD2444 240*",
-              "Straight corner wall unit: PD094D/S, W. 100x40, 1 rh or lh 60 cm door, 1 shelf, corner filler 5X5",
-              "90 degree corner wall unit: OD0713 70x70, OD0715 75x75, 2 doors, 1 shelf, 3 fixings, 155 degree hinges"
-            ],
-            "note": "NOT EXTRACTED, and the reason is worth stating: this page holds the first CORNER WALL UNITS, in two kinds that do not share a grammar. The straight corner is PD094D/S - the same D/S execution letter as the base corners on printed p.42, on a wall family, which bears directly on Elda Q7b. The 90 degree corner is OD07xx, a prefix that is NOT P + family letter at all and is not decoded. Its filler is 5X5, not the 8x8 of the base corner. Geometry, grammar and the Q7b answer are all open, so nothing here is guessed." }
+              "Compound wall unit with push-up door (3 compartments)",
+              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PD094D/S, 100x40, 1 rh or lh 60 cm door, corner filler 5X5. Elda Q7b." },
+              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OD0713 (70x70) and OD0715 (75x75), 2 doors, 1 shelf, 3 fixings, 155 degree hinges. Its prohibition block names a door STYLE - 'Shaker door' - and not only finishes, which is a kind of entry no other block has shown. Elda Q7b." }
+            ] }
         ] },
-      { "class": "wall", "family": "H.60", "section": "Dish-drainer units H. 60", "printed_pages": "224-225", "status": "not_extracted" },
+      { "class": "wall", "family": "H.60", "section": "Dish-drainer units H. 60", "printed_pages": "224-225", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "Six of seven positions, 21 of 22 codes, verified against 170-dpi renders. The seventh is the 90-degree corner dish-drainer OD0745 - and it exists ONLY at 75x75 while the plain 90-degree corner on p.223 comes in 70x70 and 75x75, so corner sizes are per POSITION and not per family. Elda Q7b.",
+        "pages": [
+          { "printed": 224, "status": "extracted", "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung door", "Dish-drainer unit with push-up door"] },
+          { "printed": 225, "status": "partial",
+            "types": [
+              "Dish-drainer unit with top-hung door (compound, 2 modules - the page omits the word Compound)",
+              "Compound dish-drainer unit with push-up door",
+              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OD0745, 75x75 only. Elda Q7b." }
+            ] }
+        ] },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola hood", "printed_pages": "226", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola No Drop hood", "printed_pages": "227", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
       { "class": "wall", "family": "H.72", "section": "Wall units H. 72", "printed_pages": "228-231", "status": "not_extracted",
