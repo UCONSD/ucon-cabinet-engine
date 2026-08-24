@@ -1,0 +1,201 @@
+{
+  "section": "Tall units H. 210 | for base unit H. 78",
+  "class": "tall",
+  "family": "Tall H.210",
+  "source_pages": "printed p.116 / PDF 118 (subset extracted: p.116 only; the section runs to printed p.125)",
+  "family_naming_note": "SAME FAMILY AS tall_h210.json, DIFFERENT SECTION. The catalog prints these as two chapters with two letter pairs - CQ/CR for printed p.111-115 and C5/C6 here - but the physical family is one: 2100 tall on a 100 plinth, depths 350 and 620. So this file JOINS family 'Tall H.210' and declares no family-level key of its own, the same way sink_base_h58_5.json joins H.58.5. What differs between the two sections is the FRONT, and a front is a property of the unit type, not of the family.",
+  "door_versions_note": "THIS FILE DELIBERATELY DECLARES NO data.door_versions, AND THE ABSENCE IS A DECISION, NOT A READING. printed p.116 does print the pair - 78 and 75 - for the lower front of every position on the page. It cannot be recorded as a FAMILY key, because door_versions merges by family and family 'Tall H.210' also holds tall_h210.json, whose own no_door_versions_note says printed p.111 prints a single elevation 210 and answers no gola question at all. Declaring it here would hand the plain full-height units a 2070 front the catalog has never printed - the identical mistake Elda Q8 was opened for at H.58.5, where a family key offers a 55,5 that one position never draws. So the split is recorded per unit type, in front_layout.gola_stack_top_to_bottom, which is exact and cannot leak. CONSEQUENCE, RECORDED RATHER THAN HIDDEN: 80_panel reads door_versions from the family, so the properties dialog will offer these units no 78/75 switch and will draw them in the handle version. Making door_versions section-scoped is a code change in 50_registry.rb and 80_panel.rb and is NOT made here. Evidence added to Elda Q8, 2026-08-24.",
+  "width_field_note": "THE FOUR-DIGIT TAIL DOES NOT DECODE, AND THIS PAGE BREAKS IT ON ITSELF. W.45 is 0551 in the first position and 1560 in the third; W.60 is 0651 and 1660. The same two widths, the same page, two different fields - so the width field is not even section-scoped, it is POSITION-scoped. _manifest.json code_grammar.tall_units already says to read the row; printed p.116 is the cheapest proof of it yet found, because both readings sit on one sheet.",
+  "extraction_note": "printed p.116 taken WHOLE: three positions, twelve codes, both depths, verified against a 175-dpi render (rule 10) after pdftotext agreed with it line for line. Nine pages of this section remain - printed p.117-125 - and they are what the Avenida Primavera wall actually needs: the oven housings are printed p.121-123 and the fridge unit p.125. Recorded in _manifest.json catalog_map so the picker shows them grey rather than silent.",
+  "data": {
+    "unit_types": {
+      "tall_door_over_door": {
+        "description": "Tall unit with doors - 1 rh or lh door - 1 rh or lh door - 4 shelves - 1 divider",
+        "opening": "doors",
+        "handed": true,
+        "interior_confirmed": [
+          "4 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.116 / PDF 118",
+        "codes": [
+          {
+            "code": "C50551",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "C50651",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "C50751",
+            "width_mm": 750,
+            "depth_mm": 350
+          },
+          {
+            "code": "C60551",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "C60651",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C60751",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1320,
+            780
+          ],
+          "note": "The recess sits BETWEEN the two fronts, not above the top one as it does on a base unit - and that is the entire point of this section. It lands at the height of the neighbouring base H.78 run's worktop, so the gola line runs through the tall unit and on down the run. Elevation printed p.116: 132 / 78 handle, 132 / 75 gola. The lower front gives its 30 mm to the recess (780 -> 750); the 1320 front above it does not, because nothing is recessed there.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1320
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "gola_note": "One recess, 1320 over 750. Fronts sum to 2070; with the 30 mm zone the stack is 2100."
+        },
+        "wall_hung": true,
+        "wall_hung_note": "Printed positively: this position's margin carries 'Surch. for wall-hung version on page 548' and the depth-band glyph stands beside both d.35 and d.62. The other two positions on the page carry neither. Verified on the 175-dpi render 2026-08-24 - the same reading pattern the plain H.210 section shows, where only the plain door type hangs.",
+        "notes": "THE POSITION THIS WHOLE SECTION EXISTS FOR: two stacked single doors, 1320 over 780, so the lower front is the same height as the door of the base unit standing beside it. One code per width and depth, both hands - 'rh or lh door' twice - so hinge_side stays per-order and is never guessed. ONE PRINTED DESCRIPTION, TWO ARTICLES: the position below is headed 'Tall unit with doors' word for word and is a different article - 2 doors over 2 doors at W.90. A reader keying positions by their printed title would merge them, which is the third time this catalog has set that trap after printed p.38's two pairs."
+      },
+      "tall_doors_over_doors": {
+        "description": "Tall unit with doors - 2 doors - 2 doors - 4 shelves - 1 divider",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": [
+          "4 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.116 / PDF 118",
+        "codes": [
+          {
+            "code": "C50950",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "C60950",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1320,
+            780
+          ],
+          "note": "The recess sits BETWEEN the two fronts, not above the top one as it does on a base unit - and that is the entire point of this section. It lands at the height of the neighbouring base H.78 run's worktop, so the gola line runs through the tall unit and on down the run. Elevation printed p.116: 132 / 78 handle, 132 / 75 gola. The lower front gives its 30 mm to the recess (780 -> 750); the 1320 front above it does not, because nothing is recessed there. This layout cannot say that each band is TWO doors side by side - the same limitation base_drawer_doors records at H.78.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1320
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "gola_note": "As tall_door_over_door: one recess, 1320 over 750."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED on printed p.116, and read as an absence of two things at once: no wall-hung line in this position's margin and no glyph beside either depth band, where the position above has both. An absence has to be re-read, so it is recorded here as a value rather than left missing. 175-dpi render, 2026-08-24.",
+        "notes": "W.90 only, one code per depth, not handed - a pair of doors has no hand. Printed under the SAME heading as the position above; see that position's note."
+      },
+      "tall_door_jumbo_drawers": {
+        "description": "Tall unit with jumbo drawers - 1 rh or lh door - 2 jumbo drawers - 3 shelves - 1 divider",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "3 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.116 / PDF 118",
+        "codes": [
+          {
+            "code": "C51560",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "C51660",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "C61560",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "C61660",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1320,
+            390,
+            390
+          ],
+          "note": "Elevation printed p.116: 132 / 39 / 39 handle, 132 / 36 / 36 gola. TWO recesses here, not one - each jumbo front gives its 30 mm, exactly as base_jumbo_drawers does at H.78 - so the fronts sum to 2040 in the gola version against 2100 in the handle one. The 1320 door is untouched in both.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1320
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "gola_note": "Undercounter recess under the 1320 door, intermediate recess between the two jumbo fronts."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED on printed p.116 - no wall-hung line in this position's margin and no glyph beside either depth band, where the first position of the same page carries both. An absence has to be written down or it is re-read as silence. 175-dpi render, 2026-08-24.",
+        "notes": "opening is recorded as 'door' following base_drawer_door at H.78, where a type mixing a hinged door with drawers takes the door's value and the hand belongs to the door; this file does not invent a new convention for a mixed front. THE MECHANISM IS NAMED AND NOT CODED: the position carries the Servo Drive glyph pointing at printed p.567, and the margin prices three LEGRABOX finishes - stainless steel, ash/brown blumotion push-pull, stainless blumotion push-pull - with no article code against any of them. Nothing is recorded as a companion, because a companion is a LINE with a code and these have none. Same blocker as printed p.112, waiting on registry/cesar/options/. WIDTH FIELD: 15 = W.45 and 16 = W.60 here, against 05 and 06 in the first position of this same page - see width_field_note."
+      }
+    }
+  }
+}

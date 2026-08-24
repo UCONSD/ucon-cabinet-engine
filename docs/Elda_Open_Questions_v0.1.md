@@ -254,6 +254,32 @@ draw one.
 3. If they are not: is the door version an ARTICLE property in general, and are
    there other positions whose single elevation we have read as a family fact?
 
+**Added 2026-08-24, the same day, from the other end of the catalog — and this
+half is not a doubt, it is a printed contradiction inside one family.**
+
+Family **Tall H.210** now holds two sections at once:
+
+| section | printed | what the elevation prints |
+|---|---|---|
+| `Tall units H. 210` | p.111 | **one** dimension: `210` |
+| `Tall units H. 210 \| for base unit H. 78` | p.116 | **two**: `132 + 78` and `132 + 75` |
+
+Same height, same plinth, same two depths, different letter pair (CQ/CR against
+C5/C6). So within one family one section states a gola execution and the other
+states nothing at all. `door_versions` is stored per family and merges per
+family, so it cannot hold both answers: declaring the pair would offer a plain
+full-height door a 2070 front the catalog has never printed, and that is Q8's
+own failure mode, arriving from the opposite direction.
+
+The registry's answer for now is to record the split **per unit type**, in
+`front_layout.gola_stack_top_to_bottom`, and to leave `door_versions`
+undeclared — exact, and it cannot leak. The cost is that the properties dialog
+offers these units no 78/75 switch, because `80_panel` reads the family key.
+
+**Question 4.** Is the door version scoped to the SECTION rather than to the
+family or to the article? If yes, `50_registry.rb` and `80_panel.rb` need it
+section-scoped, and Q8's first three questions may have the same answer.
+
 **Why it matters.** This is the same axis the 19 held-and-not-buildable H.78
 codes wait on, approached from the other side. There, two codes print a gola
 elevation that does not sum to the handle height and we cannot say *this

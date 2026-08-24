@@ -30,10 +30,10 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
 | **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
-| **Core version** | **0.73.0**, shell 0.6.0 |
-| **Headless suite** | **405 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Core version** | **0.74.0**, shell 0.6.0 |
+| **Headless suite** | **410 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
-| **Registry** | **692 codes** in **36 section files** carrying **27 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
+| **Registry** | **704 codes** in **37 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
 
 ### The Project is retired
@@ -177,6 +177,7 @@ Account: `claude/findings-2026-08-24-pictogram-sweep.md`.
 | **Base units H. 58.5** | **32-34** | **53** | **none — the section is whole** |
 | **Sink base units H. 58.5** | **35** | **24** | **none — the section is whole** |
 | Base units H. 78 | 36-43 | 131 | p.41 (grammar unread), p.42-43, p.46 (corners, Q7b) |
+| **Tall H. 210 \| for base unit H. 78** | **116-125** | **12** | **p.117-125 — and p.121-123 + p.125 are the appliance columns Avenida Primavera needs** |
 | Base H. 78 \| appliances | 47-48 | 9 | the induction-hob protection |
 | Sink base units H. 78 | 44-46 | 20 | |
 | Tall units H. 138 | 90-96 | 16 | mechanisms, corners, appliance housings |
@@ -195,7 +196,9 @@ still wait on ONE decision** — `door_versions` is a family key — and a check
 requires all nineteen to name that reason in the same words, so the backlog is
 one grep.
 
-**Forty-six codes refuse the hung version: 4 base and 42 tall** — and the
+**Fifty-two codes refuse the hung version: 4 base and 48 tall** (46 until
+printed p.116 arrived on 2026-08-24 and brought six more, none of them a flip —
+the check's comment carries the arithmetic) — and the
 figure is now COUNTED BY A CHECK, not by hand. It read *twenty-two* here this
 morning, which had counted the tall families by position instead of by code.
 **Four of the forty-six refuse in WORDS** — printed p.34 and p.37 — and the
