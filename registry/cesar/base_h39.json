@@ -1,0 +1,94 @@
+{
+  "section": "Base units H. 39",
+  "class": "base",
+  "family": "H.39",
+  "source_pages": "printed p.24 / PDF 26 (subset extracted: p.24 only, and on p.24 both types), verified against a 170-dpi render 2026-08-23",
+  "extraction_note": "printed p.24 only - the section's first page, taken whole: two types, 24 codes, all three depths. printed p.25-27 are not read.",
+  "letter_note": "THE BASE PREFIX IS NOT A FAMILY LETTER - IT IS A (FAMILY x DEPTH) KEY, and this page is where that becomes undeniable. H.39 prints THREE prefixes for three depths: B0 = d.35, BJ = d.47, B1 = d.62. A wall family has one depth and therefore one letter, which is why the wall chapter could treat the prefix as a family name; a base family has two or three and cannot. Read across the low base families: H.39 is B0/BJ/B1, H.48 is BC/BD/BQ, H.58.5 is B3/B6/B4 (6 = d.47 and 4 = d.62, NOT the H.78 mapping), H.78 is B7/B8/B9, H.84 is BK/BL/BM. There is no rule; read the section.",
+  "filler_letter_warning": "AND THE FILLER TABLE DOES NOT USE THE SAME KEY. printed p.434 prices one base-unit filler per HEIGHT with no depth axis at all, and its prefixes are B0 (39), BC (48), BJ (58,5), BE (60), BI (72), B7 (78), BK (84). Four of those match the d.35 member of the unit family - and BJ DOES NOT. BJ is H.58,5 on printed p.434 and it is H.39 at d.47 on printed p.24, two characters serving two different (family, depth) slots. The codes do not collide, because the tails differ (BJ0150/BJ0151 against BJ0525 and up), but the LETTER cannot be used to find a family. The filler recon's reading - that printed p.434 names a family letter and a unit page confirms it - held for the WALL chapter, where every family has one depth, and it does not hold here. OPEN FOR ELDA: is BJ0150/BJ0151 really the H.58,5 base filler when the H.58,5 base units are B3/B6/B4? Recorded, not resolved.",
+  "data": {
+    "height_mm": 390,
+    "plinth_h_mm": 100,
+    "plinth_note": "PRINTED AND RENDER-VERIFIED, not inherited. CESAR - 1 Project Guidelines.pdf printed p.68 / PDF 70, 'Modularity of base units H. 78', prints a dimension chain for each low base family: a worktop line at 78, the unit height below it, then 0 and 10 at the floor. H.39, H.48 and H.58.5 all read 10, so the plinth is 100 for all three - the same number H.78 stands on and, for once, read for these families rather than carried over from that one. Verified on a 200-dpi render 2026-08-23 after the N_Elle figures taught what an unverified text-layer number is worth.",
+    "door_versions": {
+      "full_mm": 390,
+      "gola_mm": 360,
+      "source_ref": "printed p.24 / PDF 26",
+      "note": "The two door heights printed over the code tables: 39 full, 36 when the top 30 mm goes to the gola profile. FAMILY-SCOPED, exactly as at H.78, and the same 30 mm difference."
+    },
+    "depths_mm": [350, 470, 620],
+    "collections": ["Maxima", "Intarsio"],
+    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.24 / PDF 26",
+    "page_observations": [
+      "d.47 IS NEW TO THIS REGISTRY. H.78 offers 350 / 620 / 670; H.39 offers 350 / 470 / 620. The set of depths is per family and not per class, and 470 has never appeared before - it is the depth the p.10 corner note hinted at (95x65 = d.57 + 80) without being the same number, so the two are unrelated and both stay recorded.",
+      "THIS FAMILY IS AN UNDERCOUNTER FAMILY, AND THE GUIDELINES SAY SO IN A DIMENSION. The modularity page draws a worktop line at 78 above every low base family and dimensions what fits beneath it: 39 + 39 for H.39, 48 + 30 for H.48, 58,5 + 19,5 for H.58.5 - and the 19,5 is exactly the drawer front printed p.37 and p.38 stack above a door. So these families are not short base units, they are the LOWER HALF OF A COLUMN. That is the stacking concept Group 4 of the extraction plan is about, arriving three groups early. RECORDED, NOT IMPLEMENTED: nothing in the engine stacks anything, and a unit that is 390 tall on a 100 plinth is a correct object on its own.",
+      "THE WIDTH SET AGREES ACROSS TWO CHAPTERS. The Project Guidelines modularity page lists 45, 60, 75, 90, 105, 120, 180, 240 for H.39 and printed p.24 prices exactly those - the simple type taking the first six and the compound the last two.",
+      "EVERY ROW ON THIS PAGE CARRIES THE HUNG GLYPH, all three depths, both positions, plus the margin surcharge. After the tall chapter, where two whole families are refused, it is worth writing down which pages say yes as well as which say no.",
+      "NO HOB GLYPH ANYWHERE, which is what a 390-tall undercounter unit should say."
+    ],
+    "unit_types": {
+      "base_bottom_hung_door": {
+        "description": "Base unit with bottom-hung door - 1 bottom-hung door",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.24 / PDF 26",
+        "codes": [
+          { "code": "B00525", "width_mm": 450, "depth_mm": 350 },
+          { "code": "B00625", "width_mm": 600, "depth_mm": 350 },
+          { "code": "B00725", "width_mm": 750, "depth_mm": 350 },
+          { "code": "B00925", "width_mm": 900, "depth_mm": 350 },
+          { "code": "B01025", "width_mm": 1050, "depth_mm": 350 },
+          { "code": "B01225", "width_mm": 1200, "depth_mm": 350 },
+          { "code": "BJ0525", "width_mm": 450, "depth_mm": 470 },
+          { "code": "BJ0625", "width_mm": 600, "depth_mm": 470 },
+          { "code": "BJ0725", "width_mm": 750, "depth_mm": 470 },
+          { "code": "BJ0925", "width_mm": 900, "depth_mm": 470 },
+          { "code": "BJ1025", "width_mm": 1050, "depth_mm": 470 },
+          { "code": "BJ1225", "width_mm": 1200, "depth_mm": 470 },
+          { "code": "B10525", "width_mm": 450, "depth_mm": 620 },
+          { "code": "B10625", "width_mm": 600, "depth_mm": 620 },
+          { "code": "B10725", "width_mm": 750, "depth_mm": 620 },
+          { "code": "B10925", "width_mm": 900, "depth_mm": 620 },
+          { "code": "B11025", "width_mm": 1050, "depth_mm": 620 },
+          { "code": "B11225", "width_mm": 1200, "depth_mm": 620 }
+        ],
+        "notes": "Six widths at each of three depths, eighteen codes, suffix 25. The page states ONE line of content - '1 bottom-hung door' - and no shelf, which is why interior_confirmed is empty rather than guessed. NOT HANDED: a flap has no rh/lh.",
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "bottom",
+          "note": "One front covering the whole face, hinged along its bottom edge. Per docs/Drawing_Spec_v0.1.md the elevation symbol is the inverted V and the plan shows the leaf fallen forward by the front height. hinge_side never applies - a bottom-hung leaf has no hand."
+        }
+      },
+      "base_compound_bottom_hung_door": {
+        "description": "Compound base unit with bottom-hung door - 1 bottom-hung door",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.24 / PDF 26",
+        "codes": [
+          { "code": "B01825", "width_mm": 1800, "depth_mm": 350 },
+          { "code": "B02425", "width_mm": 2400, "depth_mm": 350 },
+          { "code": "BJ1825", "width_mm": 1800, "depth_mm": 470 },
+          { "code": "BJ2425", "width_mm": 2400, "depth_mm": 470 },
+          { "code": "B11825", "width_mm": 1800, "depth_mm": 620 },
+          { "code": "B12425", "width_mm": 2400, "depth_mm": 620 }
+        ],
+        "notes": "THE FIRST COMPOUND IN THIS REGISTRY WITH NO PRINTED MODULE SPLIT. Every compound wall unit prints '2 modules 60+45' or the like beside its row; this page prints nothing, though the drawing shows an internal divider. So modules_mm is ABSENT rather than guessed, and the check that every compound's modules sum to its width simply does not see these rows - which is correct: it can only check what the page states. Suffix 25, the same as the simple type, so the suffix does not distinguish a compound here either. ONE front across the whole 1800 or 2400.",
+        "finish_restrictions": {
+          "kind": "not_available",
+          "source_ref": "printed p.24 / PDF 26, read off the render",
+          "for_all_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
+          "for_starred_widths_mm": [2400],
+          "for_starred_widths": ["Melamine doors (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)"],
+          "note": "RECORDED, NOT ENFORCED - M1.6. The starred line reads 'Melamine doors W. 240', so the asterisk scopes it to the widest code only - and the W.240 rows also print no price in bands 1 and 2, which is a second thing the page says about that width and is not recorded as a restriction because it is a price fact."
+        },
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "bottom",
+          "note": "One front across the whole width, hinged along its bottom edge. The internal divider the drawing shows is carcass and is not drawn - envelope only."
+        }
+      }
+    }
+  }
+}

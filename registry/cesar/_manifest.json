@@ -52,7 +52,15 @@
             ],
             "note": "HEADED ON THE PAGE, ABSENT FROM THE CHAPTER INDEX - printed p.433 jumps from 434 to 436. Mapped as a PAGE of the section whose range contains it, so rule 1 is untouched: the section still comes from the printed index." }
         ] },
-      { "class": "base", "family": "H.39", "section": "Base units H. 39", "printed_pages": "24-27", "status": "not_extracted" },
+      { "class": "base", "family": "H.39", "section": "Base units H. 39", "printed_pages": "24-27", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "EXTRACTED 2026-08-23: printed p.24 whole, two types, 24 codes, all three depths - registry/cesar/base_h39.json. THE BASE PREFIX IS A (FAMILY x DEPTH) KEY, NOT A FAMILY LETTER: B0 = d.35, BJ = d.47, B1 = d.62 here, and d.47 is a depth this registry had never held. AND THE FILLER TABLE DOES NOT USE THE SAME KEY - printed p.434 prints BJ0150/BJ0151 at H.58,5 while the H.58,5 base units are B3/B6/B4, so BJ serves two different (family, depth) slots and a filler prefix cannot be used to find a base family. That reading held for the wall chapter, where every family has one depth. Open for Elda.",
+        "pages": [
+          { "printed": 24, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": ["Base unit with bottom-hung door (18 codes, three depths)", "Compound base unit with bottom-hung door (W.180 and W.240, NO printed module split)"] },
+          { "printed": 25, "status": "not_extracted", "types": ["Base units H. 39"] },
+          { "printed": 26, "status": "not_extracted", "types": ["Base units H. 39"] },
+          { "printed": 27, "status": "not_extracted", "types": ["Base units H. 39"] }
+        ] },
       { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Sink base units H. 58.5", "printed_pages": "35", "status": "not_extracted" },
@@ -450,6 +458,20 @@
     "sweep_owed": "printed p.36, p.39, p.40 and p.42 were transcribed before the legend was found, and printed p.44-48 and the whole tall chapter have not been checked for these glyphs at all."
   },
   "code_grammar": {
+        "base_units": {
+      "shape": "two-character (family x depth) prefix + width_index + type_suffix, e.g. BJ0525 - AND THE PREFIX IS NOT A FAMILY LETTER",
+      "source_ref": "printed p.24 read in full 2026-08-23; printed p.28, p.32, p.49 swept for their prefixes the same day; printed p.36-43 held since 2026-08-17",
+      "note": "A WALL FAMILY HAS ONE DEPTH AND THEREFORE ONE LETTER, WHICH IS WHY THE WALL CHAPTER COULD TREAT THE PREFIX AS A FAMILY NAME. A base family has two or three depths and a prefix for each, so the two characters name a (family, depth) SLOT and nothing smaller. There is no rule across families and no rule across depths - read the section.",
+      "family_depth_letter": {
+        "H.39": { "350": "B0", "470": "BJ", "620": "B1" },
+        "H.48": { "letters": "BC / BD / BQ", "note": "swept from printed p.28 on 2026-08-23; which letter is which depth is NOT read yet" },
+        "H.58.5": { "350": "B3", "470": "B6", "620": "B4" },
+        "H.78": { "350": "B7", "620": "B8", "670": "B9" },
+        "H.84": { "letters": "BK / BL / BM", "note": "swept from printed p.49 on 2026-08-23; which letter is which depth is NOT read yet" }
+      },
+      "corner_letters": "AND A CORNER HAS ITS OWN PREFIXES AT THE SAME DEPTHS. printed p.42 prices the H.78 corner base units as B7 at d.35 - shared with the plain units - and then AU at d.62 and AW at d.67, where the plain units read B8 and B9. So the slot a prefix names is (family, depth, GEOMETRY), and two of the three H.78 corner prefixes are not in the family_depth_letter table at all. Found 2026-08-23 by a check written to tie the codes to that table: it failed on AU090S, which is exactly what it was for.",
+      "filler_letter_collision": "printed p.434 prices base-unit fillers one per HEIGHT with no depth axis: B0 (39), BC (48), BJ (58,5), BE (60), BI (72), B7 (78), BK (84). Four match the d.35 member of the unit family and BJ DOES NOT - BJ is H.39 at d.47 on printed p.24. So a filler prefix cannot be used to find a base family, and the wall chapter's happy result does not generalise. OPEN FOR ELDA. Note also PJ0150 at H.120 inside the base-unit filler table, a wall prefix in a base table, flagged when p.434 was first read."
+    },
     "tall_units": {
       "shape": "two-character family prefix + width_index + type_suffix, e.g. CQ0331 - and the prefix is a PAIR, one member per depth",
       "source_ref": "printed p.90-173, read at section level 2026-08-22; printed p.111 read in full and extracted the same day",

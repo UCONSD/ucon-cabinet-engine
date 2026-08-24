@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 537 codes (131 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
+check('registry loads and holds 561 codes (155 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 537
+  raise "got #{n}" unless n == 561
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 537 rows, each with code/dims/description/source') do
+check('registry catalog: 561 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 537
+  raise cat.length.to_s unless cat.length == 561
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -496,7 +496,8 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise "missing stamps: #{bad.map { |c| c['code'] }.inspect}" unless bad.empty?
 
   sections = cat.map { |c| c['section'] }.uniq.sort
-  raise sections.inspect unless sections == ['Base units H. 78',
+  raise sections.inspect unless sections == ['Base units H. 39',
+                                             'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Closing strips and fillers for Maxima and Intarsio',
                                              'Dish-drainer units H. 36',
@@ -960,6 +961,61 @@ check('FIVE PLAIN TALL FAMILIES, ONE SHAPE, AND NO AGREEMENT ABOUT HANGING') do
   # tall_h138.json claiming 'the same suffix 31' beside codes reading 01.
   suffixes = doors.map { |c| c['code'][-2..] }.uniq.sort
   raise suffixes.inspect unless suffixes.length == 3
+end
+
+check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked against the codes') do
+  # THE WALL CHAPTER GOT LUCKY. A wall family has one depth, so its two-letter
+  # prefix could be treated as a family name and the filler table on printed
+  # p.434 could be used to learn one. A BASE family has two or three depths and
+  # a prefix for each: printed p.24 prices H.39 as B0 (d.35), BJ (d.47) and B1
+  # (d.62). The prefix names a SLOT, not a family.
+  #
+  # And printed p.434 does not key the same way - it prices one filler per
+  # HEIGHT with no depth axis, and its BJ sits at H.58,5 while the H.58,5 base
+  # units are B3 / B6 / B4. Two characters, two different slots. The warning
+  # lives in code_grammar.base_units and this check keeps it there, because a
+  # warning nobody can delete silently is the only kind worth writing.
+  grammar = Registry.data['code_grammar']['base_units']
+  raise 'the base grammar block is gone' unless grammar
+  raise 'it must say the prefix is not a family letter' unless
+    grammar['shape'].to_s.include?('NOT A FAMILY LETTER')
+  raise 'the filler collision must stay recorded' unless
+    grammar['filler_letter_collision'].to_s.include?('BJ')
+  raise 'the corner prefixes must stay recorded' unless
+    grammar['corner_letters'].to_s.include?('AU')
+
+  # AND THE CODES MUST AGREE WITH THE MAP. Where the grammar states a depth per
+  # prefix, every held code of that family must sit in the slot its own prefix
+  # names - which is what turns the map from prose into something that fails.
+  map = grammar['family_depth_letter']
+  checked = 0
+  Registry.catalog.select { |c| c['class'] == 'base' }.each do |row|
+    u = Registry.lookup(row['code'])
+    # An appliance panel is not a base unit - it is a front for somebody else's
+    # machine, and its V-prefix belongs to that grammar, not this one.
+    next unless (u['object_class'] || 'cabinet') == 'cabinet'
+    # AND A CORNER HAS ITS OWN PREFIXES AT THE SAME DEPTHS. printed p.42 prices
+    # the H.78 corners as B7 at d.35 - shared with the plain units - and then
+    # AU at d.62 and AW at d.67, where the plain units read B8 and B9. So the
+    # slot is (family, depth, GEOMETRY), and the corner half is recorded in the
+    # grammar's corner_letters rather than forced into the same table.
+    next unless (row['geometry_kind'] || 'linear') == 'linear'
+
+    slots = map[u['family'].to_s]
+    next unless slots.is_a?(Hash)
+
+    depths = slots.reject { |k, _| k == 'letters' || k == 'note' }
+    next if depths.empty?
+
+    prefix = row['code'][0, 2]
+    expected = depths.key(prefix)
+    raise "#{row['code']}: prefix #{prefix} is in no slot of #{row['section']}" if expected.nil?
+    raise "#{row['code']}: #{prefix} names d.#{expected} and the row says #{row['depth_mm']}" unless
+      expected.to_i == row['depth_mm']
+
+    checked += 1
+  end
+  raise 'no base code was checked against the grammar' if checked < 100
 end
 
 check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do
@@ -4192,7 +4248,7 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 18
+  raise blocks.length.to_s unless blocks.length == 19
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
