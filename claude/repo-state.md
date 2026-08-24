@@ -27,9 +27,9 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`13e7754`** — *generator: the dishwasher panel gets a drawn plinth, and DRAWN stops meaning ORDERED (0.73.0)* |
-| **Pushed** | **yes** — `refs/heads/main` == `origin/main` == `13e7754`, read off the two refs rather than remembered (rule 16). |
-| **Working tree** | **this file was the only uncommitted change** when it was rewritten on the evening of 2026-08-24. |
+| **HEAD** | **`3168d35`** — *docs: the reverted corner seating reaches the teardown and the manifest* |
+| **Pushed** | **NO.** `refs/heads/main` = `3168d35`, `refs/remotes/origin/main` = `13e7754` — **two commits unpushed**, read off the two refs rather than remembered (rule 16). |
+| **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
 | **Core version** | **0.73.0**, shell 0.6.0 |
 | **Headless suite** | **402 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
@@ -42,7 +42,17 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 `a775846`. **Twenty of the twenty-one originals were then deleted from the
 Project; the repository is canonical.**
 
-**One was deliberately kept there: `elda-mini-order-2026-08-20.md`.** The
+**What is in the Project now is not repository material, and moving it in
+would be a mistake.** Corrected 2026-08-24 evening by Andriy, after a session
+proposed exactly that move. Two of the documents there —
+`handoff-<date>-<machine>.md` and `spec-<date>-<subject>.md` — are **the
+instructions a Cowork session is started with**: they are addressed to Claude,
+they are rewritten as the work moves, and they are read BEFORE the repository is
+reachable. The repository is where findings and decisions live; the Project is
+where the next session is told what to do. **Do not copy them into `claude/`.**
+
+**One repository document was deliberately kept there too:
+`elda-mini-order-2026-08-20.md`.** The
 scheduled Elda follow-up fires at 07:00 UTC and writes the sent/unsent state
 into that document from a fresh session, at an hour when Andriy's computer is
 asleep and this repository is unreachable. It updates the Project copy and
@@ -129,10 +139,19 @@ leaves this list when it is done, not when it is mentioned.
    than `CR96xx`.
 5. **The Elda draft email is written and unsent** — Gmail thread
    `1a0252a76b71d5d0`, draft `r-9182472239550867935`.
-6. **The 2026-08-24 handoff and the corner spec still sit in the claude.ai
-   Project**, which is otherwise retired (see above). They belong in `claude/`
-   or nowhere; right now they are the one place the day's second half is
-   narrated.
+6. **The wording of the FIRST `contradicts` line in `_manifest.json` — the
+   corner filler measured from the carcass plane, our 703 against the factory's
+   700.** It still ends `NOT YET FIXED`, which was true when it was written and
+   now reads as a pending job. `docs/Drawing_Spec_v0.1.md` and the teardown
+   both settle it the other way: **it is a recorded divergence, deliberately not
+   fixed** — two defensible readings of an 8x8 panel differing by exactly the
+   gap, and it does not affect whether the fronts meet. Left as it stands
+   because a `contradicts` line is factory-confirmed data and rewording it is a
+   content decision, not a stale number. **Andriy's call.**
+
+*(The item that stood here — moving the Project's handoff and spec into
+`claude/` — was wrong and was removed the same evening. Those two are session
+instructions, not repository documents; see "The Project is retired" above.)*
 
 ### When the extraction resumes
 
@@ -189,6 +208,8 @@ has to be re-read; a sentence does not.
 
 | sha | what |
 |---|---|
+| `3168d35` | docs: the reverted corner seating reaches the teardown and the manifest |
+| `53afd00` | docs(repo-state): rewrite at 13e7754 - the numbers, the corner correction, and the owed list |
 | `13e7754` | generator: the dishwasher panel gets a drawn plinth, and DRAWN stops meaning ORDERED (0.73.0) |
 | `3652298` | fix(corner): the 8x8 is 77 x 80, and the node seats raw again (0.72.0) |
 | `ab492dc` | docs(elda): estimate 30831 teardown, and what the factory confirms and contradicts |
