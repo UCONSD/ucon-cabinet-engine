@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 561 codes (155 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
+check('registry loads and holds 585 codes (179 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 561
+  raise "got #{n}" unless n == 585
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 561 rows, each with code/dims/description/source') do
+check('registry catalog: 585 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 561
+  raise cat.length.to_s unless cat.length == 585
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -1016,6 +1016,37 @@ check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked a
     checked += 1
   end
   raise 'no base code was checked against the grammar' if checked < 100
+end
+
+check('A PAGE STOPPED FOR A DIMENSION WE CANNOT NAME SAYS SO IN BOTH PLACES') do
+  # printed p.41 has been stopped since 2026-08-17 because its codes do not
+  # decode with the p.36 lookup and its elevation reads 750. printed p.26 and
+  # p.27 joined it on 2026-08-23: a LOW base unit with a prefix family of its
+  # own and ONE elevation carrying TWO dimensions, 36,5 and 39, where every
+  # other base page draws two profiles for the two door versions.
+  #
+  # UNREAD AND STOPPED ARE DIFFERENT STATES and the map does not distinguish
+  # them - both are not_extracted. What distinguishes them is that a stopped
+  # page carries its reason, in the map AND in the section file, so that the
+  # next person to open it learns what beat us before they repeat it.
+  stopped = Registry.gaps.select { |g|
+    g['level'] == 'type' && g['note'].to_s.match?(/STOPPED|do NOT decode/i)
+  }
+  raise 'the stopped pages have vanished' if stopped.empty?
+  stopped.each do |g|
+    raise "#{g['printed']} is stopped without saying what beat us" unless
+      g['note'].to_s.length > 120
+  end
+  # And the section file says it too, in a key a grep will find.
+  files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
+          .reject { |f| File.basename(f).start_with?('_') }
+  notes = files.filter_map { |f| JSON.parse(File.read(f)).find { |k, _| k.end_with?('_stop_note') } }
+  raise 'no section file records a stop' if notes.empty?
+  notes.each do |key, text|
+    raise "#{key} must cite the page it stopped on" unless text.include?('printed p.')
+    raise "#{key} must say a number could not be named" unless
+      text.match?(/cannot name|we do not write down|does not say what it is/i)
+  end
 end
 
 check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do
@@ -4248,7 +4279,7 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 19
+  raise blocks.length.to_s unless blocks.length == 20
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')

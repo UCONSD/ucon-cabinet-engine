@@ -57,9 +57,14 @@
         "pages": [
           { "printed": 24, "status": "extracted", "extracted_on": "2026-08-23",
             "types": ["Base unit with bottom-hung door (18 codes, three depths)", "Compound base unit with bottom-hung door (W.180 and W.240, NO printed module split)"] },
-          { "printed": 25, "status": "not_extracted", "types": ["Base units H. 39"] },
-          { "printed": 26, "status": "not_extracted", "types": ["Base units H. 39"] },
-          { "printed": 27, "status": "not_extracted", "types": ["Base units H. 39"] }
+          { "printed": 25, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": ["Base unit with jumbo drawer (18 codes)", "Compound base unit with 2 compartments (W.180 and W.240, NO printed module split)"] },
+          { "printed": 26, "status": "not_extracted",
+            "types": ["Low base unit with bottom-hung door: D00525 and up", "Low compound base unit with 2 compartments and bottom-hung door"],
+            "note": "STOPPED, NOT MERELY UNREAD. The page is headed 'Base units H. 39' and prices a LOW base unit with a prefix family of its own - D0 = d.35, DJ = d.47, D1 = d.62 - and ONE elevation profile carrying TWO dimensions, 36,5 to a dashed line and 39 to the top of the front, verified on a 300-dpi crop. printed p.24 and p.25 draw two profiles, 39 and 36, which is the door-version pair; this is not that, and the page does not say what it is. A height we cannot name is a height we do not write down. Every D row also prints no price in band 2, where the B rows do. See low_base_stop_note in base_h39.json. OPEN FOR ELDA." },
+          { "printed": 27, "status": "not_extracted",
+            "types": ["Low base unit with jumbo drawer", "Low compound base unit with 2 compartments"],
+            "note": "STOPPED for the same reason as printed p.26, and it is worth writing out rather than referring: the same D0 / DJ / D1 prefix family, the same single elevation profile carrying 36,5 and 39, the same missing band-2 prices. A page stopped by reference is a page whose reason is one deletion away from being lost." }
         ] },
       { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
