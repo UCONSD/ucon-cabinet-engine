@@ -7,11 +7,14 @@ Elda. Written during Cowork sessions, kept because the *why* of a registry file
 is not in the registry file.
 
 **Moved here on 2026-08-24** from the claude.ai Project that had held them since
-2026-08-18. The move does three things: the knowledge travels with the code, the
+2026-08-18, in commit `a775846`. The move does three things: the knowledge travels with the code, the
 history of a note lands in git beside the history of the corrections it
 explains, and a future move between tools becomes a `cd` rather than a
 migration. **Nothing was deleted from the Project until the first push of this
-directory succeeded.**
+directory succeeded.** It did, and twenty of the twenty-one originals are gone;
+`elda-mini-order-2026-08-20.md` was kept there on purpose, because a scheduled
+task writes into it from a session that cannot reach this repository. See
+`repo-state.md`.
 
 **Faithfully copied.** Every file is the Project text. Where a document said
 something that later reading falsified, a **dated correction block was ADDED at

@@ -27,20 +27,28 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`0d31813`** — *registry: base units H.48 p.28, and a catalog cache the suite had outgrown (0.68.0)* |
-| **Pushed** | **yes** — `origin/main` == `refs/heads/main` == `0d31813` |
-| **Working tree** | **this `claude/` directory, new and untracked** — the notes moved out of the claude.ai Project on 2026-08-24. Nothing else. |
+| **HEAD** | **`a775846`** — *docs: move the working notes out of the claude.ai Project and into the repo* |
+| **Pushed** | **yes** — `origin/main` == `refs/heads/main` == `a775846` |
+| **Working tree** | **this file and `claude/README.md`** — the two edits that record the move itself. The commit that lands them is the last of the 2026-08-24 session; after it, clean. |
 | **Core version** | **0.68.0**, shell 0.6.0 |
 | **Headless suite** | **388 checks, 0 failures** — green on the bridge (Ruby 3.0.2) |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **615 codes** in **34 section files** carrying **25 catalog sections**; `catalog_map` holds **67 sections** |
 | **`_to_delete/`** | **two files, still waiting on Andriy** — `probe_tmp.rb` and `00_version.rb.bak.2026-08-23`. The bridge cannot delete. |
 
-### Uncommitted
+### The Project is retired
 
-**Only `claude/`.** Fifteen markdown notes and this file, moved out of the
-claude.ai Project so that the knowledge travels with the code and its history
-lands in git beside the corrections it explains. See `claude/README.md`.
+`claude/` was moved out of the claude.ai Project on 2026-08-24 and pushed as
+`a775846`. **Twenty of the twenty-one originals were then deleted from the
+Project; the repository is canonical.**
+
+**One was deliberately kept there: `elda-mini-order-2026-08-20.md`.** The
+scheduled Elda follow-up fires at 07:00 UTC and writes the sent/unsent state
+into that document from a fresh session, at an hour when Andriy's computer is
+asleep and this repository is unreachable. It updates the Project copy and
+reports that the repo copy needs the same edit. **After that firing, the two
+copies disagree until somebody commits the repo one — and then the Project copy
+can go.**
 
 ---
 
@@ -58,6 +66,24 @@ blockers. Measured debt: `claude/debt-2026-08-24.md`.
 | **Group 2 — the plain tall column** | **DONE as far as reading can take it.** All five families' clean first pages held, 72 codes. |
 | **Group 3 — the base column** | **OPEN, part done.** H.39 (p.24-25) and H.48 (p.28) held. **Next: H.58.5, printed p.32-34 + sinks p.35** (letters known: `B3`=d.35, `B6`=d.47, `B4`=d.62), then **H.84, printed p.49-56** (letters `BK`/`BL`/`BM` swept, **depth mapping not read**). |
 | Groups 4-5 | not started. |
+
+### Where the next session starts
+
+**Base H.58.5 — printed p.32-34, plus the sink section p.35.** Reading, not
+discovery: the depth letters are already in `code_grammar.base_units`
+(`B3` = d.35, `B6` = d.47, `B4` = d.62) and the plinth is settled at 100 by the
+Project Guidelines p.68 diagram, render-verified.
+
+**Then base H.84 — printed p.49-56**, which DOES need discovery: `BK` / `BL` /
+`BM` were swept out of the filler table and **which letter is which depth has
+not been read**. H.48 is the warning — `BC` / `BQ` / `BD` is not in depth order,
+so nothing about H.84 can be assumed from the alphabet. Its plinth is 60, not
+100.
+
+**Before either, one page is owed:** the printed p.19 pictogram sweep over the
+**148 non-wall codes** transcribed before the legend was found. Their silence
+about the hung and hob glyphs means *unread*, not *absent* —
+`claude/debt-2026-08-24.md` §3.
 
 ### Sections held
 
@@ -92,6 +118,7 @@ eighteen refused only by a missing glyph and a missing margin line.
 
 | sha | what |
 |---|---|
+| `a775846` | docs: move the working notes out of the claude.ai Project and into the repo |
 | `0d31813` | registry: base units H.48 p.28, and a catalog cache the suite had outgrown (0.68.0) |
 | — | registry: base H.39 p.25, and two pages stopped on a height the page will not name (0.67.0) |
 | — | registry: base units H.39 p.24, and the base prefix that was never a family letter (0.66.0) |
