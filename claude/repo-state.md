@@ -27,14 +27,14 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`e0893dd`** — *registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0)* |
-| **Pushed** | **NO.** `refs/heads/main` == `e0893dd`, `origin/main` == `2f54abf`. **One commit is unpushed** — rule 16, check the two refs rather than the memory of a push. |
-| **Working tree** | **DIRTY — the pictogram sweep is uncommitted.** Eleven registry files, `_manifest.json`, `tools/test_contract.rb`, `core/00_version.rb`, `claude/findings-2026-08-24-pictogram-sweep.md`, `claude/README.md` and this file. No new codes. Andriy commits in his own terminal. |
-| **Core version** | **0.70.0**, shell 0.6.0 |
-| **Headless suite** | **396 checks, 0 failures** — green on the bridge (Ruby 3.0.2) |
+| **HEAD** | **`14158a5`** — *fix(corner): seat the node one front gap off the perpendicular wall (0.71.0)* |
+| **Pushed** | **yes** — `refs/heads/main` == `origin/main` == `14158a5`, read off the two refs rather than remembered (rule 16). |
+| **Working tree** | **clean.** |
+| **Core version** | **0.71.0**, shell 0.6.0 |
+| **Headless suite** | **396 checks, 0 failures — and green on BOTH Rubies.** 3.0.2 on the laptop and the 2.6.10 macOS ships, which is what the office Mac runs. That stopped being an accident on 2026-08-24; see the commit log. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **692 codes** in **36 section files** carrying **27 catalog sections**; `catalog_map` holds **67 sections** |
-| **`_to_delete/`** | **two files, still waiting on Andriy** — `probe_tmp.rb` and `00_version.rb.bak.2026-08-23`. The bridge cannot delete. |
+| **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
 
 ### The Project is retired
 
@@ -68,6 +68,30 @@ blockers. Measured debt: `claude/debt-2026-08-24.md`.
 | Groups 4-5 | not started. |
 
 ### Where the next session starts
+
+**EXTRACTION IS PAUSED, and that is a decision, not a gap.** On 2026-08-24
+Andriy opened the real Avenida Primavera kitchen and said: only what this
+project needs. That is the demand-driven discipline CLAUDE.md describes, working
+as intended - the roadmap is a MENU, and the kitchen picks from it. The first
+thing it picked was the corner seating, `14158a5`. **Do not resume the extraction
+queue below without asking.**
+
+Two things the real kitchen has already asked for and one of them is not built:
+
+1. **DONE - the corner seating.** See `docs/Drawing_Spec_v0.1.md`.
+2. **OPEN - placement should infer its direction.** Today "build next to
+   selected" always grows to the right, so the left wing of a kitchen is placed
+   by hand. Andriy wants: the selected unit stands alone, grow right; something
+   is already attached on the right, grow left; both sides taken, refuse and say
+   why rather than guess. `Placement.same_row?` already decides what counts as
+   attached - same mounting, parallel, coplanar within tolerance - so the rule
+   builds on tested machinery. **A corner is not the next unit of a run but its
+   TURN**, and it seats against two walls; if that ever makes a corner reachable
+   by continuing a run, the front gap now living in `Placement.corner_origin`
+   must move into a shared helper, because there would then be two paths to the
+   same geometry.
+
+### When the extraction resumes
 
 **Base H.84 — printed p.49-56**, which DOES need discovery: `BK` / `BL` /
 `BM` were swept out of the filler table and **which letter is which depth has
@@ -122,8 +146,11 @@ has to be re-read; a sentence does not.
 
 | sha | what |
 |---|---|
-| — | **UNCOMMITTED: registry: the printed p.19 pictogram sweep, and an absent reading that is now a bug (0.70.0)** |
-| `e0893dd` | registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0) — **UNPUSHED** |
+| `14158a5` | fix(corner): seat the node one front gap off the perpendicular wall (0.71.0) |
+| `848f10f` | fix(harness): the suite runs on the Ruby macOS ships (2.6) again |
+| `42288dc` | registry: the printed p.19 pictogram sweep, and an absent reading that is now a bug (0.70.0) |
+| `e0893dd` | registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0) |
+| `6e06bbc` | chore(gitignore): keep rendered catalog pages out of git |
 | `2f54abf` | docs: repo-state records the move, what stayed behind, and where the next session starts |
 | `a775846` | docs: move the working notes out of the claude.ai Project and into the repo |
 | `0d31813` | registry: base units H.48 p.28, and a catalog cache the suite had outgrown (0.68.0) |

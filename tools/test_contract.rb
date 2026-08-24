@@ -5089,5 +5089,48 @@ check('a sink section that joins an existing family declares no family key') do
 end
 
 
+puts "\nthe suite runs on the Ruby the other Mac actually has"
+check('NO RUBY 2.7+ METHOD MAY ENTER THE HEADLESS SUITE OR THE CORE') do
+  # THE RULE WAS ALREADY WRITTEN DOWN, AND THAT DID NOT KEEP IT.
+  # core/60_generator.rb carries it in a comment - map + compact, not
+  # filter_map, "because the headless harness has to run on the Ruby macOS
+  # actually ships, which is still 2.6" - and that comment cost nineteen
+  # failures on one machine and none on the other to earn. This file then used
+  # filter_map anyway, and tally beside it, and the bill arrived on 2026-08-24
+  # as ONE failure on the office Mac and a green suite on the laptop.
+  #
+  # A rule in a comment is a rule nothing enforces. This is the enforcement.
+  #
+  # core/ is scanned too, not just tools/: the harness LOADS the core files, so
+  # a 2.7 method in there breaks the suite on 2.6 exactly as one in here does.
+  # SketchUp's own Ruby is far newer and would never notice.
+  banned = {
+    'filter_map' => '2.7 - use map { }.compact',
+    'tally'      => '2.7 - use group_by { |x| x }.transform_values(&:length)',
+    'except'     => '3.0 (Hash#except) - use reject { |k, _| ... }',
+    'intersect?' => '3.1 - use (a & b).any?'
+  }
+  files = Dir[File.expand_path('../tools/*.rb', __dir__)] +
+          Dir[File.expand_path('../src/ucon_cabinet_engine/**/*.rb', __dir__)]
+  offenders = []
+  files.sort.each do |file|
+    File.readlines(file).each_with_index do |line, i|
+      next if line.strip.start_with?('#') # the rule may be DISCUSSED in prose
+
+      banned.each do |method, why|
+        offenders << "#{File.basename(file)}:#{i + 1} - #{method} is #{why}" if
+          line.include?(".#{method}")
+      end
+    end
+  end
+  raise "Ruby 2.7+ methods in a 2.6 harness:\n  #{offenders.join("\n  ")}" unless offenders.empty?
+
+  # And the reason must stay written where it was learned. Deleting the comment
+  # would not break anything today, which is exactly why it would get deleted.
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the reason must stay next to the code that learned it' unless
+    gen.include?('filter_map is Ruby 2.7')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
