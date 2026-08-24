@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 692 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
+check('registry loads and holds 704 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 84 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 692
+  raise "got #{n}" unless n == 704
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 692 rows, each with code/dims/description/source') do
+check('registry catalog: 704 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 692
+  raise cat.length.to_s unless cat.length == 704
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -513,6 +513,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Tall units H. 138',
                                              'Tall units H. 198',
                                              'Tall units H. 210',
+                                             'Tall units H. 210 | for base unit H. 78',
                                              'Tall units H. 222',
                                              'Tall units H. 234',
                                              'USA elements | for tall units H. 210',
@@ -1200,16 +1201,22 @@ check('AFTER THE SWEEP, AN ABSENT HUNG READING IS A BUG') do
     man.dig('page_symbols', 'sweep_done', 'wall_chapter').to_s.include?('no pictogram column')
 end
 
-check('and the sweep moved nothing: 46 codes refuse, the same 46 as before') do
+check('52 codes refuse the hung version, and every move of that number is dated') do
   # A sweep that changed an availability would be a correction, and a
-  # correction gets a dated note of its own (rule 9). This one changed none,
-  # and that is worth pinning: if a later edit quietly flips a true to a false,
-  # the count moves and this fails with the reason in its title.
+  # correction gets a dated note of its own (rule 9). The printed p.19 sweep
+  # changed none, and that is worth pinning: if a later edit quietly flips a
+  # true to a false, the count moves and this fails with the reason in its
+  # title.
+  #
+  # 2026-08-24: 46 -> 52, and it is NOT a flip. printed p.116 arrived with
+  # twelve new codes, six of which the page refuses - the 2+2 door position
+  # (C50950, C60950) and all four jumbo-drawer codes. Nothing already held
+  # changed its answer; tall went 42 -> 48 and base stayed at 4.
   refused = Registry.catalog.map { |c| Registry.lookup(c['code']) }
                     .select { |u| u['wall_hung'] == false }
-  raise refused.length.to_s unless refused.length == 46
+  raise refused.length.to_s unless refused.length == 52
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 42 }
+  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 48 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5309,6 +5316,122 @@ check('and the three files that were wrong say so, with the date') do
   h78 = File.read(File.expand_path('../registry/cesar/fillers_h78.json', __dir__))
   raise 'fillers_h78.json must warn that its own number does not travel' unless
     h78.include?('NOT PORTABLE')
+end
+
+# ---------------------------------------------------------------------------
+# Tall units H. 210 | for base unit H. 78 - printed p.116, extracted 2026-08-24
+#
+# A SECOND SECTION INSIDE AN EXISTING FAMILY. The catalog gives it its own
+# letter pair (C5 d.35 / C6 d.62) but the same body: 2100 on a 100 plinth,
+# depths 350 and 620. What differs is the FRONT - it is split so the lower part
+# is the door of the base unit standing beside it - and a front belongs to the
+# unit type, not to the family.
+# ---------------------------------------------------------------------------
+
+def t210b78(code)
+  u = Registry.lookup(code)
+  raise "#{code} is not in the registry" if u.nil?
+  u
+end
+
+def front_layout_of(type_key)
+  j = JSON.parse(File.read(File.expand_path('../registry/cesar/tall_h210_base78.json', __dir__)))
+  ty = j['data']['unit_types'][type_key]
+  raise "#{type_key} is not in the section file" if ty.nil?
+  ty['front_layout']
+end
+
+puts "\ntall units H. 210 for base unit H. 78 (printed p.116, read whole 2026-08-24)"
+
+check('the section holds 12 codes, both depths, and inherits the family body') do
+  codes = %w[C50551 C50651 C50751 C60551 C60651 C60751
+             C50950 C60950 C51560 C51660 C61560 C61660]
+  codes.each do |c|
+    u = t210b78(c)
+    raise "#{c}: height #{u['height_mm']}" unless u['height_mm'] == 2100
+    raise "#{c}: plinth #{u['plinth_h_mm']}" unless u['plinth_h_mm'] == 100
+  end
+  # the section stamp lives on the catalog ROW, not on the resolved unit
+  rows = Registry.catalog.select { |r| codes.include?(r['code']) }
+  raise "rows #{rows.length}" unless rows.length == 12
+  stamped = rows.map { |r| r['section'] }.uniq
+  raise stamped.inspect unless stamped == ['Tall units H. 210 | for base unit H. 78']
+  raise rows.map { |r| r['class'] }.uniq.inspect unless
+    rows.map { |r| r['class'] }.uniq == ['tall']
+  d35 = codes.select { |c| t210b78(c)['depth_mm'] == 350 }
+  d62 = codes.select { |c| t210b78(c)['depth_mm'] == 620 }
+  raise "d.35 #{d35.length} / d.62 #{d62.length}" unless d35.length == 6 && d62.length == 6
+  raise 'the d.35 codes must all start C5' unless d35.all? { |c| c.start_with?('C5') }
+  raise 'the d.62 codes must all start C6' unless d62.all? { |c| c.start_with?('C6') }
+end
+
+check('EVERY CODE OF THE NEW SECTION YIELDS CONTRACT-VALID ATTRIBUTES') do
+  %w[C50551 C50651 C50751 C60551 C60651 C60751
+     C50950 C60950 C51560 C51660 C61560 C61660].each do |code|
+    Contract.validate!(Generator.attributes_for(t210b78(code)))
+  end
+end
+
+check('THE SPLIT FRONT IS RECORDED, AND IT ADDS UP TO THE CARCASS') do
+  # printed p.116: 132 + 78 handle, 132 + 75 gola, on the two door positions;
+  # 132 + 39 + 39 and 132 + 36 + 36 on the jumbo-drawer one. The gola version
+  # is not a different unit - the missing millimetres are recesses, and the
+  # stack including them must still be the 2100 the carcass is.
+  { 'tall_door_over_door'      => [[1320, 780],        2070],
+    'tall_doors_over_doors'    => [[1320, 780],        2070],
+    'tall_door_jumbo_drawers'  => [[1320, 390, 390],   2040] }.each do |key, (handle, gola_fronts)|
+    fl = front_layout_of(key)
+    raise "#{key}: #{fl['heights_mm_top_to_bottom'].inspect}" unless
+      fl['heights_mm_top_to_bottom'] == handle
+    raise "#{key}: the handle fronts must be the whole carcass" unless
+      handle.inject(0) { |a, b| a + b } == 2100
+    stack = fl['gola_stack_top_to_bottom']
+    fronts = stack.select { |e| e['kind'] == 'front' }.map { |e| e['h_mm'] }
+    zones  = stack.select { |e| e['kind'] == 'zone'  }.map { |e| e['h_mm'] }
+    raise "#{key}: gola fronts #{fronts.inspect}" unless
+      fronts.inject(0) { |a, b| a + b } == gola_fronts
+    raise "#{key}: gola stack must still be 2100" unless
+      (fronts + zones).inject(0) { |a, b| a + b } == 2100
+    raise "#{key}: every recess is 30" unless zones.all? { |z| z == 30 }
+  end
+  # AND THE RECESS IS BETWEEN THE FRONTS, NOT ABOVE THEM. On a base unit the
+  # undercounter recess is the topmost element of the stack; here the 1320 door
+  # stands above it, because the recess lands at the neighbouring worktop line.
+  # That is the difference this whole section exists to draw.
+  first = front_layout_of('tall_door_over_door')['gola_stack_top_to_bottom'].first
+  raise "the stack must start with the 1320 front, got #{first.inspect}" unless
+    first['kind'] == 'front' && first['h_mm'] == 1320
+end
+
+check('AND THE SPLIT DOES NOT LEAK INTO THE PLAIN H.210 SECTION') do
+  # door_versions merges by FAMILY, and this section shares family 'Tall H.210'
+  # with tall_h210.json, whose page prints a single elevation 210. Declaring
+  # the pair here would hand a plain full-height door a 2070 front the catalog
+  # has never printed - which is Elda Q8 at H.58.5, exactly.
+  raise 'the new section must not declare door_versions' unless
+    t210b78('C50551')['door_versions'].nil?
+  raise 'the plain section must not have gained one' unless
+    Registry.lookup('CQ0531')['door_versions'].nil?
+  raw = File.read(File.expand_path('../registry/cesar/tall_h210_base78.json', __dir__))
+  raise 'the absence must be explained, not silent' unless
+    raw.include?('DELIBERATELY DECLARES NO data.door_versions')
+  raise 'and it must name the consequence for the panel' unless
+    raw.include?('80_panel')
+end
+
+check('THE WIDTH FIELD IS POSITION-SCOPED, and this one page proves it') do
+  # W.45 is 0551 in the first position of printed p.116 and 1560 in the third.
+  # Same page, same width, two fields. Nothing may decode the tail.
+  raise 'C50551 is W.45' unless t210b78('C50551')['width_mm'] == 450
+  raise 'C51560 is W.45' unless t210b78('C51560')['width_mm'] == 450
+  raise 'C50651 is W.60' unless t210b78('C50651')['width_mm'] == 600
+  raise 'C51660 is W.60' unless t210b78('C51660')['width_mm'] == 600
+  # the manifest's width_index would decode 15 as nothing and 05 as 450: if a
+  # future reader wires it up, these two rows disagree with it and this fails.
+  idx = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+        .dig('code_grammar', 'tall_units', 'width_index')
+  raise 'the width index must not have grown a 15' if idx.key?('15')
+  raise 'the width index must not have grown a 16' if idx.key?('16')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
