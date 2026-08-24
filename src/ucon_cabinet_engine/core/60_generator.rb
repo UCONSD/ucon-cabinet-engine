@@ -265,6 +265,26 @@ module UCON
           # under it. A dishwasher gets none: the plinth in front of that
           # machine really is cut away. A US fridge housing gets one, so the
           # plinth line does not break on the drawing where the fridge stands.
+          #
+          # CORRECTED 2026-08-24 (Andriy, off the Avenida Primavera kitchen).
+          # THE SENTENCE ABOVE IS RIGHT ABOUT THE JOINERY AND WRONG ABOUT THE
+          # DRAWING, because it answers one question with the other. Two facts
+          # wear the word "plinth" here and they are not the same fact:
+          #
+          #   DRAWN   - what LayOut shows. The line has to run past the machine
+          #             unbroken or the elevation reads as a hole. So the
+          #             dishwasher panel now gets a plinth box like the fridge
+          #             housing does, and that box is a REPRESENTATION. It
+          #             claims nothing about what is built.
+          #   ORDERED - what the warehouse is asked for. A plinth WITH A
+          #             CUTOUT, because the real one in front of the machine
+          #             is of course cut away. Today designers order plain
+          #             linear plinth and the cutout is improvised on site;
+          #             that side is not written yet and is not this method's
+          #             business.
+          #
+          # Nothing in the geometry tells them apart, which is exactly why it
+          # is written here: the box below is the DRAWING's answer.
           if unit['object_class'] == 'appliance_front'
             niche_depth = selected_depth_mm(model)
             placement   = placement_transform(model)
@@ -617,7 +637,13 @@ module UCON
 
       def niche_top_mm(unit)
         niche = unit['appliance_niche']
-        return base_z_mm(unit) + unit['height_mm'] unless niche
+        # The old rule - the top of the front - answers for anything stating no
+        # housing AND, since 2026-08-24, for anything stating only where its
+        # housing BEGINS. The dishwasher panel is the second case: its phantom
+        # starts on the plinth like the fridge's and ends where the panel ends.
+        # Writing 880 into the registry would have put a second copy of
+        # 100 + 780 somewhere it can drift away from the family that owns it.
+        return base_z_mm(unit) + unit['height_mm'] if niche.nil? || niche['top_mm'].nil?
 
         niche['top_mm'].to_f
       end
@@ -629,13 +655,30 @@ module UCON
       # Said on the object, because both numbers come from outside Cesar and
       # nobody reading the model would otherwise know where to argue with them.
       def niche_span_note(unit)
-        return '' unless unit['appliance_niche']
+        niche = unit['appliance_niche']
+        return '' unless niche
 
-        "Housing drawn #{niche_bottom_mm(unit).round(1)} to " \
-        "#{niche_top_mm(unit).round(1)} above the floor - the appliance maker's " \
-        'required cutout, not a Cesar dimension, so INDICATIVE like the ' \
-        'aperture. The front runs past it at the top, and that leftover is the ' \
-        'closing panel inside the housing - not this article. '
+        note = "Housing drawn #{niche_bottom_mm(unit).round(1)} to " \
+               "#{niche_top_mm(unit).round(1)} above the floor - the appliance " \
+               "maker's required cutout, not a Cesar dimension, so INDICATIVE " \
+               'like the aperture. '
+        # 2026-08-24: a housing raised onto the plinth because the DRAWING
+        # needs it there, not because the machine is, has to say so on itself -
+        # otherwise the model states a measurement it never made.
+        if niche['bottom_is_representation']
+          note += 'The machine itself stands on the floor: the housing is ' \
+                  'drawn from the plinth top so the plinth line reads unbroken ' \
+                  'on the sheet, and the plinth ORDERED under it is one with a ' \
+                  'cutout. '
+        end
+        # No leftover, no sentence about one. A fridge front runs past its
+        # cutout; a dishwasher panel ends exactly where its phantom does, and
+        # 880 - 880 is not a closing panel.
+        if (base_z_mm(unit) + unit['height_mm']) - niche_top_mm(unit) > 0.001
+          note += 'The front runs past it at the top, and that leftover is the ' \
+                  'closing panel inside the housing - not this article. '
+        end
+        note
       end
 
       def niche_attributes_for(unit, depth_mm = nil, inherited = false)

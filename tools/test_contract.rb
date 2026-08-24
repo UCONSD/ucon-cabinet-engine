@@ -678,31 +678,23 @@ check('the 8x8 filler is an L of 77 x 80 - and the missing 3 mm has a name') do
   # THE PRINTED 8x8 IS THE NOMINAL. The leg that runs along the WIDTH is the
   # one the neighbouring run meets, and that run's front stands FRONT_GAP_MM
   # proud of its own carcass - so a leg of a full 80 overshoots the front it is
-  # supposed to meet by exactly one gap. Andriy measured it in Avenida
-cat > /tmp/layer2.rb <<'SCRIPT'
-EDITS = []
-def plan(path, old, new, label)
-  abort "#{path} not found - run me from the repo root" unless File.exist?(path)
-  s = File.read(path)
-  abort "anchor missing: #{label}" unless s.include?(old)
-  abort "anchor not unique: #{label}" unless s.scan(old).length == 1
-  EDITS << [path, old, new, label]
+  # supposed to meet by exactly one gap. Measured in Avenida Primavera on
+  # 2026-08-24. The RETURN leg meets nothing and keeps its 80.
+  #
+  # Both numbers are computed from the constants: a literal 77 would go stale
+  # in silence on the day the front gap changes.
+  along = Generator::FILLER_MM - Standards::FRONT_GAP_MM
+  %w[AU110S AU110D].each do |code|
+    pl = Generator.corner_parts(Registry.lookup(code))[:filler_plan]
+    xs = pl.map(&:first)
+    ys = pl.map(&:last)
+    raise "#{code}: #{pl.inspect}" unless (xs.max - xs.min) == along
+    raise "#{code}: the return leg must keep 80" unless
+      (ys.max - ys.min) == Generator::FILLER_MM
+    raise "#{code}: #{ys.min}" unless ys.min == -83
+    raise "#{code}: #{ys.max}" unless ys.max == -3
+  end
 end
-
-GEN = 'src/ucon_cabinet_engine/core/60_generator.rb'
-abort 'already applied' if File.read(GEN).include?('FILLER_MM - s::FRONT_GAP_MM')
-
-plan(GEN, <<'OLD', <<'NEW', 'generator: the filler leg along the width is 77, not 80')
-          out_x  = fill_l + FILLER_MM
-OLD
-          # 77, NOT 80, AND THE 3 MM IS THE FRONT GAP. The catalog prints this
-          # panel as 8x8 and that is the NOMINAL. The leg that runs along the
-          # width is the one the neighbouring run meets, and the run's FRONT
-          # stands FRONT_GAP_MM proud of its carcass - so a leg of a full 80
-          # overshoots the front it is supposed to meet by exactly that gap.
-          # Measured in Avenida Primavera 2026-08-24; the return leg, which
-          # meets nothing, keeps its 80. (Rule 4 - a UCON decision.)
-          out_x  = fill_l + FILLER_MM - s::FRONT_GAP_MM
 check('wasted space is nominal minus carcass, for every corner article') do
   Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
     u = Registry.lookup(row['code'])
@@ -1418,8 +1410,12 @@ check('the appliance niche is the occupied space, never an order line') do
   # appliance plus GBBF01, so the niche is right whichever side the cabinet
   # ends up on (Elda Q5).
   raise n['width_mm'].to_s unless n['width_mm'] == 750
-  # Floor to worktop underside: an appliance stands on the floor.
-  raise n['height_mm'].to_s unless n['height_mm'] == Standards::PLINTH_H_MM + 780
+  # CORRECTED 2026-08-24. It used to read "floor to worktop underside: an
+  # appliance stands on the floor", and that was the honest description of a
+  # drawing with nothing under the machine. The panel now carries a DRAWN
+  # plinth, so the phantom starts on top of it and the span is the family's
+  # 780. The appliance did not move; the drawing did.
+  raise n['height_mm'].to_s unless n['height_mm'] == 780
 end
 check('the niche inherits the run depth when there is one, and says which') do
   u = Registry.lookup('V80630')
@@ -2362,36 +2358,50 @@ check('the wall, not the door, decides which article the corner takes') do
   raise 'no run is no answer' unless Placement.execution_for(nil).nil?
 end
 
-check('the node seats in the angle on the PRINTED node, wasted end first') do
-  # WRITTEN THREE TIMES IN ONE DAY AND BACK WHERE IT STARTED, which is worth
-  # more than the assertions are.
+check('the node seats ONE FRONT GAP off the corner, wasted end first') do
+  # REWRITTEN 2026-08-24. The numbers here used to be 100 and -1000, and they
+  # were right for the decision this check was written under: seat the printed
+  # node raw. That decision was wrong in a real kitchen - the neighbouring
+  # run's front missed the outer face of the 8x8 filler by FRONT_GAP_MM,
+  # because the printed node is a carcass dimension and our fronts stand proud
+  # of the carcass plane. See Placement.corner_origin for the whole reason.
   #
-  # It began as these numbers. Mid-day it was rewritten to expect one
-  # FRONT_GAP_MM of clear space at the corner, because a real kitchen showed
-  # the neighbouring run's front missing the outer face of the 8x8 filler by
-  # 3 mm and the SEATING looked like the culprit. It was not: the mismatch runs
-  # along the wall, and the body that had to move was the filler, whose leg
-  # along the width overshot by exactly one gap. The factory's own SketchUp
+  # EVERY EXPECTATION BELOW IS COMPUTED FROM Standards::FRONT_GAP_MM. A literal
+  # 3 in the placement code would pass a literal 3 written here, and the two
+  # would go stale together on the day the gap changes.
+  # WRITTEN THREE TIMES IN ONE DAY AND BACK WHERE IT STARTED. Mid-day this
+  # expected one FRONT_GAP_MM of clear space at the corner, because a real
+  # kitchen showed the neighbouring run's front missing the outer face of the
+  # 8x8 by 3 mm and the SEATING looked like the culprit. It was not: the
+  # mismatch runs along the wall, and the body that had to move was the filler,
+  # whose leg along the width overshot by exactly one gap. The factory's own
   # export of estimate 2026/30831 seats the corner carcass at exactly
   # nominal - carcass from the perpendicular wall, with nothing added.
-  #
-  # The lesson is not about corners: a symptom pointed at two bodies and we
-  # moved the one we could see, rather than the one that was wrong.
+  gap  = 0.0
+  node = 1000.0
+
+  # corner at the origin, wall facing -y, B7091D: right, carcass 900,
+  # node 1000x430, d.350.
   o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                               350.0, 900.0, 1000.0, 'right')
-  raise o.inspect unless o.map { |v| v.round(6) } == [100.0, -350.0, 0.0]
+  raise o.inspect unless o.map { |v| v.round(6) } == [node - 900.0, -350.0, 0.0]
 
+  # Its sibling on the other wall of the same corner runs the other way.
   o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                               350.0, 900.0, 1000.0, 'left')
-  raise o.inspect unless o.map { |v| v.round(6) } == [-1000.0, -350.0, 0.0]
+  raise o.inspect unless o.map { |v| v.round(6) } == [-node, -350.0, 0.0]
 
+  # The invariant this all exists for, now with the gap in it: whichever
+  # execution, the end of the node FACING the corner is the wasted end, never
+  # the carcass - and it stands off the corner by exactly one gap.
   f = Placement.frame([0.0, -1.0, 0.0])
   { 'right' => [-100.0, 0.0], 'left' => [900.0, 1000.0] }.each do |exec, (lo, hi)|
     o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                                 350.0, 900.0, 1000.0, exec)
-    edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]) }
-    raise "#{exec}: wasted is not against the corner" unless
-      edges.map { |v| v.round(6) }.include?(0.0)
+    edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]).round(6) }
+    near = edges.min_by(&:abs)
+    raise "#{exec}: the wasted end must touch the corner, got #{near}" unless
+      near.abs.round(6) == gap.to_f.round(6)
   end
 end
 
@@ -2719,15 +2729,23 @@ check('there is ONE front line, and everything in a run asks for it') do
   end
 end
 
-check('the plinth carries on under a fridge panel, and stops at a dishwasher') do
+check('the plinth line carries on under a fridge panel AND under a dishwasher') do
   # OURS, not the catalog's: nothing on printed p.418 mentions a plinth. It is
-  # drawn so the plinth line does not BREAK on the drawing where a fridge
-  # stands in the run. The dishwasher gets none - the plinth in front of that
-  # machine really is cut away - which is why this is a per-family flag and
-  # not a rule about appliance panels.
+  # drawn so the plinth line does not BREAK on the drawing where a machine
+  # stands in the run.
+  #
+  # REVERSED 2026-08-24. This check used to read "and stops at a dishwasher",
+  # asserting that the dishwasher panel must NOT carry it, with the reason
+  # given as "the plinth in front of that machine really is cut away". The
+  # observation was true and it was answering the wrong question: cut away is
+  # what gets BUILT, unbroken is what gets DRAWN. The flag is about the
+  # drawing, so it is now true for both.
   raise 'a US fridge panel must carry the run plinth' unless
     Registry.lookup('CR9700')['plinth_continues'] == true
-  raise 'the dishwasher panel must NOT' if Registry.lookup('V80730')['plinth_continues']
+  %w[V80530 V80630 V80730 V88559 V88566 V88569].each do |code|
+    raise "#{code} must carry it too" unless
+      Registry.lookup(code)['plinth_continues'] == true
+  end
   # An ordinary cabinet never needs the flag: it gets a plinth by standing on
   # the floor, and saying so twice would be two places to disagree.
   raise 'a cabinet must not need the flag' if Registry.lookup('B80601')['plinth_continues']
@@ -2735,7 +2753,10 @@ check('the plinth carries on under a fridge panel, and stops at a dishwasher') d
   note = Registry.data['families']['USA Tall H.210']['plinth_note']
   raise 'the decision must admit whose it is' unless note.include?("OURS, NOT THE CATALOG'S")
   raise 'the reason must be the drawing, not the joinery' unless note.include?('BREAK')
-  raise 'the dishwasher exception must travel with it' unless note.include?('p.47')
+  # 2026-08-24: this used to demand the note name p.47 as the EXCEPTION.
+  # It is no longer an exception - it is the same answer - so what the
+  # note must still carry is the pointer, not the word.
+  raise 'the dishwasher must still travel with it' unless note.include?('p.47')
 end
 
 check('a front is drawn NOMINAL: no reveal is ever deducted') do
@@ -3376,8 +3397,12 @@ check('the 66,4 leftover is now a fact of the model, not only of a note') do
   raise 'the note and the geometry must agree' unless notes.include?('66,4')
 end
 
-check('the old rule survives untouched for a family that states no housing') do
-  u = Registry.lookup('V80730')
+check('the old rule survives untouched for anything that states no housing') do
+  # 2026-08-24: V80730 used to BE that case and is not any more - every
+  # appliance panel in the registry now states where its housing begins. The
+  # rule is still live for the next family that says nothing, so the case is
+  # CONSTRUCTED rather than the check deleted: floor to the top of the front.
+  u = Registry.lookup('V80730').merge('appliance_niche' => nil)
   raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 0
   raise Generator.niche_height_mm(u).to_s unless
     Generator.niche_height_mm(u) == Standards::PLINTH_H_MM + 780
@@ -3398,9 +3423,8 @@ check('the housing says on itself that it came from the appliance, not from Cesa
   raise n['notes'] unless n['notes'].include?('INDICATIVE')
   raise n['notes'] unless n['notes'].include?('2133.6')
   raise n['height_mm'].to_s unless n['height_mm'] == 2033.6
-  # and a dishwasher still says nothing of the kind
-  d = Generator.niche_attributes_for(Registry.lookup('V80730'))
-  raise d['notes'] if d['notes'].include?('Housing drawn')
+  # and since 2026-08-24 a dishwasher says it too, in its own words. What it
+  # must NOT borrow is the leftover sentence - see the dishwasher checks below.
 end
 
 
@@ -5142,6 +5166,80 @@ check('NO RUBY 2.7+ METHOD MAY ENTER THE HEADLESS SUITE OR THE CORE') do
   gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
   raise 'the reason must stay next to the code that learned it' unless
     gen.include?('filter_map is Ruby 2.7')
+end
+
+puts "\nthe dishwasher panel: what is DRAWN is not what is ORDERED"
+# Andriy, 2026-08-24, off the Avenida Primavera kitchen: the drawn plinth is
+# there so the elevation looks right in LayOut; what goes to the warehouse is a
+# request for a plinth WITH A CUTOUT.
+
+check('THE FLAG IS ASKED OF THE OBJECT, because family H.78 is 131 other things') do
+  # The bug this closes: plinth_continues and appliance_niche were read from
+  # the FAMILY, and H.78 is three merged files - the base pages, the sink bases
+  # and the appliance panels. Setting either one there to reach one dishwasher
+  # would have drawn a plinth inside every base unit in the family and given
+  # them all a housing they do not have. There was no way to say it at all.
+  fam = Registry.data['families']['H.78']
+  raise 'the family must not be the one saying it' if fam.key?('plinth_continues')
+  raise 'nor this one' if fam.key?('appliance_niche')
+  raise 'a base unit in the same family must be untouched' if
+    Registry.lookup('B80601')['plinth_continues']
+  raise 'and must still have no housing' unless
+    Registry.lookup('B80601')['appliance_niche'].nil?
+  # ...while the family stays the right place to say it where every member IS
+  # a panel, which is the USA chapter. Both scopes work or the fix is half done.
+  raise 'the USA family says it once for all of them' unless
+    Registry.data['families']['USA Tall H.210']['plinth_continues'] == true
+end
+
+check('the housing hangs on the plinth and ends where the panel ends') do
+  u = Registry.lookup('V80630')
+  raise Generator.niche_bottom_mm(u).to_s unless
+    Generator.niche_bottom_mm(u) == Standards::PLINTH_H_MM
+  # NOT WRITTEN IN THE REGISTRY. 100 + 780 is already known to the generator,
+  # and an 880 in a JSON file is a second copy that drifts the day a family
+  # height moves.
+  raise Generator.niche_top_mm(u).to_s unless Generator.niche_top_mm(u) == 880
+  raise Generator.niche_height_mm(u).to_s unless Generator.niche_height_mm(u) == 780
+  niche = JSON.parse(File.read(File.expand_path('../registry/cesar/appliance_h78.json', __dir__)))['data']['unit_types']['appliance_dishwasher_door']['appliance_niche']
+  raise 'the bottom must be named, not numbered' unless niche['bottom'] == 'plinth_top'
+  raise 'a second copy of the plinth height has appeared' if niche.key?('bottom_mm')
+  raise 'a second copy of the panel top has appeared' if niche.key?('top_mm')
+end
+
+check('the model says on itself that the raised housing is drawn, not measured') do
+  n = Generator.niche_attributes_for(Registry.lookup('V80630'))
+  Contract.validate!(n)
+  raise n['notes'] unless n['notes'].include?('Housing drawn 100.0 to 880.0')
+  # NOT 'stands on the floor' and NOT 'cutout' - both were already in the
+  # generic placeholder sentence every niche carries, so asserting them proved
+  # nothing. What must be there is the sentence this change added.
+  raise n['notes'] unless n['notes'].include?('reads unbroken on the sheet')
+  raise n['notes'] unless n['notes'].include?('ORDERED under it is one with a cutout')
+  # The fridge's leftover sentence must not come along: this panel ends exactly
+  # where its phantom does.
+  raise n['notes'] if n['notes'].include?('closing panel')
+end
+
+check('and the fridge keeps the sentence that is true about IT and not about this') do
+  n = Generator.niche_attributes_for(Registry.lookup('CR9601'))
+  raise n['notes'] unless n['notes'].include?('closing panel')
+  raise n['notes'] if n['notes'].include?('reads unbroken')
+end
+
+check('DRAWN is not ORDERED, and the file that will be misread says so') do
+  # The one place a future reader looks for permission to order plain linear
+  # plinth is this section file. What is written there is that the drawn plinth
+  # does not claim to be the ordered one. The order side is deferred, not lost.
+  raw = File.read(File.expand_path('../registry/cesar/appliance_h78.json', __dir__))
+  raise 'the reversal must be dated' unless raw.include?('2026-08-24')
+  raise 'the order line must be named' unless raw.include?('WITH A CUTOUT')
+  raise 'the 40 mm must stay open, not be quietly resolved' unless
+    raw.include?('STILL UNREAD')
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the correction must stay beside the code that changed' unless
+    gen.include?('CORRECTED 2026-08-24')
+  raise 'and it must distinguish the two' unless gen.include?('ORDERED')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

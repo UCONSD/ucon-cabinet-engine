@@ -130,6 +130,20 @@ module UCON
         each_code(reg) do |row, family_name, family, type_key, unit_type|
           next unless row['code'] == code
 
+          # THE UNIT TYPE ANSWERS FIRST, THE FAMILY ONLY IF IT DOES NOT.
+          # 2026-08-24: 'plinth_continues' and 'appliance_niche' below were
+          # read from the family alone, and for a dishwasher panel that could
+          # never work. Family H.78 is THREE merged files - the base pages, the
+          # sink bases and these appliance panels - so switching the flag on
+          # there to reach one machine would have drawn a plinth inside 131
+          # base units and handed them a housing they do not have. The question
+          # is about ONE object, so the object gets to answer it. The family
+          # stays the fallback, and for USA Tall H.210 - where every member IS
+          # a panel - it stays the right place to say it once.
+          scoped = lambda do |key|
+            unit_type.key?(key) ? unit_type[key] : family[key]
+          end
+
           return {
             'code'               => code,
             'manufacturer'       => reg['manufacturer'],
@@ -160,11 +174,11 @@ module UCON
             # panel ever needs to say so: a cabinet gets one by standing on the
             # floor, and a panel gets one only where the drawing would
             # otherwise show a break. Absent means no.
-            'plinth_continues'   => family['plinth_continues'] ? true : false,
+            'plinth_continues'   => scoped.call('plinth_continues') ? true : false,
             # Where the client's machine really begins and ends, when the
             # family knows. Absent means the old rule: floor to the top of the
             # panel, which is right for a dishwasher and wrong for a housing.
-            'appliance_niche'    => family['appliance_niche'],
+            'appliance_niche'    => scoped.call('appliance_niche'),
             # Which door heights this FAMILY offers, or nil when it offers no
             # such choice. The 78/75 pair belongs to the base pages; a wall
             # unit 360 tall has no version to pick.

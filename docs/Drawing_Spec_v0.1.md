@@ -226,3 +226,35 @@ affect whether the fronts meet, and it is written into
 **What this cost:** a symptom pointed at two bodies, and the first attempt moved
 the one that was easy to see. The measurement that settled it — the factory's
 own file — had been in hand for an hour.
+
+---
+
+## The dishwasher plinth - DRAWN and ORDERED are two facts (2026-08-24)
+
+Added the same day, not an edit of anything above (rule 9).
+
+Until today the engine drew no plinth under a dishwasher panel, and the reason
+written in the code was correct about the joinery: **the plinth in front of the
+machine really is cut away**, or the door cannot fall forward.
+
+That answered the wrong question. What LayOut needs is the plinth **line** to
+run past the machine unbroken; a gap there reads as a hole in the elevation.
+So from this version:
+
+* the dishwasher panel carries a **drawn** plinth box, like the US fridge
+  housing already did;
+* its phantom housing starts at the **top of the plinth** (this family's own
+  100, not a global one) and ends where the panel ends - no second copy of
+  100 + 780 anywhere;
+* the housing says on itself that **the machine stands on the floor** and that
+  the raised bottom is a drawing decision, so nobody reads a measurement off it.
+
+What goes to the warehouse is the other fact: **a plinth with a cutout.**
+Andriy, 2026-08-24: designers routinely order plain linear plinth instead and
+the cutout gets improvised on site at installation. Holding the two apart in
+writing is the whole point - a drawing must not be allowed to imply an order.
+The order side is **deferred, not decided**.
+
+Still open: the *"cutout for plinth 40"* printed on p.47 and p.48. It now has a
+plausible home - 40 mm out of the plinth in front of the machine - but
+plausible is not printed (rule 1), and it stays an Elda question.
