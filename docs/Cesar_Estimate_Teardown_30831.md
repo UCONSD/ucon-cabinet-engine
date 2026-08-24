@@ -153,6 +153,16 @@ the factory: the right correction was the other leg.
 **Neither is fixed as this document is written.** Both are recorded in
 `_manifest.json` → `factory_confirmations` → `contradicts`.
 
+**Added 2026-08-24, hours later — the paragraphs above stand as written
+(rule 9).** The seating was reverted in `3652298`: the corner now sits on
+the printed node raw again, and the correction went into the filler's width leg,
+drawn at
+`FILLER_MM - FRONT_GAP_MM` = 77. The depth divergence — our 703 against the
+factory's 700 — was **not** fixed, and it has stopped being a pending fix: both
+are defensible readings of an 8x8 panel, they differ by exactly the gap, and it
+does not affect whether the fronts meet. It is a **recorded divergence**. See
+`docs/Drawing_Spec_v0.1.md` → *"CORRECTED THE SAME DAY"*.
+
 ## 6. What the exports do not carry
 
 **No article codes, in either format.** The SketchUp groups are `Group1`,

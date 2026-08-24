@@ -27,7 +27,7 @@
   ],
   "contradicts": [
     "THE CORNER FILLER IS MEASURED FROM THE CARCASS PLANE, NOT FROM THE FRONT PLANE. The factory draws the base corner 700 deep (620 + 80) and the wall corner 400 (350 + 50). core/60_generator.rb sets out_y = back_y - FILLER_MM and draws 703. NOT YET FIXED.",
-    "THE CORNER IS SEATED ON THE PRINTED NODE, WITH NO GAP. In the factory model the corner carcass ends exactly nominal - carcass = 250 mm from the perpendicular wall. Commit 14158a5 added one FRONT_GAP_MM to that seating earlier on 2026-08-24, before this file was read; it makes our own two legs agree with each other but not with the factory. NOT YET REVERTED.",
+    "THE CORNER IS SEATED ON THE PRINTED NODE, WITH NO GAP. In the factory model the corner carcass ends exactly nominal - carcass = 250 mm from the perpendicular wall. Commit 14158a5 added one FRONT_GAP_MM to that seating earlier on 2026-08-24, before this file was read; it makes our own two legs agree with each other but not with the factory. REVERTED THE SAME DAY IN 3652298: the node seats raw again and the correction went into the filler's width leg instead, drawn at FILLER_MM - FRONT_GAP_MM = 77. The original sentence is kept rather than deleted because it is why the check exists.",
     "THE USA WINE COOLER DOOR IS NOT A CR96xx ARTICLE. Metron priced it as FRN020970687 - a plain front H.2097 W.687 carrying the variant CUTOUT WORKMANSHIP + FRONT FINISH: Pred. Cantinetta A. registry/cesar/usa_tall_h210.json holds it as a code of its own."
   ],
   "gaps_opened": [
