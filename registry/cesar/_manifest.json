@@ -8,6 +8,36 @@
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
   "factory_confirmations": [
+{
+  "source": "ESTIMATE 2026 / 30831, Cesar order system v2.66, printed 2026-08-24 (TEST ESIMATE, 15 positions we specified in words), via Elda Chiara Lesca - together with the Metron SketchUp and DXF exports of the same composition",
+  "trust": "CONFIRMED",
+  "recorded_on": "2026-08-24",
+  "note": "Factory output, not a catalog reading and not our hypothesis. Where it contradicts this registry it wins - and unlike 30829, THIS ONE DID CONTRADICT. Asked for as a test composition rather than as a list of questions, which is why it settles things an answer could not. Teardown: docs/Cesar_Estimate_Teardown_30831.md.",
+  "confirms": [
+    "THE CORNER EXECUTION LETTER, AND THE DOOR HAND THAT FOLLOWS FROM IT (Elda Q7 and Q7b, closed). Printed as AU110D = RH CORNER BASE UNIT WITH LH DOOR and AU110S = LH CORNER BASE UNIT WITH RH DOOR. The letter is the CABINET; the door opens the other way and is not a free per-order choice. Orders may also carry SX and DX. This gated 21 held corner codes in five chapters.",
+    "the corner node, in the factory notation: BASE ANGOLO INGOMBRO Xtot 1150mm Ztot 700 on AU110D/S and Xtot 1000mm Ztot 400 on PD094S - both equal to corner_geometry as this registry already held it",
+    "the corner filler size per class, from the factory rather than from a page: SCATOLATO Z 80 mm on the base corner, Z 50 mm on the wall corner - the 8x8 and the 5x5",
+    "A WIDTH REDUCTION DOES NOT CHANGE THE CODE: 560 priced as B80601 and 400 as B80501, each with the variant WIDTH REDUCTION Yes and a flat 138-point surcharge. The code is the module the unit was cut from, and Metron takes the nearest module ABOVE (Elda Q3, closed for width).",
+    "GBBF01 rides with the 75 cm dishwasher door V80730 as its own line, exactly as this registry emits it (Elda Q5 - the companion is confirmed, the side is not)",
+    "the Servo Drive articles, until now unknown: 996811 TRASFORMATORE PER SERVO DRIVE VERSIONE USA and 996805 PROLUNGA DI DISTRIBUZIONE, added once per COMPOSITION and not per unit",
+    "the interior drawer kit of printed p.569 is ordered as 996OL6 - KIT TIPO L, 1 cassetto e 3 cestoni interni, Legrabox prof. 50, cm.60",
+    "twelve of our codes, chosen by Metron and not by us: CE0631, CR0635, PD0600, PD0610, PD0631, PD094S, AU110D, AU110S, B80601, B80501, V80730, B87699",
+    "FRONT_GAP_MM 3 and FRONT_T_MM 22, MEASURED IN THE FACTORY SKETCHUP EXPORT: every straight unit is drawn at depth + 25 - base d.620 gives 645, tall and wall d.350 give 375",
+    "the plinth height 100 and the family heights: 880 = 780 + 100, 2080 = 1980 + 100, 2200 = 2100 + 100"
+  ],
+  "contradicts": [
+    "THE CORNER FILLER IS MEASURED FROM THE CARCASS PLANE, NOT FROM THE FRONT PLANE. The factory draws the base corner 700 deep (620 + 80) and the wall corner 400 (350 + 50). core/60_generator.rb sets out_y = back_y - FILLER_MM and draws 703. NOT YET FIXED.",
+    "THE CORNER IS SEATED ON THE PRINTED NODE, WITH NO GAP. In the factory model the corner carcass ends exactly nominal - carcass = 250 mm from the perpendicular wall. Commit 14158a5 added one FRONT_GAP_MM to that seating earlier on 2026-08-24, before this file was read; it makes our own two legs agree with each other but not with the factory. NOT YET REVERTED.",
+    "THE USA WINE COOLER DOOR IS NOT A CR96xx ARTICLE. Metron priced it as FRN020970687 - a plain front H.2097 W.687 carrying the variant CUTOUT WORKMANSHIP + FRONT FINISH: Pred. Cantinetta A. registry/cesar/usa_tall_h210.json holds it as a code of its own."
+  ],
+  "gaps_opened": [
+    "A FRONT IS ITS OWN ORDER LINE, and its code encodes its size: FRN + five digits of height + four of width, in mm. FRN005970597 = H.597 W.597, FRN020970687 = H.2097 W.687, FRN003870897 = H.387 W.897. The Servo Drive, the push-up mechanism, the opening type and the cutout workmanship all attach to the FRONT line, not to the carcass. The Object Contract draws fronts and does not order them; this needs a versioned revision, not a patch.",
+    "A COMPANION CAN BELONG TO THE COMPOSITION rather than to an article - the two Servo Drive lines are ordered once for the whole kitchen. companion_refs has no such scope.",
+    "AN ORDER IS NOT JUST ROWS. Printed on the estimate: orders must be accompanied by the floor plan, final measurements, parts list and appliance datasheets. That is the exporter's real target."
+  ],
+  "not_answered_here": "Which side GBBF01 stands on (Q5). What the O option of the interior drawer kit gives, against the L that was chosen. Q1, Q2, Q4, Q6, Q8, Q9 - this composition contains none of them.",
+  "numbering_note": "The 30829 entry below lists 'Q8 Servo Drive article codes' among what it could not answer. That Q8 belongs to an older numbering; in docs/Elda_Open_Questions_v0.1.md today Q8 is the door-version-per-article question added 2026-08-24. The Servo Drive codes ARE answered here. Recorded rather than renumbered - renumbering a question that has been quoted in three files is how a cross-reference rots."
+},
     {
       "source": "ESTIMATE 2026 / 30829 and 30830, Cesar order system v2.66, printed 2026-08-07 (Dadvar Residence), via Elda Chiara Lesca",
       "trust": "CONFIRMED",

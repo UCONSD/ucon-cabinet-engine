@@ -79,7 +79,7 @@ question stays open until Cesar confirms actual fitted runner lengths.
 
 ## Q3 — Modification limits and the drawer-width-reduction ambiguity
 
-**Status:** open · added 2026-08-16
+**Status:** ANSWERED FOR WIDTH 2026-08-24 by estimate 2026/30831, otherwise open · added 2026-08-16 — see the dated block at the foot of this file
 
 **Context.** The Modifications/Customisations section confirms modification
 codes (989370 width/height base-wall, 989380 tall, 989350/989360 depth) added
@@ -132,7 +132,7 @@ guess.
 
 ## Q5 — 75 cm dishwasher door: which side does GBBF01 go?
 
-**Status:** open · added 2026-08-17
+**Status:** open · added 2026-08-17 — the COMPANION is now confirmed by estimate 2026/30831; the SIDE is still not stated, so the question stands
 
 **Context.** Printed p.47 states that for the 75 cm wide dishwasher door
 (V80730) "a stainless steel cabinet is installed adjacent to the 60 cm wide
@@ -178,7 +178,7 @@ by hand if the order needs one.
 
 ## Q7 — "rh or lh" in the corner base description: the door's hinge, or the cabinet's execution?
 
-**Status:** open · added 2026-08-17
+**Status:** ANSWERED 2026-08-24 · added 2026-08-17 — see the dated block at the foot of this file. THE ENGINE DOES NOT YET FOLLOW THE ANSWER.
 
 **Context.** A corner base unit is ordered as `AU110D` or `AU110S` — the letter
 is Destra / Sinistra. The carcass is not symmetric (one end carries the door
@@ -295,3 +295,109 @@ gap a planner will hit and read as our oversight.
 **Disposition until answered:** `depths_mm` for H.58.5 records what the PRICE
 pages print — 350 / 470 / 620 — and the discrepancy is written into
 `registry/cesar/base_h58_5.json` → `page_observations`.
+
+---
+
+# ANSWERED 2026-08-24 — estimate 2026/30831 and Elda's letter of the same day
+
+Rule 9: this block is ADDED and dated. The questions above keep their text;
+only their Status lines point here. Full teardown of the estimate:
+`docs/Cesar_Estimate_Teardown_30831.md`.
+
+## Q7 — CLOSED. The letter is the cabinet; the door follows.
+
+Metron printed the two corner rows as **`AU110D` — RH CORNER BASE UNIT WITH
+LH DOOR** and **`AU110S` — LH CORNER BASE UNIT WITH RH DOOR**. Elda, the same
+day, in words:
+
+> Corner units are differentiated with S or SX for Left-hand and D or DX for
+> Right-hand. The door on Left-hand units opens to the right and vice versa.
+
+So the letter names the CABINET's execution, and the door's hand is DERIVED
+from it — not a free per-order choice. Note also that orders may carry **SX
+and DX** as well as S and D; our grammar knows only S and D.
+
+**This closes Q7b, the corner execution letter, which gated 21 held corner
+codes across five chapters.**
+
+**The engine does not yet follow this.** `base_corner` still carries
+`handed: true` and the disposition above still describes two independent
+axes. Correcting that is a data and behaviour change and belongs with the
+corner geometry work, not with this note.
+
+## Q3 — CLOSED for width reduction. Still open for the rest.
+
+A reduced unit **keeps the code of the module it was cut from** and carries a
+variant plus a flat surcharge:
+
+| asked for | Metron priced | variant | surcharge |
+|---|---|---|---|
+| 560 mm | `B80601` (the 600 module) | WIDTH REDUCTION: Yes | +138 points |
+| 400 mm | `B80501` (the 450 module) | WIDTH REDUCTION: Yes | +138 points |
+
+Elda: *the 560mm base unit is a 600mm module reduced, while the 400mm is a
+450mm module reduced. You can technically start from a 600mm module and get a
+custom 400mm cabinet but obviously the starting price will be slightly
+higher.* So Metron takes the nearest module **above**, and a wider start is
+possible at a price. The `989346` ambiguity and the minimum-width limits are
+NOT answered.
+
+## Q5 — half closed.
+
+`V80730` came with **`GBBF01` STEEL UNIT FOR DISHWASHER 75** as its own line,
+exactly as this registry already emits it. Which SIDE it stands on is still
+not stated anywhere, so the question stays open.
+
+## Answered without ever being numbered
+
+**The wine cooler aperture.** We do not dimension it and there is no separate
+article. Elda: *anything that includes appliances will be tailored to the
+specific models you pick… the front panel for the wine cooler includes the
+workmanship for the finished cutout, which costs the same regardless of the
+exact size. This information is usually in the technical sheet of each
+appliance, and that's enough for the technical department.* Same for the oven
+housing: *the height of the bottom drawer will be customised depending on the
+oven height* — which is why the compact-oven housing of printed p.34 prints
+only a minimum and is held not-buildable here.
+
+**`989394` on printed p.541 is NOT that route** — it is for the Across system
+on a countertop Cesar did not supply.
+
+**Cutouts that are NOT for an appliance** — sockets, switches, vents — DO
+need a drawing from us, with exact size and position.
+
+**Front thickness: 22 mm only.** 19 mm is not offered. The edge radius is
+minimal. Clearance against panel-ready appliances is solved per layout by
+widening gaps or recessing side panels.
+
+**The stainless steel protection printed on every wine cooler door (234
+points, no code) is finish-conditional, not compulsory** — it is a frame
+inside the cutout, needed where the cutout is made post-production and
+exposes the inner layers. On lacquered panels the inner edge is finished
+anyway.
+
+**Goods sold by the metre: about 4 m maximum, 3.8 m for wood veneer**, cut to
+order with an allowance for site trimming. This is the number joint planning
+in a long run has been missing.
+
+**The plinth and the grip profile are NOT generated by the composition
+header.** The header fixes finishes and plinth height; the profiles are added
+as separate positions after the cabinets and snap to them. Estimate 30831
+contains none, which is why.
+
+**A Servo Drive pulls two lines per COMPOSITION**, not per unit: `996811`
+TRASFORMATORE PER SERVO DRIVE VERSIONE USA and `996805` PROLUNGA DI
+DISTRIBUZIONE.
+
+**Neither export carries article codes.** The SketchUp file names its groups
+`Group1`, `Group2`… with internal item numbers such as `2367` and `2715`; the
+DXF has no user blocks at all, only `*Model_Space` and `*Paper_Space`. Both
+are geometry. Asked back on 2026-08-24: whether Metron can export the
+position list as Excel or CSV, and whether the internal item number can be
+tied to the article code.
+
+## Still open after all this
+
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q5's side. And one new one, asked but not
+yet numbered: **what the `O` option of the interior drawer kit gives**, where
+Elda chose `L` and had to add the stainless-steel upcharge by hand.
