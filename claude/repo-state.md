@@ -27,13 +27,13 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`14158a5`** — *fix(corner): seat the node one front gap off the perpendicular wall (0.71.0)* |
-| **Pushed** | **yes** — `refs/heads/main` == `origin/main` == `14158a5`, read off the two refs rather than remembered (rule 16). |
-| **Working tree** | **clean.** |
-| **Core version** | **0.71.0**, shell 0.6.0 |
-| **Headless suite** | **396 checks, 0 failures — and green on BOTH Rubies.** 3.0.2 on the laptop and the 2.6.10 macOS ships, which is what the office Mac runs. That stopped being an accident on 2026-08-24; see the commit log. |
+| **HEAD** | **`13e7754`** — *generator: the dishwasher panel gets a drawn plinth, and DRAWN stops meaning ORDERED (0.73.0)* |
+| **Pushed** | **yes** — `refs/heads/main` == `origin/main` == `13e7754`, read off the two refs rather than remembered (rule 16). |
+| **Working tree** | **this file was the only uncommitted change** when it was rewritten on the evening of 2026-08-24. |
+| **Core version** | **0.73.0**, shell 0.6.0 |
+| **Headless suite** | **402 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
-| **Registry** | **692 codes** in **36 section files** carrying **27 catalog sections**; `catalog_map` holds **67 sections** |
+| **Registry** | **692 codes** in **36 section files** carrying **27 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
 
 ### The Project is retired
@@ -73,23 +73,66 @@ blockers. Measured debt: `claude/debt-2026-08-24.md`.
 Andriy opened the real Avenida Primavera kitchen and said: only what this
 project needs. That is the demand-driven discipline CLAUDE.md describes, working
 as intended - the roadmap is a MENU, and the kitchen picks from it. The first
-thing it picked was the corner seating, `14158a5`. **Do not resume the extraction
-queue below without asking.**
+thing it picked was the corner, and the corner took two commits: `14158a5` was
+wrong and `3652298` reversed it. **Do not resume the extraction queue below
+without asking.**
 
-Two things the real kitchen has already asked for and one of them is not built:
+Three things the real kitchen has asked for so far; two of them are built:
 
-1. **DONE - the corner seating.** See `docs/Drawing_Spec_v0.1.md`.
-2. **OPEN - placement should infer its direction.** Today "build next to
+1. **DONE, and the first answer was wrong — the corner front gap.** The fronts
+   of two runs missed each other at an inside corner by `FRONT_GAP_MM`.
+   `14158a5` moved the SEATING and was wrong. `3652298` moved the FILLER, which
+   is the body that had to move: **the printed 8x8 is a NOMINAL, and the leg
+   that runs along the width is drawn at `FILLER_MM - FRONT_GAP_MM` = 77,
+   because it meets a front and not a carcass; the return leg meets nothing and
+   keeps its 80.** The node seats **raw** at `nominal - carcass` again, which is
+   what Cesar's own SketchUp export of estimate 2026/30831 does. Account, dated
+   and added rather than edited: `docs/Drawing_Spec_v0.1.md` → *"CORRECTED THE
+   SAME DAY"*. **The front gap therefore lives in the filler leg
+   (`60_generator.rb`), NOT in `Placement.corner_origin`** — any note that says
+   otherwise was written before the correction.
+2. **DONE, with the order side deliberately left open — the dishwasher plinth**
+   (`13e7754`). The panel now carries a **drawn** plinth box and its phantom
+   housing starts on top of it, so the plinth LINE runs unbroken across a LayOut
+   elevation. That is a *representation*: the real plinth in front of a machine
+   is cut away, and what the warehouse must be asked for is a plinth **with a
+   cutout**. **Deferred, not decided.** Mechanically this is why
+   `plinth_continues` and `appliance_niche` are now read from the **unit type**
+   first and the family only as a fallback — family H.78 is three merged files
+   and 131 base units, so there was no way to say it about one object.
+3. **OPEN - placement should infer its direction.** Today "build next to
    selected" always grows to the right, so the left wing of a kitchen is placed
    by hand. Andriy wants: the selected unit stands alone, grow right; something
    is already attached on the right, grow left; both sides taken, refuse and say
    why rather than guess. `Placement.same_row?` already decides what counts as
    attached - same mounting, parallel, coplanar within tolerance - so the rule
    builds on tested machinery. **A corner is not the next unit of a run but its
-   TURN**, and it seats against two walls; if that ever makes a corner reachable
-   by continuing a run, the front gap now living in `Placement.corner_origin`
-   must move into a shared helper, because there would then be two paths to the
-   same geometry.
+   TURN**, and it seats against two walls.
+
+### Owed — carried in from the 2026-08-24 handoff
+
+Not numbers, but the things a next session would otherwise re-derive. A line
+leaves this list when it is done, not when it is mentioned.
+
+1. **The warehouse side of the plinth** — a request for a plinth with a cutout.
+   Deferred by Andriy, who is informed.
+2. **`"cutout for plinth 40"`, printed p.47 and p.48 — still unread.** A
+   plausible home has been found (40 mm out of the plinth in front of the
+   machine) and plausible is not printed: rule 1. Elda question, not urgent by
+   Andriy's decision.
+3. **Corner handedness — Elda Q7, and the data still says the old thing.**
+   `base_corner` carries `handed: true` and its disposition still describes two
+   independent axes, but the door hand is derived from the D/S execution letter.
+   Touches `50_registry.rb`, `60_generator.rb`, `80_panel.rb`.
+4. **Layer 3 of the Elda work** — FRN fronts as their own order lines,
+   composition-scoped companions, and the wine-cooler door being `FRN…` rather
+   than `CR96xx`.
+5. **The Elda draft email is written and unsent** — Gmail thread
+   `1a0252a76b71d5d0`, draft `r-9182472239550867935`.
+6. **The 2026-08-24 handoff and the corner spec still sit in the claude.ai
+   Project**, which is otherwise retired (see above). They belong in `claude/`
+   or nowhere; right now they are the one place the day's second half is
+   narrated.
 
 ### When the extraction resumes
 
@@ -146,7 +189,12 @@ has to be re-read; a sentence does not.
 
 | sha | what |
 |---|---|
-| `14158a5` | fix(corner): seat the node one front gap off the perpendicular wall (0.71.0) |
+| `13e7754` | generator: the dishwasher panel gets a drawn plinth, and DRAWN stops meaning ORDERED (0.73.0) |
+| `3652298` | fix(corner): the 8x8 is 77 x 80, and the node seats raw again (0.72.0) |
+| `ab492dc` | docs(elda): estimate 30831 teardown, and what the factory confirms and contradicts |
+| `30bbca1` | docs(repo-state): the day's four commits, and extraction paused by the real kitchen *(this file, written at `14158a5` — and the row below is what it therefore got backwards for three commits)* |
+| `8aee002` | chore: drop the corner probe |
+| `14158a5` | fix(corner): seat the node one front gap off the perpendicular wall (0.71.0) *(the seating was the wrong body — superseded by `3652298` the same day, and left in history: rule 9)* |
 | `848f10f` | fix(harness): the suite runs on the Ruby macOS ships (2.6) again |
 | `42288dc` | registry: the printed p.19 pictogram sweep, and an absent reading that is now a bug (0.70.0) |
 | `e0893dd` | registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0) |
@@ -240,11 +288,31 @@ And, from H.58.5:
 > panel offers a 55,5 the page has never printed. Elda **Q8**, and the same
 > axis the 19 not-buildable H.78 codes wait on — one answer settles both.
 
+And, from the corner at Avenida Primavera:
+
+> **A symptom can point at two bodies, and the easier one to see is not
+> necessarily the one that moved.** The fronts missed by exactly
+> `FRONT_GAP_MM` — a constant that appears in BOTH the seating and the filler
+> leg, so the symptom could not name which was wrong. The first fix moved the
+> seating. The measurement that settled it, the factory's own SketchUp export,
+> had been in hand for an hour before anyone opened it. **When a constant lives
+> in two places, only a measurement says which one is the bug.**
+
+And, from the dishwasher panel:
+
+> **DRAWN and ORDERED are two facts, and a drawing must never be allowed to
+> imply an order.** The panel draws a plinth so the elevation line runs
+> unbroken; the warehouse must still be asked for a plinth with a cutout. The
+> engine now says so **on the object itself**, because a raised housing that
+> stays silent gets read as a measurement.
+
 Full accounts: **`claude/findings-2026-08-23.md`** (H.96, H.120, base p.37-38,
 p.48, Group 0), **`claude/findings-2026-08-23-tall.md`** (the five plain tall
 families), **`claude/findings-2026-08-24-base-column.md`** (the base prefix) and
 **`claude/findings-2026-08-24-h58_5.md`** (H.58.5, whole) and
 **`claude/findings-2026-08-24-pictogram-sweep.md`** (the glyph debt, closed).
+The second half of 2026-08-24 — the corner and the dishwasher plinth — is
+narrated in **`docs/Drawing_Spec_v0.1.md`**, not in a findings note.
 
 ---
 
