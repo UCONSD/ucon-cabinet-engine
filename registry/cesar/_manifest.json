@@ -8,7 +8,8 @@
   "registry_status": "PRELIMINARY - verified against source PDF pages named below; not Elda-confirmed",
   "verified_on": "2026-08-16",
   "factory_confirmations": [
-    { "source": "ESTIMATE 2026 / 30829 and 30830, Cesar order system v2.66, printed 2026-08-07 (Dadvar Residence), via Elda Chiara Lesca",
+    {
+      "source": "ESTIMATE 2026 / 30829 and 30830, Cesar order system v2.66, printed 2026-08-07 (Dadvar Residence), via Elda Chiara Lesca",
       "trust": "CONFIRMED",
       "recorded_on": "2026-08-20",
       "note": "Factory output, not a catalog reading and not our hypothesis. Where it contradicts anything in this registry, it wins. Teardown: docs/Cesar_Estimate_Teardown_v0.1.md. Input/output comparison against the hand-assembled package: docs/Reconciliation_Round1_v0.1.md.",
@@ -30,479 +31,1580 @@
     "verified_on": "2026-08-18",
     "note": "The catalog's own hierarchy is: collection (Maxima/Intarsio, Tangram, Unit, N_Elle...) > element class (base/wall/tall) > height family (H.39/H.48/H.58.5/H.78/H.84) > family variant (plain / sink / for household appliances) > unit type > depth x width. Our picker mirrors class > section (family+variant) > type > size. RULE: a placeholder may only be shown at a level we have actually read in the source - sections come from the printed index, unit types only from pages we have opened. Statuses: extracted | partial | not_extracted | planned | excluded.",
     "sections": [
-      { "class": "filler", "collection": "Maxima e Intarsio", "section": "Closing strips and fillers for Maxima and Intarsio", "printed_pages": "434-435", "status": "partial",
+      {
+        "class": "filler",
+        "collection": "Maxima e Intarsio",
+        "section": "Closing strips and fillers for Maxima and Intarsio",
+        "printed_pages": "434-435",
+        "status": "partial",
         "note": "THE FIRST SECTION IN THIS MAP THAT IS NOT ONE ELEMENT CLASS. printed p.434 spreads 31 codes over twelve heights and over base, wall and tall alike, and a map entry carries one class - so 'filler' is OUR class, chosen because the catalog prints these as their own chapter after every collection, and because a person looking for a closing strip is looking for one thing and not three. The ROWS keep their families and therefore their real ground: a wall filler still hangs, a base filler still stands on the H.78 plinth. Reversible - one field in four data files and one label. Chapter index printed p.433 read 2026-08-23; the chapter runs on to p.456 with end elements and open units, which are deliberately NOT mapped here - see claude/fillers-recon-2026-08-23.md.",
         "decided_on": "2026-08-23",
         "pages": [
-          { "printed": 434, "status": "partial",
+          {
+            "printed": 434,
+            "status": "partial",
             "types": [
-              { "title": "Filler in door finishes from 2,3 to 15 cm", "status": "partial",
-                "note": "12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families." },
-              { "title": "Base unit filler in door finishes from 2,3 to 15 cm", "status": "partial",
-                "note": "10 codes, H.36 to H.138, all d.35. B70150 (H.78) held. Note PJ0150 at H.120: a wall prefix inside the base-unit table." },
-              { "title": "Wall unit filler in door finishes from 2,3 to 15 cm", "status": "partial",
-                "note": "7 codes, H.36 to H.120, all d.35, with a one-piece bottom. PB0151 (H.36) and PD0151 (H.60) held. PD0151 is the article the five-centimetre closing-strip rule of printed p.11 has been asking for." },
-              { "title": "60 to 160 degree base unit corner panel", "status": "not_extracted",
-                "note": "A80150 (H.78) and AL0150 (H.84) - the same two codes at the same prices on p.434 AND p.435, one article serving both collections. New geometry, and its minimum rear size depends on the grip system (printed p.10), so it waits with the other corner work." }
-            ] },
-          { "printed": 435, "status": "not_extracted",
+              {
+                "title": "Filler in door finishes from 2,3 to 15 cm",
+                "status": "partial",
+                "note": "12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families."
+              },
+              {
+                "title": "Base unit filler in door finishes from 2,3 to 15 cm",
+                "status": "partial",
+                "note": "10 codes, H.36 to H.138, all d.35. B70150 (H.78) held. Note PJ0150 at H.120: a wall prefix inside the base-unit table."
+              },
+              {
+                "title": "Wall unit filler in door finishes from 2,3 to 15 cm",
+                "status": "partial",
+                "note": "7 codes, H.36 to H.120, all d.35, with a one-piece bottom. PB0151 (H.36) and PD0151 (H.60) held. PD0151 is the article the five-centimetre closing-strip rule of printed p.11 has been asking for."
+              },
+              {
+                "title": "60 to 160 degree base unit corner panel",
+                "status": "not_extracted",
+                "note": "A80150 (H.78) and AL0150 (H.84) - the same two codes at the same prices on p.434 AND p.435, one article serving both collections. New geometry, and its minimum rear size depends on the grip system (printed p.10), so it waits with the other corner work."
+              }
+            ]
+          },
+          {
+            "printed": 435,
+            "status": "not_extracted",
             "types": [
-              { "title": "Closing strips and fillers for N_Elle and N_Elle with framed door", "status": "not_extracted",
-                "note": "Y00150 / Y30150 / Y60150 and YC0150 / YO0150 / YT0150, d.35, 45 degree front edge, and a band set of their own (5-8/10/11 and 12/13/15). Waits on the N_Elle chapter, printed p.321: a filler may not be held before its family. THE PAGE ALSO CONTRADICTS ITSELF - the first position is headed 'from 2,3 to 15 cm' while its own warning reads 'Minimum size available: 5 cm.' Both are on the render. Open for Elda." }
+              {
+                "title": "Closing strips and fillers for N_Elle and N_Elle with framed door",
+                "status": "not_extracted",
+                "note": "Y00150 / Y30150 / Y60150 and YC0150 / YO0150 / YT0150, d.35, 45 degree front edge, and a band set of their own (5-8/10/11 and 12/13/15). Waits on the N_Elle chapter, printed p.321: a filler may not be held before its family. THE PAGE ALSO CONTRADICTS ITSELF - the first position is headed 'from 2,3 to 15 cm' while its own warning reads 'Minimum size available: 5 cm.' Both are on the render. Open for Elda."
+              }
             ],
-            "note": "HEADED ON THE PAGE, ABSENT FROM THE CHAPTER INDEX - printed p.433 jumps from 434 to 436. Mapped as a PAGE of the section whose range contains it, so rule 1 is untouched: the section still comes from the printed index." }
-        ] },
-      { "class": "base", "family": "H.39", "section": "Base units H. 39", "printed_pages": "24-27", "status": "partial", "extracted_on": "2026-08-23",
+            "note": "HEADED ON THE PAGE, ABSENT FROM THE CHAPTER INDEX - printed p.433 jumps from 434 to 436. Mapped as a PAGE of the section whose range contains it, so rule 1 is untouched: the section still comes from the printed index."
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.39",
+        "section": "Base units H. 39",
+        "printed_pages": "24-27",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "EXTRACTED 2026-08-23: printed p.24 whole, two types, 24 codes, all three depths - registry/cesar/base_h39.json. THE BASE PREFIX IS A (FAMILY x DEPTH) KEY, NOT A FAMILY LETTER: B0 = d.35, BJ = d.47, B1 = d.62 here, and d.47 is a depth this registry had never held. AND THE FILLER TABLE DOES NOT USE THE SAME KEY - printed p.434 prints BJ0150/BJ0151 at H.58,5 while the H.58,5 base units are B3/B6/B4, so BJ serves two different (family, depth) slots and a filler prefix cannot be used to find a base family. That reading held for the wall chapter, where every family has one depth. Open for Elda.",
         "pages": [
-          { "printed": 24, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Base unit with bottom-hung door (18 codes, three depths)", "Compound base unit with bottom-hung door (W.180 and W.240, NO printed module split)"] },
-          { "printed": 25, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Base unit with jumbo drawer (18 codes)", "Compound base unit with 2 compartments (W.180 and W.240, NO printed module split)"] },
-          { "printed": 26, "status": "not_extracted",
-            "types": ["Low base unit with bottom-hung door: D00525 and up", "Low compound base unit with 2 compartments and bottom-hung door"],
-            "note": "STOPPED, NOT MERELY UNREAD. The page is headed 'Base units H. 39' and prices a LOW base unit with a prefix family of its own - D0 = d.35, DJ = d.47, D1 = d.62 - and ONE elevation profile carrying TWO dimensions, 36,5 to a dashed line and 39 to the top of the front, verified on a 300-dpi crop. printed p.24 and p.25 draw two profiles, 39 and 36, which is the door-version pair; this is not that, and the page does not say what it is. A height we cannot name is a height we do not write down. Every D row also prints no price in band 2, where the B rows do. See low_base_stop_note in base_h39.json. OPEN FOR ELDA." },
-          { "printed": 27, "status": "not_extracted",
-            "types": ["Low base unit with jumbo drawer", "Low compound base unit with 2 compartments"],
-            "note": "STOPPED for the same reason as printed p.26, and it is worth writing out rather than referring: the same D0 / DJ / D1 prefix family, the same single elevation profile carrying 36,5 and 39, the same missing band-2 prices. A page stopped by reference is a page whose reason is one deletion away from being lost." }
-        ] },
-      { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "partial", "extracted_on": "2026-08-23",
+          {
+            "printed": 24,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Base unit with bottom-hung door (18 codes, three depths)",
+              "Compound base unit with bottom-hung door (W.180 and W.240, NO printed module split)"
+            ]
+          },
+          {
+            "printed": 25,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Base unit with jumbo drawer (18 codes)",
+              "Compound base unit with 2 compartments (W.180 and W.240, NO printed module split)"
+            ]
+          },
+          {
+            "printed": 26,
+            "status": "not_extracted",
+            "types": [
+              "Low base unit with bottom-hung door: D00525 and up",
+              "Low compound base unit with 2 compartments and bottom-hung door"
+            ],
+            "note": "STOPPED, NOT MERELY UNREAD. The page is headed 'Base units H. 39' and prices a LOW base unit with a prefix family of its own - D0 = d.35, DJ = d.47, D1 = d.62 - and ONE elevation profile carrying TWO dimensions, 36,5 to a dashed line and 39 to the top of the front, verified on a 300-dpi crop. printed p.24 and p.25 draw two profiles, 39 and 36, which is the door-version pair; this is not that, and the page does not say what it is. A height we cannot name is a height we do not write down. Every D row also prints no price in band 2, where the B rows do. See low_base_stop_note in base_h39.json. OPEN FOR ELDA."
+          },
+          {
+            "printed": 27,
+            "status": "not_extracted",
+            "types": [
+              "Low base unit with jumbo drawer",
+              "Low compound base unit with 2 compartments"
+            ],
+            "note": "STOPPED for the same reason as printed p.26, and it is worth writing out rather than referring: the same D0 / DJ / D1 prefix family, the same single elevation profile carrying 36,5 and 39, the same missing band-2 prices. A page stopped by reference is a page whose reason is one deletion away from being lost."
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.48",
+        "section": "Base units H. 48",
+        "printed_pages": "28-31",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "EXTRACTED 2026-08-23: printed p.28 whole, three types, 30 codes, all three depths - registry/cesar/base_h48.json. BC = d.35, BQ = d.47, BD = d.62, READ OFF THE PAGE: the printed table runs d.35 / d.47 / d.62 and the letters run BC / BQ / BD, where alphabetically they are BC / BD / BQ. Sorting them would have swapped 470 and 620.",
         "pages": [
-          { "printed": 28, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Base unit with bottom-hung door (18 codes)", "Compound base unit with 2 compartments and bottom-hung door (NO printed module split)", "Base unit with door (W.45 and W.60 only, suffix 01)"] },
-          { "printed": 29, "status": "not_extracted", "types": ["Base units H. 48"] },
-          { "printed": 30, "status": "not_extracted", "types": ["Base units H. 48"] },
-          { "printed": 31, "status": "not_extracted", "types": ["Base units H. 48"] }
-        ] },
-      { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
-      { "class": "base", "family": "H.58.5", "section": "Sink base units H. 58.5", "printed_pages": "35", "status": "not_extracted" },
-      { "class": "base", "family": "H.78", "section": "Base units H. 78", "printed_pages": "36-43", "status": "partial", "extracted_on": "2026-08-23",
+          {
+            "printed": 28,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Base unit with bottom-hung door (18 codes)",
+              "Compound base unit with 2 compartments and bottom-hung door (NO printed module split)",
+              "Base unit with door (W.45 and W.60 only, suffix 01)"
+            ]
+          },
+          {
+            "printed": 29,
+            "status": "not_extracted",
+            "types": [
+              "Base units H. 48"
+            ]
+          },
+          {
+            "printed": 30,
+            "status": "not_extracted",
+            "types": [
+              "Base units H. 48"
+            ]
+          },
+          {
+            "printed": 31,
+            "status": "not_extracted",
+            "types": [
+              "Base units H. 48"
+            ]
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.58.5",
+        "section": "Base units H. 58.5",
+        "printed_pages": "32-34",
+        "status": "extracted",
+        "extracted_on": "2026-08-24",
+        "note": "EXTRACTED 2026-08-24: printed p.32, p.33 and p.34 - the section taken whole, six types, 53 codes, all three depths - registry/cesar/base_h58_5.json. B3 = d.35, B6 = d.47, B4 = d.62, read off the page and confirming the 2026-08-23 sweep. THE FINDING IS ON p.32: the pull-out door position prints ONE elevation, 58,5, where every other position in the family prints 58,5 AND 55,5 and where the same position at H.78 prints 78 / 75. door_versions is a FAMILY key, so the engine will offer that article a gola version the page does not draw. OPEN FOR ELDA - see claude/findings-2026-08-24-h58_5.md.",
         "pages": [
-          { "printed": 36, "status": "extracted",
-            "types": ["Base unit with pull-out door", "Base unit with laundry basket", "Base unit with door", "Base unit with doors"],
-            "note": "complete since 2026-08-17 - all four types, 26 codes" },
-          { "printed": 37, "status": "extracted", "extracted_on": "2026-08-23",
+          {
+            "printed": 32,
+            "status": "extracted",
+            "extracted_on": "2026-08-24",
+            "types": [
+              "Base unit with pull-out door (3 codes; d.35 at W.15 only, d.62 at W.15 and W.30, NO d.47)",
+              "Base unit with door (12 codes, four widths at three depths, suffix 01)",
+              "Base unit with doors (6 codes, W.90 and W.120, suffix 00)"
+            ],
+            "note": "Every depth band carries the hung glyph and the margin surcharge. The HOB glyph sits on d.62 of the two door positions and NOT on d.62 of the pull-out door above them - the mark is per (position x depth), not per page."
+          },
+          {
+            "printed": 33,
+            "status": "extracted",
+            "extracted_on": "2026-08-24",
+            "types": [
+              "Base unit with jumbo drawer and interior drawer (12 codes, d.47 and d.62 only, suffix 51)",
+              "Base unit with jumbo drawers - the content says 1 drawer + 1 jumbo drawer (18 codes, three depths, suffix 50)"
+            ],
+            "note": "No hob glyph at any depth. The gola pair on the split position is 16,5 / 36, which sums to 52,5 and not 55,5: both fronts lose 30, one under the worktop and one at the groove between them."
+          },
+          {
+            "printed": 34,
+            "status": "extracted",
+            "extracted_on": "2026-08-24",
+            "types": [
+              "Base unit for built-in compact oven (2 codes, d.62, W.60 and W.90) - HELD AND NOT BUILDABLE"
+            ],
+            "note": "REFUSES THE HUNG VERSION IN WORDS - \"not available wall hung\", no glyph, and no wall-hung line in its margin. Held and not buildable: the front height is the appliance's and the only printed number is a minimum, so the niche waits with the appliance module."
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.58.5",
+        "section": "Sink base units H. 58.5",
+        "printed_pages": "35",
+        "status": "extracted",
+        "extracted_on": "2026-08-24",
+        "note": "EXTRACTED 2026-08-24: printed p.35 whole, four types, 24 codes - registry/cesar/sink_base_h58_5.json. d.47 and d.62, no d.35, where the H.78 sink section prints d.62 and d.67. ONE fixed-front-plus-jumbo position here (suffix 80) against the TWO the H.78 sinks print on p.45 (suffixes 90 and 91), which is the pair Elda Q4 asks about.",
+        "pages": [
+          {
+            "printed": 35,
+            "status": "extracted",
+            "extracted_on": "2026-08-24",
+            "types": [
+              "Sink base unit with door (4 codes, suffix 61)",
+              "Sink base unit with doors (4 codes, suffix 60)",
+              "Sink base unit with jumbo drawer (8 codes, suffix 81 - the H.78 digits)",
+              "Sink base unit with jumbo drawer and 1 fixed front (8 codes, suffix 80)"
+            ],
+            "note": "Hung glyph on every band, hob glyph on none."
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.78",
+        "section": "Base units H. 78",
+        "printed_pages": "36-43",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
+        "pages": [
+          {
+            "printed": 36,
+            "status": "extracted",
+            "types": [
+              "Base unit with pull-out door",
+              "Base unit with laundry basket",
+              "Base unit with door",
+              "Base unit with doors"
+            ],
+            "note": "complete since 2026-08-17 - all four types, 26 codes"
+          },
+          {
+            "printed": 37,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
             "types": [
               "Base unit with door for interior drawer and jumbo drawer kit (kit on printed p.569 - NOT held, so no companion recorded)",
               "Base unit w/door and pull-out tabe, 1 door - NOT AVAILABLE WALL HUNG, printed",
               "Base unit w/door and pull-out tabe, 2 doors - NOT AVAILABLE WALL HUNG, and a drawer band above a split front the contract cannot express",
               "Base unit with drawer and door (SUFFIX 41 - printed p.38 prints the same words as 47)"
             ],
-            "note": "The page heading prints 'pull-out tabe' and the line below it 'pull-out table', twice. Both kept as printed." },
-          { "printed": 38, "status": "extracted", "extracted_on": "2026-08-23",
+            "note": "The page heading prints 'pull-out tabe' and the line below it 'pull-out table', twice. Both kept as printed."
+          },
+          {
+            "printed": 38,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
             "types": [
               "Base unit with drawer and doors (SUFFIX 40 - band above a split, held not buildable)",
               "Base unit with drawer and door (SUFFIX 47 - one elevation, 19,5/55,5, gola execution only)",
               "Base unit with drawer and doors (SUFFIX 46 - the same words as 40, at the same prices, with a different elevation)",
               "Base unit with jumbo drawer and interior drawers (one front, three drawers)"
             ],
-            "note": "FOUR POSITIONS, TWO PAIRS OF IDENTICAL DESCRIPTIONS. 40 against 46 and 41 against 47 differ only in the ELEVATION - two printed (handle 19,5/58,5 and gola 16,5/55,5) against one (19,5/55,5, groove between the fronts). A reader keying positions by their printed description would merge articles the factory sells apart." },
-          { "printed": 39, "status": "extracted",
-            "types": ["Base unit with jumbo drawer for P-One pull-out waste unit", "Base unit with pull-out XL waste unit", "Base unit with drawers and jumbo drawer"],
-            "note": "complete since 2026-08-17 - the two waste (Trash & Recycle) units carry their bin kits as companion order lines from printed p.524-525" },
-          { "printed": 40, "status": "extracted",
-            "types": ["Base unit with jumbo drawers", "Base unit with drawer and jumbo drawer"] },
-          { "printed": 41, "status": "not_extracted",
-            "types": ["Base unit with drawer and jumbo drawer", "Base unit for built-in oven H. 60"],
-            "note": "CAUTION: codes on this page (B78566, B88566, B98566 ...) do NOT decode with the p.36 width lookup, and the elevation reads 19,5 + 55,5 = 750, not 780. Read this page's grammar from scratch before extracting; do not assume." },
-          { "printed": 42, "status": "partial",
+            "note": "FOUR POSITIONS, TWO PAIRS OF IDENTICAL DESCRIPTIONS. 40 against 46 and 41 against 47 differ only in the ELEVATION - two printed (handle 19,5/58,5 and gola 16,5/55,5) against one (19,5/55,5, groove between the fronts). A reader keying positions by their printed description would merge articles the factory sells apart."
+          },
+          {
+            "printed": 39,
+            "status": "extracted",
             "types": [
-              { "title": "Base unit for built-in oven H. 60", "status": "not_extracted" },
-              { "title": "Corner base unit", "status": "extracted", "note": "Extracted and BUILDABLE since 2026-08-17: 9 sizes x 2 executions = 18 articles. The letter is the execution (S = door at the left end, D mirrored), the door hand (LH/RH) stays the per-order hinge_side. W notation decoded: second number = depth + 80 (the 8x8 filler), first = nominal length along the door wall; nominal minus carcass = wasted space, drawn as edges only. Corner PLACEMENT (how a run turns) is still M2.2. GAP found on printed p.10 (2026-08-17): the technical page lists a THIRD corner depth - 95x65 / 110x65 / 125x65, i.e. d.57, since 65 = 57 + 80 - which p.42 does not price and whose own page we have not located. Not extracted, not invented. d.57 is outside the H.78 depth grammar (7=d.35, 8=d.62, 9=d.67), so it is recorded here rather than as a phantom section: a gap row may only appear at a level we have actually read." },
-              { "title": "Corner base unit with Magicorner pull-out mechanism", "status": "not_extracted" }
-            ] },
-          { "printed": 43, "status": "not_extracted",
-            "types": ["Corner base unit with Slidecorner pull-out mechanism", "Corner base unit"],
-            "note": "corner units need M2.2 placement" }
-        ] },
-      { "class": "base", "family": "H.78", "section": "Sink base units H. 78", "printed_pages": "44-46", "status": "partial",
+              "Base unit with jumbo drawer for P-One pull-out waste unit",
+              "Base unit with pull-out XL waste unit",
+              "Base unit with drawers and jumbo drawer"
+            ],
+            "note": "complete since 2026-08-17 - the two waste (Trash & Recycle) units carry their bin kits as companion order lines from printed p.524-525"
+          },
+          {
+            "printed": 40,
+            "status": "extracted",
+            "types": [
+              "Base unit with jumbo drawers",
+              "Base unit with drawer and jumbo drawer"
+            ]
+          },
+          {
+            "printed": 41,
+            "status": "not_extracted",
+            "types": [
+              "Base unit with drawer and jumbo drawer",
+              "Base unit for built-in oven H. 60"
+            ],
+            "note": "CAUTION: codes on this page (B78566, B88566, B98566 ...) do NOT decode with the p.36 width lookup, and the elevation reads 19,5 + 55,5 = 750, not 780. Read this page's grammar from scratch before extracting; do not assume."
+          },
+          {
+            "printed": 42,
+            "status": "partial",
+            "types": [
+              {
+                "title": "Base unit for built-in oven H. 60",
+                "status": "not_extracted"
+              },
+              {
+                "title": "Corner base unit",
+                "status": "extracted",
+                "note": "Extracted and BUILDABLE since 2026-08-17: 9 sizes x 2 executions = 18 articles. The letter is the execution (S = door at the left end, D mirrored), the door hand (LH/RH) stays the per-order hinge_side. W notation decoded: second number = depth + 80 (the 8x8 filler), first = nominal length along the door wall; nominal minus carcass = wasted space, drawn as edges only. Corner PLACEMENT (how a run turns) is still M2.2. GAP found on printed p.10 (2026-08-17): the technical page lists a THIRD corner depth - 95x65 / 110x65 / 125x65, i.e. d.57, since 65 = 57 + 80 - which p.42 does not price and whose own page we have not located. Not extracted, not invented. d.57 is outside the H.78 depth grammar (7=d.35, 8=d.62, 9=d.67), so it is recorded here rather than as a phantom section: a gap row may only appear at a level we have actually read."
+              },
+              {
+                "title": "Corner base unit with Magicorner pull-out mechanism",
+                "status": "not_extracted"
+              }
+            ]
+          },
+          {
+            "printed": 43,
+            "status": "not_extracted",
+            "types": [
+              "Corner base unit with Slidecorner pull-out mechanism",
+              "Corner base unit"
+            ],
+            "note": "corner units need M2.2 placement"
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.78",
+        "section": "Sink base units H. 78",
+        "printed_pages": "44-46",
+        "status": "partial",
         "pages": [
-          { "printed": 44, "status": "extracted",
-            "types": ["Sink base unit with door", "Sink base unit with doors", "Sink base unit w/jumbo drawer", "Sink base unit w/jumbo drawers"] },
-          { "printed": 45, "status": "not_extracted",
-            "types": ["Sink base unit with fixed front and jumbo drawer", "Corner sink base unit"],
-            "note": "blocked on Elda Q4: codes 90 vs 91 (and AU925/945) are identical except for the gola front split" },
-          { "printed": 46, "status": "not_extracted",
-            "types": ["Corner sink base unit", "Corner sink base unit. 120 cm carcass", "Corner sink base unit with 155 degree hinges"],
-            "note": "corner units need M2.2 placement" }
-        ] },
-      { "class": "base", "family": "H.78", "section": "Base units H. 78 | for household appliances", "printed_pages": "47-48", "status": "partial",
+          {
+            "printed": 44,
+            "status": "extracted",
+            "types": [
+              "Sink base unit with door",
+              "Sink base unit with doors",
+              "Sink base unit w/jumbo drawer",
+              "Sink base unit w/jumbo drawers"
+            ]
+          },
+          {
+            "printed": 45,
+            "status": "not_extracted",
+            "types": [
+              "Sink base unit with fixed front and jumbo drawer",
+              "Corner sink base unit"
+            ],
+            "note": "blocked on Elda Q4: codes 90 vs 91 (and AU925/945) are identical except for the gola front split"
+          },
+          {
+            "printed": 46,
+            "status": "not_extracted",
+            "types": [
+              "Corner sink base unit",
+              "Corner sink base unit. 120 cm carcass",
+              "Corner sink base unit with 155 degree hinges"
+            ],
+            "note": "corner units need M2.2 placement"
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.78",
+        "section": "Base units H. 78 | for household appliances",
+        "printed_pages": "47-48",
+        "status": "partial",
         "pages": [
-          { "printed": 47, "status": "partial",
+          {
+            "printed": 47,
+            "status": "partial",
             "note": "Decisions on this page are per POSITION: three types are excluded by decision, the dishwasher door is extracted.",
             "types": [
-              { "title": "Floor-standing housing for fridge or freezer with sliding/fixed hinges", "status": "excluded", "decided_on": "2026-08-17",
-                "note": "V80601, V90601 (W60). EXCLUDED by decision, not by oversight - no current project orders Cesar fridge housings. PLANNING trust, reversible on demand." },
-              { "title": "Base unit for built-in fridge-freezer with sliding/fixed hinges", "status": "excluded", "decided_on": "2026-08-17",
-                "note": "V80611, V90611 (W60). Excluded with the housing above, same reason." },
-              { "title": "Door for fully-integrated dishwasher", "status": "extracted",
-                "note": "V80530 (W45), V80630 (W60), V80730 (W75) - extracted 2026-08-17 as an appliance_front panel. GBBF01 and the filler profile ride along as companion order lines, not as buildable rows." },
-              { "title": "Door for fully-integrated washing machine", "status": "excluded", "decided_on": "2026-08-17",
-                "note": "V80640 (W60). Excluded - rare in the kitchens we build." }
-            ] },
-          { "printed": 48, "status": "not_extracted",
+              {
+                "title": "Floor-standing housing for fridge or freezer with sliding/fixed hinges",
+                "status": "excluded",
+                "decided_on": "2026-08-17",
+                "note": "V80601, V90601 (W60). EXCLUDED by decision, not by oversight - no current project orders Cesar fridge housings. PLANNING trust, reversible on demand."
+              },
+              {
+                "title": "Base unit for built-in fridge-freezer with sliding/fixed hinges",
+                "status": "excluded",
+                "decided_on": "2026-08-17",
+                "note": "V80611, V90611 (W60). Excluded with the housing above, same reason."
+              },
+              {
+                "title": "Door for fully-integrated dishwasher",
+                "status": "extracted",
+                "note": "V80530 (W45), V80630 (W60), V80730 (W75) - extracted 2026-08-17 as an appliance_front panel. GBBF01 and the filler profile ride along as companion order lines, not as buildable rows."
+              },
+              {
+                "title": "Door for fully-integrated washing machine",
+                "status": "excluded",
+                "decided_on": "2026-08-17",
+                "note": "V80640 (W60). Excluded - rare in the kitchens we build."
+              }
+            ]
+          },
+          {
+            "printed": 48,
+            "status": "not_extracted",
             "note": "Three dishwasher door executions plus two accessories; statuses differ per position. EXTRACTED 2026-08-23: the three door executions, 6 codes, all HELD AND NOT BUILDABLE - their two fronts sum to 720 or 750 and the family door height is 780, so they are gola panels and door_versions is a family key. The filler profile was already an order line on the printed p.47 door and is one here too. The hob protection stays out: it belongs to a hob, and no hob is held.",
             "types": [
-              { "title": "Door for integrated dish-washer (three executions)", "status": "extracted", "extracted_on": "2026-08-23",
-                "note": "V88559/V88659 (2 fronts, aluminium profile for straight groove, 36/36), V88566/V88666 (19,5/55,5) and V88569/V88669 (16,5/55,5). W45 and W60 only - the 75 version exists on p.47. THE LAST TWO PRINT THE SAME FOUR LINES, THE SAME WIDTHS AND THE SAME PRICES and differ only in their elevation - the third instance today of one description naming two articles. All three carry the same prohibition block: not available with Maxima 2.2 Shaker door or an L-shaped grip recess, which is what makes them the straight-groove executions." },
-              { "title": "Filler profile between the dishwasher and the top", "status": "extracted", "extracted_on": "2026-08-23",
-                "note": "995945 (W45), 995946 (W60). Mandatory companion of a dishwasher door - an order line, not drawn, like a GOL profile. A 75 door takes the W60 filler, because the appliance behind it is 60 wide. Carried by all four dishwasher-door positions now, the printed p.47 one and the three here." },
-              { "title": "Protection under induction hob", "status": "not_extracted",
-                "note": "996466 (W60), 996467 (W75), 996469 (W90), 996460 (W105), 996462 (W120). Custom sizing not available per source. Belongs to a hob, not to the dishwasher kit." }
-            ] }
-        ] },
-      { "class": "base", "family": "H.84", "section": "Base units H. 84", "printed_pages": "49-52", "status": "not_extracted",
-        "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78" },
-      { "class": "base", "family": "H.84", "section": "Sink base units H. 84", "printed_pages": "53-54", "status": "not_extracted" },
-      { "class": "base", "family": "H.84", "section": "Base units H. 84 | for household appliances", "printed_pages": "55-56", "status": "not_extracted" },
-      { "class": "tall", "family": "H.138", "section": "Tall units H. 138", "printed_pages": "90-96", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "Door for integrated dish-washer (three executions)",
+                "status": "extracted",
+                "extracted_on": "2026-08-23",
+                "note": "V88559/V88659 (2 fronts, aluminium profile for straight groove, 36/36), V88566/V88666 (19,5/55,5) and V88569/V88669 (16,5/55,5). W45 and W60 only - the 75 version exists on p.47. THE LAST TWO PRINT THE SAME FOUR LINES, THE SAME WIDTHS AND THE SAME PRICES and differ only in their elevation - the third instance today of one description naming two articles. All three carry the same prohibition block: not available with Maxima 2.2 Shaker door or an L-shaped grip recess, which is what makes them the straight-groove executions."
+              },
+              {
+                "title": "Filler profile between the dishwasher and the top",
+                "status": "extracted",
+                "extracted_on": "2026-08-23",
+                "note": "995945 (W45), 995946 (W60). Mandatory companion of a dishwasher door - an order line, not drawn, like a GOL profile. A 75 door takes the W60 filler, because the appliance behind it is 60 wide. Carried by all four dishwasher-door positions now, the printed p.47 one and the three here."
+              },
+              {
+                "title": "Protection under induction hob",
+                "status": "not_extracted",
+                "note": "996466 (W60), 996467 (W75), 996469 (W90), 996460 (W105), 996462 (W120). Custom sizing not available per source. Belongs to a hob, not to the dishwasher kit."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "family": "H.84",
+        "section": "Base units H. 84",
+        "printed_pages": "49-52",
+        "status": "not_extracted",
+        "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78"
+      },
+      {
+        "class": "base",
+        "family": "H.84",
+        "section": "Sink base units H. 84",
+        "printed_pages": "53-54",
+        "status": "not_extracted"
+      },
+      {
+        "class": "base",
+        "family": "H.84",
+        "section": "Base units H. 84 | for household appliances",
+        "printed_pages": "55-56",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "family": "H.138",
+        "section": "Tall units H. 138",
+        "printed_pages": "90-96",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C1 = d.35 and C2 = d.62. The section holds ordinary door and two-door units, the 'Dispensa', 'Tandem' and pull-out types, corner tall units and Slidecorner corners (C1115D/S, C2115D/S and siblings - the D/S execution letter again), oven and microwave housings, and fridge units. Read at section level 2026-08-22. EXTRACTED 2026-08-23: printed p.90 whole, three types, 16 codes, both depths - registry/cesar/tall_h138.json. The page also settled a question the wall-hung glyph raised on printed p.37: the 'Hung version' symbol is PER POSITION, and the kit-ready door carries neither the symbol nor the margin surcharge, with no prose anywhere to say so. And the answer differs between tall families - the two-door type is hung here and is not at H.210.",
         "pages": [
-          { "printed": 90, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Tall unit with door", "Tall unit with doors", "Tall unit with door for interior drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"] },
-          { "printed": 91, "status": "not_extracted",
-            "types": ["Tall unit with pull-out door: C20380/C20680", "Dispensa tall unit with pull-out door: C20385/C20585", "Tandem tall unit with pull-out shelves: C20586/C20686"],
-            "note": "Deferred for the reason printed p.112 is deferred at H.210: every type is defined by an interior mechanism the page names and does not code - Arena Style Plus, and an ETOUCH electrical opening with a power adapter priced in the margin with no article. The envelope could be drawn today; the thing the article IS could not be recorded. Waits on registry/cesar/options/." },
-          { "printed": 92, "status": "not_extracted",
-            "types": ["Tandem tall unit with pull-out shelves, wide: C20986/C21286", "Corner tall unit with shelf, carcass W. 90 cm: C1115D/S, C1120D/S, C2115D/S, C2120D/S", "Corner tall unit with shelf, carcass W. 120 cm: C1130D/S, C1135D/S, C2130D/S, C2135D/S"],
+          {
+            "printed": 90,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Tall unit with door",
+              "Tall unit with doors",
+              "Tall unit with door for interior drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"
+            ]
+          },
+          {
+            "printed": 91,
+            "status": "not_extracted",
+            "types": [
+              "Tall unit with pull-out door: C20380/C20680",
+              "Dispensa tall unit with pull-out door: C20385/C20585",
+              "Tandem tall unit with pull-out shelves: C20586/C20686"
+            ],
+            "note": "Deferred for the reason printed p.112 is deferred at H.210: every type is defined by an interior mechanism the page names and does not code - Arena Style Plus, and an ETOUCH electrical opening with a power adapter priced in the margin with no article. The envelope could be drawn today; the thing the article IS could not be recorded. Waits on registry/cesar/options/."
+          },
+          {
+            "printed": 92,
+            "status": "not_extracted",
+            "types": [
+              "Tandem tall unit with pull-out shelves, wide: C20986/C21286",
+              "Corner tall unit with shelf, carcass W. 90 cm: C1115D/S, C1120D/S, C2115D/S, C2120D/S",
+              "Corner tall unit with shelf, carcass W. 120 cm: C1130D/S, C1135D/S, C2130D/S, C2135D/S"
+            ],
             "note": "The uncoded mechanism again, plus the D/S execution letter - the fourth chapter it appears in, after the base corners on printed p.42, the straight corner wall unit on printed p.223 and the tall corners on printed p.113-114. Elda Q7b. The corner width field decodes to nothing here either: C1115D/S is W.115 and C1120D/S is W.130."
-            }
-        ] },
-      { "class": "tall", "family": "H.198", "section": "Tall units H. 198", "printed_pages": "97-101", "status": "partial", "extracted_on": "2026-08-23",
+          }
+        ]
+      },
+      {
+        "class": "tall",
+        "family": "H.198",
+        "section": "Tall units H. 198",
+        "printed_pages": "97-101",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CE = d.35 and CF = d.62. printed p.97 is the page claude/options-architecture-2026-08-20.md takes its worked example from: one printed row carrying an option that is CHOSEN ('See kit on page 569') beside one that is IMPLIED ('1 rh or lh door with 155 degree hinges'). The same type recurs at H.210 on printed p.111 and at H.138 on printed p.90. EXTRACTED 2026-08-23: printed p.97 whole, three types, 14 codes - registry/cesar/tall_h198.json. THE PAGE IS printed p.111 WITH DIFFERENT LETTERS, down to the suffixes and the wall-hung pattern, which is what makes printed p.90 the outlier: H.198 and H.210 hang only the plain door type, H.138 hangs the two-door type as well.",
         "pages": [
-          { "printed": 97, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Tall unit with door", "Tall unit with doors (NOT offered wall-hung)", "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"] },
-          { "printed": 98, "status": "not_extracted", "types": ["Tall units H. 198 - interior mechanisms"], "note": "Deferred for the reason printed p.91 and printed p.112 are deferred: mechanisms the page names and does not code." },
-          { "printed": 99, "status": "not_extracted", "types": ["Tall units H. 198 - interior mechanisms and corners"], "note": "Mechanisms plus the D/S execution letter. Elda Q7b." },
-          { "printed": 100, "status": "not_extracted", "types": ["Tall units H. 198 - oven and microwave housings"], "note": "Appliance module." },
-          { "printed": 101, "status": "not_extracted", "types": ["Tall units H. 198 - fridge units"], "note": "Appliance module." }
-        ] },
-      { "class": "tall", "family": "H.198", "section": "Tall units H. 198 | for base unit H. 78", "printed_pages": "102-110", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C7 = d.35 and C8 = d.62. C8 is the letter the USA elements recon read on printed p.417 (C87757) and recorded as a NEW letter - it is not new, it is this family. See code_grammar.usa_elements.family_letters_are_not_new." },
-      { "class": "tall", "family": "H.210", "section": "Tall units H. 210", "printed_pages": "111-115", "status": "partial",
+          {
+            "printed": 97,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Tall unit with door",
+              "Tall unit with doors (NOT offered wall-hung)",
+              "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"
+            ]
+          },
+          {
+            "printed": 98,
+            "status": "not_extracted",
+            "types": [
+              "Tall units H. 198 - interior mechanisms"
+            ],
+            "note": "Deferred for the reason printed p.91 and printed p.112 are deferred: mechanisms the page names and does not code."
+          },
+          {
+            "printed": 99,
+            "status": "not_extracted",
+            "types": [
+              "Tall units H. 198 - interior mechanisms and corners"
+            ],
+            "note": "Mechanisms plus the D/S execution letter. Elda Q7b."
+          },
+          {
+            "printed": 100,
+            "status": "not_extracted",
+            "types": [
+              "Tall units H. 198 - oven and microwave housings"
+            ],
+            "note": "Appliance module."
+          },
+          {
+            "printed": 101,
+            "status": "not_extracted",
+            "types": [
+              "Tall units H. 198 - fridge units"
+            ],
+            "note": "Appliance module."
+          }
+        ]
+      },
+      {
+        "class": "tall",
+        "family": "H.198",
+        "section": "Tall units H. 198 | for base unit H. 78",
+        "printed_pages": "102-110",
+        "status": "not_extracted",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C7 = d.35 and C8 = d.62. C8 is the letter the USA elements recon read on printed p.417 (C87757) and recorded as a NEW letter - it is not new, it is this family. See code_grammar.usa_elements.family_letters_are_not_new."
+      },
+      {
+        "class": "tall",
+        "family": "H.210",
+        "section": "Tall units H. 210",
+        "printed_pages": "111-115",
+        "status": "partial",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CQ = d.35 and CR = d.62 - and CR is shared with printed p.126-131 below and with the USA fridge doors on printed p.418, three printed sections on one letter. First METRIC tall section in the registry and the first floor-standing full-height cabinet the engine can build. Extracted 2026-08-22: printed p.111 whole, three types, 14 codes. registry/cesar/tall_h210.json.",
         "pages": [
-          { "printed": 111, "status": "extracted",
+          {
+            "printed": 111,
+            "status": "extracted",
             "note": "Extracted whole 2026-08-22 - all three types on the page, both depths, 14 codes. Two findings recorded on the section file rather than here because they are about the page: the price table prints a W.75 one-door pair (CQ0731/CR0731) that the D x W visual index on printed p.82 does not list - verified by RENDERING p.82 after pdftotext was caught dropping digits in that block - and the wall-hung surcharge is printed per TYPE, not per page.",
             "types": [
-              { "title": "Tall unit with door", "status": "extracted", "note": "CQ0331/0531/0631/0731 at d.35 and CR0331/0531/0631/0731 at d.62, W.30/45/60/75. 1 rh or lh door, 4 shelves, 1 divider. One code, both hands - the page prices one article and hinge_side stays per-order. The only type on the page whose margin offers a wall-hung version." },
-              { "title": "Tall unit with doors", "status": "extracted", "note": "CQ0930/CQ1230 at d.35 and CR0930/CR1230 at d.62, W.90/120. 2 doors side by side over the full 2100, 4 shelves, 1 divider. Not handed." },
-              { "title": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section", "status": "extracted", "note": "CR0535/CR0635, W.45/60, d.62 ONLY - there is no CQ counterpart, so a d.35 tall unit cannot take the bottom-section kit. 1 rh or lh door with 155 degree hinges, 2 shelves, 1 divider. The kit (page 569) is CHOSEN and the hinges are IMPLIED; Contract v2 CAN now express both - companion_refs is a list of lines and a line carries origin implied or chosen - but neither is recorded yet, because a chosen companion needs a catalog to resolve from (registry/cesar/options/, p.568-569) and a person to choose it (the panel). Recorded gap, not a silent default." }
-            ] },
-          { "printed": 112, "status": "not_extracted", "types": ["Tall unit with pull-out door: CR0350/0550/0650", "Dispensa tall unit with pull-out door: CR0385/0585", "Tandem tall unit with pull-out shelves: CR0586/0686"],
-            "note": "Deferred: every type on this page is defined by an interior mechanism that the page names but does not code - Arena Style Plus pull-out doors and trays, and an ETOUCH electrical opening with a power adapter priced in the margin with no article. The envelope is a box with one front and could be drawn today; what cannot be recorded honestly is the mechanism, and extracting the carcass while dropping the thing the article IS would misrepresent it. Waits on registry/cesar/options/." },
-          { "printed": 113, "status": "not_extracted", "types": ["Convoy tall unit with pull-out shelves: CR0688", "Tall broom cupboard with door: CR1512/1612", "Corner tall unit, carcass W. 90 cm: CQ152D/S, CQ180D/S, CQ157D/S and CR siblings"],
-            "note": "Two reasons on one page. The Convoy unit is another uncoded mechanism, like p.112. The corner tall units are the third chapter in which the D/S execution letter appears - after the base corners on printed p.42 and the straight corner wall unit on printed p.223 - which makes them further direct evidence for Elda Q7b, and their width field decodes to nothing at all: CQ152D/S is W.115, CQ180D/S is W.120, CQ157D/S is W.130. The broom cupboard alone is extractable and is held back only so the page is taken whole when it is taken." },
-          { "printed": 114, "status": "not_extracted", "types": ["Corner tall unit, carcass W. 120 cm: CQ153D/S, CQ190D/S, CQ158D/S and CR siblings", "Slidecorner corner tall unit, carcass W. 90 cm: CR531D/S, CR538D/S, CR532D/S", "Slidecorner corner tall unit, carcass W. 120 cm: CR536D/S, CR539D/S, CR537D/S"],
-            "note": "Corner geometry plus the Slidecorner mechanism. Same two blockers as p.113: the D/S execution letter is gated on Elda Q7b, and a corner tall unit carries a panel W.70/75/85 that is new geometry - the corner tall is not the base corner made taller." },
-          { "printed": 115, "status": "not_extracted", "types": ["Tall unit for fridge with single door (for sliding or fixed hinges): CR4611", "Tall fridge unit with door, not suitable for fixed hinges: CR4712"],
-            "note": "Belongs to the appliance module, item 6 on the status doc NEXT list. Both carry a Servo Flex mechanism and a Power adapter priced in the margin without article codes, and CR4611 adds a Kamat fixed-hinge surcharge. The distinction between the two - one takes fixed hinges, the other explicitly does not - is exactly the kind of fact that needs somewhere to live before the codes are useful." }
-        ] },
-      { "class": "tall", "family": "H.210", "section": "Tall units H. 210 | for base unit H. 78", "printed_pages": "116-125", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units." },
-      { "class": "tall", "family": "H.210", "section": "Tall units H. 210 | for base unit H. 84", "printed_pages": "126-131", "status": "not_extracted",
-        "note": "SHARES ITS LETTERS WITH printed p.111-115: CQ = d.35 and CR = d.62 here too. The four-digit tail is what separates them - p.111-115 uses width indices 03/05/06/07/09/12 and this section uses 05/06/07/09/15/16/19/26/27/29/36 - so no code collides, but a loader that keys on the prefix would merge two sections that the book keeps apart. See the registry-loader hardening item on the status doc." },
-      { "class": "tall", "family": "H.222", "section": "Tall units H. 222", "printed_pages": "132-136", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "Tall unit with door",
+                "status": "extracted",
+                "note": "CQ0331/0531/0631/0731 at d.35 and CR0331/0531/0631/0731 at d.62, W.30/45/60/75. 1 rh or lh door, 4 shelves, 1 divider. One code, both hands - the page prices one article and hinge_side stays per-order. The only type on the page whose margin offers a wall-hung version."
+              },
+              {
+                "title": "Tall unit with doors",
+                "status": "extracted",
+                "note": "CQ0930/CQ1230 at d.35 and CR0930/CR1230 at d.62, W.90/120. 2 doors side by side over the full 2100, 4 shelves, 1 divider. Not handed."
+              },
+              {
+                "title": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section",
+                "status": "extracted",
+                "note": "CR0535/CR0635, W.45/60, d.62 ONLY - there is no CQ counterpart, so a d.35 tall unit cannot take the bottom-section kit. 1 rh or lh door with 155 degree hinges, 2 shelves, 1 divider. The kit (page 569) is CHOSEN and the hinges are IMPLIED; Contract v2 CAN now express both - companion_refs is a list of lines and a line carries origin implied or chosen - but neither is recorded yet, because a chosen companion needs a catalog to resolve from (registry/cesar/options/, p.568-569) and a person to choose it (the panel). Recorded gap, not a silent default."
+              }
+            ]
+          },
+          {
+            "printed": 112,
+            "status": "not_extracted",
+            "types": [
+              "Tall unit with pull-out door: CR0350/0550/0650",
+              "Dispensa tall unit with pull-out door: CR0385/0585",
+              "Tandem tall unit with pull-out shelves: CR0586/0686"
+            ],
+            "note": "Deferred: every type on this page is defined by an interior mechanism that the page names but does not code - Arena Style Plus pull-out doors and trays, and an ETOUCH electrical opening with a power adapter priced in the margin with no article. The envelope is a box with one front and could be drawn today; what cannot be recorded honestly is the mechanism, and extracting the carcass while dropping the thing the article IS would misrepresent it. Waits on registry/cesar/options/."
+          },
+          {
+            "printed": 113,
+            "status": "not_extracted",
+            "types": [
+              "Convoy tall unit with pull-out shelves: CR0688",
+              "Tall broom cupboard with door: CR1512/1612",
+              "Corner tall unit, carcass W. 90 cm: CQ152D/S, CQ180D/S, CQ157D/S and CR siblings"
+            ],
+            "note": "Two reasons on one page. The Convoy unit is another uncoded mechanism, like p.112. The corner tall units are the third chapter in which the D/S execution letter appears - after the base corners on printed p.42 and the straight corner wall unit on printed p.223 - which makes them further direct evidence for Elda Q7b, and their width field decodes to nothing at all: CQ152D/S is W.115, CQ180D/S is W.120, CQ157D/S is W.130. The broom cupboard alone is extractable and is held back only so the page is taken whole when it is taken."
+          },
+          {
+            "printed": 114,
+            "status": "not_extracted",
+            "types": [
+              "Corner tall unit, carcass W. 120 cm: CQ153D/S, CQ190D/S, CQ158D/S and CR siblings",
+              "Slidecorner corner tall unit, carcass W. 90 cm: CR531D/S, CR538D/S, CR532D/S",
+              "Slidecorner corner tall unit, carcass W. 120 cm: CR536D/S, CR539D/S, CR537D/S"
+            ],
+            "note": "Corner geometry plus the Slidecorner mechanism. Same two blockers as p.113: the D/S execution letter is gated on Elda Q7b, and a corner tall unit carries a panel W.70/75/85 that is new geometry - the corner tall is not the base corner made taller."
+          },
+          {
+            "printed": 115,
+            "status": "not_extracted",
+            "types": [
+              "Tall unit for fridge with single door (for sliding or fixed hinges): CR4611",
+              "Tall fridge unit with door, not suitable for fixed hinges: CR4712"
+            ],
+            "note": "Belongs to the appliance module, item 6 on the status doc NEXT list. Both carry a Servo Flex mechanism and a Power adapter priced in the margin without article codes, and CR4611 adds a Kamat fixed-hinge surcharge. The distinction between the two - one takes fixed hinges, the other explicitly does not - is exactly the kind of fact that needs somewhere to live before the codes are useful."
+          }
+        ]
+      },
+      {
+        "class": "tall",
+        "family": "H.210",
+        "section": "Tall units H. 210 | for base unit H. 78",
+        "printed_pages": "116-125",
+        "status": "not_extracted",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units."
+      },
+      {
+        "class": "tall",
+        "family": "H.210",
+        "section": "Tall units H. 210 | for base unit H. 84",
+        "printed_pages": "126-131",
+        "status": "not_extracted",
+        "note": "SHARES ITS LETTERS WITH printed p.111-115: CQ = d.35 and CR = d.62 here too. The four-digit tail is what separates them - p.111-115 uses width indices 03/05/06/07/09/12 and this section uses 05/06/07/09/15/16/19/26/27/29/36 - so no code collides, but a loader that keys on the prefix would merge two sections that the book keeps apart. See the registry-loader hardening item on the status doc."
+      },
+      {
+        "class": "tall",
+        "family": "H.222",
+        "section": "Tall units H. 222",
+        "printed_pages": "132-136",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CG = d.35 and CH = d.62. Structurally the twin of printed p.111-115 at a greater height - EXCEPT for the wall-hung glyph. EXTRACTED 2026-08-23: printed p.132 whole, three types, 14 codes - registry/cesar/tall_h222.json.",
         "pages": [
-          { "printed": 132, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Tall unit with door (SUFFIX 02, NOT offered wall-hung)", "Tall unit with doors (NOT offered wall-hung)", "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"],
-            "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout." }
-        ] },
-      { "class": "tall", "family": "H.222", "section": "Tall units H. 222 | for base unit H. 78", "printed_pages": "137-145", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have." },
-      { "class": "tall", "family": "H.222", "section": "Tall units H. 222 | for base unit H. 84", "printed_pages": "146-150", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CI = d.35 and CK = d.62. Note CK, not CJ - the letters are a lookup and nothing skips predictably." },
-      { "class": "tall", "family": "H.234", "section": "Tall units H. 234", "printed_pages": "151-155", "status": "partial", "extracted_on": "2026-08-23",
+          {
+            "printed": 132,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Tall unit with door (SUFFIX 02, NOT offered wall-hung)",
+              "Tall unit with doors (NOT offered wall-hung)",
+              "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"
+            ],
+            "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout."
+          }
+        ]
+      },
+      {
+        "class": "tall",
+        "family": "H.222",
+        "section": "Tall units H. 222 | for base unit H. 78",
+        "printed_pages": "137-145",
+        "status": "not_extracted",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have."
+      },
+      {
+        "class": "tall",
+        "family": "H.222",
+        "section": "Tall units H. 222 | for base unit H. 84",
+        "printed_pages": "146-150",
+        "status": "not_extracted",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CI = d.35 and CK = d.62. Note CK, not CJ - the letters are a lookup and nothing skips predictably."
+      },
+      {
+        "class": "tall",
+        "family": "H.234",
+        "section": "Tall units H. 234",
+        "printed_pages": "151-155",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C0 = d.35 and C9 = d.62, shared with printed p.156-164 below in the same way CQ/CR are shared between p.111-115 and p.126-131. The tallest family in the chapter. EXTRACTED 2026-08-23: printed p.151 whole, three types, 14 codes - registry/cesar/tall_h234.json. The page is printed p.132 at twelve centimetres more, position for position and suffix for suffix.",
         "pages": [
-          { "printed": 151, "status": "extracted", "extracted_on": "2026-08-23",
-            "types": ["Tall unit with door (SUFFIX 02, NOT offered wall-hung)", "Tall unit with doors (NOT offered wall-hung)", "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"],
-            "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout." }
-        ] },
-      { "class": "tall", "family": "H.234", "section": "Tall units H. 234 | for base unit H. 78", "printed_pages": "156-164", "status": "not_extracted",
-        "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter." },
-      { "class": "tall", "family": "H.234", "section": "Tall units H. 234 | for base unit H. 84", "printed_pages": "165-169", "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CW = d.35 and CX = d.62." },
-      { "class": "tall", "family": "Top elements H.36", "section": "Tall unit top elements H. 36 | without fixings", "printed_pages": "170", "status": "not_extracted",
-        "note": "Prefix SB. The top elements are the four short sections that close the chapter, and their prefixes DO run in sequence - SB/SC/SD/SE against H.36/H.48/H.60/H.72. That is the first alphabetical run of family letters anywhere in this catalog and it is recorded as an OBSERVATION, not as a rule: the wall letters B/D/E/G and the tall pairs above are both proof that a sequence in one chapter predicts nothing in another. printed p.170 also carries the N-Elle variant." },
-      { "class": "tall", "family": "Top elements H.48", "section": "Tall unit top elements H. 48 | without fixings", "printed_pages": "171", "status": "not_extracted",
-        "note": "Prefix SC. See the note on printed p.170." },
-      { "class": "tall", "family": "Top elements H.60", "section": "Tall unit top elements H. 60 | without fixings", "printed_pages": "172", "status": "not_extracted",
-        "note": "Prefix SD (SB0500-style codes: SD0500/0600/0700/0900/1200). Three types: top element with top-hung door, with door, with doors." },
-      { "class": "tall", "family": "Top elements H.72", "section": "Tall unit top elements H. 72 | without fixings", "printed_pages": "173", "status": "not_extracted",
-        "note": "Prefix SE. See the note on printed p.170." },
-      { "class": "wall", "family": "H.36", "section": "Wall units H. 36", "printed_pages": "211-212", "status": "partial",
+          {
+            "printed": 151,
+            "status": "extracted",
+            "extracted_on": "2026-08-23",
+            "types": [
+              "Tall unit with door (SUFFIX 02, NOT offered wall-hung)",
+              "Tall unit with doors (NOT offered wall-hung)",
+              "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"
+            ],
+            "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout."
+          }
+        ]
+      },
+      {
+        "class": "tall",
+        "family": "H.234",
+        "section": "Tall units H. 234 | for base unit H. 78",
+        "printed_pages": "156-164",
+        "status": "not_extracted",
+        "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter."
+      },
+      {
+        "class": "tall",
+        "family": "H.234",
+        "section": "Tall units H. 234 | for base unit H. 84",
+        "printed_pages": "165-169",
+        "status": "not_extracted",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CW = d.35 and CX = d.62."
+      },
+      {
+        "class": "tall",
+        "family": "Top elements H.36",
+        "section": "Tall unit top elements H. 36 | without fixings",
+        "printed_pages": "170",
+        "status": "not_extracted",
+        "note": "Prefix SB. The top elements are the four short sections that close the chapter, and their prefixes DO run in sequence - SB/SC/SD/SE against H.36/H.48/H.60/H.72. That is the first alphabetical run of family letters anywhere in this catalog and it is recorded as an OBSERVATION, not as a rule: the wall letters B/D/E/G and the tall pairs above are both proof that a sequence in one chapter predicts nothing in another. printed p.170 also carries the N-Elle variant."
+      },
+      {
+        "class": "tall",
+        "family": "Top elements H.48",
+        "section": "Tall unit top elements H. 48 | without fixings",
+        "printed_pages": "171",
+        "status": "not_extracted",
+        "note": "Prefix SC. See the note on printed p.170."
+      },
+      {
+        "class": "tall",
+        "family": "Top elements H.60",
+        "section": "Tall unit top elements H. 60 | without fixings",
+        "printed_pages": "172",
+        "status": "not_extracted",
+        "note": "Prefix SD (SB0500-style codes: SD0500/0600/0700/0900/1200). Three types: top element with top-hung door, with door, with doors."
+      },
+      {
+        "class": "tall",
+        "family": "Top elements H.72",
+        "section": "Tall unit top elements H. 72 | without fixings",
+        "printed_pages": "173",
+        "status": "not_extracted",
+        "note": "Prefix SE. See the note on printed p.170."
+      },
+      {
+        "class": "wall",
+        "family": "H.36",
+        "section": "Wall units H. 36",
+        "printed_pages": "211-212",
+        "status": "partial",
         "note": "CODE GRAMMAR IS NEW AND MUST NOT BE CARRIED OVER FROM H.78. Read from the source 2026-08-18: P + family letter + width index + type suffix. Family letters confirmed by direct read ONLY for PB = H.36 (printed p.211), PE = H.72 (p.228), PG = H.84 (p.238). The width index is a LOOKUP with irregular rounding (15=01, 30=03, 45=05, 60=06, 75=07, 90=09, 105=10, 120=12, 150=15, 180=18, 240=24) - never compute it. The type suffix is not stable even inside one family: 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84, and 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
         "pages": [
-          { "printed": 211, "status": "extracted",
+          {
+            "printed": 211,
+            "status": "extracted",
             "note": "Extracted whole 2026-08-20 (started 2026-08-18). All three opening kinds are in. The push-up type was a recorded gap for two days for want of a drawing convention; that was judged the wrong shape of blocker - the codes are catalog fact, the symbol is a drawing question, and the two do not have to travel together. No side-hinged door appears anywhere on this page, which is why the printed p.11 five-centimetre closing-strip rule does not bite here - the page IS that rule's stated alternative.",
             "types": [
-              { "title": "Wall unit with top-hung door", "status": "extracted",
-                "note": "PB0500/0600/0700/0900/1000/1200, W.45-120, d.35. Symbol derived by mirroring the existing hinge-axis rule, not by inventing a second one." },
-              { "title": "Wall unit with push-up door", "status": "extracted",
+              {
+                "title": "Wall unit with top-hung door",
+                "status": "extracted",
+                "note": "PB0500/0600/0700/0900/1000/1200, W.45-120, d.35. Symbol derived by mirroring the existing hinge-axis rule, not by inventing a second one."
+              },
+              {
+                "title": "Wall unit with push-up door",
+                "status": "extracted",
                 "decided_on": "2026-08-20",
-                "note": "PB0610, PB0710, PB0910, PB1010, PB1210 (W.60-120, no W.45). Held back on 2026-08-18 pending a drawing convention, extracted on 2026-08-20 as DATA WITHOUT A SYMBOL: front_layout carries mechanism push_up and NO hinge_axis, so 70_symbols draws nothing rather than something wrong - the same treatment base_pull_out_door has had since printed p.36. The push-up drawing convention is still owed and is now a task of its own, not a gate on the codes. The page also states: interior Valencia handle, no Push-pull device." },
-              { "title": "Wall unit with bottom-hung door", "status": "extracted",
-                "note": "PB0525/0625/0725/0925/1025/1225, W.45-120, d.35. Reuses the figure built for the laundry unit and the dishwasher panel." }
-            ] },
-          { "printed": 212, "status": "not_extracted",
+                "note": "PB0610, PB0710, PB0910, PB1010, PB1210 (W.60-120, no W.45). Held back on 2026-08-18 pending a drawing convention, extracted on 2026-08-20 as DATA WITHOUT A SYMBOL: front_layout carries mechanism push_up and NO hinge_axis, so 70_symbols draws nothing rather than something wrong - the same treatment base_pull_out_door has had since printed p.36. The push-up drawing convention is still owed and is now a task of its own, not a gate on the codes. The page also states: interior Valencia handle, no Push-pull device."
+              },
+              {
+                "title": "Wall unit with bottom-hung door",
+                "status": "extracted",
+                "note": "PB0525/0625/0725/0925/1025/1225, W.45-120, d.35. Reuses the figure built for the laundry unit and the dishwasher panel."
+              }
+            ]
+          },
+          {
+            "printed": 212,
+            "status": "not_extracted",
             "types": [
               "Compound wall unit with top-hung door (2 modules)",
               "Compound wall unit with top-hung door (3 compartments)",
               "Compound wall unit with push-up door (3 compartments)"
             ],
-            "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes." }
-        ] },
-      { "class": "wall", "family": "H.36", "section": "Dish-drainer units H. 36", "printed_pages": "213", "status": "extracted", "extracted_on": "2026-08-23",
-        "note": "Whole section, three positions, 16 codes, verified against a 170-dpi render. A SECOND SECTION INSIDE A FAMILY WE ALREADY HELD - dish_drainer_h36.json declares no family-level key and reads height and mounting through wall_h36.json. It also mirrors its family: H.36 has no side-hinged wall unit and its dish-drainer section has no door type either." },
-      { "class": "wall", "family": "H.48", "section": "Wall units H. 48", "printed_pages": "214-216", "status": "partial", "extracted_on": "2026-08-23",
+            "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes."
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.36",
+        "section": "Dish-drainer units H. 36",
+        "printed_pages": "213",
+        "status": "extracted",
+        "extracted_on": "2026-08-23",
+        "note": "Whole section, three positions, 16 codes, verified against a 170-dpi render. A SECOND SECTION INSIDE A FAMILY WE ALREADY HELD - dish_drainer_h36.json declares no family-level key and reads height and mounting through wall_h36.json. It also mirrors its family: H.36 has no side-hinged wall unit and its dish-drainer section has no door type either."
+      },
+      {
+        "class": "wall",
+        "family": "H.48",
+        "section": "Wall units H. 48",
+        "printed_pages": "214-216",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Read WHOLE and verified against 170-dpi renders: nine of ten positions, 34 of 35 codes. The family letter was not read when this row was written - the note then said 'do not assume it continues alphabetically', and it was right to: printed p.434 named PC first from the filler table, and these pages confirmed it. The one position left out is the corner.",
         "pages": [
-          { "printed": 214, "status": "extracted", "types": ["Wall unit with door", "Wall unit with doors", "Wall unit with top-hung door", "Wall unit with push-up door"] },
-          { "printed": 215, "status": "extracted", "types": ["Wall unit with bottom-hung door", "Compound wall unit with top-hung door (2 modules)", "Compound wall unit with push-up door (2 modules)"] },
-          { "printed": 216, "status": "partial",
+          {
+            "printed": 214,
+            "status": "extracted",
+            "types": [
+              "Wall unit with door",
+              "Wall unit with doors",
+              "Wall unit with top-hung door",
+              "Wall unit with push-up door"
+            ]
+          },
+          {
+            "printed": 215,
+            "status": "extracted",
+            "types": [
+              "Wall unit with bottom-hung door",
+              "Compound wall unit with top-hung door (2 modules)",
+              "Compound wall unit with push-up door (2 modules)"
+            ]
+          },
+          {
+            "printed": 216,
+            "status": "partial",
             "types": [
               "Compound wall unit with top-hung door (3 modules)",
               "Compound wall unit with push-up door (3 compartments)",
-              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PC094D/S, 100x40, 1 rh or lh 60 cm door, corner filler 5x5. Gated on Elda Q7b - the trailing D/S is the same execution letter the base corners carry on printed p.42, and whether it is two articles or one article with a hand variant is exactly what the estimate now with her should answer." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.48", "section": "Dish-drainer units H. 48", "printed_pages": "217-218", "status": "extracted", "extracted_on": "2026-08-23",
-        "note": "Whole section, six positions, 20 codes, verified against 170-dpi renders. Unlike H.36 it has BOTH door types, because its family does." },
-      { "class": "wall", "family": "H.48", "section": "Wall units H. 48 with Virgola hood", "printed_pages": "219-220", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.60", "section": "Wall units H. 60", "printed_pages": "221-223", "status": "partial",
+              {
+                "title": "Straight corner wall unit",
+                "status": "not_extracted",
+                "note": "PC094D/S, 100x40, 1 rh or lh 60 cm door, corner filler 5x5. Gated on Elda Q7b - the trailing D/S is the same execution letter the base corners carry on printed p.42, and whether it is two articles or one article with a hand variant is exactly what the estimate now with her should answer."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.48",
+        "section": "Dish-drainer units H. 48",
+        "printed_pages": "217-218",
+        "status": "extracted",
+        "extracted_on": "2026-08-23",
+        "note": "Whole section, six positions, 20 codes, verified against 170-dpi renders. Unlike H.36 it has BOTH door types, because its family does."
+      },
+      {
+        "class": "wall",
+        "family": "H.48",
+        "section": "Wall units H. 48 with Virgola hood",
+        "printed_pages": "219-220",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.60",
+        "section": "Wall units H. 60",
+        "printed_pages": "221-223",
+        "status": "partial",
         "note": "Family letter PD was CONFIRMED from factory estimate 2026/30829 (PD0631, 600 x 600 x 350) on 2026-08-20, BEFORE the page was opened; the page was opened the same day and agrees. First wall section to carry a side-hinged door, so this is where the printed p.11 five-centimetre closing-strip rule first bites. It is also the first section to show CORNER wall units, on p.223, in two kinds with two different code grammars - recorded there, not extracted.",
         "pages": [
-          { "printed": 221, "status": "extracted",
+          {
+            "printed": 221,
+            "status": "extracted",
             "note": "Read and extracted whole 2026-08-20: four types, 15 codes, all d.35. Push-up extracted as data with no symbol, same rule as p.211.",
             "types": [
-              { "title": "Wall unit with door", "status": "extracted",
-                "note": "PD0131 / PD0531 / PD0631, W.15/45/60 - NO W.30, although H.72 and H.84 both list one. One rh or lh door, 1 shelf. The hand is an ORDER VARIANT: estimate 2026/30829 ships PD0631 both ways on the one code. This is the first side-hinged wall door in the registry." },
-              { "title": "Wall unit with doors", "status": "extracted",
-                "note": "PD0930 only, W.90, 2 doors, 1 shelf. Suffix 30 means two doors here; at H.72 the same 30 is a pull-out door at W.15. There is NO pull-out door type on this page at all, unlike H.72 and H.84." },
-              { "title": "Wall unit with top-hung door", "status": "extracted",
-                "note": "PD0500/0600/0700/0900/1000/1200, W.45-120. Same width set and suffix as the H.36 top-hung type - a coincidence of two pages, not a rule." },
-              { "title": "Wall unit with push-up door", "status": "extracted",
+              {
+                "title": "Wall unit with door",
+                "status": "extracted",
+                "note": "PD0131 / PD0531 / PD0631, W.15/45/60 - NO W.30, although H.72 and H.84 both list one. One rh or lh door, 1 shelf. The hand is an ORDER VARIANT: estimate 2026/30829 ships PD0631 both ways on the one code. This is the first side-hinged wall door in the registry."
+              },
+              {
+                "title": "Wall unit with doors",
+                "status": "extracted",
+                "note": "PD0930 only, W.90, 2 doors, 1 shelf. Suffix 30 means two doors here; at H.72 the same 30 is a pull-out door at W.15. There is NO pull-out door type on this page at all, unlike H.72 and H.84."
+              },
+              {
+                "title": "Wall unit with top-hung door",
+                "status": "extracted",
+                "note": "PD0500/0600/0700/0900/1000/1200, W.45-120. Same width set and suffix as the H.36 top-hung type - a coincidence of two pages, not a rule."
+              },
+              {
+                "title": "Wall unit with push-up door",
+                "status": "extracted",
                 "decided_on": "2026-08-20",
-                "note": "PD0610/0710/0910/1010/1210, W.60-120. Data without a symbol, exactly as on p.211." }
-            ] },
-          { "printed": 222, "status": "extracted",
-            "types": ["Compound wall unit with top-hung door (2 modules)", "Compound wall unit with push-up door (2 modules)", "Compound wall unit with top-hung door (3 modules)"] },
-          { "printed": 223, "status": "partial",
+                "note": "PD0610/0710/0910/1010/1210, W.60-120. Data without a symbol, exactly as on p.211."
+              }
+            ]
+          },
+          {
+            "printed": 222,
+            "status": "extracted",
+            "types": [
+              "Compound wall unit with top-hung door (2 modules)",
+              "Compound wall unit with push-up door (2 modules)",
+              "Compound wall unit with top-hung door (3 modules)"
+            ]
+          },
+          {
+            "printed": 223,
+            "status": "partial",
             "types": [
               "Compound wall unit with push-up door (3 compartments)",
-              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PD094D/S, 100x40, 1 rh or lh 60 cm door, corner filler 5X5. Elda Q7b." },
-              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OD0713 (70x70) and OD0715 (75x75), 2 doors, 1 shelf, 3 fixings, 155 degree hinges. Its prohibition block names a door STYLE - 'Shaker door' - and not only finishes, which is a kind of entry no other block has shown. Elda Q7b." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.60", "section": "Dish-drainer units H. 60", "printed_pages": "224-225", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "Straight corner wall unit",
+                "status": "not_extracted",
+                "note": "PD094D/S, 100x40, 1 rh or lh 60 cm door, corner filler 5X5. Elda Q7b."
+              },
+              {
+                "title": "90-degree corner wall unit",
+                "status": "not_extracted",
+                "note": "OD0713 (70x70) and OD0715 (75x75), 2 doors, 1 shelf, 3 fixings, 155 degree hinges. Its prohibition block names a door STYLE - 'Shaker door' - and not only finishes, which is a kind of entry no other block has shown. Elda Q7b."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.60",
+        "section": "Dish-drainer units H. 60",
+        "printed_pages": "224-225",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Six of seven positions, 21 of 22 codes, verified against 170-dpi renders. The seventh is the 90-degree corner dish-drainer OD0745 - and it exists ONLY at 75x75 while the plain 90-degree corner on p.223 comes in 70x70 and 75x75, so corner sizes are per POSITION and not per family. Elda Q7b.",
         "pages": [
-          { "printed": 224, "status": "extracted", "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung door", "Dish-drainer unit with push-up door"] },
-          { "printed": 225, "status": "partial",
+          {
+            "printed": 224,
+            "status": "extracted",
+            "types": [
+              "Dish-drainer unit with door",
+              "Dish-drainer unit with doors",
+              "Dish-drainer unit with top-hung door",
+              "Dish-drainer unit with push-up door"
+            ]
+          },
+          {
+            "printed": 225,
+            "status": "partial",
             "types": [
               "Dish-drainer unit with top-hung door (compound, 2 modules - the page omits the word Compound)",
               "Compound dish-drainer unit with push-up door",
-              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OD0745, 75x75 only. Elda Q7b." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola hood", "printed_pages": "226", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.60", "section": "Wall units H. 60 with Virgola No Drop hood", "printed_pages": "227", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.72", "section": "Wall units H. 72", "printed_pages": "228-231", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "90-degree corner dish-drainer unit",
+                "status": "not_extracted",
+                "note": "OD0745, 75x75 only. Elda Q7b."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.60",
+        "section": "Wall units H. 60 with Virgola hood",
+        "printed_pages": "226",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.60",
+        "section": "Wall units H. 60 with Virgola No Drop hood",
+        "printed_pages": "227",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.72",
+        "section": "Wall units H. 72",
+        "printed_pages": "228-231",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Nine of twelve positions, 27 of 31 codes, verified against 170-dpi renders. THE RICHEST WALL SECTION SO FAR: a pull-out door, two STACKED top-hung doors and horizontally folding doors, none of which any other wall family has, plus the first wall units at d.62 - the two boiler housings. LEFT OUT: both corners (Elda Q7b) and PE0696, which is printed here but is 360 TALL, not 720; it lives in wall_h72_microwave_niche.json under family Wall H.36, because the printed dimension outranks the decoded letter. The page-228 note below was written on 2026-08-18 from a reading, and the extraction agrees with it.",
         "pages": [
-          { "printed": 228, "status": "extracted",
-            "types": ["Wall unit with pull-out door", "Wall unit with door", "Wall unit with doors", "Wall unit with top-hung doors (2 STACKED, elevation 36+36)"] },
-          { "printed": 229, "status": "extracted",
-            "types": ["Wall unit with push-up door", "Wall unit with horizontally folding doors", "Compound wall unit with horizontally-folding door"] },
-          { "printed": 230, "status": "partial",
+          {
+            "printed": 228,
+            "status": "extracted",
             "types": [
-              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OE0713 / OE0715, 70x70 and 75x75. Elda Q7b." },
-              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PE094D/S, 100x40, corner filler 5X5. Elda Q7b." },
+              "Wall unit with pull-out door",
+              "Wall unit with door",
+              "Wall unit with doors",
+              "Wall unit with top-hung doors (2 STACKED, elevation 36+36)"
+            ]
+          },
+          {
+            "printed": 229,
+            "status": "extracted",
+            "types": [
+              "Wall unit with push-up door",
+              "Wall unit with horizontally folding doors",
+              "Compound wall unit with horizontally-folding door"
+            ]
+          },
+          {
+            "printed": 230,
+            "status": "partial",
+            "types": [
+              {
+                "title": "90-degree corner wall unit",
+                "status": "not_extracted",
+                "note": "OE0713 / OE0715, 70x70 and 75x75. Elda Q7b."
+              },
+              {
+                "title": "Straight corner wall unit",
+                "status": "not_extracted",
+                "note": "PE094D/S, 100x40, corner filler 5X5. Elda Q7b."
+              },
               "Wall unit with top-hung door and microwave niche - PE0696, H.36, held under family Wall H.36",
               "Wall boiler housing, 1 door, d.62"
-            ] },
-          { "printed": 231, "status": "extracted", "types": ["Wall boiler housing, 2 doors, d.62"] }
-        ] },
-      { "class": "wall", "family": "H.72", "section": "Dish-drainer units H. 72", "printed_pages": "232-233", "status": "partial", "extracted_on": "2026-08-23",
+            ]
+          },
+          {
+            "printed": 231,
+            "status": "extracted",
+            "types": [
+              "Wall boiler housing, 2 doors, d.62"
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.72",
+        "section": "Dish-drainer units H. 72",
+        "printed_pages": "232-233",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Five of six positions, 21 of 22 codes, verified against renders. The sixth is the 90-degree corner dish-drainer OE0745 at 75x75 ONLY - the same one-size shape H.60 showed, so two families now agree that a corner dish-drainer offers one size where the plain corner offers two. Elda Q7b.",
         "pages": [
-          { "printed": 232, "status": "extracted",
-            "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung doors (2 stacked)", "Dish-drainer unit with push-up door"] },
-          { "printed": 233, "status": "partial",
+          {
+            "printed": 232,
+            "status": "extracted",
+            "types": [
+              "Dish-drainer unit with door",
+              "Dish-drainer unit with doors",
+              "Dish-drainer unit with top-hung doors (2 stacked)",
+              "Dish-drainer unit with push-up door"
+            ]
+          },
+          {
+            "printed": 233,
+            "status": "partial",
             "types": [
               "Dish-drainer unit with horizontally folding doors",
-              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OE0745, 75x75 only. Elda Q7b." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola hood", "printed_pages": "234-235", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.72", "section": "Wall units H. 72 with Virgola No Drop hood", "printed_pages": "236-237", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.84", "section": "Wall units H. 84", "printed_pages": "238-240", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "90-degree corner dish-drainer unit",
+                "status": "not_extracted",
+                "note": "OE0745, 75x75 only. Elda Q7b."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.72",
+        "section": "Wall units H. 72 with Virgola hood",
+        "printed_pages": "234-235",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.72",
+        "section": "Wall units H. 72 with Virgola No Drop hood",
+        "printed_pages": "236-237",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.84",
+        "section": "Wall units H. 84",
+        "printed_pages": "238-240",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Eight of eleven positions, 24 of 28 codes, verified against renders. THE STACK IS UNEQUAL HERE - 48 above, 36 below, both dimensioned - where H.72 splits 36 + 36. A stacked pair is two STATED heights that sum to the family height, never two halves of it. LEFT OUT: both corners (Elda Q7b) and PG0696, which is 480 tall and lives under family Wall H.48 in wall_h84_microwave_niche.json.",
         "pages": [
-          { "printed": 238, "status": "extracted", "types": ["Wall unit with pull-out door", "Wall unit with door", "Wall unit with doors", "Wall unit with top-hung doors (2 STACKED, 48+36)"] },
-          { "printed": 239, "status": "partial",
+          {
+            "printed": 238,
+            "status": "extracted",
+            "types": [
+              "Wall unit with pull-out door",
+              "Wall unit with door",
+              "Wall unit with doors",
+              "Wall unit with top-hung doors (2 STACKED, 48+36)"
+            ]
+          },
+          {
+            "printed": 239,
+            "status": "partial",
             "types": [
               "Wall unit with horizontally folding doors",
               "Wall unit with horizontally folding doors, compound (2 modules)",
-              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OG0713 / OG0715. Elda Q7b." },
-              { "title": "Corner wall unit", "status": "not_extracted", "note": "PG094D/S, 100x40, corner filler 5X5. Headed 'Corner wall unit' here and 'Straight corner wall unit' at H.48, H.60 and H.72 - same shape, three headings. Elda Q7b." }
-            ] },
-          { "printed": 240, "status": "extracted",
-            "types": ["Wall unit with top-hung door and microwave niche (PG0696 - H.48, held under family Wall H.48)", "Wall boiler housing, 1 door, d.62", "Wall boiler housing, 2 doors, d.62"] }
-        ] },
-      { "class": "wall", "family": "H.84", "section": "Dish-drainer units H. 84", "printed_pages": "241-242", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "90-degree corner wall unit",
+                "status": "not_extracted",
+                "note": "OG0713 / OG0715. Elda Q7b."
+              },
+              {
+                "title": "Corner wall unit",
+                "status": "not_extracted",
+                "note": "PG094D/S, 100x40, corner filler 5X5. Headed 'Corner wall unit' here and 'Straight corner wall unit' at H.48, H.60 and H.72 - same shape, three headings. Elda Q7b."
+              }
+            ]
+          },
+          {
+            "printed": 240,
+            "status": "extracted",
+            "types": [
+              "Wall unit with top-hung door and microwave niche (PG0696 - H.48, held under family Wall H.48)",
+              "Wall boiler housing, 1 door, d.62",
+              "Wall boiler housing, 2 doors, d.62"
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.84",
+        "section": "Dish-drainer units H. 84",
+        "printed_pages": "241-242",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Five of six positions, 16 of 17 codes, verified against renders. The compound position here has TWO racks, one per module, and is the only compound dish-drainer that does NOT carry the printed 'rack is fitted in the widest unit' rule - because with two racks there is nothing to place. CORRECTION 2026-08-23, later the same day (rule 9 - added, not erased): the clause after the dash is WRONG. printed p.249 holds the identically shaped two-rack compound at H.96 and it DOES print the sentence. Its presence is boilerplate applied unevenly and is read off each page, never derived - see the correction in dish_drainer_h84.json. The sixth position is the 90-degree corner dish-drainer OG0745, 75x75 only, the third family to offer one size there. Elda Q7b.",
         "pages": [
-          { "printed": 241, "status": "extracted", "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung doors (2 stacked, 48+36)", "Dish-drainer unit with horizontally folding doors"] },
-          { "printed": 242, "status": "partial",
+          {
+            "printed": 241,
+            "status": "extracted",
+            "types": [
+              "Dish-drainer unit with door",
+              "Dish-drainer unit with doors",
+              "Dish-drainer unit with top-hung doors (2 stacked, 48+36)",
+              "Dish-drainer unit with horizontally folding doors"
+            ]
+          },
+          {
+            "printed": 242,
+            "status": "partial",
             "types": [
               "Dish-drainer unit with horizontally folding doors, compound (2 modules, 2 racks)",
-              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OG0745, 75x75 only. Elda Q7b." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola hood", "printed_pages": "243", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.84", "section": "Wall units H. 84 with Virgola No Drop hood", "printed_pages": "244", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.96", "section": "Wall units H. 96", "printed_pages": "245-247", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "90-degree corner dish-drainer unit",
+                "status": "not_extracted",
+                "note": "OG0745, 75x75 only. Elda Q7b."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.84",
+        "section": "Wall units H. 84 with Virgola hood",
+        "printed_pages": "243",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.84",
+        "section": "Wall units H. 84 with Virgola No Drop hood",
+        "printed_pages": "244",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.96",
+        "section": "Wall units H. 96",
+        "printed_pages": "245-247",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "LETTER READ 2026-08-23, SECTION STILL NOT EXTRACTED - the same shape H.60 was in on 2026-08-20, and the same lesson: a letter is not a page. PF = H.96 was named first by the filler table on printed p.434 (PF0151) and then confirmed by a sweep of printed p.245-247, every code of which begins PF. The original warning is retired, not forgotten: B / C / D / E / G / F / J against 36 / 48 / 60 / 72 / 84 / 96 / 120 is still not a sequence - F is H.96 and G is H.84, so the run goes BACKWARDS across that pair. EXTRACTED 2026-08-23: eight of eleven positions, 23 of 27 codes, verified against renders. THE STACK IS EQUAL AGAIN - 48 above 48, both dimensioned - where H.84 splits 48 + 36, and the page returns to the plural '2 top-hung doors' that H.84 gave up. LEFT OUT: both corners (Elda Q7b) and PF0696, which is 600 tall, SIDE-HINGED where its two predecessors are top-hung, and lives under family Wall H.60 in wall_h96_microwave_niche.json.",
         "pages": [
-          { "printed": 245, "status": "extracted",
-            "types": ["Wall unit with pull-out door", "Wall unit with door", "Wall unit with doors", "Wall unit with top-hung doors (2 STACKED, 48+48, EQUAL)"] },
-          { "printed": 246, "status": "partial",
+          {
+            "printed": 245,
+            "status": "extracted",
+            "types": [
+              "Wall unit with pull-out door",
+              "Wall unit with door",
+              "Wall unit with doors",
+              "Wall unit with top-hung doors (2 STACKED, 48+48, EQUAL)"
+            ]
+          },
+          {
+            "printed": 246,
+            "status": "partial",
             "types": [
               "Wall unit with horizontally folding doors",
               "Wall unit with horizontally folding doors, compound (2 modules, NO finish restriction - H.84's carries one)",
-              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OF0723 / OF0725, 70x70 and 75x75. SUFFIX 23/25, against 13/15 at H.84 - the digit pair is not fixed. Elda Q7b." },
-              { "title": "Corner wall unit", "status": "not_extracted", "note": "PF094D/S, 100x40, corner filler 5X5. Elda Q7b." }
-            ] },
-          { "printed": 247, "status": "extracted",
-            "types": ["Wall unit with door and microwave niche (PF0696 - H.60, HANDED, held under family Wall H.60)", "Wall boiler housing, 1 door, d.62", "Wall boiler housing, 2 doors, d.62"] }
-        ] },
-      { "class": "wall", "family": "H.96", "section": "Dish-drainer units H. 96", "printed_pages": "248-249", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "90-degree corner wall unit",
+                "status": "not_extracted",
+                "note": "OF0723 / OF0725, 70x70 and 75x75. SUFFIX 23/25, against 13/15 at H.84 - the digit pair is not fixed. Elda Q7b."
+              },
+              {
+                "title": "Corner wall unit",
+                "status": "not_extracted",
+                "note": "PF094D/S, 100x40, corner filler 5X5. Elda Q7b."
+              }
+            ]
+          },
+          {
+            "printed": 247,
+            "status": "extracted",
+            "types": [
+              "Wall unit with door and microwave niche (PF0696 - H.60, HANDED, held under family Wall H.60)",
+              "Wall boiler housing, 1 door, d.62",
+              "Wall boiler housing, 2 doors, d.62"
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.96",
+        "section": "Dish-drainer units H. 96",
+        "printed_pages": "248-249",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "Five of six positions, 16 of 17 codes, verified against renders. THIS SECTION BROKE TWO DERIVED RULES ON ONE PAGE. printed p.249 prints 'In compound wall units, the dish-drainer rack is fitted in the widest unit' beside a TWO-RACK compound, where the identically shaped two-rack compound at H.84 prints nothing - so the sentence is boilerplate applied unevenly and is recorded per position in widest_unit_rack_rule, never derived. The same position also carries 'cannot be reduced in width', which no compound dish-drainer read before it does. Both mistakes are corrected in place and dated. The sixth position is the 90-degree corner dish-drainer OF0745, 75x75 only, the fourth family to offer one size there. Elda Q7b.",
         "pages": [
-          { "printed": 248, "status": "extracted", "types": ["Dish-drainer unit with door", "Dish-drainer unit with doors", "Dish-drainer unit with top-hung doors (2 stacked, 48+48)", "Dish-drainer unit with horizontally folding doors"] },
-          { "printed": 249, "status": "partial",
+          {
+            "printed": 248,
+            "status": "extracted",
+            "types": [
+              "Dish-drainer unit with door",
+              "Dish-drainer unit with doors",
+              "Dish-drainer unit with top-hung doors (2 stacked, 48+48)",
+              "Dish-drainer unit with horizontally folding doors"
+            ]
+          },
+          {
+            "printed": 249,
+            "status": "partial",
             "types": [
               "Dish-drainer unit with horizontally folding doors, compound (2 modules, 2 racks, AND the widest-unit sentence)",
-              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OF0745, 75x75 only. Elda Q7b." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola hood", "printed_pages": "250", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.96", "section": "Wall units H. 96 with Virgola No Drop hood", "printed_pages": "251", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.120", "section": "Wall units H. 120", "printed_pages": "252-254", "status": "partial", "extracted_on": "2026-08-23",
+              {
+                "title": "90-degree corner dish-drainer unit",
+                "status": "not_extracted",
+                "note": "OF0745, 75x75 only. Elda Q7b."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.96",
+        "section": "Wall units H. 96 with Virgola hood",
+        "printed_pages": "250",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.96",
+        "section": "Wall units H. 96 with Virgola No Drop hood",
+        "printed_pages": "251",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.120",
+        "section": "Wall units H. 120",
+        "printed_pages": "252-254",
+        "status": "partial",
+        "extracted_on": "2026-08-23",
         "note": "LETTER READ 2026-08-23, SECTION STILL NOT EXTRACTED - the same shape H.60 was in on 2026-08-20, and the same lesson: a letter is not a page. PJ = H.120 was named first by the filler table on printed p.434 (PJ0151) and then confirmed by a sweep of printed p.252-254, every code of which begins PJ. The original warning is retired, not forgotten: B / C / D / E / G / F / J against 36 / 48 / 60 / 72 / 84 / 96 / 120 is still not a sequence - F is H.96 and G is H.84, so the run goes BACKWARDS across that pair. THE INDEX UNDER-PRINTS THIS SECTION, and it is the SECOND instance of the scope note printed p.433 forced. The wall chapter index on printed p.205 jumps 252 to 255, but printed p.254 is headed 'Dish-drainer units H. 120' on the page - every other height in this chapter gets a dish-drainer section of its own in the index and H.120 does not. Mapped as a PAGE of the section whose range contains it, exactly as p.435 is mapped inside the filler section: the SECTION still comes from the printed index, so rule 1 is untouched and the page is not lost. Two independent chapters now show the same shape, which makes it a pattern and not an accident. EXTRACTED 2026-08-23: eight of twelve positions, 22 of 27 codes across all three pages, verified against renders. THE PLAIN AND BOILER-HOUSING SUFFIXES ARE EXCHANGED IN THIS FAMILY - 01 and 00 are the plain units here and 31 and 30 the boiler housings, and the DEPTH goes with the meaning (350 against 620). Four suffixes in this chapter now carry two depths, and 00 carries three meanings: a single top-hung door at H.36/H.48/H.60, a boiler-housing pair at H.72/H.84/H.96, a plain pair here. wall_h120.json has the tally. No folding position of any kind, which makes H.120 the only wall family in the chapter without one. LEFT OUT: both corners, the corner dish-drainer, and PJ0696, which is 840 tall and lives under family Wall H.84.",
         "pages": [
-          { "printed": 252, "status": "partial",
+          {
+            "printed": 252,
+            "status": "partial",
             "types": [
               "Wall unit with door (SUFFIX 01 - the plain and boiler-housing digits are SWAPPED in this family)",
               "Wall unit with doors (SUFFIX 00, one width only)",
               "Wall unit with top-hung doors (2 STACKED, 60+60, EQUAL, five widths)",
-              { "title": "Straight corner wall unit", "status": "not_extracted", "note": "PJ094D/S, 100x40, corner filler 10x5 - 5X5 at H.84 and H.96. Elda Q7b." }
-            ] },
-          { "printed": 253, "status": "partial",
+              {
+                "title": "Straight corner wall unit",
+                "status": "not_extracted",
+                "note": "PJ094D/S, 100x40, corner filler 10x5 - 5X5 at H.84 and H.96. Elda Q7b."
+              }
+            ]
+          },
+          {
+            "printed": 253,
+            "status": "partial",
             "types": [
-              { "title": "90-degree corner wall unit", "status": "not_extracted", "note": "OJ0716 / OJ0714, 70x70 and 75x75. THE DIGITS RUN BACKWARDS: the larger footprint takes the smaller number, where H.84 (13/15) and H.96 (23/25) ascend. Elda Q7b." },
+              {
+                "title": "90-degree corner wall unit",
+                "status": "not_extracted",
+                "note": "OJ0716 / OJ0714, 70x70 and 75x75. THE DIGITS RUN BACKWARDS: the larger footprint takes the smaller number, where H.84 (13/15) and H.96 (23/25) ascend. Elda Q7b."
+              },
               "Wall unit with door and microwave niche (PJ0696 - H.84, HANDED, held under family Wall H.84)",
               "Wall boiler housing, 1 door, d.62 (SUFFIX 31)",
               "Wall boiler housing, 2 doors, d.62 (SUFFIX 30)"
-            ] },
-          { "printed": 254, "status": "partial",
+            ]
+          },
+          {
+            "printed": 254,
+            "status": "partial",
             "note": "HEADED 'Dish-drainer units H. 120' ON THE PAGE, ABSENT FROM THE CHAPTER INDEX - held in dish_drainer_h120.json, which stamps its rows with THIS section because rule 1 says a section is what the printed index prints.",
             "types": [
               "Dish-drainer unit with door",
               "Dish-drainer unit with doors",
               "Dish-drainer unit with top-hung doors (2 stacked, 60+60 - headed 'with door' and described '2 top-hung door')",
-              { "title": "90-degree corner dish-drainer unit", "status": "not_extracted", "note": "OJ0734, 75x75 only. SUFFIX 34, where H.84 and H.96 use 45. Elda Q7b." }
-            ] }
-        ] },
-      { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola hood", "printed_pages": "255", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "wall", "family": "H.120", "section": "Wall units H. 120 with Virgola No Drop hood", "printed_pages": "256", "status": "excluded", "decided_on": "2026-08-18", "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall." },
-      { "class": "base", "collection": "USA elements", "family": "H.78", "section": "USA elements | for base units H. 78", "printed_pages": "414", "status": "not_extracted",
+              {
+                "title": "90-degree corner dish-drainer unit",
+                "status": "not_extracted",
+                "note": "OJ0734, 75x75 only. SUFFIX 34, where H.84 and H.96 use 45. Elda Q7b."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "wall",
+        "family": "H.120",
+        "section": "Wall units H. 120 with Virgola hood",
+        "printed_pages": "255",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "wall",
+        "family": "H.120",
+        "section": "Wall units H. 120 with Virgola No Drop hood",
+        "printed_pages": "256",
+        "status": "excluded",
+        "decided_on": "2026-08-18",
+        "note": "EXCLUDED by decision, not by oversight: a hood is chosen per POSITION, not per page - the same treatment as printed p.47. PLANNING trust, reversible the moment a real kitchen puts a hood on a wall."
+      },
+      {
+        "class": "base",
+        "collection": "USA elements",
+        "family": "H.78",
+        "section": "USA elements | for base units H. 78",
+        "printed_pages": "414",
+        "status": "not_extracted",
         "pages": [
-          { "printed": 414, "status": "not_extracted",
+          {
+            "printed": 414,
+            "status": "not_extracted",
             "types": [
               "Base unit for built-in oven (custom fixed front + oven niche + custom jumbo drawer + divider): B86199 / B87699 at d.62, B96199 / B97699 at d.67, W. 61 and 76.2",
               "Doors for USA fridge for base unit H. 78 (2 custom-sized fronts): B87657 W.76.2, B89657 W.91.4",
               "Base unit for built-in oven (custom fixed front + oven niche + 1 cm metal bottom panel): B86197 / B87697 at d.62, B96197 / B97697 at d.67, W. 61 and 76.2",
               "Base unit for countertop hob (custom jumbo + jumbo): B87650 / B89150 / B82150 / B82250 at d.62, B97650 / B99150 / B92150 / B92250 at d.67, W. 76.2 / 91.4 / 106.7 / 121.9"
             ],
-            "note": "READ IN FULL 2026-08-20, not extracted. This page is where the width field stops being decodable - see code_grammar.usa_elements. Nearly every type here is CUSTOM-SIZED and several carry suffix 99, the customisable carcass the factory estimate showed being priced with WIDTH REDUCTION. Surcharges for LEGRABOX finishes are printed in the margin and Servo Drive points at printed p.567." }
-        ] },
-      { "class": "base", "collection": "USA elements", "family": "H.84", "section": "USA elements | for base units H. 84", "printed_pages": "415", "status": "not_extracted",
-        "note": "Structurally the twin of p.414 with NEW family letters: BL at d.62 and BM at d.67 (BL7699, BL7657, BL9657, BL6197, BL7697, BM6197, BM7697, BL7650, BL9150, BL2150, BL2250, BM7650, BM9150). Same width set 61 / 76.2 / 91.4 / 106.7 / 121.9. The letters are read, the page is not extracted." },
-      { "class": "base", "collection": "USA elements", "family": "Unit H.66", "section": "USA elements | for Unit base units H. 66", "printed_pages": "416", "status": "not_extracted",
-        "note": "Family letters Y4 and Y7 (Y46199, Y47699, Y76199, Y77699), W. 61 and 76.2. Belongs to the Unit collection, printed p.257, which is not mapped at all." },
-      { "class": "base", "collection": "USA elements", "family": "N_Elle H.78", "section": "USA elements | for N_Elle base units H. 78", "printed_pages": "416", "status": "not_extracted" },
-      { "class": "base", "collection": "USA elements", "family": "N_Elle H.84", "section": "USA elements | for N_Elle base units H. 84", "printed_pages": "416", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "H.198", "section": "USA elements | for tall units H. 198", "printed_pages": "417", "status": "not_extracted",
-        "note": "Family letter C8 (C87757 tall oven unit H.60, C87743 tall oven and microwave/double oven unit), both W.76.2 at d.62, both with custom-sized doors." },
-      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210", "printed_pages": "418", "status": "extracted",
+            "note": "READ IN FULL 2026-08-20, not extracted. This page is where the width field stops being decodable - see code_grammar.usa_elements. Nearly every type here is CUSTOM-SIZED and several carry suffix 99, the customisable carcass the factory estimate showed being priced with WIDTH REDUCTION. Surcharges for LEGRABOX finishes are printed in the margin and Servo Drive points at printed p.567."
+          }
+        ]
+      },
+      {
+        "class": "base",
+        "collection": "USA elements",
+        "family": "H.84",
+        "section": "USA elements | for base units H. 84",
+        "printed_pages": "415",
+        "status": "not_extracted",
+        "note": "Structurally the twin of p.414 with NEW family letters: BL at d.62 and BM at d.67 (BL7699, BL7657, BL9657, BL6197, BL7697, BM6197, BM7697, BL7650, BL9150, BL2150, BL2250, BM7650, BM9150). Same width set 61 / 76.2 / 91.4 / 106.7 / 121.9. The letters are read, the page is not extracted."
+      },
+      {
+        "class": "base",
+        "collection": "USA elements",
+        "family": "Unit H.66",
+        "section": "USA elements | for Unit base units H. 66",
+        "printed_pages": "416",
+        "status": "not_extracted",
+        "note": "Family letters Y4 and Y7 (Y46199, Y47699, Y76199, Y77699), W. 61 and 76.2. Belongs to the Unit collection, printed p.257, which is not mapped at all."
+      },
+      {
+        "class": "base",
+        "collection": "USA elements",
+        "family": "N_Elle H.78",
+        "section": "USA elements | for N_Elle base units H. 78",
+        "printed_pages": "416",
+        "status": "not_extracted"
+      },
+      {
+        "class": "base",
+        "collection": "USA elements",
+        "family": "N_Elle H.84",
+        "section": "USA elements | for N_Elle base units H. 84",
+        "printed_pages": "416",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "H.198",
+        "section": "USA elements | for tall units H. 198",
+        "printed_pages": "417",
+        "status": "not_extracted",
+        "note": "Family letter C8 (C87757 tall oven unit H.60, C87743 tall oven and microwave/double oven unit), both W.76.2 at d.62, both with custom-sized doors."
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "H.210",
+        "section": "USA elements | for tall units H. 210",
+        "printed_pages": "418",
+        "status": "extracted",
         "note": "EXTRACTED 2026-08-21 - the first USA elements page in the registry, and the first tall-class family. Chosen ahead of printed p.414 because p.414's four types are all custom-sized and the contract cannot yet express a front whose width comes from the opening; this page states plain fixed widths.",
         "pages": [
-          { "printed": 418, "status": "extracted",
+          {
+            "printed": 418,
+            "status": "extracted",
             "types": [
               "Door for USA fridge (1 door): CR9400 W.45.7 / CR9600 W.61 / CR9700 W.76.2 / CR9900 W.91.4",
               "Door for USA fridge (1 wine cooler door, stainless steel protection): CR9401 / CR9601 / CR9701 / CR9901, same four widths"
             ],
-            "note": "THE PAGE THAT SETTLES THE UNITS QUESTION. It prints a column of INCHES beside the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4 - inches FIRST. The nominal inch size is printed catalog data, not a conversion we invented, and this is the only chapter that states it." }
-        ] },
-      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210 for base unit H. 78", "printed_pages": "419-421", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "H.210", "section": "USA elements | for tall units H. 210 for base unit H. 84", "printed_pages": "422", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "H.222", "section": "USA elements | for tall units H. 222", "printed_pages": "423-426", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "H.222", "section": "USA elements | for tall units H. 222 for base unit H. 84", "printed_pages": "427", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "Unit H.198", "section": "USA elements | for Unit tall units H. 198", "printed_pages": "428", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.210", "section": "USA elements | for N_Elle tall units H. 210 for base unit H. 78", "printed_pages": "429", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.210", "section": "USA elements | for N_Elle tall units H. 210 for base unit H. 84", "printed_pages": "430", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.222", "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 78", "printed_pages": "431", "status": "not_extracted" },
-      { "class": "tall", "collection": "USA elements", "family": "N_Elle H.222", "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 84", "printed_pages": "432", "status": "not_extracted" }
+            "note": "THE PAGE THAT SETTLES THE UNITS QUESTION. It prints a column of INCHES beside the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4 - inches FIRST. The nominal inch size is printed catalog data, not a conversion we invented, and this is the only chapter that states it."
+          }
+        ]
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "H.210",
+        "section": "USA elements | for tall units H. 210 for base unit H. 78",
+        "printed_pages": "419-421",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "H.210",
+        "section": "USA elements | for tall units H. 210 for base unit H. 84",
+        "printed_pages": "422",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "H.222",
+        "section": "USA elements | for tall units H. 222",
+        "printed_pages": "423-426",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "H.222",
+        "section": "USA elements | for tall units H. 222 for base unit H. 84",
+        "printed_pages": "427",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "Unit H.198",
+        "section": "USA elements | for Unit tall units H. 198",
+        "printed_pages": "428",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "N_Elle H.210",
+        "section": "USA elements | for N_Elle tall units H. 210 for base unit H. 78",
+        "printed_pages": "429",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "N_Elle H.210",
+        "section": "USA elements | for N_Elle tall units H. 210 for base unit H. 84",
+        "printed_pages": "430",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "N_Elle H.222",
+        "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 78",
+        "printed_pages": "431",
+        "status": "not_extracted"
+      },
+      {
+        "class": "tall",
+        "collection": "USA elements",
+        "family": "N_Elle H.222",
+        "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 84",
+        "printed_pages": "432",
+        "status": "not_extracted"
+      }
     ]
   },
   "page_symbols": {
     "source_ref": "printed p.19 / PDF 21, legend read 2026-08-23 and verified against a 300-dpi crop",
     "note": "TWO PICTOGRAMS SIT BESIDE EVERY DEPTH BAND IN THE BASE CODE TABLES, and neither had been transcribed until printed p.37 forced the question. They are printed art, not text: pdftotext cannot see them, which is why five days of base and wall extraction went past them. Anything read off a code table from here on records them; anything read before 2026-08-23 does NOT, so their absence on printed p.36, p.39, p.40 and p.42 means unread and never absent.",
     "symbols": [
-      { "glyph": "cabinet in a bracket", "label": "Hung version", "meaning_note": "The catalog states PER DEPTH ROW which articles can be ordered wall-hung. Generator.wall_hung_available? DERIVES the same answer from unit_class, and printed p.37 is the first page to contradict it - two positions there print 'not available wall hung' in words and drop the wall-hung surcharge from the margin. Recorded on those two articles as wall_hung false." },
-      { "glyph": "flame on a burner", "label": "Provisions for hob", "meaning_note": "Recorded as hob_provisions_depths_mm on the positions of printed p.37 and p.38. On both pages it is on d.62 and d.67 and never on d.35. NOT read by anything in the engine - it is one more fact waiting on restrictions." }
+      {
+        "glyph": "cabinet in a bracket",
+        "label": "Hung version",
+        "meaning_note": "The catalog states PER DEPTH ROW which articles can be ordered wall-hung. Generator.wall_hung_available? DERIVES the same answer from unit_class, and printed p.37 is the first page to contradict it - two positions there print 'not available wall hung' in words and drop the wall-hung surcharge from the margin. Recorded on those two articles as wall_hung false."
+      },
+      {
+        "glyph": "flame on a burner",
+        "label": "Provisions for hob",
+        "meaning_note": "Recorded as hob_provisions_depths_mm on the positions of printed p.37 and p.38. On both pages it is on d.62 and d.67 and never on d.35. NOT read by anything in the engine - it is one more fact waiting on restrictions."
+      }
     ],
     "sweep_owed": "printed p.36, p.39, p.40 and p.42 were transcribed before the legend was found, and printed p.44-48 and the whole tall chapter have not been checked for these glyphs at all."
   },
   "code_grammar": {
-        "base_units": {
+    "base_units": {
       "shape": "two-character (family x depth) prefix + width_index + type_suffix, e.g. BJ0525 - AND THE PREFIX IS NOT A FAMILY LETTER",
-      "source_ref": "printed p.24 read in full 2026-08-23; printed p.28, p.32, p.49 swept for their prefixes the same day; printed p.36-43 held since 2026-08-17",
+      "source_ref": "printed p.24 read in full 2026-08-23; printed p.28, p.32, p.49 swept for their prefixes the same day; printed p.36-43 held since 2026-08-17; printed p.32-35 read in full 2026-08-24",
       "note": "A WALL FAMILY HAS ONE DEPTH AND THEREFORE ONE LETTER, WHICH IS WHY THE WALL CHAPTER COULD TREAT THE PREFIX AS A FAMILY NAME. A base family has two or three depths and a prefix for each, so the two characters name a (family, depth) SLOT and nothing smaller. There is no rule across families and no rule across depths - read the section.",
       "family_depth_letter": {
-        "H.39": { "350": "B0", "470": "BJ", "620": "B1" },
-        "H.48": { "350": "BC", "470": "BQ", "620": "BD", "note": "read off printed p.28 on 2026-08-23. NOT alphabetical: BD is the DEEPEST, not the second." },
-        "H.58.5": { "350": "B3", "470": "B6", "620": "B4" },
-        "H.78": { "350": "B7", "620": "B8", "670": "B9" },
-        "H.84": { "letters": "BK / BL / BM", "note": "swept from printed p.49 on 2026-08-23; which letter is which depth is NOT read yet" }
+        "H.39": {
+          "350": "B0",
+          "470": "BJ",
+          "620": "B1"
+        },
+        "H.48": {
+          "350": "BC",
+          "470": "BQ",
+          "620": "BD",
+          "note": "read off printed p.28 on 2026-08-23. NOT alphabetical: BD is the DEEPEST, not the second."
+        },
+        "H.58.5": {
+          "350": "B3",
+          "470": "B6",
+          "620": "B4",
+          "note": "read in full off printed p.32-35 on 2026-08-24, confirming the 2026-08-23 sweep. NOT alphabetical and NOT the H.78 mapping: B6 is the MIDDLE depth and B4 the deepest."
+        },
+        "H.78": {
+          "350": "B7",
+          "620": "B8",
+          "670": "B9"
+        },
+        "H.84": {
+          "letters": "BK / BL / BM",
+          "note": "swept from printed p.49 on 2026-08-23; which letter is which depth is NOT read yet"
+        }
       },
       "corner_letters": "AND A CORNER HAS ITS OWN PREFIXES AT THE SAME DEPTHS. printed p.42 prices the H.78 corner base units as B7 at d.35 - shared with the plain units - and then AU at d.62 and AW at d.67, where the plain units read B8 and B9. So the slot a prefix names is (family, depth, GEOMETRY), and two of the three H.78 corner prefixes are not in the family_depth_letter table at all. Found 2026-08-23 by a check written to tie the codes to that table: it failed on AU090S, which is exactly what it was for.",
-      "filler_letter_collision": "printed p.434 prices base-unit fillers one per HEIGHT with no depth axis: B0 (39), BC (48), BJ (58,5), BE (60), BI (72), B7 (78), BK (84). Four match the d.35 member of the unit family and BJ DOES NOT - BJ is H.39 at d.47 on printed p.24. So a filler prefix cannot be used to find a base family, and the wall chapter's happy result does not generalise. OPEN FOR ELDA. Note also PJ0150 at H.120 inside the base-unit filler table, a wall prefix in a base table, flagged when p.434 was first read."
+      "filler_letter_collision": "printed p.434 prices base-unit fillers one per HEIGHT with no depth axis: B0 (39), BC (48), BJ (58,5), BE (60), BI (72), B7 (78), BK (84). Four match the d.35 member of the unit family and BJ DOES NOT - BJ is H.39 at d.47 on printed p.24. So a filler prefix cannot be used to find a base family, and the wall chapter's happy result does not generalise. OPEN FOR ELDA. Note also PJ0150 at H.120 inside the base-unit filler table, a wall prefix in a base table, flagged when p.434 was first read.",
+      "appliance_article_numbers": "THE APPLIANCE POSITIONS DO NOT USE THE CHAPTER'S WIDTH INDEX. printed p.34 prices the compact-oven base as B48698 at W.60 and B48999 at W.90, where this chapter's index reads 06 and 09; the same four-digit tails appear at H.78 d.62 (B88698 / B88798 / B88999) and d.67 (B98698 / B98798 / B98999), and the d.62 pair is priced identically to the H.58.5 one in every band. So the two-character prefix is still the (family, depth) key and the four digits are an ARTICLE NUMBER shared across families, not a width plus a suffix. READ, NOT DECODED."
     },
     "tall_units": {
       "shape": "two-character family prefix + width_index + type_suffix, e.g. CQ0331 - and the prefix is a PAIR, one member per depth",
       "source_ref": "printed p.90-173, read at section level 2026-08-22; printed p.111 read in full and extracted the same day",
       "family_letter": {
         "note": "EVERY tall section prints TWO prefixes: the first is d.35, the second is d.62. The pair is a LOOKUP and it is NOT one pair per section - CQ/CR serves both H.210 (printed p.111-115) and H.210 for base unit H.84 (printed p.126-131), and C0/C9 serves both H.234 (p.151-155) and H.234 for base unit H.78 (p.156-164), while H.198 and H.222 give their for-base-unit sections letters of their own. There is no rule; read the section.",
-        "H.138": "C1 / C2", "H.198": "CE / CF", "H.198_for_base_H.78": "C7 / C8",
-        "H.210": "CQ / CR", "H.210_for_base_H.78": "C5 / C6", "H.210_for_base_H.84": "CQ / CR",
-        "H.222": "CG / CH", "H.222_for_base_H.78": "C3 / C4", "H.222_for_base_H.84": "CI / CK",
-        "H.234": "C0 / C9", "H.234_for_base_H.78": "C0 / C9", "H.234_for_base_H.84": "CW / CX",
+        "H.138": "C1 / C2",
+        "H.198": "CE / CF",
+        "H.198_for_base_H.78": "C7 / C8",
+        "H.210": "CQ / CR",
+        "H.210_for_base_H.78": "C5 / C6",
+        "H.210_for_base_H.84": "CQ / CR",
+        "H.222": "CG / CH",
+        "H.222_for_base_H.78": "C3 / C4",
+        "H.222_for_base_H.84": "CI / CK",
+        "H.234": "C0 / C9",
+        "H.234_for_base_H.78": "C0 / C9",
+        "H.234_for_base_H.84": "CW / CX",
         "top_elements": "SB (H.36) / SC (H.48) / SD (H.60) / SE (H.72) - the one alphabetical run in the catalog, recorded as an observation and not relied on"
       },
       "width_index": {
         "note": "On printed p.111 the index matches the wall lookup exactly (30=03, 45=05, 60=06, 75=07, 90=09, 120=12) - a coincidence of two chapters. The CORNER tall units on printed p.113-114 break it past repair: CQ152D/S is W.115, CQ180D/S is W.120, CQ157D/S is W.130, CQ153D/S is W.130 and CQ158D/S is W.145. The field is neither a width nor an index into any ordered list. Read the row.",
-        "03": 300, "05": 450, "06": 600, "07": 750, "09": 900, "12": 1200
+        "03": 300,
+        "05": 450,
+        "06": 600,
+        "07": 750,
+        "09": 900,
+        "12": 1200
       },
       "type_suffix": {
         "note": "Same warning as everywhere else. On printed p.111: 31 = 1 rh or lh door, 30 = 2 doors, 35 = 1 door with 155 degree hinges, kit-ready in the bottom section. 31 and 30 happen to carry the meanings they carry at wall H.60; at wall H.72 the same 30 is a pull-out door. Coincidence, not grammar.",
-        "H.210_read": { "31": "1 rh or lh door, 4 shelves, 1 divider", "30": "2 doors, 4 shelves, 1 divider", "35": "1 rh or lh door with 155 degree hinges, 2 shelves, 1 divider, kit-ready" }
+        "H.210_read": {
+          "31": "1 rh or lh door, 4 shelves, 1 divider",
+          "30": "2 doors, 4 shelves, 1 divider",
+          "35": "1 rh or lh door with 155 degree hinges, 2 shelves, 1 divider, kit-ready"
+        }
       },
       "corner_tall_units": {
         "note": "READ, NOT DECODED, and the THIRD chapter to show the D/S execution letter after the base corners on printed p.42 and the straight corner wall unit on printed p.223. Codes CQ152D/S, CQ180D/S, CQ157D/S, CQ153D/S, CQ190D/S, CQ158D/S with CR siblings, plus Slidecorner CR531D/S, CR538D/S, CR532D/S, CR536D/S, CR539D/S, CR537D/S. A corner tall unit is NOT the base corner made taller: it carries a panel W.70/75/85 and its overall W (115/120/130 or 130/135/145) is the carcass plus that panel. Gated on Elda Q7b and on new geometry; nothing here is extracted.",
@@ -526,8 +1628,17 @@
       },
       "width_index": {
         "note": "A LOOKUP, not arithmetic - the rounding is irregular (45 rounds up to 05, 75 rounds down to 07, 105 rounds down to 10). Read a width from the row, never from the digits.",
-        "01": 150, "03": 300, "05": 450, "06": 600, "07": 750,
-        "09": 900, "10": 1050, "12": 1200, "15": 1500, "18": 1800, "24": 2400
+        "01": 150,
+        "03": 300,
+        "05": 450,
+        "06": 600,
+        "07": 750,
+        "09": 900,
+        "10": 1050,
+        "12": 1200,
+        "15": 1500,
+        "18": 1800,
+        "24": 2400
       },
       "corner_wall_units": {
         "note": "READ, NOT DECODED. printed p.223 (H.60) shows TWO kinds of corner wall unit that do not share a grammar, and neither is extracted. (1) Straight corner: PD094D/S - P + family letter, but the width field 09 does NOT read as the 100x40 footprint printed beside it, and the trailing D/S is the same execution letter the BASE corners carry on printed p.42. That makes it direct evidence for Elda Q7b. (2) 90 degree corner: OD0713 / OD0715 at 70x70 and 75x75 - the prefix is not P + family letter at all and is not decoded here. Its corner filler is 5X5, where the base corner uses 8x8. Do not extend the wall grammar to cover these until a corner page is actually extracted.",
@@ -536,8 +1647,24 @@
       },
       "type_suffix": {
         "note": "NOT STABLE, not even inside one family. 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84; 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
-        "H.36_read": { "00": "top-hung door", "10": "push-up door", "25": "bottom-hung door", "04": "compound, 2 modules", "34": "compound, 3 compartments, top-hung", "44": "compound, 3 compartments, push-up" },
-        "H.60_read": { "31": "1 rh or lh door", "30": "2 doors (at W.90; the same 30 is a PULL-OUT door at W.15 in H.72)", "00": "top-hung door", "10": "push-up door", "04": "compound, 2 modules, top-hung", "08": "compound, 2 modules, push-up", "34": "compound, 3 modules, top-hung", "44": "compound, 3 compartments, push-up" },
+        "H.36_read": {
+          "00": "top-hung door",
+          "10": "push-up door",
+          "25": "bottom-hung door",
+          "04": "compound, 2 modules",
+          "34": "compound, 3 compartments, top-hung",
+          "44": "compound, 3 compartments, push-up"
+        },
+        "H.60_read": {
+          "31": "1 rh or lh door",
+          "30": "2 doors (at W.90; the same 30 is a PULL-OUT door at W.15 in H.72)",
+          "00": "top-hung door",
+          "10": "push-up door",
+          "04": "compound, 2 modules, top-hung",
+          "08": "compound, 2 modules, push-up",
+          "34": "compound, 3 modules, top-hung",
+          "44": "compound, 3 compartments, push-up"
+        },
         "cross_family_warning": "Compare H.36_read with H.60_read before trusting any suffix: 04 is a two-module compound in both, but 34 is '3 compartments' at H.36 and '3 modules' at H.60, and H.60 has an 08 that H.36 does not. H.60 has no pull-out door type at all while H.72 and H.84 open with one."
       }
     },
@@ -602,7 +1729,14 @@
     "note": "SIZES THAT EXIST BECAUSE INCHES DO. printed p.418 prints an INCH column beside the centimetre column - 18\" 45.7, 24\" 61, 30\" 76.2, 36\" 91.4, inches FIRST - so the nominal is catalog data, not a conversion. 42\" and 48\" are read from the width column on printed p.414 (106.7 and 121.9). LOOK THIS UP, NEVER COMPUTE IT: 610 is the catalog rounding 24\" (609,6) to the centimetre, and converting 610 back gives 24 1/16\", which is not a size anyone ordered. Same rule as the width index. No metric width in this catalog collides with any of these six, so a width is enough to resolve the nominal.",
     "source_ref": "printed p.418 / PDF 420 (18/24/30/36 printed as inches); printed p.414 / PDF 416 (106.7 and 121.9)",
     "verified_on": "2026-08-20",
-    "mm_to_in": { "457": 18, "610": 24, "762": 30, "914": 36, "1067": 42, "1219": 48 }
+    "mm_to_in": {
+      "457": 18,
+      "610": 24,
+      "762": 30,
+      "914": 36,
+      "1067": 42,
+      "1219": 48
+    }
   },
   "pricing_groups": {
     "note": "Code tables carry price columns for groups 1-11. Group labels are structure only; no price is ever extracted (Object Contract 1.2)."
@@ -817,8 +1951,16 @@
       "provenance": "Thermador Freedom Collection specification sheets 12/25, supplied by Andriy 2026-08-22, same two documents as the aperture table. NOT Cesar facts.",
       "why_it_is_here": "The niche we draw behind an appliance front is the space the machine needs, and the machine's maker is the only one who states it. Cesar states the FRONT and nothing about the opening behind it.",
       "rows": [
-        { "model": "Thermador T18IW100SP", "required_cutout_in": "84 x 18 x 25", "required_cutout_mm": "2133.6 x 457 x 635" },
-        { "model": "Thermador T24IW100SP", "required_cutout_in": "84 x 24 x 25", "required_cutout_mm": "2133.6 x 610 x 635" }
+        {
+          "model": "Thermador T18IW100SP",
+          "required_cutout_in": "84 x 18 x 25",
+          "required_cutout_mm": "2133.6 x 457 x 635"
+        },
+        {
+          "model": "Thermador T24IW100SP",
+          "required_cutout_in": "84 x 24 x 25",
+          "required_cutout_mm": "2133.6 x 610 x 635"
+        }
       ],
       "the_constant": "84 in whatever the width - which is what makes it a housing standard and not a model dimension. The appliance itself is adjustable 83 9/16 to 85 1/2 in, so 84 is the planning figure and the machine takes up the slack.",
       "how_it_is_used": "registry/cesar/usa_tall_h210.json data.appliance_niche takes top_mm 2133.6 from here and starts the housing at the top of the plinth. The bottom is NOT stored there - it is Standards::PLINTH_H_MM, and a second copy of 100 would be a second thing to change.",
@@ -831,24 +1973,45 @@
       "form": "Every maker dimensions the RAILS - the frame left of, right of, above and below the hole - and lets the aperture follow. Rails are what stay constant when the panel width changes, which is why the aperture is derived and never stored.",
       "columns": "panel_w_mm / panel_h_mm / rail_side_mm / rail_top_mm / rail_bottom_mm / aperture_mm (derived)",
       "rows": [
-        { "model": "Miele KWT 6722 iS", "material_no": "11329860", "niche_mm": 560,
-          "panel_w_mm": 551, "panel_h_mm": 1762,
-          "rail_side_mm": 84, "rail_top_mm": 155, "rail_bottom_mm": 111,
+        {
+          "model": "Miele KWT 6722 iS",
+          "material_no": "11329860",
+          "niche_mm": 560,
+          "panel_w_mm": 551,
+          "panel_h_mm": 1762,
+          "rail_side_mm": 84,
+          "rail_top_mm": 155,
+          "rail_bottom_mm": 111,
           "aperture_mm": "383 x 1496",
           "source": "Miele USA spec sheet 2020-02-13, 'Custom Panel for Inset Design'",
-          "note": "Aperture width printed as '383 max' - a ceiling, not a point. A 60 cm European column; its panel is 1762 tall and never carries a 2100 front." },
-        { "model": "Thermador T18IW100SP", "line": "Freedom Collection, panel-ready", "niche_mm": 457,
-          "panel_w_mm": 451, "panel_h_mm": 2029,
-          "rail_side_mm": 79, "rail_top_mm": 158, "rail_bottom_mm": 243,
+          "note": "Aperture width printed as '383 max' - a ceiling, not a point. A 60 cm European column; its panel is 1762 tall and never carries a 2100 front."
+        },
+        {
+          "model": "Thermador T18IW100SP",
+          "line": "Freedom Collection, panel-ready",
+          "niche_mm": 457,
+          "panel_w_mm": 451,
+          "panel_h_mm": 2029,
+          "rail_side_mm": 79,
+          "rail_top_mm": 158,
+          "rail_bottom_mm": 243,
           "aperture_mm": "293 x 1628",
           "source": "Thermador specification 12/25, page 4 PANEL DIMENSIONS",
-          "note": "Lateral rail explicitly a RANGE: 74 to 82 mm. Panel thickness 19." },
-        { "model": "Thermador T24IW100SP", "line": "Freedom Collection, panel-ready", "niche_mm": 610,
-          "panel_w_mm": 603, "panel_h_mm": 2029,
-          "rail_side_mm": 79, "rail_top_mm": 158, "rail_bottom_mm": 243,
+          "note": "Lateral rail explicitly a RANGE: 74 to 82 mm. Panel thickness 19."
+        },
+        {
+          "model": "Thermador T24IW100SP",
+          "line": "Freedom Collection, panel-ready",
+          "niche_mm": 610,
+          "panel_w_mm": 603,
+          "panel_h_mm": 2029,
+          "rail_side_mm": 79,
+          "rail_top_mm": 158,
+          "rail_bottom_mm": 243,
           "aperture_mm": "445 x 1628",
           "source": "Thermador specification 12/25, page 4 PANEL DIMENSIONS",
-          "note": "Identical rails to the 18 inch unit - only the panel width changes. So the rails are a property of the PRODUCT LINE, not of the width." }
+          "note": "Identical rails to the 18 inch unit - only the panel width changes. So the rails are a property of the PRODUCT LINE, not of the width."
+        }
       ],
       "what_converges": "rail_side 79 / 79 / 84 and rail_top 155 / 158 / 158, across two unrelated makers, as absolute millimetres and not as proportions of the panel (84/551 = 15.2 %, 79/451 = 17.5 %, 79/603 = 13.1 %). Two numbers that agree to within 5 mm.",
       "what_does_not": "rail_bottom: 111 against 243, a factor of 2.2. That is where the machine compartment and the presenter drawer sit, and it is genuinely per-appliance. It is the one number that must come from the machine.",
@@ -862,9 +2025,33 @@
         "thermador": "'The drawing is based on a door panel thickness of 3/4\" (19 mm)', and the maximum panel dimensions are computed from a 1/8\" (3 mm) clearance. 19 is stated flat, with no alternative offered.",
         "miele": "16 to 22 mm are all permitted, and the maker answers the swing question directly: a table of MINIMUM GAP X to the ADJOINING HOUSING UNIT DOOR, by panel thickness and by the panel's edge radius B.",
         "miele_gap_table_mm": [
-          { "panel_thickness": "16 to 19", "gap_by_edge_radius": { "R0": 3, "R1.2": 3, "R2": 3, "R3": 3 } },
-          { "panel_thickness": "20 to 21", "gap_by_edge_radius": { "R0": "5 to 5.5", "R1.2": "4 to 5", "R2": "4 to 4.5", "R3": "3.5 to 4" } },
-          { "panel_thickness": "22", "gap_by_edge_radius": { "R0": 6.5, "R1.2": 6, "R2": 5.5, "R3": 4 } }
+          {
+            "panel_thickness": "16 to 19",
+            "gap_by_edge_radius": {
+              "R0": 3,
+              "R1.2": 3,
+              "R2": 3,
+              "R3": 3
+            }
+          },
+          {
+            "panel_thickness": "20 to 21",
+            "gap_by_edge_radius": {
+              "R0": "5 to 5.5",
+              "R1.2": "4 to 5",
+              "R2": "4 to 4.5",
+              "R3": "3.5 to 4"
+            }
+          },
+          {
+            "panel_thickness": "22",
+            "gap_by_edge_radius": {
+              "R0": 6.5,
+              "R1.2": 6,
+              "R2": 5.5,
+              "R3": 4
+            }
+          }
         ],
         "what_it_means": "A 22 mm Cesar front is not forbidden - Miele explicitly allows it - but it costs gap: 6.5 mm beside it instead of 3, unless the front carries an edge radius. Thermador does not offer the choice at all, which is the real risk: its clearances are planned around 19. So this is a QUESTION FOR THE FACTORY, not a number to change here.",
         "elda_question": "Can the USA appliance panels (CR94xx / CR96xx and their siblings) be supplied at 19 mm instead of 22, or is 2.2 cm the only thickness? If 22 is fixed, what edge radius do they carry, so the required gap can be read off the appliance maker's table?",

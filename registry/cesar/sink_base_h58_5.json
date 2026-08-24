@@ -1,0 +1,274 @@
+{
+  "section": "Sink base units H. 58.5",
+  "class": "base",
+  "family": "H.58.5",
+  "source_pages": "printed p.35 / PDF 37 (the section taken whole), verified against a 170-dpi render 2026-08-24",
+  "extraction_note": "printed p.35 is the whole section - four positions, 24 codes, two depths. Nothing on it is stopped. The family facts (height, plinth, door versions, depth set, collections) are stated ONCE, in registry/cesar/base_h58_5.json; this file restates only height_mm, which the loader allows to agree.",
+  "source_ref": "CESAR - 2 Kitchen System.pdf printed p.35 / PDF 37",
+  "page_observations": [
+    "NO d.35 SINK BASE, AND d.47 IS NEW TO THE SINKS. This page prints d.47 and d.62 only. The H.78 sink section, printed p.44, prints d.62 and d.67. So a sink section takes the family's two DEEPER depths and drops the shallowest, and which two those are is a family fact - recorded from two sections, derived from neither.",
+    "ONE FIXED-FRONT POSITION, NOT TWO - AND THAT IS EVIDENCE FOR Q4. printed p.45 gives H.78 two positions, suffixes 90 and 91, identical in dimensions and price and differing only in the gola front split, and the source never names the distinction; that is Elda Q4 and it is why printed p.45 is not extracted. printed p.35 prices the same idea ONCE, suffix 80, with the split printed plainly as 19,5 / 39 and 16,5 / 36. A family that needed one code where another prints two does not answer Q4, but it narrows it: whatever 90 and 91 separate is not something every family needs separated.",
+    "EVERY DEPTH BAND ON THIS PAGE CARRIES THE HUNG GLYPH plus the margin surcharge, and NO position carries the hob glyph at either depth - which is what a sink base should say.",
+    "SUFFIX 81 IS A JUMBO-DRAWER SINK BASE IN TWO FAMILIES NOW, H.58.5 and H.78. The other three suffixes do not travel: a sink base with one door is 61 here and 03 at H.78, with two doors 60 here and 02 there. Recorded as an observation and derived from nothing."
+  ],
+  "data": {
+    "height_mm": 585,
+    "unit_types": {
+      "sink_base_door": {
+        "description": "Sink base unit with door - 1 rh or lh door, 1 aluminium tray",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.35 / PDF 37",
+        "codes": [
+          {
+            "code": "B60561",
+            "width_mm": 450,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60661",
+            "width_mm": 600,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40561",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40661",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "W.45 and W.60 at both depths, suffix 61. The aluminium tray is stated by the source and is interior - recorded, not drawn.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, as for the plain base unit. Elevation printed p.35: 58,5 / 55,5.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
+        }
+      },
+      "sink_base_doors": {
+        "description": "Sink base unit with doors - 2 doors, 1 aluminium tray",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": [
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.35 / PDF 37",
+        "codes": [
+          {
+            "code": "B60960",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61260",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40960",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41260",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "W.90 and W.120 at both depths, suffix 60.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors; the page drawing shows an equal split. Equal widths are a representation assumption consistent with the drawing, not a stated dimension. Elevation printed p.35: 58,5 / 55,5.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "gola_note": "Both leaves lose 30 under the worktop: undercounter profile only."
+        }
+      },
+      "sink_base_jumbo_drawer": {
+        "description": "Sink base unit with jumbo drawer - 1 jumbo drawer with shaped back panel, 1 aluminium tray, no Push-pull device",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 jumbo drawer with shaped back panel",
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.35 / PDF 37",
+        "codes": [
+          {
+            "code": "B60781",
+            "width_mm": 750,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60981",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61081",
+            "width_mm": 1050,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61281",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40781",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40981",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41081",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41281",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "Four widths, 75 to 120, at both depths. Suffix 81 - the digits the H.78 sink section gives the same position on printed p.44.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            585
+          ],
+          "note": "Elevation printed p.35: 58,5 / 55,5 - one full-height front carried by the jumbo drawer (handle 585; gola 555).",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
+        }
+      },
+      "sink_base_fixed_front_jumbo_drawer": {
+        "description": "Sink base unit with jumbo drawer - 1 fixed front, 1 jumbo drawer with shaped back panel, 1 aluminium tray",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 jumbo drawer with shaped back panel",
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.35 / PDF 37",
+        "codes": [
+          {
+            "code": "B60780",
+            "width_mm": 750,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60980",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61080",
+            "width_mm": 1050,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61280",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40780",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40980",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41080",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41280",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "The same four widths and two depths as the position above it, suffix 80, and the difference is the FIXED FRONT: a 19,5 band above the jumbo drawer that does not open. The fixed front is a front and is counted as one - it is drawn and it is finished - but it is not an opening, which is why front_layout carries two bands and interior_confirmed does not mention it.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            195,
+            390
+          ],
+          "note": "Elevation printed p.35: 19,5 / 39 (handle), 16,5 / 36 (gola) - the same split the plain drawer-above-jumbo position prints on printed p.33. Sum 585 = family door height. The TOP band is fixed; only the lower one opens.",
+          "fixed_bands_top_to_bottom": [
+            true,
+            false
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "gola_note": "BOTH fronts lose 30: 195->165 under the worktop and 390->360 at the groove between them, which is why the printed gola pair sums to 52,5 and not 55,5."
+        }
+      }
+    }
+  }
+}

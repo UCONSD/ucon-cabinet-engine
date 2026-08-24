@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 615 codes (209 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
+check('registry loads and holds 692 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 615
+  raise "got #{n}" unless n == 692
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 615 rows, each with code/dims/description/source') do
+check('registry catalog: 692 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 615
+  raise cat.length.to_s unless cat.length == 692
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -498,6 +498,7 @@ check('split storage: every catalog row is stamped with its section and class') 
   sections = cat.map { |c| c['section'] }.uniq.sort
   raise sections.inspect unless sections == ['Base units H. 39',
                                              'Base units H. 48',
+                                             'Base units H. 58.5',
                                              'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Closing strips and fillers for Maxima and Intarsio',
@@ -507,6 +508,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 72',
                                              'Dish-drainer units H. 84',
                                              'Dish-drainer units H. 96',
+                                             'Sink base units H. 58.5',
                                              'Sink base units H. 78',
                                              'Tall units H. 138',
                                              'Tall units H. 198',
@@ -582,7 +584,14 @@ end
 
 puts "\nprinted p.36 completed (pull-out door + laundry basket)"
 check('the two remaining p.36 types are in: 4 pull-out door codes, 2 laundry') do
-  by_type = Registry.catalog.group_by { |c| c['type_key'] }.transform_values(&:length)
+  # SCOPED TO THE SECTION, and it was not until 2026-08-24. A type KEY is
+  # unique inside a family and nowhere else: H.58.5 opened with a
+  # base_pull_out_door of its own on printed p.32 and this check, which counts
+  # keys across the whole catalog, failed with 7 for a page that still prices
+  # exactly 4. The title says p.36; the count must say p.36 too. Rule 18.
+  by_type = Registry.catalog
+                    .select { |c| c['section'] == 'Base units H. 78' }
+                    .group_by { |c| c['type_key'] }.transform_values(&:length)
   raise by_type.inspect unless by_type['base_pull_out_door'] == 4 && by_type['base_laundry_basket'] == 2
 end
 check('EVERY p.36 code yields contract-valid attributes') do
@@ -966,7 +975,7 @@ end
 
 check('THE CATALOG CACHE IS A CACHE, NOT A SECOND SOURCE') do
   # Registry.catalog is a pure function of Registry.data and was rebuilt on
-  # every call. At 615 codes that is 0,38 s a time, and this suite calls it a
+  # every call. At 692 codes that is 0,38 s a time, and this suite calls it a
   # few hundred times: forty seconds became over ninety and the run stopped
   # fitting in one go. It is memoised now, keyed on the IDENTITY of the parsed
   # registry - so the moment data() re-reads an edited file the key misses.
@@ -1117,7 +1126,7 @@ check('the hob pictogram is recorded where it was read, and NOWHERE else') do
     raise "#{key}: a hob mark on a shallow row" unless
       ty['hob_provisions_depths_mm'].all? { |d| d > 350 }
     raise "#{key}: recorded without its page" unless
-      ty['source_ref'].to_s.match?(/printed p\.3[78]/)
+      ty['source_ref'].to_s.match?(/printed p\.3[2478]/)
   end
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'nothing may read the hob mark yet' if
@@ -4895,6 +4904,109 @@ check('a filler is never offered the wall-hung surcharge') do
   raise 'a filler was offered a fixing kit' if
     Generator.wall_hung_available?(Registry.lookup('B70150'))
 end
+
+
+puts "\nbase and sink units H. 58.5 (printed p.32-35, read whole 2026-08-24)"
+check('the two H.58.5 sections hold 77 codes, and every prefix names its depth') do
+  rows = Registry.catalog.select { |c|
+    ['Base units H. 58.5', 'Sink base units H. 58.5'].include?(c['section'])
+  }
+  raise rows.length.to_s unless rows.length == 77
+  raise 'the base section holds 53' unless
+    rows.count { |c| c['section'] == 'Base units H. 58.5' } == 53
+  # THE PREFIX IS A (FAMILY x DEPTH) KEY AND THIS IS THE CHECK THAT SAYS SO.
+  # B3 / B6 / B4 is not alphabetical and it is not the H.78 mapping: sorting
+  # the letters would put d.62 in the middle. Written against the family the
+  # third time the catalog printed an out-of-order prefix trio.
+  want = { 350 => 'B3', 470 => 'B6', 620 => 'B4' }
+  bad = rows.reject { |c| c['code'].start_with?(want[c['depth_mm']].to_s) }
+  raise "prefix does not match depth: #{bad.map { |c| [c['code'], c['depth_mm']] }.inspect}" if bad.any?
+end
+
+check('H.58.5 stands on 100 and its doors are 58,5 / 55,5') do
+  u = Registry.lookup('B30601')
+  raise u['plinth_h_mm'].inspect unless u['plinth_h_mm'] == 100
+  raise u['height_mm'].inspect unless u['height_mm'] == 585
+  raise u['door_versions'].inspect unless
+    u['door_versions']['full_mm'] == 585 && u['door_versions']['gola_mm'] == 555
+  # A SINK CODE READS THE SAME FAMILY FACTS THROUGH A FILE THAT STATES NONE.
+  v = Registry.lookup('B40661')
+  raise v.values_at('plinth_h_mm', 'height_mm').inspect unless
+    v['plinth_h_mm'] == 100 && v['height_mm'] == 585
+end
+
+check('THE PULL-OUT DOOR IS THE ONE POSITION THIS FAMILY DRAWS ONCE') do
+  # printed p.32 prints 58,5 alone over the pull-out door and 58,5 / 55,5 over
+  # every other position in the section - where the SAME position at H.78,
+  # printed p.36, prints 78 / 75. So a door version can be an ARTICLE fact and
+  # door_versions is a FAMILY key, which means the panel will still offer
+  # B30100 a 55,5 it has never seen printed. The gap is not fixed here; it is
+  # PINNED, so that the day the axis narrows this check is what fails.
+  base = JSON.parse(File.read(File.expand_path('../registry/cesar/base_h58_5.json', __dir__)))
+  types = base['data']['unit_types']
+  po = types['base_pull_out_door']
+  raise 'the pull-out door must carry NO gola stack' if po['front_layout']['gola_stack_top_to_bottom']
+  raise 'and it must say why, in the registry' unless
+    po['door_version_note'].to_s.include?('ONE HEIGHT')
+
+  drawn = %w[base_door base_doors base_jumbo_drawer_interior_drawer base_drawer_jumbo_drawer]
+  missing = drawn.reject { |k| types[k]['front_layout']['gola_stack_top_to_bottom'] }
+  raise "these positions print both elevations and must stack: #{missing.inspect}" if missing.any?
+
+  # The family still offers the choice, because that is where the key lives.
+  raise 'the family key must still be there' unless
+    Registry.lookup('B30100')['door_versions']['gola_mm'] == 555
+end
+
+check('the split front sums to 585 - and so does its gola stack, over TWO recesses') do
+  # 19,5 / 39 handle, 16,5 / 36 gola. The printed gola pair sums to 52,5, not
+  # 55,5, and that is not an error: both fronts lose 30, one under the worktop
+  # and one at the groove between them. The arithmetic is the only thing that
+  # says so.
+  base = JSON.parse(File.read(File.expand_path('../registry/cesar/base_h58_5.json', __dir__)))
+  fl = base['data']['unit_types']['base_drawer_jumbo_drawer']['front_layout']
+  raise fl['heights_mm_top_to_bottom'].inspect unless fl['heights_mm_top_to_bottom'] == [195, 390]
+  raise 'handle fronts must sum to the family door' unless
+    fl['heights_mm_top_to_bottom'].sum == 585
+  stack = fl['gola_stack_top_to_bottom']
+  raise stack.inspect unless stack.sum { |e| e['h_mm'] } == 585
+  raise 'two recesses, not one' unless stack.count { |e| e['kind'] == 'zone' } == 2
+  raise 'the fronts are 165 and 360' unless
+    stack.select { |e| e['kind'] == 'front' }.map { |e| e['h_mm'] } == [165, 360]
+end
+
+check('the compact oven is held, not buildable, and refuses the hung version in WORDS') do
+  u = Registry.lookup('B48698')
+  raise 'it must be held' unless u['width_mm'] == 600 && u['depth_mm'] == 620
+  raise 'and not buildable' if u['buildable']
+  raise 'and say why' unless u['not_buildable_reason'].to_s.include?('NO HEIGHT')
+  raise 'printed p.34 refuses the hung version' if
+    Generator.wall_hung_available?(u)
+  # FORTY-SIX ARTICLES REFUSE THE HUNG VERSION AND ONLY FOUR OF THEM SAY SO IN
+  # WORDS. The tall families refuse by leaving a glyph off, which is an absence
+  # and has to be re-read whenever a page is re-rendered; printed p.34 and
+  # printed p.37 refuse in the catalog's own sentence, which does not. The
+  # distinction is worth a check because it is the difference between a fact
+  # and a reading.
+  in_words = registry_files.flat_map { |file|
+    JSON.parse(File.read(file))['data']['unit_types'].values
+        .select { |t| t['wall_hung'] == false &&
+                      t['wall_hung_note'].to_s.start_with?('PRINTED, NOT DERIVED') }
+        .flat_map { |t| t['codes'].map { |r| r['code'] } }
+  }
+  raise in_words.sort.inspect unless in_words.sort == %w[B48698 B48999 B80672 B80972]
+end
+
+check('a sink section that joins an existing family declares no family key') do
+  # The loader raises when two files disagree about a family fact and says
+  # nothing when they agree, which is exactly right and exactly why the SECOND
+  # file must stay thin. This one carries height_mm and its unit types, and
+  # its page observations live OUTSIDE data where nothing merges them.
+  sink = JSON.parse(File.read(File.expand_path('../registry/cesar/sink_base_h58_5.json', __dir__)))
+  raise sink['data'].keys.inspect unless sink['data'].keys.sort == %w[height_mm unit_types]
+  raise 'the observations must sit outside data' unless sink['page_observations'].is_a?(Array)
+end
+
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

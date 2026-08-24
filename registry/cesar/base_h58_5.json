@@ -1,0 +1,486 @@
+{
+  "section": "Base units H. 58.5",
+  "class": "base",
+  "family": "H.58.5",
+  "source_pages": "printed p.32-34 / PDF 34-36 (the section taken whole), verified against 170-dpi renders and one 400-dpi elevation crop 2026-08-24",
+  "extraction_note": "printed p.32, p.33 and p.34 - the whole section, six types, 53 codes. Nothing on these three pages is stopped or deferred except the compact-oven housing of p.34, which is HELD AND NOT BUILDABLE for the appliance-module reason it states.",
+  "letter_note": "B3 = d.35, B6 = d.47, B4 = d.62, READ OFF THE PAGE and matching what printed p.32 was swept for on 2026-08-23. NOT alphabetical and not the H.78 mapping: at H.78 the second letter B8 is d.62, here the second letter B6 is d.47 and B4 - which looks like it should sit between B3 and B6 - is the DEEPEST. Third family in a row where sorting the letters would have swapped two depths.",
+  "data": {
+    "height_mm": 585,
+    "plinth_h_mm": 100,
+    "plinth_note": "PRINTED AND RENDER-VERIFIED for this family, not inherited. CESAR - 1 Project Guidelines.pdf printed p.68 / PDF 70, 'Modularity of base units H. 78', gives H.58.5 its own dimension chain: a worktop line at 78, the family line at 58,5, then 0 and 10 at the floor. Read on a 170-dpi render 2026-08-24, the same way H.39 and H.48 were read.",
+    "door_versions": {
+      "full_mm": 585,
+      "gola_mm": 555,
+      "source_ref": "printed p.32 / PDF 34",
+      "note": "58,5 full, 55,5 when the top 30 mm goes to the gola profile - the same 30 mm difference every base family prints. FAMILY-SCOPED, exactly as at H.39, H.48 and H.78. AND THIS PAGE IS THE FIRST TO ARGUE WITH THAT SCOPE: the pull-out door position on printed p.32 prints ONE elevation, 58,5, where the two door positions below it print both. See page_observations and base_pull_out_door.door_version_note."
+    },
+    "depths_mm": [
+      350,
+      470,
+      620
+    ],
+    "collections": [
+      "Maxima",
+      "Intarsio"
+    ],
+    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.32-34 / PDF 34-36",
+    "page_observations": [
+      "THE DOOR-VERSION PAIR IS NOT OFFERED BY EVERY POSITION IN THE FAMILY. printed p.32 draws 58,5 ALONE over 'Base unit with pull-out door', and 58,5 AND 55,5 over the two door positions beneath it and over both positions on printed p.33 and all four on printed p.35. The same pull-out door position at H.78, printed p.36, prints 78 / 75. So the absence is this family's and not this type's, and it is the first page in the registry where a door version looks like an ARTICLE fact rather than a family one. door_versions is a family key (core/50_registry.rb reads it off the family, core/80_panel.rb offers the choice whenever gola_mm exists), so the engine will offer B30100 / B40100 / B40300 a 55,5 version this page does not print. RECORDED, NOT ENFORCED, and OPEN FOR ELDA - it is the same axis the 19 not-buildable H.78 codes wait on, arriving from the other direction.",
+      "THE HOB GLYPH IS PER (POSITION x DEPTH), NOT PER PAGE. On printed p.32 the 'Provisions for hob' glyph sits beside d.62 of 'Base unit with door' and d.62 of 'Base unit with doors' - and NOT beside d.62 of the pull-out door position directly above them, and not beside d.35 or d.47 anywhere. printed p.33 carries no hob glyph at any depth, and printed p.34 carries it on its only band. Read off the renders; the legend is printed p.19.",
+      "EVERY DEPTH BAND ON printed p.32 AND p.33 CARRIES THE HUNG GLYPH, plus the 'Surch. for wall-hung version on page 548' line in the margin. printed p.34 is the exception and says so twice over - 'not available wall hung' in the position's own last line, no hung glyph, and no wall-hung line in its margin, which carries only the side panel and the feet.",
+      "THE WIDTH SETS AGREE WITH THE MODULARITY DIAGRAM. CESAR - 1 printed p.68 draws H.58.5 as four columns - a full 58,5 front at 15/30/45/60/75/90/105/120, a 19,5 + 39 split at 45 to 120, an oven at 60/90, and a two-door box at 90/120 - and printed p.32-34 price exactly those. Two chapters agreeing, which is as close to confirmation as this book gets.",
+      "THE MODULARITY DIAGRAM LISTS A DEPTH THE PRICE PAGES DO NOT. CESAR - 1 printed p.68 gives H.58.5 the depth list 35 / 47 / 62 / 67 (plus 72* and 77* on request), and printed p.32-35 print no d.67 row anywhere in the family - the code grammar has no fourth prefix for it either. depths_mm above records what the PRICE PAGES print. Recorded, resolved by nobody. OPEN FOR ELDA.",
+      "SUFFIX 00 IS TWO DIFFERENT POSITIONS ON ONE PAGE, exactly as at H.78: B30100 at W.15 is the pull-out door and B30900 at W.90 is the two-door box. Only the width field tells them apart. This is the third family to print that collision and it is still a collision, not a grammar.",
+      "SUFFIX 01 IS A PLAIN HINGED DOOR IN THREE FAMILIES NOW - H.48, H.58.5 and H.78 - and suffix 50 is a drawer above a jumbo drawer in two, H.58.5 and H.78, where the two fronts are 19,5 / 39 here and 19,5 / 58,5 there. Suffix 51 is a jumbo drawer with interior drawerS at H.78 and with ONE interior drawer here. So a suffix that agrees across families does not carry the same printed content, and this is recorded as an observation and derived from nothing.",
+      "THE PLAIN DOOR RUNS 15 TO 60 AND THE TWO-DOOR BOX 90 TO 120, with nothing at 75 - the same shape H.48 prints, where a hinged door on a low wide box is simply not sold.",
+      "d.47 IS THE ONLY DEPTH THE PULL-OUT DOOR DOES NOT OFFER: it prints d.35 at W.15 and d.62 at W.15 and W.30, and no d.47 row at all. The two door positions below it print all three depths."
+    ],
+    "unit_types": {
+      "base_pull_out_door": {
+        "description": "Base unit with pull-out door - 1 door, 1 soft-close pull-out door, no push-pull",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 soft-close pull-out door"
+        ],
+        "source_ref": "printed p.32 / PDF 34",
+        "codes": [
+          {
+            "code": "B30100",
+            "width_mm": 150,
+            "depth_mm": 350
+          },
+          {
+            "code": "B40100",
+            "width_mm": 150,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40300",
+            "width_mm": 300,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "Three codes and an uneven depth set: d.35 at W.15 only, d.62 at W.15 and W.30, no d.47. The page's own list, and the widths match the modularity diagram's first column at its narrow end.",
+        "door_version_note": "THE ONLY POSITION IN THIS FAMILY WHOSE ELEVATION PRINTS ONE HEIGHT. printed p.32 draws 58,5 and no 55,5 beside it, where every other position in the section draws both. The same position at H.78 prints 78 / 75. Nothing here says 'no gola version' in words, so this is an ABSENCE and not a refusal - but it is an absence in the one place a page states the choice, and the family key will still offer the choice. See data.door_versions and page_observations. OPEN FOR ELDA.",
+        "front_layout": {
+          "kind": "single",
+          "mechanism": "pull_out_door",
+          "note": "One full-height front carried by a pull-out mechanism, not a swinging leaf - the same geometry the H.78 position gets. NO gola_stack: the page prints no second elevation for this position, and inventing one from its H.78 twin is what rule 8 forbids."
+        }
+      },
+      "base_door": {
+        "description": "Base unit with door - 1 rh or lh door, 1 shelf",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf"
+        ],
+        "source_ref": "printed p.32 / PDF 34",
+        "codes": [
+          {
+            "code": "B30101",
+            "width_mm": 150,
+            "depth_mm": 350
+          },
+          {
+            "code": "B30301",
+            "width_mm": 300,
+            "depth_mm": 350
+          },
+          {
+            "code": "B30501",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "B30601",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "B60101",
+            "width_mm": 150,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60301",
+            "width_mm": 300,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60501",
+            "width_mm": 450,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60601",
+            "width_mm": 600,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40101",
+            "width_mm": 150,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40301",
+            "width_mm": 300,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40501",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40601",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "Four widths at each of three depths, suffix 01 - the digits H.48 and H.78 give the same position. ONE CODE, BOTH HANDS: hinge_side stays per order.",
+        "hob_provisions_depths_mm": [
+          620
+        ],
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order. Elevation printed p.32: 58,5 / 55,5.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
+        }
+      },
+      "base_doors": {
+        "description": "Base unit with doors - 2 doors, 1 shelf",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": [
+          "1 shelf"
+        ],
+        "source_ref": "printed p.32 / PDF 34",
+        "codes": [
+          {
+            "code": "B30900",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "B31200",
+            "width_mm": 1200,
+            "depth_mm": 350
+          },
+          {
+            "code": "B60900",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61200",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40900",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41200",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "W.90 and W.120 only, suffix 00 - the same digits the pull-out door carries at W.15 on this page. Width is the only thing that separates them.",
+        "hob_provisions_depths_mm": [
+          620
+        ],
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors; the page drawing shows an equal split. Equal widths are a representation assumption consistent with the drawing, not a stated dimension. Elevation printed p.32: 58,5 / 55,5.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "gola_note": "Both leaves lose 30 under the worktop: undercounter profile only."
+        }
+      },
+      "base_jumbo_drawer_interior_drawer": {
+        "description": "Base unit with jumbo drawer and interior drawer - 1 jumbo drawer, 1 interior drawer, no Push-pull device",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 jumbo drawer",
+          "1 interior drawer"
+        ],
+        "source_ref": "printed p.33 / PDF 35",
+        "codes": [
+          {
+            "code": "B60551",
+            "width_mm": 450,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60651",
+            "width_mm": 600,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60751",
+            "width_mm": 750,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60951",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61051",
+            "width_mm": 1050,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61251",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40551",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40651",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40751",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40951",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41051",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41251",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "Six widths at two depths - NO d.35, which the page simply does not print for this position. Suffix 51 is the suffix H.78 gives its jumbo drawer with interior drawerS, plural; here the printed content is one interior drawer. The suffix agrees and the content does not.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            585
+          ],
+          "note": "Elevation printed p.33: 58,5 / 55,5 - one full-height front carried by the jumbo drawer (handle 585; gola 555). The interior drawer is behind it.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
+        }
+      },
+      "base_drawer_jumbo_drawer": {
+        "description": "Base unit with jumbo drawers - 1 drawer, 1 jumbo drawer",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 drawer",
+          "1 jumbo drawer"
+        ],
+        "source_ref": "printed p.33 / PDF 35",
+        "codes": [
+          {
+            "code": "B30550",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "B30650",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "B30750",
+            "width_mm": 750,
+            "depth_mm": 350
+          },
+          {
+            "code": "B30950",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "B31050",
+            "width_mm": 1050,
+            "depth_mm": 350
+          },
+          {
+            "code": "B31250",
+            "width_mm": 1200,
+            "depth_mm": 350
+          },
+          {
+            "code": "B60550",
+            "width_mm": 450,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60650",
+            "width_mm": 600,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60750",
+            "width_mm": 750,
+            "depth_mm": 470
+          },
+          {
+            "code": "B60950",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61050",
+            "width_mm": 1050,
+            "depth_mm": 470
+          },
+          {
+            "code": "B61250",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "B40550",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40650",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40750",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "B40950",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41050",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "B41250",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "notes": "THE HEADING SAYS 'jumbo drawers' AND THE CONTENT SAYS ONE DRAWER AND ONE JUMBO DRAWER - the content is what is recorded, exactly as at H.78 where the same disagreement is printed a family higher. Suffix 50, the same digits H.78 gives its drawer-above-jumbo position. Eighteen codes, six widths at all three depths.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            195,
+            390
+          ],
+          "note": "Elevation printed p.33: 19,5 / 39 (handle), 16,5 / 36 (gola). Sum 585 = family door height. Verified on a 400-dpi crop 2026-08-24.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "gola_note": "BOTH fronts lose 30: 195->165 under the worktop and 390->360 at the groove between them. 165 + 30 + 360 + 30 = 585, which is why the printed gola pair 16,5 / 36 sums to 52,5 and not to the 55,5 a single-front position shows."
+        }
+      },
+      "base_compact_oven": {
+        "description": "Base unit for built-in compact oven - 1 front that can be modified to suit the appliance, 1 oven niche, bottom panel lined with sheet metal, not available wall hung",
+        "opening": "fixed",
+        "handed": false,
+        "interior_confirmed": [
+          "1 oven niche",
+          "bottom panel lined with sheet metal"
+        ],
+        "source_ref": "printed p.34 / PDF 36",
+        "codes": [
+          {
+            "code": "B48698",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B48999",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "THE FRONT HAS NO HEIGHT AND THE NICHE HAS NO DIMENSIONS. The position prints one modifiable front over an oven niche, and the only number on its elevation is a MINIMUM - 1, with a red warning that a Frame grip front cannot go below H 7 cm. A front whose height the appliance decides is not a front this registry can state, and the niche it sits over is the appliance module that five positions in five chapters are already waiting on. Held, findable and orderable; not drawn. This is the same discipline printed p.41 has been under since 2026-08-17.",
+        "wall_hung": false,
+        "wall_hung_note": "PRINTED, NOT DERIVED - printed p.34 / PDF 36. 'not available wall hung' is the position's own last line, there is no hung glyph on its depth band, and its margin omits the 'Surch. for wall-hung version on page 548' that every other position in this family carries. Three signals agreeing; the H.78 pull-out-table positions are the only other articles in the registry that refuse it in words.",
+        "hob_provisions_depths_mm": [
+          620
+        ],
+        "code_note": "THE TAIL IS SHARED ACROSS THREE (FAMILY x DEPTH) SLOTS AND IT IS NOT THE CHAPTER'S WIDTH INDEX. B48698 (W.60) and B48999 (W.90) here; B88698 / B88798 / B88799-shaped siblings at H.78 d.62 and B98698 / B98798 / B98999 at H.78 d.67, and the d.62 pair is priced identically to this one in all eight bands. The field this chapter reads as a width index would be 06 and 09; these read 86 and 89, and the trailing pair moves too (98 at W.60 and W.75, 99 at W.90). READ, NOT DECODED - the prefix is the (family, depth) key and the four digits are an article number this registry does not take apart. NOTE ALSO that H.58.5 prints only W.60 and W.90 where the H.78 chapter's same position prints 60 / 75 / 90.",
+        "front_layout": {
+          "kind": "single",
+          "note": "NO heights_mm_top_to_bottom and no gola_stack: the elevation prints 1 and 1 - a MINIMUM front height in centimetres for the two door versions, not a height. See not_buildable_reason."
+        }
+      }
+    }
+  }
+}

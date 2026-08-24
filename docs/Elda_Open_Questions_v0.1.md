@@ -221,3 +221,77 @@ the code letter drives the geometry (which end carries the door, the 8x8 and
 the wasted space), `hinge_side` drives only the opening symbol. The hand is
 read from the code letter and NEVER from a drawing; see
 `docs/Clearance_Rules_H78_v0.1.md` §5.
+
+---
+
+## Q8 — Is the door-version choice offered by the FAMILY or by the ARTICLE?
+
+**Status:** open · added 2026-08-24
+
+**Context.** Every base page prints two elevations over its code tables — the
+full door height and the same height less 30 mm, where the top of the front
+goes into the gola profile. We have read that as a FAMILY fact: 78 / 75 at
+H.78, 48 / 45 at H.48, 39 / 36 at H.39, 58,5 / 55,5 at H.58.5. The registry
+stores it once per family and the properties panel offers the choice on every
+article in that family.
+
+**Printed p.32 contradicts that.** The first position on the page, *Base unit
+with pull-out door* (`B30100`, `B40100`, `B40300`), prints **one** elevation:
+58,5, and nothing beside it. The two positions below it on the same page, both
+positions on printed p.33 and all four on printed p.35 print **both**. And the
+same position one family up — *Base unit with pull-out door* on printed p.36 —
+prints **78 / 75**.
+
+So at H.78 the pull-out door has a gola version and at H.58.5 the page does not
+draw one.
+
+**Questions.**
+
+1. Are `B30100`, `B40100` and `B40300` available in the gola (55,5) execution?
+2. If they are, why does printed p.32 print one elevation where printed p.36
+   prints two — is the second elevation informational rather than an
+   availability statement?
+3. If they are not: is the door version an ARTICLE property in general, and are
+   there other positions whose single elevation we have read as a family fact?
+
+**Why it matters.** This is the same axis the 19 held-and-not-buildable H.78
+codes wait on, approached from the other side. There, two codes print a gola
+elevation that does not sum to the handle height and we cannot say *this
+article exists at 75 and not at 78*. Here, one position prints no gola
+elevation at all and we cannot say *this article exists at 58,5 and not at
+55,5*. One answer settles both.
+
+**Disposition until answered:** `door_versions` stays a family key, the panel
+keeps offering 55,5 on all three codes, and the absence is recorded in
+`registry/cesar/base_h58_5.json` → `base_pull_out_door.door_version_note` and
+pinned by a check that fails the day the axis narrows.
+
+---
+
+## Q9 — H.58.5 at d.67: the modularity page offers it, the price pages do not
+
+**Status:** open · added 2026-08-24
+
+**Context.** *CESAR - 1 Project Guidelines*, printed p.68 (*Modularity of base
+units H. 78*), gives every base family a depth list. H.58.5 reads
+**35 / 47 / 62 / 67**, plus 72\* and 77\* on request.
+
+The price pages for the family — printed p.32-34 for the base units and printed
+p.35 for the sink bases — print **d.35, d.47 and d.62 only**. There is no d.67
+row anywhere in the family, and the code grammar has no fourth prefix for one:
+H.58.5 is `B3` / `B6` / `B4` and H.78's d.67 prefix `B9` belongs to H.78.
+
+**Questions.**
+
+1. Is a d.67 H.58.5 unit orderable, and under what code?
+2. If it is a made-to-order depth like the 72 and 77 marked with an asterisk,
+   should the modularity page's list be read as *available* or as *the depths
+   this height can be built at*?
+
+**Why it matters.** Small, and worth asking while the page is open: the picker
+offers depths from the registry, so a depth that exists and is not held is a
+gap a planner will hit and read as our oversight.
+
+**Disposition until answered:** `depths_mm` for H.58.5 records what the PRICE
+pages print — 350 / 470 / 620 — and the discrepancy is written into
+`registry/cesar/base_h58_5.json` → `page_observations`.
