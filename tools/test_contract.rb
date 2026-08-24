@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 704 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 84 tall + 6 fillers)') do
+check('registry loads and holds 711 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 84 tall + 13 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 704
+  raise "got #{n}" unless n == 711
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 704 rows, each with code/dims/description/source') do
+check('registry catalog: 711 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 704
+  raise cat.length.to_s unless cat.length == 711
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -4360,12 +4360,89 @@ check('no filler file declares a family-level key of its own') do
   end
 end
 
-check('the front-only fillers are held, not buildable, and say why') do
-  %w[B70151 CQ0151].each do |code|
+# THE FRONT-ONLY FILLER, 2026-08-24: a refusal retired by LOOKING at the page.
+#
+# This check used to assert the opposite - that B70151 and CQ0151 were held and
+# NOT buildable, because printed p.434 prints no depth beside their table and
+# the 2,2 stated elsewhere in the book was refused as a guess. That refusal was
+# right on the evidence it had, and it is kept verbatim in each row under
+# superseded_not_buildable_reason rather than deleted.
+#
+# What retired it is not an argument but a rendering. At 300 dpi the section
+# detail of THAT position draws a single layer in the front plane, bracketed to
+# the hatched neighbour, with the foot beneath it DASHED; and the position
+# directly below it on the same page dimensions the identical 'front in door
+# finishes' as 35 / 0,3 / 2,2 - box, gap, front. The front thickness of the page
+# is printed, one position over. The factory's own export says 22 as well.
+FILLER_FRONT_CODES = %w[B00151 BC0151 BJ0151 B70151 C10151 CE0151 CQ0151 CG0151 C00151].freeze
+
+# The filler_front unit type that holds a given code, read from the section
+# files. One file per family is the rule; this is what makes it checkable.
+def filler_front_type_for(code)
+  Dir[File.expand_path('../registry/cesar/fillers_*.json', __dir__)].each do |f|
+    ty = JSON.parse(File.read(f))['data']['unit_types']['filler_front']
+    next if ty.nil?
+    return ty if (ty['codes'] || []).any? { |c| c['code'] == code }
+  end
+  raise "no fillers_*.json holds #{code}"
+end
+
+check('the nine front-only fillers are buildable at 22, and each says what that rests on') do
+  # notes live in the section FILE - the loader does not carry prose onto the
+  # resolved unit, which is exactly why the copied filler note survived a day
+  # and a half of green suites. Read the files.
+  FILLER_FRONT_CODES.each do |code|
     u = Registry.lookup(code)
-    raise "#{code} claims to be buildable" if u.fetch('buildable', true)
-    raise "#{code} gives no reason" unless
-      u['not_buildable_reason'].to_s.downcase.include?('depth')
+    raise "#{code} is not in the registry" if u.nil?
+    raise "#{code} is still refused" unless u.fetch('buildable', true)
+    raise "#{code} depth #{u['depth_mm'].inspect}" unless u['depth_mm'] == 22
+    raise "#{code} carries no width range" unless u['width_range_mm'] == [23, 150]
+    ty = filler_front_type_for(code)
+    note = ty['notes'].to_s
+    raise "#{code}: the decision must be dated" unless note.include?('2026-08-24')
+    raise "#{code}: it must not be sold as a printed dimension" unless
+      note.include?('NOT A PRINTED DIMENSION')
+    raise "#{code}: it must name the dimensioned neighbour" unless note.include?('35 / 0,3 / 2,2')
+    raise "#{code}: it must name the factory measurement" unless note.include?('30831')
+  end
+  # the two that were refused keep the refusal
+  %w[B70151 CQ0151].each do |code|
+    raise "#{code} erased its old reason" unless
+      filler_front_type_for(code)['superseded_not_buildable_reason'].to_s.include?('NOT BUILDABLE')
+  end
+end
+
+check('AND EVERY FILLER SITS ON ITS OWN FAMILY, which is why it could be extracted at all') do
+  # printed p.434 prices this article by HEIGHT alone, and the height it prints
+  # is the family's. If a filler ever resolves to a height its family does not
+  # have, it has been attached to the wrong family - the failure the one-file-
+  # per-family rule exists to prevent.
+  { 'B00151' => 390,  'BC0151' => 480,  'BJ0151' => 585,  'B70151' => 780,
+    'C10151' => 1380, 'CE0151' => 1980, 'CQ0151' => 2100, 'CG0151' => 2220,
+    'C00151' => 2340 }.each do |code, printed_h|
+    u = Registry.lookup(code)
+    raise "#{code}: height #{u['height_mm']} against printed #{printed_h}" unless
+      u['height_mm'] == printed_h
+    raise "#{code}: a filler must inherit a plinth, not invent one" if u['plinth_h_mm'].nil?
+    raise "#{code}: the notes must say the plinth is a run item" unless
+      filler_front_type_for(code)['notes'].to_s.include?('ZOCC011')
+  end
+end
+
+check('the three rows that are NOT held name the reason, one each') do
+  # A gap that looks like an oversight gets closed by guessing. printed p.434
+  # has twelve rows and this registry holds nine.
+  note = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+         .dig('catalog_map', 'sections')
+         .find { |s| s['section'] == 'Closing strips and fillers for Maxima and Intarsio' }['pages']
+         .find { |q| q['printed'] == 434 }['types'][0]['note']
+  %w[BE0151 BK0151 CH9151].each do |code|
+    raise "#{code} is unheld and unexplained" unless note.include?(code)
+  end
+  raise 'the nine must be named too' unless note.include?('NINE ARE NOW HELD')
+  held = Registry.catalog.map { |c| c['code'] }
+  %w[BE0151 BK0151 CH9151].each do |code|
+    raise "#{code} is in the registry but the map still calls it unheld" if held.include?(code)
   end
 end
 

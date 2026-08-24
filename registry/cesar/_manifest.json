@@ -77,7 +77,7 @@
               {
                 "title": "Filler in door finishes from 2,3 to 15 cm",
                 "status": "partial",
-                "note": "12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families."
+                "note": "12 codes, H.39 to H.278. NINE ARE NOW HELD AND BUILDABLE, extracted 2026-08-24: B00151 (H.39), BC0151 (H.48), BJ0151 (H.58,5), B70151 (H.78), C10151 (H.138), CE0151 (H.198), CQ0151 (H.210), CG0151 (H.222), C00151 (H.234) - one per family this registry already holds, and every printed H matches its family's height_mm exactly. THREE ARE NOT, and each for its own reason: BE0151 at H.60 - THE CATALOG'S BASE CHAPTER HAS NO H.60 SECTION IN ITS PRINTED INDEX, so this filler names a family the map does not contain (the same is true of BI0150 at H.72 in the second position); BK0151 at H.84 - the family is mapped, printed p.49-56, and not extracted; CH9151 at H.278 - no family anywhere in anything read so far, and the only code on the page whose suffix is neither 0150 nor 0151. THE DEPTH THAT UNBLOCKED THE NINE: 22 mm, decided 2026-08-24 from the page's own art - see depth_note on any of the nine rows. SUPERSEDED, kept per rule 9: \"12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families.\""
               },
               {
                 "title": "Base unit filler in door finishes from 2,3 to 15 cm",

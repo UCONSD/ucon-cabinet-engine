@@ -18,12 +18,18 @@
           "kind": "single",
           "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - A FILLER DOES NOT OPEN, so 70_symbols draws no leaf, which is the same treatment a US appliance panel gets: it too states a single front it never swings. The kind is STATED rather than left absent because Panel.effective_slabs and Panel.gola_options both default a missing layout to 'single', and a default is not a source. It also means the front shortens to 750 with the rest of the run when the door version is gola - a filler's front line must meet its neighbours' or the drawing breaks. THAT NUMBER IS FAMILY H.78'S OWN AND IS NOT PORTABLE: 750 is base_h78.json door_versions.gola_mm, and that file already states the axis is FAMILY-SCOPED. A family that declares no door_versions has no such choice at all. This very sentence was copied verbatim into three fillers of other families and was wrong in all three; corrected 2026-08-24, account in claude/findings-2026-08-24-filler-note.md."
         },
-        "buildable": false,
-        "not_buildable_reason": "The page prints NO depth for this position - it is a front and nothing else, drawn as a bare strip with no dimensioned section. The front thickness of 2,2 cm is stated all over this catalog and would be the obvious guess, and a guess is exactly what rule 8 forbids: a number no source gives us is not written down. The article is held so it is findable and orderable; the day a depth is confirmed this becomes a data change and not a code change.",
         "codes": [
-          { "code": "B70151", "width_range_mm": [23, 150] }
+          {
+            "code": "B70151",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 22
+          }
         ],
-        "notes": "The prefix is the height-family letter and it is the same lookup the unit chapters use - B7 = H.78, exactly as in base_h78.json. A RE-CONFIRMATION of the family-letter pattern, not a new grammar. THE SUFFIX IS NOT DECODABLE ACROSS PREFIXES: 0151 here is a front-only strip, while 0151 on a P prefix (see fillers_wall_h36.json) is a wall filler WITH a one-piece bottom. Read the table, not the digits."
+        "notes": "The prefix is the height-family letter and it is the same lookup the unit chapters use - B7 = H.78, exactly as in base_h78.json. A RE-CONFIRMATION of the family-letter pattern, not a new grammar. THE SUFFIX IS NOT DECODABLE ACROSS PREFIXES: 0151 here is a front-only strip, while 0151 on a P prefix (see fillers_wall_h36.json) is a wall filler WITH a one-piece bottom. Read the table, not the digits. DEPTH 22 RECORDED 2026-08-24, AND IT IS A DECISION WITH A SOURCE, NOT A PRINTED DIMENSION AGAINST THIS CODE. Until today this article was held buildable:false because printed p.434 prints no depth beside its table and the 2,2 stated all over the catalog was, correctly, refused as a guess (rule 8). What changed is that the PAGE WAS LOOKED AT rather than read. Three things carry it: (1) THE SECTION DETAIL OF THIS POSITION, rendered at 300 dpi, draws the strip as a SINGLE LAYER standing in the front plane, fixed to the hatched neighbouring carcass by an ANGLE BRACKET - there is no box behind it and no depth to choose; and the foot beneath it is drawn DASHED, so the article ends at the front line and the plinth zone belongs to the run and not to the strip. (2) THE POSITION DIRECTLY BELOW IT ON THE SAME PAGE - the same 'front in door finishes' on a melamine box - carries a DIMENSIONED detail: 35 / 0,3 / 2,2, that is box 350 + gap 3 + front 22. The front thickness of this page is therefore printed, one position over, on the same article family. (3) Independently, Cesar's own SketchUp export of estimate 2026/30831 measures FRONT_T_MM = 22 (_manifest.json factory_confirmations, trust CONFIRMED). Andriy's decision, 2026-08-24, recorded under rule 4. If Elda contradicts it this is a DATA change and not a code change. ATTACHED, NOT STANDING. printed p.434 draws the bracket; the engine does not draw it and does not need to. What the drawing settles for us is the two things that matter: the panel is COPLANAR with the fronts beside it, and it BEGINS at the neighbouring front line - which is its own family's plinth height, declared per family and never global. Below that line is the plinth, which is a RUN item ordered by the linear metre (printed p.625: front plinth ZOCC001 at H.6 and ZOCC011 at H.10, the only two heights the catalog sells) and which may be absent entirely. So the strip is drawn from the family's plinth top to the family's front height, and nothing about the plinth is implied by the article.",
+        "superseded_not_buildable_reason": "KEPT, NOT ERASED (rule 9). Until 2026-08-24 this article was held NOT BUILDABLE, and the reason read: \"The page prints NO depth for this position - it is a front and nothing else, drawn as a bare strip with no dimensioned section. The front thickness of 2,2 cm is stated all over this catalog and would be the obvious guess, and a guess is exactly what rule 8 forbids: a number no source gives us is not written down. The article is held so it is findable and orderable; the day a depth is confirmed this becomes a data change and not a code change.\" The refusal was right on the evidence it had. What retired it is not a new argument but a LOOK at the page - see depth_note."
       },
       "filler_base_unit": {
         "description": "Base unit filler in door finishes from 2,3 to 15 cm - front in door finishes - sides, bottom and top panel in melamine",
@@ -36,7 +42,14 @@
           "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - A FILLER DOES NOT OPEN, so 70_symbols draws no leaf, which is the same treatment a US appliance panel gets: it too states a single front it never swings. The kind is STATED rather than left absent because Panel.effective_slabs and Panel.gola_options both default a missing layout to 'single', and a default is not a source. It also means the front shortens to 750 with the rest of the run when the door version is gola - a filler's front line must meet its neighbours' or the drawing breaks. THAT NUMBER IS FAMILY H.78'S OWN AND IS NOT PORTABLE: 750 is base_h78.json door_versions.gola_mm, and that file already states the axis is FAMILY-SCOPED. A family that declares no door_versions has no such choice at all. This very sentence was copied verbatim into three fillers of other families and was wrong in all three; corrected 2026-08-24, account in claude/findings-2026-08-24-filler-note.md."
         },
         "codes": [
-          { "code": "B70150", "width_range_mm": [23, 150], "depth_mm": 350 }
+          {
+            "code": "B70150",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 350
+          }
         ],
         "notes": "A shallow box, not a strip: d.35 even though the base units beside it are d.62. The detail circle on the page is dimensioned 35 / 0,3 / 2,2, which reads as 350 + 3 + 22 = 375, the D.375 finished depth the end-panel pages (printed p.436-449) use throughout - OUR reading of a drawing, not a printed equation, and only depth_mm 350 is recorded here because that is the only one of the three numbers the page labels. The page's warning block applies: if the door is framed the glass/ceramic is applied to the panel and not to the aluminium support; minimum size available also for Groove 5 cm; Trama gets 2 sides with trama and a polished edge."
       }

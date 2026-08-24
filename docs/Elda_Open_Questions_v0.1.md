@@ -224,6 +224,33 @@ read from the code letter and NEVER from a drawing; see
 
 ---
 
+## Q10 — What is the thickness of the front-only closing strip?
+
+**Status:** open · added 2026-08-24 · **we have acted, and this is the
+confirmation, not the blocker**
+
+Printed p.434, first position, *"Fillers in door finishes from 2,3 to 15 cm —
+front in door finishes"* — `B00151` … `CH9151`. The table prices the article by
+height and **prints no depth beside it**, where the two positions below it both
+print `d. 35`.
+
+**We have recorded 22 mm and drawn it**, on three grounds: the section detail of
+that position shows a single layer in the front plane bracketed to the
+neighbouring carcass, with no box behind it; the position directly beneath it on
+the same page dimensions the identical *"front in door finishes"* as
+**35 / 0,3 / 2,2** — box, gap, front; and Cesar's own SketchUp export of estimate
+2026/30831 measures the front at 22.
+
+**Questions.**
+
+1. Is the front-only closing strip 22 mm thick, like a door front?
+2. Does it ever come in another thickness — for a framed door, or in Groove,
+   where the page already says the minimum width changes to 5 cm?
+3. Is it supplied with the fixing bracket the drawing shows, or is that the
+   fitter's?
+
+---
+
 ## Q8 — Is the door-version choice offered by the FAMILY or by the ARTICLE?
 
 **Status:** open · added 2026-08-24
