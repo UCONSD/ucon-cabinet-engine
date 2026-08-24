@@ -27,11 +27,11 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`3168d35`** — *docs: the reverted corner seating reaches the teardown and the manifest* |
-| **Pushed** | **NO.** `refs/heads/main` = `3168d35`, `refs/remotes/origin/main` = `13e7754` — **two commits unpushed**, read off the two refs rather than remembered (rule 16). |
+| **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
+| **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
 | **Core version** | **0.73.0**, shell 0.6.0 |
-| **Headless suite** | **402 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Headless suite** | **405 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **692 codes** in **36 section files** carrying **27 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -208,6 +208,7 @@ has to be re-read; a sentence does not.
 
 | sha | what |
 |---|---|
+| `26753c7` | docs(repo-state): the Project holds session instructions, not repo documents |
 | `3168d35` | docs: the reverted corner seating reaches the teardown and the manifest |
 | `53afd00` | docs(repo-state): rewrite at 13e7754 - the numbers, the corner correction, and the owed list |
 | `13e7754` | generator: the dishwasher panel gets a drawn plinth, and DRAWN stops meaning ORDERED (0.73.0) |
