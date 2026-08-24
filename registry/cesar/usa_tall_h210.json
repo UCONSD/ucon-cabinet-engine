@@ -36,10 +36,26 @@
         "interior_confirmed": [],
         "source_ref": "printed p.418 / PDF 420",
         "codes": [
-          { "code": "CR9400", "width_mm": 457, "depth_mm": 22 },
-          { "code": "CR9600", "width_mm": 610, "depth_mm": 22 },
-          { "code": "CR9700", "width_mm": 762, "depth_mm": 22 },
-          { "code": "CR9900", "width_mm": 914, "depth_mm": 22 }
+          {
+            "code": "CR9400",
+            "width_mm": 457,
+            "depth_mm": 22
+          },
+          {
+            "code": "CR9600",
+            "width_mm": 610,
+            "depth_mm": 22
+          },
+          {
+            "code": "CR9700",
+            "width_mm": 762,
+            "depth_mm": 22
+          },
+          {
+            "code": "CR9900",
+            "width_mm": 914,
+            "depth_mm": 22
+          }
         ],
         "notes": "A PANEL, not a cabinet - it faces the client's own fridge, the same relationship the dishwasher door has to its machine on printed p.47. depth_mm is the front thickness (22, the UCON standard), not a carcass depth. THE HAND IS A DRAWING FACT HERE, NOT AN ORDER FACT, and the two must never be confused. THE ORDER CARRIES NO HAND. The description reads '1 door' and not '1 rh or lh door', which is the wording every handed unit in this catalog uses - and the difference is real, not an omission. THE TWO MARKETS INTEGRATE A FRIDGE DIFFERENTLY (explained by Andriy 2026-08-21). In Europe the appliance is built INSIDE a cabinet: the cabinet carries the hinges and its own door is linked to the appliance door by a sliding bracket, so the hand is a property of the CABINET and the factory must be told it. In America the fridge stands in a housing BETWEEN two neighbouring cabinets, or between panels, and the panel is mounted DIRECTLY on the appliance. The hand is then the appliance's business, not the cabinetry's, and the factory has no part in it. So '1 door' is the complete and correct description of the ARTICLE, and hinge_side must never be emitted for it or asked of an estimate. THE DRAWING MUST CARRY IT ANYWAY, and here is why (Andriy, 2026-08-21): fridges come hinged on one side and freezers on the other, which is sensible, but clients sometimes swap the two appliances round. The designer draws it one way, the estimate says nothing about hands because it cannot, and the problem surfaces on site when the hinges have to be moved. The elevation is the only place that information can live, so it lives there. SHOWN IN THE FRONT ELEVATION ONLY - see front_layout.hand_shown. No plan arc and no open leaf: how far and along what path this door actually swings is set by the appliance, not by us, and that projection stays PARKED until appliances are modelled. Parked 2026-08-21.",
         "front_layout": {
@@ -56,10 +72,26 @@
         "interior_confirmed": [],
         "source_ref": "printed p.418 / PDF 420",
         "codes": [
-          { "code": "CR9401", "width_mm": 457, "depth_mm": 22 },
-          { "code": "CR9601", "width_mm": 610, "depth_mm": 22 },
-          { "code": "CR9701", "width_mm": 762, "depth_mm": 22 },
-          { "code": "CR9901", "width_mm": 914, "depth_mm": 22 }
+          {
+            "code": "CR9401",
+            "width_mm": 457,
+            "depth_mm": 22
+          },
+          {
+            "code": "CR9601",
+            "width_mm": 610,
+            "depth_mm": 22
+          },
+          {
+            "code": "CR9701",
+            "width_mm": 762,
+            "depth_mm": 22
+          },
+          {
+            "code": "CR9901",
+            "width_mm": 914,
+            "depth_mm": 22
+          }
         ],
         "notes": "Handed in the DRAWING only, never in the order - see usa_fridge_door for the reasoning, which applies unchanged. Same four widths as the plain fridge door, one suffix apart (00 -> 01). Carries a cutout on the front, so it is not simply the other door in a different finish. The page prints two restrictions that are NOT modelled and must not be lost: (1) a surcharge of 234 points for the stainless steel protection for the wine cooler door, with NO article code - recorded here, never invented as a companion, the same treatment Servo Drive gets on the wall pages; (2) a prohibition mark against 'Maxima 2.2 with framed door' and 'Metal doors', and a positive instruction to use melamine, Technomat, Unicolor or Fenix. Finish is a composition-level axis the engine does not model at all yet (M1.6), so this restriction has nowhere to live but this note.",
         "front_layout": {
@@ -86,5 +118,8 @@
         }
       }
     }
-  }
+  },
+  "page_observations": [
+    "printed p.418 CARRIES NO PICTOGRAM COLUMN AND NO WALL-HUNG MARGIN LINE - swept 2026-08-24. Both positions are doors, not cabinets, so nothing is derived from the absence; it is recorded so the page is not swept again."
+  ]
 }

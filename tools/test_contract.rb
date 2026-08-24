@@ -1106,14 +1106,17 @@ check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do
   end
 end
 
-check('the hob pictogram is recorded where it was read, and NOWHERE else') do
+check('the hob pictogram is recorded where it was read - and the sweep is DONE') do
   # printed p.19 gives the legend for two glyphs that sit beside every base
   # code table: a cabinet-in-bracket is 'Hung version', a flame is 'Provisions
-  # for hob'. Neither had been transcribed until 2026-08-23. The hob mark is
-  # data with no home in the engine yet, so it is stored with its rows and read
-  # by nothing - and it is stored ONLY on the pages actually looked at, because
-  # absence on the others means unread, not absent. The owed sweep is written
-  # into base_h78.json's page_observations rather than left to memory.
+  # for hob'. Neither had been transcribed until 2026-08-23, and the pages read
+  # before that date carried the marks unread - which is why THIS CHECK USED TO
+  # SAY 'and NOWHERE else' and pin the two pages that had been looked at.
+  #
+  # The sweep ran on 2026-08-24. Every non-wall page carrying held codes has
+  # now been read for both glyphs, so the question this check answers changed:
+  # not 'was it recorded only where we looked', but 'is the record consistent
+  # with what the pages print'. The hob mark is still read by nothing.
   files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
           .reject { |f| File.basename(f).start_with?('_') }
   marked = files.flat_map { |file|
@@ -1123,17 +1126,78 @@ check('the hob pictogram is recorded where it was read, and NOWHERE else') do
   }
   raise 'the hob marks have vanished' if marked.empty?
   marked.each do |key, ty|
+    # NEVER on d.35 or d.47. Eight base pages now agree on this and none of
+    # them derives it - each was read.
     raise "#{key}: a hob mark on a shallow row" unless
-      ty['hob_provisions_depths_mm'].all? { |d| d > 350 }
+      ty['hob_provisions_depths_mm'].all? { |d| d >= 620 }
+    # And only ever in the base chapter, on a page we have actually opened.
     raise "#{key}: recorded without its page" unless
-      ty['source_ref'].to_s.match?(/printed p\.3[2478]/)
+      ty['source_ref'].to_s.match?(/printed p\.(3[2456789]|4[02])\b/)
   end
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'nothing may read the hob mark yet' if
     ruby.any? { |f| File.read(f).include?('hob_provisions') }
+
+  # THE OWED SWEEP MUST BE RECORDED AS DONE, in the one place that owed it.
+  man = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+  sym = man['page_symbols']
+  raise 'sweep_owed must be gone, not merely contradicted' if sym['sweep_owed']
+  raise 'the sweep must record its date and its pages' unless
+    sym.dig('sweep_done', 'date') == '2026-08-24' &&
+    sym.dig('sweep_done', 'pages').is_a?(Hash) &&
+    sym['sweep_done']['pages'].length >= 10
   obs = JSON.parse(File.read(File.expand_path('../registry/cesar/base_h78.json', __dir__)))
             .dig('data', 'page_observations').to_s
-  raise 'the owed sweep must be written down' unless obs.include?('SWEEP')
+  raise 'the sweep result must be written down' unless obs.include?('THE SWEEP, 2026-08-24')
+end
+
+check('AFTER THE SWEEP, AN ABSENT HUNG READING IS A BUG') do
+  # The point of the sweep, and the only thing that makes its negative result
+  # worth four page reads. Before it, a type with no wall_hung key meant
+  # EITHER 'the catalog offers it' OR 'nobody looked', and no reader could tell
+  # which - the H.210 correction of 2026-08-23 was exactly that ambiguity
+  # cashing out as six codes offered a version the catalog does not sell.
+  #
+  # Every non-wall CABINET type now states the reading, true as well as false.
+  # A new section that forgets to fails here, which is the whole idea.
+  #
+  # The wall chapter is exempt BY OBSERVATION, not by assumption: its code
+  # tables carry no pictogram column at all - re-checked on printed p.238 on
+  # 2026-08-24 - and a wall unit hangs by nature, so the glyph would say
+  # nothing. That exemption is recorded in _manifest.json page_symbols.
+  silent = []
+  files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
+          .reject { |f| File.basename(f).start_with?('_') }.sort
+  files.each do |file|
+    sec = JSON.parse(File.read(file))
+    next if sec['class'] == 'wall'
+
+    sec['data']['unit_types'].each do |key, ty|
+      next unless (ty['object_class'] || 'cabinet') == 'cabinet'
+      next if sec['class'] == 'filler'
+
+      silent << "#{File.basename(file)}:#{key}" unless ty.key?('wall_hung')
+      raise "#{key}: a hung reading with no note" if
+        ty.key?('wall_hung') && ty['wall_hung_note'].to_s.empty?
+    end
+  end
+  raise "these types state no hung reading: #{silent.inspect}" unless silent.empty?
+
+  man = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+  raise 'the wall exemption must be written down, not assumed' unless
+    man.dig('page_symbols', 'sweep_done', 'wall_chapter').to_s.include?('no pictogram column')
+end
+
+check('and the sweep moved nothing: 46 codes refuse, the same 46 as before') do
+  # A sweep that changed an availability would be a correction, and a
+  # correction gets a dated note of its own (rule 9). This one changed none,
+  # and that is worth pinning: if a later edit quietly flips a true to a false,
+  # the count moves and this fails with the reason in its title.
+  refused = Registry.catalog.map { |c| Registry.lookup(c['code']) }
+                    .select { |u| u['wall_hung'] == false }
+  raise refused.length.to_s unless refused.length == 46
+  by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
+  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 42 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"

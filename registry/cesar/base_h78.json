@@ -24,10 +24,12 @@
     ],
     "source_ref": "CESAR - 2 Kitchen System.pdf printed p.36-43 / PDF 38-45",
     "page_observations": [
-      "THE CATALOG PRINTS TWO PICTOGRAMS PER DEPTH ROW AND WE HAD NEVER READ THEM. printed p.19 carries the legend: a small cabinet-in-bracket glyph is 'Hung version' and a flame on a burner is 'Provisions for hob'. They sit beside each d.35 / d.62 / d.67 band in every base code table. FOUND 2026-08-23 while extracting printed p.37, five days after the first base page was read, because that page is the first to print a position that CANNOT be hung. The hob mark is recorded from here on as hob_provisions_depths_mm; on printed p.37 and p.38 it is on d.62 and d.67 and never on d.35, which is what a hob needs depth for. A SWEEP OF printed p.36, p.39, p.40 AND p.42 IS OWED - their rows were transcribed without either mark, so absence there means unread, not absent.",
+      "THE CATALOG PRINTS TWO PICTOGRAMS PER DEPTH ROW AND WE HAD NEVER READ THEM. printed p.19 carries the legend: a small cabinet-in-bracket glyph is 'Hung version' and a flame on a burner is 'Provisions for hob'. They sit beside each d.35 / d.62 / d.67 band in every base code table. FOUND 2026-08-23 while extracting printed p.37, five days after the first base page was read, because that page is the first to print a position that CANNOT be hung. The hob mark is recorded from here on as hob_provisions_depths_mm; on printed p.37 and p.38 it is on d.62 and d.67 and never on d.35, which is what a hob needs depth for. A SWEEP OF printed p.36, p.39, p.40 AND p.42 WAS OWED - their rows were transcribed without either mark, so absence there meant unread, not absent. THE SWEEP WAS DONE 2026-08-24 and it is why every position in this file now states wall_hung explicitly: an absent key can no longer be read as either answer.",
       "AND THE HUNG MARK IS A PRINTED FACT THE ENGINE DERIVES. Generator.wall_hung_available? says every base and tall cabinet can be hung unless a row says otherwise; printed p.37 prints two positions that say 'not available wall hung' in words, and their left margin drops the 'Surch. for wall-hung version on page 548' line that every other base position carries. Checked across printed p.36, p.39 and p.40: every extracted position there does carry the surcharge line, so nothing already held is wrong - the derivation was right by luck and is now backed by a flag on the two articles that break it.",
       "ONE DESCRIPTION, TWO ARTICLES, TWICE ON ONE PAGE. printed p.38 prints 'Base unit with drawer and doors' as suffix 40 AND as suffix 46, and 'Base unit with drawer and door' exists as 41 on printed p.37 and 47 on printed p.38. The words are identical and so are the widths, depths and - for 40 against 46 - the prices in every band. WHAT SEPARATES THEM IS THE ELEVATION: 40 and 41 print two, a handle 19,5/58,5 and a gola 16,5/55,5; 46 and 47 print one, 19,5/55,5 with the groove between the fronts and none under the worktop. Anything that keys a position by its printed description would merge two articles the factory sells apart.",
-      "TWO SHAPES THIS REGISTRY CANNOT YET DRAW, AND THEY ARE CONTRACT GAPS, NOT PAGE PROBLEMS. (1) A band above a split: a drawer front across the full width with TWO doors beneath it. front_layout v2.1 has single, vertical_split, horizontal and corner_door, and none of them nests, so Export.fronts_in would count two fronts where the page prints three. (2) An article printed only in the gola execution: 19,5 + 55,5 = 750, the family's gola door height, where a handle execution must sum to 780 - and door_versions is a FAMILY key, so there is no way to say that one code exists at 75 and not at 78. Thirteen of the twenty-eight codes on these two pages are held and not buildable for one or both reasons."
+      "TWO SHAPES THIS REGISTRY CANNOT YET DRAW, AND THEY ARE CONTRACT GAPS, NOT PAGE PROBLEMS. (1) A band above a split: a drawer front across the full width with TWO doors beneath it. front_layout v2.1 has single, vertical_split, horizontal and corner_door, and none of them nests, so Export.fronts_in would count two fronts where the page prints three. (2) An article printed only in the gola execution: 19,5 + 55,5 = 750, the family's gola door height, where a handle execution must sum to 780 - and door_versions is a FAMILY key, so there is no way to say that one code exists at 75 and not at 78. Thirteen of the twenty-eight codes on these two pages are held and not buildable for one or both reasons.",
+      "THE SWEEP, 2026-08-24, AND WHAT IT CHANGED: NOTHING, WHICH IS THE RESULT. printed p.36, p.39, p.40 and p.42 were re-read at 170 dpi for both glyphs. Every position on all four pages carries the hung glyph and the margin surcharge, so no held code's availability moved. Six positions gained the hob mark on d.62 and d.67 - the two door types of p.36, the two drawer types of p.40, the drawers-and-jumbo of p.39 and the corner of p.42 - and the pattern the two already-read pages showed held on all four: the flame is on the deep bands and never on d.35. A negative result that took four page reads is still the only thing that turns 'unread' into 'absent'.",
+      "AND THE PAGE SAYS TWO THINGS ABOUT POSITIONS WE DO NOT HOLD. printed p.42's 'Base unit for built-in oven H. 60' (B88698 / B88798 / B88999 at d.62, B98698 / B98798 / B98999 at d.67) carries BOTH glyphs and the wall-hung margin line - so an oven housing at H.78 CAN be hung, where the compact-oven housing at H.58.5, printed p.34, refuses it in words. Same appliance idea, two families, opposite answers. And the Magicorner corner unit at the foot of p.42 carries the FLAME AND NO HUNG GLYPH while its margin still prints the wall-hung surcharge - the page contradicting itself, recorded in catalog_map against the type that is not held."
     ],
     "unit_types": {
       "base_pull_out_door": {
@@ -65,7 +67,9 @@
           "kind": "single",
           "mechanism": "pull_out_door",
           "note": "One full-height front carried by a pull-out mechanism (see printed p.512), not a swinging leaf. Slab geometry is that of a single door; the opening SYMBOL is deliberately not drawn yet - a swing V would be a lie and the pull-out travel of this mechanism is not in the catalog. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.36. The 'Hung version' glyph is printed beside d.35 and d.62 - the only two depths this position prints, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. No flame on any band."
       },
       "base_laundry_basket": {
         "description": "Base unit with laundry basket - 1 bottom-hung door, 1 laundry bag, no Push-pull",
@@ -92,7 +96,9 @@
           "kind": "single",
           "hinge_axis": "bottom",
           "note": "One full-height front hinged along its BOTTOM edge. Per docs/Drawing_Spec_v0.1.md the elevation symbol is the inverted V - base on the hinge axis, apex at the opening edge - and the plan shows the leaf fallen to horizontal, projecting forward by the front height. Not rendered yet: 70_symbols.rb draws a single leaf only when a hinge_side is given, so nothing is drawn rather than something wrong."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.36. The 'Hung version' glyph is printed beside d.62 and d.67, as ONE glyph spanning both bands, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. No flame on any band."
       },
       "base_door": {
         "description": "Base unit with door - 1 rh or lh door, 1 shelf",
@@ -163,7 +169,13 @@
         "front_layout": {
           "kind": "single",
           "note": "One door covering the full front."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.36. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
       },
       "base_doors": {
         "description": "Base unit with doors - 2 doors, 1 shelf",
@@ -224,7 +236,13 @@
           "kind": "vertical_split",
           "count": 2,
           "note": "Two doors; catalog drawing (printed p.36) shows an equal split. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.36. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
       },
       "base_drawers_jumbo": {
         "description": "Base unit with drawers and jumbo drawer - 2 drawers, 1 jumbo drawer",
@@ -361,7 +379,13 @@
             }
           ],
           "gola_note": "Verified from the p.39 elevation (zoomed 2026-08-16): undercounter recess above the top drawer; plain joint between the two 180 drawers; intermediate recess between the second drawer and the jumbo. Top drawer opens from the undercounter zone, second drawer from below via the intermediate zone, jumbo from above via the same zone. A gola drawer unit therefore needs BOTH profiles: undercounter (GOL001/GOL005) + intermediate (GOL002/GOL006), same system."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.39. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
       },
       "base_waste_pone": {
         "description": "Base unit with jumbo drawer for P-One pull-out waste unit - 1 jumbo drawer, no Push-pull device",
@@ -415,7 +439,9 @@
             "source_ref": "printed p.524 / PDF 526",
             "note": "P-One recycling sorter bins, ordered separately: 995625 for W450 (2 bins, 27+27 l), 995626 for W600 (3 bins, 55+17+17 l). The kit fixes onto the door so the lids lift as it opens. Printed p.39 points at this page and the widths match one to one; the source does not state in words that a unit cannot be ordered without its kit, so this is a companion by evidence, not by a printed rule."
           }
-        ]
+        ],
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.39. The 'Hung version' glyph is printed beside d.62 - the only depth this position prints, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. No flame on any band."
       },
       "base_waste_xl": {
         "description": "Base unit with pull-out XL waste unit - 1 jumbo drawer, no Push-pull device, no Servo Drive mechanism",
@@ -475,7 +501,9 @@
             "source_ref": "printed p.525 / PDF 527",
             "note": "Envi Space waste kits, h.58 cm, silver grey RAL 9006, ordered separately: 995603 for W300 (32 l + small bin), 995605 for W450 (2 x 37 l), 995606 for W600 (37+37+22 l). Wording mismatch worth knowing: p.525 titles them 'for 30/45/60 cm wide base unit with door' while our unit is a pull-out; widths match one to one and printed p.39 points at this page."
           }
-        ]
+        ],
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.39. The 'Hung version' glyph is printed beside d.62 - the only depth this position prints, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. No flame on any band."
       },
       "base_jumbo_drawers": {
         "description": "Base unit with jumbo drawers - 2 jumbo drawers",
@@ -606,7 +634,13 @@
             "depth_mm": 670
           }
         ],
-        "notes": "Servo Drive referenced; interior-drawer surcharge p.570 noted at d.62 block."
+        "notes": "Servo Drive referenced; interior-drawer surcharge p.570 noted at d.62 block.",
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.40. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
       },
       "base_drawer_jumbo": {
         "description": "Base unit with drawer and jumbo drawer - 1 drawer, 1 jumbo drawer, no Push-pull device",
@@ -738,7 +772,13 @@
             "depth_mm": 670
           }
         ],
-        "notes": "No Push-pull device per source."
+        "notes": "No Push-pull device per source.",
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.40. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
       },
       "base_corner": {
         "description": "Corner base unit - 1 rh or lh door, 8x8 fixed corner front panel, 1 shelf",
@@ -902,47 +942,93 @@
           "door_width_from_row": true,
           "filler_mm": 80,
           "note": "One door of 300/450/600 at the execution's end, then the 8x8 corner filler: ONE solid L, both legs 80 long and 22 thick, its front leg on the door plane and its return projecting forward so the perpendicular run meets it. The rest of the carcass front is blind. Door and filler share the front height, so door version 75 shortens both."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.42. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
       },
       "base_door_interior_drawer_kit": {
         "description": "Base unit with door for interior drawer and jumbo drawer kit - 1 rh or lh door with 155 degree hinges",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["155 degree hinges"],
+        "interior_confirmed": [
+          "155 degree hinges"
+        ],
         "source_ref": "printed p.37 / PDF 39",
-        "hob_provisions_depths_mm": [620, 670],
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ],
         "codes": [
-          { "code": "B80505", "width_mm": 450, "depth_mm": 620 },
-          { "code": "B80605", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B90505", "width_mm": 450, "depth_mm": 670 },
-          { "code": "B90605", "width_mm": 600, "depth_mm": 670 }
+          {
+            "code": "B80505",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80605",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90505",
+            "width_mm": 450,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90605",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
         ],
         "notes": "d.62 and d.67 only - there is no d.35 execution, which is what a jumbo drawer kit needs room for. THE SAME SHAPE AS tall_door_kit_ready AND THE SAME GAP: 'See kit on page 569' is an option a person may or may not order, and the kit catalog (printed p.568-569) is not held, so NO companion is recorded. A companion is resolved from the registry and never typed. The article is the same with or without the kit; only the interior changes, and nothing the envelope draws.",
         "front_layout": {
           "kind": "single",
           "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order. Elevation printed p.37: 78 / 75.",
           "gola_stack_top_to_bottom": [
-            { "kind": "zone", "h_mm": 30, "role": "undercounter recess" },
-            { "kind": "front", "h_mm": 750 }
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
           ],
           "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.37. The 'Hung version' glyph is printed beside d.62 and d.67 - the only two depths this position prints, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35."
       },
       "base_door_pull_out_table": {
         "description": "Base unit w/door and pull-out tabe - 1 front with 97 cm long pull-out table - 1 rh or lh door - 1 shelf - no Push-pull device on top front - no intermediate grip recess - not available wall hung",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["1 front with 97 cm long pull-out table", "1 shelf"],
+        "interior_confirmed": [
+          "1 front with 97 cm long pull-out table",
+          "1 shelf"
+        ],
         "source_ref": "printed p.37 / PDF 39",
         "wall_hung": false,
         "wall_hung_note": "PRINTED, NOT DERIVED - printed p.37 / PDF 39: 'not available wall hung' is the page's own last line, and the left margin of this position omits the 'Surch. for wall-hung version on page 548' that every other base position carries. Generator.wall_hung_available? assumes every base and tall CABINET can be hung and reads this flag as the only way out - so this is the first article in the registry to exercise it. See the page_observations note on the printed pictograms.",
         "codes": [
-          { "code": "B80672", "width_mm": 600, "depth_mm": 620 }
+          {
+            "code": "B80672",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
         ],
         "notes": "THE HEADING CARRIES A TYPO AND IT IS KEPT: the page prints 'pull-out tabe' in the heading and 'pull-out table' in the line below it, on the same position, twice on the page. The registry keeps the catalog's words. One code, one width, d.62 only. The 97 cm table is longer than the 60 cm carcass, which is why it pulls out.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [195, 585],
+          "heights_mm_top_to_bottom": [
+            195,
+            585
+          ],
           "note": "Elevation printed p.37: 19,5 / 58,5, summing to 780 - the HANDLE execution, and the only one this position prints. Top band is the table's own front, bottom band the door. NO gola_stack: the page prints no second elevation for this position and states 'no intermediate grip recess', so what the gola execution looks like is stated in words and not in numbers. Rule 8 - the numbers are not guessed from the twin position four rows down."
         }
       },
@@ -950,7 +1036,10 @@
         "description": "Base unit w/door and pull-out tabe - 1 front with 97 cm long pull-out table - 2 doors - 1 shelf - no Push-pull device on top front - no intermediate grip recess - not available wall hung",
         "opening": "doors",
         "handed": false,
-        "interior_confirmed": ["1 front with 97 cm long pull-out table", "1 shelf"],
+        "interior_confirmed": [
+          "1 front with 97 cm long pull-out table",
+          "1 shelf"
+        ],
         "source_ref": "printed p.37 / PDF 39",
         "wall_hung": false,
         "wall_hung_note": "PRINTED, NOT DERIVED - printed p.37 / PDF 39, the same last line and the same missing margin surcharge as base_door_pull_out_table above it. Both positions on this page state it in words; the tall pages state the same thing only by leaving the glyph off.",
@@ -958,12 +1047,19 @@
         "front_layout_incomplete": true,
         "not_buildable_reason": "THE FRONT IS A BAND ABOVE A SPLIT AND front_layout HAS NO WORD FOR THAT. This position is one 195 table front across the full width, with TWO doors of 585 below it - a horizontal band whose lower band is itself split vertically. Contract v2.1 offers single, vertical_split, horizontal and corner_door, and none of them nests. Recorded as horizontal [195, 585] so the heights are not lost, and marked incomplete so nothing draws it: Export.fronts_in would count TWO fronts where the page prints THREE, and a handle count that is quietly wrong is worse than one that is refused. THE CONTRACT GAP IS THE FINDING, not this article.",
         "codes": [
-          { "code": "B80972", "width_mm": 900, "depth_mm": 620 }
+          {
+            "code": "B80972",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
         ],
         "notes": "The two-door twin of base_door_pull_out_table, one code, W.90, d.62. Same typo in the heading, same three printed restrictions.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [195, 585],
+          "heights_mm_top_to_bottom": [
+            195,
+            585
+          ],
           "note": "Elevation printed p.37: 19,5 / 58,5. The lower 585 band is TWO doors and this layout cannot say so - see not_buildable_reason."
         }
       },
@@ -971,140 +1067,331 @@
         "description": "Base unit with drawer and door - 1 drawer - 1 rh or lh door - 1 shelf",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["1 drawer", "1 shelf"],
+        "interior_confirmed": [
+          "1 drawer",
+          "1 shelf"
+        ],
         "source_ref": "printed p.37 / PDF 39",
-        "hob_provisions_depths_mm": [620, 670],
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ],
         "codes": [
-          { "code": "B70541", "width_mm": 450, "depth_mm": 350 },
-          { "code": "B70641", "width_mm": 600, "depth_mm": 350 },
-          { "code": "B80541", "width_mm": 450, "depth_mm": 620 },
-          { "code": "B80641", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B90541", "width_mm": 450, "depth_mm": 670 },
-          { "code": "B90641", "width_mm": 600, "depth_mm": 670 }
+          {
+            "code": "B70541",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "B70641",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "B80541",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80641",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90541",
+            "width_mm": 450,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90641",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
         ],
         "notes": "SUFFIX 41, AND printed p.38 PRINTS THE SAME DESCRIPTION AGAIN AS SUFFIX 47. The words are identical - '1 drawer, 1 rh or lh door, 1 shelf' - and the two are different articles at different prices. What separates them is the ELEVATION and nothing else: 41 prints two, the handle 19,5/58,5 and the gola 16,5/55,5; 47 prints one, 19,5/55,5 with the groove between the fronts. A reader who matched positions by their description would merge them. Servo Drive is offered on the page (printed p.567) and LEGRABOX surcharges are listed; neither is an order line here.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [195, 585],
+          "heights_mm_top_to_bottom": [
+            195,
+            585
+          ],
           "note": "Elevation printed p.37: 19,5 / 58,5 (handle), 16,5 / 55,5 (gola). Sum 780 = family door height.",
           "gola_stack_top_to_bottom": [
-            { "kind": "zone", "h_mm": 30, "role": "undercounter recess" },
-            { "kind": "front", "h_mm": 165 },
-            { "kind": "zone", "h_mm": 30, "role": "intermediate recess" },
-            { "kind": "front", "h_mm": 555 }
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
           ],
           "gola_note": "Drawer 195->165, door 585->555 (each -30); two recesses, exactly as base_drawer_jumbo."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.37. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35."
       },
       "base_drawer_doors": {
         "description": "Base unit with drawer and doors - 1 drawer - 2 doors - 1 shelf",
         "opening": "doors",
         "handed": false,
-        "interior_confirmed": ["1 drawer", "1 shelf"],
+        "interior_confirmed": [
+          "1 drawer",
+          "1 shelf"
+        ],
         "source_ref": "printed p.38 / PDF 40",
-        "hob_provisions_depths_mm": [620, 670],
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ],
         "buildable": false,
         "front_layout_incomplete": true,
         "not_buildable_reason": "A 195 drawer front above TWO 585 doors - the same nesting front_layout v2.1 cannot express, and the same refusal as base_doors_pull_out_table. Export.fronts_in would say two where the page prints three.",
         "codes": [
-          { "code": "B70940", "width_mm": 900, "depth_mm": 350 },
-          { "code": "B80940", "width_mm": 900, "depth_mm": 620 },
-          { "code": "B90940", "width_mm": 900, "depth_mm": 670 }
+          {
+            "code": "B70940",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "B80940",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90940",
+            "width_mm": 900,
+            "depth_mm": 670
+          }
         ],
         "notes": "SUFFIX 40, W.90 only, one code per depth - and printed p.38 prints this description TWICE, as 40 and as 46, exactly as it prints 'drawer and door' as 41 and 47. Same pairing, same distinguishing mark: 40 prints both elevations, 46 prints one.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [195, 585],
+          "heights_mm_top_to_bottom": [
+            195,
+            585
+          ],
           "note": "Elevation printed p.38: 19,5 / 58,5 (handle), 16,5 / 55,5 (gola). The lower band is TWO doors and this layout cannot say so.",
           "gola_stack_top_to_bottom": [
-            { "kind": "zone", "h_mm": 30, "role": "undercounter recess" },
-            { "kind": "front", "h_mm": 165 },
-            { "kind": "zone", "h_mm": 30, "role": "intermediate recess" },
-            { "kind": "front", "h_mm": 555 }
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
           ],
           "gola_note": "As base_drawer_door: two recesses, 165 over 555."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.38. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35."
       },
       "base_drawer_door_gola_only": {
         "description": "Base unit with drawer and door - 1 drawer - 1 rh or lh door - 1 shelf",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["1 drawer", "1 shelf"],
+        "interior_confirmed": [
+          "1 drawer",
+          "1 shelf"
+        ],
         "source_ref": "printed p.38 / PDF 40",
-        "hob_provisions_depths_mm": [620, 670],
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ],
         "buildable": false,
         "not_buildable_reason": "THE PAGE PRINTS ONE ELEVATION AND IT IS NOT THE FULL-HEIGHT ONE: 195 + 555 = 750, the family's GOLA door height, with the groove drawn between the two fronts and none under the worktop, so 780 - 750 = 30 is the single intermediate recess. THAT READING IS OURS (rule 4), forced by arithmetic: a handle execution must sum to 780 and this does not. And door_versions is a FAMILY key - full_mm and gola_mm are stated once for H.78 and every article inherits both - so there is no way yet to say this code exists at 75 and not at 78. Held, findable, orderable, and not drawn until that axis can be narrowed to an article.",
         "codes": [
-          { "code": "B70547", "width_mm": 450, "depth_mm": 350 },
-          { "code": "B70647", "width_mm": 600, "depth_mm": 350 },
-          { "code": "B80547", "width_mm": 450, "depth_mm": 620 },
-          { "code": "B80647", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B90547", "width_mm": 450, "depth_mm": 670 },
-          { "code": "B90647", "width_mm": 600, "depth_mm": 670 }
+          {
+            "code": "B70547",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "B70647",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "B80547",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80647",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90547",
+            "width_mm": 450,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90647",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
         ],
         "notes": "SUFFIX 47, the twin of 41 four rows up on the previous page. Identical description, identical widths, identical depths, different price and a different elevation. The type key says what the elevation says and the word 'gola' appears nowhere on the page.",
         "front_layout": {
           "kind": "horizontal",
           "note": "NO heights_mm_top_to_bottom: the page prints no full-height elevation for this article, and inventing one from its twin is exactly what rule 8 forbids. The gola stack below carries the printed numbers, and Export.horizontal_fronts already falls back to it for the front count.",
           "gola_stack_top_to_bottom": [
-            { "kind": "front", "h_mm": 195 },
-            { "kind": "zone", "h_mm": 30, "role": "intermediate recess" },
-            { "kind": "front", "h_mm": 555 }
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
           ],
           "gola_note": "Elevation printed p.38: 19,5 / 55,5 with the groove BETWEEN the fronts and nothing above the top one - the reverse of base_drawer_door, which recesses under the worktop as well. 195 + 30 + 555 = 780."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.38. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35."
       },
       "base_drawer_doors_gola_only": {
         "description": "Base unit with drawer and doors - 1 drawer - 2 doors - 1 shelf",
         "opening": "doors",
         "handed": false,
-        "interior_confirmed": ["1 drawer", "1 shelf"],
+        "interior_confirmed": [
+          "1 drawer",
+          "1 shelf"
+        ],
         "source_ref": "printed p.38 / PDF 40",
-        "hob_provisions_depths_mm": [620, 670],
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ],
         "buildable": false,
         "front_layout_incomplete": true,
         "not_buildable_reason": "BOTH GAPS AT ONCE. First, the lower band is two doors, which front_layout v2.1 cannot nest - see base_drawer_doors. Second, the page prints one elevation and 195 + 555 = 750 is the gola door height, not the 780 a handle execution must sum to; THAT READING IS OURS (rule 4), and door_versions is a FAMILY key, so there is no way yet to say this code exists at 75 and not at 78.",
         "codes": [
-          { "code": "B70946", "width_mm": 900, "depth_mm": 350 },
-          { "code": "B80946", "width_mm": 900, "depth_mm": 620 },
-          { "code": "B90946", "width_mm": 900, "depth_mm": 670 }
+          {
+            "code": "B70946",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "B80946",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90946",
+            "width_mm": 900,
+            "depth_mm": 670
+          }
         ],
         "notes": "SUFFIX 46, the twin of 40. Same three depths at W.90, same prices as 40 to the euro in every band - which is worth recording, because it means the difference between the two is not priced and cannot be read off the price column either.",
         "front_layout": {
           "kind": "horizontal",
           "note": "NO heights_mm_top_to_bottom - see base_drawer_door_gola_only. The lower band is TWO doors and this layout cannot say so.",
           "gola_stack_top_to_bottom": [
-            { "kind": "front", "h_mm": 195 },
-            { "kind": "zone", "h_mm": 30, "role": "intermediate recess" },
-            { "kind": "front", "h_mm": 555 }
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
           ],
           "gola_note": "Elevation printed p.38: 19,5 / 55,5, groove between the fronts."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.38. The 'Hung version' glyph is printed beside all three depths, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35."
       },
       "base_jumbo_interior_drawers": {
         "description": "Base unit with jumbo drawer and interior drawers - 1 jumbo drawer - 2 interior drawers - no Push-pull device",
         "opening": "pull-out",
         "handed": false,
-        "interior_confirmed": ["1 jumbo drawer", "2 interior drawers"],
+        "interior_confirmed": [
+          "1 jumbo drawer",
+          "2 interior drawers"
+        ],
         "source_ref": "printed p.38 / PDF 40",
-        "hob_provisions_depths_mm": [620, 670],
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ],
         "codes": [
-          { "code": "B80551", "width_mm": 450, "depth_mm": 620 },
-          { "code": "B80651", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B90551", "width_mm": 450, "depth_mm": 670 },
-          { "code": "B90651", "width_mm": 600, "depth_mm": 670 }
+          {
+            "code": "B80551",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80651",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90551",
+            "width_mm": 450,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90651",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
         ],
         "notes": "ONE FRONT, THREE DRAWERS. The two interior drawers sit BEHIND the jumbo front and have no front of their own - which is why the elevation is 78 / 75 undivided and why the handle count is one. d.62 and d.67 only, W.45 and W.60 only. The LEGRABOX surcharge on this position is 237 where every other position on the page lists 65 / 32 / 97 - the interior drawers are what is being surcharged, and it is not an order line here.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [780],
+          "heights_mm_top_to_bottom": [
+            780
+          ],
           "note": "Elevation printed p.38: 78 / 75 - one full-height front carried by the jumbo drawer.",
           "gola_stack_top_to_bottom": [
-            { "kind": "zone", "h_mm": 30, "role": "undercounter recess" },
-            { "kind": "front", "h_mm": 750 }
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
           ],
           "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.38. The 'Hung version' glyph is printed beside d.62 and d.67 - the only two depths this position prints, and the margin carries 'Surch. for wall-hung version on page 548'. Recorded as TRUE rather than left absent: before the sweep an absent key meant 'nobody looked', and after it an absent key would still mean that. The flame is on d.62 and d.67 and never on d.35."
       }
     }
   }

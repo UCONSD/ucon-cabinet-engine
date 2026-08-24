@@ -15,8 +15,15 @@
       "source_ref": "printed p.28 / PDF 30",
       "note": "48 full, 45 with the top 30 mm in the gola profile - the same 30 mm difference every base family prints."
     },
-    "depths_mm": [350, 470, 620],
-    "collections": ["Maxima", "Intarsio"],
+    "depths_mm": [
+      350,
+      470,
+      620
+    ],
+    "collections": [
+      "Maxima",
+      "Intarsio"
+    ],
     "source_ref": "CESAR - 2 Kitchen System.pdf printed p.28 / PDF 30",
     "page_observations": [
       "TWO OF THE THREE PLAIN DOOR SUFFIXES NOW AGREE ACROSS THE BASE CLASS. 01 is a plain hinged door at H.48 and at H.78; 25 is a bottom-hung door at H.48 and at H.39. That is two families each, and it is recorded as an observation and derived from nothing - the wall chapter offered exactly this shape of evidence five times before H.120 broke it.",
@@ -32,31 +39,105 @@
         "interior_confirmed": [],
         "source_ref": "printed p.28 / PDF 30",
         "codes": [
-          { "code": "BC0525", "width_mm": 450, "depth_mm": 350 },
-          { "code": "BC0625", "width_mm": 600, "depth_mm": 350 },
-          { "code": "BC0725", "width_mm": 750, "depth_mm": 350 },
-          { "code": "BC0925", "width_mm": 900, "depth_mm": 350 },
-          { "code": "BC1025", "width_mm": 1050, "depth_mm": 350 },
-          { "code": "BC1225", "width_mm": 1200, "depth_mm": 350 },
-          { "code": "BQ0525", "width_mm": 450, "depth_mm": 470 },
-          { "code": "BQ0625", "width_mm": 600, "depth_mm": 470 },
-          { "code": "BQ0725", "width_mm": 750, "depth_mm": 470 },
-          { "code": "BQ0925", "width_mm": 900, "depth_mm": 470 },
-          { "code": "BQ1025", "width_mm": 1050, "depth_mm": 470 },
-          { "code": "BQ1225", "width_mm": 1200, "depth_mm": 470 },
-          { "code": "BD0525", "width_mm": 450, "depth_mm": 620 },
-          { "code": "BD0625", "width_mm": 600, "depth_mm": 620 },
-          { "code": "BD0725", "width_mm": 750, "depth_mm": 620 },
-          { "code": "BD0925", "width_mm": 900, "depth_mm": 620 },
-          { "code": "BD1025", "width_mm": 1050, "depth_mm": 620 },
-          { "code": "BD1225", "width_mm": 1200, "depth_mm": 620 }
+          {
+            "code": "BC0525",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC0625",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC0725",
+            "width_mm": 750,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC0925",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC1025",
+            "width_mm": 1050,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC1225",
+            "width_mm": 1200,
+            "depth_mm": 350
+          },
+          {
+            "code": "BQ0525",
+            "width_mm": 450,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ0625",
+            "width_mm": 600,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ0725",
+            "width_mm": 750,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ0925",
+            "width_mm": 900,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ1025",
+            "width_mm": 1050,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ1225",
+            "width_mm": 1200,
+            "depth_mm": 470
+          },
+          {
+            "code": "BD0525",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD0625",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD0725",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD0925",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD1025",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD1225",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
         ],
         "notes": "Six widths at each of three depths, suffix 25 - the same digits H.39 gives the same position. One printed line of content and no shelf, so interior_confirmed is empty rather than guessed. NOT HANDED: a flap has no rh/lh.",
         "front_layout": {
           "kind": "single",
           "hinge_axis": "bottom",
           "note": "One front covering the whole face, hinged along its bottom edge. hinge_side never applies."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-23 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.28."
       },
       "base_compound_2_compartments_bottom_hung": {
         "description": "Compound base unit with 2 compartments and bottom-hung door - 1 bottom-hung door",
@@ -65,47 +146,110 @@
         "interior_confirmed": [],
         "source_ref": "printed p.28 / PDF 30",
         "codes": [
-          { "code": "BC1825", "width_mm": 1800, "depth_mm": 350 },
-          { "code": "BC2425", "width_mm": 2400, "depth_mm": 350 },
-          { "code": "BQ1825", "width_mm": 1800, "depth_mm": 470 },
-          { "code": "BQ2425", "width_mm": 2400, "depth_mm": 470 },
-          { "code": "BD1825", "width_mm": 1800, "depth_mm": 620 },
-          { "code": "BD2425", "width_mm": 2400, "depth_mm": 620 }
+          {
+            "code": "BC1825",
+            "width_mm": 1800,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC2425",
+            "width_mm": 2400,
+            "depth_mm": 350
+          },
+          {
+            "code": "BQ1825",
+            "width_mm": 1800,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ2425",
+            "width_mm": 2400,
+            "depth_mm": 470
+          },
+          {
+            "code": "BD1825",
+            "width_mm": 1800,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD2425",
+            "width_mm": 2400,
+            "depth_mm": 620
+          }
         ],
         "notes": "THE HEADING COUNTS THE COMPARTMENTS AND THE PAGE STILL PRINTS NO SPLIT - the third compound in this chapter with no modules_mm, after both of H.39's. Suffix 25, the same as the simple type, so only the width field marks the compound.",
         "finish_restrictions": {
           "kind": "not_available",
           "source_ref": "printed p.28 / PDF 30, read off the render",
-          "for_all_widths": ["Metal doors", "Noce Sgubbiato doors", "Fenix NTA doors", "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"],
-          "for_starred_widths_mm": [2400],
-          "for_starred_widths": ["Melamine doors (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)"],
+          "for_all_widths": [
+            "Metal doors",
+            "Noce Sgubbiato doors",
+            "Fenix NTA doors",
+            "Unicolor doors (Calacatta Oro, Calacatta Grigio, Cemento Chiaro, Botticino, Quercia Antracite, Noce Sinfonia, Quercia naturale Nodato, Noce Dogale, Travertino, Ardesia Pelda, Ardesia Graphite)"
+          ],
+          "for_starred_widths_mm": [
+            2400
+          ],
+          "for_starred_widths": [
+            "Melamine doors (Scandio, Lutezio, Noce Avena, Noce Miele, Noce Castano, Noce Moro)"
+          ],
           "note": "RECORDED, NOT ENFORCED - M1.6. Word for word the block printed p.24 and p.25 put on their compounds, a family lower."
         },
         "front_layout": {
           "kind": "single",
           "hinge_axis": "bottom",
           "note": "One front across the whole width, hinged along its bottom edge. The divider is carcass and is not drawn."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-23 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.28."
       },
       "base_door": {
         "description": "Base unit with door - 1 rh or lh door - 1 shelf",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["1 shelf"],
+        "interior_confirmed": [
+          "1 shelf"
+        ],
         "source_ref": "printed p.28 / PDF 30",
         "codes": [
-          { "code": "BC0501", "width_mm": 450, "depth_mm": 350 },
-          { "code": "BC0601", "width_mm": 600, "depth_mm": 350 },
-          { "code": "BQ0501", "width_mm": 450, "depth_mm": 470 },
-          { "code": "BQ0601", "width_mm": 600, "depth_mm": 470 },
-          { "code": "BD0501", "width_mm": 450, "depth_mm": 620 },
-          { "code": "BD0601", "width_mm": 600, "depth_mm": 620 }
+          {
+            "code": "BC0501",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "BC0601",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "BQ0501",
+            "width_mm": 450,
+            "depth_mm": 470
+          },
+          {
+            "code": "BQ0601",
+            "width_mm": 600,
+            "depth_mm": 470
+          },
+          {
+            "code": "BD0501",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "BD0601",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
         ],
         "notes": "SUFFIX 01, the same digits the plain door carries at H.78. Two widths only, 45 and 60. ONE CODE, BOTH HANDS - hinge_side stays per order.",
         "front_layout": {
           "kind": "single",
           "note": "One door covering the full front, hinged on a vertical edge. hinge_side per order."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-23 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.28."
       }
     }
   }

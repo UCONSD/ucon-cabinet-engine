@@ -11,61 +11,131 @@
         "description": "Sink base unit with door - 1 rh or lh door, 1 aluminium tray",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["1 aluminium tray"],
+        "interior_confirmed": [
+          "1 aluminium tray"
+        ],
         "source_ref": "printed p.44 / PDF 46",
         "codes": [
-          { "code": "B80503", "width_mm": 450, "depth_mm": 620 },
-          { "code": "B80603", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B90503", "width_mm": 450, "depth_mm": 670 },
-          { "code": "B90603", "width_mm": 600, "depth_mm": 670 }
+          {
+            "code": "B80503",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80603",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90503",
+            "width_mm": 450,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90603",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
         ],
         "notes": "No d.35 sink base is listed on the page; the explicit rows are the authority. The aluminium tray is stated by the source but is interior - recorded, not drawn.",
         "front_layout": {
           "kind": "single",
           "note": "One door covering the full front, as for the plain base unit."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.44. The 'Hung version' glyph is printed beside d.62 and d.67 and the margin carries 'Surch. for wall-hung version on page 548'. No flame on either band."
       },
       "sink_base_doors": {
         "description": "Sink base unit with doors - 2 doors, 1 aluminium tray",
         "opening": "doors",
         "handed": false,
-        "interior_confirmed": ["1 aluminium tray"],
+        "interior_confirmed": [
+          "1 aluminium tray"
+        ],
         "source_ref": "printed p.44 / PDF 46",
         "codes": [
-          { "code": "B80602", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B80902", "width_mm": 900, "depth_mm": 620 },
-          { "code": "B81202", "width_mm": 1200, "depth_mm": 620 },
-          { "code": "B90602", "width_mm": 600, "depth_mm": 670 },
-          { "code": "B90902", "width_mm": 900, "depth_mm": 670 },
-          { "code": "B91202", "width_mm": 1200, "depth_mm": 670 }
+          {
+            "code": "B80602",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80902",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B81202",
+            "width_mm": 1200,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90602",
+            "width_mm": 600,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90902",
+            "width_mm": 900,
+            "depth_mm": 670
+          },
+          {
+            "code": "B91202",
+            "width_mm": 1200,
+            "depth_mm": 670
+          }
         ],
         "front_layout": {
           "kind": "vertical_split",
           "count": 2,
           "note": "Two doors; the page drawing shows an equal split. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.44. The 'Hung version' glyph is printed beside d.62 and d.67 and the margin carries 'Surch. for wall-hung version on page 548'. No flame on either band."
       },
       "sink_base_jumbo_drawer": {
         "description": "Sink base unit with jumbo drawer - 1 jumbo drawer with shaped back panel, 1 aluminium tray, no Push-pull device",
         "opening": "pull-out",
         "handed": false,
-        "interior_confirmed": ["1 jumbo drawer with shaped back panel", "1 aluminium tray"],
+        "interior_confirmed": [
+          "1 jumbo drawer with shaped back panel",
+          "1 aluminium tray"
+        ],
         "source_ref": "printed p.44 / PDF 46",
         "codes": [
-          { "code": "B80681", "width_mm": 600, "depth_mm": 620 },
-          { "code": "B90681", "width_mm": 600, "depth_mm": 670 }
+          {
+            "code": "B80681",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90681",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
         ],
         "notes": "Source states no Push-pull device. Servo Drive referenced on the page as an option (p.567). W600 only.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [780],
+          "heights_mm_top_to_bottom": [
+            780
+          ],
           "note": "Elevation printed p.44: 78 / 75, i.e. one full-height front (handle 780; gola 750).",
           "gola_stack_top_to_bottom": [
-            { "kind": "zone", "h_mm": 30, "role": "undercounter recess" },
-            { "kind": "front", "h_mm": 750 }
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
           ],
           "gola_note": "Single front loses 30 under the worktop, as for a full-height door: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.44. The 'Hung version' glyph is printed beside d.62 and d.67 and the margin carries 'Surch. for wall-hung version on page 548'. No flame on either band."
       },
       "sink_base_jumbo_drawers": {
         "description": "Sink base unit with jumbo drawers - 1 top jumbo drawer with shaped interior for sink, 1 jumbo drawer with shaped back panel, 1 aluminium tray",
@@ -78,29 +148,84 @@
         ],
         "source_ref": "printed p.44 / PDF 46",
         "codes": [
-          { "code": "B80787", "width_mm": 750, "depth_mm": 620 },
-          { "code": "B80987", "width_mm": 900, "depth_mm": 620 },
-          { "code": "B81087", "width_mm": 1050, "depth_mm": 620 },
-          { "code": "B81287", "width_mm": 1200, "depth_mm": 620 },
-          { "code": "B90787", "width_mm": 750, "depth_mm": 670 },
-          { "code": "B90987", "width_mm": 900, "depth_mm": 670 },
-          { "code": "B91087", "width_mm": 1050, "depth_mm": 670 },
-          { "code": "B91287", "width_mm": 1200, "depth_mm": 670 }
+          {
+            "code": "B80787",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "B80987",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "B81087",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "B81287",
+            "width_mm": 1200,
+            "depth_mm": 620
+          },
+          {
+            "code": "B90787",
+            "width_mm": 750,
+            "depth_mm": 670
+          },
+          {
+            "code": "B90987",
+            "width_mm": 900,
+            "depth_mm": 670
+          },
+          {
+            "code": "B91087",
+            "width_mm": 1050,
+            "depth_mm": 670
+          },
+          {
+            "code": "B91287",
+            "width_mm": 1200,
+            "depth_mm": 670
+          }
         ],
         "notes": "Servo Drive referenced on the page as an option (p.567). The top drawer's shaped interior clears the sink bowl - stated by the source, interior, not drawn. No W600 row on the page; smallest is W750.",
         "front_layout": {
           "kind": "horizontal",
-          "heights_mm_top_to_bottom": [390, 390],
+          "heights_mm_top_to_bottom": [
+            390,
+            390
+          ],
           "note": "Elevation printed p.44: 39 / 39 (handle); gola shows 36 / 36. Same split as the plain jumbo-drawers unit on printed p.40.",
           "gola_stack_top_to_bottom": [
-            { "kind": "zone", "h_mm": 30, "role": "undercounter recess" },
-            { "kind": "front", "h_mm": 360 },
-            { "kind": "zone", "h_mm": 30, "role": "intermediate recess" },
-            { "kind": "front", "h_mm": 360 }
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
           ],
           "gola_note": "Both jumbo fronts lose 30 (390->360); undercounter recess above the top front, intermediate recess between the two. A gola unit therefore needs BOTH profiles, same system."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-08-24 (printed p.19 pictogram sweep), printed p.44. The 'Hung version' glyph is printed beside d.62 and d.67 and the margin carries 'Surch. for wall-hung version on page 548'. No flame on either band."
       }
     }
-  }
+  },
+  "page_observations": [
+    "NO HOB GLYPH ANYWHERE ON printed p.44, at either depth, in any of the four positions - swept 2026-08-24 against printed p.19's legend. The H.58.5 sink page says the same thing, so two sink sections now agree that a sink base is not offered hob provisions, and neither derives it.",
+    "EVERY POSITION CARRIES THE HUNG GLYPH at both depths, plus the margin surcharge. Recorded on each type as wall_hung true rather than left absent, because an absent key is exactly what the sweep existed to abolish."
+  ]
 }

@@ -15,9 +15,21 @@
         "interior_confirmed": [],
         "source_ref": "printed p.47 / PDF 49",
         "codes": [
-          { "code": "V80530", "width_mm": 450, "depth_mm": 22 },
-          { "code": "V80630", "width_mm": 600, "depth_mm": 22 },
-          { "code": "V80730", "width_mm": 750, "depth_mm": 22 }
+          {
+            "code": "V80530",
+            "width_mm": 450,
+            "depth_mm": 22
+          },
+          {
+            "code": "V80630",
+            "width_mm": 600,
+            "depth_mm": 22
+          },
+          {
+            "code": "V80730",
+            "width_mm": 750,
+            "depth_mm": 22
+          }
         ],
         "notes": "A PANEL, not a cabinet: it bolts onto the appliance's own door, which is why the source specifies it 'without fixing holes' - there are no hinges on it. The hinge axis is therefore a constant of the appliance class (a dishwasher only ever drops down), not a per-order choice, so hinge_side never applies. depth_mm is the front thickness (22, the UCON standard), not a carcass depth. The side elevation prints 78 / 75, so the panel follows the same door-version axis as any front. The page also prints 'cutout for plinth 40' - UNRESOLVED whether the 40 mm is cut from the plinth in front of the appliance or from the panel itself; envelope-only representation does not draw it either way, but do not encode it until read.",
         "front_layout": {
@@ -29,7 +41,11 @@
           {
             "role": "filler_profile",
             "by": "width",
-            "map": { "450": "995945", "600": "995946", "750": "995946" },
+            "map": {
+              "450": "995945",
+              "600": "995946",
+              "750": "995946"
+            },
             "drawn": false,
             "source_ref": "printed p.48 / PDF 50",
             "note": "Filler profile between the dishwasher and the top. Only W45 and W60 exist; the 75 cm door takes the W60 profile because the appliance behind it is 60 cm wide. A strip, like a GOL profile: ordered, never drawn."
@@ -37,7 +53,9 @@
           {
             "role": "door_bearing_cabinet",
             "code": "GBBF01",
-            "applies_to_widths_mm": [750],
+            "applies_to_widths_mm": [
+              750
+            ],
             "drawn": false,
             "source_ref": "printed p.47 / PDF 49",
             "note": "Stainless steel cabinet W150 with the door-bearing mechanism, required only by the 75 cm version: 60 (appliance) + 15 = 75. NOT generated as geometry: the source states no depth for it, and which side of the appliance it stands on is Elda Q5. Order line until both are answered."
@@ -49,20 +67,33 @@
         "object_class": "appliance_front",
         "opening": "bottom-hung",
         "handed": false,
-        "interior_confirmed": ["black rear support frame for fronts"],
+        "interior_confirmed": [
+          "black rear support frame for fronts"
+        ],
         "source_ref": "printed p.48 / PDF 50",
         "buildable": false,
         "not_buildable_reason": "TWO FRONTS THAT DO NOT SUM TO 780. The family door height is 780 and these print 360 + 360 = 720. 780 minus one 30 mm recess is 750 and minus two is 720, so all three executions on printed p.48 are GOLA panels - which the prohibition block supports, since it rules out the L-shaped grip recess and the first execution names an aluminium profile for straight groove use. THAT READING IS OURS (rule 4). The blocker is the one printed p.38 found first: door_versions is a FAMILY key, so there is no way yet to say an article exists at 75 or 72 and not at 78. Nineteen codes in two sections now wait on that axis. Held, findable, orderable, not drawn.",
         "codes": [
-          { "code": "V88559", "width_mm": 450, "depth_mm": 22 },
-          { "code": "V88659", "width_mm": 600, "depth_mm": 22 }
+          {
+            "code": "V88559",
+            "width_mm": 450,
+            "depth_mm": 22
+          },
+          {
+            "code": "V88659",
+            "width_mm": 600,
+            "depth_mm": 22
+          }
         ],
         "notes": "printed p.48 CALLS THIS AN INTEGRATED DISHWASHER AND printed p.47 CALLS ITS DOOR FULLY-INTEGRATED. Two words apart, two different articles, and only this page names an aluminium profile. It is also the only one of the three positions with 'cutout for plinth 40' printed beside it - the second time that figure appears in this registry and the second time it is left unresolved: whether the 40 is cut from the plinth in front of the appliance or from the panel itself is not stated, and envelope-only geometry draws neither.",
         "companions": [
           {
             "role": "filler_profile",
             "by": "width",
-            "map": { "450": "995945", "600": "995946" },
+            "map": {
+              "450": "995945",
+              "600": "995946"
+            },
             "drawn": false,
             "source_ref": "printed p.48 / PDF 50",
             "note": "The same filler profile V80530 takes, printed on THIS page rather than referred to from another. W45 and W60 are the only widths these executions come in, so no 75 case arises here."
@@ -71,15 +102,24 @@
         "finish_restrictions": {
           "kind": "not_available",
           "source_ref": "printed p.48 / PDF 50, read off the render",
-          "for_all_widths": ["Maxima 2.2 with Shaker door", "L-shaped grip recess"],
+          "for_all_widths": [
+            "Maxima 2.2 with Shaker door",
+            "L-shaped grip recess"
+          ],
           "note": "RECORDED, NOT ENFORCED - M1.6. All three executions on this page carry the same prohibition block, and it is the reason the page exists: these doors are for the STRAIGHT groove systems, and the L-shaped recess is served by something else."
         },
         "front_layout": {
           "kind": "horizontal",
           "note": "NO heights_mm_top_to_bottom - see not_buildable_reason: the printed pair does not sum to the family door height. NO hinge_axis either: one key cannot carry two leaves, which is the rule the stacked wall units settled. The machine still drops its door; the catalog has not dimensioned how two fronts travel on it.",
           "gola_stack_top_to_bottom": [
-            { "kind": "front", "h_mm": 360 },
-            { "kind": "front", "h_mm": 360 }
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
           ],
           "gola_note": "Elevation printed p.48: 36 / 36, with the aluminium profile in the joint between them."
         }
@@ -89,20 +129,33 @@
         "object_class": "appliance_front",
         "opening": "bottom-hung",
         "handed": false,
-        "interior_confirmed": ["black rear support frame for fronts"],
+        "interior_confirmed": [
+          "black rear support frame for fronts"
+        ],
         "source_ref": "printed p.48 / PDF 50",
         "buildable": false,
         "not_buildable_reason": "TWO FRONTS THAT DO NOT SUM TO 780. The family door height is 780 and these print 195 + 555 = 750. 780 minus one 30 mm recess is 750 and minus two is 720, so all three executions on printed p.48 are GOLA panels - which the prohibition block supports, since it rules out the L-shaped grip recess and the first execution names an aluminium profile for straight groove use. THAT READING IS OURS (rule 4). The blocker is the one printed p.38 found first: door_versions is a FAMILY key, so there is no way yet to say an article exists at 75 or 72 and not at 78. Nineteen codes in two sections now wait on that axis. Held, findable, orderable, not drawn.",
         "codes": [
-          { "code": "V88566", "width_mm": 450, "depth_mm": 22 },
-          { "code": "V88666", "width_mm": 600, "depth_mm": 22 }
+          {
+            "code": "V88566",
+            "width_mm": 450,
+            "depth_mm": 22
+          },
+          {
+            "code": "V88666",
+            "width_mm": 600,
+            "depth_mm": 22
+          }
         ],
         "notes": "ONE DESCRIPTION, TWO ARTICLES - THE THIRD INSTANCE FOUND TODAY. This position and the one below it print the same four lines, the same two widths and the same price in every band; only the elevation differs, 19,5/55,5 here against 16,5/55,5 there. printed p.38 does the same thing twice with base units. The type key carries the numbers because nothing else on the page separates them.",
         "companions": [
           {
             "role": "filler_profile",
             "by": "width",
-            "map": { "450": "995945", "600": "995946" },
+            "map": {
+              "450": "995945",
+              "600": "995946"
+            },
             "drawn": false,
             "source_ref": "printed p.48 / PDF 50",
             "note": "The same filler profile V80530 takes, printed on THIS page rather than referred to from another. W45 and W60 are the only widths these executions come in, so no 75 case arises here."
@@ -111,15 +164,24 @@
         "finish_restrictions": {
           "kind": "not_available",
           "source_ref": "printed p.48 / PDF 50, read off the render",
-          "for_all_widths": ["Maxima 2.2 with Shaker door", "L-shaped grip recess"],
+          "for_all_widths": [
+            "Maxima 2.2 with Shaker door",
+            "L-shaped grip recess"
+          ],
           "note": "RECORDED, NOT ENFORCED - M1.6. All three executions on this page carry the same prohibition block, and it is the reason the page exists: these doors are for the STRAIGHT groove systems, and the L-shaped recess is served by something else."
         },
         "front_layout": {
           "kind": "horizontal",
           "note": "NO heights_mm_top_to_bottom and no hinge_axis - see appliance_dishwasher_door_aluminium_profile.",
           "gola_stack_top_to_bottom": [
-            { "kind": "front", "h_mm": 195 },
-            { "kind": "front", "h_mm": 555 }
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
           ],
           "gola_note": "Elevation printed p.48: 19,5 / 55,5 - the same pair the suffix-47 base units of printed p.38 print."
         }
@@ -129,20 +191,33 @@
         "object_class": "appliance_front",
         "opening": "bottom-hung",
         "handed": false,
-        "interior_confirmed": ["black rear support frame for fronts"],
+        "interior_confirmed": [
+          "black rear support frame for fronts"
+        ],
         "source_ref": "printed p.48 / PDF 50",
         "buildable": false,
         "not_buildable_reason": "TWO FRONTS THAT DO NOT SUM TO 780. The family door height is 780 and these print 165 + 555 = 720. 780 minus one 30 mm recess is 750 and minus two is 720, so all three executions on printed p.48 are GOLA panels - which the prohibition block supports, since it rules out the L-shaped grip recess and the first execution names an aluminium profile for straight groove use. THAT READING IS OURS (rule 4). The blocker is the one printed p.38 found first: door_versions is a FAMILY key, so there is no way yet to say an article exists at 75 or 72 and not at 78. Nineteen codes in two sections now wait on that axis. Held, findable, orderable, not drawn.",
         "codes": [
-          { "code": "V88569", "width_mm": 450, "depth_mm": 22 },
-          { "code": "V88669", "width_mm": 600, "depth_mm": 22 }
+          {
+            "code": "V88569",
+            "width_mm": 450,
+            "depth_mm": 22
+          },
+          {
+            "code": "V88669",
+            "width_mm": 600,
+            "depth_mm": 22
+          }
         ],
         "notes": "The twin of the position above, distinguishable only by its elevation. 16,5 / 55,5 is exactly the gola pair the base drawer-and-door units print, which is what a dishwasher door has to match when it stands in a run of them.",
         "companions": [
           {
             "role": "filler_profile",
             "by": "width",
-            "map": { "450": "995945", "600": "995946" },
+            "map": {
+              "450": "995945",
+              "600": "995946"
+            },
             "drawn": false,
             "source_ref": "printed p.48 / PDF 50",
             "note": "The same filler profile V80530 takes, printed on THIS page rather than referred to from another. W45 and W60 are the only widths these executions come in, so no 75 case arises here."
@@ -151,19 +226,32 @@
         "finish_restrictions": {
           "kind": "not_available",
           "source_ref": "printed p.48 / PDF 50, read off the render",
-          "for_all_widths": ["Maxima 2.2 with Shaker door", "L-shaped grip recess"],
+          "for_all_widths": [
+            "Maxima 2.2 with Shaker door",
+            "L-shaped grip recess"
+          ],
           "note": "RECORDED, NOT ENFORCED - M1.6. All three executions on this page carry the same prohibition block, and it is the reason the page exists: these doors are for the STRAIGHT groove systems, and the L-shaped recess is served by something else."
         },
         "front_layout": {
           "kind": "horizontal",
           "note": "NO heights_mm_top_to_bottom and no hinge_axis - see appliance_dishwasher_door_aluminium_profile.",
           "gola_stack_top_to_bottom": [
-            { "kind": "front", "h_mm": 165 },
-            { "kind": "front", "h_mm": 555 }
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
           ],
           "gola_note": "Elevation printed p.48: 16,5 / 55,5."
         }
       }
     }
-  }
+  },
+  "page_observations": [
+    "printed p.47 AND p.48 CARRY NO PICTOGRAM COLUMN AT ALL - swept 2026-08-24 against printed p.19's legend. Not one position on either page prints the hung glyph or the flame, and the two door positions of p.47 and all three of p.48 also drop the 'Surch. for wall-hung version' line their neighbours carry. NOTHING IS DERIVED FROM THAT: every article held here is an appliance_front, and Generator.wall_hung_available? already refuses anything that is not a cabinet. The reading is recorded so the pages are not swept a third time.",
+    "TWO POSITIONS ON printed p.47 ARE NOT HELD and they DO carry the wall-hung margin line: the floor-standing fridge/freezer housing (V80601 / V90601) and the base unit for a built-in fridge-freezer (V80611 / V90611). Both are appliance housings and wait with the appliance module."
+  ]
 }

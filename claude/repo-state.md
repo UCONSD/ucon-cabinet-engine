@@ -27,11 +27,11 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`2f54abf`** — *docs: repo-state records the move, what stayed behind, and where the next session starts* |
-| **Pushed** | **yes** — `origin/main` == `refs/heads/main` == `2f54abf` |
-| **Working tree** | **DIRTY — the whole H.58.5 extraction is uncommitted.** Two new registry files (`base_h58_5.json`, `sink_base_h58_5.json`), `_manifest.json`, `tools/test_contract.rb`, `core/00_version.rb`, `docs/Elda_Open_Questions_v0.1.md`, `claude/findings-2026-08-24-h58_5.md`, `claude/README.md` and this file. Andriy commits in his own terminal. |
-| **Core version** | **0.69.0**, shell 0.6.0 |
-| **Headless suite** | **394 checks, 0 failures** — green on the bridge (Ruby 3.0.2) |
+| **HEAD** | **`e0893dd`** — *registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0)* |
+| **Pushed** | **NO.** `refs/heads/main` == `e0893dd`, `origin/main` == `2f54abf`. **One commit is unpushed** — rule 16, check the two refs rather than the memory of a push. |
+| **Working tree** | **DIRTY — the pictogram sweep is uncommitted.** Eleven registry files, `_manifest.json`, `tools/test_contract.rb`, `core/00_version.rb`, `claude/findings-2026-08-24-pictogram-sweep.md`, `claude/README.md` and this file. No new codes. Andriy commits in his own terminal. |
+| **Core version** | **0.70.0**, shell 0.6.0 |
+| **Headless suite** | **396 checks, 0 failures** — green on the bridge (Ruby 3.0.2) |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **692 codes** in **36 section files** carrying **27 catalog sections**; `catalog_map` holds **67 sections** |
 | **`_to_delete/`** | **two files, still waiting on Andriy** — `probe_tmp.rb` and `00_version.rb.bak.2026-08-23`. The bridge cannot delete. |
@@ -75,13 +75,12 @@ not been read**. H.48 and now H.58.5 are the warning — `BC` / `BQ` / `BD` and
 `B3` / `B6` / `B4` are both out of depth order — so nothing about H.84 can be
 assumed from the alphabet. Its plinth is 60, not 100.
 
-**Before it, one page is still owed:** the printed p.19 pictogram sweep over
-the **148 non-wall codes** transcribed before the legend was found. Their
-silence about the hung and hob glyphs means *unread*, not *absent* —
-`claude/debt-2026-08-24.md` §3. H.58.5 is the argument for doing it: on
-printed p.32 the hob glyph sits on d.62 of two positions and NOT on d.62 of the
-position directly above them, so the mark is per (position x depth) and no
-sweep can be shortcut by a rule.
+**Nothing is owed before it.** The printed p.19 pictogram sweep — the oldest
+debt in the registry, `claude/debt-2026-08-24.md` §3 — **was done on
+2026-08-24**: ten pages, 146 held codes, no availability changed, six positions
+gained the hob mark, and every non-wall cabinet type now states `wall_hung`
+explicitly so that an absent reading is a failing check rather than a shrug.
+Account: `claude/findings-2026-08-24-pictogram-sweep.md`.
 
 ### Sections held
 
@@ -110,11 +109,12 @@ still wait on ONE decision** — `door_versions` is a family key — and a check
 requires all nineteen to name that reason in the same words, so the backlog is
 one grep.
 
-**Twenty-two codes refuse the hung version:** 2 base (p.37), **2 base (p.34)**,
-2 tall H.138, 6 tall H.210, and all 10 of H.222 + H.234. **Four of the
-twenty-two refuse in WORDS** — p.34 and p.37 — and the other eighteen only by a
-missing glyph and a missing margin line. An absence has to be re-read; a
-sentence does not, and that difference is now its own check.
+**Forty-six codes refuse the hung version: 4 base and 42 tall** — and the
+figure is now COUNTED BY A CHECK, not by hand. It read *twenty-two* here this
+morning, which had counted the tall families by position instead of by code.
+**Four of the forty-six refuse in WORDS** — printed p.34 and p.37 — and the
+other forty-two only by a missing glyph and a missing margin line. An absence
+has to be re-read; a sentence does not.
 
 ---
 
@@ -122,7 +122,8 @@ sentence does not, and that difference is now its own check.
 
 | sha | what |
 |---|---|
-| — | **UNCOMMITTED: registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0)** |
+| — | **UNCOMMITTED: registry: the printed p.19 pictogram sweep, and an absent reading that is now a bug (0.70.0)** |
+| `e0893dd` | registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0) — **UNPUSHED** |
 | `2f54abf` | docs: repo-state records the move, what stayed behind, and where the next session starts |
 | `a775846` | docs: move the working notes out of the claude.ai Project and into the repo |
 | `0d31813` | registry: base units H.48 p.28, and a catalog cache the suite had outgrown (0.68.0) |
@@ -196,6 +197,14 @@ And, from the base column:
 > and `catalog_map`. A plan written from a map that says *not_extracted* where
 > the manifest says *blocked* schedules a day of work that cannot be done.
 
+And, from the pictogram sweep:
+
+> **A positive reading has to be recorded as a positive reading.** For six days
+> a type with no `wall_hung` key meant EITHER 'the catalog offers it' OR
+> 'nobody looked', and that ambiguity had already shipped six H.210 codes with
+> a version the catalog does not sell. The sweep changed no value and fixed
+> that: 54 types now state the reading, and a check makes silence a failure.
+
 And, from H.58.5:
 
 > **A door version can be an ARTICLE fact.** printed p.32 draws ONE elevation
@@ -207,7 +216,8 @@ And, from H.58.5:
 Full accounts: **`claude/findings-2026-08-23.md`** (H.96, H.120, base p.37-38,
 p.48, Group 0), **`claude/findings-2026-08-23-tall.md`** (the five plain tall
 families), **`claude/findings-2026-08-24-base-column.md`** (the base prefix) and
-**`claude/findings-2026-08-24-h58_5.md`** (H.58.5, whole).
+**`claude/findings-2026-08-24-h58_5.md`** (H.58.5, whole) and
+**`claude/findings-2026-08-24-pictogram-sweep.md`** (the glyph debt, closed).
 
 ---
 

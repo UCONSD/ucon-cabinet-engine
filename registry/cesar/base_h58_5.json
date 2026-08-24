@@ -68,7 +68,9 @@
           "kind": "single",
           "mechanism": "pull_out_door",
           "note": "One full-height front carried by a pull-out mechanism, not a swinging leaf - the same geometry the H.78 position gets. NO gola_stack: the page prints no second elevation for this position, and inventing one from its H.78 twin is what rule 8 forbids."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.32."
       },
       "base_door": {
         "description": "Base unit with door - 1 rh or lh door, 1 shelf",
@@ -159,7 +161,9 @@
             }
           ],
           "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.32."
       },
       "base_doors": {
         "description": "Base unit with doors - 2 doors, 1 shelf",
@@ -221,7 +225,9 @@
             }
           ],
           "gola_note": "Both leaves lose 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.32."
       },
       "base_jumbo_drawer_interior_drawer": {
         "description": "Base unit with jumbo drawer and interior drawer - 1 jumbo drawer, 1 interior drawer, no Push-pull device",
@@ -313,7 +319,9 @@
             }
           ],
           "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.33."
       },
       "base_drawer_jumbo_drawer": {
         "description": "Base unit with jumbo drawers - 1 drawer, 1 jumbo drawer",
@@ -445,7 +453,9 @@
             }
           ],
           "gola_note": "BOTH fronts lose 30: 195->165 under the worktop and 390->360 at the groove between them. 165 + 30 + 360 + 30 = 585, which is why the printed gola pair 16,5 / 36 sums to 52,5 and not to the 55,5 a single-front position shows."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.33."
       },
       "base_compact_oven": {
         "description": "Base unit for built-in compact oven - 1 front that can be modified to suit the appliance, 1 oven niche, bottom panel lined with sheet metal, not available wall hung",

@@ -10,8 +10,14 @@
     "height_mm": 1980,
     "plinth_h_mm": 100,
     "plinth_note": "Same reading as tall_h210.json (2026-08-22) and tall_h138.json: a tall unit stands in a run with the base units and its front has to line up, so it takes the plinth the Project Guidelines print for the Cesar door chain. printed p.97 prints ONE dimension, 198, and no plinth - the number is inherited from that decision, not read off this page.",
-    "depths_mm": [350, 620],
-    "collections": ["Maxima", "Intarsio"],
+    "depths_mm": [
+      350,
+      620
+    ],
+    "collections": [
+      "Maxima",
+      "Intarsio"
+    ],
     "source_ref": "CESAR - 2 Kitchen System.pdf printed p.97 / PDF 99",
     "no_door_versions_note": "No door_versions, read from the page: printed p.97 prints a single elevation dimension, 198, where the base pages print a 78/75 pair. The gola question is not answered here.",
     "wall_fixing_note": "The chapter notice on printed p.79 - 'IMPORTANT: 35 cm deep tall units must be fixed to the wall' - applies to every CE code in this file. Installation, not geometry; recorded so nobody re-derives it from the depth.",
@@ -26,37 +32,93 @@
         "description": "Tall unit with door - 1 rh or lh door - 4 shelves - 1 divider",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["4 shelves", "1 divider"],
+        "interior_confirmed": [
+          "4 shelves",
+          "1 divider"
+        ],
         "source_ref": "printed p.97 / PDF 99",
         "codes": [
-          { "code": "CE0331", "width_mm": 300, "depth_mm": 350 },
-          { "code": "CE0531", "width_mm": 450, "depth_mm": 350 },
-          { "code": "CE0631", "width_mm": 600, "depth_mm": 350 },
-          { "code": "CE0731", "width_mm": 750, "depth_mm": 350 },
-          { "code": "CF0331", "width_mm": 300, "depth_mm": 620 },
-          { "code": "CF0531", "width_mm": 450, "depth_mm": 620 },
-          { "code": "CF0631", "width_mm": 600, "depth_mm": 620 },
-          { "code": "CF0731", "width_mm": 750, "depth_mm": 620 }
+          {
+            "code": "CE0331",
+            "width_mm": 300,
+            "depth_mm": 350
+          },
+          {
+            "code": "CE0531",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "CE0631",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "CE0731",
+            "width_mm": 750,
+            "depth_mm": 350
+          },
+          {
+            "code": "CF0331",
+            "width_mm": 300,
+            "depth_mm": 620
+          },
+          {
+            "code": "CF0531",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "CF0631",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "CF0731",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
         ],
         "notes": "Four widths at each depth. Suffix 31, as at H.210 - and NOT as at H.138, which prints 01 for the same position, nor as at H.222 and H.234, which print 02. Three readings across five families of the position they otherwise all agree about. ONE CODE, BOTH HANDS. The only position on this page carrying the printed 'Hung version' glyph, and it carries it on both depth bands.",
         "front_layout": {
           "kind": "single",
           "note": "One door covering the full 1980 front, hinged on a vertical edge. hinge_side per order."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. printed p.97 prints the glyph beside this position only. Recorded as TRUE so that an absent key can never again be read as either answer. No flame anywhere in the tall chapter."
       },
       "tall_two_doors": {
         "description": "Tall unit with doors - 2 doors - 4 shelves - 1 divider",
         "opening": "doors",
         "handed": false,
-        "interior_confirmed": ["4 shelves", "1 divider"],
+        "interior_confirmed": [
+          "4 shelves",
+          "1 divider"
+        ],
         "source_ref": "printed p.97 / PDF 99",
         "wall_hung": false,
         "wall_hung_note": "PRINTED ONLY AS ART - printed p.97 / PDF 99. No 'Hung version' glyph on either depth band and no 'Surch. for wall-hung version on page 548' in the margin, where the door type above carries both. Verified on a 170-dpi render 2026-08-23. THE SAME POSITION IS OFFERED WALL-HUNG AT H.138, so this is read per position and per family and derived from nothing.",
         "codes": [
-          { "code": "CE0930", "width_mm": 900, "depth_mm": 350 },
-          { "code": "CE1230", "width_mm": 1200, "depth_mm": 350 },
-          { "code": "CF0930", "width_mm": 900, "depth_mm": 620 },
-          { "code": "CF1230", "width_mm": 1200, "depth_mm": 620 }
+          {
+            "code": "CE0930",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "CE1230",
+            "width_mm": 1200,
+            "depth_mm": 350
+          },
+          {
+            "code": "CF0930",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "CF1230",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
         ],
         "notes": "Two widths, 90 and 120, exactly as at H.210 - H.138 adds a W.60 that neither taller family offers. Suffix 30.",
         "front_layout": {
@@ -69,13 +131,25 @@
         "description": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section - 1 rh or lh door with 155 degree hinges - 1 shelf - 1 divider",
         "opening": "door",
         "handed": true,
-        "interior_confirmed": ["155 degree hinges", "1 shelf", "1 divider"],
+        "interior_confirmed": [
+          "155 degree hinges",
+          "1 shelf",
+          "1 divider"
+        ],
         "source_ref": "printed p.97 / PDF 99",
         "wall_hung": false,
         "wall_hung_note": "PRINTED ONLY AS ART - printed p.97 / PDF 99. No glyph on the d.62 band and no wall-hung surcharge in the margin. The kit-ready door is refused in all three plain tall families now, which is the one part of this pattern that has never varied - and it is still recorded per position, because two families agreeing about the two-door type was exactly what H.138 broke.",
         "codes": [
-          { "code": "CF0535", "width_mm": 450, "depth_mm": 620 },
-          { "code": "CF0635", "width_mm": 600, "depth_mm": 620 }
+          {
+            "code": "CF0535",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "CF0635",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
         ],
         "notes": "d.62 ONLY - no CE counterpart, so a 35 cm deep tall unit cannot take the bottom-section kit. Third family to price this position and third to price it deep-only. THE PAGE claude/options-architecture-2026-08-20.md TOOK ITS WORKED EXAMPLE FROM: one printed row carrying an option that is CHOSEN ('See kit on page 569') beside one that is IMPLIED ('155 degree hinges'). Contract v2 can express both and NEITHER is recorded, because a chosen companion needs a catalog to resolve from (registry/cesar/options/, printed p.568-569) and a person to choose it. Four positions in four chapters now point at that one unread page.",
         "front_layout": {

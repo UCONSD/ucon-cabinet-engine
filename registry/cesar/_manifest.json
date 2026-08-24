@@ -309,7 +309,8 @@
             "types": [
               {
                 "title": "Base unit for built-in oven H. 60",
-                "status": "not_extracted"
+                "status": "not_extracted",
+                "note": "SWEPT 2026-08-24: this position carries BOTH printed p.19 glyphs at d.62 and d.67 and the wall-hung margin line - so an oven housing at H.78 CAN be hung, where the compact-oven housing at H.58.5 (printed p.34) refuses it in the catalog's own words. Two families, the same appliance idea, opposite answers; read the page. Its elevation also prints REAL front heights - 9 + 9 above and below the niche (handle), 7 + 8 (gola) - where the H.58.5 position prints only a minimum, so this one is readable when the appliance module arrives."
               },
               {
                 "title": "Corner base unit",
@@ -318,7 +319,8 @@
               },
               {
                 "title": "Corner base unit with Magicorner pull-out mechanism",
-                "status": "not_extracted"
+                "status": "not_extracted",
+                "note": "SWEPT 2026-08-24, AND THE PAGE CONTRADICTS ITSELF HERE: this position carries the FLAME at d.62 and d.67 and NO hung glyph, while its margin still prints 'Surch. for wall-hung version on page 548'. Everywhere else the two agree - the four articles that refuse in words drop the margin line too, and the tall positions that refuse by a missing glyph drop it as well. Recorded, not resolved, and it is not held, so nothing depends on it. Worth putting to Elda with the corner questions."
               }
             ]
           },
@@ -1518,20 +1520,36 @@
   },
   "page_symbols": {
     "source_ref": "printed p.19 / PDF 21, legend read 2026-08-23 and verified against a 300-dpi crop",
-    "note": "TWO PICTOGRAMS SIT BESIDE EVERY DEPTH BAND IN THE BASE CODE TABLES, and neither had been transcribed until printed p.37 forced the question. They are printed art, not text: pdftotext cannot see them, which is why five days of base and wall extraction went past them. Anything read off a code table from here on records them; anything read before 2026-08-23 does NOT, so their absence on printed p.36, p.39, p.40 and p.42 means unread and never absent.",
+    "note": "TWO PICTOGRAMS SIT BESIDE EVERY DEPTH BAND IN THE BASE CODE TABLES, and neither had been transcribed until printed p.37 forced the question. They are printed art, not text: pdftotext cannot see them, which is why five days of base and wall extraction went past them. Everything read from 2026-08-23 on records them, and THE BACKLOG WAS SWEPT ON 2026-08-24 - see sweep_done below. From that date an absent reading is not possible in a held section: every non-wall cabinet type states wall_hung explicitly, and a check enforces it.",
     "symbols": [
       {
         "glyph": "cabinet in a bracket",
         "label": "Hung version",
-        "meaning_note": "The catalog states PER DEPTH ROW which articles can be ordered wall-hung. Generator.wall_hung_available? DERIVES the same answer from unit_class, and printed p.37 is the first page to contradict it - two positions there print 'not available wall hung' in words and drop the wall-hung surcharge from the margin. Recorded on those two articles as wall_hung false."
+        "meaning_note": "The catalog states PER DEPTH ROW which articles can be ordered wall-hung. Generator.wall_hung_available? DERIVES the same answer from unit_class, and the catalog contradicts it in two different ways: printed p.34 and p.37 refuse in WORDS ('not available wall hung', and the margin drops the surcharge), while the whole of tall H.222 and H.234 and two positions each on p.97 and p.111 refuse only by leaving the glyph off. Recorded per position as wall_hung, true as well as false."
       },
       {
         "glyph": "flame on a burner",
         "label": "Provisions for hob",
-        "meaning_note": "Recorded as hob_provisions_depths_mm on the positions of printed p.37 and p.38. On both pages it is on d.62 and d.67 and never on d.35. NOT read by anything in the engine - it is one more fact waiting on restrictions."
+        "meaning_note": "Recorded as hob_provisions_depths_mm. Across every base page now read - printed p.32, p.34, p.36, p.37, p.38, p.39, p.40 and p.42 - it is on d.62 and d.67 and NEVER on d.35 or d.47, and it is per POSITION as well as per depth: printed p.32 puts it on d.62 of the two door types and not on d.62 of the pull-out door one row above them. Absent from the sink pages, the tall chapter, the appliance pages, the USA page and the filler chapter. NOT read by anything in the engine - one more fact waiting on restrictions."
       }
     ],
-    "sweep_owed": "printed p.36, p.39, p.40 and p.42 were transcribed before the legend was found, and printed p.44-48 and the whole tall chapter have not been checked for these glyphs at all."
+    "sweep_done": {
+      "date": "2026-08-24",
+      "note": "Every non-wall page carrying held codes has now been read at 170 dpi for both glyphs. NOTHING CHANGED AVAILABILITY - every position that was being offered the hung version does carry the glyph and the margin line - and six positions gained the hob mark. The value is the negative: absence is now absence.",
+      "pages": {
+        "36": "base H.78 - all four positions hung; flame on d.62/d.67 of the two door types",
+        "39": "base H.78 - all three positions hung; flame on d.62/d.67 of drawers-and-jumbo only",
+        "40": "base H.78 - both positions hung; flame on d.62/d.67 of both",
+        "42": "base H.78 - the held corner is hung, flame on d.62/d.67. NOT HELD: the built-in oven H.60 carries both; the Magicorner carries the flame and NO hung glyph while its margin still prints the surcharge",
+        "44": "sink base H.78 - all four positions hung, no flame anywhere",
+        "47": "appliances - no pictogram column at all; the two door positions also drop the wall-hung margin line",
+        "48": "appliances - no pictogram column at all",
+        "111": "tall H.210 - the plain door is hung, the other two are not; no flame in the tall chapter",
+        "418": "USA elements - no pictogram column, no margin line",
+        "434": "fillers - no pictogram column anywhere in the chapter"
+      },
+      "wall_chapter": "STILL EXCLUDED, AND STILL BY OBSERVATION. The wall code tables carry no pictogram column - seen on every wall render read so far and re-checked once on 2026-08-24. A wall unit hangs by nature, so the hung glyph would say nothing; the flame would, and it is not there."
+    }
   },
   "code_grammar": {
     "base_units": {

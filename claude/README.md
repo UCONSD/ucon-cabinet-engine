@@ -37,7 +37,8 @@ one names the date and what superseded it.
 
 **Findings — a page said something we had assumed:**
 `findings-2026-08-23.md`, `findings-2026-08-23-tall.md`,
-`findings-2026-08-24-base-column.md`, `findings-2026-08-24-h58_5.md`.
+`findings-2026-08-24-base-column.md`, `findings-2026-08-24-h58_5.md`,
+`findings-2026-08-24-pictogram-sweep.md`.
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,

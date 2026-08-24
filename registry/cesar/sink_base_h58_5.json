@@ -60,7 +60,9 @@
             }
           ],
           "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.35."
       },
       "sink_base_doors": {
         "description": "Sink base unit with doors - 2 doors, 1 aluminium tray",
@@ -109,7 +111,9 @@
             }
           ],
           "gola_note": "Both leaves lose 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.35."
       },
       "sink_base_jumbo_drawer": {
         "description": "Sink base unit with jumbo drawer - 1 jumbo drawer with shaped back panel, 1 aluminium tray, no Push-pull device",
@@ -181,7 +185,9 @@
             }
           ],
           "gola_note": "Single front loses 30 under the worktop: undercounter profile only."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.35."
       },
       "sink_base_fixed_front_jumbo_drawer": {
         "description": "Sink base unit with jumbo drawer - 1 fixed front, 1 jumbo drawer with shaped back panel, 1 aluminium tray",
@@ -267,7 +273,9 @@
             }
           ],
           "gola_note": "BOTH fronts lose 30: 195->165 under the worktop and 390->360 at the groove between them, which is why the printed gola pair sums to 52,5 and not 55,5."
-        }
+        },
+        "wall_hung": true,
+        "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.35."
       }
     }
   }
