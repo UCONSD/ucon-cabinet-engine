@@ -113,14 +113,22 @@ project-specific choice harden into a global standard.
   one section file = one commit. Loader merges + mtime-caches.
 - `docs/` — Object Contract, Roadmap (see §7/§7.1 for current milestones),
   Elda open questions + email drafts, project notes.
+- `claude/` — the working notes: chapter recon, architecture decisions,
+  findings that corrected something already committed. **Read
+  `claude/repo-state.md` first** — it owns every volatile number (HEAD,
+  version, check count, registry size, what is next) and no other document
+  repeats them. `claude/README.md` is the index. Moved out of the claude.ai
+  Project on 2026-08-24; corrections in these notes are DATED AND ADDED,
+  never edits that erase the mistake.
 - `sources/` — git-ignored PDFs (factory/) and the raw extract registers
   (raw_dump/, .md tracked / .xlsx ignored).
 - `tools/test_contract.rb` — headless test suite.
 
 ## Workflow
 
-- **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp,
-  currently 136 checks. Run after every change; keep it green. New pure
+- **Tests:** `ruby tools/test_contract.rb` — plain Ruby, no SketchUp.
+  The count lives in `claude/repo-state.md`, not here — a number in two
+  files goes stale in one. Run after every change; keep it green. New pure
   logic gets a check here. If a rule needs SketchUp to test, split the
   pure part out first.
 - **Versioning:** bump `CORE_VERSION` in `core/00_version.rb` on meaningful
