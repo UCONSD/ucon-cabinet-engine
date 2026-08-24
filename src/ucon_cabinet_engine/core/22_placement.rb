@@ -314,10 +314,14 @@ module UCON
       # invented here:
       #
       #   left attached, right free -> RIGHT
-      #   both attached             -> :blocked. The caller says so. Dropping a
-      #                                unit into an occupied gap is the failure
-      #                                this rule exists to stop, and guessing a
-      #                                side would be that failure with a coat on.
+      #   both attached             -> :blocked, WHICH IS A STATEMENT AND NOT A
+      #                                policy. This rule reports what it sees;
+      #                                what to do about it belongs to the
+      #                                caller. Generator builds on the right
+      #                                anyway - Andriy, 2026-08-24: a unit in
+      #                                the wrong place can be dragged, a unit
+      #                                that was never built has to be asked for
+      #                                twice.
       #
       # ATTACHED MEANS TOUCHING. A cabinet three metres down the same wall
       # leaves this side free. The tolerance is SNAP_MM - the distance at which
@@ -342,12 +346,6 @@ module UCON
         :right
       end
 
-      # What the person is told when both sides are taken. Phrased for someone
-      # holding the mouse, like refusal_for.
-      def side_refusal(code = nil)
-        "#{code || 'This unit'} has something attached on both sides, so there is " \
-        'no room beside it. Select a unit at the end of the run, or make room first.'
-      end
     end
   end
 end

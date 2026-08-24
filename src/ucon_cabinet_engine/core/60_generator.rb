@@ -38,18 +38,24 @@ module UCON
         return Geom::Transformation.new unless span
 
         side = placement_side(model, sel, span)
-        return nil if side == :blocked
 
         # RIGHT steps past this unit's high end. LEFT steps back by the NEW
         # element's own width, because a unit is drawn from its origin forwards
         # - so to sit on the left its origin must land that much before this
         # one's low end. Without the new width there is nothing to step back by
         # and the run continues right, which is what it always did.
+        #
+        # :blocked - both sides attached - ALSO BUILDS, on the right. Andriy,
+        # 2026-08-24: "if it lands on the wrong side I can always move it with
+        # the mouse; what matters is that the run continues." So the rule still
+        # STATES that both sides are taken, because that is a fact and a check
+        # holds it, and the policy of what to do about it lives here, in the
+        # caller, where a person decided it. Never blocking beats never being
+        # wrong: a unit in the wrong place can be dragged, a unit that was not
+        # built has to be asked for twice.
         offset =
           if side == :left && new_width_mm
             span[0] - new_width_mm.to_f
-          elsif side == :left
-            span[1]
           else
             span[1]
           end
@@ -311,18 +317,13 @@ module UCON
         # had one reader left and it was the wrong question.
         z0 = base_z_mm(unit)
 
-        # WHICH SIDE OF THE SELECTED UNIT (2026-08-24). Worked out BEFORE the
-        # operation opens, so a refusal costs nothing and cannot leave half a
-        # unit in the model. The new element's own width goes in because
-        # stepping LEFT means stepping back by ITS width, not by the selected
-        # one's.
+        # WHICH SIDE OF THE SELECTED UNIT (2026-08-24). The new element's own
+        # width goes in because stepping LEFT means stepping back by ITS width,
+        # not by the selected one's - and a FILLER reaches this line with a
+        # width like any cabinet, because with_ordered_width has already turned
+        # its catalog range into a number at the top of this method. The rule
+        # is the same for both and there is no second path.
         placement = placement_transform(model, unit['width_mm'])
-        if placement.nil?
-          sel = selected_unit(model)
-          held = sel && Contract.read(sel.definition)['code']
-          UI.messagebox(Placement.side_refusal(held))
-          return nil
-        end
 
         model.start_operation("UCON: build #{code}", true)
         begin

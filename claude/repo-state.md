@@ -30,8 +30,8 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
 | **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
-| **Core version** | **0.76.0**, shell 0.6.0 |
-| **Headless suite** | **422 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Core version** | **0.76.1**, shell 0.6.0 |
+| **Headless suite** | **423 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -117,7 +117,22 @@ Three things the real kitchen has asked for so far; two of them are built:
    sentence for the person holding the mouse. Attached means TOUCHING, at
    `SNAP_MM` - the same distance at which the place tool closes a joint, so the
    two rules can never disagree about what "next to" means. A corner on the
-   right occupies its NODE, wasted space and all.
+   right occupies its NODE, wasted space and all. **It applies to fillers
+   exactly as to cabinets**: `with_ordered_width` turns the catalog range into
+   a number before anything is drawn, so a 50 mm strip reaches the placement
+   with a width like any other element.
+   **Both sides taken does NOT refuse** (Andriy, 2026-08-24, after trying it):
+   the rule still reports `:blocked` because that is a fact, and the generator
+   builds on the right anyway - a unit in the wrong place can be dragged, a unit
+   that was never built has to be asked for twice. Rule states, caller decides.
+   **THE TURN AT A CORNER IS NOT BUILT AND IS NOT WANTED YET.** Selecting a
+   corner and building continues the run along the SAME wall; it does not swing
+   onto the perpendicular one. That is M2.2 and Andriy has parked it: moving a
+   unit with the mouse is cheaper than a rule that guesses which wall. What his
+   model already proves, if it is ever picked up: `AU110D` is the RIGHT
+   execution, its wasted end faces the perpendicular wall, and the hand-placed
+   `B80501` sits at offset (370, -533) turned +90 degrees in the corner's own
+   frame - one measured instance, not a formula.
    **The half that is untried:** `Generator.placement_side` gathers the
    neighbours in the selected unit's frame and needs SketchUp, so no headless
    check reaches it. It has been read, not run. **Try it in the model before

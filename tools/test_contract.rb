@@ -5577,13 +5577,38 @@ check('attached on the left: RIGHT, which is also the default') do
     Placement.side_beside(MINE[0], MINE[1], left_neighbour) == :right
 end
 
-check('BOTH SIDES TAKEN: refuse, and say so rather than guess a side') do
+check('BOTH SIDES TAKEN: the rule says so - and the caller builds anyway') do
+  # The rule STATES the fact. The policy is the generator's, and Andriy set it
+  # on 2026-08-24: build on the right regardless, because a unit in the wrong
+  # place can be dragged and a unit that was never built has to be asked for
+  # twice. Keeping the two apart is why :blocked still exists at all.
   boxed = [[-450.0, 0.0], [600.0, 1050.0]]
   raise Placement.side_beside(MINE[0], MINE[1], boxed).to_s unless
     Placement.side_beside(MINE[0], MINE[1], boxed) == :blocked
-  msg = Placement.side_refusal('B80601')
-  raise msg unless msg.include?('B80601')
-  raise 'the refusal must tell the person what to do' unless msg.include?('end of the run')
+
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'nothing may refuse to build over a blocked side' if gen.include?('side_refusal')
+  raise 'the policy must be written where it is decided' unless
+    gen.include?('ALSO BUILDS, on the right')
+end
+
+check('A FILLER TAKES THE SAME PATH AS A CABINET, width and all') do
+  # Andriy, 2026-08-24: the side rule is for fillers too. A filler reaches the
+  # placement with a width like any cabinet, because with_ordered_width turns
+  # its catalog RANGE into a number before anything is drawn. If that ever
+  # stopped happening, the left step would have nothing to step back by and a
+  # filler would silently continue right.
+  strip = Registry.with_ordered_width(Registry.lookup('CQ0151'), 50)
+  raise strip['width_mm'].inspect unless strip['width_mm'] == 50
+  raise Generator.span_for_attrs(strip).inspect unless
+    Generator.span_for_attrs(strip) == [0.0, 50.0]
+
+  # and the placement asks for the NEW element's width, not the selected one's
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the new width must reach the placement' unless
+    gen.include?("placement_transform(model, unit['width_mm'])")
+  raise 'and the left step must use it' unless
+    gen.include?('span[0] - new_width_mm.to_f')
 end
 
 check('a unit further down the same wall is NOT attached') do
