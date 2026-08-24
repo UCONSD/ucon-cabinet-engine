@@ -368,20 +368,11 @@ module UCON
         # What a neighbour occupies along its own x. A straight unit is its
         # width; a corner is its node, read from the registry because the
         # contract carries corner_geometry rather than a width.
+        # ONE implementation, in Generator.span_for_attrs. It used to be written
+        # out here as well, and a rule in two places is two chances to update
+        # one - the mistake this file's own history is made of.
         def span_for(attrs)
-          return Placement.span_mm(width_mm: attrs['width_mm'].to_f) if attrs['width_mm']
-          return nil unless attrs['corner_geometry']
-
-          unit = begin
-            Registry.lookup(attrs['code'])
-          rescue StandardError
-            nil
-          end
-          return nil unless unit
-
-          Placement.span_mm(carcass_mm: unit['carcass_length_mm'],
-                            nominal_mm: attrs['corner_geometry'].to_s.split('x').first.to_i,
-                            execution:  unit['execution'])
+          Generator.span_for_attrs(attrs)
         end
 
         # ---- unit plumbing: SketchUp in, millimetres out --------------------

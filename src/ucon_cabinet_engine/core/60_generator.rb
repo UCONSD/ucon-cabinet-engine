@@ -26,24 +26,103 @@ module UCON
       # selected unit's right edge, inheriting its orientation (a rotated run
       # keeps its direction); the visual joint comes from the reveal, so no
       # gap. Nothing selected -> origin.
-      def placement_transform(model)
-        sel = model.selection.grep(Sketchup::ComponentInstance).find do |i|
-          i.definition.get_attribute(Contract::DICTIONARY, 'code')
-        end
+      def placement_transform(model, new_width_mm = nil)
+        sel = selected_unit(model)
         return Geom::Transformation.new unless sel
 
-        width = run_extent_mm(sel.definition)
+        span = span_for_attrs(Contract.read(sel.definition))
         # Nothing we can measure: land at the origin, where it is obvious the
         # run was not continued. The old code read the missing width as 0.0 and
         # dropped the new unit exactly on top of the selected one - a lie that
         # looked like a placement.
-        return Geom::Transformation.new unless width
+        return Geom::Transformation.new unless span
+
+        side = placement_side(model, sel, span)
+        return nil if side == :blocked
+
+        # RIGHT steps past this unit's high end. LEFT steps back by the NEW
+        # element's own width, because a unit is drawn from its origin forwards
+        # - so to sit on the left its origin must land that much before this
+        # one's low end. Without the new width there is nothing to step back by
+        # and the run continues right, which is what it always did.
+        offset =
+          if side == :left && new_width_mm
+            span[0] - new_width_mm.to_f
+          elsif side == :left
+            span[1]
+          else
+            span[1]
+          end
 
         t = sel.transformation
-        shifted = t * Geom::Transformation.translation(Geom::Vector3d.new(width.mm, 0, 0))
+        shifted = t * Geom::Transformation.translation(Geom::Vector3d.new(offset.mm, 0, 0))
         # pin to the floor regardless of where the selected unit sits
         o = shifted.origin
         Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * shifted
+      end
+
+      def selected_unit(model)
+        model.selection.grep(Sketchup::ComponentInstance).find do |i|
+          i.definition.get_attribute(Contract::DICTIONARY, 'code')
+        end
+      end
+
+      # What a unit occupies along its own x, as [lo, hi]. ONE implementation:
+      # run_extent_mm reads its high end and the place tool asks the same
+      # question when it snaps a joint. It used to be written twice.
+      def span_for_attrs(attrs)
+        return Placement.span_mm(width_mm: attrs['width_mm'].to_f) if attrs['width_mm']
+        return nil unless attrs['corner_geometry'] && attrs['code']
+
+        unit = begin
+          Registry.lookup(attrs['code'])
+        rescue StandardError
+          nil
+        end
+        return nil unless unit
+
+        Placement.span_mm(carcass_mm: unit['carcass_length_mm'],
+                          nominal_mm: attrs['corner_geometry'].to_s.split('x').first.to_i,
+                          execution:  unit['execution'])
+      end
+
+      # The SketchUp half of the side rule: gather what already touches the
+      # selected unit, in ITS frame, and let the pure rule decide. Everything
+      # that can be got wrong about geometry is here; everything that can be
+      # got wrong about the decision is in Placement.side_beside, where a
+      # headless check can reach it.
+      def placement_side(model, sel, span)
+        mine = Contract.read(sel.definition)
+        t    = sel.transformation
+        xv   = Geom::Vector3d.new(1, 0, 0).transform(t); xv.normalize!
+        yv   = Geom::Vector3d.new(0, 1, 0).transform(t); yv.normalize!
+        back_mine = Geom::Point3d.new(0, mine['depth_mm'].to_f.mm, 0).transform(t)
+
+        spans = []
+        model.entities.grep(Sketchup::ComponentInstance).each do |other|
+          next if other == sel
+
+          a = Contract.read(other.definition)
+          next unless a['code'] && a['depth_mm']
+
+          other_span = span_for_attrs(a)
+          next unless other_span
+
+          ot   = other.transformation
+          axis = Geom::Vector3d.new(0, 1, 0).transform(ot); axis.normalize!
+          back = Geom::Point3d.new(0, a['depth_mm'].to_f.mm, 0).transform(ot)
+          offset = (back - back_mine).dot(yv).to_mm
+
+          next unless Placement.same_row?(mine['mounting'], a['mounting'],
+                                          axis.dot(yv), offset)
+
+          ends = other_span.map do |x|
+            (Geom::Point3d.new(x.mm, 0, 0).transform(ot) - t.origin).dot(xv).to_mm
+          end
+          spans << ends.minmax
+        end
+
+        Placement.side_beside(span[0], span[1], spans)
       end
 
       # ---- corner units ---------------------------------------------------
@@ -82,22 +161,8 @@ module UCON
       # A corner carries no width by contract, so its reach comes from the
       # registry: the node it occupies, read through the execution letter.
       def run_extent_mm(definition)
-        attrs = Contract.read(definition)
-        return attrs['width_mm'].to_f if attrs['width_mm']
-        return nil unless attrs['code']
-
-        unit = begin
-          Registry.lookup(attrs['code'])
-        rescue StandardError
-          nil
-        end
-        return nil unless unit && unit['corner_geometry']
-
-        Placement.run_extent_mm(
-          carcass_mm: unit['carcass_length_mm'],
-          nominal_mm: unit['corner_geometry'].to_s.split('x').first.to_i,
-          execution:  unit['execution']
-        )
+        span = span_for_attrs(Contract.read(definition))
+        span && span[1]
       end
 
       def corner_parts(unit, front_height_mm = nil)
@@ -246,6 +311,19 @@ module UCON
         # had one reader left and it was the wrong question.
         z0 = base_z_mm(unit)
 
+        # WHICH SIDE OF THE SELECTED UNIT (2026-08-24). Worked out BEFORE the
+        # operation opens, so a refusal costs nothing and cannot leave half a
+        # unit in the model. The new element's own width goes in because
+        # stepping LEFT means stepping back by ITS width, not by the selected
+        # one's.
+        placement = placement_transform(model, unit['width_mm'])
+        if placement.nil?
+          sel = selected_unit(model)
+          held = sel && Contract.read(sel.definition)['code']
+          UI.messagebox(Placement.side_refusal(held))
+          return nil
+        end
+
         model.start_operation("UCON: build #{code}", true)
         begin
           carcass_mat = Geometry.material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216])
@@ -287,7 +365,6 @@ module UCON
           # is written here: the box below is the DRAWING's answer.
           if unit['object_class'] == 'appliance_front'
             niche_depth = selected_depth_mm(model)
-            placement   = placement_transform(model)
 
             draw_plinth(e, unit, model) if unit['plinth_continues']
             # Built through the ordinary front_slabs path and named FRONT…, so
@@ -337,7 +414,7 @@ module UCON
             Contract.write!(definition, attributes_for(unit))
             Symbols.draw(model, definition, unit, nil)
 
-            instance = model.active_entities.add_instance(definition, placement_transform(model))
+            instance = model.active_entities.add_instance(definition, placement)
             instance.name = "Cesar #{code} — #{unit['description']}"
             model.selection.clear
             model.selection.add(instance)
@@ -359,7 +436,7 @@ module UCON
           # time; door symbols wait for a hinge_side from the panel.
           Symbols.draw(model, definition, unit, nil)
 
-          instance = model.active_entities.add_instance(definition, placement_transform(model))
+          instance = model.active_entities.add_instance(definition, placement)
           instance.name = "Cesar #{code} — #{unit['description']}"
 
           model.selection.clear

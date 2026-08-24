@@ -5545,5 +5545,99 @@ check('AND THE CATALOG STILL HANGS A FULL-DEPTH TALL UNIT') do
   raise 'CR0631 is the d.62 one' unless deep['depth_mm'] == 620
 end
 
+# ---------------------------------------------------------------------------
+# WHICH SIDE THE NEXT ELEMENT TAKES (2026-08-24)
+#
+# "Build next to selected" grew to the right and only to the right, so the left
+# wing of a kitchen was placed by hand. Andriy's rule: something attached on the
+# right and the left free -> go left; both free -> go right; both taken ->
+# refuse. The DECISION is pure and lives here; the geometry that feeds it is in
+# Generator.placement_side, where no headless check can reach.
+# ---------------------------------------------------------------------------
+
+puts "\nwhich side of the selected unit the next element takes"
+
+# a 600 unit selected, sitting at 0..600 in its own frame
+MINE = [0.0, 600.0].freeze
+
+check('both sides free: the run continues RIGHT, as it always did') do
+  raise Placement.side_beside(*MINE, []).to_s unless
+    Placement.side_beside(MINE[0], MINE[1], []) == :right
+end
+
+check('SOMETHING ATTACHED ON THE RIGHT: the new element goes LEFT') do
+  right_neighbour = [[600.0, 1050.0]]
+  raise Placement.side_beside(MINE[0], MINE[1], right_neighbour).to_s unless
+    Placement.side_beside(MINE[0], MINE[1], right_neighbour) == :left
+end
+
+check('attached on the left: RIGHT, which is also the default') do
+  left_neighbour = [[-450.0, 0.0]]
+  raise Placement.side_beside(MINE[0], MINE[1], left_neighbour).to_s unless
+    Placement.side_beside(MINE[0], MINE[1], left_neighbour) == :right
+end
+
+check('BOTH SIDES TAKEN: refuse, and say so rather than guess a side') do
+  boxed = [[-450.0, 0.0], [600.0, 1050.0]]
+  raise Placement.side_beside(MINE[0], MINE[1], boxed).to_s unless
+    Placement.side_beside(MINE[0], MINE[1], boxed) == :blocked
+  msg = Placement.side_refusal('B80601')
+  raise msg unless msg.include?('B80601')
+  raise 'the refusal must tell the person what to do' unless msg.include?('end of the run')
+end
+
+check('a unit further down the same wall is NOT attached') do
+  # three metres away: the side is free and the run may grow into it.
+  far = [[3600.0, 4200.0]]
+  raise Placement.side_beside(MINE[0], MINE[1], far).to_s unless
+    Placement.side_beside(MINE[0], MINE[1], far) == :right
+  # and just inside SNAP_MM it IS attached, so this rule and the joint-closing
+  # snap can never disagree about what "next to" means
+  near = [[600.0 + Placement::SNAP_MM - 1, 1200.0]]
+  raise Placement.side_beside(MINE[0], MINE[1], near).to_s unless
+    Placement.side_beside(MINE[0], MINE[1], near) == :left
+end
+
+check('A NARROW FILLER DOES NOT REFUSE AGAINST ITSELF') do
+  # The trap this rule was written for. A 50 mm filler is narrower than
+  # SNAP_MM, so its own span - or an identical twin - lies within touching
+  # distance of BOTH its ends. Without the "the neighbour must lie past me"
+  # test, CQ0151 at 50 wide would report :blocked in an empty kitchen.
+  narrow = [0.0, 50.0]
+  raise 'a filler in an empty room must go right' unless
+    Placement.side_beside(narrow[0], narrow[1], []) == :right
+  raise 'its own span must not count as a neighbour' unless
+    Placement.side_beside(narrow[0], narrow[1], [[0.0, 50.0]]) == :right
+  # and it still sees a real neighbour on its right
+  raise 'a real right-hand neighbour must still be seen' unless
+    Placement.side_beside(narrow[0], narrow[1], [[50.0, 650.0]]) == :left
+end
+
+check('a CORNER on the right pushes the run left, wasted space and all') do
+  # A corner's span is its NODE, not its carcass - Placement.span_mm - so the
+  # unreachable depth counts as occupied. A run beside a left-execution corner
+  # therefore starts past the node.
+  corner = Placement.span_mm(carcass_mm: 900, nominal_mm: 1150, execution: 'left')
+  raise corner.inspect unless corner == [0.0, 1150.0]
+  # seat that corner immediately to the right of the selected unit
+  raise 'the corner must occupy the right side' unless
+    Placement.side_beside(MINE[0], MINE[1], [[600.0, 600.0 + 1150.0]]) == :left
+end
+
+check('the span rule now has ONE implementation, and both callers use it') do
+  # Generator.run_extent_mm and the place tool both used to write it out.
+  gen  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  tool = File.read(File.expand_path('../src/ucon_cabinet_engine/core/75_place_tool.rb', __dir__))
+  raise 'the generator must hold the one implementation' unless
+    gen.include?('def span_for_attrs')
+  raise 'the place tool must delegate, not repeat' unless
+    tool.include?('Generator.span_for_attrs')
+  raise 'the place tool must not look the corner up for itself any more' if
+    tool.include?("Placement.span_mm(carcass_mm:")
+  # and it still answers the same thing for a straight unit
+  raise Generator.span_for_attrs('width_mm' => 600).inspect unless
+    Generator.span_for_attrs('width_mm' => 600) == [0.0, 600.0]
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

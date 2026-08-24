@@ -300,6 +300,54 @@ module UCON
         end
         best
       end
+
+      # ---- which side of the selected unit the next element takes -----------
+
+      # Andriy's rule, 2026-08-24. Until today "build next to selected" grew to
+      # the RIGHT and only ever to the right, so the left wing of a kitchen was
+      # placed by hand. What he asked for:
+      #
+      #   something attached on the right, left free -> go LEFT
+      #   both sides free                            -> go RIGHT
+      #
+      # and the two halves that follow from the same sentence rather than being
+      # invented here:
+      #
+      #   left attached, right free -> RIGHT
+      #   both attached             -> :blocked. The caller says so. Dropping a
+      #                                unit into an occupied gap is the failure
+      #                                this rule exists to stop, and guessing a
+      #                                side would be that failure with a coat on.
+      #
+      # ATTACHED MEANS TOUCHING. A cabinet three metres down the same wall
+      # leaves this side free. The tolerance is SNAP_MM - the distance at which
+      # the place tool already closes a joint by itself - so anything that would
+      # have snapped counts as attached, and the two rules cannot disagree.
+      #
+      # A neighbour must also LIE on that side: its far end past mine. Without
+      # that test a unit's own span, or an identical twin standing on top of it,
+      # reads as touching BOTH ends, and a narrow element - a 50 mm filler, the
+      # very thing this was asked for - would refuse against itself.
+      #
+      # Spans are [lo, hi] along the SELECTED unit's own x, so left and right
+      # are ITS left and right: a rotated run keeps its own sense of direction
+      # and a kitchen drawn at 34 degrees behaves like one drawn square.
+      def side_beside(mine_lo, mine_hi, spans, touch_mm = SNAP_MM)
+        right = spans.any? { |lo, hi| hi > mine_hi && (lo - mine_hi).abs <= touch_mm }
+        left  = spans.any? { |lo, hi| lo < mine_lo && (mine_lo - hi).abs <= touch_mm }
+
+        return :blocked if right && left
+        return :left    if right
+
+        :right
+      end
+
+      # What the person is told when both sides are taken. Phrased for someone
+      # holding the mouse, like refusal_for.
+      def side_refusal(code = nil)
+        "#{code || 'This unit'} has something attached on both sides, so there is " \
+        'no room beside it. Select a unit at the end of the run, or make room first.'
+      end
     end
   end
 end
