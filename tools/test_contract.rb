@@ -674,15 +674,35 @@ check('S puts the door at the left end, D mirrors it') do
   raise l[:wasted_x].to_s unless l[:wasted_x] == 900
   raise r[:wasted_x].to_s unless r[:wasted_x] == -250
 end
-check('the 8x8 filler is one L: both legs 80 long, 22 thick, projecting forward') do
-  plan = Generator.corner_parts(Registry.lookup('AU110S'))[:filler_plan]
-  xs = plan.map(&:first)
-  ys = plan.map(&:last)
-  raise plan.inspect unless (xs.max - xs.min) == 80 && (ys.max - ys.min) == 80
-  # It stands in FRONT of the front plane: the outermost y is -83, not +55.
-  raise ys.min.to_s unless ys.min == -83
-  raise ys.max.to_s unless ys.max == -3
+check('the 8x8 filler is an L of 77 x 80 - and the missing 3 mm has a name') do
+  # THE PRINTED 8x8 IS THE NOMINAL. The leg that runs along the WIDTH is the
+  # one the neighbouring run meets, and that run's front stands FRONT_GAP_MM
+  # proud of its own carcass - so a leg of a full 80 overshoots the front it is
+  # supposed to meet by exactly one gap. Andriy measured it in Avenida
+cat > /tmp/layer2.rb <<'SCRIPT'
+EDITS = []
+def plan(path, old, new, label)
+  abort "#{path} not found - run me from the repo root" unless File.exist?(path)
+  s = File.read(path)
+  abort "anchor missing: #{label}" unless s.include?(old)
+  abort "anchor not unique: #{label}" unless s.scan(old).length == 1
+  EDITS << [path, old, new, label]
 end
+
+GEN = 'src/ucon_cabinet_engine/core/60_generator.rb'
+abort 'already applied' if File.read(GEN).include?('FILLER_MM - s::FRONT_GAP_MM')
+
+plan(GEN, <<'OLD', <<'NEW', 'generator: the filler leg along the width is 77, not 80')
+          out_x  = fill_l + FILLER_MM
+OLD
+          # 77, NOT 80, AND THE 3 MM IS THE FRONT GAP. The catalog prints this
+          # panel as 8x8 and that is the NOMINAL. The leg that runs along the
+          # width is the one the neighbouring run meets, and the run's FRONT
+          # stands FRONT_GAP_MM proud of its carcass - so a leg of a full 80
+          # overshoots the front it is supposed to meet by exactly that gap.
+          # Measured in Avenida Primavera 2026-08-24; the return leg, which
+          # meets nothing, keeps its 80. (Rule 4 - a UCON decision.)
+          out_x  = fill_l + FILLER_MM - s::FRONT_GAP_MM
 check('wasted space is nominal minus carcass, for every corner article') do
   Registry.catalog.select { |c| c['type_key'] == 'base_corner' }.each do |row|
     u = Registry.lookup(row['code'])
@@ -2342,45 +2362,37 @@ check('the wall, not the door, decides which article the corner takes') do
   raise 'no run is no answer' unless Placement.execution_for(nil).nil?
 end
 
-check('the node seats ONE FRONT GAP off the corner, wasted end first') do
-  # REWRITTEN 2026-08-24. The numbers here used to be 100 and -1000, and they
-  # were right for the decision this check was written under: seat the printed
-  # node raw. That decision was wrong in a real kitchen - the neighbouring
-  # run's front missed the outer face of the 8x8 filler by FRONT_GAP_MM,
-  # because the printed node is a carcass dimension and our fronts stand proud
-  # of the carcass plane. See Placement.corner_origin for the whole reason.
+check('the node seats in the angle on the PRINTED node, wasted end first') do
+  # WRITTEN THREE TIMES IN ONE DAY AND BACK WHERE IT STARTED, which is worth
+  # more than the assertions are.
   #
-  # EVERY EXPECTATION BELOW IS COMPUTED FROM Standards::FRONT_GAP_MM. A literal
-  # 3 in the placement code would pass a literal 3 written here, and the two
-  # would go stale together on the day the gap changes.
-  gap  = Standards::FRONT_GAP_MM
-  node = 1000.0 + gap
-
-  # corner at the origin, wall facing -y, B7091D: right, carcass 900,
-  # node 1000x430, d.350.
+  # It began as these numbers. Mid-day it was rewritten to expect one
+  # FRONT_GAP_MM of clear space at the corner, because a real kitchen showed
+  # the neighbouring run's front missing the outer face of the 8x8 filler by
+  # 3 mm and the SEATING looked like the culprit. It was not: the mismatch runs
+  # along the wall, and the body that had to move was the filler, whose leg
+  # along the width overshot by exactly one gap. The factory's own SketchUp
+  # export of estimate 2026/30831 seats the corner carcass at exactly
+  # nominal - carcass from the perpendicular wall, with nothing added.
+  #
+  # The lesson is not about corners: a symptom pointed at two bodies and we
+  # moved the one we could see, rather than the one that was wrong.
   o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                               350.0, 900.0, 1000.0, 'right')
-  raise o.inspect unless o.map { |v| v.round(6) } == [node - 900.0, -350.0, 0.0]
+  raise o.inspect unless o.map { |v| v.round(6) } == [100.0, -350.0, 0.0]
 
-  # Its sibling on the other wall of the same corner runs the other way.
   o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                               350.0, 900.0, 1000.0, 'left')
-  raise o.inspect unless o.map { |v| v.round(6) } == [-node, -350.0, 0.0]
+  raise o.inspect unless o.map { |v| v.round(6) } == [-1000.0, -350.0, 0.0]
 
-  # The invariant this all exists for, now with the gap in it: whichever
-  # execution, the end of the node FACING the corner is the wasted end, never
-  # the carcass - and it stands off the corner by exactly one gap.
   f = Placement.frame([0.0, -1.0, 0.0])
   { 'right' => [-100.0, 0.0], 'left' => [900.0, 1000.0] }.each do |exec, (lo, hi)|
     o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                                 350.0, 900.0, 1000.0, exec)
-    edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]).round(6) }
-    near = edges.min_by(&:abs)
-    raise "#{exec}: expected one gap of clear space at the corner, got #{near}" unless
-      near.abs.round(6) == gap.to_f.round(6)
+    edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]) }
+    raise "#{exec}: wasted is not against the corner" unless
+      edges.map { |v| v.round(6) }.include?(0.0)
   end
-
-  raise 'a zero gap would make this check vacuous' if gap.to_f.zero?
 end
 
 check('a wall runs one dominant way from the corner, and that picks the article') do

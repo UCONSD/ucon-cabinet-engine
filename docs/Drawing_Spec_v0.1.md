@@ -191,3 +191,38 @@ two legs of a corner agree, not as a new allowance.
 
 **The tall corners take it unchanged, and so do the wall corners**, with their
 own filler size (5x5 rather than 8x8): the filler size is not part of the rule.
+
+### CORRECTED THE SAME DAY — the rule above is wrong, and this is the right one
+
+**Added 2026-08-24, hours after the section above. Rule 9: dated and added, not
+erased, because the mistake is why the check exists.**
+
+The symptom was real. The neighbouring run's front did miss the outer face of
+the 8x8 filler by `FRONT_GAP_MM`. **The body that had to move was the filler,
+not the unit.**
+
+The mismatch runs **along the wall**, not through the depth. A run standing
+against the perpendicular wall has its carcass front at `wall - depth` and its
+FRONT one gap further out. The corner's filler leg along the width reached a
+full 80 from the door — and so overshot the very front it exists to meet, by
+exactly that gap.
+
+**The rule: the printed 8x8 is a NOMINAL. The leg that runs along the width is
+drawn at `FILLER_MM - FRONT_GAP_MM` — 77 — because it meets a front, not a
+carcass. The return leg meets nothing and keeps its 80.** The L is 77 x 80.
+
+And **the seating takes the printed node raw**. The `+ FRONT_GAP_MM` proposed
+above has been reverted. Cesar's own SketchUp export of estimate 2026/30831
+seats the corner carcass at exactly `nominal - carcass` = 250 mm from the
+perpendicular wall, with nothing added.
+
+**One divergence stays, and it is recorded rather than fixed.** That same export
+draws the base corner 900 x 700 — depth 620 + 80 measured from the CARCASS —
+where we draw 703, because our filler stands on the front plane. Both are
+defensible readings of an 8x8 panel and they differ by the gap. It does not
+affect whether the fronts meet, and it is written into
+`registry/cesar/_manifest.json` under `factory_confirmations` → `contradicts`.
+
+**What this cost:** a symptom pointed at two bodies, and the first attempt moved
+the one that was easy to see. The measurement that settled it — the factory's
+own file — had been in hand for an hour.

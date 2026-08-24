@@ -116,7 +116,14 @@ module UCON
         if left
           door_x = 0
           fill_l = door
-          out_x  = fill_l + FILLER_MM
+          # 77, NOT 80, AND THE 3 MM IS THE FRONT GAP. The catalog prints this
+          # panel as 8x8 and that is the NOMINAL. The leg that runs along the
+          # width is the one the neighbouring run meets, and the run's FRONT
+          # stands FRONT_GAP_MM proud of its carcass - so a leg of a full 80
+          # overshoots the front it is supposed to meet by exactly that gap.
+          # Measured in Avenida Primavera 2026-08-24; the return leg, which
+          # meets nothing, keeps its 80. (Rule 4 - a UCON decision.)
+          out_x  = fill_l + FILLER_MM - s::FRONT_GAP_MM
           in_x   = out_x - s::FRONT_T_MM
           plan   = [[fill_l, back_y], [out_x, back_y], [out_x, out_y],
                     [in_x, out_y], [in_x, front_y], [fill_l, front_y]]
@@ -124,7 +131,7 @@ module UCON
         else
           door_x = carcass - door
           fill_l = door_x - FILLER_MM
-          out_x  = fill_l
+          out_x  = fill_l + s::FRONT_GAP_MM
           in_x   = out_x + s::FRONT_T_MM
           plan   = [[fill_l + FILLER_MM, back_y], [out_x, back_y], [out_x, out_y],
                     [in_x, out_y], [in_x, front_y], [fill_l + FILLER_MM, front_y]]
