@@ -66,7 +66,15 @@
             "types": ["Low base unit with jumbo drawer", "Low compound base unit with 2 compartments"],
             "note": "STOPPED for the same reason as printed p.26, and it is worth writing out rather than referring: the same D0 / DJ / D1 prefix family, the same single elevation profile carrying 36,5 and 39, the same missing band-2 prices. A page stopped by reference is a page whose reason is one deletion away from being lost." }
         ] },
-      { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "not_extracted" },
+      { "class": "base", "family": "H.48", "section": "Base units H. 48", "printed_pages": "28-31", "status": "partial", "extracted_on": "2026-08-23",
+        "note": "EXTRACTED 2026-08-23: printed p.28 whole, three types, 30 codes, all three depths - registry/cesar/base_h48.json. BC = d.35, BQ = d.47, BD = d.62, READ OFF THE PAGE: the printed table runs d.35 / d.47 / d.62 and the letters run BC / BQ / BD, where alphabetically they are BC / BD / BQ. Sorting them would have swapped 470 and 620.",
+        "pages": [
+          { "printed": 28, "status": "extracted", "extracted_on": "2026-08-23",
+            "types": ["Base unit with bottom-hung door (18 codes)", "Compound base unit with 2 compartments and bottom-hung door (NO printed module split)", "Base unit with door (W.45 and W.60 only, suffix 01)"] },
+          { "printed": 29, "status": "not_extracted", "types": ["Base units H. 48"] },
+          { "printed": 30, "status": "not_extracted", "types": ["Base units H. 48"] },
+          { "printed": 31, "status": "not_extracted", "types": ["Base units H. 48"] }
+        ] },
       { "class": "base", "family": "H.58.5", "section": "Base units H. 58.5", "printed_pages": "32-34", "status": "not_extracted" },
       { "class": "base", "family": "H.58.5", "section": "Sink base units H. 58.5", "printed_pages": "35", "status": "not_extracted" },
       { "class": "base", "family": "H.78", "section": "Base units H. 78", "printed_pages": "36-43", "status": "partial", "extracted_on": "2026-08-23",
@@ -469,7 +477,7 @@
       "note": "A WALL FAMILY HAS ONE DEPTH AND THEREFORE ONE LETTER, WHICH IS WHY THE WALL CHAPTER COULD TREAT THE PREFIX AS A FAMILY NAME. A base family has two or three depths and a prefix for each, so the two characters name a (family, depth) SLOT and nothing smaller. There is no rule across families and no rule across depths - read the section.",
       "family_depth_letter": {
         "H.39": { "350": "B0", "470": "BJ", "620": "B1" },
-        "H.48": { "letters": "BC / BD / BQ", "note": "swept from printed p.28 on 2026-08-23; which letter is which depth is NOT read yet" },
+        "H.48": { "350": "BC", "470": "BQ", "620": "BD", "note": "read off printed p.28 on 2026-08-23. NOT alphabetical: BD is the DEEPEST, not the second." },
         "H.58.5": { "350": "B3", "470": "B6", "620": "B4" },
         "H.78": { "350": "B7", "620": "B8", "670": "B9" },
         "H.84": { "letters": "BK / BL / BM", "note": "swept from printed p.49 on 2026-08-23; which letter is which depth is NOT read yet" }

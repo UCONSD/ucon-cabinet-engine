@@ -224,9 +224,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 585 codes (179 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
+check('registry loads and holds 615 codes (209 base + 20 sink + 9 appliance + 291 wall + 8 USA tall + 72 tall + 6 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 585
+  raise "got #{n}" unless n == 615
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -410,9 +410,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 585 rows, each with code/dims/description/source') do
+check('registry catalog: 615 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 585
+  raise cat.length.to_s unless cat.length == 615
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -497,6 +497,7 @@ check('split storage: every catalog row is stamped with its section and class') 
 
   sections = cat.map { |c| c['section'] }.uniq.sort
   raise sections.inspect unless sections == ['Base units H. 39',
+                                             'Base units H. 48',
                                              'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Closing strips and fillers for Maxima and Intarsio',
@@ -963,6 +964,26 @@ check('FIVE PLAIN TALL FAMILIES, ONE SHAPE, AND NO AGREEMENT ABOUT HANGING') do
   raise suffixes.inspect unless suffixes.length == 3
 end
 
+check('THE CATALOG CACHE IS A CACHE, NOT A SECOND SOURCE') do
+  # Registry.catalog is a pure function of Registry.data and was rebuilt on
+  # every call. At 615 codes that is 0,38 s a time, and this suite calls it a
+  # few hundred times: forty seconds became over ninety and the run stopped
+  # fitting in one go. It is memoised now, keyed on the IDENTITY of the parsed
+  # registry - so the moment data() re-reads an edited file the key misses.
+  #
+  # A CACHE THAT CAN DISAGREE WITH ITS SOURCE IS A SECOND SOURCE, which is the
+  # thing this project keeps refusing to have. So: the cached array must be the
+  # same object twice running, and it must equal what a fresh build produces
+  # from the same data.
+  first  = Registry.catalog
+  second = Registry.catalog
+  raise 'the cache is not caching' unless first.equal?(second)
+  fresh = Registry.send(:build_catalog, Registry.data, 'cesar')
+  raise 'the cache has drifted from its source' unless fresh == first
+  raise 'a rebuild must be a NEW array, or the comparison proves nothing' if
+    fresh.equal?(first)
+end
+
 check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked against the codes') do
   # THE WALL CHAPTER GOT LUCKY. A wall family has one depth, so its two-letter
   # prefix could be treated as a family name and the filler table on printed
@@ -1065,11 +1086,13 @@ check('A PRINTED DESCRIPTION DOES NOT IDENTIFY AN ARTICLE') do
   raise 'the twin descriptions have vanished' if shared.empty?
   # And where two type keys share a description, their FRONTS must differ -
   # otherwise they really are one article and the split is ours, not the page's.
+  # ONE index, not a Registry.catalog.find per key: catalog is cached now but
+  # it is still a 600-row array, and a find inside a loop is how a suite grows
+  # a minute it does not need.
+  first_of = {}
+  Registry.catalog.each { |c| first_of[c['type_key']] ||= c['code'] }
   shared.each do |(desc, _section), keys|
-    layouts = keys.uniq.map { |k|
-      row = Registry.catalog.find { |c| c['type_key'] == k }
-      Registry.lookup(row['code'])['front_layout']
-    }
+    layouts = keys.uniq.map { |k| Registry.lookup(first_of[k])['front_layout'] }
     raise "#{desc}: two type keys, one front" unless layouts.uniq.length == layouts.length
   end
 end
@@ -4279,7 +4302,7 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 20
+  raise blocks.length.to_s unless blocks.length == 21
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')

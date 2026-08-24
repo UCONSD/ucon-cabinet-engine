@@ -297,8 +297,26 @@ module UCON
         unit.merge('width_mm' => w)
       end
 
+      # CACHED ALONGSIDE data, AND FOR THE SAME REASON. catalog is a pure
+      # function of data - it walks every code and flattens it - and rebuilding
+      # it took 0,38 s once the registry passed 600 codes. The headless suite
+      # calls it a few hundred times and went from forty seconds to over ninety.
+      # The cache key is the object identity of the parsed registry, so the
+      # moment data() re-reads an edited file this map misses and rebuilds:
+      # hot-editing a JSON file in SketchUp behaves exactly as it did before.
       def catalog(manufacturer = 'cesar')
-        each_code(data(manufacturer)).map do |row, family_name, family, type_key, unit_type|
+        reg = data(manufacturer)
+        @catalog_cache ||= {}
+        hit = @catalog_cache[manufacturer]
+        return hit[:rows] if hit && hit[:for].equal?(reg)
+
+        rows = build_catalog(reg, manufacturer)
+        @catalog_cache[manufacturer] = { for: reg, rows: rows }
+        rows
+      end
+
+      def build_catalog(reg, manufacturer)
+        each_code(reg).map do |row, family_name, family, type_key, unit_type|
           { 'code' => row['code'], 'width_mm' => row['width_mm'],
             'width_range_mm' => row['width_range_mm'],
             'nominal_in' => nominal_in(row['width_mm'], manufacturer),
