@@ -30,8 +30,8 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
 | **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
-| **Core version** | **0.75.0**, shell 0.6.0 |
-| **Headless suite** | **414 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Core version** | **0.76.0**, shell 0.6.0 |
+| **Headless suite** | **422 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -110,14 +110,22 @@ Three things the real kitchen has asked for so far; two of them are built:
    `plinth_continues` and `appliance_niche` are now read from the **unit type**
    first and the family only as a fallback — family H.78 is three merged files
    and 131 base units, so there was no way to say it about one object.
-3. **OPEN - placement should infer its direction.** Today "build next to
-   selected" always grows to the right, so the left wing of a kitchen is placed
-   by hand. Andriy wants: the selected unit stands alone, grow right; something
-   is already attached on the right, grow left; both sides taken, refuse and say
-   why rather than guess. `Placement.same_row?` already decides what counts as
-   attached - same mounting, parallel, coplanar within tolerance - so the rule
-   builds on tested machinery. **A corner is not the next unit of a run but its
-   TURN**, and it seats against two walls.
+3. **DONE, and half of it is still untried - placement infers its direction**
+   (2026-08-24). `Placement.side_beside` is pure and carries eight checks:
+   both sides free grows RIGHT as it always did; attached on the right grows
+   LEFT; attached on the left grows right; **both attached refuses** with a
+   sentence for the person holding the mouse. Attached means TOUCHING, at
+   `SNAP_MM` - the same distance at which the place tool closes a joint, so the
+   two rules can never disagree about what "next to" means. A corner on the
+   right occupies its NODE, wasted space and all.
+   **The half that is untried:** `Generator.placement_side` gathers the
+   neighbours in the selected unit's frame and needs SketchUp, so no headless
+   check reaches it. It has been read, not run. **Try it in the model before
+   trusting it**, and in particular try it on a rotated run - left and right are
+   the SELECTED unit's, not the world's.
+   Stepping LEFT steps back by the NEW element's own width, which is why
+   `placement_transform` now takes it; without it the run continues right, as
+   before.
 
 ### Owed — carried in from the 2026-08-24 handoff
 
