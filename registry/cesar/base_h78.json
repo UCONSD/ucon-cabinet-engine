@@ -781,6 +781,7 @@
         ]
       },
       "base_corner": {
+        "seating_note": "SEATED ONE FRONT GAP OFF THE PERPENDICULAR WALL, SO THE MODEL WILL NOT MEASURE THE PRINTED NODE. printed p.42 gives this article a W notation and that is a CARCASS dimension, taken carcass to carcass. Our fronts stand FRONT_GAP_MM + FRONT_T_MM proud of the carcass plane; along a straight run that is invisible, but AT A CORNER THE AXES SWAP and the offset turns sideways. Seated raw, the neighbouring run's front lands one gap short of the outer face of the 8x8 filler - measured in a real kitchen, Avenida Primavera, 2026-08-24. Placement.corner_origin therefore seats the unit nominal + Standards::FRONT_GAP_MM from the corner, and the gap shows in the model as clear space behind the WASTED_SPACE box. THE NUMBERS IN THIS FILE ARE UNTOUCHED: corner_geometry still says what the page says, and no code, price or order line moves. A UCON decision, rule 4, PLANNING trust. IF YOU ARE HERE BECAUSE THE MODEL IS 3 MM OFF THE CATALOG - that is this note, and it is deliberate. The depth leg has always carried the same gap, because the 8x8 is drawn off the front plane; this only makes the second leg agree.",
         "description": "Corner base unit - 1 rh or lh door, 8x8 fixed corner front panel, 1 shelf",
         "geometry_kind": "corner",
         "opening": "door",

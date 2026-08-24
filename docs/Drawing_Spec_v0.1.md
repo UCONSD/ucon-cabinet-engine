@@ -152,3 +152,42 @@ not in the catalog, so it deliberately draws nothing.
 
 Test on a real model and correct the spec if the drawing argues with it — the
 spec is the authority, but reality gets a vote.
+
+---
+
+## Corners: the seating carries our front gap, the catalog's node does not
+
+**Added 2026-08-24, from Avenida Primavera. Applies to EVERY corner class.**
+
+A printed corner node - the `W. 100x43` style notation on printed p.42 and its
+equivalents in the tall and wall chapters - is a **carcass** dimension. It is
+taken carcass to carcass and knows nothing about how far our fronts stand proud
+of the carcass plane.
+
+Along a straight run that costs nothing: every front is pushed forward by
+`FRONT_GAP_MM + FRONT_T_MM`, so they share a plane. **At a corner the axes
+swap.** The offset that was *forward* in one run becomes *sideways* in the
+other and eats length along the wall. Seat the node raw and the neighbouring
+run's front lands `FRONT_GAP_MM` short of the outer face of the corner filler.
+
+**Rule: a corner unit is seated `nominal + FRONT_GAP_MM` from the corner,
+measured along the wall it backs onto.** The catalog number is not altered; only
+the seating moves. In the model the gap appears as clear space between the far
+edge of the `WASTED_SPACE` box and the perpendicular wall.
+
+Three things this rule deliberately does NOT do:
+
+- **It does not grow the wasted-space box.** That box is `nominal - carcass`, a
+  quantity derived from the catalog, and mixing our drawing constant into it
+  would put a UCON decision inside a Cesar number.
+- **It does not touch `Placement.span_mm`.** The unit still occupies carcass
+  plus wasted measured from its own origin; the shift is already in where that
+  origin landed. Applying it twice would double the gap.
+- **It does not change any code, price, order line or printed dimension.**
+
+The filler leg has always carried this gap - it is drawn off the front plane and
+reaches `-(FRONT_GAP_MM + FILLER_MM)` - so the rule is best read as making the
+two legs of a corner agree, not as a new allowance.
+
+**The tall corners take it unchanged, and so do the wall corners**, with their
+own filler size (5x5 rather than 8x8): the filler size is not part of the rule.

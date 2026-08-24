@@ -2342,28 +2342,45 @@ check('the wall, not the door, decides which article the corner takes') do
   raise 'no run is no answer' unless Placement.execution_for(nil).nil?
 end
 
-check('the node seats in the angle, and the wasted space is what goes in it') do
-  # Reproduces the probe exactly: corner at the origin, wall facing -y,
-  # B7091D (right, carcass 900, node 1000x430, d.350) seated at x=100 y=-350.
+check('the node seats ONE FRONT GAP off the corner, wasted end first') do
+  # REWRITTEN 2026-08-24. The numbers here used to be 100 and -1000, and they
+  # were right for the decision this check was written under: seat the printed
+  # node raw. That decision was wrong in a real kitchen - the neighbouring
+  # run's front missed the outer face of the 8x8 filler by FRONT_GAP_MM,
+  # because the printed node is a carcass dimension and our fronts stand proud
+  # of the carcass plane. See Placement.corner_origin for the whole reason.
+  #
+  # EVERY EXPECTATION BELOW IS COMPUTED FROM Standards::FRONT_GAP_MM. A literal
+  # 3 in the placement code would pass a literal 3 written here, and the two
+  # would go stale together on the day the gap changes.
+  gap  = Standards::FRONT_GAP_MM
+  node = 1000.0 + gap
+
+  # corner at the origin, wall facing -y, B7091D: right, carcass 900,
+  # node 1000x430, d.350.
   o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                               350.0, 900.0, 1000.0, 'right')
-  raise o.inspect unless o.map { |v| v.round(6) } == [100.0, -350.0, 0.0]
+  raise o.inspect unless o.map { |v| v.round(6) } == [node - 900.0, -350.0, 0.0]
 
   # Its sibling on the other wall of the same corner runs the other way.
   o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                               350.0, 900.0, 1000.0, 'left')
-  raise o.inspect unless o.map { |v| v.round(6) } == [-1000.0, -350.0, 0.0]
+  raise o.inspect unless o.map { |v| v.round(6) } == [-node, -350.0, 0.0]
 
-  # And the invariant that all of it exists for: whichever execution, the end
-  # of the node that touches the corner is the WASTED end, never the carcass.
+  # The invariant this all exists for, now with the gap in it: whichever
+  # execution, the end of the node FACING the corner is the wasted end, never
+  # the carcass - and it stands off the corner by exactly one gap.
   f = Placement.frame([0.0, -1.0, 0.0])
   { 'right' => [-100.0, 0.0], 'left' => [900.0, 1000.0] }.each do |exec, (lo, hi)|
     o = Placement.corner_origin([0.0, 0.0, 0.0], [0.0, -1.0, 0.0],
                                 350.0, 900.0, 1000.0, exec)
-    wasted_edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]) }
-    raise "#{exec}: wasted is not against the corner" unless
-      wasted_edges.map { |v| v.round(6) }.include?(0.0)
+    edges = [lo, hi].map { |x| Placement.dot(Placement.add(o, Placement.scale(f[:x], x)), f[:x]).round(6) }
+    near = edges.min_by(&:abs)
+    raise "#{exec}: expected one gap of clear space at the corner, got #{near}" unless
+      near.abs.round(6) == gap.to_f.round(6)
   end
+
+  raise 'a zero gap would make this check vacuous' if gap.to_f.zero?
 end
 
 check('a wall runs one dominant way from the corner, and that picks the article') do

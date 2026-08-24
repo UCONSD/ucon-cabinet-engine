@@ -194,7 +194,31 @@ module UCON
       def corner_origin(corner, normal, depth_mm, carcass_mm, nominal_mm, execution)
         n = normalize(normal)
         f = frame(normal)
-        slide = execution.to_s == 'left' ? -nominal_mm : (nominal_mm - carcass_mm)
+        # ONE FRONT GAP OFF THE PERPENDICULAR WALL, AND THE CATALOG DOES NOT
+        # KNOW ABOUT IT. The printed W notation is a CARCASS dimension, taken
+        # carcass to carcass. Our fronts stand FRONT_GAP_MM + FRONT_T_MM proud
+        # of the carcass plane; along a straight run that is invisible, because
+        # every front in the run is proud by the same amount. AT A CORNER THE
+        # AXES SWAP and the offset turns sideways: seat the node raw and the
+        # neighbouring run's front lands one gap short of the outer face of the
+        # 8x8 filler. Measured in Avenida Primavera, 2026-08-24.
+        #
+        # This is not a new allowance. The depth leg of the same corner ALREADY
+        # carries the gap - Generator.corner_parts reaches -(FRONT_GAP_MM +
+        # FILLER_MM), because the filler is drawn off the front plane - so this
+        # makes the two legs of a corner agree.
+        #
+        # nominal_mm ITSELF IS NOT TOUCHED: the catalog number stays what the
+        # page prints, and the gap shows in the model as clear space behind the
+        # WASTED_SPACE box. Placement.span_mm is deliberately left alone - the
+        # unit still OCCUPIES carcass + wasted from its own origin and the
+        # shift is already in where that origin landed; applying it there too
+        # would double the gap.
+        #
+        # A UCON decision (rule 4), PLANNING trust. See base_corner in
+        # registry/cesar/base_h78.json and docs/Drawing_Spec_v0.1.md.
+        node  = nominal_mm + Standards::FRONT_GAP_MM
+        slide = execution.to_s == 'left' ? -node : (node - carcass_mm)
         add(add(corner, scale(n, depth_mm)), scale(f[:x], slide))
       end
 
