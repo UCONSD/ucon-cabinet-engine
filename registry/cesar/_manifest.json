@@ -2246,12 +2246,16 @@
         "base": {
           "code": "989410",
           "points": 42,
-          "capacity": "240kg/pair"
+          "fixings": 2
         },
         "tall": {
           "code": "989411",
-          "points": 84
-        }
+          "points": 84,
+          "fixings": 4
+        },
+        "capacity_per_pair_kg": 240,
+        "fixings_note": "PRINTED ON printed p.548 AS A HEADING OVER BOTH ROWS: 'Wall-hung base and tall units - with fixings, 240 Kg capacity per pair', and then 'base units with 2 fixings' 989410 and 'tall units with 4 fixings' 989411. So the capacity belongs to the PAIR of fixings, not to a class of cabinet, and the fixing COUNT is what differs: a tall unit takes two pairs. CORRECTION 2026-08-24: until today the 240 kg sat inside the 'base' entry alone, where it read as a property of base units, and the count 2 / 4 was not in the data at all - it existed only as prose in the comment above Generator.wall_hung_ref. A fact that lives in one branch of a structure it spans, and a fact that lives only in a code comment, are the same defect the copied filler note was: right once, unfindable afterwards. Found while answering whether CR0631 (600 x 2100 x 620) may be hung - it may: printed p.111 carries the wall-hung line in that position's margin and the glyph beside BOTH depth bands, re-verified on a 175-dpi render.",
+        "no_size_limit_note": "THE CATALOG SETS NO SIZE LIMIT ON HANGING. printed p.111 offers the hung version on every width of its first position, 30 through 75, at both d.35 and d.62; the phrase 'not available wall hung' occurs three times in 634 pages and all three are BASE units (printed p.34, printed p.37 twice). What the book gives is the capacity of the fixings, not the weight of a loaded cabinet and nothing at all about the wall - so whether a 2100 x 620 pantry may hang on a given wall is a site question, not a catalog one, and the engine must not pretend to answer it."
       },
       "matt_lacquered_carcass": {
         "base": {

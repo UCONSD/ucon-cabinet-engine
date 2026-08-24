@@ -5434,5 +5434,39 @@ check('THE WIDTH FIELD IS POSITION-SCOPED, and this one page proves it') do
   raise 'the width index must not have grown a 16' if idx.key?('16')
 end
 
+check('the hung capacity belongs to the PAIR, and the fixing count is in the data') do
+  # printed p.548 heads both rows with '240 Kg capacity per pair' and then
+  # differs them by COUNT: 2 fixings for a base, 4 for a tall. Until
+  # 2026-08-24 the 240 sat inside the base entry, where it read as a property
+  # of base units, and the count existed only as prose in the comment above
+  # Generator.wall_hung_ref - so the engine knew a printed number it could not
+  # be asked for. Same defect as the copied filler note, one level up.
+  w = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+       .dig('modifications', 'codes', 'wall_hung')
+  raise 'the capacity must be stated once, above both classes' unless
+    w['capacity_per_pair_kg'] == 240
+  raise 'a class may not carry a capacity of its own' if
+    w['base'].key?('capacity') || w['tall'].key?('capacity')
+  raise "base fixings #{w['base']['fixings'].inspect}" unless w['base']['fixings'] == 2
+  raise "tall fixings #{w['tall']['fixings'].inspect}" unless w['tall']['fixings'] == 4
+  raise 'a tall takes two pairs, and that is why it costs twice' unless
+    w['tall']['fixings'] == w['base']['fixings'] * 2
+  raise 'the correction must be dated' unless w['fixings_note'].include?('2026-08-24')
+end
+
+check('AND THE CATALOG STILL HANGS A FULL-DEPTH TALL UNIT') do
+  # The question that found the defect: may CR0631 - 600 x 2100 x 620 - hang?
+  # printed p.111 says yes, in that position's margin and with the glyph beside
+  # both depth bands. Nothing in the registry may quietly narrow that to d.35.
+  %w[CQ0331 CQ0531 CQ0631 CQ0731 CR0331 CR0531 CR0631 CR0731].each do |code|
+    u = Registry.lookup(code)
+    raise "#{code} lost its hung version" unless Generator.wall_hung_available?(u)
+    raise "#{code} must order 989411" unless
+      Generator.wall_hung_ref(u)['code'] == '989411'
+  end
+  deep = Registry.lookup('CR0631')
+  raise 'CR0631 is the d.62 one' unless deep['depth_mm'] == 620
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

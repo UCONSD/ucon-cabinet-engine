@@ -31,7 +31,7 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
 | **Core version** | **0.74.0**, shell 0.6.0 |
-| **Headless suite** | **410 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Headless suite** | **412 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **704 codes** in **37 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -148,6 +148,21 @@ leaves this list when it is done, not when it is mentioned.
    gap, and it does not affect whether the fronts meet. Left as it stands
    because a `contradicts` line is factory-confirmed data and rewording it is a
    content decision, not a stale number. **Andriy's call.**
+
+7. **`wall_hung` is recorded per TYPE, and the catalog prints the glyph per
+   DEPTH BAND.** Nothing is wrong today: on printed p.111 the first position
+   carries the symbol beside both d.35 and d.62, re-verified on a 175-dpi
+   render 2026-08-24, and every held code agrees with its type. But the schema
+   cannot say *"hung at d.35, refused at d.62"*, and this catalog has already
+   proved twice that it states availability per POSITION rather than per family
+   — the pictogram sweep, and `tall_two_doors` hung at H.138 and refused at
+   H.210 on facing pages. The day a page splits the answer between depths, a
+   boolean on the type will silently pick one of them. **Not urgent — no held
+   code needs it, and no page read so far splits it.** Found while answering
+   whether `CR0631` (600 × 2100 × 620) may be hung. It may: the limit the book
+   prints is not a size but the fixings — 240 kg per pair, `989410` two for a
+   base, `989411` four for a tall — and the weight of a loaded cabinet and the
+   wall behind it are site questions the catalog never answers.
 
 *(The item that stood here — moving the Project's handoff and spec into
 `claude/` — was wrong and was removed the same evening. Those two are session
