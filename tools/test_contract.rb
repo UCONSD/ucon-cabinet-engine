@@ -1070,7 +1070,7 @@ check('A PAGE STOPPED FOR A DIMENSION WE CANNOT NAME SAYS SO IN BOTH PLACES') do
   # And the section file says it too, in a key a grep will find.
   files = Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
           .reject { |f| File.basename(f).start_with?('_') }
-  notes = files.filter_map { |f| JSON.parse(File.read(f)).find { |k, _| k.end_with?('_stop_note') } }
+  notes = files.map { |f| JSON.parse(File.read(f)).find { |k, _| k.end_with?('_stop_note') } }.compact
   raise 'no section file records a stop' if notes.empty?
   notes.each do |key, text|
     raise "#{key} must cite the page it stopped on" unless text.include?('printed p.')
@@ -4551,7 +4551,7 @@ check('WHERE THE RACK GOES IS READ OFF EACH PAGE - the printed sentence derives 
     end
   }
   raise "a compound with no answer: #{answered.inspect}" if answered.any?(&:nil?)
-  raise "all three answers must be in the registry: #{answered.tally.inspect}" unless
+  raise "all three answers must be in the registry: #{answered.group_by { |x| x }.transform_values(&:length).inspect}" unless
     answered.uniq.sort == %i[dimensioned one_per_module rule]
 
   # 3. AND THE ANTI-DERIVATION CLAUSE, which is what the day cost. Two
