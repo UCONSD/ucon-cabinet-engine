@@ -5242,5 +5242,74 @@ check('DRAWN is not ORDERED, and the file that will be misread says so') do
   raise 'and it must distinguish the two' unless gen.include?('ORDERED')
 end
 
+# ---------------------------------------------------------------------------
+# A NOTE IS A CLAIM, AND A COPIED NOTE IS A COPIED CLAIM (2026-08-24)
+#
+# One front_layout note was written for fillers_h78.json and pasted verbatim
+# into three fillers of other families. It carried family H.78's gola door
+# height - 750 - into a wall unit 360 tall and a tall unit 2100 tall, where the
+# family declares no door-version axis at all. base_h78.json had said the axis
+# was FAMILY-SCOPED since the day it was written, so the registry contradicted
+# itself in prose and this suite stayed green through it, because nothing
+# looked at prose. Now something does.
+# ---------------------------------------------------------------------------
+
+def foreign_front_height_quotes(pairs)
+  gola = {}
+  pairs.each do |_, raw|
+    j  = JSON.parse(raw)
+    dv = j['data'] && j['data']['door_versions']
+    gola[j['family']] = dv['gola_mm'] if dv.is_a?(Hash) && dv['gola_mm']
+  end
+  bad = []
+  pairs.each do |name, raw|
+    fam = JSON.parse(raw)['family']
+    raw.scan(/shortens to (\d+)/).flatten.map(&:to_i).uniq.each do |mm|
+      next if gola[fam] == mm
+      bad << "#{name} (family #{fam}) quotes #{mm}, its family declares #{gola[fam].inspect}"
+    end
+  end
+  bad
+end
+
+check('THE PROSE READER PROVES ITSELF before the registry is trusted to it') do
+  # Rule 12: run it against the defect it exists for, on a fixture, so a green
+  # suite means the reader works and not that today's files happen to agree.
+  legal = ['ok.json', '{"family":"H.78","data":{"door_versions":{"gola_mm":750},' \
+           '"unit_types":{"x":{"note":"the front shortens to 750 with the run"}}}}']
+  broken = ['bad.json', '{"family":"Wall H.36","data":{"door_versions":null,' \
+            '"unit_types":{"x":{"note":"the front shortens to 750 with the run"}}}}']
+  silent = ['quiet.json', '{"family":"Tall H.210","data":{"unit_types":{"x":{"note":"no claim here"}}}}']
+
+  found = foreign_front_height_quotes([legal, broken, silent])
+  raise "the reader is blind: #{found.inspect}" unless found.size == 1
+  raise found.first unless found.first.start_with?('bad.json')
+
+  raise 'false positive on a file that makes no claim' unless
+    foreign_front_height_quotes([legal, silent]).empty?
+end
+
+check('a filler may not quote a front height its own family does not have') do
+  pairs = registry_section_files.map { |f| [File.basename(f), File.read(f)] }
+  raise 'no registry files found - the glob is wrong' if pairs.empty?
+  bad = foreign_front_height_quotes(pairs)
+  raise bad.join(' | ') unless bad.empty?
+end
+
+check('and the three files that were wrong say so, with the date') do
+  %w[fillers_wall_h36.json fillers_wall_h60.json fillers_tall_h210.json].each do |fn|
+    raw = File.read(File.expand_path("../registry/cesar/#{fn}", __dir__))
+    raise "#{fn}: the correction must be dated" unless raw.include?('2026-08-24')
+    raise "#{fn}: it must name what is actually true here" unless
+      raw.include?('THIS FAMILY HAS NO DOOR-VERSION AXIS')
+    raise "#{fn}: the mistake must not be erased, only demoted" unless
+      raw.include?('copied from fillers_h78.json')
+  end
+  # and the source of the number must still say it is family-scoped
+  h78 = File.read(File.expand_path('../registry/cesar/fillers_h78.json', __dir__))
+  raise 'fillers_h78.json must warn that its own number does not travel' unless
+    h78.include?('NOT PORTABLE')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
