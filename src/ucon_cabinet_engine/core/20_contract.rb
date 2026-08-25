@@ -31,6 +31,7 @@ module UCON
         hardware_ref hardware_source companion_refs variants
         code code_status pricing_group_ref
         status priority source_ref restrictions notes
+        void_role
       ].freeze
 
       ALWAYS_REQUIRED = %w[
@@ -38,7 +39,11 @@ module UCON
       ].freeze
 
       ENUMS = {
-        'object_class'    => %w[cabinet worktop panel filler accessory appliance appliance_front corner_unit],
+        # `void` is a RESERVATION, not a body - a span whose extent is known and
+        # whose division is not yet decided. It sits beside `appliance` and
+        # `appliance_front` for the same reason they are here: it is a thing the
+        # drawing owns and the factory does not make. docs/Reserved_Void_Spec_v0.1.md
+        'object_class'    => %w[cabinet worktop panel filler accessory appliance appliance_front corner_unit void],
         'geometry_kind'   => %w[linear corner non_dim],
         'mounting'        => %w[floor wall_hung],
         'code_status'     => %w[PRELIMINARY CONFIRMED],
@@ -46,7 +51,10 @@ module UCON
         'opening_method'  => %w[handle push_to_open gola],
         'hinge_side'      => %w[rh lh],
         'hardware_source' => %w[factory client],
-        'priority'        => %w[P1 P2 P3]
+        'priority'        => %w[P1 P2 P3],
+        # The role decides the DATUM and the fill offer, and both are read while
+        # drawing - which is what earns a key under Object Contract v2 SS4.2 rule 6.
+        'void_role'       => %w[above_housing run_gap front_remainder]
       }.freeze
 
       # §1.4 — the two keys that hold structure rather than a scalar. They are
@@ -154,6 +162,19 @@ module UCON
         elsif present?(a['mount_bottom_mm'])
           raise ArgumentError,
                 'mount_bottom_mm is only meaningful with mounting = wall_hung (§1.3)'
+        end
+
+        # A VOID MUST SAY WHICH KIND IT IS, and nothing else may claim one.
+        # The role decides the datum and the fill offer; a void without it is a
+        # translucent box nobody can act on, which is worse than an absence
+        # because it looks answered. docs/Reserved_Void_Spec_v0.1.md §3.
+        if a['object_class'].to_s == 'void'
+          unless present?(a['void_role'])
+            raise ArgumentError, 'object_class = void requires void_role'
+          end
+        elsif present?(a['void_role'])
+          raise ArgumentError,
+                'void_role is only meaningful with object_class = void'
         end
 
         # §4 — a code cannot outrank the object carrying it.

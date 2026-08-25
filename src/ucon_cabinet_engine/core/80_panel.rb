@@ -186,17 +186,11 @@ module UCON
           unless (total - unit['height_mm']).abs < 0.001
             raise "gola stack #{total} does not sum to #{unit['height_mm']}"
           end
-          w = unit['width_mm']
-          z = 0.0
-          slabs = []
-          stack.reverse.each do |seg|
-            if seg['kind'] == 'front'
-              slabs << { name: "FRONT_#{slabs.length + 1}_FROM_BOTTOM",
-                         x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: seg['h_mm'].round(1) }
-            end
-            z += seg['h_mm']
-          end
-          slabs
+          # THE WALK LIVES IN THE GENERATOR NOW. This loop used to be written
+          # out here and kept only the fronts, which quietly dropped anything
+          # else in the stack. A 30 mm recess survived that treatment; a
+          # RESERVATION does not - see Generator.slabs_from_stack.
+          Generator.slabs_from_stack(stack, unit['width_mm'])
         else
           Generator.front_slabs(unit)
         end

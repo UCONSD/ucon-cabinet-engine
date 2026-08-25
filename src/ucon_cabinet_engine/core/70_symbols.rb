@@ -450,6 +450,13 @@ module UCON
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'
           (slabs || Generator.front_slabs(unit)).each_with_index do |slab, i|
+            # A RESERVATION IS NOT A DRAWER. The diagonal is the UCON symbol for
+            # a front that pulls out; putting one on a span whose division is
+            # undecided would draw a drawer nobody has ordered. The band still
+            # shows - it is real geometry from draw_void_slab - it just carries
+            # no opening symbol.
+            next if %i[void opening].include?(slab[:kind])
+
             g = definition.entities.add_group
             g.name = "SYM_FRONT_DRAWER_#{i + 1}"
             x1 = slab[:x_mm]

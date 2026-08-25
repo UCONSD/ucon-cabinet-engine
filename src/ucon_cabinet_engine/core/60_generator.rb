@@ -218,6 +218,12 @@ module UCON
       # CAD glass: a cool grey that is plainly not the front's white and is
       # plainly not transparent.
       GLASS_RGB = [205, 214, 218].freeze
+      # A reservation reads as a warning, not as a material. Same red the
+      # appliance module already uses for the void above a housing, so the two
+      # halves of one concept look like one concept in the model.
+      VOID_RGB  = [214, 69, 65].freeze
+      # A niche is decided, so it does not shout. Grey, not red.
+      OPENING_RGB = [150, 156, 160].freeze
 
       # Reach of the selected unit along its own +x, in millimetres, or nil.
       # A corner carries no width by contract, so its reach comes from the
@@ -535,20 +541,85 @@ module UCON
               w_mm: slab_w.round(1), h_mm: h }
           end
         when 'horizontal'
-          heights = layout['heights_mm_top_to_bottom'].map(&:to_f)
-          unless (heights.sum - h).abs < 0.001
-            raise "front_layout heights #{heights.inspect} do not sum to #{h}"
-          end
-          z = 0.0
-          heights.reverse.each_with_index.map do |hh, i|
-            slab = { name: "FRONT_#{i + 1}_FROM_BOTTOM",
-                     x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1) }
-            z += hh
-            slab
-          end
+          slabs_from_stack(front_stack(layout, h), w)
         else
           [{ name: 'FRONT', x_mm: 0, z_mm: 0, w_mm: w, h_mm: h }]
         end
+      end
+
+      # THE STACK, IN ONE FORM. A horizontal layout states itself either as
+      # `heights_mm_top_to_bottom` - the shorthand, and what 708 of 711 codes
+      # use - or as `stack_top_to_bottom`, whose entries carry a kind. The
+      # shorthand is the stack with every entry a front, so it is lifted rather
+      # than special-cased.
+      #
+      # Kinds and their meanings: docs/Reserved_Void_Spec_v0.1.md §4.
+      #
+      # THE SUM CHECK IS THE INVARIANT, not bookkeeping. Printed p.121-125
+      # satisfy it on 16 of 16 codes and it is what recovers every number that
+      # section does not print - the 600 mm oven niche above all. A section that
+      # fails here has been misread, and this raise is where that surfaces.
+      # ONE PLACE THAT TURNS A STACK INTO SLABS, and it exists for the same
+      # reason draw_front_slab does: 80_panel walked its own copy of this loop
+      # for the gola version and dropped every entry that was not a front. That
+      # was harmless while the only other kind was an empty 30 mm zone. It stops
+      # being harmless the moment an entry is a RESERVATION, because the one
+      # thing a reservation must never do is disappear quietly.
+      def slabs_from_stack(stack, w)
+        z = 0.0
+        n = 0
+        slabs = []
+        stack.reverse_each do |entry|
+          hh = entry['h_mm'].to_f
+          case entry['kind']
+          when 'front'
+            n += 1
+            slabs << { name: "FRONT_#{n}_FROM_BOTTOM",
+                       x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1) }
+          when 'remainder'
+            # THE SPAN IS OWNED, THE BODY IS NOT. See §5 of
+            # claude/findings-2026-08-25-tall-h210-appliance-columns.md: the
+            # catalog prints the SUM of a custom-sized front and the appliance
+            # opening below it, and refuses to divide it. Drawing nothing here
+            # is what leaves 1125 mm of column unmarked, and in a real kitchen
+            # that is what gets built over.
+            slabs << { name: "VOID_REMAINDER_#{hh.round}",
+                       x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1),
+                       kind: :void, holds: entry['holds'],
+                       appliance_class: entry['appliance_class'] }
+          when 'appliance_opening'
+            # A NICHE IS NOT A VOID, and the difference is the whole point of
+            # the concept: a void's division is undecided, a niche's is decided
+            # and the appliance is what decides it. printed p.121-125 never
+            # print this number - 600 for an oven H.60 is MEASURED, five times
+            # over, from what the front stacks leave. See §1 of
+            # claude/findings-2026-08-25-tall-h210-appliance-columns.md.
+            slabs << { name: "APPLIANCE_OPENING_#{hh.round}",
+                       x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1),
+                       kind: :opening, appliance_class: entry['appliance_class'] }
+          when 'zone'
+            # The gola recess. Drawing_Spec: the 30 mm zone stays empty - it is
+            # not a front, and it is not a reservation either, because what
+            # fills it is decided and ordered as a GOL profile.
+            nil
+          else
+            raise "front_layout stack: unknown kind #{entry['kind'].inspect}"
+          end
+          z += hh
+        end
+        slabs
+      end
+
+      def front_stack(layout, h)
+        stack = layout['stack_top_to_bottom']
+        stack ||= Array(layout['heights_mm_top_to_bottom'])
+                  .map { |hh| { 'kind' => 'front', 'h_mm' => hh } }
+        total = stack.sum { |e| e['h_mm'].to_f }
+        unless (total - h).abs < 0.001
+          raise "front_layout heights #{stack.map { |e| e['h_mm'] }.inspect} " \
+                "do not sum to #{h}"
+        end
+        stack
       end
 
       # ONE PLACE THAT TURNS A SLAB INTO GEOMETRY. This loop stood written out
@@ -557,6 +628,10 @@ module UCON
       # the three. Same lesson as front_y_mm, learned the same way.
       def draw_front_slab(entities, slab, unit, z0, material)
         t     = Standards::FRONT_T_MM
+        if %i[void opening].include?(slab[:kind])
+          return draw_void_slab(entities, slab, unit, z0, t)
+        end
+
         rails = cutout_rails(unit, slab)
         unless rails
           return Geometry.box(
@@ -595,6 +670,51 @@ module UCON
           Geometry.material(entities.model, 'UCON_Glass_Gray', GLASS_RGB)
         )
         frame
+      end
+
+      # A RESERVATION, DRAWN. Same plane and same thickness as a front, because
+      # that is where it has to appear on an elevation - a band that is missing
+      # from the elevation is exactly the information nobody receives. The name
+      # carries the number for whoever opens the outliner, the same reason
+      # CUTOUT_LABEL is in a name and not only in a note.
+      #
+      # UNTESTED HEADLESS - it needs SketchUp, like everything that draws. Try
+      # it in the model before believing it.
+      def draw_void_slab(entities, slab, unit, z0, t)
+        void = slab[:kind] == :void
+        mat = Geometry.material(entities.model,
+                                void ? 'UCON_Void_Red' : 'UCON_Opening_Gray',
+                                void ? VOID_RGB : OPENING_RGB)
+        mat.alpha = 0.35 if mat.respond_to?(:alpha=)
+        box = Geometry.box(
+          entities, slab[:name],
+          slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
+          slab[:w_mm], t, slab[:h_mm], mat
+        )
+        return box unless box.respond_to?(:set_attribute)
+
+        cls = slab[:appliance_class]
+        if void
+          holds = Array(slab[:holds])
+          box.set_attribute(Contract::DICTIONARY, 'object_class', 'void')
+          box.set_attribute(Contract::DICTIONARY, 'void_role', 'front_remainder')
+          note = "TO BE FILLED - #{slab[:h_mm].round} mm. Holds: " \
+                 "#{holds.empty? ? 'undecided' : holds.map { |x| x.tr('_', ' ') }.join(' + ')}" \
+                 "#{cls ? " (#{cls})" : ''}. " \
+                 'The catalog prints this span and not its division.'
+        else
+          # NO object_class HERE, and the absence is deliberate. A niche is part
+          # of the cabinet, not a thing beside it; claiming a class for it would
+          # put a second object in the order for one article. What it carries is
+          # a measurement, and 88_appliance_check is what reads it.
+          note = "APPLIANCE OPENING - KEEP CLEAR, #{slab[:h_mm].round} mm" \
+                 "#{cls ? " (#{cls})" : ''}. Measured from the printed front " \
+                 'stack, not printed as a number.'
+        end
+        box.set_attribute(Contract::DICTIONARY, 'height_mm', slab[:h_mm])
+        box.set_attribute(Contract::DICTIONARY, 'width_mm', slab[:w_mm])
+        box.set_attribute(Contract::DICTIONARY, 'notes', note)
+        box
       end
 
       # THE APERTURE, OR NOTHING.

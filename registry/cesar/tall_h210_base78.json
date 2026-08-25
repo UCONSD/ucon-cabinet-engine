@@ -2,11 +2,11 @@
   "section": "Tall units H. 210 | for base unit H. 78",
   "class": "tall",
   "family": "Tall H.210",
-  "source_pages": "printed p.116 / PDF 118 (subset extracted: p.116 only; the section runs to printed p.125)",
+  "source_pages": "printed p.116 and p.121-125 / PDF 118 and 123-127 (p.117-120 and p.124 not extracted; the section runs printed p.116-125)",
   "family_naming_note": "SAME FAMILY AS tall_h210.json, DIFFERENT SECTION. The catalog prints these as two chapters with two letter pairs - CQ/CR for printed p.111-115 and C5/C6 here - but the physical family is one: 2100 tall on a 100 plinth, depths 350 and 620. So this file JOINS family 'Tall H.210' and declares no family-level key of its own, the same way sink_base_h58_5.json joins H.58.5. What differs between the two sections is the FRONT, and a front is a property of the unit type, not of the family.",
   "door_versions_note": "THIS FILE DELIBERATELY DECLARES NO data.door_versions, AND THE ABSENCE IS A DECISION, NOT A READING. printed p.116 does print the pair - 78 and 75 - for the lower front of every position on the page. It cannot be recorded as a FAMILY key, because door_versions merges by family and family 'Tall H.210' also holds tall_h210.json, whose own no_door_versions_note says printed p.111 prints a single elevation 210 and answers no gola question at all. Declaring it here would hand the plain full-height units a 2070 front the catalog has never printed - the identical mistake Elda Q8 was opened for at H.58.5, where a family key offers a 55,5 that one position never draws. So the split is recorded per unit type, in front_layout.gola_stack_top_to_bottom, which is exact and cannot leak. CONSEQUENCE, RECORDED RATHER THAN HIDDEN: 80_panel reads door_versions from the family, so the properties dialog will offer these units no 78/75 switch and will draw them in the handle version. Making door_versions section-scoped is a code change in 50_registry.rb and 80_panel.rb and is NOT made here. Evidence added to Elda Q8, 2026-08-24.",
   "width_field_note": "THE FOUR-DIGIT TAIL DOES NOT DECODE, AND THIS PAGE BREAKS IT ON ITSELF. W.45 is 0551 in the first position and 1560 in the third; W.60 is 0651 and 1660. The same two widths, the same page, two different fields - so the width field is not even section-scoped, it is POSITION-scoped. _manifest.json code_grammar.tall_units already says to read the row; printed p.116 is the cheapest proof of it yet found, because both readings sit on one sheet.",
-  "extraction_note": "printed p.116 taken WHOLE: three positions, twelve codes, both depths, verified against a 175-dpi render (rule 10) after pdftotext agreed with it line for line. Nine pages of this section remain - printed p.117-125 - and they are what the Avenida Primavera wall actually needs: the oven housings are printed p.121-123 and the fridge unit p.125. Recorded in _manifest.json catalog_map so the picker shows them grey rather than silent.",
+  "extraction_note": "printed p.116 taken WHOLE: three positions, twelve codes, both depths, verified against a 175-dpi render (rule 10) after pdftotext agreed with it line for line. Nine pages of this section remain - printed p.117-125 - and they are what the Avenida Primavera wall actually needs: the oven housings are printed p.121-123 and the fridge unit p.125. Recorded in _manifest.json catalog_map so the picker shows them grey rather than silent. | 2026-08-25, DEMAND-DRIVEN SECOND PASS: printed p.121, 122, 123 and 125 read at 600 dpi and held - 8 types, 14 codes, all d.62. Two positions on those sheets are read and NOT held: printed p.121 position 3 (C68654 / C68754), whose single mixed elevation the front_layout shapes cannot express and which is an Elda question, and printed p.123 position 3 (C62691), which is a 1320-tall wall-hung unit printed inside an H.210 section and therefore a different family. printed p.117-120 and p.124 remain unread. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md.",
   "data": {
     "unit_types": {
       "tall_door_over_door": {
@@ -195,6 +195,580 @@
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.116 - no wall-hung line in this position's margin and no glyph beside either depth band, where the first position of the same page carries both. An absence has to be written down or it is re-read as silence. 175-dpi render, 2026-08-24.",
         "notes": "opening is recorded as 'door' following base_drawer_door at H.78, where a type mixing a hinged door with drawers takes the door's value and the hand belongs to the door; this file does not invent a new convention for a mixed front. THE MECHANISM IS NAMED AND NOT CODED: the position carries the Servo Drive glyph pointing at printed p.567, and the margin prices three LEGRABOX finishes - stainless steel, ash/brown blumotion push-pull, stainless blumotion push-pull - with no article code against any of them. Nothing is recorded as a companion, because a companion is a LINE with a code and these have none. Same blocker as printed p.112, waiting on registry/cesar/options/. WIDTH FIELD: 15 = W.45 and 16 = W.60 here, against 05 and 06 in the first position of this same page - see width_field_note."
+      },
+      "tall_oven_h46_custom_door": {
+        "description": "Tall unit for oven H. 46 - 1 rh or lh custom-sized door - 1 drawer - 1 rh or lh door - 2 shelves - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "2 shelves",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.121 / PDF 123",
+        "codes": [
+          {
+            "code": "C62610",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.121: 19,5 / 78 handle, ⌐16,5 / ⌐75 gola. The TOP front carries no dimension in either execution - it is drawn as a bar and left unnumbered, which is what 'custom-sized' means on this page. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1125,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h46",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 780
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1125,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h46",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "remainder_note": "THE REMAINDER IS EXECUTION-INDEPENDENT, and that is what makes it a real number rather than an artefact: 195 + 780 = 975 and 30 + 165 + 30 + 750 = 975, so handle and gola leave the SAME 1125. The oven H.46 niche height is NOT recorded, here or anywhere - a 460 would make the door exactly 665 and the arithmetic would close, and it would be an invention in the one place the catalog has gone out of its way to say the number is not fixed."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "THE FIRST ARTICLE IN THIS REGISTRY WITH A REMAINDER. It is buildable: the span is drawn as a void band, red, named for its height, and it appears on an elevation where before there would have been nothing. What is NOT claimed is the division. W.60 only - no W.75 is printed."
+      },
+      "tall_oven_h60_drawer_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 drawer - 1 jumbo drawer - 1 shelf - no push-pull device - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.121 / PDF 123",
+        "codes": [
+          {
+            "code": "C62650",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C62750",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.121: 72 / 19,5 / 58,5 handle, 72 / ⌐16,5 / ⌐55,5 gola. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 585
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "Servo Drive glyph pointing at printed p.567 and one LEGRABOX finish priced in the margin with no article code against it - NAMED AND NOT CODED, the same blocker printed p.116's jumbo position records, waiting on registry/cesar/options/."
+      },
+      "tall_oven_h60_two_drawers_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 1 shelf - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.122 / PDF 124",
+        "codes": [
+          {
+            "code": "C62653",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C62753",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.122: 72 / 19,5 / 19,5 / 39 handle, 72 / ⌐18 / 18 / ⌐36 gola. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 180
+            },
+            {
+              "kind": "front",
+              "h_mm": 180
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "gola_grouping_note": "THE PAGE THAT CORRECTS THE GOLA RULE. Read at 900 dpi 2026-08-25: there is a recess hook above the FIRST 18 and NONE between the two 18s, then a hook above the 36. Two recesses, three fronts - so the PAIR of drawers gives 30 mm between them, 1,5 cm each, and the jumbo gives its own 30. The rule is: A RECESS IS SUBTRACTED FROM THE FRONT GROUP BENEATH IT, and a group of two splits it equally. Every other position held so far is a group of one, which is why the older sentence - 'the lower front gives its 30 mm' - survived this long."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "Three LEGRABOX finishes priced, none coded. See tall_oven_h60_drawer_jumbo."
+      },
+      "tall_oven_h60_two_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 jumbo drawers - 1 shelf - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.122 / PDF 124",
+        "codes": [
+          {
+            "code": "C62657",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C62757",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.122: 72 / 39 / 39 handle, 72 / ⌐36 / ⌐36 gola. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "Two groups of one, so each jumbo front gives its own 30 mm - the ordinary case."
+      },
+      "tall_oven_h60_jumbo_interior_drawers": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 jumbo drawer - 2 interior drawers - 1 shelf - no push-pull device - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.122 / PDF 124",
+        "codes": [
+          {
+            "code": "C62651",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C62751",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.122: 72 / 78 handle, 72 / ⌐75 gola. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 780
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 720
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "THE TWO INTERIOR DRAWERS ARE NOT FRONTS and the elevation says so - it prints one 78 where the description lists three moving parts. They sit behind the jumbo front, so the stack holds two fronts and the export counts two handles."
+      },
+      "tall_oven_microwave_jumbo": {
+        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "1 adjustable divider with stainless steel protection",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.123 / PDF 125",
+        "codes": [
+          {
+            "code": "C63640",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.123: 39 handle, ⌐36 gola - one front, and nothing else is dimensioned. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1710,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1710,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "remainder_note": "390 handle against 30 + 360 gola: the same 1710 both ways."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "THE COLUMN ON THE AVENIDA PRIMAVERA RENDER. Two appliance openings and a custom-sized door share one span, and the catalog prints only the sum. Same shape as tall_oven_h46_custom_door and the same refusal to invent either number."
+      },
+      "tall_oven_microwave_jumbo_no_pushpull": {
+        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - no push-pull device - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "1 adjustable divider with stainless steel protection",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.123 / PDF 125",
+        "codes": [
+          {
+            "code": "C63659",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.123: 58,5 handle, ⌐55,5 gola. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1515,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 585
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1515,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "remainder_note": "585 handle against 30 + 555 gola: the same 1515 both ways."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
+        "notes": "THE COLUMN ON THE AVENIDA PRIMAVERA RENDER. Two appliance openings and a custom-sized door share one span, and the catalog prints only the sum. Same shape as tall_oven_h46_custom_door and the same refusal to invent either number. Differs from tall_oven_microwave_jumbo only in the drawer height and the push-pull line."
+      },
+      "tall_fridge": {
+        "description": "Tall unit for fridge (for sliding or fixed hinges) - 1 rh or lh door - 1 rh or lh door with fixed hinges - 1 divider",
+        "opening": "doors",
+        "handed": true,
+        "interior_confirmed": [
+          "1 divider"
+        ],
+        "source_ref": "printed p.125 / PDF 127",
+        "codes": [
+          {
+            "code": "C64601",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C64701",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.125: 132 / 78 handle, 132 / ⌐75 gola - the SAME stack as tall_door_over_door on printed p.116, so the gola line runs through this unit and on down the adjacent base H.78 run. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1320
+            },
+            {
+              "kind": "front",
+              "h_mm": 780
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1320
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
+          "no_opening_note": "NO appliance_opening ENTRY, and that is a reading. The fronts alone sum to 2100: the fridge stands BEHIND two ordinary doors, and this page prints no niche of any kind. What the built-in fridge actually needs of the carcass is seam finding 3 - the niche width taken from the Cesar door code is 13 narrower than nominal at standard and 51 wider at flush - and it is not answered here."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "CONTRADICTORY, AND RECORDED AS CONTRADICTORY. The cabinet-in-a-bracket glyph IS printed beside d. 62 - verified at 600 dpi against printed p.123 position 3's, the same glyph - while the margin carries only side panel D. p.549 and feet H. 5 mm p.548, and NO 'Surch. for wall-hung version on page 548'. Everywhere else the two signals agree. This is the SECOND instance of the disagreement claude/findings-2026-08-24-pictogram-sweep.md §4 recorded for the Magicorner corner on printed p.42, and it is MIRRORED - there the margin line stood without the glyph. Recorded false because the priced offer is the one a person can order; the glyph goes to Elda beside the corner question.",
+        "notes": "Servo Flex mechanism p.567 and a horizontal grip recess for fridge p.622, both named and neither coded. One position, one code per width, d.62 only. 'doors' rather than 'door': the position prints two, one of them with fixed hinges, and hinge_side stays per-order."
       }
     }
   }

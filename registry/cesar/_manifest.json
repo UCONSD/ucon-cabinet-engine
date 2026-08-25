@@ -667,8 +667,8 @@
         "section": "Tall units H. 210 | for base unit H. 78",
         "printed_pages": "116-125",
         "status": "partial",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units. EXTRACTION OPENED 2026-08-24, demand-driven: Andriy chose H.210 for the Avenida Primavera tall wall, so this section - not the plain one - is the one that kitchen needs. printed p.116 held whole; the nine pages above it are what remains, and printed p.121-123 and p.125 are the appliance columns the render draws.",
-        "extracted_on": "2026-08-24",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units. EXTRACTION OPENED 2026-08-24, demand-driven: Andriy chose H.210 for the Avenida Primavera tall wall, so this section - not the plain one - is the one that kitchen needs. printed p.116 held whole; the nine pages above it are what remains, and printed p.121-123 and p.125 are the appliance columns the render draws. | 2026-08-25: printed p.121, 122, 123 and 125 HELD - 8 types, 13 codes, all d.62, all refusing the hung version. printed p.117-120 and p.124 remain unread. Two positions on the held sheets are read and deliberately not held (C68654/C68754 and C62691) - see their pages.",
+        "extracted_on": "2026-08-25",
         "pages": [
           {
             "printed": 116,
@@ -715,27 +715,36 @@
           },
           {
             "printed": 121,
-            "status": "not_extracted",
+            "status": "extracted",
             "types": [
-              "Tall unit for oven H. 46 - 1 rh or lh CUSTOM-SIZED door, 1 drawer, 1 rh or lh door"
+              "Tall unit for oven H. 46 - 1 rh or lh CUSTOM-SIZED door, 1 drawer, 1 rh or lh door (C62610)",
+              "Tall unit for oven H. 60 - 1 rh or lh door, 1 drawer, 1 jumbo drawer (C62650 / C62750)",
+              "Tall unit for oven H. 60 - SINGLE MIXED ELEVATION (C68654 / C68754) - READ, NOT HELD"
             ],
-            "note": "APPLIANCE MODULE, and the Avenida Primavera wall needs this page. The custom-sized door is a front whose size comes from the opening - the contract cannot express it yet."
+            "note": "Two of three positions held. The custom-sized door IS now expressible: it is a REMAINDER of 1125, execution-independent, and the span is drawn as a void band - docs/Reserved_Void_Spec_v0.1.md. POSITION 3 IS NOT HELD: C68654 / C68754 print ONE elevation instead of the handle/gola pair, 72 / 19,5 / one recess / 55,5, so the small drawer keeps its full height and only the front below it is recessed. Neither heights_mm_top_to_bottom nor a gola stack says that, prices are identical to position 2 in all eleven bands, and the side tab names a third programme (Tangram) the header block does not. ELDA QUESTION.",
+            "extracted_on": "2026-08-25"
           },
           {
             "printed": 122,
-            "status": "not_extracted",
+            "status": "extracted",
             "types": [
-              "Tall unit for oven H. 60 - 1 rh or lh door, 2 drawers, 1 jumbo drawer"
+              "Tall unit for oven H. 60 - 1 door, 2 drawers, 1 jumbo drawer (C62653 / C62753)",
+              "Tall unit for oven H. 60 - 1 door, 2 jumbo drawers (C62657 / C62757)",
+              "Tall unit for oven H. 60 - 1 door, 1 jumbo drawer, 2 interior drawers (C62651 / C62751)"
             ],
-            "note": "APPLIANCE MODULE. Servo Drive in the margin, no article code."
+            "note": "Held whole: 3 positions, 6 codes, d.62 only. THE PAGE THAT CORRECTED THE GOLA RULE - position 1 prints a recess above the first 18 and none between the two 18s, so a recess is subtracted from the front GROUP beneath it and a group of two splits the 30 equally.",
+            "extracted_on": "2026-08-25"
           },
           {
             "printed": 123,
-            "status": "not_extracted",
+            "status": "extracted",
             "types": [
-              "Tall unit for oven and microwave oven - 1 rh or lh CUSTOM-SIZED door, 1 jumbo drawer"
+              "Tall unit for oven and microwave oven - CUSTOM-SIZED door, 1 jumbo drawer (C63640)",
+              "Tall unit for oven and microwave oven - CUSTOM-SIZED door, taller jumbo drawer (C63659)",
+              "Wall-hung tall unit with fixings H. 132 for oven H. 60 (C62691) - READ, NOT HELD"
             ],
-            "note": "APPLIANCE MODULE. THIS IS THE POSITION THE DESIGNER'S RENDER DRAWS on the tall wall - two stacked appliances in one column. Custom-sized door again."
+            "note": "THE COLUMN ON THE RENDER, and it is held. Remainders of 1710 and 1515, both execution-independent. POSITION 3 IS NOT HELD AND IS NOT AN H.210 UNIT: C62691 is 1320 tall, no feet, fixed front, one 72 door over a 600 niche - a different family printed inside this section, the same trap printed p.116 sets with two identically-titled positions, now on the height axis. There is a tall_h138.json and 132 is not 138.",
+            "extracted_on": "2026-08-25"
           },
           {
             "printed": 124,
@@ -747,11 +756,12 @@
           },
           {
             "printed": 125,
-            "status": "not_extracted",
+            "status": "extracted",
             "types": [
-              "Tall unit for fridge (for sliding or fixed hinges)"
+              "Tall unit for fridge (for sliding or fixed hinges) - 2 doors (C64601 / C64701)"
             ],
-            "note": "APPLIANCE MODULE. Servo Flex mechanism and a horizontal grip recess on printed p.622, neither coded."
+            "note": "Held: one position, two codes, d.62. Fronts 132 + 78 handle and 132 + ⌐75 gola sum to 2100 on their own - the fridge stands BEHIND the doors and this page prints no niche. CONTRADICTION RECORDED: the cabinet-in-a-bracket glyph is printed beside d.62 and the 'Surch. for wall-hung version on page 548' line is NOT. Second instance of the disagreement the printed p.19 sweep found on the Magicorner corner of printed p.42, and mirrored - there the margin line stood without the glyph. Held as wall_hung false, glyph to Elda.",
+            "extracted_on": "2026-08-25"
           }
         ]
       },

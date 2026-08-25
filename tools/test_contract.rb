@@ -228,9 +228,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 711 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 84 tall + 13 fillers)') do
+check('registry loads and holds 724 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 97 tall + 13 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 711
+  raise "got #{n}" unless n == 724
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -414,9 +414,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 711 rows, each with code/dims/description/source') do
+check('registry catalog: 724 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 711
+  raise cat.length.to_s unless cat.length == 724
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -1205,7 +1205,7 @@ check('AFTER THE SWEEP, AN ABSENT HUNG READING IS A BUG') do
     man.dig('page_symbols', 'sweep_done', 'wall_chapter').to_s.include?('no pictogram column')
 end
 
-check('52 codes refuse the hung version, and every move of that number is dated') do
+check('65 codes refuse the hung version, and every move of that number is dated') do
   # A sweep that changed an availability would be a correction, and a
   # correction gets a dated note of its own (rule 9). The printed p.19 sweep
   # changed none, and that is worth pinning: if a later edit quietly flips a
@@ -1216,11 +1216,20 @@ check('52 codes refuse the hung version, and every move of that number is dated'
   # twelve new codes, six of which the page refuses - the 2+2 door position
   # (C50950, C60950) and all four jumbo-drawer codes. Nothing already held
   # changed its answer; tall went 42 -> 48 and base stayed at 4.
+  #
+  # 2026-08-25: 52 -> 65, and it is not a flip either. printed p.121-123 and
+  # p.125 arrived with thirteen codes and ALL THIRTEEN refuse: not one of the
+  # eight positions carries the margin line. Tall 48 -> 61, base still 4.
+  # The fridge unit is the awkward one and is refused DELIBERATELY - its
+  # cabinet-in-a-bracket glyph is printed and its surcharge line is not, the
+  # mirror image of the Magicorner disagreement on printed p.42, and the
+  # priced offer is the one a person can actually order. See tall_fridge's
+  # wall_hung_note; the glyph goes to Elda.
   refused = Registry.catalog.map { |c| Registry.lookup(c['code']) }
                     .select { |u| u['wall_hung'] == false }
-  raise refused.length.to_s unless refused.length == 52
+  raise refused.length.to_s unless refused.length == 65
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 48 }
+  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 61 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -3203,8 +3212,16 @@ end
 
 check('one place turns a slab into geometry, and every caller goes through it') do
   core = File.expand_path('../src/ucon_cabinet_engine/core', __dir__)
-  gen   = File.read(File.join(core, '60_generator.rb'))
-  panel = File.read(File.join(core, '80_panel.rb'))
+  # CODE ONLY, COMMENTS STRIPPED. This counted every occurrence in the file
+  # until 2026-08-25, when a comment elsewhere in the generator referred to this
+  # method by name and the count went to four. The check then said the seam had
+  # been broken, and nothing had been broken - it had been explained. A check
+  # that forbids naming the thing it protects protects nothing.
+  code = lambda { |f|
+    File.readlines(File.join(core, f)).reject { |l| l.strip.start_with?('#') }.join
+  }
+  gen   = code.call('60_generator.rb')
+  panel = code.call('80_panel.rb')
   # 1 definition + 2 calls in build, 1 call in the properties panel.
   raise 'the generator must define it and use it twice' unless
     gen.scan('draw_front_slab').length == 3
@@ -5824,6 +5841,142 @@ end
 
 check('the kit defines the shared submenu root without requiring the other extension') do
   raise 'UCON.extensions_menu is not defined' unless UCON.respond_to?(:extensions_menu)
+end
+
+puts "\nthe reserved void - printed p.121-125, and the concept B6 shares"
+# docs/Reserved_Void_Spec_v0.1.md. A void is a span whose extent is known and
+# whose division is not. Three places wanted one and only the appliance module
+# had it; these checks hold the engine's half.
+
+check('EVERY STACK SUMS TO ITS HEIGHT - fronts, recesses and openings alike') do
+  # The invariant measured on printed p.121-125, applied to the whole registry
+  # so a future section cannot forget it. front_stack raises; a silent pass here
+  # would mean nothing is being checked, so the count is asserted too.
+  # BUILDABLE ONLY, and that is not a loophole. printed p.47's dishwasher doors
+  # carry kind 'horizontal' with no heights at all - the printed pair does not
+  # sum to the family door height - and they are marked not buildable and
+  # front_layout_incomplete for exactly that reason. Asking them to sum would
+  # re-raise a gap that is already recorded, in the wrong file.
+  seen = 0
+  Registry.catalog.select { |c| c['buildable'] }.each do |row|
+    u = Registry.lookup(row['code'])
+    fl = u['front_layout'] || {}
+    next unless fl['kind'] == 'horizontal'
+
+    seen += 1
+    Generator.front_stack(fl, u['height_mm'])
+  end
+  raise 'no horizontal layout was checked' if seen.zero?
+  raise "only #{seen} horizontal layouts - the registry has more" unless seen > 100
+end
+
+check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
+  # 1125 on printed p.121 - 195 + 780 handle against 30 + 165 + 30 + 750 gola.
+  # 1710 and 1515 on printed p.123. Handle and gola leave the SAME hole to the
+  # millimetre, and that is the property that makes the span measurable at all.
+  # If a future edit moves one stack and not the other, this is where it lands.
+  found = 0
+  Registry.catalog.each do |row|
+    fl = Registry.lookup(row['code'])['front_layout'] || {}
+    a = Array(fl['stack_top_to_bottom']).select { |e| e['kind'] == 'remainder' }
+    next if a.empty?
+
+    b = Array(fl['gola_stack_top_to_bottom']).select { |e| e['kind'] == 'remainder' }
+    raise "#{row['code']}: gola stack has no remainder" if b.empty?
+    raise "#{row['code']}: #{a.map { |e| e['h_mm'] }} vs #{b.map { |e| e['h_mm'] }}" unless
+      a.map { |e| e['h_mm'] } == b.map { |e| e['h_mm'] }
+    found += 1
+  end
+  raise 'the remainder has vanished from the registry' if found.zero?
+  raise "expected 3 remainder codes, got #{found}" unless found == 3
+end
+
+check('the span is DRAWN - a remainder becomes a void slab, not an absence') do
+  u = Registry.lookup('C62610')
+  slabs = Generator.front_slabs(u)
+  voids = slabs.select { |sl| sl[:kind] == :void }
+  raise slabs.inspect unless voids.length == 1
+  v = voids.first
+  # 195 + 780 = 975 from the bottom, and 1125 tall - the top of the column.
+  raise v.inspect unless v[:h_mm] == 1125.0 && v[:z_mm] == 975.0
+  raise v.inspect unless v[:name] == 'VOID_REMAINDER_1125'
+  raise v.inspect unless v[:holds] == %w[custom_sized_front appliance_opening]
+  raise 'the void must reach the top of the unit' unless
+    v[:z_mm] + v[:h_mm] == u['height_mm']
+end
+
+check('AND A NICHE IS NOT A VOID - the 600 is measured, so it is not red') do
+  # The difference the whole concept turns on: a void's division is undecided,
+  # a niche's is decided and the appliance decides it.
+  slabs = Generator.front_slabs(Registry.lookup('C62650'))
+  op = slabs.select { |sl| sl[:kind] == :opening }
+  raise slabs.inspect unless op.length == 1
+  raise op.first.inspect unless op.first[:h_mm] == 600.0
+  raise op.first.inspect unless op.first[:appliance_class] == 'oven_h60'
+  raise 'a niche must not be a void' if slabs.any? { |sl| sl[:kind] == :void }
+  # and the five stacks that measured it still leave exactly 600
+  %w[C62650 C62750 C62653 C62753 C62657 C62757 C62651 C62751].each do |code|
+    got = Generator.front_slabs(Registry.lookup(code))
+                   .select { |sl| sl[:kind] == :opening }.sum { |sl| sl[:h_mm] }
+    raise "#{code}: #{got}" unless got == 600.0
+  end
+end
+
+check('A REMAINDER HIDES FRONTS AND DOES NOT ABOLISH THEM') do
+  # printed p.121 prints '1 rh or lh custom-sized door' in words: how many is
+  # known, only how tall is not. Three fronts, three handles.
+  raise Export.fronts_in(Registry.lookup('C62610')['front_layout']).inspect unless
+    Export.fronts_in(Registry.lookup('C62610')['front_layout']) == 3
+  raise 'oven + microwave prints two fronts' unless
+    Export.fronts_in(Registry.lookup('C63640')['front_layout']) == 2
+  # and the niche is never one of them
+  raise 'the oven niche must not be counted as a front' unless
+    Export.fronts_in(Registry.lookup('C62651')['front_layout']) == 2
+end
+
+check('object_class = void requires a role, and nothing else may claim one') do
+  base = {
+    'schema_version' => '2', 'object_class' => 'void', 'manufacturer' => 'Cesar',
+    'geometry_kind' => 'linear', 'height_mm' => 1125, 'depth_mm' => 22,
+    'width_mm' => 600, 'code' => nil, 'code_status' => 'PRELIMINARY',
+    'status' => 'PLANNING', 'source_ref' => 'printed p.121 / PDF 123'
+  }
+  begin
+    Contract.validate!(base.dup)
+    raise 'a void without a role validated'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('void_role')
+  end
+  Contract.validate!(base.merge('void_role' => 'front_remainder'))
+  begin
+    Contract.validate!(base.merge('void_role' => 'somewhere'))
+    raise 'an unknown role validated'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('void_role')
+  end
+  begin
+    Contract.validate!(base.merge('object_class' => 'cabinet',
+                                  'void_role' => 'front_remainder'))
+    raise 'a cabinet claimed a void role'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('only meaningful')
+  end
+end
+
+check('the two halves of one concept use one word for it') do
+  # The engine's void and the appliance module's void must not drift into two
+  # unrelated ideas with the same name. Neither file may reach for the other -
+  # SS11 - so what holds them together is the spec, and the spec must be cited
+  # from both sides or it is a document nobody is bound by.
+  spec = File.expand_path('../docs/Reserved_Void_Spec_v0.1.md', __dir__)
+  raise 'the spec is missing' unless File.exist?(spec)
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the generator must cite the spec' unless
+    gen.include?('Reserved_Void_Spec')
+  text = File.read(spec)
+  %w[above_housing run_gap front_remainder].each do |role|
+    raise "the spec must name #{role}" unless text.include?(role)
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

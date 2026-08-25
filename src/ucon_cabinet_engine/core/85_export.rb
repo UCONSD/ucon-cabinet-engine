@@ -225,8 +225,27 @@ module UCON
         heights = fl['heights_mm_top_to_bottom']
         return heights.size if heights.is_a?(Array) && !heights.empty?
 
-        stack = Array(fl['gola_stack_top_to_bottom']).select { |e| e['kind'] == 'front' }
-        stack.empty? ? nil : stack.size
+        # A TYPE WITH A REMAINDER DECLARES NO SHORTHAND, on purpose: a partial
+        # list of heights that looks complete is the failure this avoids. So the
+        # handle stack is asked before the gola one, and only entries that are
+        # FRONTS are counted - a remainder is a span nobody can order a front
+        # for yet, and counting it would put a handle on a door whose height
+        # nobody knows. docs/Reserved_Void_Spec_v0.1.md §4.
+        %w[stack_top_to_bottom gola_stack_top_to_bottom].each do |key|
+          stack = Array(fl[key])
+          next if stack.empty?
+
+          # A REMAINDER HIDES FRONTS, IT DOES NOT ABOLISH THEM. printed p.121
+          # says '1 rh or lh custom-sized door' in words: HOW MANY is printed,
+          # only HOW TALL is not. So the count is known and the handle is
+          # ordered; refusing to count it would drop a real order line to
+          # protect a number nobody asked for. `fronts_within` is that count,
+          # and it is read from the page, not derived.
+          n = stack.count { |e| e['kind'] == 'front' } +
+              stack.sum { |e| e['kind'] == 'remainder' ? e['fronts_within'].to_i : 0 }
+          return n if n.positive?
+        end
+        nil
       end
 
       def positive_int(value)
