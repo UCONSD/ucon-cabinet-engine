@@ -27,11 +27,11 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`27ede4c`** — *chore: probe reports are measurements, not data*. The last commit that changed behaviour under it is `e9229d0` (0.77.2). |
-| **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). At the close of 2026-08-24 `refs/heads/main` and `refs/remotes/origin/main` were both `27ede4c`, working tree clean. |
-| **Working tree** | **this file only** while it is being written. A file that records HEAD cannot name the commit carrying its own text, so it sits **one** commit behind by construction. **ONE IS STRUCTURAL. MORE IS NEGLECT.** This cell said so on 2026-08-24 and the HEAD row then drifted to FOURTEEN commits behind under cover of that very sentence — a session on another machine read it and reported the day's closed work as still owed. **If the sha above is not the sha in `refs/heads/main` or its immediate parent, stop and rewrite this block before doing anything else.** Do not guess forward; read the refs and the log. |
-| **Core version** | **0.77.2**, shell 0.6.0 |
-| **Headless suite** | **429 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **HEAD** | **`ed91383`** — *docs(trust): an estimate confirms codes and structure, not prices*, re-read from `refs/heads/main` 2026-08-25 evening. Under it: `862ed5f` (kit availability, printed p.568), `1b44ca6`, `27ede4c`. **The last commit that changed BEHAVIOUR is still `e9229d0` (0.77.2)** — everything since is documentation, and 0.78.0 is in the working tree below, uncommitted. |
+| **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). On 2026-08-25 evening `refs/heads/main` and `refs/remotes/origin/main` were both `ed91383` — pushed, with the five files above still out of the tree. (At the close of 2026-08-24 they were both `27ede4c`, working tree clean.) |
+| **Working tree** | **2026-08-25 evening: FIVE FILES UNCOMMITTED** — `core/00_version.rb` (0.77.2 -> 0.78.0), the new `core/88_appliance_check.rb`, the new `tools/test_appliance_seam.rb`, the new `claude/findings-2026-08-25-appliance-seam.md`, and this file. Written through the device bridge by a Cowork session; **Andriy commits in his own terminal.** THE HEAD ROW ABOVE WENT STALE WHILE THIS CELL WAS BEING WRITTEN — it was rewritten for `1b44ca6`, two documentation commits landed in another session, and it now reads `ed91383` because the refs were re-read rather than assumed. That is the third time in two days, and it is what the sentence below is about. Original note follows, and it still governs. **this file only** while it is being written. A file that records HEAD cannot name the commit carrying its own text, so it sits **one** commit behind by construction. **ONE IS STRUCTURAL. MORE IS NEGLECT.** This cell said so on 2026-08-24 and the HEAD row then drifted to FOURTEEN commits behind under cover of that very sentence — a session on another machine read it and reported the day's closed work as still owed. **If the sha above is not the sha in `refs/heads/main` or its immediate parent, stop and rewrite this block before doing anything else.** Do not guess forward; read the refs and the log. |
+| **Core version** | **0.78.0**, shell 0.6.0 |
+| **Headless suite** | **429 checks, 0 failures** in `tools/test_contract.rb`, plus **16 checks, 0 failures** in the SEPARATE `tools/test_appliance_seam.rb` (2026-08-25). The two are deliberately not merged: the engine's suite must keep passing on a machine where the appliance extension was never installed, and a suite needing both trees cannot prove that. The seam suite SKIPS with exit 0 when the appliance package is absent, after running the three checks that prove the dependency is optional. Original note follows. **429 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening, after `8e211f1` added the H.210 base-78 section (12 codes) and `e555f2f` added seven filler rows. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -206,6 +206,21 @@ leaves this list when it is done, not when it is mentioned.
    prints is not a size but the fixings — 240 kg per pair, `989410` two for a
    base, `989411` four for a tall — and the weight of a loaded cabinet and the
    wall behind it are site questions the catalog never answers.
+
+8. **Four things the appliance seam found in what the engine DRAWS today, all
+   four undecided.** Account: `claude/findings-2026-08-25-appliance-seam.md`.
+   (a) `usa_tall_h210` draws its housing from the **plinth top** to 2133.6, so
+   the top is the right 84 in from the floor and the OPENING is 100 short;
+   (b) `NICHE_DEFAULT_DEPTH_MM` 620 is shallower than a Designer column's 635;
+   (c) `niche_attributes_for` takes `width_mm` from the **Cesar door code**, and
+   for built-in refrigeration the required cutout is 13 NARROWER than nominal in
+   a standard install and 51 WIDER flush — one number cannot be right for both;
+   (d) nothing is drawn in the 66-73 left above a housing in a 2200 run, where
+   the rules call for a filler or an open shelf, set back 55.
+   **No geometry was moved.** Each is a drawing decision, not a typo — (a)
+   reverses a deliberate 2026-08-22 choice, and (b)/(c) would mean a Cesar unit
+   cannot be drawn until a machine has been named. The seam reports; Andriy
+   decides.
 
 *(The item that stood here — moving the Project's handoff and spec into
 `claude/` — was wrong and was removed the same evening. Those two are session
