@@ -27,13 +27,13 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 | | |
 |---|---|
-| **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
-| **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
-| **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
+| **HEAD** | **`27ede4c`** — *chore: probe reports are measurements, not data*. The last commit that changed behaviour under it is `e9229d0` (0.77.2). |
+| **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). At the close of 2026-08-24 `refs/heads/main` and `refs/remotes/origin/main` were both `27ede4c`, working tree clean. |
+| **Working tree** | **this file only** while it is being written. A file that records HEAD cannot name the commit carrying its own text, so it sits **one** commit behind by construction. **ONE IS STRUCTURAL. MORE IS NEGLECT.** This cell said so on 2026-08-24 and the HEAD row then drifted to FOURTEEN commits behind under cover of that very sentence — a session on another machine read it and reported the day's closed work as still owed. **If the sha above is not the sha in `refs/heads/main` or its immediate parent, stop and rewrite this block before doing anything else.** Do not guess forward; read the refs and the log. |
 | **Core version** | **0.77.2**, shell 0.6.0 |
 | **Headless suite** | **429 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
-| **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
+| **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening, after `8e211f1` added the H.210 base-78 section (12 codes) and `e555f2f` added seven filler rows. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
 
 ### The Project is retired
@@ -270,6 +270,20 @@ has to be re-read; a sentence does not.
 
 | sha | what |
 |---|---|
+| `27ede4c` | chore: probe reports are measurements, not data |
+| `e9229d0` | fix(placement): a row is aligned at the FRONT, so a shallow neighbour stops being invisible (0.77.2) |
+| `467699b` | tools: read-only probes that write their reports into the repo |
+| `a6991bf` | fix(placement): a turned element takes the RUN's depth, so a shallow filler lands on the front line (0.77.1) |
+| `6f31f7d` | placement: a run turns at a corner's wasted end, back to the wall and shoulder to the 8x8 (0.77.0) |
+| `28091f3` | placement: both sides taken builds anyway, and the rule covers fillers (0.76.1) |
+| `c2d3475` | docs(repo-state): 422 checks, and the side rule with its untried half |
+| `b111343` | placement: the next element takes the free side, and refuses when both are taken (0.76.0) |
+| `e555f2f` | registry(fillers): the front-only strip is 22 deep and nine of twelve rows are held (0.75.0) |
+| `6458a0d` | registry: the hung capacity is a property of the fixing pair, and the count 2/4 leaves the code comment |
+| `8e211f1` | registry: tall units H.210 for base unit H.78, printed p.116 - and a split front that must not leak to its family (0.74.0) |
+| `cb80117` | registry(fillers): a note copied from H.78 claimed a front height three families do not have *(the same message as `ec3d8fb` below - the first commit went in without the new findings note, which needed `git add`)* |
+| `ec3d8fb` | registry(fillers): a note copied from H.78 claimed a front height three families do not have |
+| `7f1a3d8` | docs(repo-state): 405 checks |
 | `26753c7` | docs(repo-state): the Project holds session instructions, not repo documents |
 | `3168d35` | docs: the reverted corner seating reaches the teardown and the manifest |
 | `53afd00` | docs(repo-state): rewrite at 13e7754 - the numbers, the corner correction, and the owed list |
