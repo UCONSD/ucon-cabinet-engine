@@ -1,0 +1,1057 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_openings",
+ "generated": "2026-08-25",
+ "units": "mm, measured from the finished floor",
+ "rule": "a value appears here only if it is printed in the manufacturer design guide",
+ "sources": [
+  {
+   "brand": "Wolf",
+   "file": "wolf-design-guide.pdf",
+   "revision": "7/2025",
+   "pages": 152
+  },
+  {
+   "brand": "Sub-Zero",
+   "file": "subzero-design-guide.pdf",
+   "revision": "4/2026",
+   "pages": 102
+  },
+  {
+   "brand": "Cove",
+   "file": "cv_dg_nws.pdf",
+   "revision": null,
+   "pages": 12
+  }
+ ],
+ "appliances": [
+  {
+   "model": "CL3650UID/S/T/R",
+   "brand": "Sub-Zero",
+   "series": "Classic",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "stainless",
+   "nominal_w_in": 36,
+   "installations": {
+    "standard": {
+     "w": 902,
+     "h": 2127,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.10"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 0,
+     "w": 152,
+     "datum_y": "floor",
+     "y": 1918,
+     "h": 178,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "GFCI not recommended indoors",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.14"
+    },
+    {
+     "service": "water",
+     "datum_x": "right_side_of_opening",
+     "x": 152,
+     "w": 457,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 76,
+     "spec": "1/4\" OD copper, braided stainless or PEX, 35-120 psi, 36\" excess line",
+     "note": "area extends 13 forward on the floor",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.15"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Classic opening is 13 narrower than nominal - the frame overlaps the cabinetry",
+    "flush inset would be 965 x 2134 x 665 but is overlay-only (subzero-design-guide.pdf rev 4/2026 p.11)"
+   ],
+   "product_name": "36\" Classic Over-and-Under Refrigerator/Freezer with Internal Dispenser"
+  },
+  {
+   "model": "CL4250SD/S/T",
+   "brand": "Sub-Zero",
+   "series": "Classic",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "stainless",
+   "nominal_w_in": 42,
+   "installations": {
+    "standard": {
+     "w": 1054,
+     "h": 2127,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.10"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 0,
+     "w": 152,
+     "datum_y": "floor",
+     "y": 1918,
+     "h": 178,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "GFCI not recommended indoors",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.14"
+    },
+    {
+     "service": "water",
+     "datum_x": "right_side_of_opening",
+     "x": 152,
+     "w": 457,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 76,
+     "spec": "1/4\" OD copper, braided stainless or PEX, 35-120 psi, 36\" excess line",
+     "note": "area extends 13 forward on the floor",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.15"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Classic opening is 13 narrower than nominal - the frame overlaps the cabinetry",
+    "flush inset would be 1118 x 2134 x 665 but is overlay-only (subzero-design-guide.pdf rev 4/2026 p.11)"
+   ],
+   "product_name": "42\" Classic Side-by-Side Refrigerator/Freezer with Dispenser"
+  },
+  {
+   "model": "CL4850SD/S/T",
+   "brand": "Sub-Zero",
+   "series": "Classic",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "stainless",
+   "nominal_w_in": 48,
+   "installations": {
+    "standard": {
+     "w": 1206,
+     "h": 2127,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.10"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 0,
+     "w": 152,
+     "datum_y": "floor",
+     "y": 1918,
+     "h": 178,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "GFCI not recommended indoors",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.14"
+    },
+    {
+     "service": "water",
+     "datum_x": "right_side_of_opening",
+     "x": 152,
+     "w": 457,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 76,
+     "spec": "1/4\" OD copper, braided stainless or PEX, 35-120 psi, 36\" excess line",
+     "note": "area extends 13 forward on the floor",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.15"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Classic opening is 13 narrower than nominal - the frame overlaps the cabinetry",
+    "flush inset would be 1270 x 2134 x 665 but is overlay-only (subzero-design-guide.pdf rev 4/2026 p.11)"
+   ],
+   "product_name": "48\" Classic Side-by-Side Refrigerator/Freezer with Dispenser"
+  },
+  {
+   "model": "DEC2450R/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.46"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 241,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Designer opening equals nominal exactly; unit depth 610, opening 635 for panel thickness"
+   ],
+   "product_name": "24\" Designer Column Refrigerator - Panel Ready"
+  },
+  {
+   "model": "DEC3050R/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 762,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.46"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 318,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Designer opening equals nominal exactly; unit depth 610, opening 635 for panel thickness"
+   ],
+   "product_name": "30\" Designer Column Refrigerator - Panel Ready"
+  },
+  {
+   "model": "DEC3050FI/R",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 762,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.46"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 318,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Designer opening equals nominal exactly; unit depth 610, opening 635 for panel thickness"
+   ],
+   "product_name": "30\" Designer Column Freezer with Ice Maker - Panel Ready"
+  },
+  {
+   "model": "DEC3650R/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 36,
+   "installations": {
+    "standard": {
+     "w": 914,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.46"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 394,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Designer opening equals nominal exactly; unit depth 610, opening 635 for panel thickness"
+   ],
+   "product_name": "36\" Designer Column Refrigerator - Panel Ready"
+  },
+  {
+   "model": "DEC3650FI/R",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 36,
+   "installations": {
+    "standard": {
+     "w": 914,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.46"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 394,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "Designer opening equals nominal exactly; unit depth 610, opening 635 for panel thickness"
+   ],
+   "product_name": "36\" Designer Column Freezer with Ice Maker - Panel Ready"
+  },
+  {
+   "model": "DEC2450W/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "wine_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.60"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 241,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [],
+   "product_name": "24\" Designer Wine Storage - Panel Ready"
+  },
+  {
+   "model": "DEC3050W/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "wine_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 762,
+     "h": 2134,
+     "d": 635,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.60"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "left_side_of_opening",
+     "x": 114,
+     "w": 318,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 108,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "zone width A is per model width",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.47"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [],
+   "product_name": "30\" Designer Wine Storage - Panel Ready"
+  },
+  {
+   "model": "DEU2450R/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_undercounter",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 876,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.86"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 51,
+     "w": 127,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 102,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "dimensions read from p.87; confirm A/B assignment on the drawing",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.87"
+    }
+   ],
+   "ada_variant": "DEU2450R/ADA/L",
+   "notes": [],
+   "product_name": "24\" Designer Undercounter Refrigerator - Panel Ready"
+  },
+  {
+   "model": "DEU1550W/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "wine_undercounter",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 15,
+   "installations": {
+    "standard": {
+     "w": 381,
+     "h": 876,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.56"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 51,
+     "w": 127,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 102,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "dimensions read from p.87; confirm A/B assignment on the drawing",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.87"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "no ADA version exists for any 15in undercounter unit"
+   ],
+   "product_name": "15\" Designer Undercounter Wine Storage - Panel Ready"
+  },
+  {
+   "model": "DEU2450W/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "wine_undercounter",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 876,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.56"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 51,
+     "w": 127,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 102,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "dimensions read from p.87; confirm A/B assignment on the drawing",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.87"
+    }
+   ],
+   "ada_variant": "DEU2450W/ADA/L",
+   "notes": [],
+   "product_name": "24\" Designer Undercounter Wine Storage - Panel Ready"
+  },
+  {
+   "model": "DEU1550I/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "ice_maker",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 15,
+   "installations": {
+    "standard": {
+     "w": 381,
+     "h": 876,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.94"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 51,
+     "w": 127,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 102,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "dimensions read from p.87; confirm A/B assignment on the drawing",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.87"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "no ADA version exists for any 15in undercounter unit"
+   ],
+   "product_name": "15\" Designer Undercounter Indoor/Outdoor Ice Maker with Pump - Panel Ready"
+  },
+  {
+   "model": "DW2451",
+   "brand": "Cove",
+   "series": "Cove",
+   "type": "dishwasher",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 600,
+     "h": 876,
+     "d": 610,
+     "source": "cv_dg_nws.pdf p.6"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong, 6ft cord",
+     "note": "receptacle in an adjacent cabinet, within reach of the cord",
+     "source": "cv_dg_nws.pdf p.7"
+    },
+    {
+     "service": "water",
+     "datum_x": "back_of_opening",
+     "x": 51,
+     "w": null,
+     "datum_y": "floor",
+     "y": 38,
+     "h": 140,
+     "spec": "5ft braided tubing, 3/8\" female compression, 30-140 psi, max 140F",
+     "note": "routed at the back, above the toe kick",
+     "source": "cv_dg_nws.pdf p.7"
+    },
+    {
+     "service": "drain",
+     "datum_x": "back_of_opening",
+     "x": 51,
+     "w": null,
+     "datum_y": "floor",
+     "y": 508,
+     "h": 584,
+     "spec": "5ft corrugated tubing, high loop factory installed",
+     "note": "connection 508-1092 above the bottom of the leveling legs",
+     "source": "cv_dg_nws.pdf p.7"
+    }
+   ],
+   "ada_variant": "DW2451/ADA",
+   "notes": [
+    "600 gives minimum reveals; 610 is also common with larger reveals"
+   ],
+   "product_name": "24\" Dishwasher - Panel Ready"
+  },
+  {
+   "model": "DF36650/S/P",
+   "brand": "Wolf",
+   "series": "Dual Fuel",
+   "type": "range",
+   "install_class": "freestanding_run",
+   "finish": "stainless",
+   "nominal_w_in": 36,
+   "installations": {
+    "standard": {
+     "w": 914,
+     "h": null,
+     "d": null,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 216,
+     "w": 413,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 124,
+     "spec": "grounded 240/208 VAC, 60 Hz, 50 amp dedicated circuit, 42.5 A, 10.2 kW",
+     "note": "electrical and gas in \"A\" location only",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    },
+    {
+     "service": "gas",
+     "datum_x": "right_side_of_opening",
+     "x": 216,
+     "w": 413,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 124,
+     "spec": "3/4\" ID supply line, 1/2\" NPT female inlet, NG 5\" WC after regulator",
+     "note": "same \"A\" zone",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "opening height and depth are not published - the range sits in a run",
+    "10in (254) riser required against a combustible surface"
+   ],
+   "product_name": "36\" Dual Fuel Range - 6 Burners"
+  },
+  {
+   "model": "DF48650C/S/P",
+   "brand": "Wolf",
+   "series": "Dual Fuel",
+   "type": "range",
+   "install_class": "freestanding_run",
+   "finish": "stainless",
+   "nominal_w_in": 48,
+   "installations": {
+    "standard": {
+     "w": 1219,
+     "h": null,
+     "d": null,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 216,
+     "w": 464,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 124,
+     "spec": "grounded 240/208 VAC, 60 Hz, 50 amp dedicated circuit, 42.5 A, 10.2 kW",
+     "note": "electrical and gas in \"A\" location only",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    },
+    {
+     "service": "gas",
+     "datum_x": "right_side_of_opening",
+     "x": 216,
+     "w": 464,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 124,
+     "spec": "3/4\" ID supply line, 1/2\" NPT female inlet, NG 5\" WC after regulator",
+     "note": "same \"A\" zone",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "opening height and depth are not published - the range sits in a run",
+    "10in (254) riser required against a combustible surface"
+   ],
+   "product_name": "48\" Dual Fuel Range - 6 Burners and Infrared Charbroiler"
+  },
+  {
+   "model": "DF60650DG/S/P",
+   "brand": "Wolf",
+   "series": "Dual Fuel",
+   "type": "range",
+   "install_class": "freestanding_run",
+   "finish": "stainless",
+   "nominal_w_in": 60,
+   "installations": {
+    "standard": {
+     "w": 1524,
+     "h": null,
+     "d": null,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 216,
+     "w": 464,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 124,
+     "spec": "grounded 240/208 VAC, 60 Hz, 50 amp dedicated circuit, 42.5 A, 10.2 kW",
+     "note": "electrical and gas in \"A\" location only",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    },
+    {
+     "service": "gas",
+     "datum_x": "right_side_of_opening",
+     "x": 216,
+     "w": 464,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 124,
+     "spec": "3/4\" ID supply line, 1/2\" NPT female inlet, NG 5\" WC after regulator",
+     "note": "same \"A\" zone",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.97"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "opening height and depth are not published - the range sits in a run",
+    "10in (254) riser required against a combustible surface"
+   ],
+   "product_name": "60\" Dual Fuel Range - 6 Burners and Infrared Dual Griddle"
+  },
+  {
+   "model": "CSO3050TE/S/T",
+   "brand": "Wolf",
+   "series": "E Series",
+   "type": "steam_oven",
+   "install_class": "cabinet_slot",
+   "finish": "stainless",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 724,
+     "h": 449,
+     "d": 584,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.36"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "see guide",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.36"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [],
+   "product_name": "30\" E Series Transitional Convection Steam Oven"
+  },
+  {
+   "model": "MDD3050TE/S/T",
+   "brand": "Wolf",
+   "series": "E Series",
+   "type": "microwave",
+   "install_class": "cabinet_slot",
+   "finish": "stainless",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 562,
+     "h": 449,
+     "d": 548,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.50"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "see guide",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.50"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [],
+   "product_name": "30\" E Series Transitional Drop-Down Door Microwave Oven"
+  },
+  {
+   "model": "EC3050TE/S",
+   "brand": "Wolf",
+   "series": "E Series",
+   "type": "coffee",
+   "install_class": "cabinet_slot",
+   "finish": "stainless",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 562,
+     "h": null,
+     "d": 548,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.86"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "see guide",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.86"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [],
+   "product_name": "30\" E Series Transitional Coffee System"
+  },
+  {
+   "model": "WWD3050O",
+   "brand": "Wolf",
+   "series": "E Series",
+   "type": "warming_drawer",
+   "install_class": "cabinet_slot",
+   "finish": "stainless",
+   "nominal_w_in": 30,
+   "installations": {
+    "standard": {
+     "w": 727,
+     "h": 232,
+     "d": 584,
+     "source": "wolf-design-guide.pdf rev 7/2025 p.62"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "see guide",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.62"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [],
+   "product_name": "30\" Indoor/Outdoor Warming Drawer"
+  },
+  {
+   "model": "PW362418",
+   "brand": "Wolf",
+   "series": "Pro",
+   "type": "hood_wall",
+   "install_class": "wall_mounted",
+   "finish": "stainless",
+   "nominal_w_in": 36,
+   "installations": {},
+   "services": [
+    {
+     "service": "duct",
+     "datum_x": "none",
+     "spec": "10in (254) round, rigid metal only, runs up to 50ft",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.144"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "a hood is not built into an opening"
+   ],
+   "product_name": "36\" Pro Wall Hood - 24\" Depth"
+  },
+  {
+   "model": "PW482418",
+   "brand": "Wolf",
+   "series": "Pro",
+   "type": "hood_wall",
+   "install_class": "wall_mounted",
+   "finish": "stainless",
+   "nominal_w_in": 48,
+   "installations": {},
+   "services": [
+    {
+     "service": "duct",
+     "datum_x": "none",
+     "spec": "10in (254) round, rigid metal only, runs up to 50ft",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.144"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "a hood is not built into an opening"
+   ],
+   "product_name": "48\" Pro Wall Hood - 24\" Depth"
+  },
+  {
+   "model": "PW602418",
+   "brand": "Wolf",
+   "series": "Pro",
+   "type": "hood_wall",
+   "install_class": "wall_mounted",
+   "finish": "stainless",
+   "nominal_w_in": 60,
+   "installations": {},
+   "services": [
+    {
+     "service": "duct",
+     "datum_x": "none",
+     "spec": "10in (254) round, rigid metal only, runs up to 50ft",
+     "source": "wolf-design-guide.pdf rev 7/2025 p.144"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "a hood is not built into an opening"
+   ],
+   "product_name": "60\" Pro Wall Hood - 24\" Depth"
+  },
+  {
+   "model": "CL3650UFD/O",
+   "brand": "Sub-Zero",
+   "series": "Classic",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 36,
+   "installations": {
+    "standard": {
+     "w": 902,
+     "h": 2127,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.10"
+    },
+    "flush_inset": {
+     "w": 965,
+     "h": 2134,
+     "d": 665,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.11"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 0,
+     "w": 152,
+     "datum_y": "floor",
+     "y": 1918,
+     "h": 178,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "GFCI not recommended indoors",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.14"
+    },
+    {
+     "service": "water",
+     "datum_x": "right_side_of_opening",
+     "x": 152,
+     "w": 457,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 76,
+     "spec": "1/4\" OD copper, braided stainless or PEX, 35-120 psi, 36\" excess line",
+     "note": "area extends 13 forward on the floor",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.15"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "flush inset is available for overlay models only",
+    "flush inset needs finished cleats above and a 55 setback for whatever fills the void"
+   ],
+   "product_name": "36\" Classic French Door Refrigerator/Freezer - Overlay"
+  },
+  {
+   "model": "CL4850SD/O",
+   "brand": "Sub-Zero",
+   "series": "Classic",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 48,
+   "installations": {
+    "standard": {
+     "w": 1206,
+     "h": 2127,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.10"
+    },
+    "flush_inset": {
+     "w": 1270,
+     "h": 2134,
+     "d": 665,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.11"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 0,
+     "w": 152,
+     "datum_y": "floor",
+     "y": 1918,
+     "h": 178,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "GFCI not recommended indoors",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.14"
+    },
+    {
+     "service": "water",
+     "datum_x": "right_side_of_opening",
+     "x": 152,
+     "w": 457,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 76,
+     "spec": "1/4\" OD copper, braided stainless or PEX, 35-120 psi, 36\" excess line",
+     "note": "area extends 13 forward on the floor",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.15"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "flush inset is available for overlay models only",
+    "flush inset needs finished cleats above and a 55 setback for whatever fills the void"
+   ],
+   "product_name": "48\" Classic Side-by-Side - Overlay"
+  }
+ ]
+}

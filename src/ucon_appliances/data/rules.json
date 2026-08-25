@@ -1,0 +1,111 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_rules",
+ "decided": "2026-08-25",
+ "decided_by": "Andriy",
+ "datum": {
+  "value": "floor",
+  "note": "housing height is measured from the finished floor, never from the plinth top, never inherited"
+ },
+ "filler": {
+  "setback_from_cabinet_front_mm": 55,
+  "applies_to_brands": [
+   "Sub-Zero"
+  ],
+  "reason": "the Sub-Zero hinge draws the panel inward as the door opens"
+ },
+ "void": {
+  "threshold_mm": 120,
+  "at_or_below": "filler",
+  "above": [
+   "open_shelf_cabinet",
+   "filler"
+  ],
+  "material": "carcass",
+  "never_leave_raw": true,
+  "note": "84in is the American standard; anything above it needs a proposed solution. The threshold was 70 until 2026-08-25: at 70 a Classic standard opening left 73 mm and the tool offered an open shelf 73 mm tall, which is not a shelf."
+ },
+ "installation": {
+  "default_for_custom_panel": "flush_inset",
+  "stainless_offers": [
+   "standard"
+  ],
+  "custom_panel_offers": [
+   "standard",
+   "flush_inset"
+  ],
+  "pro_series": "ask, no default (its standard/flush pair is not about panels)",
+  "source": "subzero-design-guide.pdf rev 4/2026 p.11 - flush inset is available for overlay models only"
+ },
+ "gola": {
+  "when": "opening_method == gola",
+  "housing": "ADA",
+  "substitute_variant": "ada_variant",
+  "on_missing_variant": "error at specification time",
+  "remedies": [
+   {
+    "code": "GOL080",
+    "what": "flush-fitted end cap, used when the grip recess is aligned with a dishwasher"
+   },
+   {
+    "code": "GOL081",
+    "what": "flush-fitted end cap where the recess meets a base or tall side panel, RH and LH"
+   },
+   {
+    "code": null,
+    "what": "Grip Edgings FRAME / STEP / 30 deg on the panel itself, included in the door price"
+   }
+  ],
+  "servo_flex": "required for a fridge tall unit with fixed hinges when there is no handle and no grip recess"
+ },
+ "panels": {
+  "ucon_supplies": [
+   "face"
+  ],
+  "face_thickness_mm": 22,
+  "factory_spec": {
+   "face_mm": 19,
+   "spacer_mm": 3,
+   "backer_mm": 6
+  },
+  "mounting_kit": {
+   "eliminates": [
+    "spacer",
+    "backer"
+   ],
+   "except_models": "glass door models",
+   "dual_installation": "two kits",
+   "source": "subzero-design-guide.pdf rev 4/2026 p.16"
+  },
+  "consequences_of_22mm": [
+   "90 degree door stop may be required for flush inset thicker than 19",
+   "dispenser models CL4250SD and CL4850SD need the panel routed in the dispenser area",
+   "weight limits: 34 kg for CL3650R(ID)/RG/F and CL3050W, 23 kg all other models, 6 kg grille"
+  ]
+ },
+ "sections": {
+  "tall": {
+   "plinth_mm": 100,
+   "carcass": "H210",
+   "top_mm": 2200
+  },
+  "base_h78": {
+   "plinth_mm": 100,
+   "carcass_mm": 780,
+   "top_mm": 880
+  },
+  "base_h84": {
+   "plinth_mm": 60,
+   "carcass_mm": 840,
+   "top_mm": 900
+  },
+  "worktop": "sits on top of the carcass",
+  "plinth_source": "registry/cesar - plinth_h_mm is a family fact"
+ },
+ "colour": {
+  "housing": "neutral",
+  "void": "red",
+  "utilities": "by service",
+  "meaning": "red marks what still needs a decision"
+ }
+}

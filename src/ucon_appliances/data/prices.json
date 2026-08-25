@@ -1,0 +1,136 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_prices",
+ "basis": "US list MSRP as published by the manufacturer",
+ "snapshot": "2026-08-24",
+ "currency": "USD",
+ "disclaimer": "not supplied by UCON - the dealer quotes; before dealer discount, delivery, installation, panels, handles and tax",
+ "programme": {
+  "name": "Full Suite Savings 2026",
+  "base": 1000,
+  "per_addon": 250,
+  "cap": 2500,
+  "qualifying": "Sub-Zero full-size refrigeration + Wolf cooking + Cove dishwasher",
+  "valid": "1 Jan 2026 - 31 Dec 2026, invoiced same date, installed by 31 Dec 2027",
+  "excluded_addons": [
+   "MS24",
+   "MC24",
+   "CW24"
+  ],
+  "caution": "terms read from the promo page and brochure, not the full T&C"
+ },
+ "prices": [
+  {
+   "model": "CL3650UID/S/T/R",
+   "msrp_usd": 14735.0
+  },
+  {
+   "model": "CL4250SD/S/T",
+   "msrp_usd": 15560.0
+  },
+  {
+   "model": "CL4850SD/S/T",
+   "msrp_usd": 16745.0
+  },
+  {
+   "model": "CSO3050TE/S/T",
+   "msrp_usd": 8135.0
+  },
+  {
+   "model": "DEC2450R/L",
+   "msrp_usd": 9700.0
+  },
+  {
+   "model": "DEC2450W/L",
+   "msrp_usd": 8685.0
+  },
+  {
+   "model": "DEC3050FI/R",
+   "msrp_usd": 10265.0
+  },
+  {
+   "model": "DEC3050R/L",
+   "msrp_usd": 10265.0
+  },
+  {
+   "model": "DEC3050W/L",
+   "msrp_usd": 10075.0
+  },
+  {
+   "model": "DEC3650FI/R",
+   "msrp_usd": 10820.0
+  },
+  {
+   "model": "DEC3650R/L",
+   "msrp_usd": 10820.0
+  },
+  {
+   "model": "DEU1550I/L",
+   "msrp_usd": 5430.0
+  },
+  {
+   "model": "DEU1550W/L",
+   "msrp_usd": 3595.0
+  },
+  {
+   "model": "DEU2450R/ADA/L",
+   "msrp_usd": 3335.0
+  },
+  {
+   "model": "DEU2450R/L",
+   "msrp_usd": 3335.0
+  },
+  {
+   "model": "DEU2450W/ADA/L",
+   "msrp_usd": 3995.0
+  },
+  {
+   "model": "DEU2450W/L",
+   "msrp_usd": 5045.0
+  },
+  {
+   "model": "DF36650/S/P",
+   "msrp_usd": 12940.0
+  },
+  {
+   "model": "DF48650C/S/P",
+   "msrp_usd": 18180.0
+  },
+  {
+   "model": "DF60650DG/S/P",
+   "msrp_usd": 23695.0
+  },
+  {
+   "model": "DW2451",
+   "msrp_usd": 2935.0
+  },
+  {
+   "model": "DW2451/ADA",
+   "msrp_usd": 2935.0
+  },
+  {
+   "model": "EC3050TE/S",
+   "msrp_usd": 4805.0
+  },
+  {
+   "model": "MDD3050TE/S/T",
+   "msrp_usd": 3090.0
+  },
+  {
+   "model": "PW362418",
+   "msrp_usd": 2585.0
+  },
+  {
+   "model": "PW482418",
+   "msrp_usd": 2910.0
+  },
+  {
+   "model": "PW602418",
+   "msrp_usd": 3235.0
+  },
+  {
+   "model": "WWD3050O",
+   "msrp_usd": 2650.0
+  }
+ ]
+}

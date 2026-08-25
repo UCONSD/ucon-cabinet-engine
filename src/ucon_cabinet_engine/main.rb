@@ -83,10 +83,16 @@ module UCON
     end
 
     unless defined?(@ui_installed) && @ui_installed
-      menu = UI.menu('Extensions').add_submenu(PLUGIN_NAME)
-      menu.add_item('Palette…') { open_palette }
+      # ONE UCON submenu, shared with the appliance extension. Neither depends
+      # on the other: UCON.extensions_menu is defined in core/05_panel_kit.rb
+      # and in the appliance tree's panel_kit.rb, both self-guarding, so
+      # whichever extension loads first builds it and the other finds it.
+      # Item labels must name their own extension - load order decides the
+      # order they appear in, and it is not guaranteed.
+      menu = UCON.extensions_menu
+      menu.add_item('Cabinet palette…') { open_palette }
       menu.add_separator
-      menu.add_item('About') { UI.messagebox(about_text) }
+      menu.add_item('About Cabinet Engine') { UI.messagebox(about_text) }
 
       command = UI::Command.new(PLUGIN_NAME) { open_palette }
       command.tooltip         = PLUGIN_NAME

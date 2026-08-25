@@ -8,6 +8,10 @@
 # run, something SketchUp-flavoured has leaked into core/20_contract.rb and the
 # leak is the bug — not this test.
 
+require 'digest'
+# The panel kit loads with core, not at the end of this file: the panel is
+# built by checks far above the kit's own, and it interpolates PanelKit::CSS.
+require_relative '../src/ucon_cabinet_engine/core/05_panel_kit'
 require_relative '../src/ucon_cabinet_engine/core/10_standards'
 require_relative '../src/ucon_cabinet_engine/core/20_contract'
 # 22_placement is the placement RULE SET and has no SketchUp in it at all -
@@ -2306,7 +2310,12 @@ check('the menu is an entry point, not a control panel') do
   # SketchUp cannot remove a menu item once added, so every one of these is
   # permanent for the session and costs a restart to change. The palette is the
   # day-to-day surface; the menu opens it and says what version this is.
-  raise items.inspect unless items == ['Palette…', 'About']
+  # RENAMED 2026-08-25: the submenu is now the shared 'UCON' root, so a bare
+  # 'About' would not say About WHAT with two extensions hanging off it.
+  raise items.inspect unless items == ['Cabinet palette…', 'About Cabinet Engine']
+
+  raise 'the shell builds its own submenu instead of the shared root' unless
+    shell.include?('UCON.extensions_menu')
 
   # Assert on what the shell CALLS, not on what it says: the comment explaining
   # the removals mentions the old items by name, and a prose match would fail on
@@ -5779,6 +5788,42 @@ check('a corner that cannot say its execution does not turn anything') do
     Placement.corner_turn_seat([-250.0, 900.0], :low, nil, 620, 80, 3).nil?
   raise 'no depth, no turn' unless
     Placement.corner_turn_seat([-250.0, 900.0], :low, 450, nil, 80, 3).nil?
+end
+
+
+# ---------------------------------------------------------------- panel kit
+#
+# The kit is VENDORED into both extension trees, not shared, because the engine
+# must keep working on a machine where the appliance extension was never
+# installed - which a shared require would quietly make false. These checks are
+# what stop the two copies from drifting apart instead.
+
+KIT_EXPECTED_VERSION = 1
+
+check('the vendored panel kit is the version this suite expects') do
+  actual = UCON::CabinetEngine::PanelKit::KIT_VERSION
+  raise "kit is v#{actual}, suite expects v#{KIT_EXPECTED_VERSION} - " \
+        'if you regenerated the kit, bump the literal in BOTH suites' unless
+    actual == KIT_EXPECTED_VERSION
+end
+
+check('the vendored panel kit still hashes to what the generator stamped') do
+  css = UCON::CabinetEngine::PanelKit::CSS
+  want = UCON::CabinetEngine::PanelKit::KIT_SHA
+  got  = Digest::SHA256.hexdigest(css)[0, 16]
+  raise "kit sha #{got}, stamped #{want} - core/05_panel_kit.rb was hand-edited. " \
+        'Edit design/panel_kit.css and run tools/build_panel_kit.rb' unless got == want
+end
+
+check('the kit carries the trust encoding both panels depend on') do
+  css = UCON::CabinetEngine::PanelKit::CSS
+  %w[--ok --amber --red .trust-printed .trust-assumed .trust-decide .flag .peer].each do |token|
+    raise "the kit lost #{token}" unless css.include?(token)
+  end
+end
+
+check('the kit defines the shared submenu root without requiring the other extension') do
+  raise 'UCON.extensions_menu is not defined' unless UCON.respond_to?(:extensions_menu)
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

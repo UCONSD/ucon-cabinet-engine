@@ -69,11 +69,23 @@ end
 # ---------------------------------------------------------------------------
 
 def appliance_lib
+  # MOVED 2026-08-25: the package lives IN THIS REPOSITORY now, at
+  # src/ucon_appliances, and its lib file is lib/appliances.rb. The old loose
+  # copy under ~/Downloads had lib/ucon_appliances.rb, and while both existed
+  # this list quietly preferred the stale one - a suite that finds the wrong
+  # tree does not fail, it just gets quieter, which is worse.
   candidates = [ENV['UCON_APPLIANCES'],
+                File.expand_path('../src/ucon_appliances', __dir__),
                 File.expand_path('../../ucon-appliances', __dir__),
                 File.expand_path('~/Downloads/ucon-appliances'),
                 File.expand_path('~/dev/ucon-appliances')].compact
-  candidates.map { |d| File.join(d, 'lib', 'ucon_appliances.rb') }.find { |f| File.file?(f) }
+  candidates.each do |d|
+    %w[appliances.rb ucon_appliances.rb].each do |base|
+      f = File.join(d, 'lib', base)
+      return f if File.file?(f)
+    end
+  end
+  nil
 end
 
 lib = appliance_lib

@@ -132,5 +132,23 @@ SKIPPED, and exits 0. A skip is honest; a green tick for checks that never ran
 is not. It looks for `$UCON_APPLIANCES`, then `../ucon-appliances` beside the
 repo, then `~/Downloads/ucon-appliances`, then `~/dev/ucon-appliances`.
 
-The appliance package is **not in this repository** and should not be: it is a
-separate extension, currently `ucon-appliances-0.1.1.rbz`.
+**CORRECTED 2026-08-25 evening (rule 9 — added, not erased). Both paragraphs
+above are now wrong, and the second one was reversed by decision the same day.**
+
+The search list gained `src/ucon_appliances` at the FRONT, and the lib file it
+looks for is `lib/appliances.rb` as well as the older `lib/ucon_appliances.rb`.
+While both trees existed the old list silently preferred the stale Downloads
+copy — a suite that finds the wrong tree does not fail, it gets quieter, which
+is worse than failing.
+
+And the package IS in this repository now, at `src/ucon_appliances/`, beside
+`src/ucon_cabinet_engine/`. **Two extensions, one repository** — see §11 of
+`claude/appliance-rules-decided.md`. The separation that matters is at RUNTIME,
+and it is unchanged: neither extension requires the other, the engine's suite
+passes with the appliance tree deleted, and the three optional-dependency
+checks still prove it. What changed is only where the files are kept. The
+original claim follows, and it was right about the runtime and wrong about the
+repository:
+
+> The appliance package is **not in this repository** and should not be: it is a
+> separate extension, currently `ucon-appliances-0.1.1.rbz`.

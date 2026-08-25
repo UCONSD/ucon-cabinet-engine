@@ -1,0 +1,410 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_sets",
+ "generated": "2026-08-25",
+ "note": "totals and rebates are computed from prices.json, never stored",
+ "sets": [
+  {
+   "key": "36_Core",
+   "cooking_width_in": 36,
+   "level": "Core",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "CL3650UID/S/T/R",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF36650/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW362418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 36
+  },
+  {
+   "key": "36_Plus",
+   "cooking_width_in": 36,
+   "level": "Plus",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "CL4250SD/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF36650/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW362418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 1
+    },
+    {
+     "slot": "mw",
+     "model": "MDD3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "wine",
+     "model": "DEU2450W/L",
+     "qty": 1
+    },
+    {
+     "slot": "ice",
+     "model": "DEU1550I/L",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 42
+  },
+  {
+   "key": "36_Full",
+   "cooking_width_in": 36,
+   "level": "Full",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "DEC2450R/L",
+     "qty": 1
+    },
+    {
+     "slot": "fridge2",
+     "model": "DEC3050FI/R",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF36650/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW362418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 2
+    },
+    {
+     "slot": "mw",
+     "model": "MDD3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "steam",
+     "model": "CSO3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "wine",
+     "model": "DEC2450W/L",
+     "qty": 1
+    },
+    {
+     "slot": "ice",
+     "model": "DEU1550I/L",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 54
+  },
+  {
+   "key": "48_Core",
+   "cooking_width_in": 48,
+   "level": "Core",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "CL4850SD/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF48650C/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW482418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 48
+  },
+  {
+   "key": "48_Plus",
+   "cooking_width_in": 48,
+   "level": "Plus",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "DEC3050R/L",
+     "qty": 1
+    },
+    {
+     "slot": "fridge2",
+     "model": "DEC3050FI/R",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF48650C/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW482418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 1
+    },
+    {
+     "slot": "mw",
+     "model": "MDD3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "wine",
+     "model": "DEC2450W/L",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 60
+  },
+  {
+   "key": "48_Full",
+   "cooking_width_in": 48,
+   "level": "Full",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "DEC3650R/L",
+     "qty": 1
+    },
+    {
+     "slot": "fridge2",
+     "model": "DEC3650FI/R",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF48650C/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW482418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 2
+    },
+    {
+     "slot": "steam",
+     "model": "CSO3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "mw",
+     "model": "MDD3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "coffee",
+     "model": "EC3050TE/S",
+     "qty": 1
+    },
+    {
+     "slot": "wine",
+     "model": "DEC2450W/L",
+     "qty": 1
+    },
+    {
+     "slot": "ice",
+     "model": "DEU1550I/L",
+     "qty": 1
+    },
+    {
+     "slot": "under",
+     "model": "DEU2450R/L",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 72
+  },
+  {
+   "key": "60_Core",
+   "cooking_width_in": 60,
+   "level": "Core",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "CL4850SD/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF60650DG/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW602418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 48
+  },
+  {
+   "key": "60_Plus",
+   "cooking_width_in": 60,
+   "level": "Plus",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "DEC3650R/L",
+     "qty": 1
+    },
+    {
+     "slot": "fridge2",
+     "model": "DEC3650FI/R",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF60650DG/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW602418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 1
+    },
+    {
+     "slot": "steam",
+     "model": "CSO3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "wine",
+     "model": "DEC2450W/L",
+     "qty": 1
+    },
+    {
+     "slot": "ice",
+     "model": "DEU1550I/L",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 72
+  },
+  {
+   "key": "60_Full",
+   "cooking_width_in": 60,
+   "level": "Full",
+   "items": [
+    {
+     "slot": "fridge",
+     "model": "DEC3650R/L",
+     "qty": 1
+    },
+    {
+     "slot": "fridge2",
+     "model": "DEC3650FI/R",
+     "qty": 1
+    },
+    {
+     "slot": "cooking",
+     "model": "DF60650DG/S/P",
+     "qty": 1
+    },
+    {
+     "slot": "hood",
+     "model": "PW602418",
+     "qty": 1
+    },
+    {
+     "slot": "dw",
+     "model": "DW2451",
+     "qty": 2
+    },
+    {
+     "slot": "steam",
+     "model": "CSO3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "mw",
+     "model": "MDD3050TE/S/T",
+     "qty": 1
+    },
+    {
+     "slot": "coffee",
+     "model": "EC3050TE/S",
+     "qty": 1
+    },
+    {
+     "slot": "wine",
+     "model": "DEC3050W/L",
+     "qty": 1
+    },
+    {
+     "slot": "ice",
+     "model": "DEU1550I/L",
+     "qty": 1
+    },
+    {
+     "slot": "under",
+     "model": "DEU2450R/L",
+     "qty": 1
+    },
+    {
+     "slot": "warm",
+     "model": "WWD3050O",
+     "qty": 1
+    }
+   ],
+   "refrigeration_width_in": 72
+  }
+ ]
+}

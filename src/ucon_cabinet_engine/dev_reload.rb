@@ -8,9 +8,13 @@
 # It re-reads every file in core/ and then builds B80601, so one keystroke
 # covers edit -> reload -> rebuild.
 #
-# The menu item "Extensions > UCON Cabinet Engine > Reload core" reloads
-# without building. Use that when you only want fresh code; use this when you
-# want to see the result immediately.
+# CORRECTED 2026-08-25 (rule 9 - added, not erased): there is no such MENU
+# item and there has not been one. "Reload core" is a BUTTON IN THE PALETTE,
+# core/90_palette.rb. It reloads without building. Use that when you only want
+# fresh code; use this when you want to see the result immediately. The
+# original line follows, and it named a menu item that does not exist:
+# "The menu item Extensions > UCON Cabinet Engine > Reload core reloads
+# without building." 
 #
 # Nothing here touches the shell (main.rb). The shell is loaded once by
 # SketchUp at startup and must not be re-loaded, or the menu duplicates.

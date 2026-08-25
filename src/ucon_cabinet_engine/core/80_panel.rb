@@ -379,18 +379,39 @@ module UCON
         # (hardware.gola_profile_body) for when a detailed view needs it.
       end
 
+      # OBSERVATION, mirroring what the appliance panel says about us. The
+      # engine may ACT on the appliance module - that is the permitted
+      # direction and 88_appliance_check.rb is where it happens - but here we
+      # only report, so the line is honest on a machine with no appliances.
+      def peer_state
+        unless defined?(UCON::CabinetEngine::ApplianceCheck) &&
+               UCON::CabinetEngine::ApplianceCheck.available?
+          return { ok: false, text: 'Appliances not installed — the engine does not need them.' }
+        end
+
+        v = if defined?(UCON::Appliances::VERSION)
+              UCON::Appliances::VERSION
+            else
+              'installed'
+            end
+        { ok: true, text: "Appliances #{v} — seam active." }
+      end
+
       def html
         <<~HTML
           <!DOCTYPE html><html><head><meta charset="utf-8"><style>
-            body{font:13px -apple-system,Helvetica,Arial;margin:0;padding:14px;background:#f5f5f4;color:#222}
-            h3{margin:0 0 2px;font-size:14px} .muted{color:#777;font-size:11px;margin-bottom:10px}
-            fieldset{border:1px solid #ddd;border-radius:6px;margin:0 0 10px;padding:8px 10px;background:#fff}
-            legend{font-size:11px;color:#555;padding:0 4px}
+          #{UCON::CabinetEngine::PanelKit::CSS}
+            /* engine panel, structural only - every colour comes from the kit */
+            body{padding:14px;background:var(--bg-sunk)}
+            h3{margin:0 0 2px;font-size:14px}
+            .muted{color:var(--muted);font-size:11px;margin-bottom:10px}
+            fieldset{border:1px solid var(--line);border-radius:6px;margin:0 0 10px;padding:8px 10px;background:var(--bg)}
+            legend{font-size:11px;color:var(--muted);padding:0 4px}
             label{display:block;margin:3px 0} select{width:100%;margin-top:3px}
-            button{width:100%;padding:8px;border:0;border-radius:6px;background:#2563eb;color:#fff;font-size:13px;cursor:pointer}
-            button:disabled{background:#aaa} .warn{color:#b45309;font-size:11px;margin-top:4px}
-            #empty{color:#888;padding:30px 0;text-align:center}
+            button{width:100%;padding:8px;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:#fff;font-size:13px;cursor:pointer}
+            #empty{color:var(--muted);padding:30px 0;text-align:center}
           </style></head><body>
+          <div class="peer#{UCON::CabinetEngine::Panel.peer_state[:ok] ? '' : ' off'}" style="margin:-14px -14px 10px;padding:7px 14px;border-bottom:1px solid var(--line);background:var(--bg)">#{UCON::CabinetEngine::Panel.peer_state[:text]}</div>
           <div id="empty">Select a UCON unit in the model</div>
           <div id="form" style="display:none">
             <h3 id="code"></h3><div class="muted" id="desc"></div>
@@ -405,7 +426,7 @@ module UCON
                 <option value="handle">Handle</option>
                 <option value="push_to_open">Push-to-open</option>
               </select>
-              <div id="golaNote" class="warn" style="display:none">Door 75 opens by gola only. Its grip-recess profiles are separate order lines — a drawer stack needs two:</div>
+              <div id="golaNote" class="flag" style="display:none">Door 75 opens by gola only. Its grip-recess profiles are separate order lines — a drawer stack needs two:</div>
               <select id="gol" style="display:none"></select>
               <div id="handleBlock">
                 <select id="hmode" onchange="rules()">
@@ -414,7 +435,7 @@ module UCON
                 </select>
                 <select id="handle"></select>
               </div>
-              <div id="ptoNote" class="warn" style="display:none">Push-pull device code not found in source — P3, pending Elda. hardware_ref stays empty.</div>
+              <div id="ptoNote" class="flag" style="display:none">Push-pull device code not found in source — P3, pending Elda. hardware_ref stays empty.</div>
             </fieldset>
             <fieldset id="hingeFs"><legend>Hinge side</legend>
               <select id="hinge">

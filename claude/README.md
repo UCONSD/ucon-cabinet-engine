@@ -52,9 +52,11 @@ one names the date and what superseded it.
 
 **Appliances** — a SEPARATE extension (`UCON::Appliances`, own namespace, own
 dictionary, own four JSON files, own 48-check suite); `core/88_appliance_check.rb`
-is the only seam and it only asks questions. The package itself lives at
-`~/Downloads/ucon-appliances/` and **is not under version control** —
-`appliance-rules-decided.md` is the prose behind its `data/rules.json`:
+is the only seam and it only asks questions. **The package moved into this
+repository on 2026-08-25** — `src/ucon_appliances/`, its own extension target
+beside `src/ucon_cabinet_engine/`, its own version, its own suite
+(`tools/test_appliances.rb`). `appliance-rules-decided.md` is the prose behind
+its `data/rules.json`:
 `appliance-rules-decided.md`, `findings-2026-08-25-appliance-seam.md`,
 `appliance-housing-datum-2026-08-25.md`, `appliance-filler-plane-2026-08-25.md`,
 `appliance-flush-vs-standard-2026-08-25.md`,
