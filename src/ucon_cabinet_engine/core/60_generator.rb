@@ -26,11 +26,12 @@ module UCON
       # selected unit's right edge, inheriting its orientation (a rotated run
       # keeps its direction); the visual joint comes from the reveal, so no
       # gap. Nothing selected -> origin.
-      def placement_transform(model, new_width_mm = nil)
+      def placement_transform(model, new_unit = nil)
         sel = selected_unit(model)
         return Geom::Transformation.new unless sel
 
-        span = span_for_attrs(Contract.read(sel.definition))
+        sel_attrs = Contract.read(sel.definition)
+        span = span_for_attrs(sel_attrs)
         # Nothing we can measure: land at the origin, where it is obvious the
         # run was not continued. The old code read the missing width as 0.0 and
         # dropped the new unit exactly on top of the selected one - a lie that
@@ -38,6 +39,25 @@ module UCON
         return Geom::Transformation.new unless span
 
         side = placement_side(model, sel, span)
+        new_width_mm = new_unit && new_unit['width_mm']
+        new_depth_mm = new_unit && new_unit['depth_mm']
+
+        # THE TURN. If the selected unit is a corner and the side the rule chose
+        # is the corner's WASTED end - the one facing the perpendicular wall -
+        # the run does not continue, it turns. Everything about where it lands
+        # is in Placement.corner_turn_seat, pinned by a check against the turn
+        # Andriy placed by hand in Avenida Primavera.
+        turn = corner_turn_for(sel_attrs, span, side, new_width_mm, new_depth_mm)
+        if turn
+          x, y, angle = turn
+          shifted = sel.transformation *
+                    Geom::Transformation.translation(Geom::Vector3d.new(x.mm, y.mm, 0)) *
+                    Geom::Transformation.rotation(Geom::Point3d.new(0, 0, 0),
+                                                  Geom::Vector3d.new(0, 0, 1),
+                                                  angle.degrees)
+          o = shifted.origin
+          return Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * shifted
+        end
 
         # RIGHT steps past this unit's high end. LEFT steps back by the NEW
         # element's own width, because a unit is drawn from its origin forwards
@@ -90,6 +110,27 @@ module UCON
         Placement.span_mm(carcass_mm: unit['carcass_length_mm'],
                           nominal_mm: attrs['corner_geometry'].to_s.split('x').first.to_i,
                           execution:  unit['execution'])
+      end
+
+      # nil unless the selected unit is a corner AND the chosen side is its
+      # wasted end. The execution letter is what says which end that is, and it
+      # lives in the registry rather than on the object, so it is looked up.
+      def corner_turn_for(sel_attrs, span, side, new_width_mm, new_depth_mm)
+        return nil unless sel_attrs['geometry_kind'].to_s == 'corner'
+        return nil unless new_width_mm && new_depth_mm
+
+        unit = begin
+          Registry.lookup(sel_attrs['code'])
+        rescue StandardError
+          nil
+        end
+        return nil unless unit
+
+        turn_end = Placement.corner_turn_end(unit['execution'])
+        return nil unless Placement.turning?(side, turn_end)
+
+        Placement.corner_turn_seat(span, turn_end, new_width_mm, new_depth_mm,
+                                   FILLER_MM, Standards::FRONT_GAP_MM)
       end
 
       # The SketchUp half of the side rule: gather what already touches the
@@ -323,7 +364,7 @@ module UCON
         # width like any cabinet, because with_ordered_width has already turned
         # its catalog range into a number at the top of this method. The rule
         # is the same for both and there is no second path.
-        placement = placement_transform(model, unit['width_mm'])
+        placement = placement_transform(model, unit)
 
         model.start_operation("UCON: build #{code}", true)
         begin

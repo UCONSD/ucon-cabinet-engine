@@ -346,6 +346,57 @@ module UCON
         :right
       end
 
+      # ---- and the turn, when the neighbour is a corner ---------------------
+      #
+      # A corner has two ends and they are not alike. The end that carries the
+      # 8x8 is where the run CONTINUES STRAIGHT - its width leg is drawn at 77
+      # precisely so it meets the next front. The other end is the WASTED one,
+      # and it faces the perpendicular wall: nothing continues there, the run
+      # TURNS.
+      #
+      # Andriy, 2026-08-24: "rotate 90 degrees counter-clockwise and it goes up
+      # against the 8x8 block."
+      #
+      # MEASURED, NOT DERIVED. His own kitchen already holds the turn, placed by
+      # hand and accepted: AU110D at origin (620, 250) turned 90, and B80501
+      # beside it at (1153, 620) turned 180 - which in the corner's own frame is
+      # offset (370, -533) and a further +90. Both halves of that offset mean
+      # something, which is what makes them a rule rather than two numbers:
+      #
+      #   x = span_low + new_depth   puts the new unit's BACK on the wasted-end
+      #                              plane, which IS the perpendicular wall
+      #   y = -(new_width + 83)      puts its near end on the corner's outermost
+      #                              front face - 83 is FILLER_MM + FRONT_GAP_MM,
+      #                              the plane the 8x8's return leg reaches
+      #
+      # so it lands back to the wall and shoulder to the 8x8, growing away from
+      # the corner. A check pins this against the measured instance.
+      #
+      # THE MIRROR IS NOT MEASURED. A left-execution corner wastes its HIGH end,
+      # so the turn is the same construction reflected, at -90. No hand-placed
+      # example of that exists yet; when one does, check it before trusting it.
+      def corner_turn_end(execution)
+        execution.to_s == 'left' ? :high : :low
+      end
+
+      # Does the side the rule picked land on the end that turns?
+      def turning?(side, turn_end)
+        (side == :left && turn_end == :low) || (side == :right && turn_end == :high)
+      end
+
+      # [x, y, angle_in_degrees] in the corner's own frame.
+      def corner_turn_seat(span, turn_end, new_width_mm, new_depth_mm,
+                           filler_mm, front_gap_mm)
+        return nil unless new_width_mm && new_depth_mm
+
+        clear = filler_mm.to_f + front_gap_mm.to_f
+        if turn_end == :low
+          [span[0] + new_depth_mm.to_f, -(new_width_mm.to_f + clear), 90]
+        else
+          [span[1] - new_depth_mm.to_f, -clear, -90]
+        end
+      end
+
     end
   end
 end

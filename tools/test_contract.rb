@@ -5605,9 +5605,9 @@ check('A FILLER TAKES THE SAME PATH AS A CABINET, width and all') do
 
   # and the placement asks for the NEW element's width, not the selected one's
   gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
-  raise 'the new width must reach the placement' unless
-    gen.include?("placement_transform(model, unit['width_mm'])")
-  raise 'and the left step must use it' unless
+  raise 'the whole unit must reach the placement - width AND depth' unless
+    gen.include?('placement_transform(model, unit)')
+  raise 'and the left step must use its width' unless
     gen.include?('span[0] - new_width_mm.to_f')
 end
 
@@ -5662,6 +5662,74 @@ check('the span rule now has ONE implementation, and both callers use it') do
   # and it still answers the same thing for a straight unit
   raise Generator.span_for_attrs('width_mm' => 600).inspect unless
     Generator.span_for_attrs('width_mm' => 600) == [0.0, 600.0]
+end
+
+check('THE TURN AT A CORNER IS PINNED TO A MEASURED ONE, not to a formula') do
+  # Avenida Primavera, read out of the model 2026-08-24: AU110D sits at origin
+  # (620, 250) turned 90 degrees, and the B80501 that turns the run onto the
+  # south wall sits at (1153, 620) turned 180. In the corner's own frame that
+  # is offset (370, -533) and a further +90 - and Andriy placed it by hand
+  # before any of this existed, which is what makes it evidence rather than
+  # agreement with myself.
+  #
+  # AU110D: carcass 900, nominal 1150, so wasted 250 and the span is
+  # [-250, 900] - the wasted end low, which is the end that faces the
+  # perpendicular wall. B80501 is 450 wide and 620 deep.
+  span = Placement.span_mm(carcass_mm: 900, nominal_mm: 1150, execution: 'right')
+  raise span.inspect unless span == [-250.0, 900.0]
+
+  seat = Placement.corner_turn_seat(span, :low, 450, 620, 80, 3)
+  raise seat.inspect unless seat == [370.0, -533.0, 90]
+
+  # and the two halves must keep MEANING what they mean, or they are two
+  # numbers that happened to fit:
+  #   the back lands on the wasted-end plane - the perpendicular wall
+  raise 'the back must land on the wasted plane' unless seat[0] - 620 == span[0]
+  #   the near end lands on the corner's outermost front face, 80 + 3
+  raise 'the near end must meet the 8x8 face' unless seat[1] + 450 == -83
+end
+
+check('the turn fires on the WASTED end and never on the 8x8 end') do
+  # The 8x8 end is where the run continues straight - its width leg is drawn at
+  # 77 to meet the next front. Turning there would put a cabinet through it.
+  raise 'a right-execution corner wastes its low end' unless
+    Placement.corner_turn_end('right') == :low
+  raise 'a left-execution corner wastes its high end' unless
+    Placement.corner_turn_end('left') == :high
+
+  raise 'left onto a low-wasted corner turns' unless Placement.turning?(:left, :low)
+  raise 'right onto a low-wasted corner must NOT turn' if Placement.turning?(:right, :low)
+  raise 'right onto a high-wasted corner turns' unless Placement.turning?(:right, :high)
+  raise 'left onto a high-wasted corner must NOT turn' if Placement.turning?(:left, :high)
+
+  # B80603 continues straight off the same corner in the same model, at the
+  # 8x8 end. If turning? ever said yes there, that unit would swing into it.
+  raise 'the straight side must stay straight' if Placement.turning?(:right, :low)
+end
+
+check('THE MIRROR IS A MIRROR, and is marked as unmeasured') do
+  # No hand-placed left-execution turn exists yet. What can be checked is that
+  # the construction reflects rather than being a second guess: the two seats
+  # occupy the same band along the corner's front, and the angles are opposite.
+  low  = Placement.corner_turn_seat([-250.0, 900.0], :low,  450, 620, 80, 3)
+  high = Placement.corner_turn_seat([-250.0, 900.0], :high, 450, 620, 80, 3)
+  raise low.inspect  unless low[2]  == 90
+  raise high.inspect unless high[2] == -90
+  # low runs from -533 up to -83; high from -83 down to -533
+  raise 'the two must sweep the same band' unless
+    [low[1], low[1] + 450].minmax == [high[1] - 450, high[1]].minmax
+  placement = File.read(File.expand_path('../src/ucon_cabinet_engine/core/22_placement.rb', __dir__))
+  raise 'the unmeasured half must say so' unless
+    placement.include?('THE MIRROR IS NOT MEASURED')
+end
+
+check('a corner that cannot say its execution does not turn anything') do
+  # Better a straight continuation the eye catches than a turn built on a
+  # missing letter.
+  raise 'no width, no turn' unless
+    Placement.corner_turn_seat([-250.0, 900.0], :low, nil, 620, 80, 3).nil?
+  raise 'no depth, no turn' unless
+    Placement.corner_turn_seat([-250.0, 900.0], :low, 450, nil, 80, 3).nil?
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
