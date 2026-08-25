@@ -7,7 +7,8 @@ Elda. Written during Cowork sessions, kept because the *why* of a registry file
 is not in the registry file.
 
 **Moved here on 2026-08-24** from the claude.ai Project that had held them since
-2026-08-18, in commit `a775846`. The move does three things: the knowledge travels with the code, the
+2026-08-18, in commit `a775846`; **a second batch — the appliance notes — followed
+on 2026-08-25**, listed under "Appliances" below. The move does three things: the knowledge travels with the code, the
 history of a note lands in git beside the history of the corrections it
 explains, and a future move between tools becomes a `cd` rather than a
 migration. **Nothing was deleted from the Project until the first push of this
@@ -15,6 +16,10 @@ directory succeeded.** It did, and twenty of the twenty-one originals are gone;
 `elda-mini-order-2026-08-20.md` was kept there on purpose, because a scheduled
 task writes into it from a session that cannot reach this repository. See
 `repo-state.md`.
+
+**After the 2026-08-25 housekeeping the Project holds exactly two files:** the
+current `handoff-<date>-<machine>.md` and `elda-mini-order-2026-08-20.md`.
+Anything else appearing there is a note that has not been moved yet.
 
 **Faithfully copied.** Every file is the Project text. Where a document said
 something that later reading falsified, a **dated correction block was ADDED at
@@ -44,6 +49,17 @@ one names the date and what superseded it.
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
 `fillers-recon-2026-08-23.md`, `usa-elements-recon-2026-08-20.md`,
 `corner-units-m22-brief-2026-08-20.md`, `wine-cooler-aperture-2026-08-22.md`.
+
+**Appliances** — a SEPARATE extension (`UCON::Appliances`, own namespace, own
+dictionary, own four JSON files, own 48-check suite); `core/88_appliance_check.rb`
+is the only seam and it only asks questions. The package itself lives at
+`~/Downloads/ucon-appliances/` and **is not under version control** —
+`appliance-rules-decided.md` is the prose behind its `data/rules.json`:
+`appliance-rules-decided.md`, `findings-2026-08-25-appliance-seam.md`,
+`appliance-housing-datum-2026-08-25.md`, `appliance-filler-plane-2026-08-25.md`,
+`appliance-flush-vs-standard-2026-08-25.md`,
+`appliance-openings-recon-2026-08-25.md` with its raw table
+`appliance-openings-106-configs-2026-08-25.csv`.
 
 **Architecture and decisions:**
 `warehouse-architecture-2026-08-22.md`, `options-architecture-2026-08-20.md`,

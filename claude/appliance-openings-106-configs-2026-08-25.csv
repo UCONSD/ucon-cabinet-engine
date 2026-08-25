@@ -1,0 +1,107 @@
+brand,section,page,config,install,variant,w_mm,h_mm,d_mm,aux,flag,source
+Wolf,M Series Ovens,10,"30"" M Series Single Oven",STANDARD INSTALLATION,,724,,591,,,wolf-design-guide.pdf rev 7/2025 p.10
+Wolf,M Series Ovens,12,"30"" M Series Double Oven",STANDARD INSTALLATION,,724,,591,,,wolf-design-guide.pdf rev 7/2025 p.12
+Wolf,M Series Ovens,14,"30"" M Series Single Oven",DUAL STANDARD INSTALLATION,,1486,,591,,,wolf-design-guide.pdf rev 7/2025 p.14
+Wolf,E Series Ovens,22,"24"" E Series Single Oven",STANDARD INSTALLATION,,562,591,584,,,wolf-design-guide.pdf rev 7/2025 p.22
+Wolf,E Series Ovens,24,"30"" E Series Single Oven",STANDARD INSTALLATION,,724,,591,,,wolf-design-guide.pdf rev 7/2025 p.24
+Wolf,E Series Ovens,26,"30"" E Series Double Oven",STANDARD INSTALLATION,,724,,591,,,wolf-design-guide.pdf rev 7/2025 p.26
+Wolf,E Series Ovens,28,"30"" E Series Single Oven",DUAL STANDARD INSTALLATION,,1486,,591,,,wolf-design-guide.pdf rev 7/2025 p.28
+Wolf,Convection Steam Ovens,36,Convection Steam Oven,STANDARD INSTALLATION,"24"" Model",562,449,584,,,wolf-design-guide.pdf rev 7/2025 p.36
+Wolf,Convection Steam Ovens,36,Convection Steam Oven,STANDARD INSTALLATION,"30"" Model",724,449,584,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.36
+Wolf,Convection Steam Ovens,37,Convection Steam Oven,FLUSH INSET INSTALLATION,"24"" Model",603,,,"A=13/16"" (21)",,wolf-design-guide.pdf rev 7/2025 p.37
+Wolf,Convection Steam Ovens,37,Convection Steam Oven,FLUSH INSET INSTALLATION,"30"" Model",765,,,"?=13/16"" (21)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.37
+Wolf,Speed Ovens,42,Speed Oven,STANDARD INSTALLATION,"24"" Model",562,449,584,,,wolf-design-guide.pdf rev 7/2025 p.42
+Wolf,Speed Ovens,42,Speed Oven,STANDARD INSTALLATION,"30"" Model",562,449,584,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.42
+Wolf,Microwave Ovens,50,Drop-Down Door Microwave Oven,STANDARD INSTALLATION,"24"" Model",562,449,548,,,wolf-design-guide.pdf rev 7/2025 p.50
+Wolf,Microwave Ovens,50,Drop-Down Door Microwave Oven,STANDARD INSTALLATION,"30"" Model",562,449,548,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.50
+Wolf,Microwave Ovens,52,Drawer Microwave Oven,STANDARD INSTALLATION,"24"" Model",562,375,559,,,wolf-design-guide.pdf rev 7/2025 p.52
+Wolf,Microwave Ovens,52,Drawer Microwave Oven,STANDARD INSTALLATION,"30"" Model",562,375,559,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.52
+Wolf,Microwave Ovens,54,Convection Microwave Oven,STANDARD INSTALLATION WITH TRIM,"27"" Trim",641,479,511,,,wolf-design-guide.pdf rev 7/2025 p.54
+Wolf,Microwave Ovens,54,Convection Microwave Oven,STANDARD INSTALLATION WITH TRIM,"30"" Trim",699,479,511,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.54
+Wolf,Microwave Ovens,56,Standard Microwave Oven,STANDARD INSTALLATION WITH TRIM,"27"" Trim",641,432,508,,,wolf-design-guide.pdf rev 7/2025 p.56
+Wolf,Microwave Ovens,56,Standard Microwave Oven,STANDARD INSTALLATION WITH TRIM,"30"" Trim",699,432,508,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.56
+Wolf,Warming Drawers,62,Warming Drawer,STANDARD INSTALLATION,,727,232,584,,,wolf-design-guide.pdf rev 7/2025 p.62
+Wolf,Coffee System,86,Coffee System,STANDARD INSTALLATION,"24"" Model",562,,548,,,wolf-design-guide.pdf rev 7/2025 p.86
+Wolf,Coffee System,86,Coffee System,STANDARD INSTALLATION,"30"" Model",562,,548,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.86
+Wolf,Vacuum Seal Drawer,92,Vacuum Seal Drawer,STANDARD INSTALLATION,,562,141,572,,,wolf-design-guide.pdf rev 7/2025 p.92
+Wolf,Dual Fuel Ranges,97,Dual Fuel Range,INSTALLATION,"30"" Range",762,,,"A=101/4"" (260)",,wolf-design-guide.pdf rev 7/2025 p.97
+Wolf,Dual Fuel Ranges,97,Dual Fuel Range,INSTALLATION,"36"" Range",914,,,"?=161/4"" (413)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.97
+Wolf,Dual Fuel Ranges,97,Dual Fuel Range,INSTALLATION,"48"" Range",1219,,,"?=181/4"" (464)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.97
+Wolf,Dual Fuel Ranges,97,Dual Fuel Range,INSTALLATION,"60"" Range",1524,,,"?=181/4"" (464)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.97
+Wolf,Gas Ranges,101,Gas Range,INSTALLATION,"12""",254,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.101
+Wolf,Gas Ranges,101,Gas Range,INSTALLATION,"30"" Range",762,,,,,wolf-design-guide.pdf rev 7/2025 p.101
+Wolf,Gas Ranges,101,Gas Range,INSTALLATION,"36"" Range",914,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.101
+Wolf,Gas Ranges,101,Gas Range,INSTALLATION,"48"" Range",1219,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.101
+Wolf,Gas Ranges,101,Gas Range,INSTALLATION,"60"" Range",1530,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.101
+Wolf,Induction Ranges,105,Transitional Induction Range,INSTALLATION,"30"" Transitional",762,,,"A=101/4"" (260)",,wolf-design-guide.pdf rev 7/2025 p.105
+Wolf,Induction Ranges,105,Transitional Induction Range,INSTALLATION,"36"" Transitional",914,,,"?=161/4"" (413)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.105
+Wolf,Induction Ranges,106,Professional Induction Range,INSTALLATION,"30"" Professional",762,,,"A=101/4"" (260)",,wolf-design-guide.pdf rev 7/2025 p.106
+Wolf,Induction Ranges,106,Professional Induction Range,INSTALLATION,"36"" Professional",914,,,"?=161/4"" (413)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.106
+Wolf,Induction Ranges,106,Professional Induction Range,INSTALLATION,"48"" Professional",1219,,,"?=181/4"" (464)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.106
+Wolf,Induction Ranges,107,"30"" Transitional Induction Range",DUAL INSTALLATION,,1521,,,,,wolf-design-guide.pdf rev 7/2025 p.107
+Wolf,Sealed Burner Rangetops,111,Sealed Burner Rangetop,INSTALLATION,"30"" Rangetop",762,191,,,,wolf-design-guide.pdf rev 7/2025 p.111
+Wolf,Sealed Burner Rangetops,111,Sealed Burner Rangetop,INSTALLATION,"36"" Rangetop",914,191,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.111
+Wolf,Sealed Burner Rangetops,111,Sealed Burner Rangetop,INSTALLATION,"48"" Rangetop",1219,191,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.111
+Wolf,Outdoor Grills/Modules,116,Outdoor Grill,NON-COMBUSTIBLE INSTALLATION COMBUSTIBLE INSTALLATION,,,298,,,,wolf-design-guide.pdf rev 7/2025 p.116
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"18"" Single",457,,,"?=161/4"" (413)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"30"" Double",762,,,"?=281/4"" (718)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"36"" Double",914,,,"?=341/4"" (870)",,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"18"" Single",419,,,,,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"42"" Double",1067,,,"?=401/4"" (1022)",,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"30"" Double",724,,,,,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"54"" Double",1372,,,"?=521/4"" (1327)",,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"36"" Double",876,,,,,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"42"" Double",1029,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,119,Access Doors,DIMENSIONS INSTALLATION,"54"" Double",1334,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.119
+Wolf,Outdoor Accessories,122,Accessory Drawers and Doors,INSTALLATION OPENING W H D,Single Drawer,692,,,"?=93/4"" (248); ?=241/4"" (616)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.122
+Wolf,Outdoor Accessories,122,Accessory Drawers and Doors,INSTALLATION OPENING W H D,2- or 3-Drawer,311,489,,"?=181/4"" (464)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.122
+Wolf,Outdoor Accessories,122,Accessory Drawers and Doors,INSTALLATION OPENING W H D,Tall Dry Storage,565,819,,"?=20"" (508)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.122
+Wolf,Outdoor Accessories,122,Accessory Drawers and Doors,INSTALLATION OPENING W H D,Single Trash/Recycling,413,616,,"?=193/4"" (502)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.122
+Wolf,Outdoor Accessories,122,Accessory Drawers and Doors,INSTALLATION OPENING W H D,Double Trash/Recycling,413,616,,"?=223/4"" (578)",колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.122
+Wolf,Cooktop Ventilation Hoods,133,Opening Dimensions,CEILING-MOUNTED HOOD Refer to the chart and illustrations be,"36"" Hood",873,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.133
+Wolf,Cooktop Ventilation Hoods,133,Opening Dimensions,CEILING-MOUNTED HOOD Refer to the chart and illustrations be,"48"" Hood",1175,,,,колонки сопоставлены эвристикой — проверить,wolf-design-guide.pdf rev 7/2025 p.133
+Sub-Zero,Classic Series Refrigeration,10,Opening Dimensions,STANDARD INSTALLATION,"36"" Model",902,,,,,subzero-design-guide.pdf rev 4/2026 p.10
+Sub-Zero,Classic Series Refrigeration,10,Opening Dimensions,STANDARD INSTALLATION,"42"" Model",1054,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.10
+Sub-Zero,Classic Series Refrigeration,10,Opening Dimensions,STANDARD INSTALLATION,"48"" Model",1206,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.10
+Sub-Zero,Classic Series Refrigeration,11,Opening Dimensions,FLUSH INSET INSTALLATION,"48"" Model",1270,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.11
+Sub-Zero,Classic Series Refrigeration,12,Opening Dimensions,DUAL STANDARD INSTALLATION,"Two 30"" Models",1518,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.12
+Sub-Zero,Classic Series Refrigeration,12,Opening Dimensions,DUAL STANDARD INSTALLATION,"30"" and 36"" Models",1670,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.12
+Sub-Zero,Classic Series Refrigeration,12,Opening Dimensions,DUAL STANDARD INSTALLATION,"Two 36"" Models",1822,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.12
+Sub-Zero,Classic Series Refrigeration,13,Opening Dimensions,DUAL FLUSH INSET INSTALLATION,"Two 36"" Models",1886,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.13
+Sub-Zero,PRO Series Refrigeration,37,Opening Dimensions,STANDARD / FLUSH INSTALLATION,,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.37
+Sub-Zero,PRO Series Refrigeration,38,Opening Dimensions,DUAL STANDARD / FLUSH INSTALLATION,,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.38
+Sub-Zero,Designer Series Refrigeration,46,Opening Dimensions,DESIGNER SERIES OPENING DIMENSIONS COLUMN / TALL W H,"18"" Column",457,2134,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.46
+Sub-Zero,Designer Series Refrigeration,46,Opening Dimensions,DESIGNER SERIES OPENING DIMENSIONS COLUMN / TALL W H,"30"" Column / Tall",762,2134,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.46
+Sub-Zero,Designer Series Refrigeration,46,Opening Dimensions,DESIGNER SERIES OPENING DIMENSIONS COLUMN / TALL W H,"24"" Drawer",610,876,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.46
+Sub-Zero,Designer Series Refrigeration,46,Opening Dimensions,DESIGNER SERIES OPENING DIMENSIONS COLUMN / TALL W H,"TOP VIEW                       27"" Drawer",686,876,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.46
+Sub-Zero,Designer Series Refrigeration,46,Opening Dimensions,DESIGNER SERIES OPENING DIMENSIONS COLUMN / TALL W H,"30"" Drawer",762,876,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.46
+Sub-Zero,Designer Series Refrigeration,46,Opening Dimensions,DESIGNER SERIES OPENING DIMENSIONS COLUMN / TALL W H,"36"" Drawer",914,,,"?=341/2"" (876)",колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.46
+Sub-Zero,Designer Series Refrigeration,49,Stainless Steel Panels,The outdoor model requires the use of Sub-Zero stainless Rev,,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.49
+Sub-Zero,Wine Storage,56,Opening Dimensions,"UNDERCOUNTER WINE The depth of each model is 23 1/8"" (587). ",DEU1550W,381,876,610,,,subzero-design-guide.pdf rev 4/2026 p.56
+Sub-Zero,Wine Storage,56,Opening Dimensions,"UNDERCOUNTER WINE The depth of each model is 23 1/8"" (587). ",DEU2450W,610,876,610,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.56
+Sub-Zero,Wine Storage,56,Opening Dimensions,"UNDERCOUNTER WINE The depth of each model is 23 1/8"" (587). ",DEU2450WADA,610,826,610,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.56
+Sub-Zero,Wine Storage,57,Dual Installation,UNDERCOUNTER WINE Dual installation kits are available throu,"Two 15"" Models",762,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.57
+Sub-Zero,Wine Storage,57,Dual Installation,UNDERCOUNTER WINE Dual installation kits are available throu,"15"" and 24"" Models",991,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.57
+Sub-Zero,Wine Storage,57,Dual Installation,UNDERCOUNTER WINE Dual installation kits are available throu,"Two 24"" Models",1219,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.57
+Sub-Zero,Wine Storage,60,Opening Dimensions,DESIGNER SERIES WINE OPENING DIMENSIONS W*,"18"" Column",457,,635,,,subzero-design-guide.pdf rev 4/2026 p.60
+Sub-Zero,Wine Storage,60,Opening Dimensions,DESIGNER SERIES WINE OPENING DIMENSIONS W*,"30"" Column / Tall",762,,635,,,subzero-design-guide.pdf rev 4/2026 p.60
+Sub-Zero,Wine Storage,62,Opening Dimensions,MODEL CL3050W STANDARD INSTALLATION,,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.62
+Sub-Zero,Wine Storage,63,Opening Dimensions,MODEL CL3050W FLUSH INSET INSTALLATION,,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.63
+Sub-Zero,Wine Storage,64,Opening Dimensions,MODEL CL3050W DUAL STANDARD INSTALLATION,Two Models CL3050W,1518,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.64
+Sub-Zero,Wine Storage,64,Opening Dimensions,MODEL CL3050W DUAL STANDARD INSTALLATION,"CL3050W and 30"" Classic Series Model",1518,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.64
+Sub-Zero,Wine Storage,64,Opening Dimensions,MODEL CL3050W DUAL STANDARD INSTALLATION,"CL3050W and 36"" Classic Series Model",1670,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.64
+Sub-Zero,Wine Storage,65,Opening Dimensions,MODEL CL3050W DUAL FLUSH INSET INSTALLATION,"CL3050W and 36"" Classic Series Model",1734,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.65
+Sub-Zero,Wine Storage,67,Custom Panel—Undercounter Wine,"For Undercounter Wine models excluding stainless steel, a TY",DEU1550W,375,772,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.67
+Sub-Zero,Wine Storage,67,Custom Panel—Undercounter Wine,"For Undercounter Wine models excluding stainless steel, a TY",DEU2450W,603,772,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.67
+Sub-Zero,Wine Storage,67,Custom Panel—Undercounter Wine,"For Undercounter Wine models excluding stainless steel, a TY",DEU2450WADA,603,721,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.67
+Sub-Zero,Wine Storage,69,Custom Panels—Designer Series,"For Designer Series models excluding stainless steel, Reveal",,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.69
+Sub-Zero,Designer Series Undercounter Refrigeration,86,Opening Dimensions,DESIGNER SERIES UNDERCOUNTER MODELS The depth of each model ,"Two 15"" Models",762,,610,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.86
+Sub-Zero,Designer Series Undercounter Refrigeration,86,Opening Dimensions,DESIGNER SERIES UNDERCOUNTER MODELS The depth of each model ,"15"" and 24"" Models",991,,610,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.86
+Sub-Zero,Designer Series Undercounter Refrigeration,89,Custom Panel,"For Designer Series Undercounter models, a custom door TYPIC",,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.89
+Sub-Zero,Designer Series Undercounter Ice Maker,94,Opening Dimensions,ICE MAKER DUAL INSTALLATION If two units are installed side ,"Two 15"" Models",762,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.94
+Sub-Zero,Designer Series Undercounter Ice Maker,94,Opening Dimensions,ICE MAKER DUAL INSTALLATION If two units are installed side ,"15"" and 24"" Models",991,,,,колонки сопоставлены эвристикой — проверить,subzero-design-guide.pdf rev 4/2026 p.94
+Sub-Zero,Designer Series Undercounter Ice Maker,97,Stainless Steel Panel,Stainless steel panels are available through an authorized T,,,,,,размеры не распознаны — страница читается глазами,subzero-design-guide.pdf rev 4/2026 p.97
+Cove,Contents,3,Contents,4 Cove Dishwashers 5 Overall Dimensions,,,,,,размеры не распознаны — страница читается глазами,cv_dg_nws.pdf — p.3
+Cove,Dishwashers,6,Opening Dimensions,DISHWASHER OPENING WIDTH Cove dishwashers accommodate varyin,Standard Models,600,876,,,,cv_dg_nws.pdf — p.6
+Cove,Dishwashers,6,Opening Dimensions,DISHWASHER OPENING WIDTH Cove dishwashers accommodate varyin,ADA Height Models,600,826,,,,cv_dg_nws.pdf — p.6
+Cove,Dishwashers,8,Door Panel,CUSTOM PANEL STAINLESS STEEL PANEL IMPORTANT NOTE: The dishw,,,,,,размеры не распознаны — страница читается глазами,cv_dg_nws.pdf — p.8
