@@ -175,6 +175,50 @@ check('a handled front changes no model anywhere') do
   raise 'model moved' unless Check.review(u, 'DW2451')['model'] == 'DW2451'
 end
 
+puts "\nthe run gap — B6, and the engine states what the guide cannot know"
+
+check('a run gap comes back with the printed width and the depth the engine states') do
+  g = Check.run_gap('DF48650C/S/P', 'depth_mm' => 620, 'section_top_mm' => 880)
+  raise g.inspect unless g['checked'] && g['applies']
+  raise g.inspect unless g['w'] == 1219 && g['d'] == 620 && g['h'] == 880
+  raise g.inspect unless g['role'] == 'run_gap' && g['datum'] == 'floor'
+end
+
+check('the seam refuses a run gap when the engine states no depth') do
+  g = Check.run_gap('DF48650C/S/P', 'section_top_mm' => 880)
+  raise g.inspect if g['applies']
+  raise g.inspect unless g['reason'].include?('run depth')
+end
+
+check('a fridge asked for as a run gap is refused, not quietly reshaped') do
+  g = Check.run_gap('DEC3050R/L', 'depth_mm' => 620, 'section_top_mm' => 2200)
+  raise g.inspect if g['applies']
+end
+
+check('the 48in Core set carries exactly one run gap, and it is the range') do
+  r = Check.run_gaps_in_set('48_Core', 'depth_mm' => 620, 'section_top_mm' => 880)
+  raise r.inspect unless r['checked'] && r['gaps'].size == 1
+  g = r['gaps'].first
+  raise g.inspect unless g['model'] == 'DF48650C/S/P' && g['slot'] == 'cooking' && g['w'] == 1219
+end
+
+check('the wall hood is in that set and is not one of its gaps') do
+  r = Check.run_gaps_in_set('48_Core', 'depth_mm' => 620, 'section_top_mm' => 880)
+  raise r.inspect if r['gaps'].any? { |g| g['model'] == 'PW482418' }
+end
+
+check('an unknown set is answered, not raised') do
+  r = Check.run_gaps_in_set('no_such_set', 'depth_mm' => 620, 'section_top_mm' => 880)
+  raise r.inspect if r['checked']
+  raise r.inspect unless r['gaps'] == [] && r['reason'].include?('no_such_set')
+end
+
+check('this file still writes nothing and draws nothing') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/88_appliance_check.rb', __dir__))
+  forbidden = ['set_attribute', 'add_group', 'add_instance', 'start_operation']
+  raise 'the seam has grown a hand' if forbidden.any? { |f| src.include?(f) }
+end
+
 puts "\nthe report a person reads"
 
 check('the report names the code, the model and every finding') do

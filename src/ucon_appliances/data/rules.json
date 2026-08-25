@@ -23,7 +23,19 @@
   ],
   "material": "carcass",
   "never_leave_raw": true,
-  "note": "84in is the American standard; anything above it needs a proposed solution. The threshold was 70 until 2026-08-25: at 70 a Classic standard opening left 73 mm and the tool offered an open shelf 73 mm tall, which is not a shelf."
+  "note": "84in is the American standard; anything above it needs a proposed solution. The threshold was 70 until 2026-08-25: at 70 a Classic standard opening left 73 mm and the tool offered an open shelf 73 mm tall, which is not a shelf.",
+  "run_gap": {
+   "datum": "floor",
+   "top": "the appliance where it publishes a height, otherwise the section top",
+   "depth": "the run's own depth, measured from the unit beside the gap - never a constant",
+   "holds": "the appliance itself, and nothing at all until one is named",
+   "when_unassigned": "RESERVED - client-supplied machine, the division is NOT decided",
+   "top_note": "Height is the section top: the guide publishes a width and nothing else",
+   "proud_note": "The reservation stops at the worktop - a pro range's body may stand proud of it",
+   "drawn_by": "the engine. The extent is a fact about the RUN, and a run gap exists only inside a run",
+   "decided": "2026-08-25",
+   "note": "B6. A range stands in a gap in the run, not in an opening, so the guide prints a width and nothing else. Before this it was skipped and the span was marked by nothing."
+  }
  },
  "installation": {
   "default_for_custom_panel": "flush_inset",

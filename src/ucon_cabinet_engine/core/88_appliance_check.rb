@@ -133,6 +133,55 @@ module UCON
           'findings' => findings, 'offers' => offers, 'niche' => niche }
       end
 
+      # ------------------------------------------------------------ run gaps
+      #
+      # THE SECOND QUESTION, AND IT IS STILL ONLY A QUESTION. A run gap is a
+      # span between two cabinets where a freestanding machine stands on the
+      # floor - the guide prints its WIDTH and nothing else, because the machine
+      # is not built into anything. B6.
+      #
+      # WHY THE ENGINE DRAWS IT AND THE APPLIANCE MODULE DOES NOT, decided
+      # 2026-08-25: a reservation nobody can see is worse than an empty gap, so
+      # the void must carry this contract - and only this tree may write it.
+      # A run gap exists only inside a run, and a run is drawn here, so nothing
+      # is lost: the appliance module reports the span it did not reserve and
+      # names this command. §11's arrow is untouched, and this file still never
+      # writes an attribute and never draws.
+      #
+      # WHAT THE ENGINE MUST STATE, because the guide cannot know it: the run's
+      # own depth and the top of the section. Both are measured from the unit
+      # beside the gap - never taken from a constant. 610, 620 and 635 are all
+      # live depths in this project.
+      def run_gap(model, opts = {})
+        return unavailable unless available?
+
+        g = ::UCON::Appliances.run_gap(model, opts['installation'],
+                                       run_depth_mm: opts['depth_mm'],
+                                       section_top_mm: opts['section_top_mm'])
+        g.merge('checked' => true, 'model' => model)
+      end
+
+      # Every item of a preset that reserves a span instead of filling an
+      # opening, in the order the set states them. A set with none returns [],
+      # which is a fact and not a failure.
+      def run_gaps_in_set(set_key, opts = {})
+        return unavailable.merge('gaps' => []) unless available?
+
+        set = ::UCON::Appliances.set(set_key)
+        unless set
+          return { 'checked' => false, 'gaps' => [], 'reason' => "unknown set #{set_key}" }
+        end
+
+        gaps = []
+        set['items'].each do |it|
+          it['qty'].to_i.times do
+            g = run_gap(it['model'], opts)
+            gaps << g.merge('slot' => it['slot']) if g['applies']
+          end
+        end
+        { 'checked' => true, 'gaps' => gaps }
+      end
+
       # A SENTENCE FOR A HUMAN, because a hash of findings is not a report.
       # Deliberately not written onto the object: an appliance disagreement is
       # a fact about the SPECIFICATION, and the moment it is stamped into a

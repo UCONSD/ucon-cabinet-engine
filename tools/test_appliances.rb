@@ -186,6 +186,93 @@ check('a 2000 carcass on a 100 plinth takes none of them') do
   end
 end
 
+# --------------------------------------------------------------- the run gap
+#
+# B6. A void above a housing is what an opening does not fill; a run gap is
+# what the guide does not publish at all.
+
+check('a run gap is read from the data - a width, no height AND no depth') do
+  from_data = A.all.map { |a| a['model'] }.select do |m|
+    o = A.opening(m)
+    o && !o['w'].nil? && o['h'].nil? && o['d'].nil?
+  end
+  by_rule = A.all.map { |a| a['model'] }.select { |m| A.run_gap?(m) }
+  !by_rule.empty? && by_rule.sort == from_data.sort
+end
+
+# THE CHECK ABOVE FAILED ON ITS FIRST RUN and the failure is why the depth is in
+# the rule. EC3050TE/S publishes a width and a depth off p.86 and no height, and
+# it IS built into a cabinet. Kept as two checks rather than corrected into one,
+# because the second one is now the only thing standing between that model and a
+# housing drawn zero millimetres high.
+
+check('a missing height that is not a run gap is a hole in the data, and is named') do
+  A.height_missing?('EC3050TE/S') && !A.run_gap?('EC3050TE/S') &&
+    A.all.select { |a| A.height_missing?(a['model']) }.map { |a| a['model'] } == ['EC3050TE/S']
+end
+
+check('no model is both a run gap and a hole') do
+  A.all.none? { |a| A.run_gap?(a['model']) && A.height_missing?(a['model']) }
+end
+
+check('every run gap says in its own notes why its height is absent') do
+  A.all.select { |a| A.run_gap?(a['model']) }.all? do |a|
+    a['notes'].any? { |n| n.downcase.include?('not published') }
+  end
+end
+
+check('the data and install_class never disagree about which models stand in a run') do
+  A.all.all? { |a| A.run_gap?(a['model']) == (a['install_class'] == 'freestanding_run') }
+end
+
+check('a wall-mounted hood is not a run gap, because it has no opening at all') do
+  A.opening('PW482418').nil? && A.run_gap?('PW482418') == false
+end
+
+check('a fridge with a full published opening is not a run gap') do
+  A.run_gap?('CL4850SD/S/T') == false &&
+    A.run_gap?('CL4850SD/S/T', 'standard') == false
+end
+
+check('the height rule prefers the appliance and falls back to the section top') do
+  A.run_gap_height(928, 880) == 928 && A.run_gap_height(nil, 880) == 880
+end
+
+check('a run gap refuses to be drawn when the caller states no run depth') do
+  r = A.run_gap('DF48650C/S/P', nil, section_top_mm: 880)
+  r['applies'] == false && r['reason'].include?('run depth')
+end
+
+check('a run gap refuses to be drawn when nobody states a height') do
+  r = A.run_gap('DF48650C/S/P', nil, run_depth_mm: 620)
+  r['applies'] == false && r['reason'].include?('height')
+end
+
+check('the 48in range reserves its printed width, floor to the section top') do
+  r = A.run_gap('DF48650C/S/P', nil, run_depth_mm: 620, section_top_mm: 880)
+  r['applies'] && r['w'] == 1219 && r['d'] == 620 && r['h'] == 880 &&
+    r['role'] == 'run_gap' && r['datum'] == 'floor' &&
+    r['height_from'] == 'the section top'
+end
+
+check('a run gap names the page it was read from and invents no dimension') do
+  r = A.run_gap('DF48650C/S/P', nil, run_depth_mm: 620, section_top_mm: 880)
+  n = r['note']
+  n.include?('p.97') && n.include?('1219') && n.include?('880') &&
+    !n.include?('610') && !n.include?('928')
+end
+
+check('a run gap says it is unassigned, and says what would fill it') do
+  r = A.run_gap('DF48650C/S/P', nil, run_depth_mm: 620, section_top_mm: 880)
+  r['note'].include?('RESERVED') && r['holds'].to_s.include?('appliance itself')
+end
+
+check('every model that is a run gap is asked for by name in at least one set') do
+  gaps = A.all.map { |a| a['model'] }.select { |m| A.run_gap?(m) }
+  in_sets = A.sets['sets'].flat_map { |s| s['items'].map { |i| i['model'] } }.uniq
+  gaps.all? { |m| in_sets.include?(m) }
+end
+
 # ------------------------------------------------------------------- gola
 
 check('gola substitutes the ADA variant where one exists') do

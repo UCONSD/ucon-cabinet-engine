@@ -137,6 +137,34 @@ module UCON
         return nil
       end
 
+      # A GAP IN THE RUN IS NOT A HOUSING (B6). This is where the old code tried
+      # to draw one anyway: with no published height the box came out zero high
+      # and the run was left marked by nothing. The span is real and it is
+      # reserved - by the ENGINE, which owns the run and knows its depth and its
+      # top. Nothing here calls the engine; §11's arrow points the other way.
+      if A.run_gap?(model_no, inst)
+        UI.messagebox(["#{model_no} stands in a GAP IN THE RUN, not in an opening.",
+                       "The guide prints its width — #{open['w']} mm — and nothing else, " \
+                       'because the machine sits between two runs and not inside one.',
+                       '',
+                       'Reserve the span from the UCON palette (Reserve appliance run gaps).',
+                       "Source: #{open['source']}"].join("\n"))
+        return nil
+      end
+
+      # AND THE OTHER MISSING HEIGHT, which is a hole and not a concept. This
+      # one used to reach the builder and come out as a box zero high.
+      if A.height_missing?(model_no, inst)
+        UI.messagebox(["#{model_no}: this file holds no opening HEIGHT for the model.",
+                       "It publishes #{open['w']} wide and #{open['d']} deep, from " \
+                       "#{open['source']}, and no height at all.",
+                       '',
+                       'Nothing is drawn: a housing with no height is a box with no height.',
+                       'Re-read the page and add the number, or record in words why it is absent — ' \
+                       'every range does.'].join("\n"))
+        return nil
+      end
+
       su.start_operation("Appliance housing #{model_no}", true)
       begin
         w = open['w']
@@ -268,6 +296,8 @@ module UCON
       x = 0.0
       placed = 0
       skipped = []
+      unreserved = []
+      holes = []
       s['items'].each do |it|
         it['qty'].to_i.times do
           sub = A.for_front_system(it['model'], front_system)
@@ -278,7 +308,19 @@ module UCON
           mn = sub['model']
           open = A.opening(mn)
           unless open
-            skipped << "#{mn} — no opening (not built in)"
+            skipped << "#{mn} — no opening at all: it is not built into the cabinetry"
+            next
+          end
+          # B6. IT STOPS BEING A SILENT SKIP. The span is named with its number
+          # and its width still moves the next housing along, so the set keeps
+          # the shape it has on a wall. Drawing it belongs to the engine.
+          if A.run_gap?(mn)
+            unreserved << "#{mn} — #{open['w']} mm of run, floor to the worktop"
+            x += open['w'] + 100
+            next
+          end
+          if A.height_missing?(mn)
+            holes << "#{mn} — #{open['source']} publishes no opening height in this file"
             next
           end
           place(it['model'], front_system: front_system, section_top_mm: section_top_mm,
@@ -297,6 +339,18 @@ module UCON
         msg << ''
         msg << 'Not placed:'
         skipped.uniq.each { |k| msg << "  - #{k}" }
+      end
+      unless holes.empty?
+        msg << ''
+        msg << 'NOT DRAWN — the opening height is missing from the data, not from the guide:'
+        holes.uniq.each { |k| msg << "  - #{k}" }
+      end
+      unless unreserved.empty?
+        msg << ''
+        msg << 'NOT RESERVED — a gap in the run, not a housing:'
+        unreserved.uniq.each { |k| msg << "  - #{k}" }
+        msg << '  Reserve these from the UCON palette (Reserve appliance run gaps):'
+        msg << '  the extent is a fact about the run, and the run is the engine\'s to draw.'
       end
       UI.messagebox(msg.join("\n"))
     end

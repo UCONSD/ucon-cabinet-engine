@@ -29,7 +29,7 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.1.1'
+    VERSION = '0.2.0'
 
     module_function
 
@@ -155,6 +155,108 @@ module UCON
     def fits?(section_top_mm, model, installation = nil)
       h = opening_h(model, installation)
       h.nil? ? true : section_top_mm >= h
+    end
+
+    # --------------------------------------------------------------- run gap
+    #
+    # THE OTHER SHAPE, and B6. A void above a housing is what a published
+    # opening does not fill. A RUN GAP is what the guide does not publish at
+    # all: a pro range stands on the floor BETWEEN two runs rather than inside
+    # an opening, so its page prints a width and nothing else. Until this was
+    # built, place_set skipped such an item entirely and 1219 mm of run was
+    # marked by nothing - which is worse than an empty gap, because a foreign
+    # component standing in it looks like a settled question.
+    #
+    # THE DATA RULE WAS NEVER THE PROBLEM. "A value reaches the file only if it
+    # is printed" stands untouched; what was missing was a concept.
+    #
+    # READ FROM THE DATA, NOT FROM THE CLASS: an opening exists, it has a width,
+    # and it has NEITHER a height NOR a depth. `install_class ==
+    # 'freestanding_run'` sits on the same models and is the cross-check - a
+    # check fails if the two ever disagree, because then one of them is a typo.
+    #
+    # THE DEPTH IS PART OF THE TEST AND THAT WAS LEARNED THE SAME HOUR. Width
+    # and no height alone also catches EC3050TE/S, a coffee system that IS built
+    # into a cabinet: it publishes a width and a depth off p.86 and no height.
+    # A machine that stands in a run publishes ONE number, because nothing about
+    # it is an opening; a slot with two numbers and a missing third is a page
+    # somebody has not finished reading. See height_missing? below.
+    def run_gap?(model, installation = nil)
+      o = opening(model, installation)
+      return false unless o
+
+      !o['w'].nil? && o['h'].nil? && o['d'].nil?
+    end
+
+    # THE OTHER WAY A HEIGHT CAN BE ABSENT, and it is not a concept but a hole.
+    # It must never be drawn: until this was caught, such a model reached the
+    # housing builder and came out as a box zero millimetres high - present in
+    # the model, invisible on the screen, and countable by the schedule.
+    #
+    # Documented absence is a fact - every range says in its own notes why its
+    # height is not printed. Silent absence is a page to re-read.
+    def height_missing?(model, installation = nil)
+      o = opening(model, installation)
+      return false unless o
+
+      o['h'].nil? && !run_gap?(model, installation)
+    end
+
+    # The height rule, on its own so both of its branches can be checked:
+    # THE HEIGHT COMES FROM THE APPLIANCE WHERE IT PUBLISHES ONE, and from the
+    # section top only where it does not (Reserved_Void_Spec v0.1 §3, corrected
+    # 2026-08-25 against the model - a pro range's top stands ABOVE the worktop,
+    # so "floor to worktop" was wrong as a rule even where it is right as a
+    # number). No freestanding range publishes a height today, so the fallback
+    # is the branch that runs; the other exists because the guide may print one
+    # tomorrow and the rule must not have to be rewritten when it does.
+    def run_gap_height(published_h, section_top_mm)
+      published_h || section_top_mm
+    end
+
+    # The reservation, as numbers. PURE - it draws nothing, and the two facts
+    # the guide cannot know are the caller's to state: how deep the run is and
+    # where its top is. A caller that states neither gets a REFUSAL, not a
+    # default: 610, 620 and 635 are all live depths in this project, and a
+    # silent choice between them is a wrong drawing that looks right.
+    def run_gap(model, installation = nil, run_depth_mm: nil, section_top_mm: nil)
+      o = opening(model, installation)
+      unless o && run_gap?(model, installation)
+        return { 'applies' => false,
+                 'reason' => 'this model publishes a full opening, or no width at all' }
+      end
+      if run_depth_mm.to_f <= 0
+        return { 'applies' => false,
+                 'reason' => 'the run depth is not stated - measure it from the unit beside the gap' }
+      end
+
+      h = run_gap_height(o['h'], section_top_mm)
+      if h.to_f <= 0
+        return { 'applies' => false,
+                 'reason' => 'neither the appliance nor the caller states a height' }
+      end
+
+      { 'applies' => true, 'model' => model, 'role' => 'run_gap',
+        'w' => o['w'], 'd' => run_depth_mm, 'h' => h,
+        'height_from' => o['h'] ? 'the published opening' : 'the section top',
+        'datum' => rules['datum']['value'],
+        'holds' => rules['void']['run_gap']['holds'],
+        'source' => o['source'],
+        'note' => run_gap_note(model, o, h) }
+    end
+
+    # The words that go on the drawn box. They live in rules.json, not here:
+    # what a reservation says to whoever opens the model is a decision, and
+    # decisions have a date and an author.
+    def run_gap_note(model, opening_row, h)
+      r = rules['void']['run_gap']
+      a = find(model)
+      name = a && a['product_name'] ? " (#{a['product_name']})" : ''
+      [format('%s - %s mm of run, floor to %s mm', r['when_unassigned'], opening_row['w'], h.round),
+       "Holds: #{r['holds']} - #{model}#{name}",
+       opening_row['h'] ? nil : r['top_note'],
+       r['proud_note'],
+       "Source: #{opening_row['source']}"].compact.join(' | ')
     end
 
     # ------------------------------------------------------------------- gola
