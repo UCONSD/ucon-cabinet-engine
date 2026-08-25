@@ -355,8 +355,15 @@ module UCON
       # (printed p.434); with_ordered_width refuses a width for an article that
       # names its own, and refuses to build one that does not without it. See
       # _manifest.json -> order_axes_outside_code.filler_width_mm.
-      def build(code, model = Sketchup.active_model, width_mm: nil)
-        unit = Registry.with_ordered_width(Registry.lookup(code), width_mm)
+      # height_mm joined width_mm 2026-08-25, and for the same reason: the
+      # kitchen asked for a size the page does not print and the answer is a
+      # DRAWING, not a refusal. Both go through the registry, which decides
+      # whether the change is a printed modification or an unprinted request -
+      # this method never decides that and must not learn how.
+      def build(code, model = Sketchup.active_model, width_mm: nil, height_mm: nil)
+        unit = Registry.with_ordered_height(
+          Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
+        )
         unless unit.fetch('buildable', true)
           raise ArgumentError,
                 "#{code} is in the registry but cannot be built yet.\n\n" \
@@ -1220,6 +1227,88 @@ module UCON
           attrs['mount_bottom_mm'] = mount_bottom_mm(unit)
         else
           attrs['mounting'] = 'floor'
+        end
+        # A REDUCTION IS A VARIANT, NOT A COMPANION, and that is read off a real
+        # order rather than off the Modifications page. The source extract calls
+        # a modification 'a separate order line'; Metron's estimate 2026/30831
+        # priced 560 as B80601 with the variant WIDTH REDUCTION and a flat 138
+        # points ON THE SAME ROW. The estimate is the thing that actually went
+        # out, so the estimate wins. §4.2 rule 6: a variant earns its own key
+        # only when geometry reads it - nothing reads this, so it lives in
+        # `variants` and not in the key list.
+        # AN INCREASE IS THE OTHER HALF, AND IT IS NOT THE SAME THING. A
+        # reduction is a printed option with a code and a point value; an
+        # increase is printed nowhere. Both reach the drawing, and the drawing
+        # says which is which - because the LayOut sheet goes to Elda, she
+        # enters it in Metron, and the difference between what she can key in
+        # and what she cannot is the whole point of sending it.
+        if unit['width_increased_from_mm']
+          attrs['variants'] = Array(attrs['variants']) + [{
+            'key' => 'WIDTH INCREASE',
+            'value' => "REQUESTED, from #{unit['width_increased_from_mm']} mm - NOT PRINTED",
+            'source_ref' => 'No printed option: the Modifications section lists reduction only ' \
+                            '(989370 / 989380). No code and no surcharge exists for a wider ' \
+                            'carcass in anything read. Elda Q11, open - this drawing is the ask.'
+          }]
+          attrs['notes'] = [attrs['notes'],
+                            "WIDTH INCREASED #{unit['width_increased_from_mm']} -> " \
+                            "#{unit['width_mm']} mm. THE CATALOG DOES NOT PRINT THIS. Drawn to " \
+                            'be priced: no article code exists for the change, and feasibility ' \
+                            'must be confirmed with Cesar before it is relied on.'].compact.join(' | ')
+        end
+        if unit['width_reduced_from_mm']
+          attrs['variants'] = Array(attrs['variants']) + [{
+            'key' => 'WIDTH REDUCTION',
+            'value' => "Yes, from #{unit['width_reduced_from_mm']} mm",
+            'source_ref' => 'Elda 2026-08-24 (Q3, closed for width); surcharge codes ' \
+                            '989370 base/wall and 989380 tall, _manifest.json'
+          }]
+          # FEASIBILITY IS NOT OURS TO ASSERT. The Modifications section's own
+          # master rule: 'Always check feasibility with Cesar before relying on a
+          # modified item.' So the note says so on the object, where whoever
+          # reads the order sees it.
+          attrs['notes'] = [attrs['notes'],
+                            "WIDTH REDUCED #{unit['width_reduced_from_mm']} -> " \
+                            "#{unit['width_mm']} mm. Feasibility to be confirmed with " \
+                            'Cesar before it is relied on.'].compact.join(' | ')
+        end
+        # HEIGHT, the same two directions and NOT the same evidence. Reduction
+        # is printed and priced - 989370 / 138 points, printed p.548, and for a
+        # TALL unit at the same code and the same points, where a width
+        # reduction charges tall units 989380 / 227. Increase is printed
+        # nowhere. The variants say which is which, because the difference
+        # between what Elda can key into Metron and what she cannot is the whole
+        # reason the sheet is being sent.
+        if unit['height_increased_from_mm']
+          attrs['variants'] = Array(attrs['variants']) + [{
+            'key' => 'HEIGHT INCREASE',
+            'value' => "REQUESTED, from #{unit['height_increased_from_mm']} mm - NOT PRINTED",
+            'source_ref' => 'No printed option: the Modifications section prices height ' \
+                            'REDUCTION only (989370). The only printed way to a taller unit ' \
+                            'is printed p.550\'s combined tall unit, which stacks two standard ' \
+                            'carcasses under one door and is a different article. Elda Q11 ' \
+                            'question 4, open - this drawing is the ask.'
+          }]
+          attrs['notes'] = [attrs['notes'],
+                            "HEIGHT INCREASED #{unit['height_increased_from_mm']} -> " \
+                            "#{unit['height_mm']} mm. THE CATALOG DOES NOT PRINT THIS. Drawn to " \
+                            'be priced: no article code exists for the change, and feasibility ' \
+                            'must be confirmed with Cesar before it is relied on.'].compact.join(' | ')
+        end
+        if unit['height_reduced_from_mm']
+          attrs['variants'] = Array(attrs['variants']) + [{
+            'key' => 'HEIGHT REDUCTION',
+            'value' => "Yes, from #{unit['height_reduced_from_mm']} mm",
+            'source_ref' => 'printed p.548 / PDF 550, surcharge code 989370 at 138 points for ' \
+                            'base, wall AND tall alike, _manifest.json ' \
+                            'modifications.codes.height_reduction. No minimum height is ' \
+                            'printed - Elda Q3.'
+          }]
+          attrs['notes'] = [attrs['notes'],
+                            "HEIGHT REDUCED #{unit['height_reduced_from_mm']} -> " \
+                            "#{unit['height_mm']} mm. NO EXCLUSION LIST IS PRINTED FOR HEIGHT - " \
+                            'the one on printed p.548 is headed for WIDTH (Elda Q17). ' \
+                            'Feasibility to be confirmed with Cesar before it is relied on.'].compact.join(' | ')
         end
         companions = companion_refs_for(unit)
         attrs['companion_refs'] = companions if companions

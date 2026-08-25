@@ -1,0 +1,34 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "Top elements H.60",
+  "source_pages": "printed p.434 / PDF 436 (subset extracted: the H.60 row of the FIRST position)",
+  "family_note": "No family-level keys - tall_top_h60.json owns them. See fillers_h78.json.",
+  "why_now_note": "BE0151 WAS READ AND NOT HELD UNTIL TODAY, and the reason it was blocked has gone. _manifest recorded it as 'a filler naming a family the map does not contain' - the catalog's BASE chapter has no H.60 section. It does not; the TOP-ELEMENT chapter does, printed p.172, and that family is now held. A filler may not be held before its family; this one now has one. AND IT MATTERS: printed p.434's first position prints 60 and does NOT print 72, so choosing an H.60 top row gives the run a front-only closing strip that an H.72 row would not have had.",
+  "data": {
+    "unit_types": {
+      "filler_front": {
+        "description": "Filler in door finishes from 2,3 to 15 cm - front in door finishes",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - A FILLER DOES NOT OPEN. The kind is STATED rather than left absent because Panel.effective_slabs defaults a missing layout to single, and a default is not a source."
+        },
+        "codes": [
+          {
+            "code": "BE0151",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 22
+          }
+        ],
+        "notes": "Depth 22, the figure decided 2026-08-24 from the page's own art for every code in this position. THE WIDTH IS ORDERED, NOT CODED: one article covers 23 to 150, and Registry.with_ordered_width turns the range into a number before anything is drawn."
+      }
+    }
+  }
+}

@@ -27,3 +27,8 @@ tools/*_report.txt
 # tools/build_rbz.rb rebuilds them from src/ in one command, so a stale one in
 # git is worse than none - it installs cleanly and then misbehaves.
 build/
+
+# --- probe bridge: a post box into the open model, dev only ---
+tools/probe_inbox/
+tools/probe_outbox.txt
+tools/probe_log.txt

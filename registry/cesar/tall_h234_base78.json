@@ -1,0 +1,226 @@
+{
+  "section": "Tall units H. 234 | for base unit H. 78",
+  "class": "tall",
+  "family": "Tall H.234",
+  "source_pages": "printed p.162 / PDF 164 (subset extracted: p.162 only; the section runs printed p.156-164)",
+  "family_naming_note": "SAME FAMILY AS tall_h234.json, DIFFERENT SECTION - as tall_h210_base78 and tall_h222_base78 are to theirs. C0/C9 for printed p.151-155, C9x here.",
+  "family_keys_note": "NO FAMILY-LEVEL DATA KEYS. tall_h234.json owns height_mm 2340, plinth_h_mm 100, depths and collections for family 'Tall H.234'; 50_registry.rb refuses two files that state the same family fact, and it caught exactly that on tall_h222_base78.json earlier the same evening.",
+  "depth_note": "d.62 ONLY on printed p.162 - one label serves all three code tables.",
+  "extraction_note": "printed p.162 taken WHOLE 2026-08-25. THIRD TIME THIS PAGE HAS BEEN EXTRACTED AT A DIFFERENT HEIGHT, and each time because the kitchen moved: p.123 at H.210, p.143 at H.222 when the wall went for the ceiling, p.162 at H.234 when the top doors had to open sideways and only H.60 and H.48 sell that - and H.234 + H.60 is the one combination that both opens sideways and reaches 3048 with 8 mm to spare. 3 positions, 4 codes, verified against a 150-dpi render.",
+  "ladder_note": "THE REMAINDERS CLIMB WITH THE FAMILY, 120 AT A TIME: 1710 at H.210, 1830 at H.222, 1950 here; and 1515, 1635, 1755. A check pins every step, so a transcription slip in any of the three files shows up as a broken ladder rather than as a plausible number.",
+  "data": {
+    "unit_types": {
+      "tall_oven_h60_two_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 jumbo drawers - 2 shelves - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "2 shelves",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.162 / PDF 164",
+        "codes": [
+          {
+            "code": "C92657",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C92757",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.162: 96 / 39 / 39 handle, 96 / ⌐36 / ⌐36 gola. EVERY STACK ON THIS PAGE SUMS TO 2340, in both executions. Third family to satisfy the same invariant after printed p.121-125 at 2100 and printed p.143 at 2220.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 960
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 960
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
+          "appliance_opening_note": "THE 600 IS MEASURED, AND THIS IS THE THIRD TOTAL IT HAS BEEN MEASURED FROM. C92657 leaves 960 + 390 + 390 = 1740 out of 2340, so 600. printed p.121-122 left the same 600 six times out of 2100 and printed p.143 once out of 2220. Three totals, one answer, and the catalog prints the number nowhere."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",
+        "notes": "The third independent witness for the 600 niche. Three LEGRABOX finishes priced, none coded."
+      },
+      "tall_oven_microwave_jumbo": {
+        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "1 adjustable divider with stainless steel protection",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.162 / PDF 164",
+        "codes": [
+          {
+            "code": "C92640",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.162: 39 handle, ⌐36 gola. EVERY STACK ON THIS PAGE SUMS TO 2340, in both executions. Third family to satisfy the same invariant after printed p.121-125 at 2100 and printed p.143 at 2220.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1950,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1950,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
+          "remainder_note": "390 handle against 30 + 360 gola: the same 1950 both ways. 120 more than C42640 at H.222."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",
+        "notes": "THE COLUMN THE EAST WALL NEEDS at the chosen height. Twin of C63640 and C42640."
+      },
+      "tall_oven_microwave_jumbo_no_pushpull": {
+        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - no push-pull device - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "1 adjustable divider with stainless steel protection",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.162 / PDF 164",
+        "codes": [
+          {
+            "code": "C93659",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.162: 58,5 handle, ⌐55,5 gola. EVERY STACK ON THIS PAGE SUMS TO 2340, in both executions. Third family to satisfy the same invariant after printed p.121-125 at 2100 and printed p.143 at 2220.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1755,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 585
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1755,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
+          "remainder_note": "585 against 30 + 555: the same 1755 both ways. 120 more than C43659 at H.222."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",
+        "notes": "Twin of C63659 and C43659. NOTE THE LETTER: C93659 against C92640 on one page - the tail is POSITION-scoped."
+      }
+    }
+  }
+}

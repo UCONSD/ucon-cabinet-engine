@@ -62,8 +62,32 @@ module UCON
       # walks the model. A rule that sits in the glue is a rule the headless
       # suite cannot see - which is how a drawer unit came to be offered a
       # single gola profile for weeks.
+      # CORRECTED 2026-08-25, and the correction is the contract's own sentence.
+      # This used to be "carries a code", which is right about the niche for the
+      # WRONG REASON and silently wrong about anything else. §4.2 rule 4: when no
+      # valid article exists the code becomes null and the object carries a
+      # visible warning - "unknown is null, never a quietly kept stale article
+      # AND NEVER A SILENT DELETION". A code-only test deletes it silently, and
+      # that surfaced the first time the rule was used: two custom 610 boxes over
+      # a fridge niche, which the factory has to make and which vanished from the
+      # order.
+      #
+      # The dictionary already told the two apart and nobody read it. A niche
+      # carries manufacturer = CLIENT, because it is the space the client's own
+      # machine occupies. A custom-size cabinet carries manufacturer = Cesar and
+      # no code, because SOMEBODY HAS TO MAKE IT and we do not know the article
+      # yet. So the question is not "is there a code" but "is there somebody to
+      # make it", and the missing code becomes a warning on the row instead of a
+      # reason to drop it.
+      #
+      # A void is excluded by class: a reservation is a span the drawing owns,
+      # not a thing anyone builds.
       def orderable?(attrs)
-        !(attrs || {})['code'].to_s.empty?
+        a = attrs || {}
+        return false if a['object_class'].to_s == 'void'
+        return false if a['manufacturer'].to_s == 'client'
+
+        !a['manufacturer'].to_s.empty?
       end
 
       def rows(objects)
@@ -93,11 +117,22 @@ module UCON
         COLUMNS.each_with_object({}) { |c, h| h[c] = nil }
       end
 
+      # A ROW WITHOUT A CODE SAYS SO IN WORDS. The companion rows have done this
+      # since v2 - 'UNRESOLVED companion - no article for this size' - and a unit
+      # row had no equivalent because until 2026-08-25 a unit without a code
+      # never reached here. Whoever reads the order must see the hole, not infer
+      # it from an empty cell.
+      def order_description(a)
+        return a['unit_type'] unless a['code'].to_s.empty?
+
+        ['CUSTOM SIZE - NO ARTICLE, to be quoted', a['unit_type']].compact.join(' - ')
+      end
+
       def unit_row(number, a)
         blank.merge(
           'row' => number, 'level' => 0,
           'code' => a['code'],
-          'description' => a['unit_type'],
+          'description' => order_description(a),
           # A corner unit is dimensioned by its footprint instead of a width.
           # What the factory actually prints in the L column for one of these
           # is NOT known - positions 1 and 2 of the estimate now with Elda are

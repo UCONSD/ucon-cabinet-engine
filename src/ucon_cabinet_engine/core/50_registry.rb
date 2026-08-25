@@ -272,16 +272,115 @@ module UCON
       #
       # Pure, and raises rather than defaulting. A filler silently built at the
       # bottom of its range would be a drawing nobody could tell was wrong.
+      # WHICH PROHIBITION EACH TEST STANDS FOR. The list itself is the CATALOG'S,
+      # printed in the Modifications section and held in _manifest.json under
+      # modifications.width_modification_prohibited_for; these are only the
+      # readings of it. The keys must match that list exactly and a check pins
+      # that they do, so a change to the source list breaks here rather than
+      # quietly going unenforced.
+      #
+      # THEY MATCH THE CATALOG'S OWN WORDS against the catalog's own
+      # descriptions, which is prose against prose and worth naming as such. It
+      # is the weakest thing in this file. A false NO is loud - somebody is told
+      # a reduction is refused and asks why - and a false YES is silent, which
+      # is why the suite runs every held code past this and pins the count.
+      WIDTH_MOD_FORBIDDEN = {
+        'appliance units' =>
+          ->(u) { %w[appliance appliance_front].include?(u['object_class'].to_s) },
+        'units with interior drawers' =>
+          ->(u) { u['description'].to_s =~ /interior drawer/i },
+        'units with jumbo drawers' =>
+          ->(u) { u['description'].to_s =~ /jumbo/i },
+        'pull-out units' =>
+          ->(u) { u['description'].to_s =~ /pull[-\s]?out/i },
+        # NOT push-pull. The first version matched it and refused 133 codes,
+        # most of them for saying 'NO push-pull device' - the description
+        # naming the thing it does not have. A push-pull device is opening
+        # HARDWARE anyway, not the mechanism the prohibition means: the
+        # catalog's 'units with mechanisms' are the pull-outs, the Magicorner
+        # and their kin. Matching a word without reading the sentence it sits
+        # in is exactly the failure this file warns about two lines up.
+        'units with mechanisms' =>
+          ->(u) { u['description'].to_s =~ /mechanism|magicorner/i },
+        'tall or wall units with framed glass doors' =>
+          ->(u) { (u['front_layout'] || {})['cutout'] || u['description'].to_s =~ /glass/i }
+      }.freeze
+
+      def width_modification_refusal(unit)
+        WIDTH_MOD_FORBIDDEN.each { |why, test| return why if test.call(unit) }
+        nil
+      end
+
       def with_ordered_width(unit, width_mm)
         range = unit['width_range_mm']
 
         if range.nil?
           return unit if width_mm.nil? || width_mm.to_s.empty?
 
-          raise ArgumentError,
-                "#{unit['code']} states its own width (#{unit['width_mm']} mm). " \
-                'A width is ordered only for an article whose catalog row gives ' \
-                'a range instead of a width.'
+          stated = unit['width_mm'].to_f
+          asked  = width_mm.to_f
+          return unit if (asked - stated).abs < 0.001
+
+          # A WIDTH REDUCTION IS A REAL THING AND THE ENGINE COULD NOT SAY IT.
+          # Elda, 2026-08-24 (Q3, closed for width): a reduced unit KEEPS THE
+          # CODE of the module it was cut from and carries the variant
+          # WIDTH REDUCTION with a flat surcharge - 989370 at 138 points for a
+          # base or wall unit, 989380 at 227 for a tall one. The manifest has
+          # held those codes since, marked 'NOT yet wired to the generator'.
+          # This is the wiring. Found needed on 2026-08-25 by a wall that wanted
+          # 437 from a 450 module and 874 from a 900 one.
+          # A WIDER UNIT IS A REQUEST, NOT AN OPTION, and it is now drawn as one.
+          #
+          # This raised until 2026-08-25 evening, and the ground was sound: the
+          # Modifications section prints REDUCTION only - 989370 and 989380 for
+          # width, 989370 again for height - and the only increases printed
+          # anywhere are a side panel's DEPTH in 50 mm steps and the combined
+          # tall unit of printed p.550, which reaches H.235-278 by stacking two
+          # standard carcasses under one door. Nothing read gives a carcass a
+          # wider body, and nothing gives that a code or a surcharge.
+          #
+          # WHAT CHANGED IS THE WORKFLOW, NOT THE EVIDENCE. Andriy, 2026-08-25:
+          # it is done in practice, but this factory is new to him, so the plan
+          # is to DRAW it, send the LayOut sheet to Elda, have her enter it in
+          # Metron by hand, and compare. The drawing is the question; Metron's
+          # answer is the confirmation - exactly how width REDUCTION came to be
+          # known, from estimate 2026/30831.
+          #
+          # So the engine draws it and refuses to dress it up: no code is
+          # invented, the variant says NOT PRINTED in as many words, and
+          # code_status stays PRELIMINARY. A refusal here would have meant no
+          # drawing, and therefore no question, and therefore no answer.
+          if asked > stated
+            if (why = width_modification_refusal(unit))
+              raise ArgumentError,
+                    "#{unit['code']} may not be width-modified at all: the catalog " \
+                    "prohibits it for #{why}."
+            end
+            unless asked == asked.round
+              raise ArgumentError,
+                    "A modified width is a whole number of millimetres; got #{width_mm.inspect}."
+            end
+
+            return unit.merge('width_mm' => asked.round,
+                              'width_increased_from_mm' => stated.round)
+          end
+
+          if (why = width_modification_refusal(unit))
+            raise ArgumentError,
+                  "#{unit['code']} may not be width-modified: the catalog prohibits it " \
+                  "for #{why}. Modifications section, held in _manifest.json under " \
+                  'modifications.width_modification_prohibited_for.'
+          end
+
+          unless asked == asked.round
+            raise ArgumentError,
+                  "A reduced width is a whole number of millimetres; got #{width_mm.inspect}."
+          end
+          raise ArgumentError, "#{unit['code']} reduced to #{asked.round} is not positive" unless
+            asked.positive?
+
+          return unit.merge('width_mm' => asked.round,
+                            'width_reduced_from_mm' => stated.round)
         end
 
         lo, hi = range
@@ -290,6 +389,27 @@ module UCON
                 "#{unit['code']} has no width in the catalog: one article covers " \
                 "#{lo} to #{hi} mm and the width is stated per order. Ask for it " \
                 'before building.'
+        end
+
+        # A FLOAT USED TO WALK STRAIGHT PAST THIS GUARD. Integer("49.2") raises,
+        # which is what the rescue below was written for - but Integer(49.2)
+        # TRUNCATES and returns 49 without a word. So a caller that asked for
+        # 49,2 got 49 built, and the only trace was a 0,2 mm gap at the wall.
+        # Found 2026-08-25 building the Avenida Primavera top run, where three
+        # fillers were ordered at 49,2, 69,2 and 109,3 and three were drawn at
+        # 49, 69 and 109. The message below has always said what it means; the
+        # code did not enforce it.
+        #
+        # The rule itself does not change - the catalog orders a filler in whole
+        # millimetres - but a width that is not one is now REFUSED and named,
+        # instead of being quietly rounded into something nobody asked for.
+        if width_mm.is_a?(Float) && width_mm != width_mm.round
+          raise ArgumentError,
+                "A filler width is a whole number of millimetres; got " \
+                "#{width_mm.inspect}. Round it yourself and say which way: " \
+                "#{width_mm.floor} leaves #{format('%.2f', width_mm - width_mm.floor)} mm " \
+                "to scribe, #{width_mm.ceil} is #{format('%.2f', width_mm.ceil - width_mm)} mm " \
+                'too wide.'
         end
 
         w = begin
@@ -309,6 +429,73 @@ module UCON
         end
 
         unit.merge('width_mm' => w)
+      end
+
+      # ---- HEIGHT, and what the page prints about it -------------------------
+      #
+      # Added 2026-08-25, the same evening as the width increase and for the
+      # same wall: over the range the project needs 610 x 720 where printed
+      # p.172's position prints 600 x 600.
+      #
+      # WHAT THE SOURCE ACTUALLY SAYS, and the asymmetry is the point:
+      #
+      #   HEIGHT REDUCTION is printed and priced - printed p.548, code 989370,
+      #   138 points, and the row is repeated for base/wall and for TALL at the
+      #   same code and the same points, where WIDTH charges tall units more
+      #   (989380, 227). Held in _manifest.json under
+      #   modifications.codes.height_reduction since the day the chapter was
+      #   read, marked 'NOT yet wired'. This is the wiring.
+      #
+      #   HEIGHT INCREASE is printed nowhere, exactly like a width increase, and
+      #   is drawn on the same terms: a request, marked NOT PRINTED, no code
+      #   invented. See the long note above with_ordered_width.
+      #
+      #   AND THE EXCLUSION LIST IS FOR WIDTH ONLY. printed p.548 heads it
+      #   'Units that cannot be modified in WIDTH' and names appliance units,
+      #   interior/jumbo drawers, pull-outs, mechanisms and framed glass. NO
+      #   SUCH LIST IS PRINTED FOR HEIGHT. So this method does NOT reuse
+      #   WIDTH_MOD_FORBIDDEN wholesale - borrowing a prohibition the page did
+      #   not write would be inventing catalog, which is the one thing this
+      #   registry may not do. Elda Q17 asks whether the list is meant to cover
+      #   height too, and until she answers, every height change carries the
+      #   master rule on the object.
+      #
+      # ONE REFUSAL IS OURS AND IS NOT BORROWED. An appliance housing's opening
+      # height is the APPLIANCE'S - that is not a catalog prohibition, it is a
+      # fact this engine already holds and draws (the 600 oven niche, recovered
+      # from three different family totals). Changing such a carcass's height
+      # without changing what it houses would produce a stack that no longer
+      # sums to its own height, and §4.2's arithmetic would catch it one step
+      # later with a worse message. So it is refused here, and the reason given
+      # is ours rather than the page's.
+      def height_modification_refusal(unit)
+        return 'an appliance housing takes its opening height from the appliance, ' \
+               'not from the carcass - change the appliance, not the box' if
+          %w[appliance appliance_front].include?(unit['object_class'].to_s)
+
+        nil
+      end
+
+      def with_ordered_height(unit, height_mm)
+        return unit if height_mm.nil? || height_mm.to_s.empty?
+
+        stated = unit['height_mm'].to_f
+        asked  = height_mm.to_f
+        return unit if (asked - stated).abs < 0.001
+
+        if (why = height_modification_refusal(unit))
+          raise ArgumentError,
+                "#{unit['code']} may not be height-modified: #{why}."
+        end
+        unless asked == asked.round
+          raise ArgumentError,
+                "A modified height is a whole number of millimetres; got #{height_mm.inspect}."
+        end
+        raise ArgumentError, "#{unit['code']} at #{asked.round} is not positive" unless
+          asked.positive?
+
+        key = asked > stated ? 'height_increased_from_mm' : 'height_reduced_from_mm'
+        unit.merge('height_mm' => asked.round, key => stated.round)
       end
 
       # CACHED ALONGSIDE data, AND FOR THE SAME REASON. catalog is a pure

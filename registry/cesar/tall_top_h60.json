@@ -1,0 +1,129 @@
+{
+  "section": "Tall unit top elements H. 60 | without fixings",
+  "class": "tall",
+  "family": "Top elements H.60",
+  "source_pages": "printed p.172 / PDF 174 (taken WHOLE - three positions)",
+  "family_naming_note": "Joins the name catalog_map already used. Prefix SD; the run SB/SC/SD/SE against H.36/H.48/H.60/H.72 is the only alphabetical run of family letters in this catalog and is still read from the row.",
+  "extraction_note": "printed p.172 taken WHOLE 2026-08-25, and taken because of a REMARK rather than a plan: Andriy said the top doors must open to the side, not upward. printed p.170 and p.173 - the two heights already held - sell only a top-hung door. THIS PAGE AND printed p.171 ARE THE ONLY ONES THAT SELL A SIDE-HINGED TOP ELEMENT, which is why the four pages of this chapter are not one page at four heights. 3 positions, 9 codes, d.62, verified against a 150-dpi render. printed p.171 (SC, H.48) remains unread.",
+  "side_hinged_width_note": "THE SIDE-HINGED SINGLE DOOR STOPS AT W.60. Position 2 prints SD0531 at W.45 and SD0631 at W.60 and nothing wider; above that the side-hinged option is the TWO-door position, W.90 and W.120. CONSEQUENCE, WRITTEN DOWN BECAUSE IT DECIDES A LAYOUT: a 610 side-hinged single door cannot be made. Modifications reduce, and there is no side-hinged single door above 600 to reduce FROM.",
+  "data": {
+    "height_mm": 600,
+    "plinth_h_mm": 0,
+    "plinth_note": "ZERO, AND IT HAS TO BE STATED. Generator.plinth_h_mm defaults to Standards::PLINTH_H_MM when a family is silent. A top element stands on the tall unit below it, so silence would draw it a 100 mm plinth in mid-air. Learned on tall_top_h36/h72 the same day.",
+    "mounting_note": "NO `mounting` VALUE, AND THE ABSENCE IS A READING. 'without fixings': this element rests on the tall unit beneath it and meets neither the floor nor the wall, which are the only two values Object Contract v2.1 allows. See tall_top_h72.json for the full argument.",
+    "depths_mm": [
+      620
+    ],
+    "depth_note": "d.62 only - one label serves all three code tables and no second band is printed.",
+    "collections": [
+      "Maxima",
+      "Intarsio"
+    ],
+    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.172 / PDF 174",
+    "overall_height_n_elle_mm": 622,
+    "n_elle_note": "printed p.172 carries 'N- Elle' and 62,2 in its TEXT LAYER and prints neither. NOT PRINTED, verified the way the wall chapter's was on 2026-08-23: rendering the page at 600 dpi and cropping exactly where pdftotext puts the string shows blank paper. White text, or a hidden layer for the N_Elle edition - IN THE FILE, NOT IN THE BOOK. Third chapter to do it. DOCUMENT LEAD BELOW SOURCE TRUST: used for nothing, drawn by nothing, never quoted to Elda as something the catalog prints.",
+    "unit_types": {
+      "top_element_top_hung": {
+        "description": "Top element with top-hung door - 1 top-hung door - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [
+          "1 shelf"
+        ],
+        "source_ref": "printed p.172 / PDF 174",
+        "codes": [
+          {
+            "code": "SD0500",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "SD0600",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "SD0700",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "SD0900",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "SD1200",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge. Single elevation, 60 - no handle/gola pair is printed, as at H.36 and H.72."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "REFUSED IN THE CATALOG'S OWN WORDS, in the section title on printed p.172: 'without fixings'. Not a missing glyph and not a derivation - the same kind of reading printed p.37 gives with 'not available wall hung'.",
+        "notes": "The position this chapter leads with, and the one Andriy ruled out for this kitchen."
+      },
+      "top_element_door": {
+        "description": "Top element with door - 1 rh or lh door - 1 shelf",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf"
+        ],
+        "source_ref": "printed p.172 / PDF 174",
+        "codes": [
+          {
+            "code": "SD0531",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "SD0631",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "single",
+          "note": "A SIDE-HINGED door, so NO hinge_axis: the key marks the exceptions - top and bottom - and a side hinge is the ordinary case. hinge_side stays per-order, the page saying \"1 rh or lh door\"."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "REFUSED IN THE CATALOG'S OWN WORDS, in the section title on printed p.172: 'without fixings'. Not a missing glyph and not a derivation - the same kind of reading printed p.37 gives with 'not available wall hung'.",
+        "notes": "THE ARTICLE THE EAST WALL NEEDS. W.45 and W.60 ONLY - see side_hinged_width_note. SD0631 is the 600 that sits over each 600 column."
+      },
+      "top_element_two_doors": {
+        "description": "Top element with doors - 2 doors - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [
+          "1 shelf"
+        ],
+        "source_ref": "printed p.172 / PDF 174",
+        "codes": [
+          {
+            "code": "SD0930",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "SD1230",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors side by side. Not handed - a pair of doors has no hand, the same reading tall_doors_over_doors takes at H.210."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "REFUSED IN THE CATALOG'S OWN WORDS, in the section title on printed p.172: 'without fixings'. Not a missing glyph and not a derivation - the same kind of reading printed p.37 gives with 'not available wall hung'.",
+        "notes": "The side-hinged option ABOVE W.60. SD1230 at 1200 is the widest thing this chapter sells with a door that does not open upward, and it is 20 short of the 1220 fridge niche."
+      }
+    }
+  }
+}

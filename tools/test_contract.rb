@@ -228,9 +228,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 724 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 97 tall + 13 fillers)') do
+check('registry loads and holds 752 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 124 tall + 14 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 724
+  raise "got #{n}" unless n == 752
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -414,9 +414,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 724 rows, each with code/dims/description/source') do
+check('registry catalog: 752 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 724
+  raise cat.length.to_s unless cat.length == 752
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -514,12 +514,17 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 96',
                                              'Sink base units H. 58.5',
                                              'Sink base units H. 78',
+                                             'Tall unit top elements H. 36 | without fixings',
+                                             'Tall unit top elements H. 60 | without fixings',
+                                             'Tall unit top elements H. 72 | without fixings',
                                              'Tall units H. 138',
                                              'Tall units H. 198',
                                              'Tall units H. 210',
                                              'Tall units H. 210 | for base unit H. 78',
                                              'Tall units H. 222',
+                                             'Tall units H. 222 | for base unit H. 78',
                                              'Tall units H. 234',
+                                             'Tall units H. 234 | for base unit H. 78',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 120',
                                              'Wall units H. 36',
@@ -1205,7 +1210,7 @@ check('AFTER THE SWEEP, AN ABSENT HUNG READING IS A BUG') do
     man.dig('page_symbols', 'sweep_done', 'wall_chapter').to_s.include?('no pictogram column')
 end
 
-check('65 codes refuse the hung version, and every move of that number is dated') do
+check('92 codes refuse the hung version, and every move of that number is dated') do
   # A sweep that changed an availability would be a correction, and a
   # correction gets a dated note of its own (rule 9). The printed p.19 sweep
   # changed none, and that is worth pinning: if a later edit quietly flips a
@@ -1225,11 +1230,25 @@ check('65 codes refuse the hung version, and every move of that number is dated'
   # mirror image of the Magicorner disagreement on printed p.42, and the
   # priced offer is the one a person can actually order. See tall_fridge's
   # wall_hung_note; the glyph goes to Elda.
+  #
+  # 2026-08-25, later: 65 -> 75. The ten top elements of printed p.170 and p.173
+  # refuse, and they are the FIRST codes in the registry to refuse in the
+  # catalog's own words rather than by a missing glyph - the section title is
+  # 'without fixings'. Tall 61 -> 71, base still 4.
   refused = Registry.catalog.map { |c| Registry.lookup(c['code']) }
                     .select { |u| u['wall_hung'] == false }
-  raise refused.length.to_s unless refused.length == 65
+  #
+  # 2026-08-25, later still: 75 -> 79. printed p.143 arrived with four codes when
+  # Andriy chose H.222 + top H.72 for the east wall, and all four refuse. Tall
+  # 71 -> 75, base still 4.
+  #
+  # 2026-08-25, last move of the evening: 79 -> 92. printed p.172 brought nine
+  # top elements and printed p.162 four columns, and all thirteen refuse - the
+  # top elements in the catalog's own words again, the columns by the absent
+  # glyph. Tall 75 -> 88, base still 4.
+  raise refused.length.to_s unless refused.length == 92
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 61 }
+  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 88 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -4191,17 +4210,55 @@ end
 
 puts "\nthe model walk: a rule in the pure module, a click in the glue"
 
-check('ORDERABLE means carries a code - and the niche is why') do
+check('ORDERABLE means somebody has to make it - and the niche is still why') do
   # An appliance niche is drawn and never ordered. It is not skipped by a
-  # special case in the walk; it simply has no code, because the generator
-  # gives it none and marks it manufacturer = client. Contract §2: the
-  # dictionary is what tools read, so the dictionary answers.
+  # special case in the walk; the generator marks it manufacturer = CLIENT, and
+  # Contract §2 says the dictionary is what tools read.
+  #
+  # THE RULE WAS 'CARRIES A CODE' UNTIL 2026-08-25, which got the niche right
+  # for the wrong reason: a niche has no code AND no maker, and the test read
+  # the wrong half. See the next check for what that cost.
   niche = Generator.niche_attributes_for(Registry.lookup('V80730'), 600, true)
   raise 'a niche must not be orderable' if Export.orderable?(niche)
-  raise 'and it must not be orderable because of its class, but its code' unless
-    niche['code'].to_s.empty?
+  raise 'and the reason must be its maker, not its code' unless
+    niche['manufacturer'].to_s == 'client'
   raise 'a cabinet must be' unless Export.orderable?(Generator.attributes_for(Registry.lookup('B80601')))
   raise 'nil must not blow up the walk' if Export.orderable?(nil)
+end
+
+check('A CUSTOM SIZE WITH NO ARTICLE IS ORDERED, NOT DELETED') do
+  # Object Contract v2.1 §4.2 rule 4: unknown is null, 'never a quietly kept
+  # stale article AND NEVER A SILENT DELETION'. The export's orderable? test was
+  # 'carries a code', so the first object ever to use that rule - two custom 610
+  # boxes above a fridge niche, which the factory has to build - dropped out of
+  # the order without a word. The dictionary already told a custom size from a
+  # client's machine: one says Cesar, the other says client.
+  custom = {
+    'schema_version' => '2', 'object_class' => 'cabinet', 'manufacturer' => 'Cesar',
+    'geometry_kind' => 'linear', 'width_mm' => 610, 'depth_mm' => 620, 'height_mm' => 600,
+    'unit_type' => 'Top element, custom width', 'code' => nil,
+    'code_status' => 'PRELIMINARY', 'status' => 'PLANNING',
+    'source_ref' => 'no printed article - Elda Q11'
+  }
+  Contract.validate!(custom.dup)
+  raise 'a custom size must reach the order' unless Export.orderable?(custom)
+  row = Export.rows([custom]).first
+  raise row.inspect unless row['code'].nil?
+  raise "the row must say so in words: #{row['description'].inspect}" unless
+    row['description'].to_s.include?('NO ARTICLE')
+  raise 'and it must still carry its size' unless
+    [row['l_mm'], row['h_mm'], row['p_mm']] == [610, 600, 620]
+
+  # AND A VOID IS STILL NOT ORDERED. A reservation is a span the drawing owns,
+  # not a thing anyone builds, and it must not have followed the custom size in.
+  void = { 'schema_version' => '2', 'object_class' => 'void', 'void_role' => 'run_gap',
+           'manufacturer' => 'Cesar', 'geometry_kind' => 'linear',
+           'width_mm' => 1220, 'depth_mm' => 620, 'height_mm' => 2440,
+           'code' => nil, 'code_status' => 'PRELIMINARY', 'status' => 'PLANNING',
+           'source_ref' => 'measured' }
+  Contract.validate!(void.dup)
+  raise 'a void must not be ordered' if Export.orderable?(void)
+  raise 'a void must not produce a row' unless Export.rows([void]).empty?
 end
 
 check('the FILTER lives in the pure module, so no caller can lose it') do
@@ -4343,19 +4400,248 @@ check('a width outside the printed range is refused, and both ends are not') do
     end
 end
 
-check('SENTINEL: a width may not be ordered for an article that names its own') do
-  # The other half of Generator::INSTANCE_KEYS - an object may not out-vote the
-  # registry about what article it is. B80601 is 600 wide and that is final; a
-  # narrower one is a MODIFICATION with a surcharge (Elda position 4), never a
-  # number typed into a dialog.
+check('SENTINEL: a width change keeps the CODE; only the DIRECTION is printed or not') do
+  # 2026-08-25, correction the second. This check has been wrong twice, and both
+  # corrections are kept because the reasoning is the value, not the verdict.
+  #
+  # (1) It used to refuse B80601 at 560 outright, on the grounds that an object
+  #     may not out-vote the registry about what article it is. The ground was
+  #     right and the refusal was wrong: Elda's letter of 2026-08-24 prices
+  #     exactly that unit - '560 priced as B80601 with the variant WIDTH
+  #     REDUCTION' - so 560 is not a typed number overriding the catalog, it is
+  #     a MODIFICATION the catalog sells.
+  # (2) It then asserted that a WIDER width 'does not exist' and must be refused.
+  #     That confused two different things: the catalog does not PRINT a width
+  #     increase (the Modifications section lists reduction only; the only
+  #     printed increases are side-panel DEPTH and the assembled tall unit on
+  #     p.550), and a width increase cannot be BUILT. The first is true and the
+  #     engine still says so on every increased object. The second was mine to
+  #     assume and not mine to assert: the drawing is what goes to Elda, she
+  #     keys it into Metron, and a refusal here would have prevented the very
+  #     question from being asked. So the engine now DRAWS an increase and marks
+  #     it NOT PRINTED rather than refusing to draw it.
+  #
+  # What the sentinel guards is what survived both corrections: the CODE never
+  # changes, and the two directions are never confused with one another.
+  u = Registry.with_ordered_width(Registry.lookup('B80601'), 560)
+  raise 'the reduced width did not take' unless u['width_mm'] == 560
+  raise 'the code must stay the module it was cut from' unless u['code'] == 'B80601'
+  raise 'and it must remember what it was cut from' unless u['width_reduced_from_mm'] == 600
+  raise 'a reduction is not an increase' unless u['width_increased_from_mm'].nil?
+
+  w = Registry.with_ordered_width(Registry.lookup('B80601'), 640)
+  raise 'the wider width did not take' unless w['width_mm'] == 640
+  raise 'the code must stay the module it was widened from' unless w['code'] == 'B80601'
+  raise 'and it must remember what it was widened from' unless w['width_increased_from_mm'] == 600
+  raise 'an increase is not a reduction' unless w['width_reduced_from_mm'].nil?
+
+  # AND THE DRAWING MUST SAY IT IS AN ASK, NOT AN OPTION.
+  a = Generator.attributes_for(w)
+  Contract.validate!(a.dup)
+  v = Array(a['variants']).find { |x| x['key'] == 'WIDTH INCREASE' }
+  raise "no variant: #{a['variants'].inspect}" if v.nil?
+  raise v.inspect unless v['value'].include?('600')
+  raise 'the value must not read as a catalog option' unless v['value'].include?('NOT PRINTED')
+  raise 'the variant must point at the open question' unless v['source_ref'].to_s.include?('Q11')
+  raise 'the note must say the catalog does not print it' unless
+    a['notes'].to_s.include?('THE CATALOG DOES NOT PRINT THIS')
+  raise 'feasibility must be flagged' unless a['notes'].to_s.include?('Cesar')
+  # it is still a real unit on the order, under its own code
+  raise 'an increased unit must still be ordered under its module code' unless a['code'] == 'B80601'
+
+  # a whole number of millimetres, in BOTH directions
   begin
-    Registry.with_ordered_width(Registry.lookup('B80601'), 560)
-    raise 'a typed width was allowed to overwrite the catalog'
+    Registry.with_ordered_width(Registry.lookup('B80601'), 640.5)
+    raise 'a fractional increase was allowed'
   rescue ArgumentError => e
-    raise "wrong refusal: #{e.message}" unless e.message.include?('states its own width')
+    raise "wrong refusal: #{e.message}" unless e.message.include?('whole number')
   end
+
+  # THE PROHIBITIONS ARE THE CATALOG'S, and they bite in BOTH directions.
+  begin
+    Registry.with_ordered_width(Registry.lookup('B80753'), 700)
+    raise 'a jumbo-drawer unit was width-modified'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('jumbo')
+  end
+  begin
+    Registry.with_ordered_width(Registry.lookup('B80753'), 1000)
+    raise 'a jumbo-drawer unit was WIDENED despite the prohibition'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('jumbo')
+  end
+
   raise 'and an unranged article must pass through untouched' unless
     Registry.with_ordered_width(Registry.lookup('B80601'), nil)['width_mm'] == 600
+  raise 'asking for the width it already has is not a modification' unless
+    Registry.with_ordered_width(Registry.lookup('B80601'), 600)['width_reduced_from_mm'].nil? &&
+    Registry.with_ordered_width(Registry.lookup('B80601'), 600)['width_increased_from_mm'].nil?
+end
+
+check('HEIGHT IS THE SAME TWO DIRECTIONS AND NOT THE SAME EVIDENCE') do
+  # Added 2026-08-25 with the width increase, for the same wall: over the range
+  # the project needs 610 x 720 where printed p.172's position prints 600 x 600.
+  #
+  # The ASYMMETRY is what this check exists to hold still. Height REDUCTION is
+  # printed and priced - printed p.548, 989370, 138 points, and for a TALL unit
+  # at the same code and the same points, where a WIDTH reduction charges tall
+  # units 989380 / 227. Height INCREASE is printed nowhere. Two directions, two
+  # different kinds of statement, and the object must not blur them.
+  base = Registry.lookup('SD0631')
+  raise 'the fixture moved' unless base['height_mm'] == 600 && base['width_mm'] == 600
+
+  up = Registry.with_ordered_height(base, 720)
+  raise 'the taller height did not take' unless up['height_mm'] == 720
+  raise 'the code must not change' unless up['code'] == 'SD0631'
+  raise 'and it must remember what it grew from' unless up['height_increased_from_mm'] == 600
+  raise 'an increase is not a reduction' unless up['height_reduced_from_mm'].nil?
+  a = Generator.attributes_for(up)
+  Contract.validate!(a.dup)
+  v = Array(a['variants']).find { |x| x['key'] == 'HEIGHT INCREASE' }
+  raise "no variant: #{a['variants'].inspect}" if v.nil?
+  raise 'the value must not read as a catalog option' unless v['value'].include?('NOT PRINTED')
+  raise 'and it must not claim a surcharge code of its own' if v['value'] =~ /9893\d\d/
+  raise 'the note must say the catalog does not print it' unless
+    a['notes'].to_s.include?('THE CATALOG DOES NOT PRINT THIS')
+
+  down = Registry.with_ordered_height(base, 480)
+  raise 'the reduced height did not take' unless down['height_mm'] == 480
+  raise 'and it must remember what it was cut from' unless down['height_reduced_from_mm'] == 600
+  b = Generator.attributes_for(down)
+  Contract.validate!(b.dup)
+  w = Array(b['variants']).find { |x| x['key'] == 'HEIGHT REDUCTION' }
+  raise "no variant: #{b['variants'].inspect}" if w.nil?
+  raise 'a printed modification names its code' unless w['source_ref'].include?('989370')
+  # AND IT MUST NOT NAME THE WIDTH CODE FOR TALL UNITS. printed p.548 charges a
+  # tall unit 989380 / 227 for WIDTH and 989370 / 138 for HEIGHT; copying the
+  # width table across is the exact error this check is here to catch.
+  raise 'the tall WIDTH code has leaked into the height row' if w['source_ref'].include?('989380')
+  raise 'the missing minimum must be named, not silently absent' unless
+    w['source_ref'].include?('Q3')
+  raise 'and the exclusion list is for WIDTH - the note must say so' unless
+    b['notes'].to_s.include?('NO EXCLUSION LIST IS PRINTED FOR HEIGHT')
+
+  # THE FRONT FOLLOWS THE CARCASS, or the drawing lies about what is ordered.
+  raise 'the front did not follow the height' unless
+    Generator.front_slabs(up).map { |s| s[:h_mm] }.max == 720
+
+  # AND THE BUILDER MUST BE ABLE TO ASK FOR IT. Generator.build is where a code
+  # becomes geometry; if the ordered height cannot reach it, everything above is
+  # true of an object nobody can draw. Checked by SIGNATURE because build itself
+  # needs SketchUp and this file must not.
+  raise 'Generator.build takes no height_mm' unless
+    Generator.method(:build).parameters.include?(%i[key height_mm])
+  raise 'Generator.build lost width_mm' unless
+    Generator.method(:build).parameters.include?(%i[key width_mm])
+
+  # an unmodified unit carries neither variant
+  c = Generator.attributes_for(base)
+  raise 'an unmodified unit must claim no height change' if
+    Array(c['variants']).any? { |x| x['key'].to_s.start_with?('HEIGHT') }
+
+  # asking for the height it already has is not a modification, and nil is not one either
+  raise 'the same height is not a modification' unless
+    Registry.with_ordered_height(base, 600)['height_reduced_from_mm'].nil?
+  raise 'nil must pass through untouched' unless
+    Registry.with_ordered_height(base, nil)['height_mm'] == 600
+
+  # whole millimetres, exactly as for width
+  begin
+    Registry.with_ordered_height(base, 720.5)
+    raise 'a fractional height was allowed'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('whole number')
+  end
+
+  # AND THE ONE REFUSAL THAT IS OURS RATHER THAN THE PAGE'S: an appliance
+  # housing's opening height is the appliance's. No printed prohibition says so;
+  # the arithmetic of every stack in this registry does.
+  # catalog rows are the RAW registry and carry no object_class; lookup is what
+  # enriches them. Reading it off the raw row returns nil for every code and the
+  # refusal below would then never be exercised - a check that passes by finding
+  # nothing is the quietest way to test nothing at all.
+  appliance = Registry.catalog.map { |x| Registry.lookup(x['code']) }.compact.find do |x|
+    %w[appliance appliance_front].include?(x['object_class'].to_s)
+  end
+  raise 'no appliance code in the registry to test the refusal against' if appliance.nil?
+  begin
+    Registry.with_ordered_height(appliance, appliance['height_mm'].to_i - 60)
+    raise 'an appliance housing was height-modified'
+  rescue ArgumentError => e
+    raise "wrong refusal: #{e.message}" unless e.message.include?('appliance')
+  end
+end
+
+check('A REDUCTION REACHES THE OBJECT AND THE ORDER, as a variant') do
+  # Metron's estimate 2026/30831 priced 560 as B80601 with the variant
+  # WIDTH REDUCTION and 138 points on the SAME ROW, so a reduction is a variant
+  # and not a companion line - the estimate is what actually went out.
+  u = Registry.with_ordered_width(Registry.lookup('B80601'), 560)
+  a = Generator.attributes_for(u)
+  Contract.validate!(a.dup)
+  raise a['width_mm'].inspect unless a['width_mm'] == 560
+  raise 'the code must not change' unless a['code'] == 'B80601'
+  v = Array(a['variants']).find { |x| x['key'] == 'WIDTH REDUCTION' }
+  raise "no variant: #{a['variants'].inspect}" if v.nil?
+  raise v.inspect unless v['value'].include?('600')
+  raise 'the variant must cite where the rule came from' unless
+    v['source_ref'].to_s.include?('Q3')
+  # and the catalog's own master rule must be on the object
+  raise 'feasibility must be flagged' unless
+    a['notes'].to_s.include?('Feasibility to be confirmed')
+
+  # an UNreduced unit carries neither
+  b = Generator.attributes_for(Registry.lookup('B80601'))
+  raise 'an unmodified unit must not claim a reduction' if
+    Array(b['variants']).any? { |x| x['key'] == 'WIDTH REDUCTION' }
+  raise 'nor carry the note' if b['notes'].to_s.include?('WIDTH REDUCED')
+
+  # and the order carries the variant as its own row
+  rows = Export.rows([a])
+  raise 'the unit row is missing' if rows.empty?
+  raise "the variant row is missing: #{rows.inspect}" unless
+    rows.any? { |r| r['description'].to_s.include?('WIDTH REDUCTION') }
+end
+
+check('the prohibition list in the code is the one in the manifest') do
+  # The list is the CATALOG'S - Modifications section - and _manifest.json holds
+  # it. The lambdas in 50_registry.rb are only readings of it, so if the source
+  # list ever changes, this fails instead of a prohibition quietly going
+  # unenforced.
+  printed = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+            .dig('modifications', 'width_modification_prohibited_for')
+  raise 'the prohibition list has vanished from the manifest' if printed.nil? || printed.empty?
+  raise "code #{Registry::WIDTH_MOD_FORBIDDEN.keys.sort.inspect} vs manifest #{printed.sort.inspect}" unless
+    Registry::WIDTH_MOD_FORBIDDEN.keys.sort == printed.sort
+end
+
+check('EVERY held code is asked whether it may be cut, and the answer is stable') do
+  # prose against prose - the catalog's prohibition words against the catalog's
+  # own descriptions - and the weakest thing in 50_registry.rb. A false NO is
+  # loud; a false YES is silent. So the whole registry is run past it and the
+  # split is pinned: a change in either direction has to be looked at.
+  refused = Hash.new(0)
+  allowed = 0
+  Registry.catalog.each do |row|
+    u = Registry.lookup(row['code'])
+    next if u['width_range_mm']
+
+    why = Registry.width_modification_refusal(u)
+    why ? refused[why] += 1 : allowed += 1
+  end
+  raise 'nothing is refused - the matcher has stopped matching' if refused.empty?
+  raise 'nothing is allowed - the matcher matches everything' if allowed.zero?
+  total = refused.values.sum + allowed
+  raise "counted #{total}" unless total.positive?
+  # named so a move is visible in the failure, not just a number
+  # 2026-08-25, the day it was wired: 17 appliance, 12 pull-out, 155 jumbo,
+  # 24 interior-drawer = 208 refused, 530 allowed. NO framed-glass refusal and
+  # NO mechanism refusal fires today, and both are recorded as zero rather than
+  # left out: an empty bucket that later fills is a change somebody should see.
+  raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
+    refused == { 'appliance units' => 17, 'pull-out units' => 12,
+                 'units with jumbo drawers' => 155,
+                 'units with interior drawers' => 24 } && allowed == 530
 end
 
 check('an ordered filler satisfies the contract') do
@@ -4462,14 +4748,20 @@ check('the three rows that are NOT held name the reason, one each') do
          .dig('catalog_map', 'sections')
          .find { |s| s['section'] == 'Closing strips and fillers for Maxima and Intarsio' }['pages']
          .find { |q| q['printed'] == 434 }['types'][0]['note']
+  # 2026-08-25: BE0151 moved from the unheld list to the held one, and the note
+  # keeps WHY it was blocked - it was looked for in the base chapter, which has
+  # no H.60 section, while the top-element chapter does. A row can be blocked by
+  # the family you happen to look for it in, and that is worth more than the row.
   %w[BE0151 BK0151 CH9151].each do |code|
-    raise "#{code} is unheld and unexplained" unless note.include?(code)
+    raise "#{code} is unexplained" unless note.include?(code)
   end
-  raise 'the nine must be named too' unless note.include?('NINE ARE NOW HELD')
+  raise 'the held count must be named too' unless note.include?('TEN ARE NOW HELD')
   held = Registry.catalog.map { |c| c['code'] }
-  %w[BE0151 BK0151 CH9151].each do |code|
+  %w[BK0151 CH9151].each do |code|
     raise "#{code} is in the registry but the map still calls it unheld" if held.include?(code)
   end
+  raise 'BE0151 is held now and the map must not still be waiting for it' unless
+    held.include?('BE0151')
 end
 
 check('the ORDER says the width was chosen, not read off a page') do
@@ -5843,6 +6135,123 @@ check('the kit defines the shared submenu root without requiring the other exten
   raise 'UCON.extensions_menu is not defined' unless UCON.respond_to?(:extensions_menu)
 end
 
+puts "\ntall unit top elements - printed p.170 and p.173, what closes the wall"
+check('nineteen top elements, d.62 only, and they refuse the hung version IN WORDS') do
+  # 10 -> 19 on 2026-08-25 when printed p.172 came in: H.36 five, H.72 five,
+  # H.60 nine. printed p.171 (H.48) is still unread on purpose.
+  top = Registry.catalog.select { |c| c['section'].to_s.start_with?('Tall unit top elements') }
+  raise top.length.to_s unless top.length == 19
+  raise 'top elements are d.62 only' unless
+    top.map { |c| Registry.lookup(c['code'])['depth_mm'] }.uniq == [620]
+  raise 'widths' unless top.map { |c| Registry.lookup(c['code'])['width_mm'] }.uniq.sort ==
+                        [450, 600, 750, 900, 1200]
+
+  # THE FACT THAT DECIDED A LAYOUT: the side-hinged SINGLE door stops at W.60.
+  # Above it the only door that does not open upward is the two-door position.
+  # A 610 side-hinged single door therefore cannot be made - modifications
+  # reduce, and there is nothing above 600 to reduce from.
+  side = top.select { |c| Registry.lookup(c['code'])['unit_type'] == 'top_element_door' }
+  raise "side-hinged singles: #{side.map { |c| c['code'] }.inspect}" unless
+    side.map { |c| Registry.lookup(c['code'])['width_mm'] }.sort == [450, 600]
+  two = top.select { |c| Registry.lookup(c['code'])['unit_type'] == 'top_element_two_doors' }
+  raise "two-door tops: #{two.map { |c| c['code'] }.inspect}" unless
+    two.map { |c| Registry.lookup(c['code'])['width_mm'] }.sort == [900, 1200]
+  # and only ONE of the three held heights sells either of them
+  raise 'the side-hinged positions must live at H.60 alone, for now' unless
+    (side + two).map { |c| c['section'] }.uniq == ['Tall unit top elements H. 60 | without fixings']
+  # The FIRST codes in this registry to refuse by the catalog's own sentence
+  # rather than by a missing pictogram: the section title is 'without fixings'.
+  top.each do |c|
+    raise "#{c['code']} does not refuse" unless Registry.lookup(c['code'])['wall_hung'] == false
+  end
+  # THE REASON IS READ FROM THE FILE, not through Registry.lookup - the loader
+  # carries `wall_hung` into the engine and deliberately not its note, the same
+  # split the printed p.19 sweep's own check makes. A value the engine can act
+  # on travels; the prose that justifies it stays where a person reads it.
+  dir = File.expand_path('../registry/cesar', __dir__)
+  %w[tall_top_h36.json tall_top_h60.json tall_top_h72.json].each do |f|
+    JSON.parse(File.read(File.join(dir, f)))['data']['unit_types'].each do |k, ty|
+      raise "#{f} #{k} does not say why" unless
+        ty['wall_hung_note'].to_s.include?('without fixings')
+    end
+  end
+end
+
+check('A FRACTIONAL FILLER WIDTH IS REFUSED, not silently rounded') do
+  # Integer("49.2") raises and Integer(49.2) truncates, so the guard caught a
+  # string and let a float through. Three fillers ordered at 49,2, 69,2 and
+  # 109,3 on 2026-08-25 were built at 49, 69 and 109, and the only evidence was
+  # a fraction of a millimetre against a wall. A rounding nobody asked for is
+  # worse than a refusal, because it looks like the number that was requested.
+  u = Registry.lookup('BE0151')
+  [49.2, 109.3, 0.5].each do |w|
+    Registry.with_ordered_width(u, w)
+    raise "#{w} was accepted"
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('whole number of millimetres')
+    raise "#{w} must say which way to round" unless e.message.include?('to scribe')
+  end
+  # whole numbers still pass, as Floats and as Integers
+  raise 'a whole float must pass' unless
+    Registry.with_ordered_width(u, 49.0)['width_mm'] == 49
+  raise 'an integer must pass' unless
+    Registry.with_ordered_width(u, 109)['width_mm'] == 109
+  # and the range still bites
+  begin
+    Registry.with_ordered_width(u, 20)
+    raise '20 was accepted below the range'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('outside')
+  end
+end
+
+check('A TOP ELEMENT HAS NO PLINTH, and the zero is stated rather than left silent') do
+  # Generator.plinth_h_mm falls back to Standards::PLINTH_H_MM when a family says
+  # nothing, which was right for every family in the registry until these two:
+  # a top element rests on the tall unit below it. Silence would have drawn a
+  # 100 mm plinth floating 2200 mm off the floor.
+  %w[SB0600 SE0600].each do |code|
+    u = Registry.lookup(code)
+    raise "#{code} plinth #{u['plinth_h_mm'].inspect}" unless u['plinth_h_mm'].to_f.zero?
+    raise "#{code} would still be drawn a plinth" if Generator.plinth?(u)
+    raise "#{code} must not start above the floor of its own definition" unless
+      Generator.base_z_mm(u).to_f.zero?
+  end
+  # and the families that DO stand on a plinth still do
+  raise 'a tall unit lost its plinth' unless Generator.plinth_h_mm(Registry.lookup('CH0635')) == 100.0
+end
+
+check('the two heights differ by a shelf, and that is printed rather than tidied') do
+  # H.36 lists the door and nothing else; H.72 adds '1 shelf'. Two sections that
+  # look like one section at two heights are exactly where a reader smooths over
+  # a real difference.
+  raise 'H.36 must hold no shelf' unless
+    Registry.lookup('SB0600')['interior_confirmed'] == []
+  raise 'H.72 must hold one shelf' unless
+    Registry.lookup('SE0600')['interior_confirmed'] == ['1 shelf']
+  raise 'both are top-hung' unless
+    %w[SB0600 SE0600].all? { |c| Registry.lookup(c)['front_layout']['hinge_axis'] == 'top' }
+end
+
+check('N_Elle is a DOCUMENT LEAD here too, and every file that keeps one says so') do
+  # printed p.170 and p.173 put 'N- Elle' and a second height in the text layer
+  # and print neither. The wall chapter found this on 2026-08-23 and wrote that
+  # it would not be the last; this is the second chapter. A file that keeps the
+  # number without the warning would be quoting the book for something the book
+  # does not say.
+  dir = File.expand_path('../registry/cesar', __dir__)
+  kept = Dir[File.join(dir, '*.json')].reject { |f| File.basename(f).start_with?('_') }
+         .select { |f| JSON.parse(File.read(f))['data']['overall_height_n_elle_mm'] }
+  raise 'the N_Elle lead has vanished' if kept.empty?
+  kept.each do |f|
+    note = JSON.parse(File.read(f))['data']['n_elle_note'].to_s
+    raise "#{File.basename(f)}: the lead is kept without the warning" unless
+      note.include?('NOT PRINTED') || note.include?('NOT PRINTED ON THE PAGE')
+  end
+  raise 'the top-element pages must carry it' unless
+    kept.map { |f| File.basename(f) }.include?('tall_top_h72.json')
+end
+
 puts "\nthe reserved void - printed p.121-125, and the concept B6 shares"
 # docs/Reserved_Void_Spec_v0.1.md. A void is a span whose extent is known and
 # whose division is not. Three places wanted one and only the appliance module
@@ -5888,7 +6297,25 @@ check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
     found += 1
   end
   raise 'the remainder has vanished from the registry' if found.zero?
-  raise "expected 3 remainder codes, got #{found}" unless found == 3
+  # 3 -> 5: printed p.121 and p.123 at H.210, printed p.143 at H.222. The count
+  # is pinned so that a remainder appearing or vanishing is never silent.
+  raise "expected 7 remainder codes, got #{found}" unless found == 7
+  # AND THE TWO HEIGHTS ARE 120 APART, EVERYWHERE. The oven-and-microwave column
+  # leaves 1710 at H.210 and 1830 at H.222; 1515 becomes 1635. That is the whole
+  # difference between the families, and a transcription slip breaks it here.
+  # THREE FAMILIES NOW, AND THE LADDER IS THE CHECK. 1710 / 1830 / 1950 and
+  # 1515 / 1635 / 1755 - every step 120, which is the whole difference between
+  # H.210, H.222 and H.234. A transcription slip in any of the three files
+  # breaks a rung instead of looking plausible.
+  pairs = { 'C63640' => 'C42640', 'C63659' => 'C43659',
+            'C42640' => 'C92640', 'C43659' => 'C93659' }
+  pairs.each do |low, high|
+    a = Registry.lookup(low)['front_layout']['stack_top_to_bottom']
+         .find { |e| e['kind'] == 'remainder' }['h_mm']
+    b = Registry.lookup(high)['front_layout']['stack_top_to_bottom']
+         .find { |e| e['kind'] == 'remainder' }['h_mm']
+    raise "#{low} #{a} vs #{high} #{b}" unless b - a == 120
+  end
 end
 
 check('the span is DRAWN - a remainder becomes a void slab, not an absence') do

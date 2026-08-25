@@ -1,0 +1,71 @@
+{
+  "section": "Tall unit top elements H. 72 | without fixings",
+  "class": "tall",
+  "family": "Top elements H.72",
+  "source_pages": "printed p.173 / PDF 175 (taken WHOLE - the page holds one position)",
+  "family_naming_note": "The catalog_map already named these four families 'Top elements H.36' through 'Top elements H.72' and this file joins that name rather than inventing one. THE PREFIXES RUN IN SEQUENCE - SB/SC/SD/SE against H.36/H.48/H.60/H.72 - which is the only alphabetical run of family letters anywhere in this catalog, and it is still read from the row and never decoded: see _manifest code_grammar.tall_units.",
+  "extraction_note": "printed p.173 taken WHOLE 2026-08-25 - one position, 5 codes, d.62. Demand-driven: on the Avenida Primavera east wall this is the only one of the four top heights that gets close to the ceiling. 2200 + 720 = 2920 under 3048 leaves 128. THE OTHER TWO PAGES OF THIS CHAPTER ARE NOT HELD - printed p.171 (SC, H.48) and printed p.172 (SD, H.60) each carry a SECOND straight position, 'Top element with door - 1 rh or lh door - 1 shelf', which this section and the H.36 one do not. Their headings and prefixes are read; their pages are not.",
+  "data": {
+    "height_mm": 720,
+    "plinth_h_mm": 0,
+    "plinth_note": "ZERO, AND IT HAS TO BE STATED. Generator.plinth_h_mm defaults to Standards::PLINTH_H_MM (100) whenever a family is silent, because every family in this registry until now either stood on the floor with a plinth or hung on a wall. A TOP ELEMENT DOES NEITHER - it rests on the tall unit beneath it - and left silent it would have been drawn with a 100 mm plinth floating under it, 2200 mm off the floor. Caught 2026-08-25 while writing the build script, before anything was drawn. The default is not wrong; the family was the first one it did not fit.",
+    "mounting_note": "NO `mounting` VALUE, AND THE ABSENCE IS A READING. The section's own title is 'without fixings': this element rests on the tall unit beneath it and meets neither the floor nor the wall, which are the only two values Object Contract v2.1 ENUMS allow. Recording 'floor' would be a number nobody can honour - the same objection §1.3 makes to a hanging height on a floor unit. So the object carries no mounting, and where it sits comes from the unit it is placed on. THE COUNTERPART EXISTS AND IS NOT HELD: printed p.123 position 3 is a 'Wall-hung tall unit WITH fixings', so 'with fixings' is this catalog's phrase for wall-hung. Its own top-element page has not been found and is not guessed at.",
+    "depths_mm": [
+      620
+    ],
+    "depth_note": "d.62 ONLY on the straight position, and that is printed rather than assumed: one 'd. 62' label serves the whole code table and no second band appears beside it. The two CORNER positions of printed p.170 do print d.35 and d.62 both - so the chapter is not a single-depth chapter, this position is a single-depth position.",
+    "collections": [
+      "Maxima",
+      "Intarsio"
+    ],
+    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.173 / PDF 175",
+    "overall_height_n_elle_mm": 742,
+    "n_elle_note": "Each top-element page carries 'N- Elle' and a second height at H + 2,2 in its TEXT LAYER. NOT PRINTED, and verified the same way the wall chapter's was on 2026-08-23: rendering the page at 600 dpi and cropping exactly where pdftotext puts the string shows blank paper. White text, or a hidden layer for the N_Elle edition - IN THE FILE, NOT IN THE BOOK. SECOND CHAPTER TO DO THIS; wall_h36.json's n_elle_note said it would not be the last. The number is kept as a DOCUMENT LEAD BELOW SOURCE TRUST: used for nothing, drawn by nothing, and not to be quoted to Elda as something the catalog prints.",
+    "unit_types": {
+      "top_element_top_hung": {
+        "description": "Top element with top-hung door - 1 top-hung door - 1 shelf",
+        "opening": "door",
+        "handed": false,
+        "interior_confirmed": [
+          "1 shelf"
+        ],
+        "source_ref": "printed p.173 / PDF 175",
+        "codes": [
+          {
+            "code": "SE0500",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "SE0600",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "SE0700",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "SE0900",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "SE1200",
+            "width_mm": 1200,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "single",
+          "hinge_axis": "top",
+          "note": "One door covering the full front, hinged along its top edge - the same figure the wall chapter's top-hung units carry, and the same elevation symbol. THE ELEVATION PRINTS ONE STICK, NOT A PAIR: no handle/gola alternative is offered, which is what one expects above eye level where there is no worktop line for a recess to follow. Read at 600 dpi."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "REFUSED IN THE CATALOG'S OWN WORDS, in the section title: 'without fixings'. Not a missing glyph and not a derivation - the strongest form of this reading the chapter offers, and the same kind printed p.37 gives with 'not available wall hung'. Read at 150 and 600 dpi, 2026-08-25.",
+        "notes": "ONE SHELF, printed, where the H.36 position has none. NO SURCHARGE BLOCK AT ALL on this page - only 'Surch. for side panel D. on page 549' in the margin, and no Servo Drive line, where the H.36 position prices one. An absence read at 600 dpi and written down rather than left silent."
+      }
+    }
+  }
+}

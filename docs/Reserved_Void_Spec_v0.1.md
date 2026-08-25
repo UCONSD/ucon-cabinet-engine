@@ -73,6 +73,15 @@ both are read while drawing:
 |---|---|---|
 | `above_housing` | top of the opening | `rules.json → void` (threshold 120) |
 | `run_gap` | floor | the appliance itself; nothing if it is never placed |
+
+> **CORRECTED 2026-08-25, same evening, added rather than edited (rule 9).** §5 below said a
+> run gap runs *floor to worktop*. **It does not.** The Avenida Primavera model holds a
+> component named `48 WOLF` standing in exactly such a gap, measured through the probe bridge
+> at **z 0…928,4** against a worktop at **880**: a pro range's top is ABOVE the run. So the
+> rule is **the height comes from the appliance, and from the section top only where the
+> appliance publishes none** — the same shape as the remainder, where the catalog gives the
+> span and the appliance gives the division. The wrong sentence is left standing below
+> because it is why this row exists.
 | `front_remainder` | top of the fixed front below | custom-sized front + the opening(s) |
 
 Everything else a void needs is already in the key set: `code` is `null`,

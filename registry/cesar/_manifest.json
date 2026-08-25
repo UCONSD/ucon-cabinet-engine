@@ -77,7 +77,7 @@
               {
                 "title": "Filler in door finishes from 2,3 to 15 cm",
                 "status": "partial",
-                "note": "12 codes, H.39 to H.278. NINE ARE NOW HELD AND BUILDABLE, extracted 2026-08-24: B00151 (H.39), BC0151 (H.48), BJ0151 (H.58,5), B70151 (H.78), C10151 (H.138), CE0151 (H.198), CQ0151 (H.210), CG0151 (H.222), C00151 (H.234) - one per family this registry already holds, and every printed H matches its family's height_mm exactly. THREE ARE NOT, and each for its own reason: BE0151 at H.60 - THE CATALOG'S BASE CHAPTER HAS NO H.60 SECTION IN ITS PRINTED INDEX, so this filler names a family the map does not contain (the same is true of BI0150 at H.72 in the second position); BK0151 at H.84 - the family is mapped, printed p.49-56, and not extracted; CH9151 at H.278 - no family anywhere in anything read so far, and the only code on the page whose suffix is neither 0150 nor 0151. THE DEPTH THAT UNBLOCKED THE NINE: 22 mm, decided 2026-08-24 from the page's own art - see depth_note on any of the nine rows. SUPERSEDED, kept per rule 9: \"12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families.\""
+                "note": "12 codes, H.39 to H.278. TEN ARE NOW HELD AND BUILDABLE. Nine extracted 2026-08-24: B00151 (H.39), BC0151 (H.48), BJ0151 (H.58,5), B70151 (H.78), C10151 (H.138), CE0151 (H.198), CQ0151 (H.210), CG0151 (H.222), C00151 (H.234) - one per family this registry already holds, and every printed H matches its family's height_mm exactly. BE0151 (H.60) JOINED THEM 2026-08-25, and the reason it was blocked is worth keeping: it was recorded as naming a family the map does not contain, because THE CATALOG'S BASE CHAPTER HAS NO H.60 SECTION IN ITS PRINTED INDEX. That was true and it was the wrong chapter - the TOP-ELEMENT chapter has an H.60 section, printed p.172, and once that family was held the filler had one. A row can be blocked by the family you happen to look for it in. (BI0150 at H.72 in the second position is still blocked the same way, and note that the FIRST position prints no 72 at all.) TWO ARE STILL NOT HELD: BK0151 at H.84 - the family is mapped, printed p.49-56, and not extracted; CH9151 at H.278 - no family anywhere in anything read so far, and the only code on the page whose suffix is neither 0150 nor 0151. THE DEPTH THAT UNBLOCKED THE NINE: 22 mm, decided 2026-08-24 from the page's own art - see depth_note on any of the nine rows. SUPERSEDED, kept per rule 9: \"12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families.\""
               },
               {
                 "title": "Base unit filler in door finishes from 2,3 to 15 cm",
@@ -800,8 +800,9 @@
         "family": "H.222",
         "section": "Tall units H. 222 | for base unit H. 78",
         "printed_pages": "137-145",
-        "status": "not_extracted",
-        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have."
+        "status": "partial",
+        "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have. | 2026-08-25: printed p.143 HELD WHOLE - 3 positions, 4 codes, d.62. OPENED BECAUSE THE KITCHEN ASKED: Andriy chose H.222 + top element H.72 for the Avenida Primavera east wall, the combination that reaches a 3048 ceiling with 8 mm to spare, and p.143 carries that wall's oven-and-microwave column (C42640). THE PAGE IS THE TWIN OF printed p.123 AT A GREATER HEIGHT and it settles a measurement: C42657 leaves exactly 600 for an oven H.60 from a total of 2220, where printed p.121-122 left the same 600 six times from 2100. Same number, two totals. printed p.137-142, p.144 and p.145 remain unread - their headings are scanned: p.141-142 more oven columns, p.144 a corner tall unit for oven W.60/W.75 plus fridge units, p.145 more fridge.",
+        "extracted_on": "2026-08-25"
       },
       {
         "class": "tall",
@@ -838,8 +839,9 @@
         "family": "H.234",
         "section": "Tall units H. 234 | for base unit H. 78",
         "printed_pages": "156-164",
-        "status": "not_extracted",
-        "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter."
+        "status": "partial",
+        "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter. | 2026-08-25: printed p.162 HELD WHOLE - 3 positions, 4 codes, d.62. The east wall went H.234 + top H.60, the one combination that both opens sideways and reaches a 3048 ceiling with 8 mm to spare. C92640 is that wall's oven-and-microwave column. THE 600 OVEN NICHE IS MEASURED A THIRD TIME HERE, out of a total of 2340. printed p.156-161, p.163 and p.164 remain unread.",
+        "extracted_on": "2026-08-25"
       },
       {
         "class": "tall",
@@ -854,8 +856,9 @@
         "family": "Top elements H.36",
         "section": "Tall unit top elements H. 36 | without fixings",
         "printed_pages": "170",
-        "status": "not_extracted",
-        "note": "Prefix SB. The top elements are the four short sections that close the chapter, and their prefixes DO run in sequence - SB/SC/SD/SE against H.36/H.48/H.60/H.72. That is the first alphabetical run of family letters anywhere in this catalog and it is recorded as an OBSERVATION, not as a rule: the wall letters B/D/E/G and the tall pairs above are both proof that a sequence in one chapter predicts nothing in another. printed p.170 also carries the N-Elle variant."
+        "status": "partial",
+        "note": "Prefix SB. The top elements are the four short sections that close the chapter, and their prefixes DO run in sequence - SB/SC/SD/SE against H.36/H.48/H.60/H.72. That is the first alphabetical run of family letters anywhere in this catalog and it is recorded as an OBSERVATION, not as a rule: the wall letters B/D/E/G and the tall pairs above are both proof that a sequence in one chapter predicts nothing in another. printed p.170 also carries the N-Elle variant. | 2026-08-25: THE STRAIGHT POSITION HELD - SB0500/0600/0700/0900/1200, d.62 only, 5 codes, no shelf. The two CORNER positions are read and not held: D/S execution, a panel ordered at W.70/75/85, and an ordered width that is not the carcass width (W.115 with a 70 panel on a 90 carcass). Corner geometry - Elda Q7b. The reading is kept in registry/cesar/tall_top_h36.json under data.corner_positions_not_held so it does not have to be done twice.",
+        "extracted_on": "2026-08-25"
       },
       {
         "class": "tall",
@@ -863,23 +866,25 @@
         "section": "Tall unit top elements H. 48 | without fixings",
         "printed_pages": "171",
         "status": "not_extracted",
-        "note": "Prefix SC. See the note on printed p.170."
+        "note": "Prefix SC. See the note on printed p.170. | 2026-08-25: heading and prefix confirmed on the render, page NOT read. BOTH CARRY A SECOND STRAIGHT POSITION the H.36 and H.72 sections do not - 'Top element with door - 1 rh or lh door - 1 shelf' - so this chapter's four pages are not four copies of one page at four heights. Held back deliberately: the wall's top height is not chosen yet, and a page read for a height nobody picks is the extraction queue coming back in through the side door."
       },
       {
         "class": "tall",
         "family": "Top elements H.60",
         "section": "Tall unit top elements H. 60 | without fixings",
         "printed_pages": "172",
-        "status": "not_extracted",
-        "note": "Prefix SD (SB0500-style codes: SD0500/0600/0700/0900/1200). Three types: top element with top-hung door, with door, with doors."
+        "status": "extracted",
+        "note": "Prefix SD (SB0500-style codes: SD0500/0600/0700/0900/1200). Three types: top element with top-hung door, with door, with doors. | 2026-08-25: heading and prefix confirmed on the render, page NOT read. BOTH CARRY A SECOND STRAIGHT POSITION the H.36 and H.72 sections do not - 'Top element with door - 1 rh or lh door - 1 shelf' - so this chapter's four pages are not four copies of one page at four heights. Held back deliberately: the wall's top height is not chosen yet, and a page read for a height nobody picks is the extraction queue coming back in through the side door. | 2026-08-25: HELD WHOLE - three positions, 9 codes, d.62. TAKEN BECAUSE OF A REMARK, NOT A PLAN: Andriy said the top doors must open sideways, and this page and printed p.171 are the ONLY two in the chapter that sell a side-hinged top element. THE SIDE-HINGED SINGLE DOOR STOPS AT W.60 - SD0531 and SD0631 and nothing wider; above that it is the two-door position, W.90 and W.120. So a 610 side-hinged single door cannot be made: modifications reduce, and there is nothing above 600 to reduce from.",
+        "extracted_on": "2026-08-25"
       },
       {
         "class": "tall",
         "family": "Top elements H.72",
         "section": "Tall unit top elements H. 72 | without fixings",
         "printed_pages": "173",
-        "status": "not_extracted",
-        "note": "Prefix SE. See the note on printed p.170."
+        "status": "extracted",
+        "note": "Prefix SE. See the note on printed p.170. | 2026-08-25: HELD WHOLE - one position, SE0500/0600/0700/0900/1200, d.62, 1 shelf. On the Avenida Primavera east wall this is the only one of the four top heights that comes close to the ceiling: 2200 + 720 = 2920 under 3048 leaves 128.",
+        "extracted_on": "2026-08-25"
       },
       {
         "class": "wall",
@@ -2205,7 +2210,7 @@
   },
   "storage_note": "Catalog is stored as one file per catalog section in registry/cesar/. _manifest.json holds shared facts (grammar, hardware, external specs); section files hold unit types and codes. The loader merges them; one extracted catalog page = one file = one commit.",
   "modifications": {
-    "status_note": "CONTROL level from Modifications_Customisations_Source_Extract_v0.1 (rows confirmed from source). NOT yet wired to the generator/panel - groundwork for the modifications feature (see docs/Modifications_Design_Spec_v0.1.md). Every modification is feasibility-pending -> PRELIMINARY. Elda Q3 open for min width/height and the 989346 ambiguity.",
+    "status_note": "CONTROL level from Modifications_Customisations_Source_Extract_v0.1 (rows confirmed from source). WIDTH REDUCTION IS WIRED (2026-08-25, Registry.with_ordered_width -> variant WIDTH REDUCTION) and HEIGHT REDUCTION IS WIRED (2026-08-25, Registry.with_ordered_height -> variant HEIGHT REDUCTION, code 989370). The rest is still groundwork (see docs/Modifications_Design_Spec_v0.1.md). An INCREASE in width or height is printed NOWHERE and is drawn as a REQUEST, marked NOT PRINTED, with no code invented - Elda Q11. THE EXCLUSION LIST BELOW IS HEADED FOR WIDTH and is not borrowed for height - Elda Q17. Every modification is feasibility-pending -> PRELIMINARY. Elda Q3 open for min width/height and the 989346 ambiguity.",
     "master_rule": "Always check feasibility with Cesar before relying on a modified item.",
     "each_charged_separately": true,
     "codes": {

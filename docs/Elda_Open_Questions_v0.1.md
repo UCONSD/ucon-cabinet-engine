@@ -351,6 +351,224 @@ pages print — 350 / 470 / 620 — and the discrepancy is written into
 
 ---
 
+## Q11 — Can a top element be supplied at 610 mm, where the widest side-hinged one printed is 600?
+
+**Status:** open · added 2026-08-25 · **blocks a live project, not a hypothesis**
+
+**The project.** 545 Avenida Primavera, east wall. Tall units **H.234** on a 100 plinth with
+**H.60 top elements**, d.62 throughout, under a 3048 (10 ft) ceiling — 100 + 2340 + 600 = 3040,
+so the run finishes 8 mm short of the slab. In the middle of the run there is a **1220 mm
+(48 in) niche for one appliance**. Above that niche the client wants **two cabinets of 610 mm
+each**, so that the top row reads as two halves over one appliance rather than as one wide box.
+
+**Why the catalog does not answer it.** The doors above must open to the **side**, not upward.
+printed p.172 sells three top-element positions at H.60, and the side-hinged **single**-door one —
+*Top element with door – 1 rh or lh door – 1 shelf* — is printed at **W.45 (`SD0531`) and
+W.60 (`SD0631`) and nothing wider**. Above W.60 the only door that does not open upward is the
+**two**-door position, `SD0930` (W.90) and `SD1230` (W.120).
+
+**And Q3's answer does not reach this case.** Elda, 2026-08-24: a reduced unit keeps the code of
+the module it was cut from, and Metron takes *the nearest module above*. For 610 in this position
+**there is no module above** — 600 is the largest printed. This is the first width the project has
+needed that sits ABOVE a position's widest printed article rather than between two of them, and it
+is a different question from Q3, which is about cutting down.
+
+**Questions.**
+
+1. **Can `SD0631` be supplied at 610 mm?** That is 10 mm *more* than the printed width, and the
+   Modifications chapter prices reduction (989370 / 989380) and no increase we have found.
+2. If not — **is a width INCREASE available at all**, on any article, at a surcharge? Or does
+   "the nearest module above" mean an article is simply unavailable above its largest printed
+   width, full stop?
+3. If an increase is impossible — **can 610 be cut from `SD0930`**, the W.90 two-door top element?
+   That would give a 610 box with two doors rather than one. Is it supplied, does it keep
+   `SD0930`'s code with `WIDTH REDUCTION: Yes` as the base units do, and is a ~300 mm door leaf
+   inside the maker's limits?
+
+**Disposition until answered.** The engine builds **`SD1230`** (W.120, two doors) over the niche.
+It is 20 mm narrower than the 1220 it sits above, and that 20 mm is absorbed by the corner filler
+at the end of the run rather than left as a gap — see
+`claude/findings-2026-08-25-top-elements-and-the-ceiling.md` §7. **Nothing is invented:** no 610
+article is written into the registry, and the two-cabinet arrangement the client asked for is not
+drawn until this is answered.
+
+**Disposition CORRECTED 2026-08-25, late evening — the engine now DRAWS the 610.** The paragraph
+above is kept because the reasoning in it is still right about the catalog; the verdict it drew
+from that reasoning was wrong about the workflow. Andriy: *"в жизни делают. Но проблема в том, что
+я с этой фабрикой ещё не работал. Поэтому мы делаем чертёж просто в Layout и отправляем Elda, а
+потом она руками вводит это всё дело в Metron, и мы сравниваем результаты."* The LayOut sheet is
+not an order — it is **the form this question is asked in**. Refusing to draw 610 would have
+prevented the ask, and substituting `SD1230` would have sent a sheet that does not show what the
+client wants. So `50_registry.rb` now accepts a width ABOVE the printed one, keeps the module's
+code, and records `width_increased_from_mm`; `60_generator.rb` marks the object with the variant
+
+    WIDTH INCREASE = "REQUESTED, from 600 mm - NOT PRINTED"
+
+whose `source_ref` says no code and no surcharge exists in anything read and names this question,
+and adds the note *THE CATALOG DOES NOT PRINT THIS … feasibility must be confirmed with Cesar.*
+**The registry is unchanged: no 610 article exists.** The increase lives on the object, which is
+where a request belongs, and the catalog prohibitions (jumbo drawers, mechanisms, appliance
+housings) refuse an increase exactly as they refuse a cut. Sentinel:
+*a width change keeps the CODE; only the DIRECTION is printed or not*, `tools/test_contract.rb`.
+
+4. **And the same question for HEIGHT.** Under the 610-wide pair over the range the project needs
+   **610 × 720**, where the position's printed height is 600. The Modifications chapter prints
+   height REDUCTION only, so this is a second unprinted increase, asked the same way. Is a taller
+   carcass in a printed position available at a surcharge — and if not, is the answer p.550's
+   assembled tall unit (a standard carcass plus a standard top element under one continuous door),
+   applied here?
+
+### Ready to send
+
+> On a current project we have a 1220 mm (48 in) niche for a single appliance, flanked by H.234
+> tall units, with H.60 top elements above at d.62. Above the niche we would like **two top
+> elements of 610 mm each** rather than one of 1200, and the doors must open to the side rather
+> than upward.
+>
+> On p.172 the side-hinged single-door top element is printed only at W.45 and W.60. Can `SD0631`
+> be supplied at **610 mm** — that is, 10 mm wider than the printed module? If a width increase is
+> not possible, is 610 available by reducing `SD0930` (the W.90 two-door element), and would that
+> keep the `SD0930` code with a width-reduction line as the base units do?
+>
+> We are asking because your note of 24 August explained that a reduced unit takes the nearest
+> module **above**; here there is no module above 610 in this position, so we would rather ask than
+> assume.
+
+---
+
+## Q12 — `C68654` / `C68754`: one elevation where every other position prints two
+
+**Status:** open · added 2026-08-25
+
+**What the page shows.** printed p.121 position 3 is *Tall unit for oven H. 60*, and its
+elevation is a **single** stick — `72 / [oven] / 19,5 / ⌐ / 55,5` — where position 2 immediately
+above it prints the usual pair: `72 / 19,5 / 58,5` with handles and `72 / ⌐16,5 / ⌐55,5` with the
+grip recess. In position 3 the 19,5 drawer keeps its full height and has **no recess above it**,
+while the 55,5 below is recessed. One recess in the whole column, and it closes: 720 + 195 + 30 +
+555 + 600 = 2100.
+
+**Why it matters.** The prices are **identical to `C62650` / `C62750` in all eleven bands**, and
+the printed descriptions differ only in the capitalisation of *"no Push-pull device"*. So this is
+neither the handle version nor the gola version of the position above — it is a third thing with a
+mixed stack, and our registry has no shape for it. `front_layout` carries one stack for the handle
+execution and one for the gola execution; declaring `C68654` as either would draw a front 30 mm
+wrong.
+
+**Questions.**
+1. What is `C68654` / `C68754`? A third front programme — the page's side tab names
+   *Maxima – Intarsio – **Tangram*** while the header block names only Maxima and Intarsio — or an
+   article whose stack simply is what it is?
+2. If it is a programme, does the same programme appear elsewhere in the chapter under codes we
+   have read as ordinary?
+
+**Disposition.** Not held. printed p.121 positions 1 and 2 are extracted and position 3 is
+recorded as read-and-not-held, with its reason, in `registry/cesar/tall_h210_base78.json`.
+
+---
+
+## Q13 — The fridge unit carries the hung pictogram and no hung surcharge
+
+**Status:** open · added 2026-08-25 · **second instance of a disagreement first seen on printed p.42**
+
+printed p.125's single position (`C64601` W.60 / `C64701` W.75) prints the **cabinet-in-a-bracket
+pictogram** beside `d. 62` — verified at 600 dpi against printed p.123 position 3's, the same glyph
+— while its margin carries only *side panel D. p.549* and *feet H. 5 mm p.548*, and **no
+*Surch. for wall-hung version on page 548***.
+
+Everywhere else in this catalog the two signals agree: a position that refuses the hung version
+drops both. The printed p.19 pictogram sweep found one exception, the *Corner base unit with
+Magicorner* on printed p.42, which carries **the margin line and no glyph** — the mirror image of
+this one. **Two instances is a pattern worth asking about.**
+
+**Question.** Is the wall-hung version offered on these two positions? If it is, why is it not
+priced; if it is not, why is the glyph printed?
+
+**Disposition.** Both are held as `wall_hung: false`, because the priced offer is the one a person
+can actually order. Recorded in `registry/cesar/tall_h210_base78.json` and in
+`claude/findings-2026-08-24-pictogram-sweep.md` §4.
+
+---
+
+## Q14 — The chapter sells top elements at H.36 and H.72 and no closing strip to finish them
+
+**Status:** open · added 2026-08-25
+
+printed p.434's first position — the front-only filler, the strip every tall run is closed with —
+prints **39 · 48 · 58,5 · 60 · 78 · 84 · 138 · 198 · 210 · 222 · 234 · 278**. It prints **no 36 and
+no 72**. The tall-unit top-element chapter sells four heights: **H.36, H.48, H.60, H.72**. Two of
+them have no strip of their own.
+
+The only H.72 filler printed anywhere in the catalog is **`PE0151`**, in the third position:
+*Wall unit filler … with one-piece bottom*, **d.35** — right height, and drawn for wall units,
+which are d.35, against a top-element run at d.62.
+
+**Questions.**
+1. Is the front-only closing strip available at **H.36 and H.72**, unprinted?
+2. If not, what closes a top-element run at those heights against a wall — `PE0151` at its d.35,
+   a side panel from p.549 cut to size, or something else?
+
+**Disposition.** The Avenida Primavera wall was built at **H.60**, where the strip *is* printed
+(`BE0151`), so this does not block that kitchen — it was chosen for the door hinge and it happened
+to solve this too. The question stays open because the next wall may not have that luxury.
+
+---
+
+## Q15 — What is the maximum load on ONE wall-hung element?
+
+**Status:** open · added 2026-08-25 at Andriy's request · **blocks a live project**
+
+**What is printed.** printed p.548: *"Wall-hung base and tall units — with fixings, 240 Kg capacity
+per pair."* The registry records the rest of it: a base unit takes **2** fixings, a tall unit takes
+**4**, and `CESAR - 1 Project Guidelines.pdf` printed p.39 adds that a wall-hung base unit is *not*
+"without feet" — *"Wall-hung base units are always provided with fixings and a foot to stabilise
+them and determine their inclination"*, the foot bearing against the WALL at the bottom rear and
+never touching the floor.
+
+**Why "per pair" is not enough to design with.**
+
+1. **Is 240 kg the capacity of a PAIR OF FIXINGS, or of an ELEMENT?** If it is the fixings, a tall
+   unit with four of them would carry 480 kg. If it is the element, the extra pair is about
+   stability and moment, not load, and 240 is the ceiling however many fixings are used.
+2. **What does the 240 include?** The carcass, the fronts and the contents, presumably — but does
+   it also cover **anything resting ON TOP of the hung unit**?
+3. **And the foot.** It bears against the wall rather than the floor, so it takes moment and not
+   weight. Is that right, and does it change the number?
+
+**The concrete case, which is why point 2 matters.** 545 Avenida Primavera, south wall. A row of
+tall-unit top elements (`SD` series, H.60, d.62) is to STAND ON a row of hung cabinets beneath it,
+because the top-element chapter is titled *"without fixings"* throughout and carries no wall-hung
+surcharge on any of its four pages — see Q16. The lower row would therefore carry its own weight
+and contents **plus the whole row above and everything in it**, on one set of fixings. Whether that
+is inside 240 kg, inside 480, or outside both, is not something the catalog answers and not
+something we will guess.
+
+**Question, in one line.** For one wall-hung element: what is the maximum permitted load, does it
+scale with the number of fixings, and does it include what is stacked on top of it?
+
+---
+
+## Q16 — Is there a top element WITH fixings?
+
+**Status:** open · added 2026-08-25
+
+All four pages of the top-element chapter — printed p.170, p.171, p.172, p.173 — are headed
+**"without fixings"**, and none of them prints *"Surch. for wall-hung version on page 548"* in its
+margin, where almost every base and tall price table in the book does. printed p.123 position 3 is
+a *"Wall-hung tall unit **with fixings** H. 132"*, so **"with fixings" is this catalog's phrase for
+wall-hung**, and its absence here is a refusal in the catalog's own words rather than a gap in our
+reading. The registry holds all nineteen top elements as `wall_hung: false` for exactly that reason.
+
+**Questions.**
+1. Is a top element available in a wall-hung version, ordered against p.548 or otherwise?
+2. If not — is it structurally acceptable to hang one anyway with the p.548 fixings, or must a top
+   element always be carried by the cabinet beneath it?
+
+**Why it is being asked.** On the south wall of 545 Avenida Primavera a row of `SD` top elements
+sits 1840 mm above the floor with a hood beneath it, so nothing but the wall is available to it
+across the range opening. See Q15 for the load half of the same problem.
+
+---
+
 # ANSWERED 2026-08-24 — estimate 2026/30831 and Elda's letter of the same day
 
 Rule 9: this block is ADDED and dated. The questions above keep their text;
@@ -449,8 +667,38 @@ are geometry. Asked back on 2026-08-24: whether Metron can export the
 position list as Excel or CSV, and whether the internal item number can be
 tied to the article code.
 
+## Q17 — The exclusion list on printed p.548 is headed for WIDTH. Does it govern height too?
+
+**Status:** open · added 2026-08-25
+
+printed p.548 prints three width rows and then a fourth headed **"Units that cannot be modified in
+width"** — appliance units, units with interior or jumbo drawers, pull-out units, units with
+mechanisms, and tall or wall units with framed glass doors. Immediately below it the same page
+prints **height reduction** for base, wall and tall units, code **989370**, 138 points — and prints
+**no exclusion list of its own**.
+
+**Questions.**
+
+1. Does the width exclusion list also govern **height** reduction, or is height reduction available
+   on families where width reduction is not?
+2. The width table charges a tall unit **989380 / 227 points** and a base or wall unit **989370 /
+   138**. The height table charges **989370 / 138 for all three classes**, tall included. Is that
+   right, or is the tall height row a repeat of the base row in the printed table?
+3. **Is a height INCREASE available at all?** See Q11 question 4 — the project needs 610 × 720 where
+   the position prints 600 × 600, and nothing read prints an increase in any dimension except a side
+   panel's depth.
+
+**What the engine does until this is answered.** `Registry.with_ordered_height` refuses **one**
+family and borrows nothing: an **appliance housing**, because its opening height is the appliance's
+and not the carcass's — a fact this registry already holds and draws, not a prohibition read off
+this page. Every other height change is drawn, and the object carries the note *NO EXCLUSION LIST IS
+PRINTED FOR HEIGHT* together with the master rule, so whoever reads the order sees exactly how far
+the page goes. Copying the width list across would have been inventing catalog.
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q17 are the Avenida Primavera batch and go out with the LayOut sheet. Q5's side. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.
