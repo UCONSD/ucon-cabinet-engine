@@ -363,8 +363,24 @@ module UCON
       # offset (370, -533) and a further +90. Both halves of that offset mean
       # something, which is what makes them a rule rather than two numbers:
       #
-      #   x = span_low + new_depth   puts the new unit's BACK on the wasted-end
-      #                              plane, which IS the perpendicular wall
+      #   x = span_low + run_depth   puts the new unit's FRONT where the run's
+      #                              front belongs. RUN depth, not the new
+      #                              element's - corrected 2026-08-24 the same
+      #                              evening, after a cabinet turned correctly
+      #                              and a filler did not: "it built along the
+      #                              wall, not along the front". A unit is drawn
+      #                              from its origin FORWARDS, so the origin is
+      #                              the front edge whatever the depth; feeding
+      #                              it the element's own depth pinned the BACK
+      #                              to the wall instead and shoved a shallow
+      #                              filler 270 mm too far in. The two agreed
+      #                              only because B80501 is 620 deep, exactly
+      #                              like the corner - one measurement, two
+      #                              readings, and the wrong one fitted.
+      #                              His own kitchen settles it independently:
+      #                              B70501 at d.350 stands in the 620 run with
+      #                              its back 270 off the wall and its FRONT in
+      #                              line. Shallow elements align forwards.
       #   y = -(new_width + 83)      puts its near end on the corner's outermost
       #                              front face - 83 is FILLER_MM + FRONT_GAP_MM,
       #                              the plane the 8x8's return leg reaches
@@ -385,15 +401,15 @@ module UCON
       end
 
       # [x, y, angle_in_degrees] in the corner's own frame.
-      def corner_turn_seat(span, turn_end, new_width_mm, new_depth_mm,
+      def corner_turn_seat(span, turn_end, new_width_mm, run_depth_mm,
                            filler_mm, front_gap_mm)
-        return nil unless new_width_mm && new_depth_mm
+        return nil unless new_width_mm && run_depth_mm
 
         clear = filler_mm.to_f + front_gap_mm.to_f
         if turn_end == :low
-          [span[0] + new_depth_mm.to_f, -(new_width_mm.to_f + clear), 90]
+          [span[0] + run_depth_mm.to_f, -(new_width_mm.to_f + clear), 90]
         else
-          [span[1] - new_depth_mm.to_f, -clear, -90]
+          [span[1] - run_depth_mm.to_f, -clear, -90]
         end
       end
 

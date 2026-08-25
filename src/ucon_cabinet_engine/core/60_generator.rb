@@ -115,9 +115,9 @@ module UCON
       # nil unless the selected unit is a corner AND the chosen side is its
       # wasted end. The execution letter is what says which end that is, and it
       # lives in the registry rather than on the object, so it is looked up.
-      def corner_turn_for(sel_attrs, span, side, new_width_mm, new_depth_mm)
+      def corner_turn_for(sel_attrs, span, side, new_width_mm, _new_depth_mm)
         return nil unless sel_attrs['geometry_kind'].to_s == 'corner'
-        return nil unless new_width_mm && new_depth_mm
+        return nil unless new_width_mm && sel_attrs['depth_mm']
 
         unit = begin
           Registry.lookup(sel_attrs['code'])
@@ -129,7 +129,11 @@ module UCON
         turn_end = Placement.corner_turn_end(unit['execution'])
         return nil unless Placement.turning?(side, turn_end)
 
-        Placement.corner_turn_seat(span, turn_end, new_width_mm, new_depth_mm,
+        # THE RUN'S depth, which at a corner is the corner's own - not the new
+        # element's. A shallow filler joins the run at its FRONT, exactly as
+        # B70501 does at d.350 in the 620 run of Avenida Primavera.
+        Placement.corner_turn_seat(span, turn_end, new_width_mm,
+                                   sel_attrs['depth_mm'].to_f,
                                    FILLER_MM, Standards::FRONT_GAP_MM)
       end
 

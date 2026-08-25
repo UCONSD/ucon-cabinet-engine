@@ -30,8 +30,8 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
 | **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
-| **Core version** | **0.77.0**, shell 0.6.0 |
-| **Headless suite** | **427 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Core version** | **0.77.1**, shell 0.6.0 |
+| **Headless suite** | **428 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -135,9 +135,19 @@ Three things the real kitchen has asked for so far; two of them are built:
    **It is measured, not derived.** His own kitchen already held the turn,
    placed by hand: `AU110D` at (620, 250) turned 90, `B80501` at (1153, 620)
    turned 180 - offset (370, -533) and a further +90 in the corner's frame. Both
-   halves mean something and a check holds both: `span_low + new_depth` puts the
-   back on the perpendicular wall, `-(new_width + 83)` puts the near end on the
+   halves mean something and a check holds both: `span_low + run_depth` puts the
+   FRONT on the run's front line, `-(new_width + 83)` puts the near end on the
    8x8's outer face, 83 being `FILLER_MM + FRONT_GAP_MM`.
+   **CORRECTED THE SAME EVENING (rule 9, and it is the day's second instance of
+   the same shape).** The first version used the NEW element's depth, so a
+   cabinet turned correctly and a filler was pushed back onto the wall - "along
+   the wall, not along the front". `B80501` had hidden it: at 620 it is exactly
+   as deep as the corner, so both readings gave 370 and the wrong one fitted.
+   **One measurement, two readings — the same trap as the 8x8 on 2026-08-24
+   morning.** A unit is drawn from its origin FORWARDS, so the origin is the
+   front edge whatever the depth; the run's depth is what belongs there.
+   `B70501` at d.350 standing in the 620 run with its back 270 off the wall is
+   the independent witness, and a check holds that number.
    **THE MIRROR IS NOT MEASURED.** A left-execution corner wastes its high end
    and turns at -90; no hand-placed example exists. A check proves it reflects
    rather than guesses. Measure one before trusting it.

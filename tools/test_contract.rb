@@ -5684,9 +5684,33 @@ check('THE TURN AT A CORNER IS PINNED TO A MEASURED ONE, not to a formula') do
   # and the two halves must keep MEANING what they mean, or they are two
   # numbers that happened to fit:
   #   the back lands on the wasted-end plane - the perpendicular wall
-  raise 'the back must land on the wasted plane' unless seat[0] - 620 == span[0]
+  raise 'a full-depth unit still lands its back on the wall' unless seat[0] - 620 == span[0]
   #   the near end lands on the corner's outermost front face, 80 + 3
   raise 'the near end must meet the 8x8 face' unless seat[1] + 450 == -83
+end
+
+check('A SHALLOW ELEMENT TURNS ONTO THE FRONT LINE, not onto the wall') do
+  # Found by trying it, 2026-08-24: the cabinet turned correctly and the filler
+  # did not - "it built along the wall, not along the front". The seat took the
+  # NEW element's depth, so a 350-deep filler pinned its own back to the
+  # perpendicular wall and stood 270 mm proud of where the run's front is.
+  # B80501 had hidden it: at 620 deep it is exactly as deep as the corner, so
+  # both readings gave the same number and the wrong one fitted.
+  #
+  # A unit is drawn from its origin FORWARDS, so the origin is the front edge
+  # whatever the depth. Feed the RUN's depth and every element, deep or shallow,
+  # lands its front on the same line.
+  span = [-250.0, 900.0]
+  deep    = Placement.corner_turn_seat(span, :low, 450, 620, 80, 3)
+  shallow = Placement.corner_turn_seat(span, :low, 150, 620, 80, 3)
+  raise 'the front line must not move with the element depth' unless
+    deep[0] == shallow[0]
+  raise deep.inspect unless deep[0] == 370.0
+
+  # and the shallow one's back then stands off the wall by the difference,
+  # which is how Andriy's own B70501 sits in the 620 run: 620 - 350 = 270
+  raise 'the gap behind a shallow element is the depth difference' unless
+    (shallow[0] - 350) - span[0] == 270.0
 end
 
 check('the turn fires on the WASTED end and never on the 8x8 end') do
