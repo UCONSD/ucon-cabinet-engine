@@ -277,11 +277,19 @@ module UCON
       # the mounting test a wall unit would butt against a base unit; without
       # the parallel test a unit on a return wall would pull this one out of
       # place; without the coplanar test a run at another depth would.
-      def same_row?(mounting, other_mounting, depth_axis_dot, back_offset_mm)
+      # WHICH PLANE THE CALLER MEASURES IS THE CALLER'S BUSINESS, and the two
+      # callers ask different questions. The place tool measures a neighbour's
+      # BACK against the wall it is snapping to - right for its question. The
+      # generator measures the two FRONTS, because a row is aligned at the front
+      # and a shallow element stands off the wall: a 350 filler in a 620 run is
+      # 270 mm off, nine times this tolerance, and measuring backs made it
+      # invisible. Corrected 2026-08-24. The parameter is named for the quantity,
+      # not for either plane.
+      def same_row?(mounting, other_mounting, depth_axis_dot, plane_offset_mm)
         return false unless mounting.to_s == other_mounting.to_s
         return false if depth_axis_dot < PARALLEL_MIN
 
-        back_offset_mm.abs <= COPLANAR_TOL_MM
+        plane_offset_mm.abs <= COPLANAR_TOL_MM
       end
 
       # How far this unit must slide along the wall for one of its ends to meet

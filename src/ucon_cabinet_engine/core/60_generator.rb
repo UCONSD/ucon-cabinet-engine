@@ -147,7 +147,6 @@ module UCON
         t    = sel.transformation
         xv   = Geom::Vector3d.new(1, 0, 0).transform(t); xv.normalize!
         yv   = Geom::Vector3d.new(0, 1, 0).transform(t); yv.normalize!
-        back_mine = Geom::Point3d.new(0, mine['depth_mm'].to_f.mm, 0).transform(t)
 
         spans = []
         model.entities.grep(Sketchup::ComponentInstance).each do |other|
@@ -161,8 +160,20 @@ module UCON
 
           ot   = other.transformation
           axis = Geom::Vector3d.new(0, 1, 0).transform(ot); axis.normalize!
-          back = Geom::Point3d.new(0, a['depth_mm'].to_f.mm, 0).transform(ot)
-          offset = (back - back_mine).dot(yv).to_mm
+
+          # MEASURED AT THE FRONT, NOT AT THE BACK - corrected 2026-08-24 after
+          # Andriy reported that a run with something on its right still built
+          # right. A row is aligned at its FRONT: a 350 filler stands in a 620
+          # run with its back 270 mm off the wall, and 270 is nine times
+          # COPLANAR_TOL_MM, so measuring backs made every shallow neighbour
+          # INVISIBLE to the rule. Invisible on the right means the right looks
+          # free, and the run keeps growing into it.
+          #
+          # The origin IS the front edge - a unit is drawn from it forwards -
+          # so the two origins projected on the depth axis are the two front
+          # planes. This is the third time today the same distinction decided
+          # something: the 8x8 leg, the turn, and now this.
+          offset = (ot.origin - t.origin).dot(yv).to_mm
 
           next unless Placement.same_row?(mine['mounting'], a['mounting'],
                                           axis.dot(yv), offset)

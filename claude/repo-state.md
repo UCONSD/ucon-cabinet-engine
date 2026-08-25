@@ -30,8 +30,8 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **HEAD** | **`26753c7`** — *docs(repo-state): the Project holds session instructions, not repo documents* |
 | **Pushed** | **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). Everything up to and including `26753c7` was pushed as it was made; `13e7754..26753c7` went up on the evening of 2026-08-24. The cell can only ever say what was true before the commit you are about to make. |
 | **Working tree** | **this file only**, and that is structural: a file that records HEAD cannot name the commit that carries its own text. **The HEAD above is always one commit behind the one you are about to make.** Not staleness — do not "fix" it by guessing forward. |
-| **Core version** | **0.77.1**, shell 0.6.0 |
-| **Headless suite** | **428 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
+| **Core version** | **0.77.2**, shell 0.6.0 |
+| **Headless suite** | **429 checks, 0 failures.** Re-run 2026-08-24 evening on **Ruby 3.0.2** (the device-bridge VM — the suite CAN be run that way, and that is new). **The 2.6 side was not re-run**: it is guarded by a check that fails when a 2.7+ method enters the suite or the core, and a guard is a proxy for a run. Six checks entered after `848f10f` proved 2.6 by running it. |
 | **Object Contract** | **v2.1** — unchanged, with **two named gaps** |
 | **Registry** | **711 codes** in **44 section files** carrying **28 catalog sections**; `catalog_map` holds **67 sections**. **Re-counted from the files** 2026-08-24 evening — unchanged since `42288dc`, because nothing since has touched the registry. |
 | **`_to_delete/`** | **untracked, and therefore PER MACHINE** — it is not part of the repository's state at all, only of whichever clone you are standing in. The bridge cannot delete; Andriy clears it. Recorded here once so no future session counts its files as a number this file owns. |
@@ -151,11 +151,13 @@ Three things the real kitchen has asked for so far; two of them are built:
    **THE MIRROR IS NOT MEASURED.** A left-execution corner wastes its high end
    and turns at -90; no hand-placed example exists. A check proves it reflects
    rather than guesses. Measure one before trusting it.
-   **The half that is untried:** `Generator.placement_side` gathers the
-   neighbours in the selected unit's frame and needs SketchUp, so no headless
-   check reaches it. It has been read, not run. **Try it in the model before
-   trusting it**, and in particular try it on a rotated run - left and right are
-   the SELECTED unit's, not the world's.
+   **The SketchUp half has now been RUN, not merely read** (2026-08-24 evening,
+   in the model, by Andriy): the side rule, the filler, and the turn at the
+   corner all behave. `Generator.placement_side` still carries no headless
+   check - it needs SketchUp - so a future change to it is unguarded and has to
+   be tried in the model again. What has NOT been tried is a rotated run: left
+   and right are the SELECTED unit's, not the world's, and nothing has proved
+   that on a wall drawn at an angle. Avenida Primavera has two of those.
    Stepping LEFT steps back by the NEW element's own width, which is why
    `placement_transform` now takes it; without it the run continues right, as
    before.

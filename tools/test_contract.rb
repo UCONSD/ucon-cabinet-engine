@@ -5713,6 +5713,31 @@ check('A SHALLOW ELEMENT TURNS ONTO THE FRONT LINE, not onto the wall') do
     (shallow[0] - 350) - span[0] == 270.0
 end
 
+check('A SHALLOW NEIGHBOUR IS STILL A NEIGHBOUR, or the run grows into it') do
+  # Reported by Andriy 2026-08-24: a run with something on its right kept
+  # building right. The row test measured BACKS, and a 350-deep filler standing
+  # front-aligned in a 620 run has its back 270 mm off - nine times
+  # COPLANAR_TOL_MM - so the rule could not see it at all. A neighbour it cannot
+  # see is a side it calls free.
+  raise 'two equal depths must be one row' unless
+    Placement.same_row?('floor', 'floor', 1.0, 0)
+  raise 'measured at the back, a shallow neighbour vanishes' if
+    Placement.same_row?('floor', 'floor', 1.0, 270)
+  raise 'measured at the front, it is there' unless
+    Placement.same_row?('floor', 'floor', 1.0, 0)
+  # a genuinely different row - another wall, another depth line - still fails
+  raise 'a run at another depth is not this row' if
+    Placement.same_row?('floor', 'floor', 1.0, 620)
+  raise 'a wall unit is not in a base row' if
+    Placement.same_row?('floor', 'wall', 1.0, 0)
+
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the generator must measure the two origins, which are the two fronts' unless
+    gen.include?('offset = (ot.origin - t.origin).dot(yv).to_mm')
+  raise 'and must not go back to measuring backs' if
+    gen.include?('back_mine')
+end
+
 check('the turn fires on the WASTED end and never on the 8x8 end') do
   # The 8x8 end is where the run continues straight - its width leg is drawn at
   # 77 to meet the next front. Turning there would put a cabinet through it.
