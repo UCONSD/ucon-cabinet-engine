@@ -225,9 +225,16 @@ module UCON
       # an outliner.
       GLASS_FRAME_LABEL = '(frame: DECLARED)'
 
-      # CAD glass: a cool grey that is plainly not the front's white and is
-      # plainly not transparent.
-      GLASS_RGB = [205, 214, 218].freeze
+      # GLASS_RGB WAS HERE AND IS DELETED, 2026-08-26 (Andriy). It was a cool
+      # grey chosen on 2026-08-22 to be "plainly not the front's white" - and
+      # 205,214,218 sat close enough to the 164,178,187 SketchUp paints on an
+      # unpainted BACK face that the drawing read as a modelling error. He
+      # looked at the west wall and asked whether he was seeing the reverse of
+      # a surface. He was not; he was seeing our own decision. A colour that
+      # makes a correct drawing look wrong has failed at the only job it had.
+      #
+      # The pane now takes its own door's material and the glass is said by the
+      # hatch - see draw_front_slab, and HATCH_ANGLE_DEG in 70_symbols.
       # A reservation reads as a warning, not as a material. Same red the
       # appliance module already uses for the void above a housing, so the two
       # halves of one concept look like one concept in the model.
@@ -701,13 +708,27 @@ module UCON
         # one thickness in play is already in dispute (Cesar 22 against the
         # appliance planning's 19), and inventing a third is how that argument
         # gets lost.
+        #
+        # THE PANE TAKES THE FRONT'S OWN MATERIAL, 2026-08-26 (Andriy, looking at
+        # the west wall): "no need for it to be a different colour - maybe it is
+        # the back side of a flat surface." It was not the back side; it was
+        # OURS. UCON_Glass_Gray was 205,214,218 and SketchUp paints an unpainted
+        # back face 164,178,187 - two grey-blues close enough that a correct
+        # drawing looked like a modelling mistake, which is a good enough reason
+        # on its own to stop using one of them.
+        #
+        # SO THE GLASS READING NOW RESTS ENTIRELY ON THE HATCH, and that is the
+        # split 70_symbols already describes: the pane is the thing that is
+        # really there, the diagonals are the convention that says what it is.
+        # A pane the colour of its own door says nothing by itself and is not
+        # meant to.
         Geometry.box(
           entities, "#{slab[:name]}_GLASS",
           slab[:x_mm] + rails[:left], front_y_mm,
           z0 + slab[:z_mm] + rails[:bottom],
           slab[:w_mm] - rails[:left] - rails[:right], t,
           slab[:h_mm] - rails[:bottom] - rails[:top],
-          Geometry.material(entities.model, 'UCON_Glass_Gray', GLASS_RGB)
+          material
         )
         frame
       end

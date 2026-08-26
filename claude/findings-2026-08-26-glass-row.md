@@ -108,3 +108,46 @@ Neither was held before. Recorded here rather than wired, because neither has a 
 
 Band, left to right: wall → `PF0151` 103 → three `TF0641` → `SD0631`, **every joint 0,0**.
 Registry 756 codes. Suites 467 / 68 / 30. Core 0.85.0.
+
+---
+
+## The colour was ours, and it made a correct drawing look wrong
+
+**Andriy, on seeing the west wall:** *"the hatch looks excellent — the colour just must not be
+blue. Maybe it's the back side of a flat surface, SketchUp paints the reverse a grey-blue."*
+
+Measured rather than argued:
+
+```
+UCON_Glass_Gray             205, 214, 218
+SketchUp back-face default  164, 178, 187
+```
+
+**It was not the back face. It was ours** — chosen 2026-08-22 to be "plainly not the front's
+white", and landing close enough to the colour SketchUp uses for an unpainted reverse that a
+correct drawing read as a modelling error.
+
+> **A colour that makes a correct drawing look wrong has failed at the only job it had.**
+
+`GLASS_RGB` and the `UCON_Glass_Gray` material are **deleted** — the same rule that took
+`FRONT_REVEAL_MM` this morning: a number we have decided not to draw is a number we do not
+store, and the reason is left where the number was. The pane takes its own door's material, so
+it is the same white as the front it sits in.
+
+### And that puts the whole glass reading on the hatch, which is where it belongs
+
+`Symbols.draw_glass_hatch` was already drawing exactly what Andriy's reference sheet shows:
+**pairs of parallel 45° lines**, spacing 250, pair gap 25 — pairs and not singles, because a
+lone diagonal reads as a section cut. It lives on the elevation tag,
+`UCON — Opening (front)`, which was simply switched off. He turned it on and confirmed it.
+
+That is the split `70_symbols` already described and now depends on: **the pane is the thing
+that is really there, the diagonals are the convention that says what it is.** A pane the
+colour of its own door says nothing by itself, and is not meant to.
+
+### The second time in one day the model was behind the engine
+
+The three glass units were redrawn to pick the change up. They were built at run 41, two hours
+before; the six modified fronts this morning were built the day before. **A model is not
+recomputed when the engine changes** — it holds what it was given, and both times the person
+who noticed was Andriy looking at a sheet.
