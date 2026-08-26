@@ -6328,6 +6328,40 @@ check('A FRACTIONAL FILLER WIDTH ROUNDS UP, and the allowance is said out loud')
   end
 end
 
+check('A MODIFIED UNIT GETS A MODIFIED FRONT, in both axes') do
+  # FOUND IN THE MODEL, 2026-08-26, by Andriy looking at a sheet: six top
+  # elements carried a CARCASS 610 wide and a FRONT 600, and two of those had a
+  # carcass 720 tall with a front 600 - a 120 mm band of cabinet with no front on
+  # it at all. The engine is right today and those bodies are stale, built before
+  # the increase path existed; nothing had re-drawn them and nothing would have
+  # noticed.
+  #
+  # THE INTERESTING HALF IS THAT REDUCTION WAS NEVER WRONG. SD0930 cut to 770
+  # drew 385 + 385 in the same model on the same day. One direction of the same
+  # rule worked and the other did not, which is exactly the kind of asymmetry a
+  # check has to hold, because reading the code proves nothing about the past.
+  u = Registry.lookup('SD0631')
+  raise u['width_mm'].to_s unless u['width_mm'] == 600
+
+  wide = Registry.with_ordered_width(u, 610)
+  slabs = Generator.front_slabs(wide)
+  raise slabs.inspect unless slabs.sum { |sl| sl[:w_mm] } == 610
+  raise 'the front must not keep the printed width' if slabs.any? { |sl| sl[:w_mm] == 600 }
+
+  tall = Registry.with_ordered_height(wide, 720)
+  slabs = Generator.front_slabs(tall)
+  raise slabs.inspect unless slabs.sum { |sl| sl[:w_mm] } == 610
+  raise slabs.inspect unless slabs.map { |sl| sl[:z_mm] + sl[:h_mm] }.max == 720
+  raise 'the front must reach the top of a heightened carcass' if
+    slabs.any? { |sl| sl[:h_mm] == 600 }
+
+  # and the direction that always worked keeps working
+  cut = Registry.with_ordered_width(Registry.lookup('SD0930'), 770)
+  slabs = Generator.front_slabs(cut)
+  raise slabs.inspect unless slabs.sum { |sl| sl[:w_mm] } == 770
+  raise slabs.inspect unless slabs.length == 2
+end
+
 check('the reveal sentence died with the reveal') do
   # FRONT_REVEAL_MM was deleted on 2026-08-26 and notes_for went on telling every
   # object about "1.5 mm reveal recorded, not drawn" - a sentence that outlived
