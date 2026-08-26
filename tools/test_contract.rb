@@ -6276,32 +6276,66 @@ check('nineteen top elements, d.62 only, and they refuse the hung version IN WOR
   end
 end
 
-check('A FRACTIONAL FILLER WIDTH IS REFUSED, not silently rounded') do
-  # Integer("49.2") raises and Integer(49.2) truncates, so the guard caught a
-  # string and let a float through. Three fillers ordered at 49,2, 69,2 and
-  # 109,3 on 2026-08-25 were built at 49, 69 and 109, and the only evidence was
-  # a fraction of a millimetre against a wall. A rounding nobody asked for is
-  # worse than a refusal, because it looks like the number that was requested.
+check('A FRACTIONAL FILLER WIDTH ROUNDS UP, and the allowance is said out loud') do
+  # THE HISTORY IS KEPT BECAUSE IT IS WHY THE RULE CAN BE TRUSTED.
+  # Integer("49.2") raises and Integer(49.2) TRUNCATES, so the first guard caught
+  # a string and let a float through: three fillers ordered at 49,2, 69,2 and
+  # 109,3 on 2026-08-25 were built at 49, 69 and 109, and the only evidence was a
+  # fraction of a millimetre against a wall. That evening the truncation became a
+  # REFUSAL naming both roundings. On 2026-08-26 Andriy closed owed 2 and the
+  # refusal became the RULE: UP, always, because up is the only direction a
+  # fitter can correct - and the allowance goes ON THE OBJECT, which is the half
+  # the refusal was really protecting.
   u = Registry.lookup('BE0151')
-  [49.2, 109.3, 0.5].each do |w|
-    Registry.with_ordered_width(u, w)
-    raise "#{w} was accepted"
+  r = Registry.with_ordered_width(u, 109.3)
+  raise r['width_mm'].to_s unless r['width_mm'] == 110
+  raise r['width_clear_mm'].to_s unless r['width_clear_mm'] == 109.3
+  raise r['scribe_mm'].to_s unless (r['scribe_mm'] - 0.7).abs < 0.001
+
+  # THE ORDER READS ONE WIDTH AND THE DRAWING READS THE OTHER, and that is the
+  # whole point: 110 is bought, 109,3 is drawn, 0,7 is cut off on site.
+  raise Generator.drawn_width_mm(r).to_s unless Generator.drawn_width_mm(r) == 109.3
+  a = Generator.attributes_for(r)
+  raise a['width_mm'].to_s unless a['width_mm'] == 110
+  raise a['notes'] unless a['notes'].include?('scribed off on site')
+  raise a['notes'] unless a['notes'].include?('109.3')
+  raise 'the front must be drawn at the clear width, not the ordered one' unless
+    Generator.front_slabs(r).sum { |sl| sl[:w_mm] } == 109.3
+
+  # a whole number keeps both hands clean: no clear width, no allowance, no note
+  w = Registry.with_ordered_width(u, 49.0)
+  raise w['width_mm'].to_s unless w['width_mm'] == 49
+  raise 'a whole width must carry no allowance' if w['scribe_mm'] || w['width_clear_mm']
+  raise 'an integer must pass' unless Registry.with_ordered_width(u, 109)['width_mm'] == 109
+  raise Generator.attributes_for(w)['notes'] if
+    Generator.attributes_for(w)['notes'].include?('scribed off')
+
+  # AND THE RANGE STILL BITES, on the ORDERED width rather than the asked one:
+  # 0,5 rounds up to 1 and no filler is made at 1. The message must send the
+  # reader to two fillers rather than to a width nobody prints.
+  begin
+    Registry.with_ordered_width(u, 0.5)
+    raise '0.5 was accepted'
   rescue ArgumentError => e
-    raise e.message unless e.message.include?('whole number of millimetres')
-    raise "#{w} must say which way to round" unless e.message.include?('to scribe')
+    raise e.message unless e.message.include?('rounds up to 1')
+    raise e.message unless e.message.include?('two fillers')
   end
-  # whole numbers still pass, as Floats and as Integers
-  raise 'a whole float must pass' unless
-    Registry.with_ordered_width(u, 49.0)['width_mm'] == 49
-  raise 'an integer must pass' unless
-    Registry.with_ordered_width(u, 109)['width_mm'] == 109
-  # and the range still bites
   begin
     Registry.with_ordered_width(u, 20)
     raise '20 was accepted below the range'
   rescue ArgumentError => e
-    raise e.message unless e.message.include?('outside')
+    raise e.message unless e.message.include?('outside') || e.message.include?('rounds up to 20')
   end
+end
+
+check('the reveal sentence died with the reveal') do
+  # FRONT_REVEAL_MM was deleted on 2026-08-26 and notes_for went on telling every
+  # object about "1.5 mm reveal recorded, not drawn" - a sentence that outlived
+  # its number by one commit and pointed at nothing. A deletion is not finished
+  # while something still says the number aloud.
+  n = Generator.notes_for(Registry.lookup('B80601'))
+  raise n if n.include?('1.5')
+  raise n unless n.include?('the faces meet')
 end
 
 check('A TOP ELEMENT HAS NO PLINTH, and the zero is stated rather than left silent') do

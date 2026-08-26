@@ -372,7 +372,9 @@ module UCON
         end
 
         s    = Standards
-        w    = unit['width_mm']
+        # DRAWN, not ordered - see drawn_width_mm. For everything except a
+        # scribed filler the two are the same number.
+        w    = drawn_width_mm(unit)
         h    = unit['height_mm']
         d    = unit['depth_mm']
         # A base unit stands on its plinth; a wall unit hangs and has neither
@@ -530,8 +532,22 @@ module UCON
       # bottom. Slabs butt together with no drawn gap, so each joint reads as
       # exactly one line — the same one-line-per-edge rule as the flush front.
       # Pure; tested headless.
+      # THE WIDTH THAT IS DRAWN, WHICH IS NOT ALWAYS THE WIDTH THAT IS ORDERED.
+      # A filler is ordered in whole millimetres and rounded UP by rule (owed 2,
+      # closed 2026-08-26): a 109,3 clear space is ordered at 110 and 0,7 is
+      # scribed off on site. The BODY has to fill 109,3, or the sheet shows a gap
+      # that will not exist - so `width_clear_mm` is what gets drawn and
+      # `width_mm` stays what gets ordered.
+      #
+      # ONE ASKER, three readers - build, front_slabs and plinth_width_mm - for
+      # the same reason plinth_h_mm has one: three copies of a rule is three
+      # chances to update two.
+      def drawn_width_mm(unit)
+        unit['width_clear_mm'] || unit['width_mm']
+      end
+
       def front_slabs(unit)
-        w = unit['width_mm']
+        w = drawn_width_mm(unit)
         h = unit['height_mm']
         layout = unit['front_layout'] || { 'kind' => 'single' }
 
@@ -1300,7 +1316,7 @@ module UCON
       # How wide the plinth is. A corner unit is not dimensioned by a width, so
       # it answers from its own footprint.
       def plinth_width_mm(unit)
-        unit['geometry_kind'] == 'corner' ? corner_parts(unit)[:carcass] : unit['width_mm']
+        unit['geometry_kind'] == 'corner' ? corner_parts(unit)[:carcass] : drawn_width_mm(unit)
       end
 
       # THE ONE WRITER OF A PLINTH. It was written out three times in this file
@@ -1615,9 +1631,28 @@ module UCON
           else
             ''
           end
+        # SAID ONLY WHERE IT IS TRUE. A filler whose clear space was not a whole
+        # number is ordered UP and cut on site, and the two widths on this object
+        # disagree on purpose - so the object has to say which is which.
+        scribe_note =
+          if unit['scribe_mm']
+            " ORDERED #{unit['width_mm']} FOR A CLEAR SPACE OF #{unit['width_clear_mm']}: " \
+            "#{format('%.1f', unit['scribe_mm'])} mm is scribed off on site. A filler is " \
+            'ordered in whole millimetres and the rounding is UP by rule, because up is the ' \
+            'only direction a fitter can correct. THE BODY IS DRAWN AT THE CLEAR SPACE, so ' \
+            'the sheet shows no gap that will not exist: the attributes are the order and ' \
+            'the geometry is the drawing.'
+          else
+            ''
+          end
+        # WAS 'Front drawn flush; 1.5 mm reveal recorded, not drawn.' until
+        # 2026-08-26. FRONT_REVEAL_MM was deleted that day because nothing read
+        # it, and the sentence outlived the number by one commit - it went on
+        # telling every object about a 1,5 that no longer existed anywhere.
         "Generated from registry/cesar.json (#{unit['registry_status']}). " \
-        "#{interior_note}#{handed_note} Front drawn flush; 1.5 mm reveal recorded, not drawn." \
-        "#{cutout_note}"
+        "#{interior_note}#{handed_note} Front drawn flush: the faces meet, and no reveal is " \
+        'drawn or stored.' \
+        "#{scribe_note}#{cutout_note}"
       end
     end
   end

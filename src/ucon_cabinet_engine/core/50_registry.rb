@@ -403,32 +403,52 @@ module UCON
         # The rule itself does not change - the catalog orders a filler in whole
         # millimetres - but a width that is not one is now REFUSED and named,
         # instead of being quietly rounded into something nobody asked for.
-        if width_mm.is_a?(Float) && width_mm != width_mm.round
-          raise ArgumentError,
-                "A filler width is a whole number of millimetres; got " \
-                "#{width_mm.inspect}. Round it yourself and say which way: " \
-                "#{width_mm.floor} leaves #{format('%.2f', width_mm - width_mm.floor)} mm " \
-                "to scribe, #{width_mm.ceil} is #{format('%.2f', width_mm.ceil - width_mm)} mm " \
-                'too wide.'
-        end
-
-        w = begin
-          Integer(width_mm)
+        asked = begin
+          Float(width_mm)
         rescue ArgumentError, TypeError
           nil
         end
-        if w.nil?
+        if asked.nil?
           raise ArgumentError,
-                "A filler width is a whole number of millimetres; got #{width_mm.inspect}."
+                "A filler width is a number of millimetres; got #{width_mm.inspect}."
         end
 
-        unless w >= lo && w <= hi
+        # THE RULE, 2026-08-26 (Andriy, closing owed 2). A filler is ordered in
+        # WHOLE millimetres and the rounding is ALWAYS UP, because up is the only
+        # direction a fitter can correct: ordered wider, the excess is scribed off
+        # against the wall; ordered narrower, there is a gap and nothing to close
+        # it with.
+        #
+        # THIS REPLACES THE REFUSAL ADDED THE DAY BEFORE, and the refusal is why
+        # the rule can be trusted. Before 2026-08-25 `Integer(49.2)` truncated to
+        # 49 in silence, and three fillers on the Avenida Primavera top run were
+        # ordered 0,2, 0,2 and 0,3 too NARROW with nothing but a gap at the wall
+        # to show for it. The refusal made that visible and asked a human every
+        # time. The rule answers the same question once - and it keeps the half
+        # the refusal was really protecting: THE ALLOWANCE IS SAID ON THE OBJECT.
+        #
+        # Two widths come out of this, and they are different on purpose:
+        #   width_mm       what is ORDERED - a whole number, rounded up
+        #   width_clear_mm what is DRAWN - the space it actually fills
+        # Generator.drawn_width_mm is the one reader of the second. Same shape as
+        # the Sub-Zero panels and the plinth: the attributes are the order and the
+        # geometry is the sheet.
+        ordered = asked.ceil
+        scribe  = (ordered - asked).round(3)
+
+        unless ordered >= lo && ordered <= hi
           raise ArgumentError,
-                "#{unit['code']} is made from #{lo} to #{hi} mm; #{w} is outside " \
-                'that. The range is the catalog\'s, printed on the page the row cites.'
+                "#{unit['code']} is made from #{lo} to #{hi} mm. A clear space of " \
+                "#{asked} rounds up to #{ordered}, which is outside that range. The " \
+                "range is the catalog's, printed on the page the row cites - so this " \
+                'is two fillers or a different article, not a width nobody prints.'
         end
 
-        unit.merge('width_mm' => w)
+        return unit.merge('width_mm' => ordered) if scribe.zero?
+
+        unit.merge('width_mm' => ordered,
+                   'width_clear_mm' => asked,
+                   'scribe_mm' => scribe)
       end
 
       # ---- HEIGHT, and what the page prints about it -------------------------
