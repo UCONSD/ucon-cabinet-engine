@@ -6839,13 +6839,47 @@ check('three collections, 124 codes, and each is a separate ARTICLE and not a va
     'Adjoining end side panel for N_Elle' => 24,
     'Adjoining end side panel for N_Elle with framed door' => 24
   }
-  # Two pages per collection, and they are NOT the same article at two prices:
-  # printed p.440 is for units whose hinges are on the 45 side, p.441 for units
-  # with drawers, push-up doors, or hinges away from it. Same heights, same
-  # depth groups, different codes.
+  # CORRECTED THE SAME EVENING. This said "the two pages price the same heights
+  # and the same depth groups under different codes", which is false - see
+  # page_split_note in every one of the three files. What the check now pins is
+  # what was actually measured.
   types = rows.map { |r| r['type_key'] }.uniq.sort
   raise types.inspect unless types == %w[end_panel_45 end_panel_45_opposite_hinge]
   raise 'the two pages share a code' unless rows.map { |r| r['code'] }.uniq.length == 124
+end
+
+check('THE TWO PAGES OF A COLLECTION NEVER PRICE THE SAME DEPTH GROUP') do
+  # The measurement that killed the first reading of this chapter, pinned so it
+  # cannot be un-noticed. Within one collection the two printed pages partition
+  # the depth groups with ZERO overlap, so there is no height-and-depth that
+  # exists on both and nothing is ever a choice between them: the depth group
+  # picks the code and the page follows.
+  #
+  # AND THE PARTITION MOVES BETWEEN COLLECTIONS, which is what rules out the
+  # tidy explanation. Maxima puts 35+35 on the banner page; N_Elle and N_Elle
+  # framed put it on the 45-degree page. So the banner does not mean
+  # "back-to-back", and what it does mean is Elda Q22.
+  groups = lambda do |section, type|
+    Registry.catalog.select { |c| c['section'] == section && c['type_key'] == type }
+            .map { |c| Registry.lookup(c['code'])['printed_depth_label'] }.uniq.sort
+  end
+  PANEL_SECTIONS.each do |sec|
+    a = groups.call(sec, 'end_panel_45')
+    b = groups.call(sec, 'end_panel_45_opposite_hinge')
+    raise "#{sec}: a page is empty" if a.empty? || b.empty?
+    raise "#{sec} overlaps on #{(a & b).inspect}" unless (a & b).empty?
+  end
+  # and the partition really does differ, so this is a fact about the book and
+  # not an accident of one collection
+  m = groups.call('End elements for Maxima-Intarsio', 'end_panel_45')
+  n = groups.call('Adjoining end side panel for N_Elle', 'end_panel_45')
+  # BETWEEN DIGITS. The first version matched a bare '+' and every label on
+  # every page ends '+ door thickness', so it called all of them paired and the
+  # check failed on true data. Rule 18's shape again: the title said back-to-back
+  # and the matcher said plus sign.
+  paired = ->(g) { g.any? { |x| x =~ /\d\+\d/ } }
+  raise 'the collections now agree - re-read the pages and Q22' unless
+    !paired.call(m) && paired.call(n)
 end
 
 check('EVERY end panel yields contract-valid attributes') do
@@ -6890,6 +6924,53 @@ check('the drawn depth is the catalog\'s, and the label it disagrees with is kep
     'for 72+35-cm deep side panel + door thickness' => [1120],
     'for 62+62-cm deep side panel + door thickness' => [1290]
   }
+end
+
+check('the picker grid must have something to put ON the button') do
+  # The rule 90_palette.sizeGrid routes on: a width is worth a button only when
+  # it tells the codes apart. Pinned in DATA here, because the grid itself is
+  # JavaScript and cannot be reached from this suite.
+  #
+  # Andriy, 2026-08-26, opening End panels: four rows of nine buttons all
+  # reading 22. Nothing was missing - the width was CONSTANT, and a constant on
+  # a button is a button that says nothing.
+  panels = Registry.catalog.select { |c| c['class'] == 'end_panel' }
+  raise 'the panel width stopped being one number' unless
+    panels.map { |c| c['width_mm'] }.uniq == [22]
+  raise 'the panel height stopped being the article' unless
+    panels.map { |c| c['height_mm'] }.uniq.length > 10
+
+  # and the sections that DO route on width must still have a width that varies
+  # inside a depth row, or the same blank buttons appear somewhere else
+  %w[base wall tall].each do |cls|
+    rows = Registry.catalog.select { |c| c['class'] == cls && c['width_mm'] }
+    next if rows.empty?
+
+    flat = rows.group_by { |c| [c['section'], c['type_key'], c['depth_mm']] }
+               .reject { |_k, v| v.length < 2 }
+               .select { |_k, v| v.map { |c| c['width_mm'] }.uniq.length == 1 &&
+                                 v.map { |c| c['height_mm'] }.uniq.length == 1 }
+    raise "#{cls}: rows that cannot be told apart: #{flat.keys.inspect}" unless flat.empty?
+  end
+end
+
+check('a selected code reaches the Build button, whatever else it still needs asked') do
+  # A SOURCE CHECK, and it exists because the whole suite was blind to this.
+  # heightGrid was written for fillers, where the width widget always runs and
+  # ends by calling showCard and syncBuild. An end panel states no width range,
+  # so it hit the early return above them and Andriy picked B90030 with nothing
+  # to press. Nothing headless could see it - the grid is JavaScript - so what
+  # is pinned is the ORDER of two lines in the file.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  body = src[/function heightGrid\(el\)\{(.+?)\n              \}/m, 1]
+  raise 'heightGrid is gone or renamed - re-read this check before deleting it' unless body
+
+  sync  = body.index('syncBuild(c);')
+  guard = body.index('if(!c.width_range_mm) return;')
+  raise 'syncBuild is no longer called in heightGrid' unless sync
+  raise 'the width-range early return is gone - so is the reason for this check' unless guard
+  raise 'the Build button is behind the width-range return again' unless sync < guard
+  raise 'the card is behind it too' unless body.index('showCard(c);') < guard
 end
 
 check('a panel has no front, and the empty list is stated rather than reached') do

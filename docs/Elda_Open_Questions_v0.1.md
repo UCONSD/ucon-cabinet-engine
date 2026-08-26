@@ -826,8 +826,52 @@ island case, depends on which.
 
 ---
 
+## Q22 — what does the second panel page's banner actually mean?
+
+Every collection prints the adjoining end side panel across two pages. The first
+is headed *"… | with 45° vertical edge"*. The second carries a banner: *"For base
+units with drawers/jumbo drawers, wall units w/push-up doors and base/wall units
+with doors w/hinges on the side opposite the 45° edge."* The drawings on the two
+pages are the same drawing.
+
+We read that as two articles for the same end — pick by what the neighbouring
+unit does. **The tables do not support it.** Within a collection the two pages
+price **disjoint** depth groups: there is no height-and-depth that appears on
+both, so there is never a choice to make.
+
+And which groups fall on which page **changes between collections**:
+
+| collection | "45° vertical edge" page | banner page |
+|---|---|---|
+| Maxima-Intarsio (p.440 / 441) | 35, 62, 67 | **35+35**, 62+35, 67+35, 62+62 |
+| N_Elle (p.444 / 445) | 35, 62, 67, **35+35** | 62+35, 67+35, 72+35, 62+62 |
+| N_Elle framed (p.446 / 447) | 35, 62, 67, **35+35** | 62+35, 67+35, 72+35, 62+62 |
+
+So the banner does not mean "back-to-back" either — 35+35 is on the banner page
+in one collection and on the 45° page in the other two.
+
+**Questions:**
+
+1. Is the second page a **different article** (a panel for a neighbour with
+   drawers, a push-up door, or hinges away from the 45°), or is it **the same
+   table continuing across a spread**, with a banner that applies only to its own
+   rows?
+2. If it is a different article: **why is no single-depth panel priced on it?**
+   A 620-deep base unit with jumbo drawers at the end of a run is an everyday
+   thing, and only the 45° page prices a d.64,5 panel.
+3. If it is the same table: does the banner mean the back-to-back panels are
+   **only** for those situations — and what finishes the end of a back-to-back
+   run whose doors are ordinary?
+
+**What the engine does meanwhile.** It holds both pages, records which page each
+code came from, and lets the DEPTH GROUP pick the code — which it can, because
+the groups do not overlap. The picker labels the two levels with the printed page
+headings and calls neither a choice.
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q21 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q22 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.

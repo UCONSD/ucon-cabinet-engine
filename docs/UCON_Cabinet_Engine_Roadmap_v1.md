@@ -603,14 +603,25 @@ Consequences already accepted:
 - `object_class: 'panel'` has existed in the Contract since v2 and nothing has
   ever built one; the fridge-bay panels were a hard-coded table inside a probe.
   Getting them out of the probe and into the registry is part of this milestone.
-- A panel is handed and it is joined to a specific door. Printed p.440 (hinges
+- ~~A panel is handed and it is joined to a specific door. Printed p.440 (hinges
   on the 45° side) and p.441 (hinges opposite) are **different articles**, so
-  the hand is a choice, never a guess — the `hinge_side` discipline, applied to
-  a second object.
+  the hand is a choice, never a guess.~~ **WRONG, corrected the same evening by
+  the first lookup against the real kitchen.** The two pages of a collection
+  price **disjoint** depth groups, so there is never a choice between them; and
+  which groups fall on which page **changes between collections**, so the banner
+  does not mean "back-to-back" either. What the second page's banner means is
+  **Elda Q22**. The depth group picks the code. Account:
+  `claude/findings-2026-08-26-panels-recon.md` §9.1.
 - Code grammar is per depth group with drifting suffixes (`0030` / `0130` /
   `0077` / `0087` / `0097` / `0107`). Explicit registry rows only.
 
 New Elda questions: **Q20** (p.436 labels d.102 and d.107 both "62+35"; codes
-and arithmetic say d.107 is 67+35) and **Q21** (whether the printed `d.` is the
+and arithmetic say d.107 is 67+35), **Q21** (whether the printed `d.` is the
 overall assembly depth including door faces, which is what everything drawn
-depends on).
+depends on) and **Q22** (what the second page's banner means, given that the two
+pages never price the same depth group).
+
+And one question the model itself raised: an **unprinted height increase orphans
+its end panel**. Two `SD0631` at H.720 and `UCON-BESP-001` at H.313 have no
+finishing panel at any depth, because the catalog prices none at a height it does
+not print. Q11's consequence, and it needs its own answer.

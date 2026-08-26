@@ -198,12 +198,15 @@ module UCON
       # registry keeps the catalog's wording; this map never travels into data
       # or into an order. An unmapped type falls back to its key.
       TYPE_LABELS = {
-        'end_panel_45'            => 'End panel, 45° edge',
-        # THE LABEL SAYS WHAT DECIDES IT, not what it looks like. The two pages
-        # are different articles and the choice belongs to the neighbour: this
-        # one is for a unit with drawers, a push-up door, or hinges pointing
-        # away from the 45.
-        'end_panel_45_opposite_hinge' => 'End panel, drawers / hinges opposite',
+        # THE LABELS ARE THE PRINTED PAGE HEADINGS AND NOTHING MORE, corrected
+        # 2026-08-26. They first read as though the person were choosing between
+        # two articles for the same end. They are not: the two pages of a
+        # collection price DISJOINT depth groups, so the depth picks the code and
+        # this level picks nothing. Labelling it as a choice invited a decision
+        # that does not exist. What the second page's banner MEANS is Elda Q22.
+        'end_panel_45'            => 'End panel — p. “with 45° vertical edge”',
+        'end_panel_45_opposite_hinge' =>
+          'End panel — p. “drawers / push-up / hinges opposite”',
         'filler_front'            => 'Filler, front only',
         'filler_base_unit'        => 'Base unit filler',
         'filler_wall_unit'        => 'Wall unit filler',
@@ -282,6 +285,15 @@ module UCON
             .dlab{width:44px;color:#555;font-size:12px}
             .wbtn{flex:1;padding:6px 0;border:1px solid #d4d4d4;border-radius:5px;background:#fff;
                   font-size:11px;cursor:pointer;text-align:center}
+            /* THE HEIGHT GRID STANDS UP, 2026-08-26. Laid out as rows it ran
+               off the right edge: the end-panel chapter prints sixteen heights
+               in one depth group and a flex row cannot wrap without lying about
+               which depth a button belongs to. One COLUMN per depth, heights
+               down it, so the whole article table is on screen at once. */
+            .dcols{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px}
+            .dcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+            .dcol .wbtn{flex:0 0 auto}
+            .dch{color:#555;font-size:12px;text-align:center;padding-bottom:2px}
             .wbtn:hover{background:#eef2ff}
             .wbtn.sel{background:#2563eb;color:#fff;border-color:#2563eb}
             .wbtn small{display:block;color:#8a8a8a;font-size:10px;line-height:1.2;margin-top:1px}
@@ -521,34 +533,55 @@ module UCON
                 });
                 if(st.code) showCard(CAT.find(function(c){return c.code===st.code;}));
               }
-              // A FILLER HAS NO WIDTH IN ITS CODE: one article covers 2,3
-              // to 15 cm and the number is stated when it is ordered (printed
-              // p.434). So the grid is sizeGrid ONE DIMENSION OVER - rows are
-              // still depths, but the buttons carry the HEIGHT, because that
-              // is what varies inside a filler type. The wall filler is the
-              // case that shows it: PB0151 and PD0151 are both d.35 and
-              // differ only in height, so one row per code read as two
-              // identical rows labelled 'd. 35'.
-              function widthList(el){
+              // THE BUTTON MUST CARRY WHAT VARIES. Rows are depths either way;
+              // this grid puts the HEIGHT on the button instead of the width.
+              //
+              // Written for FILLERS, which have no width in their code: one
+              // article covers 2,3 to 15 cm and the number is stated when it is
+              // ordered (printed p.434). PB0151 and PD0151 are both d.35 and
+              // differ only in height, so a width grid read as two identical
+              // rows labelled 'd. 35'.
+              //
+              // END PANELS NEED IT FOR THE OPPOSITE REASON, 2026-08-26. A panel
+              // HAS a width and it is 22 - the 2,2 cm thickness, the same on
+              // every code in the chapter. Andriy opened the picker and got
+              // four rows of nine buttons all reading 22. The width was not
+              // missing, it was constant, and a constant on a button is a
+              // button that says nothing. So the routing rule below is not
+              // 'is it a filler' but 'does the width distinguish anything'.
+              function heightGrid(el){
                 var rs = rs_by_depth(rows());
+                var cols = document.createElement('div'); cols.className='dcols';
                 rs.depths.forEach(function(d){
-                  var row = document.createElement('div'); row.className='drow';
-                  var lab = document.createElement('div'); lab.className='dlab';
-                  lab.textContent = d ? 'd. ' + (d/10) : 'front';
-                  row.appendChild(lab);
+                  var col = document.createElement('div'); col.className='dcol';
+                  var head = document.createElement('div'); head.className='dch';
+                  head.textContent = d ? 'd. ' + (d/10) : 'front';
+                  col.appendChild(head);
                   rs.by[d].forEach(function(c){
                     var b = document.createElement('button'); b.className='wbtn';
                     if(st.code===c.code) b.className += ' sel';
                     b.innerHTML = 'H. ' + (c.height_mm/10) +
                                   '<small>' + esc(c.code) + '</small>';
                     b.onclick = function(){ st.w = null; st.code = c.code; render(); };
-                    row.appendChild(b);
+                    col.appendChild(b);
                   });
-                  el.appendChild(row);
+                  cols.appendChild(col);
                 });
+                el.appendChild(cols);
                 if(!st.code) return;
                 var c = CAT.find(function(x){ return x.code===st.code; });
-                if(!c || !c.width_range_mm) return;
+                if(!c) return;
+                // THE CARD AND THE BUILD BUTTON COME FIRST, and until 2026-08-26
+                // they came LAST - after a `return` that only a filler ever got
+                // past. This function was written for fillers, where the width
+                // widget below always runs and ends by calling both. An end
+                // panel states no width range, so it took the early return and
+                // reached neither: Andriy picked B90030 and had nothing to press.
+                // A selected code is a selected code, whatever else the article
+                // still needs asked.
+                showCard(c);
+                syncBuild(c);
+                if(!c.width_range_mm) return;
                 var lo = c.width_range_mm[0], hi = c.width_range_mm[1];
                 var wrap = document.createElement('div'); wrap.className='drow';
                 var wlab = document.createElement('div'); wlab.className='dlab';
@@ -613,7 +646,16 @@ module UCON
               function sizeGrid(el){
                 var rs = rows();
                 if(rs.length && rs[0].corner_geometry){ cornerList(el); return; }
-                if(rs.length && rs[0].width_range_mm){ widthList(el); return; }
+                // The width is worth a button only when it tells the codes
+                // apart. A filler states a RANGE and no width at all; an end
+                // panel states the same 22 on every row while the height is the
+                // whole article. Both go one dimension over.
+                var ws = uniq(rs.map(function(c){return c.width_mm;}));
+                var hs = uniq(rs.map(function(c){return c.height_mm;}));
+                if(rs.length && (rs[0].width_range_mm ||
+                                 (ws.length === 1 && hs.length > 1))){
+                  heightGrid(el); return;
+                }
                 var depths = uniq(rs.map(function(c){return c.depth_mm;})).sort(function(a,b){return a-b;});
                 depths.forEach(function(d){
                   var row = document.createElement('div'); row.className='drow';
@@ -651,6 +693,11 @@ module UCON
                     c.carcass_length_mm + ' × ' + c.depth_mm + ' · door ' + c.door_width_mm +
                     '<br><i>' + c.execution + ' execution — the mirror is a different code; ' +
                     'the door hand is set in the properties panel</i>'
+                  : c['class'] === 'end_panel'
+                  ? 'H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm, ' +
+                    c.width_mm + ' mm thick' +
+                    '<br><i>the depth is the catalog\u2019s DRAWN d. \u2014 the carcass ' +
+                    'depth it serves is the smaller number on the page</i>'
                   : 'W ' + c.width_mm + ' × H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm' +
                     (INCH ? '<br><span class="src">' +
                             esc(inchLabel(c.width_mm, c.nominal_in)) + ' × ' +

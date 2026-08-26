@@ -239,3 +239,71 @@ name. So `Registry.width_is_a_thickness?` runs BEFORE the list and outside it.
   45° lip (205 in N_Elle, 84/168 stone and 134/267 ceramic in the framed
   collection), the grip-recess height reduction (84), and the depth increase of
   printed p.549 (41 a step).
+
+---
+
+## 9. The first lookup against the real kitchen, and what it corrected (same evening)
+
+Probe run 48 (`build/66_island_ends.rb`, read-only) walked the Avenida Primavera
+model, found every cabinet end with nothing against it, and asked the new
+registry which panel would finish each. Five things came back.
+
+### 9.1 THE CORRECTION — the two pages are not what §2 and the commit said
+
+The registry note read: *"THIS IS A DIFFERENT ARTICLE, NOT A VARIANT. The two
+pages price the same heights and the same depth groups under different codes."*
+**That is false, and the first real lookup showed it.** Within a collection the
+two pages price **disjoint** depth groups, so no comparison between them is
+possible and nothing is ever a choice. Worse for the reading: **which page a
+group falls on changes between collections** — Maxima puts 35+35 on the banner
+page, N_Elle and N_Elle framed put it on the 45° page — so the banner does not
+mean "back-to-back" either. The drawings on both pages are the same drawing.
+
+The claim survived the extraction because nothing in it was tested against a
+question. It died the moment a real end at d.620 asked *which code* — and the
+answer came back from one page with no rival on the other.
+
+Now: the two type keys record **which printed page a code came from**, which is
+a fact; what the banner MEANS is **Elda Q22**; the depth group picks the code;
+and the picker labels the two levels with the printed page headings and calls
+neither a choice. The wrong note is kept beside the correction in all three
+files (`choice_note` / `choice_note_corrected_2026_08_26`), and a check now pins
+the disjointness *and* the fact that the partition moves between collections.
+
+> **A reading nothing has asked a question of is not yet knowledge.** Four
+> documents, a commit message and a set of green checks all repeated it, because
+> every one of them was written from the same reading of the same two pages.
+
+### 9.2 The model has NO island yet
+
+*"none — every run has its back to something that is not a cabinet."* Nothing in
+545 Avenida Primavera stands back to back today, so every free end is a
+single-depth panel and the back-to-back groups (d.75 / 102 / 107 / 112 / 129)
+have nothing to serve. The island is still to be drawn; the panels for it come
+after its units, not before.
+
+### 9.3 A deep panel stops at H.84 and resumes at H.138
+
+The chapter prints **no H.72, H.96 or H.120 at d.62 or d.67** — those heights
+exist only in the d.35 group. So a 620-deep unit at wall height has no adjoining
+end panel in the book at all. Not a gap in the extraction: it is what the pages
+print, and it is consistent (a 620-deep box 720 high is not a thing Cesar sells).
+
+### 9.4 AN UNPRINTED HEIGHT INCREASE ORPHANS ITS END PANEL
+
+Two `SD0631` in this kitchen were increased to **H.720** — the increase Q11 is
+about, printed nowhere. The probe asked for their end panels and got nothing at
+any depth. The same is true of `UCON-BESP-001` at H.313. This is a consequence
+worth stating plainly: **a dimension the catalog does not print cannot be
+finished with a catalog part.** Whatever Elda answers about the height increase,
+the end of that run needs an answer of its own.
+
+### 9.5 A hint about the collection question, from the kitchen's own tall run
+
+`C90635` is **H.2340** at d.620, and only **Maxima** prices a panel that tall —
+`F90030`. N_Elle and N_Elle framed stop at H.84. So if this kitchen is N_Elle,
+its tall run cannot have a finished end from the panel chapter at all. Combined
+with the estimate header (MAXIMA 2.2, 2026/30829) against the glass page's
+N_Elle mark, that is worth putting in front of Elda alongside the glass
+question — it is the first place where the collection answer changes what CAN be
+ordered rather than only which code.
