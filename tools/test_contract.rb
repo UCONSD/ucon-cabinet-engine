@@ -241,9 +241,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 752 codes (262 base + 44 sink + 9 appliance + 291 wall + 8 USA tall + 124 tall + 14 fillers)') do
+check('registry loads and holds 756 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 752
+  raise "got #{n}" unless n == 756
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -427,9 +427,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 752 rows, each with code/dims/description/source') do
+check('registry catalog: 756 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 752
+  raise cat.length.to_s unless cat.length == 756
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -525,6 +525,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 72',
                                              'Dish-drainer units H. 84',
                                              'Dish-drainer units H. 96',
+                                             'Glass wall units H. 96',
                                              'Sink base units H. 58.5',
                                              'Sink base units H. 78',
                                              'Tall unit top elements H. 36 | without fixings',
@@ -4737,10 +4738,16 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # 24 interior-drawer = 208 refused, 530 allowed. NO framed-glass refusal and
   # NO mechanism refusal fires today, and both are recorded as zero rather than
   # left out: an empty bucket that later fills is a change somebody should see.
+  # 2026-08-26: the framed-glass bucket FILLED, from zero to three, the day the
+  # H.96 glass wall units were extracted on demand - TF0541, TF0641, TF0940. The
+  # note above said an empty bucket that later fills is a change somebody should
+  # see; this is that change, and the matcher found them by their own
+  # description without a line of new code.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
     refused == { 'appliance units' => 17, 'pull-out units' => 12,
                  'units with jumbo drawers' => 155,
-                 'units with interior drawers' => 24 } && allowed == 530
+                 'units with interior drawers' => 24,
+                 'tall or wall units with framed glass doors' => 3 } && allowed == 530
 end
 
 check('an ordered filler satisfies the contract') do
@@ -6360,6 +6367,79 @@ check('A MODIFIED UNIT GETS A MODIFIED FRONT, in both axes') do
   slabs = Generator.front_slabs(cut)
   raise slabs.inspect unless slabs.sum { |sl| sl[:w_mm] } == 770
   raise slabs.inspect unless slabs.length == 2
+end
+
+check('the glass wall units are held, and the page refuses them in BOTH axes') do
+  # Extracted 2026-08-26 on demand: the Avenida Primavera west wall wants glass
+  # doors at 600 x 960 x 350 and the plain-door PF0631 standing there has none.
+  # printed p.314, chapter 'Glass display cabinet elements'.
+  g = Registry.lookup('TF0641')
+  raise g.inspect unless g['width_mm'] == 600 && g['height_mm'] == 960 && g['depth_mm'] == 350
+  raise g['family'].inspect unless g['family'] == 'Glass wall H.96'
+  raise g['description'] unless g['description'] =~ /glass door/i
+  raise g['source_ref'] unless g['source_ref'].include?('p.314')
+
+  # IT IS A DIFFERENT ARTICLE, NOT A VARIANT of the plain-door unit: PF is the
+  # wall chapter at printed p.245, TF is the glass chapter at p.314, and the
+  # letters run BACKWARDS across the F/G pair in BOTH chapters - TF is H.96 and
+  # TG is H.84, exactly as PF is H.96 and PG would be H.84. A letter is a lookup.
+  p = Registry.lookup('PF0631')
+  raise 'same size, different article' unless
+    p['width_mm'] == g['width_mm'] && p['height_mm'] == g['height_mm'] &&
+    p['depth_mm'] == g['depth_mm'] && p['code'] != g['code']
+  raise Registry.lookup('TG0641')['height_mm'].to_s if
+    (Registry.lookup('TG0641') rescue nil) && Registry.lookup('TG0641')['height_mm'] == 960
+
+  # "Cannot be reduced in width, height or depth" is printed on the position.
+  # WIDTH was already refused by the p.548 framed-glass rule with no new code;
+  # HEIGHT was wired on 2026-08-26 and must cite THIS page, not borrow that list.
+  raise 'width must be refused' unless
+    Registry.width_modification_refusal(g) == 'tall or wall units with framed glass doors'
+  begin
+    Registry.with_ordered_height(g, 900)
+    raise 'a glass unit accepted a height change'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('p.314')
+    raise e.message unless e.message.include?('width, height or depth')
+  end
+  # and an unchanged height is still a no-op, not a refusal
+  raise 'an unchanged height must pass' unless
+    Registry.with_ordered_height(g, 960)['height_mm'] == 960
+
+  # THE PANE IS DRAWN, AND THE FRAME SAYS WHOSE NUMBER IT IS. The book prints no
+  # frame section anywhere either Andriy or the session could find, so 25 is a
+  # UCON declaration and wears '(frame: DECLARED)' - deliberately NOT the
+  # aperture's '(cutout: INDICATIVE)', because an aperture's rails come from a
+  # machine's published spec and this comes from us. Two labels, two claims.
+  raise 'a glass door is not an appliance aperture' if (g['front_layout'] || {})['cutout']
+  raise g['front_layout'].inspect unless g['front_layout']['glass_frame_mm'] == 25
+  rails = Generator.cutout_rails(g, Generator.front_slabs(g).first)
+  raise rails.inspect unless rails == { left: 25.0, right: 25.0, bottom: 25.0, top: 25.0 }
+  raise Generator::GLASS_FRAME_LABEL unless Generator::GLASS_FRAME_LABEL == '(frame: DECLARED)'
+  raise 'the two labels must not be the same claim' if
+    Generator::GLASS_FRAME_LABEL == Generator::CUTOUT_LABEL
+  n = Generator.notes_for(g)
+  raise n unless n.include?('(frame: DECLARED)') && n.include?('25 mm')
+  raise n unless n.include?('UCON declaration')
+  raise n if n.include?('INDICATIVE')
+
+  # BOTH LEAVES OF A TWO-DOOR GLASS UNIT ARE GLAZED. The aperture guard waits
+  # for a slab as wide as the whole unit, which would have glazed neither door
+  # of TF0940; a glass frame answers per leaf.
+  two = Registry.lookup('TF0940')
+  slabs = Generator.front_slabs(two)
+  raise slabs.inspect unless slabs.length == 2
+  slabs.each do |sl|
+    raise "a leaf went unglazed: #{sl.inspect}" unless Generator.cutout_rails(two, sl)
+  end
+
+  # and the appliance aperture is untouched: it still waits, and still says
+  # INDICATIVE rather than DECLARED.
+  wine = Registry.lookup('CR9601')
+  raise 'the wine cooler must keep its own label' unless
+    Generator.notes_for(wine).include?('INDICATIVE')
+  raise 'the wine cooler must not claim a declared frame' if
+    Generator.notes_for(wine).include?('(frame: DECLARED)')
 end
 
 check('the reveal sentence died with the reveal') do

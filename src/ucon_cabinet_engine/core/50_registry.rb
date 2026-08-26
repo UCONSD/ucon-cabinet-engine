@@ -493,6 +493,26 @@ module UCON
                'not from the carcass - change the appliance, not the box' if
           %w[appliance appliance_front].include?(unit['object_class'].to_s)
 
+        # AND THE ONE THE PAGE ITSELF PRINTS, added 2026-08-26 when the glass
+        # wall units were extracted on demand. Every position in the glass
+        # display chapter carries, beside the code, the sentence
+        #
+        #     "Cannot be reduced in width, height or depth"
+        #
+        # printed p.314 for H.96 and repeated at every other height of that
+        # chapter. THIS IS NOT THE WIDTH LIST BORROWED. p.548 excludes 'tall or
+        # wall units with framed glass doors' from WIDTH only, and borrowing a
+        # prohibition the page did not write is the one thing this registry may
+        # not do - the comment above with_ordered_height says exactly that about
+        # Elda Q17. Here the page wrote it, in those words, next to the article.
+        #
+        # DEPTH is prohibited by the same sentence and is NOT wired, because this
+        # engine has no depth-modification path to refuse. Said out loud so the
+        # absence is a known gap rather than an oversight.
+        return 'a glass display element - printed p.314 states "Cannot be reduced in ' \
+               'width, height or depth" on the position itself' if
+          unit['description'].to_s =~ /glass/i
+
         nil
       end
 

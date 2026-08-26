@@ -1,0 +1,37 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "Wall H.96",
+  "source_pages": "printed p.434 / PDF 436 (subset extracted: the H.96 row of the third position)",
+  "family_note": "No family-level keys - see fillers_h78.json.",
+  "extraction_note": "DEMAND-DRIVEN, 2026-08-26. The Avenida Primavera west wall closes against the wall with a 103,000 gap at the glass row's height, and Andriy asked for a plain filler there rather than a finished end panel. The wall filler table on printed p.434 runs H.36 PB0151, H.48 PC0151, H.60 PD0151, H.72 PE0151, H.84 PG0151, H.96 PF0151, H.120 PJ0151; only the H.96 row was taken. PE0151, PG0151 and PJ0151 are NOT extracted.",
+  "letter_note": "PG = H.84 and PF = H.96 - THE F/G PAIR RUNS BACKWARDS AGAINST HEIGHT here too. That is now three independent readings of the same rule: the plain wall chapter (printed p.245-247, recorded in wall_h96.json), the glass display chapter (printed p.314, TF = H.96 against TG = H.84), and this filler table. A letter is a lookup and never a sequence.",
+  "data": {
+    "unit_types": {
+      "filler_wall_unit": {
+        "description": "Wall unit filler in door finishes from 2,3 to 15 cm - with one-piece bottom",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [
+          "one-piece bottom"
+        ],
+        "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - a filler does not open, so 70_symbols draws no leaf. The kind is STATED rather than left absent because Panel.effective_slabs and Panel.gola_options both default a missing layout to 'single', and a default is not a source."
+        },
+        "codes": [
+          {
+            "code": "PF0151",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 350
+          }
+        ],
+        "notes": "THE PAGE ITSELF ANSWERS THE QUESTION THIS FILLER WAS ORDERED FOR. Andriy, 2026-08-26: the three PF0631 on the west wall become glass units TF0641, and the filler between the last one and the wall must be ordered in the colour of the GLASS DOOR'S FRAME. printed p.434 prints, beside this very table: 'If the door is framed, the glass/ceramic will be applied to the panel and not to the aluminium support.' So a filler in a framed-door finish is a front in that finish on a PANEL - the aluminium support is not what carries it. The finish itself is not modelled: there is no appearance layer yet (M1.6/M1.8), so the requirement rides on the object as a note and reaches the order that way. The same block prints two more conditions worth keeping: minimum size for Groove is 5 cm, and Trama gets two sides with trama and a polished edge."
+      }
+    }
+  }
+}

@@ -214,6 +214,16 @@ module UCON
       # Said once, in the group name and in the notes, spelled the same both
       # times so a search for it finds every place the claim is made.
       CUTOUT_LABEL = '(cutout: INDICATIVE)'
+      # AND ITS SIBLING, 2026-08-26. A glass DOOR is not an appliance APERTURE
+      # and the two must not wear one label: an aperture's rails come from a
+      # machine's published specification and are INDICATIVE of it, while a
+      # glass door's frame is a number UCON declared because the catalog prints
+      # none. Andriy read the glass chapter, the Unit-structure pages, the
+      # technical pages and the filler table himself and confirmed the absence -
+      # then set 25 and said to draw it CAD-style. So the label says DECLARED,
+      # which is a different claim from INDICATIVE and has to look different in
+      # an outliner.
+      GLASS_FRAME_LABEL = '(frame: DECLARED)'
 
       # CAD glass: a cool grey that is plainly not the front's white and is
       # plainly not transparent.
@@ -673,8 +683,9 @@ module UCON
         # THE NAME CARRIES THE WARNING. Whoever opens the outliner is the
         # person who can still catch this before it reaches a drawing, and the
         # notes on the definition are one click further away than the tree.
+        label = (unit['front_layout'] || {})['glass_frame_mm'] ? GLASS_FRAME_LABEL : CUTOUT_LABEL
         frame = Geometry.framed_slab(
-          entities, "#{slab[:name]} #{CUTOUT_LABEL}",
+          entities, "#{slab[:name]} #{label}",
           slab[:x_mm], front_y_mm, z0 + slab[:z_mm],
           slab[:w_mm], t, slab[:h_mm], rails, material
         )
@@ -764,9 +775,21 @@ module UCON
       # split front, and no aperture in this catalog crosses a joint, so a
       # split gets no hole rather than a guessed one.
       def cutout_rails(unit, slab)
-        cutout = (unit['front_layout'] || {})['cutout']
+        layout = unit['front_layout'] || {}
+
+        # A GLASS DOOR IS A FRAME WITH A PANE IN IT, and every leaf of a glass
+        # unit is glazed - so unlike an appliance aperture this does NOT wait
+        # for a slab as wide as the whole unit. TF0940 has two glass doors and
+        # both are glass; the aperture guard below would have glazed neither.
+        frame = layout['glass_frame_mm']
+        if frame
+          f = frame.to_f
+          return { left: f, right: f, bottom: f, top: f }
+        end
+
+        cutout = layout['cutout']
         return nil unless cutout
-        return nil unless slab[:w_mm] == unit['width_mm']
+        return nil unless slab[:w_mm] == drawn_width_mm(unit)
 
         side = cutout['rail_side_mm'].to_f
         { left:   side,
@@ -1623,6 +1646,21 @@ module UCON
         # The aperture is the one thing on this object that no Cesar page
         # states. Saying so on the object itself is the difference between a
         # placeholder and a wrong drawing.
+        # A GLASS DOOR SAYS WHOSE NUMBER ITS FRAME IS, 2026-08-26. The catalog
+        # prints no frame section anywhere Andriy or this session could find -
+        # not the glass chapter, not Unit structure, not the technical pages,
+        # not the filler table - so 25 is UCON's, declared once and drawn
+        # CAD-style, and the object is the place that has to admit it.
+        glass_note =
+          if (frame_mm = (unit['front_layout'] || {})['glass_frame_mm'])
+            " Glass door #{GLASS_FRAME_LABEL}: the frame is drawn at #{frame_mm} mm, " \
+            'which is a UCON declaration and not a Cesar dimension - the catalog ' \
+            'prints no frame section for a glass door on any page read so far. The ' \
+            'pane is drawn opaque and flat, the CAD convention, and at full front ' \
+            'thickness. Nothing here is a manufacturing statement.'
+          else
+            ''
+          end
         cutout_note =
           if (unit['front_layout'] || {})['cutout']
             " Aperture #{CUTOUT_LABEL}: the catalog never dimensions it. " \
@@ -1652,7 +1690,7 @@ module UCON
         "Generated from registry/cesar.json (#{unit['registry_status']}). " \
         "#{interior_note}#{handed_note} Front drawn flush: the faces meet, and no reveal is " \
         'drawn or stored.' \
-        "#{scribe_note}#{cutout_note}"
+        "#{scribe_note}#{glass_note}#{cutout_note}"
       end
     end
   end

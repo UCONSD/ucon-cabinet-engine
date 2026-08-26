@@ -1646,6 +1646,32 @@
         "section": "USA elements | for N_Elle tall units H. 222 for base unit H. 84",
         "printed_pages": "432",
         "status": "not_extracted"
+      },
+      {
+        "class": "glass",
+        "family": "Glass H.96",
+        "section": "Glass wall units H. 96",
+        "printed_pages": "314",
+        "status": "extracted",
+        "extracted_on": "2026-08-26",
+        "note": "DEMAND-DRIVEN. The Avenida Primavera west wall holds three PF0631 - plain-door wall units 600 x 960 x 350 - and Andriy asked for glass doors there on 2026-08-26. The H.96 block of printed p.314 was taken whole: both positions, all three codes (TF0541, TF0641, TF0940), registry/cesar/glass_wall_h96.json. THE CLASS IS 'glass' HERE AND 'wall' ON THE CATALOG ROWS, on purpose: the CHAPTER is 'Glass display cabinet elements' and the OBJECT is a wall unit that hangs at d.35. Keeping them apart is what leaves the wall chapter's own 24-section index intact. NOT EXTRACTED, and the printed chapter index names them so a later session need not re-read it: Glass tall unit H.138 (p.308), H.198 (p.309), H.210 (p.310), H.222 (p.311); Tall unit top elements with glass doors H.36 and H.48 (p.312); Glass wall units H.60 and H.72 (p.313); Glass wall units H.84 (p.314, the other half of the page this came from); Glass wall units H.120 (p.315); plus the chapter's own finishes and price bands (p.306-307). LETTERS: TD = H.60, TE = H.72, TF = H.96, TG = H.84, TJ = H.120 - the F/G pair runs BACKWARDS against height, the same way it does in the plain wall chapter, read here independently. EVERY POSITION IS MARKED N_Elle and this kitchen is MAXIMA 2.2: whether that is a collection restriction or the name of the framed-glass door profile is an Elda question and it decides whether the section applies here at all.",
+        "pages": [
+          {
+            "printed": 314,
+            "status": "partial",
+            "extracted_on": "2026-08-26",
+            "types": [
+              "Wall unit with glass door - 1 rh or lh glass door - 2 glass shelves (TF0541, TF0641)",
+              "Wall unit with glass doors - 2 glass doors - 2 glass shelves (TF0940)",
+              {
+                "title": "Glass wall units H. 84 (TG0541, TG0641, TG0940)",
+                "status": "not_extracted",
+                "note": "The top half of the same printed page. Not needed by this kitchen, so not taken - the H.96 block was."
+              }
+            ],
+            "note": "PRINTED ON EVERY POSITION: 'Cannot be reduced in width, height or depth.' The width half was already refused by WIDTH_MOD_FORBIDDEN's framed-glass rule from p.548; the HEIGHT half was wired on 2026-08-26 citing THIS page rather than borrowing the width list, and DEPTH is prohibited by the same sentence but has no modification path in the engine to refuse."
+          }
+        ]
       }
     ]
   },

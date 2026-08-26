@@ -1,0 +1,73 @@
+{
+  "section": "Glass wall units H. 96",
+  "class": "wall",
+  "family": "Glass wall H.96",
+  "source_pages": "CESAR - 2 Kitchen System.pdf printed p.314 / PDF 316, the H.96 block read whole 2026-08-26",
+  "extraction_note": "DEMAND-DRIVEN, and narrow on purpose. The Avenida Primavera west wall holds three PF0631 - plain-door wall units, 600 x 960 x 350 - and Andriy asked for glass doors there on 2026-08-26. Only the H. 96 block of printed p.314 was taken. NOT extracted and not to be assumed: Glass wall units H. 60 (TD), H. 72 (TE), H. 84 (TG, the other half of the same printed page) and H. 120 (TJ), the glass tall units H. 138/198/210/222, and the tall-unit top elements with glass doors H. 36 and H. 48. The whole chapter is 'Glass display cabinet elements', printed p.305-315.",
+  "letter_note": "TD = H.60, TE = H.72, TF = H.96, TG = H.84, TJ = H.120. THE F/G PAIR RUNS BACKWARDS AGAINST HEIGHT, exactly as it does in the plain wall chapter, where wall_h96.json already records 'F is H.96 and G is H.84: the letters run BACKWARDS across that pair, which is why they are a lookup and never a sequence.' That was read off printed p.245-247 and p.434; this is the same rule holding in a different chapter, read independently. A letter is a lookup.",
+  "collection_note": "EVERY POSITION ON THIS PAGE CARRIES THE MARK 'N_Elle'. This project's header is MAXIMA 2.2 (estimate 2026/30829). The page does not say whether N_Elle is a COLLECTION restriction or the name of the framed-glass DOOR PROFILE - the book also has a whole chapter of 'N_Elle base units with framed door' (printed p.397+), which suggests the second, and suggesting is not knowing. ELDA QUESTION, and it decides whether this section applies to this kitchen at all.",
+  "carcass_note": "The chapter's finishes page (printed p.306) prints its own carcass finish list and price bands 1-5, and repeats on every band: THE SIDE PANELS OF A GLASS DISPLAY CARCASS CANNOT BE CUSTOMISED - if an end panel in a customised finish is wanted on an end unit, a 22 mm side panel in that finish must be added ONTO the glass display unit. Not an issue in this kitchen (Andriy, 2026-08-26: the run ends against a filler, not an exposed end), recorded because it will be somewhere else.",
+  "door_options_note": "Each position prints surcharges for the door treatment and the shelves rather than separate articles: '60 cm wide glass door with fabric 95', '60 cm wide ribbed glass door 95', 'Bronze glass shelves D.35 15', 'Fume glass shelves D.35 15' (H.96, one-door position). THE STANDARD DOOR IS THE POSITION ITSELF and carries none of these - Andriy, 2026-08-26: standard glass doors. The numbers are points, and no article code is printed beside any of them, which is the same shape as the wine cooler's stainless protection (Elda W3).",
+  "data": {
+    "height_mm": 960,
+    "mounting": "wall_hung",
+    "mounting_note": "A glass wall unit hangs like any other wall unit; how high is a project decision the catalog does not state.",
+    "page_observations": [
+      "The position drawings print 96 beside the carcass and 98,2 beside it - the same +2,2 cm appears at every height in this chapter (60/62,2, 72/74,2, 84/86,2, 96/98,2, 120/122,2). What the second number measures is NOT stated on the page and is deliberately not guessed here.",
+      "d. 35 is the only depth printed for glass wall units at any height.",
+      "PRINTED ON EVERY POSITION: 'Cannot be reduced in width, height or depth.' The p.548 modifications list already excludes 'tall or wall units with framed glass doors' from WIDTH reduction; this page states the same prohibition on the position itself AND extends it to HEIGHT and DEPTH."
+    ],
+    "unit_types": {
+      "glass_wall_door": {
+        "description": "Wall unit with glass door - 1 rh or lh glass door - 1 glass shelf or 2 glass shelves per height",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "2 glass shelves"
+        ],
+        "source_ref": "printed p.314 / PDF 316",
+        "codes": [
+          {
+            "code": "TF0541",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "TF0641",
+            "width_mm": 600,
+            "depth_mm": 350
+          }
+        ],
+        "notes": "Two widths at H.96. ONE CODE, BOTH HANDS, like its plain-door cousin PF0631. CANNOT BE REDUCED IN WIDTH, HEIGHT OR DEPTH - printed on the position. Registry.WIDTH_MOD_FORBIDDEN already refuses a width change for anything whose description says 'glass'; the height half of the same printed sentence was wired on 2026-08-26 and cites THIS page rather than borrowing the width list.",
+        "front_layout": {
+          "kind": "single",
+          "glass_frame_mm": 25,
+          "note": "One glass door covering the full front, hinged on a vertical edge, hinge_side per order. THE FRAME IS 25 mm AND IT IS UCON'S NUMBER, NOT CESAR'S (Andriy, 2026-08-26). The catalog prints no frame section for a glass door on any page either of us could find: not the glass chapter (printed p.305-315), not 'Unit structure' (printed p.260, p.282-283, whose 'aluminium frame' is the structural frame of an open shelving unit and a different thing), not the technical pages (printed p.10-11), not the filler table (printed p.434). Andriy checked by eye as well and set 25, to be drawn CAD-style. So the object carries GLASS_FRAME_LABEL '(frame: DECLARED)' - deliberately not the aperture's '(cutout: INDICATIVE)', because an aperture's rails come from a machine's published specification and this comes from us. The pane is opaque and flat at full front thickness, which is the convention this engine chose for glass on 2026-08-22: a transparent material would show the room through a cabinet in every rendered view. NOTHING HERE IS A MANUFACTURING STATEMENT - the sheet is a drawing, not a production spec."
+        }
+      },
+      "glass_wall_two_doors": {
+        "description": "Wall unit with glass doors - 2 glass doors - 2 glass shelves",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": [
+          "2 glass shelves"
+        ],
+        "source_ref": "printed p.314 / PDF 316",
+        "codes": [
+          {
+            "code": "TF0940",
+            "width_mm": 900,
+            "depth_mm": 350
+          }
+        ],
+        "notes": "One width at H.96. CANNOT BE REDUCED IN WIDTH, HEIGHT OR DEPTH - printed on the position.",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "glass_frame_mm": 25,
+          "note": "Two glass doors meeting at the centre, BOTH GLAZED - cutout_rails answers a glass frame for every leaf, where an appliance aperture waits for a slab as wide as the whole unit. THE FRAME IS 25 mm AND IT IS UCON'S NUMBER, NOT CESAR'S (Andriy, 2026-08-26). The catalog prints no frame section for a glass door on any page either of us could find: not the glass chapter (printed p.305-315), not 'Unit structure' (printed p.260, p.282-283, whose 'aluminium frame' is the structural frame of an open shelving unit and a different thing), not the technical pages (printed p.10-11), not the filler table (printed p.434). Andriy checked by eye as well and set 25, to be drawn CAD-style. So the object carries GLASS_FRAME_LABEL '(frame: DECLARED)' - deliberately not the aperture's '(cutout: INDICATIVE)', because an aperture's rails come from a machine's published specification and this comes from us. The pane is opaque and flat at full front thickness, which is the convention this engine chose for glass on 2026-08-22: a transparent material would show the room through a cabinet in every rendered view. NOTHING HERE IS A MANUFACTURING STATEMENT - the sheet is a drawing, not a production spec."
+        }
+      }
+    }
+  }
+}
