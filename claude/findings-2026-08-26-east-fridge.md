@@ -360,9 +360,29 @@ The sentence that must survive lives on the appliance opening instead, which is 
 bay already has: the plinth box is a representation, the plinth ORDERED there has a cutout, and
 the machine's own base is 102 while the drawn line is the run's 100.
 
-### The 2 mm that is left
+### The last 2 mm — decided and closed
 
-The plinth tops out at **100** and the doors start at **102**, so a 2 mm strip of the machine's
-own base shows between them. It is the last gap in the bay and it is the same question one
-level down: draw the doors from 100 and let the drawn height exceed the ordered 1810 by 2, as
-the widths already exceed theirs — or leave the machine's real base visible. **Not decided.**
+The plinth topped out at **100** and the doors started at **102**, leaving a 2 mm strip of the
+machine's own base showing. **Andriy: take it out.** The doors are now DRAWN from 100, so the
+drawn height exceeds the ordered 1810 by 2 — exactly as the drawn widths already exceed theirs.
+**One rule, three axes.** The ORDERED panel is untouched and **102 remains the read datum**;
+the model disagrees with the guide by 2 mm on purpose and both panels say so.
+
+Measured back out of the model afterwards: **every joint in the bay is 0,0**, from the top of
+the plinth to the top of the run — plinth to doors, door to door, doors to grille, grille to the
+cabinet above. The order still carries exactly four no-article rows and no plinth among them.
+
+### And a constant died of it
+
+Chasing this raised a question about reveals in general, and the answer was sitting in
+`Standards`: **`FRONT_REVEAL_MM = 1.5`, declared, marked `:confirmed_decision`, and read by
+NOTHING** — its definition, its own `STATUS` row, and one test pinning the constants table. No
+reader in any drawing path. The engine has always drawn fronts with their faces meeting; the
+constant said otherwise and nobody had noticed because nobody used it.
+
+**Deleted 2026-08-26** (core 0.83.0), with the reason left in place of the number and a check
+named *"FRONT_REVEAL_MM is gone and stays gone"* so it cannot quietly return.
+
+> **A number we have decided not to draw is a number we do not store.** That rule was already
+> written for the 5 mm adjustable foot. A constant nobody reads is not inert: it reads as
+> intent, and the next person wires it up.
