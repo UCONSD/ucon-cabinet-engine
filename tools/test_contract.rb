@@ -12,6 +12,7 @@ require 'digest'
 # The panel kit loads with core, not at the end of this file: the panel is
 # built by checks far above the kit's own, and it interpolates PanelKit::CSS.
 require_relative '../src/ucon_cabinet_engine/core/05_panel_kit'
+require_relative '../src/ucon_cabinet_engine/core/08_project'
 require_relative '../src/ucon_cabinet_engine/core/10_standards'
 require_relative '../src/ucon_cabinet_engine/core/20_contract'
 # 22_placement is the placement RULE SET and has no SketchUp in it at all -
@@ -36,6 +37,8 @@ require_relative '../src/ucon_cabinet_engine/core/90_palette' rescue nil
 
 Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
+# Project facts - the numbers that belong to one kitchen. core/08_project.rb.
+Project   = UCON::CabinetEngine::Project
 B80601    = UCON::CabinetEngine::Units::B80601
 
 # The interpreter is part of the result. macOS still ships Ruby 2.6, the Linux
@@ -6404,6 +6407,145 @@ check('the two halves of one concept use one word for it') do
   %w[above_housing run_gap front_remainder].each do |role|
     raise "the spec must name #{role}" unless text.include?(role)
   end
+end
+
+puts "\nthe run gap - B6, the third void, and the one the order must not carry"
+
+# NOTHING HERE TOUCHES THE APPLIANCE PACKAGE, and that is the point: the width
+# arrives as a parameter, so this suite keeps passing on a machine where the
+# appliance extension was never installed. The Wolf numbers are checked on the
+# other side of the seam, in tools/test_appliance_seam.rb.
+RUN_GAP = lambda do |over|
+  # ** and not a bare hash: on Ruby 3 a trailing hash is a positional argument
+  # and never keywords, and the suite runs on both.
+  Generator.run_gap_attributes('DF48650C/S/P',
+                               **{ width_mm: 1219, depth_mm: 620, carcass_top_mm: 880,
+                                   worktop_t_mm: 40, source_ref: 'appliance guide p.97',
+                                   note: 'RESERVED - client-supplied machine' }.merge(over))
+end
+
+# A model that holds attributes and nothing else. Project facts live on the
+# model, so the only way to check them headlessly is to hand them one.
+FAKE_MODEL = Class.new do
+  def initialize
+    @d = {}
+  end
+
+  def get_attribute(dict, key, default = nil)
+    (@d[dict] || {}).fetch(key, default)
+  end
+
+  def set_attribute(dict, key, value)
+    (@d[dict] ||= {})[key] = value
+  end
+end
+
+check('a project number is STATED, kept on the model, and never defaulted') do
+  m = FAKE_MODEL.new
+  raise 'an unstated worktop must be nil, not a number' unless Project.worktop_t_mm(m).nil?
+  raise 'the stated value did not come back' unless Project.worktop_t_mm!(40, m) == 40.0
+  raise 'it did not survive on the model' unless Project.worktop_t_mm(m) == 40.0
+  ['', 0, -20, nil].each do |bad|
+    begin
+      Project.worktop_t_mm!(bad, m)
+      raise "#{bad.inspect} was accepted as a thickness"
+    rescue ArgumentError => e
+      raise e.message unless e.message.include?('positive')
+    end
+  end
+  raise 'a bad write must not destroy the good one' unless Project.worktop_t_mm(m) == 40.0
+end
+
+check('a run gap is a void with a role, and it validates') do
+  a = RUN_GAP.call({})
+  Contract.validate!(a.dup)
+  raise a.inspect unless a['object_class'] == 'void' && a['void_role'] == 'run_gap'
+  raise a.inspect unless [a['width_mm'], a['depth_mm'], a['height_mm']] == [1219, 620, 920.0]
+  raise 'a reservation must carry no code' unless a['code'].nil?
+  raise a.inspect unless a['status'] == 'PLANNING'
+end
+
+check('the top is MEASURED plus STATED, and the object says which is which') do
+  # 2026-08-25, the real kitchen: the first reservation stopped at 880 - the
+  # carcass - and a gap in the run is a gap in the FINISHED run. 880 + 40 = 920,
+  # and the range's own 928,4 stands proud of it, which is what a range does.
+  a = RUN_GAP.call({})
+  raise a.inspect unless a['height_mm'] == 920.0
+  raise a['notes'] unless a['notes'].include?('880 MEASURED')
+  raise a['notes'] unless a['notes'].include?('40 STATED')
+  raise a['notes'] unless a['notes'].include?('nothing in the model draws it')
+  # and a different project gets a different number, with no constant anywhere
+  raise 'the worktop is hard-wired' unless RUN_GAP.call(worktop_t_mm: 20)['height_mm'] == 900.0
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/10_standards.rb', __dir__))
+  raise 'a worktop thickness must not become a standard' if src =~ /WORKTOP/i
+end
+
+check('it refuses each of the four numbers it must not invent') do
+  { width_mm: 'printed width', depth_mm: "run's depth",
+    carcass_top_mm: "run's carcass top", worktop_t_mm: 'worktop thickness' }.each do |k, word|
+    begin
+      RUN_GAP.call(k => nil)
+      raise "#{k} was invented"
+    rescue ArgumentError => e
+      raise "#{k}: #{e.message}" unless e.message.include?(word.split.last)
+    end
+  end
+end
+
+check('the page the width came from survives onto the object') do
+  a = RUN_GAP.call({})
+  raise a.inspect unless a['source_ref'].include?('p.97')
+  raise a['notes'] unless a['notes'].include?('RESERVED')
+  # And what the ENGINE measured says so, so nobody reads 620 as a default.
+  raise a['notes'] unless a['notes'].include?('MEASURED')
+end
+
+check('a reservation is never an order line, and a cabinet is never a reservation') do
+  a = RUN_GAP.call({})
+  cab = Generator.attributes_for(Registry.lookup('B80601'))
+  raise 'a reservation was ordered' if Export.orderable?(a)
+  raise 'a reservation was not recognised' unless Export.reservation?(a)
+  raise 'a cabinet became a reservation' if Export.reservation?(cab)
+  raise 'a cabinet stopped being orderable' unless Export.orderable?(cab)
+  raise 'nil must not blow up either question' if Export.reservation?(nil)
+end
+
+check('the reserved span reaches the schedule, and in its own block') do
+  a = RUN_GAP.call({})
+  cab = Generator.attributes_for(Registry.lookup('B80601'))
+  raise 'a void must still produce no order row' unless Export.rows([a]).empty?
+  held = Export.reservations([cab, a, cab])
+  raise held.inspect unless held.size == 1
+  r = held.first
+  raise r.inspect unless r['row'] == 1 && r['void_role'] == 'run_gap'
+  raise r.inspect unless r['description'].start_with?('RESERVED, UNASSIGNED')
+  raise r.inspect unless [r['l_mm'], r['p_mm'], r['h_mm']] == [1219, 620, 920.0]
+  csv = Export.reservations_csv(held)
+  raise csv unless csv.lines.first.start_with?('row,void_role,description')
+  raise csv unless csv.include?('1219')
+end
+
+check('the palette offers the reservation and never carries the width itself') do
+  pal = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'no callback' unless pal.include?("add_action_callback('reserve_run_gap')")
+  raise 'no button' unless pal.include?('sketchup.reserve_run_gap()')
+  raise 'the list must come from the appliance module' unless pal.include?('ApplianceCheck.run_gap_models')
+  raise 'the worktop must be asked for, not assumed' unless pal.include?('Project.worktop_t_mm')
+  raise 'no worktop thickness may be written into the palette' if pal =~ /worktop_t_mm!\(\s*\d/
+  # A model number in this tree would be a second copy of somebody else's data,
+  # and the first thing to go stale when the guide is revised.
+  raise 'the engine must not hold an appliance model number' if pal =~ /DF\d{5}/
+end
+
+check('the model walk treats a reservation as a leaf, not as a box to open') do
+  # No headless test can walk a SketchUp model, and this is the line that made
+  # the difference between a schedule that prints the hole and one that never
+  # sees it: the walker used to ask orderable? alone, and a void - excluded from
+  # the order by class - was descended into as if it were a container.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/86_export_run.rb', __dir__))
+  code = src.gsub(/^\s*#.*$/, '')
+  raise 'the walker must ask Export.reservation?' unless code.include?('Export.reservation?')
+  raise 'the reservations must be shaped by Export' unless code.include?('Export.reservations')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

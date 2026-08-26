@@ -184,6 +184,29 @@ check('a run gap comes back with the printed width and the depth the engine stat
   raise g.inspect unless g['role'] == 'run_gap' && g['datum'] == 'floor'
 end
 
+check('an installed package that is TOO OLD is a state, not a Ruby error') do
+  # THE FIRST RUN IN SKETCHUP FAILED EXACTLY HERE. The engine comes from the
+  # repository through a one-line dev loader and `Reload core` updates it in a
+  # second; the appliance package is an installed .rbz copy and does not move
+  # until somebody rebuilds it. So the pair CAN be mismatched, and the seam must
+  # answer that with a sentence rather than `undefined method`.
+  raise 'the tree in this repo must support run gaps' unless Check.run_gaps_supported?
+  raise 'a supported package must give no reason' unless Check.run_gap_reason.nil?
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/88_appliance_check.rb', __dir__))
+  code = src.gsub(/^\s*#.*$/, '')
+  raise 'every run-gap entry point must ask' unless code.scan('run_gaps_supported?').size >= 4
+  raise 'the rebuild instruction must be in the sentence' unless
+    Check.method(:run_gap_reason).owner && src.include?('tools/build_rbz.rb')
+end
+
+check('the seam lists the machines that stand in a run, and only those') do
+  models = Check.run_gap_models
+  raise models.inspect unless models.include?('DF48650C/S/P')
+  raise 'a wall hood is not a run gap' if models.include?('PW482418')
+  raise 'a column is not a run gap' if models.include?('DEC3050R/L')
+  raise models.inspect unless models.size == 3
+end
+
 check('the seam refuses a run gap when the engine states no depth') do
   g = Check.run_gap('DF48650C/S/P', 'section_top_mm' => 880)
   raise g.inspect if g['applies']

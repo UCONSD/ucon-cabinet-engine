@@ -37,7 +37,12 @@ module UCON
         entities.each do |ent|
           if ent.is_a?(Sketchup::ComponentInstance)
             attrs = Contract.read(ent.definition)
-            if Export.orderable?(attrs)
+            # A RESERVATION IS A LEAF TOO, and it was not one until 2026-08-25.
+            # This asked orderable? alone, so a void - excluded from the order
+            # by class - was treated as a container and descended into, which is
+            # how a reserved span could never have reached the schedule however
+            # well 85_export printed it.
+            if Export.orderable?(attrs) || Export.reservation?(attrs)
               out << attrs
             else
               collect(ent.definition.entities, out, depth + 1)
@@ -52,7 +57,8 @@ module UCON
       def run(model = Sketchup.active_model)
         found = objects(model)
         rows  = Export.rows(found)
-        if rows.empty?
+        held  = Export.reservations(found)
+        if rows.empty? && held.empty?
           UI.messagebox('No UCON objects in this model — nothing to export.')
           return nil
         end
@@ -61,10 +67,20 @@ module UCON
         return nil unless path
 
         path = "#{path}.csv" unless path.to_s.downcase.end_with?('.csv')
-        File.write(path, Export.csv(rows))
+        # The reservations go BELOW the order and under their own header, so
+        # nothing in the top table is a line the factory cannot make and nothing
+        # in the model is missing from the file. §12.
+        body = Export.csv(rows)
+        unless held.empty?
+          body += "\nRESERVED, UNASSIGNED — the drawing owns these spans and nobody has " \
+                  "decided what fills them. Answer before the install.\n"
+          body += Export.reservations_csv(held)
+        end
+        File.write(path, body)
         UI.messagebox(
           "Order schedule written:\n\n#{path}\n\n" \
-          "#{found.length} object(s), #{rows.length} row(s).\n\n" \
+          "#{found.length} object(s), #{rows.length} row(s)" \
+          "#{held.empty? ? '' : ", #{held.length} RESERVED span(s) below the order"}.\n\n" \
           'Empty quantity cells are the ones no single object can answer - a ' \
           'linear-metre profile is measured along the RUN, and a handle count ' \
           'follows the fronts. The note column says which is which.'

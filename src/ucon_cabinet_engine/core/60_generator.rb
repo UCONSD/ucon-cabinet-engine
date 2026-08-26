@@ -982,6 +982,169 @@ module UCON
         nil
       end
 
+      # ---- the run gap, B6 -------------------------------------------------
+      #
+      # A SPAN BETWEEN TWO CABINETS WHERE A FREESTANDING MACHINE STANDS ON THE
+      # FLOOR. Not an opening in anything: the guide prints such a machine's
+      # WIDTH and nothing else, because nothing is built around it. Until this
+      # existed the item was skipped and the span was marked by nothing - and a
+      # foreign component standing in an unmarked span looks like a settled
+      # question, which is worse than an empty one.
+      #
+      # WHY IT IS DRAWN HERE AND NOT BY THE APPLIANCE MODULE, WHICH KNOWS THE
+      # WIDTH. Decided 2026-08-25, claude/appliance-rules-decided.md §12: a
+      # reservation nobody can see is worse than no reservation, so it must
+      # carry this contract - and only this tree may write it. Nothing is lost,
+      # because a run gap exists only inside a run and a run is drawn here. The
+      # arrow of §11 survives intact: the ENGINE asks (88_appliance_check.rb)
+      # and the appliance module answers.
+      RESERVED_TAG = 'UCON — Reserved void'
+
+      # PURE, and it RAISES instead of defaulting. 610, 620 and 635 are all live
+      # depths in this project, so a silently chosen one is a wrong drawing that
+      # looks right - and the top of the run is the same kind of number.
+      # THE TOP IS TWO NUMBERS AND THEY HAVE DIFFERENT NATURES, which is why they
+      # are not summed by the caller and handed over as one. The carcass top is
+      # MEASURED off the body beside the gap; the worktop is STATED for the
+      # project, because no model here draws one. The object says which is which.
+      #
+      # CORRECTED 2026-08-25, the same evening, from the first run in the real
+      # kitchen (rule 9). The reservation was drawn to 880 - the carcass - and
+      # the answer was that a gap in the run is a gap in the FINISHED run: floor
+      # to the top of the stone. 880 + 40 = 920, and the range's own 928,4 stands
+      # 8,4 proud of it, which is what a pro range does.
+      def run_gap_attributes(model_no, width_mm:, depth_mm:, carcass_top_mm:, worktop_t_mm:,
+                             source_ref:, note: nil)
+        unless width_mm.to_f.positive?
+          raise ArgumentError, "no printed width for #{model_no} - a run gap is its width or nothing"
+        end
+        unless depth_mm.to_f.positive?
+          raise ArgumentError, "the run's depth is not measured - select the unit beside the gap"
+        end
+        unless carcass_top_mm.to_f.positive?
+          raise ArgumentError, "the run's carcass top is not measured - select the unit beside the gap"
+        end
+        unless worktop_t_mm.to_f.positive?
+          raise ArgumentError,
+                'the worktop thickness is not stated for this project - nothing in the model draws ' \
+                'a worktop, so it cannot be measured'
+        end
+
+        top_mm = carcass_top_mm.to_f + worktop_t_mm.to_f
+
+        { 'schema_version' => Contract::SCHEMA_VERSION,
+          'object_class'   => 'void',
+          'void_role'      => 'run_gap',
+          # The span holds the client's own machine, exactly as an appliance
+          # niche does, and nobody manufactures a reservation. The exporter
+          # keeps it out of the order by CLASS and not by this, so this key is
+          # here to be read by a person and not by a filter.
+          'manufacturer'   => 'client',
+          'unit_type'      => "Reserved run gap — #{model_no}",
+          'geometry_kind'  => 'linear',
+          'width_mm'       => width_mm,
+          'depth_mm'       => depth_mm,
+          'height_mm'      => top_mm,
+          'code'           => nil,
+          'code_status'    => 'PRELIMINARY',
+          'status'         => 'PLANNING',
+          'source_ref'     => source_ref,
+          'notes'          => [note,
+                               "Top #{top_mm.round} = #{carcass_top_mm.round} MEASURED off the unit " \
+                               "beside the gap + #{worktop_t_mm.round} STATED for the worktop; depth " \
+                               "#{depth_mm.round} measured the same way. Nothing here is defaulted.",
+                               Project.stated_note('worktop thickness', worktop_t_mm.to_f)]
+                              .compact.join(' | ') }
+      end
+
+      # The top of the CARCASS beside the gap, read off the neighbour the way the
+      # corner seat is: by measuring a body that is already standing correctly
+      # rather than by rebuilding the number from a family and a plinth.
+      #
+      # THE BODY, NOT THE INSTANCE. An instance's bounds are everything its
+      # definition carries, and a definition carries symbols too - an open door
+      # leaf reaches forward, a plan symbol sits above its row. The box the
+      # generator named CARCASS is the only thing here that is the cabinet. Where
+      # there is none - a corner unit draws its own geometry - the instance is
+      # the honest fallback and there is nothing better to measure.
+      def selected_top_mm(model)
+        sel = selected_unit(model)
+        return nil unless sel
+
+        body = sel.definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
+        t = if body
+              (sel.transformation.origin.z + body.bounds.max.z).to_mm
+            else
+              sel.bounds.max.z.to_mm
+            end
+        t.positive? ? t : nil
+      rescue StandardError
+        nil
+      end
+
+      # THE COMMAND. Ask the appliance layer for the printed width, measure the
+      # run off the neighbour, draw the reservation. Refuses, with a sentence,
+      # rather than inventing any of the three.
+      def build_run_gap(model_no, model = Sketchup.active_model, worktop_t_mm: nil)
+        depth   = selected_depth_mm(model)
+        carcass = selected_top_mm(model)
+        unless depth && carcass
+          raise ArgumentError,
+                "Select the unit beside the gap first.\n\n" \
+                'A run gap takes its depth and its top from the RUN, and the guide ' \
+                'prints neither. Nothing is defaulted here on purpose.'
+        end
+
+        worktop = worktop_t_mm || Project.worktop_t_mm(model)
+        unless worktop.to_f.positive?
+          raise ArgumentError,
+                "This project has not stated its worktop thickness.\n\n" \
+                'A gap in the run is a gap in the FINISHED run - floor to the top of the ' \
+                'stone - and no model here draws a worktop to measure. State it once in ' \
+                'the palette and it travels in the .skp.'
+        end
+
+        gap = ApplianceCheck.run_gap(model_no, 'depth_mm' => depth,
+                                     'section_top_mm' => carcass + worktop)
+        raise ArgumentError, gap['reason'].to_s unless gap['checked']
+        raise ArgumentError, "#{model_no}: #{gap['reason']}" unless gap['applies']
+
+        attrs = run_gap_attributes(model_no, width_mm: gap['w'], depth_mm: gap['d'],
+                                   carcass_top_mm: carcass, worktop_t_mm: worktop,
+                                   source_ref: gap['source'], note: gap['note'])
+
+        # Seated exactly like a cabinet continuing the run - same side rule,
+        # same corner turn, same inherited rotation. A reservation that lands by
+        # a different path is a reservation that lands somewhere else.
+        placement = placement_transform(model, attrs)
+
+        model.start_operation("UCON: reserve run gap #{model_no}", true)
+        begin
+          mat = Geometry.material(model, 'UCON_Void_Red', VOID_RGB)
+          mat.alpha = 0.35 if mat.respond_to?(:alpha=)
+          definition = model.definitions.add(
+            "UCON_VOID_RUN_GAP_#{attrs['width_mm'].round}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
+          )
+          Geometry.box(definition.entities, "VOID_RUN_GAP_#{attrs['width_mm'].round}",
+                       0, 0, 0, attrs['width_mm'], attrs['depth_mm'], attrs['height_mm'], mat)
+          Contract.write!(definition, attrs)
+
+          instance = model.active_entities.add_instance(definition, placement)
+          instance.name = "UCON void — run gap #{attrs['width_mm'].round(1)} mm " \
+                          "(#{model_no}, unassigned)"
+          instance.layer = model.layers[RESERVED_TAG] || model.layers.add(RESERVED_TAG)
+
+          model.selection.clear
+          model.selection.add(instance)
+          model.commit_operation
+          model.active_view.zoom(instance)
+          instance
+        rescue StandardError
+          model.abort_operation
+          raise
+        end
+      end
+
       # Does this unit hang? Catalog-level fact, carried by the registry
       # family. Asked in one place so nothing downstream has to know the
       # spelling.

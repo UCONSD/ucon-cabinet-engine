@@ -23,15 +23,15 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 
 ---
 
-## As of 2026-08-25, evening (second pass — the reserved void)
+## As of 2026-08-25, late evening (third pass — B6, the run gap)
 
 | | |
 |---|---|
-| **HEAD** | **`a105069`** — *feat(engine): a span the drawing owns without a body — the custom-sized front becomes a remainder, and the 600 niche was never printed (0.79.0)*, re-read from `refs/heads/main`. 14 files, +1370 / −113. Under it: `e01f2ef` (phase 2's first run), `12f31a7`, `84d9920`. **This is the first commit since `98a511c` that changes what the engine DRAWS** — the sentence that stood in this cell for three commits no longer holds. |
-| **Pushed** | **NO. `refs/heads/main` is `a105069`, `refs/remotes/origin/main` is still `e01f2ef`.** One commit ahead, unpushed as of 2026-08-25 evening. **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). |
-| **Working tree** | **NINE modified, NINE new.** M: `.gitignore`, `claude/repo-state.md`, `docs/Elda_Open_Questions_v0.1.md`, `docs/Reserved_Void_Spec_v0.1.md`, `registry/cesar/_manifest.json`, `src/ucon_cabinet_engine/core/` 00/50/60/85, `tools/test_contract.rb`. New: `claude/findings-2026-08-25-top-elements-and-the-ceiling.md`, `registry/cesar/` fillers_top_h60 / tall_h222_base78 / tall_h234_base78 / tall_top_h36 / tall_top_h60 / tall_top_h72, `tools/probe_bridge.rb`, `tools/void_probe.rb`. **The one-commit structural lag applies to THIS FILE and to nothing else.** |
-| **Core version** | **0.80.0 uncommitted** (0.79.0 at `HEAD`) - it changes what the engine ORDERS as well as what it draws: width reduction wired, the export's orderable? rule corrected, and **BOTH DIMENSIONS ARE NOW MODIFIABLE IN BOTH DIRECTIONS**: width reduction (printed, 989370 / 989380), **height reduction** (printed, 989370 for base, wall AND tall - `Registry.with_ordered_height`, new), and a width or height **INCREASE drawn as a REQUEST** - the module's code kept, the variant valued `NOT PRINTED`, no surcharge invented, Q11 named on the object. `Generator.build` takes `height_mm:` beside `width_mm:`. The exclusion list on printed p.548 is headed for WIDTH and is NOT borrowed for height (Q17); the one height refusal that stands is ours - an appliance housing takes its opening height from the appliance. Shell 0.6.0. **Appliances 0.1.1** - a SEPARATE clock; §11. The appliance half of the void spec is still not written, so 0.1.1 is correct and not stale. |
-| **Headless suite** | **THREE suites, each runnable alone.** `tools/test_contract.rb` **450 checks, 0 failures** (440 at `a105069`). The count moved by ONE for two features: the sentinel that asserted a wider unit cannot exist was REWRITTEN in place rather than added to, keeping both of its dated corrections, and the height modification arrived as one check. `tools/test_appliances.rb` **54, 0**. `tools/test_appliance_seam.rb` **16, 0**. Re-run 2026-08-25 late evening on the office Mac, Ruby 3.0.2. **The 2.6 run has still not been done since `848f10f`.** |
+| **HEAD** | **`95c9297`** — *feat(appliances): a range reserves a span instead of nothing — the run gap becomes a concept the seam can ask about, and a coffee system stops being drawn zero high (0.2.0)*, re-read from `refs/heads/main`. Under it **`8d947f2`** — the 0.80.0 work, which the previous version of this row described as *pending*: it stayed pending for a day and landed only after two pasted command blocks died in zsh, the second at a `#` comment, which zsh does not accept interactively. **It went in as a FILE — `build/commit-b6.sh`, gitignored — which is the rule this repository already had.** |
+| **Pushed** | **NO. `refs/heads/main` is `95c9297`, `refs/remotes/origin/main` is still `e01f2ef`** — THREE commits ahead, unpushed. **Do not trust this cell — read the two refs** (rule 16, and it is two `cat`s). |
+| **Working tree** | **ELEVEN modified, ONE new** — B6 whole, and it has now RUN in SketchUp. New: **`src/ucon_cabinet_engine/core/08_project.rb`** — the project axis, first key. M: `claude/appliance-rules-decided.md`, `claude/plan-2026-08-25-b6-run-gap.md`, `claude/repo-state.md`, `src/ucon_cabinet_engine/core/00_version.rb`, `src/ucon_cabinet_engine/core/60_generator.rb`, `src/ucon_cabinet_engine/core/85_export.rb`, `src/ucon_cabinet_engine/core/86_export_run.rb`, `src/ucon_cabinet_engine/core/88_appliance_check.rb`, `src/ucon_cabinet_engine/core/90_palette.rb`, `tools/test_appliance_seam.rb`, `tools/test_contract.rb`. **Read it from `git`, never from this cell** — through the device mount `git status` can lag a write by a second, and the first list this row was given was one file short of the truth. |
+| **Core version** | **0.81.0 uncommitted** (0.80.0 at `HEAD`) — it draws a new object and it changes what the schedule prints: `Generator.build_run_gap` reserves a span between two cabinets, and `Export.reservations` prints such spans BESIDE the order rather than inside it. Shell 0.6.0. **Appliances 0.2.0** — a separate clock; §11. |
+| **Headless suite** | **THREE suites, each runnable alone.** `tools/test_contract.rb` **459, 0** (450 at `8d947f2`). `tools/test_appliances.rb` **68, 0** (54). `tools/test_appliance_seam.rb` **25, 0** (16). Re-run 2026-08-25 late evening on the office Mac, Ruby 3.0.2. **The 2.6 run has still not been done since `848f10f`.** |
 | **Extensions** | **TWO, one repository**, and **both now RUN** (2026-08-25, SketchUp 2026, first time for the appliance one). `src/ucon_cabinet_engine.rb` + tree, `src/ucon_appliances.rb` + tree. Neither requires the other. **The engine is NOT copied into Plugins**: a one-line dev loader there requires the repository, so Extension Manager has nothing of it to uninstall — which is exactly how the copy was lost on 2026-08-25. Appliances stay an `.rbz` copy from `tools/build_rbz.rb`. One shared `UCON` submenu via `UCON.extensions_menu`. Design VENDORED from `design/panel_kit.css` by `tools/build_panel_kit.rb`; a hand-edited copy fails its own suite. Account: `claude/findings-2026-08-25-first-run.md`. |
 | **Object Contract** | **v2.1**, one of the two named gaps closed (the `remainder`; see `docs/Reserved_Void_Spec_v0.1.md`), and **two rules that were confirmed and unwired are now wired**: a WIDTH REDUCTION reaches the object as a variant (Elda 2026-08-24, Q3 closed for width), and §4.2 rule 4's *never a silent deletion* is finally true of the exporter. **printed p.414's gap - a front whose WIDTH comes from the opening - is NOT closed**, and Q11 is its live twin: 610 has no article because nothing above it can be cut down. **Q11's disposition was corrected the same evening**: the engine DRAWS 610 rather than refusing it, because the LayOut sheet is how the question gets asked - the catalog prints reduction only, and the object says so in its own variant instead of the registry inventing an article. |
 | **Registry** | **752 codes** in **50 section files** carrying **33 catalog sections** (711 at the start of the evening). Added in one sitting, all demand-driven: printed p.121-125 (+13), p.170 and p.173 (+10), p.143 (+4), p.172 (+9), p.162 (+4), and `BE0151` (+1). |
@@ -91,7 +91,8 @@ thing it picked was the corner, and the corner took two commits: `14158a5` was
 wrong and `3652298` reversed it. **Do not resume the extraction queue below
 without asking.**
 
-Three things the real kitchen has asked for so far; two of them are built:
+Four things the real kitchen has asked for so far; three are built and the fourth
+is built headless and untried in the model:
 
 1. **DONE, and the first answer was wrong — the corner front gap.** The fronts
    of two runs missed each other at an inside corner by `FRONT_GAP_MM`.
@@ -165,6 +166,56 @@ Three things the real kitchen has asked for so far; two of them are built:
    Stepping LEFT steps back by the NEW element's own width, which is why
    `placement_transform` now takes it; without it the run continues right, as
    before.
+
+4. **BUILT HEADLESS, UNTRIED IN SKETCHUP — B6, the run gap** (2026-08-25 late
+   evening). A range stands BETWEEN two runs, not inside an opening, so its page
+   prints a width and nothing else; `place_set` skipped it and 1219 mm of the
+   south run was marked by nothing. Now: the appliance layer answers with the
+   printed width (`Appliances.run_gap`, pure, and it REFUSES rather than
+   defaulting when the caller states no run depth — 610, 620 and 635 are all
+   live here), the engine asks through the existing seam
+   (`ApplianceCheck.run_gap`), and the ENGINE draws
+   (`Generator.build_run_gap`), because a reservation nobody can see is worse
+   than an empty gap and only this tree may write this contract. §11's arrow is
+   untouched: the engine asks, the appliance module answers, and nothing in that
+   tree calls this one. Decisions: `claude/appliance-rules-decided.md` §12; the
+   alternatives that were rejected: `claude/plan-2026-08-25-b6-run-gap.md`.
+   **The depth and the top are MEASURED off the unit beside the gap** — the
+   command refuses without a selection instead of choosing a number.
+   **The export prints reservations BESIDE the order, not in it** — a factory
+   must not receive a line nobody can make, and a person must see the hole.
+   That is decided against `docs/Reserved_Void_Spec_v0.1.md` §3, whose sentence
+   is left standing because it is the half of the argument the new block keeps.
+   **IT HAS NOW RUN IN SKETCHUP, and the run corrected it twice** (2026-08-25, late
+   evening, the south run of Avenida Primavera):
+
+   - **the package was 0.1.1 and the engine was current.** `undefined method
+     'run_gap?'` — the engine is loaded from the repository by a dev loader and
+     `Reload core` updates it in a second, while the appliance package is an
+     installed `.rbz` copy that moves only when somebody rebuilds it. The seam now
+     answers that with a sentence naming `tools/build_rbz.rb`, because an installed
+     package that is too old is a STATE, like an absent one, and not a Ruby error.
+   - **the height was the carcass and should have been the finished run.** The
+     reservation stopped at 880 — the top of the neighbour's body, honestly measured.
+     A gap in the run is a gap in the FINISHED run: **920 = 880 measured + 40 stated
+     for the worktop**, and the range's own 928,4 stands 8,4 proud of it. The worktop
+     is not drawn in this model — no `object_class: worktop` anywhere, every base unit
+     tops out at 880 — so it CANNOT be measured, and it is now a project number kept
+     on the model (`core/08_project.rb`), stated once in the palette. The object says
+     which of its numbers was measured and which was declared.
+   - and `selected_top_mm` stopped measuring the INSTANCE, which carries the opening
+     symbols too, and now measures the `CARCASS` box.
+
+   Three readings of the drawn reservation — attributes, seat, world bounds — agree to
+   the millimetre, and it sits where `48 WOLF` stands (x 1903,0…3122,2 measured against
+   1904,0…3123,0 drawn; the guide prints 1219 and the gap is 1219,2).
+
+   **And a second thing fell out of the first check** — `EC3050TE/S`, a coffee
+   system that IS built in, publishes a width and a depth off p.86 and no
+   height, so "width and no height" alone called it a run gap. The rule now also
+   requires NO DEPTH, and the coffee system, which used to reach the housing
+   builder and come out **a box zero millimetres high**, is refused by name.
+   Recorded as **B7**.
 
 ### Owed — carried in from the 2026-08-24 handoff
 

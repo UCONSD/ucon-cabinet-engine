@@ -37,6 +37,40 @@ module UCON
         # JavaScript, and sketchup.export() is the kind of thing that works
         # until a browser engine decides it should not.
         @dialog.add_action_callback('export_order') { |_| ExportRun.run }
+        # B6. The span between two cabinets where a freestanding machine stands.
+        # The list comes from the appliance module when it is installed, because
+        # nobody should have to type a model number the other tree already
+        # holds; with no module there is nothing to offer and the button says so
+        # rather than opening an empty box.
+        @dialog.add_action_callback('reserve_run_gap') do |_|
+          begin
+            models = ApplianceCheck.run_gap_models
+            if models.empty?
+              why = ApplianceCheck.run_gap_reason ||
+                    'it knows no machine that stands in a run'
+              UI.messagebox("Nothing to reserve.\n\n#{why.to_s.capitalize}.\n\n" \
+                            'The width of a run gap is the appliance maker\'s number, ' \
+                            'and this extension does not hold it.')
+            else
+              su = Sketchup.active_model
+              # The worktop is a PROJECT number: no model here draws one, so it
+              # cannot be measured, and it is not the same for two kitchens. It
+              # is asked once and kept on the model - core/08_project.rb.
+              stated = Project.worktop_t_mm(su)
+              answer = UI.inputbox(
+                ['Machine standing in the gap', 'Worktop thickness, mm — stated, nothing draws it'],
+                [models.first, stated ? stated.round.to_s : ''],
+                [models.join('|'), ''], 'Reserve a run gap'
+              )
+              if answer
+                Project.worktop_t_mm!(answer[1], su)
+                Generator.build_run_gap(answer[0], su)
+              end
+            end
+          rescue StandardError => e
+            UI.messagebox("Nothing was reserved.\n\n#{e.message}")
+          end
+        end
         # The tool lives in core, so it arrives with a Reload core - no restart.
         @dialog.add_action_callback('place') do |_|
           begin
@@ -629,6 +663,7 @@ module UCON
             <button onclick="sketchup.place()">Place selected unit…</button>
             <button onclick="sketchup.panel()">Unit Properties panel</button>
             <button onclick="sketchup.export_order()">Order schedule (CSV)…</button>
+            <button onclick="sketchup.reserve_run_gap()">Reserve run gap…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             <div class="grp">Opening symbols</div>
             <div class="row">

@@ -106,6 +106,63 @@ module UCON
         end
       end
 
+      # ---- reservations ------------------------------------------------------
+      #
+      # WHAT THE DRAWING OWNS AND NOBODY HAS DECIDED YET, printed BESIDE the
+      # order and never inside it.
+      #
+      # Both halves of the argument are right about different readers, so they
+      # are separated rather than reconciled. The FACTORY must not receive a
+      # line it cannot make: an order is what can be ordered, and nothing can be
+      # ordered against a span whose division is undecided - it would have to be
+      # guessed, and guessing is what this file exists to prevent. THE PERSON
+      # reading the order must see the hole: an unmarked 1219 mm of run is a
+      # change order with a date on it, and a line that says "1219 mm reserved,
+      # unassigned" is a question somebody answers before the install instead of
+      # a fitter answering it on site.
+      #
+      # Decided 2026-08-25 - claude/appliance-rules-decided.md §12 - against
+      # docs/Reserved_Void_Spec_v0.1.md §3, which put the void in the order with
+      # a warning on it. The spec's sentence is left standing there because it
+      # is the half of the argument this block keeps.
+      RESERVATION_COLUMNS = %w[row void_role description l_mm p_mm h_mm status note].freeze
+
+      # A RESERVATION IS SELECTED BY CLASS, exactly as orderable? excludes it by
+      # class. One question, asked once, answered in two directions - so a void
+      # can never be both, and never neither.
+      def reservation?(attrs)
+        (attrs || {})['object_class'].to_s == 'void'
+      end
+
+      def reservations(objects)
+        number = 0
+        Array(objects).select { |o| reservation?(o) }.map do |attrs|
+          a = attrs || {}
+          number += 1
+          RESERVATION_COLUMNS.each_with_object({}) { |c, h| h[c] = nil }.merge(
+            'row'         => number,
+            'void_role'   => a['void_role'],
+            'description' => reservation_description(a),
+            'l_mm'        => a['width_mm'],
+            'p_mm'        => a['depth_mm'],
+            'h_mm'        => a['height_mm'],
+            'status'      => a['status'],
+            'note'        => a['notes']
+          )
+        end
+      end
+
+      # It says RESERVED before it says anything else. A row whose first word is
+      # the article number reads as an order line however the header is titled.
+      def reservation_description(a)
+        ['RESERVED, UNASSIGNED', a['unit_type']].compact.reject { |x| x.to_s.empty? }.join(' - ')
+      end
+
+      def reservations_csv(rows)
+        table = [RESERVATION_COLUMNS] + rows.map { |r| RESERVATION_COLUMNS.map { |c| r[c] } }
+        table.map { |cells| cells.map { |v| csv_cell(v) }.join(',') }.join("\n") + "\n"
+      end
+
       def csv(rows)
         table = [COLUMNS] + rows.map { |r| COLUMNS.map { |c| r[c] } }
         table.map { |cells| cells.map { |v| csv_cell(v) }.join(',') }.join("\n") + "\n"

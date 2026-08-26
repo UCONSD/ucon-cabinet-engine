@@ -152,8 +152,33 @@ module UCON
       # own depth and the top of the section. Both are measured from the unit
       # beside the gap - never taken from a constant. 610, 620 and 635 are all
       # live depths in this project.
+      # AN INSTALLED PACKAGE CAN STILL BE TOO OLD, and that is a state rather
+      # than a fault, exactly as an absent one is. It happened on the FIRST run
+      # of this in SketchUp: the engine is loaded from the repository by a
+      # one-line dev loader, so `Reload core` brings it up to date in a second,
+      # while the appliance package is an INSTALLED .rbz COPY that changes only
+      # when somebody rebuilds and reinstalls it. Two extensions, two clocks -
+      # §11, on purpose - and this is what that costs. Without this guard the
+      # caller was handed `undefined method 'run_gap?'`, which reports what Ruby
+      # noticed instead of what to do about it.
+      def run_gaps_supported?
+        available? && ::UCON::Appliances.respond_to?(:run_gap) &&
+          ::UCON::Appliances.respond_to?(:run_gap?)
+      end
+
+      # nil when the question can be asked; otherwise the sentence a person
+      # needs. One place, so the palette and the generator say the same thing.
+      def run_gap_reason
+        return 'the UCON Appliances extension is not installed in this session' unless available?
+        return nil if run_gaps_supported?
+
+        'the installed UCON Appliances package is older than this engine and knows ' \
+        'nothing about a run gap. Rebuild it — ruby tools/build_rbz.rb — reinstall ' \
+        'the .rbz through Extension Manager, and restart SketchUp.'
+      end
+
       def run_gap(model, opts = {})
-        return unavailable unless available?
+        return { 'checked' => false, 'applies' => false, 'reason' => run_gap_reason } unless run_gaps_supported?
 
         g = ::UCON::Appliances.run_gap(model, opts['installation'],
                                        run_depth_mm: opts['depth_mm'],
@@ -161,11 +186,24 @@ module UCON
         g.merge('checked' => true, 'model' => model)
       end
 
+      # Every model the appliance layer says stands in a run rather than in an
+      # opening. Observation, and the palette's list: a person should not have
+      # to type a model number the other tree already knows.
+      def run_gap_models
+        return [] unless run_gaps_supported?
+
+        ::UCON::Appliances.all.map { |a| a['model'] }.select do |m|
+          ::UCON::Appliances.run_gap?(m)
+        end
+      end
+
       # Every item of a preset that reserves a span instead of filling an
       # opening, in the order the set states them. A set with none returns [],
       # which is a fact and not a failure.
       def run_gaps_in_set(set_key, opts = {})
-        return unavailable.merge('gaps' => []) unless available?
+        unless run_gaps_supported?
+          return { 'checked' => false, 'gaps' => [], 'reason' => run_gap_reason }
+        end
 
         set = ::UCON::Appliances.set(set_key)
         unless set
