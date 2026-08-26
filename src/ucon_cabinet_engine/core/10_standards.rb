@@ -17,7 +17,20 @@ module UCON
       BACK_INSET_MM     = 20    # back panel inset from the rear face
       FRONT_T_MM        = 22    # standard front thickness
       FRONT_GAP_MM      = 3     # carcass-to-front gap
-      FRONT_REVEAL_MM   = 1.5   # front reveal, per side
+      # FRONT_REVEAL_MM = 1.5 WAS HERE AND IS DELETED, 2026-08-26 (Andriy).
+      # It was declared, marked :confirmed_decision, and drawn by NOTHING -
+      # `grep FRONT_REVEAL_MM` found the definition, its own STATUS row and one
+      # test pinning the table, and no reader in any drawing path. This engine
+      # draws fronts with their faces meeting: a 600 door on a 600 unit, no
+      # reveal deducted, because the sheet is read at a scale where a 1,5 mm
+      # line is dirt rather than information. The same decision was taken again
+      # on 2026-08-26 for the Sub-Zero panels, where the factory's own 3 mm door
+      # gap is drawn as nothing and the ORDERED panel keeps the real size.
+      #
+      # A NUMBER WE HAVE DECIDED NOT TO DRAW IS A NUMBER WE DO NOT STORE - the
+      # rule already applied to the 5 mm adjustable foot a few lines below. A
+      # constant nobody reads is not inert: it reads as intent, and the next
+      # person wires it up.
       PLINTH_H_MM       = 100   # default plinth height
       PLINTH_H_ALT_MM   = 60    # alternate plinth height, special request only
       #
@@ -85,7 +98,6 @@ module UCON
         BACK_INSET_MM:     :ucon_working_standard,
         FRONT_T_MM:        :elda_confirmed,
         FRONT_GAP_MM:      :derived_from_elda_dimensions,
-        FRONT_REVEAL_MM:   :confirmed_decision,
         PLINTH_H_MM:       :confirmed_decision,
         PLINTH_H_ALT_MM:   :confirmed_decision,
         PLINTH_T_MM:       :confirmed_decision,

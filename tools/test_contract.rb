@@ -151,13 +151,23 @@ end
 puts "\nlocked standards (transcription check against the control document)"
 {
   PANEL_T_MM: 18, BACK_T_MM: 4, BACK_INSET_MM: 20, FRONT_T_MM: 22,
-  FRONT_GAP_MM: 3, FRONT_REVEAL_MM: 1.5, PLINTH_H_MM: 100,
+  FRONT_GAP_MM: 3, PLINTH_H_MM: 100,
   PLINTH_H_ALT_MM: 60, PLINTH_T_MM: 18, PLINTH_SETBACK_MM: 45
 }.each do |const, expected|
   check("#{const} == #{expected}") do
     actual = Standards.const_get(const)
     raise "got #{actual}" unless actual == expected
   end
+end
+
+check('FRONT_REVEAL_MM is gone and stays gone') do
+  # Deleted 2026-08-26 (Andriy). It was declared, marked :confirmed_decision, and
+  # read by nothing: fronts are drawn with their faces meeting, here and on the
+  # Sub-Zero panels alike. A constant nobody draws reads as intent, and the next
+  # person wires it up - so the deletion is pinned rather than trusted.
+  raise 'it came back' if Standards.const_defined?(:FRONT_REVEAL_MM)
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core', __dir__) + '/10_standards.rb')
+  raise 'the reason must survive the number' unless src.include?('WAS HERE AND IS DELETED')
 end
 
 check('every standard records where its authority comes from') do

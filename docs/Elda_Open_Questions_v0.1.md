@@ -730,8 +730,61 @@ guess. **Nothing is drawn at all until a machine is named**, because the height 
 
 ---
 
+## Q19 — A door that opens UPWARD over the fridge: 1220 x 313 at d.62
+
+**Status:** open · added 2026-08-26 · **blocks a live project, not a hypothesis**
+
+**The project.** 545 Avenida Primavera, east wall. A 48 in Sub-Zero `CL4850SD/S/T` stands in the
+1220 niche; its published opening ends at **2127** from the finished floor and the tall run
+finishes at **2440**. That leaves a band **1220 wide, 313 high, at the run's own depth of 620**,
+directly above the appliance. We want it to be a cabinet with **one door that opens upward**,
+not a bare recess.
+
+**The nearest printed article, named so the question is concrete.** `PB1210` — *Wall unit with
+push-up door, 1 push-up door*, **H.36 W.120 d.35**, printed p.211. Push-up positions print at
+**H.36 / H.48 / H.60**, widths **600 / 750 / 900 / 1050 / 1200**, and **depth 350 only** (p.211,
+p.214, p.221).
+
+Three deltas separate `PB1210` from what the kitchen needs:
+
+| | printed | needed | delta |
+|---|---|---|---|
+| width | 1200 | **1220** | **+20**, above the widest printed module — the same shape as Q11 |
+| height | 360 | **313** | **−47**, and 360 is the **smallest** printed push-up height |
+| depth | 350 | **620** | **+270**, and no push-up position prints any other depth |
+
+**The 313 is not a preference, it is forced.** The appliance opening ends at 2127 and the row
+ends at 2440. A printed H.36 would reach 2487 and break the run.
+
+**Questions.**
+
+1. Can a push-up position be supplied at **W.122** — 20 mm above the widest printed module? If a
+   width increase is not possible, is 1220 reachable another way?
+2. Can it be supplied at **H.31,3**, below the smallest printed push-up height? Is that a printed
+   height reduction (see Q17), or not available at all?
+3. Can it be supplied at **d.62**? Every push-up position prints d.35, and this one sits over a
+   620-deep run and must finish flush with the tall units either side.
+4. If the answer to any of those is no: **is this a made-to-measure element the factory will
+   build**, and what does it need from us — a dimensioned drawing, a chosen mechanism, or both?
+5. **Which mechanism carries a front 1220 wide and only 313 high?** That is the part we cannot
+   answer from the book at all.
+
+**What the engine does until this is answered.** It DRAWS the cabinet — carcass 1220 x 620 x 313
+with a front on the same plane as the run, `opening: push-up`, which is the catalog's own word for
+a door that opens upward. It carries **no article**: the internal reference `UCON-BESP-001` lives
+in the object's name and never in the `code` field, so nothing can mistake it for catalog, and the
+exporter prints the row as **"CUSTOM SIZE - NO ARTICLE, to be quoted"**. This is the buildability
+ladder of `docs/Bespoke_Elements_Design_Spec_v0.1.md` working as designed: draw what the kitchen
+needs, ask the factory, and change the plan if the answer is no.
+
+**Note for whoever reads the elevation.** The row ABOVE this one deliberately opens sideways —
+that is Q11, and it is about the H.60 top elements at 2440–3040. Two neighbours opening in
+different directions is intended, not an oversight.
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q18 are the Avenida Primavera batch and go out with the LayOut sheet. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch and go out with the LayOut sheet. Q5's side. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.

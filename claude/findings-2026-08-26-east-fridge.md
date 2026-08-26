@@ -241,3 +241,128 @@ Cesar article is held for an open shelf 313 tall.
    the seam like everything else — and filing it there means a `.rbz` rebuild, which nothing
    in this change has needed so far.
 3. **The article question, twice**: the UCON panel line, and the open shelf at 313.
+
+---
+
+## THE OPEN SHELF BECAME A CUSTOM CABINET — and why that is a Sub-Zero problem
+
+**Andriy, 2026-08-26, on seeing it in the model.** The box above the fridge had no finish face
+at all — a bare carcass — which is fine as far as it goes and is not what the kitchen wants
+there. **It becomes a custom cabinet with ONE DOOR THAT OPENS UPWARD.**
+
+His framing is the one that matters, and it is why this project started with Sub-Zero at all:
+
+> **These are the hardest machines to integrate into a European kitchen, and none of this is
+> obvious — not to a session and not to an ordinary designer.** So the approach is: we draw
+> what we need, send it to Elda, and she tries to make it. If she cannot, the plan changes.
+
+That is `docs/Bespoke_Elements_Design_Spec_v0.1.md`'s buildability ladder stated by the person
+who wrote it: **1. factory builds it → 2. change the plan → 3. simplify → 4. UCON fabricates.**
+
+### The catalog was searched FIRST, because the spec demands it
+
+The same spec says a bespoke element that starts wanting doors is **a signal to go and look for
+a catalog match instead**. The signal was followed, and the search has an answer worth keeping:
+
+**`PB1210` — Wall unit with push-up door, 1 push-up door, H.36 W.120 d.35, printed p.211.**
+Push-up positions print at **H.36 / H.48 / H.60**, widths **600 / 750 / 900 / 1050 / 1200**, and
+**depth 350 only** — p.211, p.214, p.221.
+
+| | printed | needed | delta |
+|---|---|---|---|
+| width | 1200 | 1220 | **+20** — above the widest printed module, the Q11 shape |
+| height | 360 | 313 | **−47** — and 360 is the SMALLEST printed push-up height |
+| depth | 350 | 620 | **+270** — no push-up position prints any other depth |
+
+**313 is forced, not chosen:** the appliance opening ends at 2127 and the row at 2440. A printed
+H.36 would reach 2487 and break the run.
+
+So there is no catalog match, and now that is a *finding* rather than an assumption — and it
+gave the letter three precise deltas against a named article instead of "we want something
+custom". **Elda Q19.**
+
+### What was built
+
+```
+UCON-BESP-001 — custom cabinet above the fridge, 1 door opening UPWARD
+  x 5587,5..6232,5   y 695,3..1915,3   z 2127,0..2440,0
+  carcass 1220 x 620 x 313, front 22 on the same plane as the run
+  order line: CUSTOM SIZE - NO ARTICLE, to be quoted
+```
+
+- **`opening: "push-up"`** — the CATALOG'S word for a door that opens upward, used for exactly
+  that reason. Which mechanism actually carries a front 1220 wide and 313 high is the part no
+  page answers, and it is question 5 of Q19.
+- **`UCON-BESP-001` lives in the NAME, never in `code`.** The spec's first safety rule is never
+  a fake Cesar code; keeping the internal reference out of the code field means no exporter path
+  can promote it into one.
+- **The neighbours open in different directions on purpose.** Q11 records that the H.60 top
+  elements over this niche must NOT open upward. That is the row at 2440–3040. This one is the
+  band below it, and the object says so on itself so that a later session does not "fix" the
+  disagreement.
+
+### What this does not settle
+
+The mechanism, the three deltas, and whether Cesar will build it at all — Q19. And the same
+structural gap as everything else in this file: **the engine cannot regenerate this object.**
+It was drawn by `build/44_above_fridge_custom.rb` through an armed probe run.
+
+---
+
+## REDRAWN WITHOUT GAPS — the plinth's rule, applied to an appliance panel
+
+**Andriy, 2026-08-26**, on seeing the panels in the model:
+
+> We redraw with no gaps at all. This is not for the order, it is for LayOut, and gaps read
+> as dirt on a sheet. The factory gap between these doors is 3 mm. On our models we draw
+> without gaps. We do it the way we do the plinth: the doors are drawn with no gaps, and the
+> panels that go to the warehouse are the ones in the Sub-Zero spec.
+
+So the **DRAWN / ORDERED** split that 2026-08-24 settled for the plinth now governs appliance
+panels too, and **the attributes disagree with the geometry on purpose**:
+
+| | DRAWN (LayOut) | ORDERED (warehouse, p.19) |
+|---|---|---|
+| freezer | **486,5** × 1810 | 483 × 1810 |
+| refrigerator | **733,5** × 1810 | 730 × 1810 |
+| grille | **1220 × 215** | 1219 × 197 |
+
+Joints measured back out of the model: doors **0,0**, doors to grille **0,0**, grille to the
+cabinet above **0,0**, and the assembly spans **1220,0 of the 1220,0 run**.
+
+**The joint line was not invented.** The real assembly is 1219 inside a 1220 run — freezer
+0,5…483,5, a 6 mm gap, fridge 489,5…1219,5 — and the centreline of that gap is **486,5**. The
+drawn faces meet there, so the line an elevation shows sits where the real joint is and only
+the gap around it disappears. The grille was drawn up to **2127** for the same reason: at 2109
+it left an 18 mm band between itself and the cabinet above.
+
+**Why this is safe to do at all:** the order reads the attributes and the drawing does not.
+`width_mm` and `height_mm` still carry Sub-Zero's published panel, so the row that reaches the
+warehouse is the real one. Every panel says both numbers in its notes, because a reader who
+measures the model and reads the attribute will otherwise think they have found a bug.
+
+## The plinth line runs across the bay
+
+**Andriy, same conversation:** *"yes, draw the standard plinth. The order that goes to the
+warehouse is a plinth WITH A CUTOUT."*
+
+Drawn 1220 × 18 × **100**, set back 45 — and **the height was asked, not assumed**: it comes
+from the neighbouring tall unit `C92640` through `Generator.plinth_h_mm`, so if that family
+ever states 60 this line follows it instead of drifting.
+
+**It carries no contract attributes, deliberately.** Everywhere else in this engine a plinth is
+GEOMETRY belonging to the unit in front of it, never an object; giving it attributes here would
+have put a plinth row in the order, and **Elda L2 is unanswered** — *no plinth article enters
+the registry and none enters the warehouse* until it is. Verified: the model still has exactly
+**four** no-article order rows, the three panels and `UCON-BESP-001`, and no plinth among them.
+
+The sentence that must survive lives on the appliance opening instead, which is the object this
+bay already has: the plinth box is a representation, the plinth ORDERED there has a cutout, and
+the machine's own base is 102 while the drawn line is the run's 100.
+
+### The 2 mm that is left
+
+The plinth tops out at **100** and the doors start at **102**, so a 2 mm strip of the machine's
+own base shows between them. It is the last gap in the bay and it is the same question one
+level down: draw the doors from 100 and let the drawn height exceed the ordered 1810 by 2, as
+the widths already exceed theirs — or leave the machine's real base visible. **Not decided.**
