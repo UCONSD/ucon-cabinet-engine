@@ -152,3 +152,25 @@ repository:
 
 > The appliance package is **not in this repository** and should not be: it is a
 > separate extension, currently `ucon-appliances-0.1.1.rbz`.
+
+---
+
+## ALL FOUR ANSWERED 2026-08-26 — see `claude/findings-2026-08-26-seam-findings-closed.md`
+
+Rule 9: added, not erased. Everything above stands as it was written, including
+"What was NOT changed, and why", which was right for exactly one day.
+
+- **1, the housing 100 short** — FIXED. The datum moved to the FLOOR and the
+  drawn opening is 2133,6. The 2026-08-22 plinth decision is reversed and the
+  reversal is recorded in the registry row beside the sentence it reverses.
+- **2 and 3, depth and width** — DECIDED THE OTHER WAY, deliberately. The
+  drawing keeps the Cesar nominal and the run's depth; the published cutout is
+  NOT copied onto the object; the object says which of its numbers is measured
+  and which declared. **The depth finding therefore still prints, and the seam
+  suite now says so by name** so nobody mistakes the decision for a regression.
+- **4, nothing above the housing** — DRAWN. `ApplianceCheck.above_housing`
+  returns the remainder in millimetres and the engine draws a filler from them,
+  set back by the appliance rule's own number. Nothing is drawn until a machine
+  is named. The ARTICLE is open and went to Elda as Q18.
+
+Decisions: `claude/appliance-rules-decided.md` §13.

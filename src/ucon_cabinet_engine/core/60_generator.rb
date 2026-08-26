@@ -360,7 +360,8 @@ module UCON
       # DRAWING, not a refusal. Both go through the registry, which decides
       # whether the change is a printed modification or an unprinted request -
       # this method never decides that and must not learn how.
-      def build(code, model = Sketchup.active_model, width_mm: nil, height_mm: nil)
+      def build(code, model = Sketchup.active_model, width_mm: nil, height_mm: nil,
+                appliance: nil, installation: nil)
         unit = Registry.with_ordered_height(
           Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
         )
@@ -471,6 +472,11 @@ module UCON
             # Its own hideable tag, like the symbol tags: one switch takes every
             # placeholder off the sheet.
             niche.layer = model.layers[PLACEHOLDER_TAG] || model.layers.add(PLACEHOLDER_TAG)
+
+            # And the remainder ABOVE it gets a body, when a machine has been
+            # named. See draw_above_housing: without one the height cannot be
+            # known, so nothing is drawn and the niche note still says why.
+            draw_above_housing(model, unit, placement, appliance, carcass_mat, installation)
 
             model.selection.clear
             model.selection.add(instance)
@@ -932,6 +938,19 @@ module UCON
                   'on the sheet, and the plinth ORDERED under it is one with a ' \
                   'cutout. '
         end
+        # THE SAME SENTENCE READ FROM THE OTHER END, 2026-08-26 (owed 10
+        # finding 1). A housing drawn from the FLOOR is honest about the
+        # machine and breaks the plinth line, so the drawing has to say what
+        # the elevation will show. There the box was raised to keep the line;
+        # here the line is kept in front of a housing that starts on the floor.
+        # Both are representations and both have to admit it - which is the
+        # whole of rule 4 applied to our own drawing.
+        if niche['bottom'] == 'floor' && unit['plinth_continues']
+          note += 'The machine stands on the FINISHED FLOOR and the housing is ' \
+                  'drawn from it. The plinth box in front is a REPRESENTATION ' \
+                  'that keeps the plinth line unbroken on the sheet, and the ' \
+                  'plinth ORDERED there is one with a cutout. '
+        end
         # No leftover, no sentence about one. A fridge front runs past its
         # cutout; a dishwasher panel ends exactly where its phantom does, and
         # 880 - 880 is not a closing panel.
@@ -963,10 +982,108 @@ module UCON
                               'opening, so the two share a top - unless the family states a ' \
                               'housing of its own); ' \
                               "depth #{inherited ? 'inherited from the neighbouring unit' : 'defaulted to d.62 - no neighbour was selected'}. " \
+                              'TWO STATES, AND THE OBJECT SAYS WHICH IS WHICH (2026-08-26, owed ' \
+                              '10 findings 2 and 3). The width above is the Cesar door NOMINAL, ' \
+                              'declared for the drawing - it is not the machine\'s cutout, and for ' \
+                              'built-in refrigeration the two differ with the sign of the ' \
+                              'installation: the published opening is NARROWER than the door at a ' \
+                              'standard install and WIDER at flush inset, from one nominal. The ' \
+                              'depth is MEASURED when a neighbour was selected and DECLARED ' \
+                              'otherwise. The required cutout is deliberately not copied here: ' \
+                              'ApplianceCheck asks the appliance module for it live, because a ' \
+                              'second copy of a published number is a second thing to go stale. ' \
+                              'Name the machine and the seam reports every disagreement. ' \
                               "#{niche_span_note(unit)}" \
                               'Never an order line: the machine is not a Cesar object. The ' \
                               "page's 'cutout for plinth 40' is recorded as unresolved and is not drawn."
         }
+      end
+
+      # ------------------------------------------- the remainder above a housing
+      #
+      # 2026-08-26, Andriy, owed 10 finding 4. In a 2200 run a Designer column
+      # leaves 66 mm above its opening and a Classic 73, and the engine drew
+      # NOTHING there. The niche note called the span "the closing panel inside
+      # the housing"; no closing panel existed. A span named in prose and drawn
+      # by no body is the silent deletion SS4.2 rule 4 forbids, wearing a
+      # sentence as a disguise.
+      #
+      # THREE NUMBERS AND NOT ONE OF THEM IS OURS. The HEIGHT is what is left
+      # over the machine's published opening; the SETBACK is an appliance rule
+      # (a Sub-Zero hinge draws the panel inward as the door opens); the
+      # MATERIAL is one too. The engine owns only where the run's top is. They
+      # are therefore asked through the seam, in the direction the seam already
+      # runs, and NOTHING IS DRAWN UNTIL A MACHINE IS NAMED - the same shape as
+      # B6's run gap: the number that fixes the body does not exist until
+      # somebody says which machine stands there.
+      #
+      # THE ARTICLE IS OPEN AND THE OBJECT SAYS SO. A filler is priced by
+      # HEIGHT and printed p.434 prints no H.66 and no H.73, so there is no
+      # code to give this. It goes out as a row with no article - which the
+      # exporter already prints as "CUSTOM SIZE - NO ARTICLE, to be quoted" -
+      # rather than as a guess that would look answered.
+      def above_housing_attributes_for(unit, info)
+        {
+          'schema_version' => Contract::SCHEMA_VERSION,
+          'object_class'   => 'filler',
+          'manufacturer'   => 'Cesar',
+          'unit_type'      => "Closing filler above the #{info['model']} housing",
+          'geometry_kind'  => 'linear',
+          'width_mm'       => unit['width_mm'],
+          'depth_mm'       => Standards::PANEL_T_MM,
+          'height_mm'      => info['h_mm'],
+          'code_status'    => 'PRELIMINARY',
+          'status'         => 'PLANNING',
+          'source_ref'     => unit['source_ref'],
+          'notes'          => "The span left above #{info['model']}'s published opening " \
+                              "inside our own #{unit['height_mm']} run: " \
+                              "#{info['bottom_mm'].round(1)} to #{info['top_mm'].round(1)} " \
+                              'above the floor. THE HEIGHT IS THE MACHINE\'S, not Cesar\'s - ' \
+                              'it is the run top less the published opening, so it moves with ' \
+                              'the installation type. Set back ' \
+                              "#{info['setback_mm']} mm from the front plane because the " \
+                              'appliance hinge draws the panel inward; material ' \
+                              "#{info['material']}. NO ARTICLE YET: a filler is priced by " \
+                              'height and the page prints none at this height, so the code is ' \
+                              'deliberately absent rather than guessed, and the appliance ' \
+                              "rules offer #{Array(info['fill']).join(' or ')}. " \
+                              'Until it is answered this is a row to be quoted, not a code. ' \
+                              'NOT VISIBLE ON AN ELEVATION, and that is a decision rather than ' \
+                              'an oversight (Andriy, 2026-08-26). The Cesar front in front of ' \
+                              'this strip is drawn NOMINAL to the top of the run, so it covers ' \
+                              'this band; the panel Sub-Zero actually supplies is shorter - its ' \
+                              'typical column panel is 2029 on a 102 toe kick with a 3 reveal, ' \
+                              'which is 69 below our 2200. The nominal rule was confirmed in ' \
+                              'the WIDTH axis on the same reading (762 drawn, 756 supplied) and ' \
+                              'is kept in the height axis too. So this article is an ORDER LINE ' \
+                              'and not a face: somebody must still make it, and the sheet will ' \
+                              'not show it.'
+        }
+      end
+
+      def draw_above_housing(model, unit, placement, appliance, material, installation = nil)
+        return nil unless appliance
+        return nil unless defined?(ApplianceCheck) && ApplianceCheck.available?
+
+        info = ApplianceCheck.above_housing(
+          unit, appliance, 'installation' => installation
+        )
+        return nil unless info['checked'] && info['applies']
+        return nil if info['error'] || info['h_mm'].to_f <= 0.5
+
+        attrs = above_housing_attributes_for(unit, info)
+        defn  = model.definitions.add(
+          "UCON_ABOVE_HOUSING_#{unit['width_mm']}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
+        )
+        Geometry.box(
+          defn.entities, 'FILLER_ABOVE_HOUSING',
+          0, front_y_mm + info['setback_mm'].to_f, info['bottom_mm'],
+          attrs['width_mm'], attrs['depth_mm'], attrs['height_mm'], material
+        )
+        Contract.write!(defn, attrs)
+        inst = model.active_entities.add_instance(defn, placement)
+        inst.name = "Filler above #{appliance} — #{attrs['height_mm'].round(1)} mm, no article yet"
+        inst
       end
 
       # Depth of the selected UCON unit, so a niche can inherit the run it is

@@ -99,6 +99,42 @@ module UCON
         nil
       end
 
+      NOT_DECIDED = 'not decided yet'
+
+      # WHICH MACHINE STANDS BEHIND THIS FRONT, and asked ONLY where the answer
+      # changes what gets drawn. A front that states a housing leaves a
+      # remainder above it in a 2200 run - 66 mm behind a Designer column, 73
+      # behind a Classic - and that height is the MACHINE'S, not ours. Without a
+      # name there is nothing to draw, so the question is worth one dialog.
+      # Every other code is built exactly as before and is never asked.
+      #
+      # "not decided yet" is a real answer and it is the DEFAULT, deliberately:
+      # a run is usually drawn before the appliance is chosen, and a forced pick
+      # would put a number on the sheet nobody has agreed to. Cancel means the
+      # same thing. The niche note still says what is missing and why.
+      def appliance_for(code)
+        unit  = Registry.lookup(code)
+        niche = unit['appliance_niche']
+        return nil unless unit['object_class'] == 'appliance_front' && niche && niche['top_mm']
+
+        models = ApplianceCheck.housing_models
+        return nil if models.empty?
+
+        answer = UI.inputbox(
+          ['Machine standing in this housing'], [NOT_DECIDED],
+          [([NOT_DECIDED] + models).join('|')],
+          'Which machine? — it decides the filler above it'
+        )
+        return nil unless answer && answer[0] != NOT_DECIDED
+
+        answer[0]
+      rescue StandardError
+        # An unknown code, an absent appliance module, a dialog that could not
+        # open: none of them is a reason not to build the front. The remainder
+        # simply goes undrawn, which is what happened before this existed.
+        nil
+      end
+
       def show_picker
         require 'json'
         @picker&.close rescue nil
@@ -119,7 +155,11 @@ module UCON
         # spells "nothing typed".
         @picker.add_action_callback('build') do |_, code, width|
           begin
-            Generator.build(code, width_mm: (width.to_s.strip.empty? ? nil : width.to_s.strip))
+            Generator.build(
+              code,
+              width_mm: (width.to_s.strip.empty? ? nil : width.to_s.strip),
+              appliance: appliance_for(code)
+            )
           rescue StandardError => e
             UI.messagebox("Build failed:\n\n#{e.message}")
           end

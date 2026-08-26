@@ -697,8 +697,41 @@ the page goes. Copying the width list across would have been inventing catalog.
 
 ---
 
+## Q18 — What article closes the 66 to 73 mm above an appliance housing?
+
+**Status:** open · added 2026-08-26
+
+An American built-in refrigerator column publishes an opening **84 in = 2133,6** from the finished
+floor. Our tall run is **2100 on a 100 plinth = 2200**. So the run is TALLER than the machine needs
+and a strip is left over above the housing and inside our own front: **66 mm** over a Sub-Zero
+Designer column, **73 mm** over a Classic, and the number moves with the installation type.
+
+The appliance maker's own rules say what goes there — a filler, in carcass material, set back
+**55 mm** from the cabinet front plane, because the hinge draws the panel inward as the door opens.
+They do not say, and cannot say, what Cesar sells for it.
+
+**Questions.**
+
+1. **Which article is the closing strip above a tall appliance housing?** printed p.434 prices
+   fillers by HEIGHT — `B00151` H.39, `BC0151` H.48, `BE0151` H.60, and so on up — and the width is
+   stated per order. There is no H.6,6 and no H.7,3, so the strip is not a filler of that table as
+   we read it.
+2. **Is it a panel cut to size instead?** If so, which panel article, and is it priced by area or by
+   the piece?
+3. **Does the answer change above 120 mm**, where the appliance rules offer an open shelf cabinet as
+   an alternative to a filler?
+
+**What the engine does until this is answered.** It DRAWS the strip — 2026-08-26, Andriy's decision:
+a span named in a note and drawn by no body is a silent deletion, and this one was silently deleted
+for as long as the housing has existed. The object is a `filler` with **no code**, `PRELIMINARY`,
+and its notes name the two offers and the setback. The exporter already prints such a row as
+**"CUSTOM SIZE - NO ARTICLE, to be quoted"**, so it reaches the order as a question rather than as a
+guess. **Nothing is drawn at all until a machine is named**, because the height is the machine's.
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q17 are the Avenida Primavera batch and go out with the LayOut sheet. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q18 are the Avenida Primavera batch and go out with the LayOut sheet. Q5's side. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.

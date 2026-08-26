@@ -60,10 +60,15 @@ end
 check('the drawn niche is built from the generator, not from the registry row') do
   u = Registry.lookup('CR9700')
   n = Check.drawn_niche(u)
-  # The row states only `bottom: plinth_top` and a top. The BOX is the
-  # generator's, and these two numbers exist nowhere in the JSON.
-  raise n.inspect unless (n['bottom_mm'] - 100).abs < 0.001
-  raise n.inspect unless (n['height_mm'] - 2033.6).abs < 0.1
+  # The row states only a datum NAME and a top. The BOX is the generator's, and
+  # neither of these numbers exists anywhere in the JSON.
+  #
+  # 2026-08-26: the datum moved from `plinth_top` to `floor` (owed 10 finding
+  # 1), so the two numbers this check reads changed with it - 100 -> 0 and
+  # 2033,6 -> 2133,6. What it proves did not change at all: the height is still
+  # nowhere in the row, and the generator is still the only thing that knows it.
+  raise n.inspect unless n['bottom_mm'].abs < 0.001
+  raise n.inspect unless (n['height_mm'] - 2133.6).abs < 0.1
 end
 
 # ---------------------------------------------------------------------------
@@ -109,15 +114,32 @@ end
 # the engine draws today.
 puts "\nCR9700 (USA fridge door, 762) vs DEC3050R/L (Designer 30in column)"
 
-check('the housing the engine draws is 100 short, and the seam says so') do
+# TWO CHECKS INVERTED 2026-08-26, and inverted is the right word: they were
+# right on 2026-08-25 and the thing they described has been FIXED (owed 10
+# finding 1, Andriy). The housing is drawn from the floor now, so the seam must
+# no longer be able to say either sentence. A check that once proved a defect
+# exists is the natural place to prove it is gone.
+check('the housing the engine draws is no longer 100 short') do
   r = Check.review(Registry.lookup('CR9700'), 'DEC3050R/L')
-  raise r.inspect if r['agrees']
-  raise r['findings'].inspect unless r['findings'].any? { |f| f.include?('2033.6') && f.include?('2134') }
+  raise r['findings'].inspect if r['findings'].any? { |f| f.include?('2033.6') }
+  raise r['findings'].inspect if r['findings'].any? { |f| f.start_with?('drawn housing height') }
 end
 
-check('and it names the reason: the housing is drawn from the plinth top') do
+check('and the datum finding is gone with it: the housing starts on the floor') do
   r = Check.review(Registry.lookup('CR9700'), 'DEC3050R/L')
-  raise r['findings'].inspect unless r['findings'].any? { |f| f.include?('measured from the floor') }
+  raise r['findings'].inspect if r['findings'].any? { |f| f.include?('measured from the floor') }
+end
+
+# AND THE DEPTH SURVIVES ON PURPOSE. Findings 2 and 3 were decided the other
+# way the same day: the drawing keeps the Cesar door width and the run's depth,
+# the machine's published cutout is NOT copied onto the object, and this seam
+# stays the live judge of the difference. So the pair below is not a regression
+# - it is the decision, and it has a check so that a later session cannot
+# mistake it for one.
+check('the depth disagreement is still reported, because it was decided to stay') do
+  r = Check.review(Registry.lookup('CR9700'), 'DEC3050R/L')
+  raise r.inspect if r['agrees']
+  raise r['findings'].inspect unless r['findings'].any? { |f| f.include?('shallower') }
 end
 
 check('the TOP is right, so a seam comparing tops alone would have passed it') do
@@ -242,12 +264,60 @@ check('this file still writes nothing and draws nothing') do
   raise 'the seam has grown a hand' if forbidden.any? { |f| src.include?(f) }
 end
 
+puts "\nthe remainder above the housing, as numbers - owed 10 finding 4"
+
+# `review` reports it in prose and always did. The generator cannot draw a body
+# from a sentence, so the same question is asked again for its three numbers -
+# and every one of them belongs to the appliance module.
+
+check('the void above comes back in millimetres, not in a sentence') do
+  i = Check.above_housing(Registry.lookup('CR9700'), 'DEC3050R/L')
+  raise i.inspect unless i['checked'] && i['applies']
+  raise i.inspect unless (i['h_mm'] - 66).abs < 1
+  raise i.inspect unless (i['top_mm'] - 2200).abs < 0.001
+  raise i.inspect unless (i['bottom_mm'] - 2134).abs < 1
+  raise i.inspect unless i['material'] == 'carcass'
+  raise i.inspect unless i['setback_mm'] == 55
+  raise i.inspect unless Array(i['fill']).include?('filler')
+end
+
+check('a Classic column leaves a different remainder, and the seam says so') do
+  d = Check.above_housing(Registry.lookup('CR9700'), 'DEC3050R/L')['h_mm']
+  c = Check.above_housing(Registry.lookup('CR9900'), 'CL3650UID/S/T/R')['h_mm']
+  raise "#{d} vs #{c}" unless (d - c).abs > 1
+  # 73 is why the void threshold moved from 70 to 120 on 2026-08-25: an open
+  # shelf 73 mm tall is not a shelf.
+  raise c.to_s unless (c - 73).abs < 1
+end
+
+check('the numbers and the sentence are the same answer, asked twice') do
+  r = Check.review(Registry.lookup('CR9700'), 'DEC3050R/L', 'run_top_mm' => 2200)
+  i = Check.above_housing(Registry.lookup('CR9700'), 'DEC3050R/L')
+  offer = r['offers'].find { |o| o.include?('left above the housing') } or raise r.inspect
+  # Compared as a NUMBER, not as a string. The prose rounds an Integer 66 to
+  # "66" and this rounds a Float 66.0 to "66.0" - the same millimetre wearing
+  # two spellings, and a string match would have called that a disagreement.
+  spoken = offer[/\A[\d.]+/].to_f
+  raise offer unless (spoken - i['h_mm'].to_f).abs < 0.1
+  raise offer unless offer.include?(i['setback_mm'].to_s)
+end
+
+check('and it is still only a question: no model, no machine, no answer') do
+  # A section shorter than the opening is an ERROR, not a body to draw.
+  i = Check.above_housing(Registry.lookup('CR9700'), 'DEC3050R/L',
+                          'section_top_mm' => 1800)
+  raise i.inspect unless i['error']
+end
+
 puts "\nthe report a person reads"
 
 check('the report names the code, the model and every finding') do
   t = Check.report(Registry.lookup('CR9700'), 'DEC3050R/L', 'run_top_mm' => 2200)
   raise t unless t.include?('CR9700') && t.include?('DEC3050R/L') && t.include?('DISAGREES')
-  raise t unless t.lines.size >= 4
+  # WAS >= 4 until 2026-08-26. Two of the four findings were fixed that morning,
+  # so the report is shorter by exactly the two that were closed. The floor is
+  # what a report must always have: a title, a finding and an offer.
+  raise t unless t.lines.size >= 3
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)"

@@ -13,7 +13,8 @@
     "plinth_h_note": "100, as base H.78 and metric tall H.210. A US fridge housing stands in the same run and its plinth line must not step. Named plinth_h_NOTE and not plinth_note because this file already carries a plinth_note about whether a plinth is drawn here at all - two different questions, and the first draft of this line collided with it. The duplicate-key guard in tools/test_contract.rb caught it; JSON.parse would have kept the last silently.",
     "plinth_continues": true,
     "appliance_niche": {
-      "bottom": "plinth_top",
+      "bottom": "floor",
+      "bottom_correction_2026_08_26": "CORRECTED 2026-08-26 (Andriy, owed 10 finding 1). The datum moved from the top of the plinth to the FLOOR, and the 2026-08-22 decision below is reversed rather than erased (rule 9). It was right about the elevation and wrong about the machine: drawn from plinth_top the opening came out 2033,6 tall against the 2133,6 the appliance makers require, so the TOP was correct and the HEIGHT was a hundred millimetres short. The appliance seam found it the first time it ran. The plinth line is still drawn across the front, and the plinth ORDERED there is one with a cutout - the same sentence the dishwasher already carries, and the housing now says it on itself through Generator.niche_span_note.",
       "top_mm": 2133.6,
       "trust": "indicative",
       "source": "appliance",

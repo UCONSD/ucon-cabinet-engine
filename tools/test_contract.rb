@@ -2249,7 +2249,15 @@ check('the housing behind a panel starts at THIS family plinth, not at a global 
   # niche_bottom_mm used to return Standards::PLINTH_H_MM outright, with a
   # comment saying the plinth height "is a standard and stays one". The H.84
   # drawings say it does not.
-  u = Registry.lookup('CR9601').merge('plinth_h_mm' => 60)
+  #
+  # THE WITNESS CHANGED 2026-08-26 AND THE RULE DID NOT. This asked CR9601, the
+  # USA fridge door, until its datum moved to the floor (owed 10 finding 1) and
+  # the check started reporting 0.0 for a rule that was never about that unit.
+  # The dishwasher panel still states `bottom: plinth_top`, deliberately and
+  # with `bottom_is_representation` beside it, so it is the witness now. A check
+  # that follows its subject rather than its example is the point of rule 13.
+  u = Registry.lookup('V80730').merge('plinth_h_mm' => 60)
+  raise u['appliance_niche'].inspect unless u['appliance_niche']['bottom'] == 'plinth_top'
   raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 60
 end
 
@@ -3432,13 +3440,24 @@ puts "\nthe housing behind the panel"
 # plinth. It ran floor to the top of the front - right for a dishwasher, wrong
 # for a housing at BOTH ends.
 
-check('the US housing starts on the plinth and stops at the appliance cutout') do
+# REVERSED 2026-08-26 (Andriy, owed 10 finding 1), and the reversal is recorded
+# rather than the old check deleted. Drawn from the plinth top the opening came
+# out 2033,6 tall where the machine needs 2133,6: the TOP was right and the
+# HEIGHT was a hundred short, which is why the appliance seam compares both.
+# The housing now starts on the FLOOR, and the plinth line in front of it is a
+# representation whose ORDERED plinth carries a cutout.
+check('the US housing starts on the FLOOR and stops at the appliance cutout') do
   u = Registry.lookup('CR9601')
-  raise Generator.niche_bottom_mm(u).to_s unless
-    Generator.niche_bottom_mm(u) == Standards::PLINTH_H_MM
+  raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u).zero?
   # 84 in. Measured, not converted from anything of ours.
   raise Generator.niche_top_mm(u).to_s unless Generator.niche_top_mm(u) == 2133.6
-  raise Generator.niche_height_mm(u).to_s unless Generator.niche_height_mm(u) == 2033.6
+  raise Generator.niche_height_mm(u).to_s unless Generator.niche_height_mm(u) == 2133.6
+end
+
+check('and it says on itself that the plinth in front of it is a representation') do
+  n = Generator.niche_attributes_for(Registry.lookup('CR9601'))
+  raise n['notes'] unless n['notes'].include?('FINISHED FLOOR')
+  raise n['notes'] unless n['notes'].include?('cutout')
 end
 
 check('the 66,4 leftover is now a fact of the model, not only of a note') do
@@ -3466,8 +3485,14 @@ end
 check('the plinth height is not copied into the registry') do
   section = File.read(File.expand_path('../registry/cesar/usa_tall_h210.json', __dir__))
   niche = Registry.data['families']['USA Tall H.210']['appliance_niche']
-  raise 'the bottom must be named, not numbered' unless niche['bottom'] == 'plinth_top'
+  # 'plinth_top' until 2026-08-26, 'floor' since. Either way it is a NAME and
+  # not a number, which is what this check has always been about: a datum
+  # spelled as a word cannot drift away from the family that owns it.
+  raise 'the bottom must be named, not numbered' unless
+    %w[floor plinth_top].include?(niche['bottom'])
   raise 'a second copy of the plinth height has appeared' if niche.key?('bottom_mm')
+  raise 'the reversal must be recorded, not erased (rule 9)' unless
+    niche['bottom_correction_2026_08_26'].to_s.include?('2133,6')
   raise 'the section file must point at the measured table' unless
     section.include?('us_appliance_housing_cutouts')
 end
@@ -3477,9 +3502,70 @@ check('the housing says on itself that it came from the appliance, not from Cesa
   Contract.validate!(n)
   raise n['notes'] unless n['notes'].include?('INDICATIVE')
   raise n['notes'] unless n['notes'].include?('2133.6')
-  raise n['height_mm'].to_s unless n['height_mm'] == 2033.6
+  raise n['height_mm'].to_s unless n['height_mm'] == 2133.6
   # and since 2026-08-24 a dishwasher says it too, in its own words. What it
   # must NOT borrow is the leftover sentence - see the dishwasher checks below.
+end
+
+check('the niche states which of its numbers is measured and which declared') do
+  # Owed 10 findings 2 and 3, decided 2026-08-26: the drawing keeps the Cesar
+  # door width and the run's depth, and the published cutout is NOT copied onto
+  # the object. That decision is only honest if the object says so, because a
+  # width that is right for a dishwasher and wrong for a fridge looks identical.
+  n = Generator.niche_attributes_for(Registry.lookup('CR9601'))
+  raise n['notes'] unless n['notes'].include?('NOMINAL')
+  raise n['notes'] unless n['notes'].include?('NARROWER') && n['notes'].include?('WIDER')
+  raise 'the required cutout must not be copied onto the object' unless
+    n['notes'].include?('ApplianceCheck')
+end
+
+puts "\nthe remainder above the housing gets a body - owed 10 finding 4"
+
+check('the filler above the housing validates, and carries no invented article') do
+  info = { 'model' => 'DEC3050R/L', 'h_mm' => 66.0, 'bottom_mm' => 2134.0,
+           'top_mm' => 2200.0, 'fill' => ['filler'], 'material' => 'carcass',
+           'setback_mm' => 55 }
+  a = Generator.above_housing_attributes_for(Registry.lookup('CR9700'), info)
+  Contract.validate!(a)
+  raise a['object_class'] unless a['object_class'] == 'filler'
+  raise a.inspect if a['code']
+  raise a['code_status'] unless a['code_status'] == 'PRELIMINARY'
+  raise a['height_mm'].to_s unless a['height_mm'] == 66.0
+  raise a['notes'] unless a['notes'].include?('NO ARTICLE YET')
+  # It IS an order line - a filler somebody must make - so the exporter must
+  # carry it and say the article is missing rather than drop it.
+  raise 'a filler must reach the order' unless Export.orderable?(a)
+  raise Export.order_description(a) unless
+    Export.order_description(a).include?('NO ARTICLE')
+end
+
+check('the filler says it is an ORDER LINE and not a face') do
+  # Decided 2026-08-26 by Andriy, after the live run and after the Sub-Zero page
+  # was read: the nominal rule keeps the HEIGHT axis too, so the Cesar front is
+  # drawn to the top of the run and covers this strip on an elevation. That is
+  # the decision, and an object whose body is invisible has to say so - or the
+  # next session finds a filler nobody can see and "fixes" the front.
+  info = { 'model' => 'DEC3050R/L', 'h_mm' => 66.0, 'bottom_mm' => 2134.0,
+           'top_mm' => 2200.0, 'fill' => ['filler'], 'material' => 'carcass',
+           'setback_mm' => 55 }
+  a = Generator.above_housing_attributes_for(Registry.lookup('CR9700'), info)
+  raise a['notes'] unless a['notes'].include?('NOT VISIBLE ON AN ELEVATION')
+  raise a['notes'] unless a['notes'].include?('2029')
+  raise a['notes'] unless a['notes'].include?('ORDER LINE')
+  # And it must still reach the order, which is the whole point of drawing it.
+  raise 'an invisible body that is not ordered is nothing at all' unless Export.orderable?(a)
+end
+
+check('and NOTHING is drawn until a machine is named') do
+  # The height, the setback and the material are all the appliance module's.
+  # The engine owns only where the run's top is, so a body drawn without a
+  # named machine would be three guesses wearing one box. Same shape as B6.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  body = src[/def draw_above_housing.*?\n      end\n/m] or raise 'draw_above_housing has gone'
+  raise 'it must refuse without an appliance' unless body.include?('return nil unless appliance')
+  raise 'it must refuse without the seam' unless body.include?('ApplianceCheck.available?')
+  raise 'the setback must come from the seam, never from a constant' if body =~ /\b55\b/
+  raise 'the height must come from the seam' unless body.include?("info['h_mm']")
 end
 
 

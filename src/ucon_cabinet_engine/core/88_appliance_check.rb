@@ -133,6 +133,49 @@ module UCON
           'findings' => findings, 'offers' => offers, 'niche' => niche }
       end
 
+      # ------------------------------------------------- the void above, in mm
+      #
+      # `review` already reports the remainder above a housing, and it reports
+      # it as a SENTENCE: "66 left above the housing: filler, carcass, set back
+      # 55 from the front plane". That is the right answer for a person and a
+      # useless one for the generator, which cannot draw a body from prose.
+      # This asks the same question and returns the numbers.
+      #
+      # It still decides nothing, and the three numbers are all the appliance
+      # module's: the HEIGHT is what is left over its published opening, the
+      # SETBACK is the appliance rule (a Sub-Zero hinge draws the panel inward),
+      # the MATERIAL likewise. The engine owns only where the run's top is.
+      #
+      # So nothing is drawn until a machine is NAMED - the same shape as B6's
+      # run gap, and for the same reason: the number that fixes the body does
+      # not exist until somebody says which machine stands there.
+      #
+      # opts:
+      #   'installation'     standard | flush_inset, as in review.
+      #   'section_top_mm'   the top of the section the housing stands in.
+      #                      Defaults to the unit's own front top.
+      def above_housing(unit, model, opts = {})
+        return unavailable unless available?
+
+        a   = ::UCON::Appliances
+        top = opts['section_top_mm'] ||
+              (Generator.base_z_mm(unit) + unit['height_mm'].to_f)
+        v = a.void(top, model, opts['installation'])
+
+        unless v['applies']
+          return { 'checked' => true, 'applies' => false, 'reason' => v['reason'] }
+        end
+        if v['error']
+          return { 'checked' => true, 'applies' => true, 'error' => v['error'],
+                   'h_mm' => v['h'] }
+        end
+
+        { 'checked' => true, 'applies' => true, 'model' => model,
+          'h_mm' => v['h'], 'bottom_mm' => top - v['h'], 'top_mm' => top,
+          'fill' => v['fill'], 'material' => v['material'],
+          'setback_mm' => v['setback_mm'] }
+      end
+
       # ------------------------------------------------------------ run gaps
       #
       # THE SECOND QUESTION, AND IT IS STILL ONLY A QUESTION. A run gap is a
@@ -195,6 +238,27 @@ module UCON
         ::UCON::Appliances.all.map { |a| a['model'] }.select do |m|
           ::UCON::Appliances.run_gap?(m)
         end
+      end
+
+      # THE MIRROR OF run_gap_models. A run gap publishes a width and nothing
+      # else; a housing publishes a HEIGHT, and only a machine with one can say
+      # how much of our run it leaves over. Sorted, because a list a person
+      # picks from must not reorder itself between two openings of the dialog.
+      #
+      # An old installed package is a STATE here too: `void` and `opening_h`
+      # both predate the run-gap work, so this asks for them by name rather
+      # than assuming the copy in Plugins is the one in this repository.
+      def housing_models
+        return [] unless available? &&
+                         ::UCON::Appliances.respond_to?(:opening_h) &&
+                         ::UCON::Appliances.respond_to?(:void)
+
+        ::UCON::Appliances.all.map { |a| a['model'] }.select do |m|
+          next false if ::UCON::Appliances.respond_to?(:run_gap?) &&
+                        ::UCON::Appliances.run_gap?(m)
+
+          !::UCON::Appliances.opening_h(m).nil?
+        end.sort
       end
 
       # Every item of a preset that reserves a span instead of filling an
