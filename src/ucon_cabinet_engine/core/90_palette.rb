@@ -176,10 +176,22 @@ module UCON
       # is at least a unit-shaped thing that fills a run, while an end panel is
       # a board beside one. It spans base, wall and tall heights in a single
       # printed table, so it belongs to no element class the book has.
+      # AND A CLASS THAT ONLY THE MAP HOLDS STILL NEEDS ONE, 2026-08-26. The
+      # picker draws a heading for every class in the CATALOG MAP as well as
+      # for every class in the registry - a chapter we have not extracted shows
+      # as an inert CATALOG ONLY row, which is the whole point of the map. Three
+      # of them were rendering as bare keys: 'glass' since the glass wall units
+      # were mapped this morning, 'open_unit' and 'side_panel' since the panel
+      # chapter was mapped this evening. Andriy saw it in the dialog. The check
+      # meant to prevent exactly this looked only at the registry - a check can
+      # only fail on what it looks at, and it was looking at half.
       CLASS_LABELS = {
         'base' => 'Base units', 'wall' => 'Wall units', 'tall' => 'Tall units',
         'filler' => 'Fillers and closing strips',
-        'end_panel' => 'End panels'
+        'end_panel' => 'End panels',
+        'glass' => 'Glass display units',
+        'open_unit' => 'Open units',
+        'side_panel' => 'Finishing side panels'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The

@@ -6962,10 +6962,20 @@ check('every class the catalog holds has a picker label') do
   # as its bare key - a heading reading "end_panel" over 124 codes - and nothing
   # would have failed. A label is display vocabulary and never travels into
   # data, so this only guards the display.
-  classes = Registry.catalog.map { |c| c['class'] }.uniq.compact
+  # BOTH SETS, and the second one is why this check existed at all. The picker
+  # draws a heading per class in the registry AND per class in the catalog map,
+  # because an unextracted chapter shows as an inert CATALOG ONLY row. The first
+  # version read only the registry and went green while three map classes -
+  # glass, open_unit, side_panel - rendered as bare keys in the dialog. Andriy
+  # saw it in the dialog the same evening. A check can only fail on what it
+  # looks at, and it was looking at half.
+  held    = Registry.catalog.map { |c| c['class'] }.uniq.compact
+  mapped  = Registry.map_sections.map { |x| x['class'] }.uniq.compact
+  classes = (held + mapped).uniq
   missing = classes.reject { |c| Palette::CLASS_LABELS.key?(c) }
   raise "no label for #{missing.inspect}" unless missing.empty?
-  raise 'a label exists for a class nothing holds' unless
+  raise "a label exists for a class nothing holds: " \
+        "#{(Palette::CLASS_LABELS.keys - classes).inspect}" unless
     (Palette::CLASS_LABELS.keys - classes).empty?
 end
 
