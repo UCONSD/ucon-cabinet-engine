@@ -241,9 +241,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 756 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers)') do
+check('registry loads and holds 880 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels)') do
   n = Registry.codes.length
-  raise "got #{n}" unless n == 756
+  raise "got #{n}" unless n == 880
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -427,9 +427,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 756 rows, each with code/dims/description/source') do
+check('registry catalog: 880 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 756
+  raise cat.length.to_s unless cat.length == 880
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -513,7 +513,9 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise "missing stamps: #{bad.map { |c| c['code'] }.inspect}" unless bad.empty?
 
   sections = cat.map { |c| c['section'] }.uniq.sort
-  raise sections.inspect unless sections == ['Base units H. 39',
+  raise sections.inspect unless sections == ['Adjoining end side panel for N_Elle',
+                                             'Adjoining end side panel for N_Elle with framed door',
+                                             'Base units H. 39',
                                              'Base units H. 48',
                                              'Base units H. 58.5',
                                              'Base units H. 78',
@@ -525,6 +527,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 72',
                                              'Dish-drainer units H. 84',
                                              'Dish-drainer units H. 96',
+                                             'End elements for Maxima-Intarsio',
                                              'Glass wall units H. 96',
                                              'Sink base units H. 58.5',
                                              'Sink base units H. 78',
@@ -551,8 +554,14 @@ check('split storage: every catalog row is stamped with its section and class') 
   # 'filler' arrived 2026-08-23 with printed p.434 and is the first class that
   # is OURS rather than the catalog's - one chapter whose rows are base, wall
   # and tall at once. catalog_map carries the reasoning.
+  # 'end_panel' arrived 2026-08-26 with printed p.440-447. Unlike the glass
+  # chapter - whose SECTION class is 'glass' while its ROWS stay 'wall', because
+  # the object really is a wall unit that hangs - an end panel is not a unit of
+  # any class. It is a board beside one, and it spans base, wall and tall
+  # heights in a single table. So section and row agree here, and the class is
+  # its own.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
-    cat.map { |c| c['class'] }.uniq.sort == %w[base filler tall wall]
+    cat.map { |c| c['class'] }.uniq.sort == %w[base end_panel filler tall wall]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -3017,7 +3026,16 @@ check('the USA width field is recorded as UNDECODABLE, with the evidence') do
   # None of it may leak into the catalog before a page is extracted.
   # CR left this list on 2026-08-21: printed p.418 is extracted. The rest are
   # read but not extracted, and must not appear in the catalog.
-  bad = Registry.codes.select { |c| c.start_with?('BL', 'BM', 'C8', 'Y4', 'Y7') }
+  # SCOPED TO THE USA CHAPTER ON 2026-08-26, and the reason is the finding.
+  # This used to test every code in the registry, on the assumption that a
+  # prefix names a family. The end-panel chapter falsified it in one commit:
+  # printed p.440 prices BM0030 and printed p.444 prices Y40028, three hundred
+  # pages away from the USA elements, and neither has anything to do with them.
+  # A PREFIX IS NOT A CHAPTER - which is rule 5 arriving from the other side.
+  # What the check is actually for survives: nothing may enter the catalog from
+  # a USA page we have not extracted.
+  usa = Registry.catalog.select { |r| r['section'].to_s.start_with?('USA elements') }
+  bad = usa.map { |r| r['code'] }.select { |c| c.start_with?('BL', 'BM', 'C8', 'Y4', 'Y7') }
   raise bad.inspect unless bad.empty?
 end
 
@@ -4743,10 +4761,22 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # note above said an empty bucket that later fills is a change somebody should
   # see; this is that change, and the matcher found them by their own
   # description without a line of new code.
+  # 2026-08-26, second change of the day: 124 END PANELS arrived and the matcher
+  # caught SIXTY of them in the jumbo-drawer bucket. Not because they have jumbo
+  # drawers - because printed p.441's own title is "for base units with
+  # drawers/jumbo drawers ... hinges on the side opposite the 45 degree edge",
+  # so the description names the units the panel is FOR. That is the exact
+  # failure this file already warns about two hundred lines up, where matching
+  # 'push-pull' refused 133 codes for saying they had none: A WORD IS NOT A
+  # SENTENCE. The other sixty-four answered "yes, cut me" - the silent kind of
+  # wrong. Both are now refused by Registry.width_is_a_thickness?, which runs
+  # BEFORE the catalog's list and is not part of it, and jumbo/allowed are back
+  # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
     refused == { 'appliance units' => 17, 'pull-out units' => 12,
                  'units with jumbo drawers' => 155,
                  'units with interior drawers' => 24,
+                 'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 3 } && allowed == 530
 end
 
@@ -6790,6 +6820,153 @@ check('the model walk treats a reservation as a leaf, not as a box to open') do
   code = src.gsub(/^\s*#.*$/, '')
   raise 'the walker must ask Export.reservation?' unless code.include?('Export.reservation?')
   raise 'the reservations must be shaped by Export' unless code.include?('Export.reservations')
+end
+
+
+puts "\nend panels — printed p.440-447, and the first section with no ground of its own"
+
+PANEL_SECTIONS = ['End elements for Maxima-Intarsio',
+                  'Adjoining end side panel for N_Elle',
+                  'Adjoining end side panel for N_Elle with framed door'].freeze
+
+check('three collections, 124 codes, and each is a separate ARTICLE and not a variant') do
+  rows = Registry.catalog.select { |c| PANEL_SECTIONS.include?(c['section']) }
+  raise rows.length.to_s unless rows.length == 124
+
+  by_section = rows.group_by { |r| r['section'] }.transform_values(&:length)
+  raise by_section.inspect unless by_section == {
+    'End elements for Maxima-Intarsio' => 76,
+    'Adjoining end side panel for N_Elle' => 24,
+    'Adjoining end side panel for N_Elle with framed door' => 24
+  }
+  # Two pages per collection, and they are NOT the same article at two prices:
+  # printed p.440 is for units whose hinges are on the 45 side, p.441 for units
+  # with drawers, push-up doors, or hinges away from it. Same heights, same
+  # depth groups, different codes.
+  types = rows.map { |r| r['type_key'] }.uniq.sort
+  raise types.inspect unless types == %w[end_panel_45 end_panel_45_opposite_hinge]
+  raise 'the two pages share a code' unless rows.map { |r| r['code'] }.uniq.length == 124
+end
+
+check('EVERY end panel yields contract-valid attributes') do
+  Registry.catalog.select { |c| PANEL_SECTIONS.include?(c['section']) }.each do |row|
+    Contract.validate!(Generator.attributes_for(Registry.lookup(row['code'])))
+  end
+end
+
+check('a panel takes its height from its ROW, because one table holds sixteen of them') do
+  # The precedence added to Registry.lookup on 2026-08-26. Before it, height was
+  # a family fact and this whole section was unrepresentable.
+  raise 'PB0030' unless Registry.lookup('PB0030')['height_mm'] == 360
+  raise 'C00030' unless Registry.lookup('C00030')['height_mm'] == 2340
+  raise 'the family must not be answering' unless
+    Registry.lookup('PB0030')['height_mm'] != Registry.lookup('C00030')['height_mm']
+  # and a section that says nothing per row is untouched
+  raise 'B80601 lost its family height' unless Registry.lookup('B80601')['height_mm'] == 780
+end
+
+check('the drawn depth is the catalog\'s, and the label it disagrees with is kept') do
+  # DERIVED, and pinned rather than computed: d = sum of the carcass depths plus
+  # 2,2 per door face, rounded up. Eight groups, and the rule closes on all of
+  # them - including 72+35, which only the N_Elle collection prints and which the
+  # rule was not derived from. depth_mm holds the PRINTED d. and nothing else.
+  seen = {}
+  Registry.catalog.select { |c| PANEL_SECTIONS.include?(c['section']) }.each do |row|
+    u = Registry.lookup(row['code'])
+    (seen[u['printed_depth_label']] ||= []) << u['depth_mm']
+  end
+  got = seen.transform_values { |v| v.uniq.sort }
+  raise got.inspect unless got == {
+    'for 35-cm deep side panel + door thickness'    => [375],
+    'for 62-cm deep side panel + door thickness'    => [645],
+    'for 67-cm deep side panel + door thickness'    => [695],
+    'for 35+35-cm deep side panel + door thickness' => [750],
+    # THE COLLISION. printed p.436, p.441, p.445 and p.447 all label the d.102
+    # and the d.107 group "62+35". They cannot both be; the codes and the
+    # arithmetic say d.107 is 67+35. Elda Q20. The label is kept VERBATIM, which
+    # is why this one entry holds two depths - a silent correction here would
+    # have hidden the question.
+    'for 62+35-cm deep side panel + door thickness' => [1020, 1070],
+    'for 72+35-cm deep side panel + door thickness' => [1120],
+    'for 62+62-cm deep side panel + door thickness' => [1290]
+  }
+end
+
+check('a panel has no front, and the empty list is stated rather than reached') do
+  u = Registry.lookup('B70030')
+  raise 'front_layout' unless u['front_layout']['kind'] == 'none'
+  raise 'a panel grew a door' unless Generator.front_slabs(u).empty?
+  # the guard that matters: an unknown kind still gets a full face, so 'none'
+  # must not be arriving there by accident.
+  raise 'the else branch stopped working' unless
+    Generator.front_slabs(Registry.lookup('B80601')).length == 1
+end
+
+check('a panel refuses a width modification, and NOT for the catalog\'s reason') do
+  u = Registry.lookup('B70030')
+  raise 'not refused' unless Registry.width_modification_refusal(u)
+  raise 'wrong reason' unless
+    Registry.width_modification_refusal(u) == 'end panels, whose width is a thickness'
+  # It must come from the thickness guard and not from the catalog's list -
+  # sixty of these matched 'units with jumbo drawers' before the guard existed,
+  # on the strength of printed p.441's own title.
+  raise 'the catalog list must not claim it' unless
+    Registry::WIDTH_MOD_FORBIDDEN.none? { |_why, test| test.call(u) } ||
+    Registry.width_is_a_thickness?(u)
+  raise 'width_is_a_thickness? must be about panels only' if
+    Registry.width_is_a_thickness?(Registry.lookup('B80601'))
+end
+
+check('the one misprinted height is corrected AND the printed value survives') do
+  # Y00129 is printed H.84 on printed p.445 and recorded at H.36,8: the parallel
+  # framed page prints the same group as 36,8/78/84, and Y0/Y3/Y6 is that triple
+  # everywhere else in the collection. Verified against a rendered page image, so
+  # it is the catalog's misprint. A correction that erases what was printed is
+  # not a correction, it is a second source.
+  reg = JSON.parse(File.read(File.expand_path('../registry/cesar/end_panels_nelle.json', __dir__)))
+  ut  = reg['data']['unit_types']['end_panel_45_opposite_hinge']
+  row = ut['codes'].find { |c| c['code'] == 'Y00129' }
+  raise 'Y00129 is gone' unless row
+  raise 'height' unless row['height_mm'] == 368
+  raise 'the printed value was erased' unless row['printed_height_cm'] == '84'
+  raise 'the reason is not written down' unless ut['height_correction_2026_08_26'].to_s.include?('misprint')
+  raise 'and the group must hold no second H.84' unless
+    ut['codes'].select { |c| c['depth_mm'] == 1120 }.map { |c| c['height_mm'] }.sort == [368, 780, 840]
+end
+
+check('NOTHING is drawn on a guessed ground, and the refusal says why') do
+  msg = Generator.panel_needs_a_ground_message('B70030')
+  raise 'the code' unless msg.include?('B70030')
+  raise 'the page' unless msg.include?('p.440')
+  raise 'what to do' unless msg.downcase.include?('select the unit')
+  raise 'and that nothing happened' unless msg.include?('Nothing was drawn')
+end
+
+check('the 1,8 cm panel is held as a SURCHARGE and never as an article') do
+  # printed p.553: "Surcharge for finishing side panels, 1.8 cm thick | Replacing
+  # standard side panel". No codes on the page, and under rule 4 it draws
+  # nothing - the carcass already occupies that volume. The map must say so, and
+  # no registry row may claim it.
+  sec = Registry.map_sections.find { |s| s['printed_pages'].to_s == '551-553' }
+  raise 'the 1,8 section is not in the map' unless sec
+  raise 'status' unless sec['status'] == 'not_extracted'
+  raise 'the reason must be recorded' unless sec['note'].include?('Replacing standard side panel')
+  raise 'it must not be sold as an article' unless sec['note'].include?('prints no codes')
+  raise 'no row may be 1,8 thick' unless
+    Registry.catalog.select { |c| c['class'] == 'end_panel' }.all? { |c| c['width_mm'] == 22 }
+end
+
+
+check('every class the catalog holds has a picker label') do
+  # Added 2026-08-26 with 'end_panel'. Without it a new class reaches the picker
+  # as its bare key - a heading reading "end_panel" over 124 codes - and nothing
+  # would have failed. A label is display vocabulary and never travels into
+  # data, so this only guards the display.
+  classes = Registry.catalog.map { |c| c['class'] }.uniq.compact
+  missing = classes.reject { |c| Palette::CLASS_LABELS.key?(c) }
+  raise "no label for #{missing.inspect}" unless missing.empty?
+  raise 'a label exists for a class nothing holds' unless
+    (Palette::CLASS_LABELS.keys - classes).empty?
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

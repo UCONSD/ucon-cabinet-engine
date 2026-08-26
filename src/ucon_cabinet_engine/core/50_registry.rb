@@ -148,7 +148,17 @@ module UCON
             'code'               => code,
             'manufacturer'       => reg['manufacturer'],
             'family'             => family_name,
-            'height_mm'          => family['height_mm'],
+            # HEIGHT IS NORMALLY A FAMILY FACT AND SOMETIMES A ROW FACT.
+            # Every section extracted before 2026-08-26 is one height family
+            # per file - H.78 is 780 for all 262 of its codes - so the family
+            # said it once. The end-panel pages are the first section where
+            # ONE table spans sixteen heights: printed p.440 prices PB0030 at
+            # H.36 and C00030 at H.234 side by side, and the height is what the
+            # code IS. So the row answers first and the family stays the
+            # fallback, the same precedence 'scoped' uses above for
+            # plinth_continues and appliance_niche. A file that says nothing
+            # per row is unaffected.
+            'height_mm'          => (row['height_mm'] || family['height_mm']),
             # How the family meets the room. Catalog-level, not per code: every
             # unit in the wall chapter hangs. Absent means floor, so no existing
             # section file has to say anything.
@@ -192,6 +202,12 @@ module UCON
             # width and it is right above this line.
             'width_range_mm'     => row['width_range_mm'],
             'depth_mm'           => row['depth_mm'],
+            # THE LABEL BESIDE THE DEPTH, AND ONLY THE PANEL PAGES HAVE ONE.
+            # An end panel's row prints two numbers - the carcass depth it
+            # serves and the depth the catalog draws - and the second is what
+            # depth_mm above holds. Carrying the printed words means the object
+            # can say which of the two it is, instead of a reader assuming.
+            'printed_depth_label' => row['printed_depth_label'],
             'unit_type'          => type_key,
             'description'        => unit_type['description'],
             'opening'            => unit_type['opening'],
@@ -306,7 +322,25 @@ module UCON
           ->(u) { (u['front_layout'] || {})['cutout'] || u['description'].to_s =~ /glass/i }
       }.freeze
 
+      # NOT ONE OF THE CATALOG'S PROHIBITIONS, and deliberately not in the list
+      # above. WIDTH_MOD_FORBIDDEN is the book's own words about which UNITS may
+      # not be cut, pinned against _manifest.json by a check; this is a category
+      # error the book never had to name. An end panel's 'width_mm' is its 2,2 cm
+      # THICKNESS - the dimensions its codes vary are height and depth, and one
+      # code is one height at one depth. 989370 cuts a carcass down; there is
+      # nothing here for it to cut, and a panel ordered 500 wide is not a wider
+      # panel, it is a different article or none.
+      #
+      # Added 2026-08-26 with the end-panel chapter, because the census check
+      # below says it in the right order: a false NO is loud and a false YES is
+      # silent. 124 codes silently answering "yes, cut me" is the silent kind.
+      def width_is_a_thickness?(unit)
+        (unit || {})['object_class'].to_s == 'panel'
+      end
+
       def width_modification_refusal(unit)
+        return 'end panels, whose width is a thickness' if width_is_a_thickness?(unit)
+
         WIDTH_MOD_FORBIDDEN.each { |why, test| return why if test.call(unit) }
         nil
       end
@@ -561,7 +595,10 @@ module UCON
           { 'code' => row['code'], 'width_mm' => row['width_mm'],
             'width_range_mm' => row['width_range_mm'],
             'nominal_in' => nominal_in(row['width_mm'], manufacturer),
-            'depth_mm' => row['depth_mm'], 'height_mm' => family['height_mm'],
+            # Row first, family second - see the same precedence in lookup.
+            # A picker row for an end panel gets its height from the code.
+            'depth_mm' => row['depth_mm'],
+            'height_mm' => (row['height_mm'] || family['height_mm']),
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],
             'source_ref' => unit_type['source_ref'],

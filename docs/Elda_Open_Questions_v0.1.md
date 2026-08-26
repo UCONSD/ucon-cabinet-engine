@@ -783,8 +783,51 @@ different directions is intended, not an oversight.
 
 ---
 
+## Q20 — printed p.436 labels two different depth groups with the same words
+
+On "End elements for Maxima-Intarsio | L-shaped end side panel", BOTH the
+**d. 102** group and the **d. 107** group are labelled *"for 62+35–cm deep side
+panel + door thickness"*.
+
+They cannot both be. The codes say otherwise: the d.102 rows carry the
+X-prefixes (`X40097`, `X80097`, `XL0097`) that mean a 62-deep panel everywhere
+else in the chapter, and the d.107 rows carry the B-prefixes (`B60097`,
+`B90097`, `BM0097`) that mean 67. The arithmetic agrees — 62+35 plus two door
+faces is 101,4 and 67+35 plus two is 106,4.
+
+**Question:** is the d.107 group "for **67**+35–cm deep side panel", i.e. is the
+p.436 label a misprint? The same pairing appears on printed p.441, where the
+d.107 group is again labelled 62+35.
+
+---
+
+## Q21 — is the printed `d.` the panel, or the whole assembly?
+
+Every adjoining end side panel group prints two numbers: the carcass depth it
+serves ("for 35–cm deep side panel **+ door thickness**") and a drawn depth
+(`d. 37,5`). Across all seven groups the second is the first plus 2,2 per door
+face, rounded up:
+
+| label | carcass | + door faces | printed |
+|---|---|---|---|
+| 35 | 35 | 37,2 | d. 37,5 |
+| 62 | 62 | 64,2 | d. 64,5 |
+| 67 | 67 | 69,2 | d. 69,5 |
+| 35+35 | 70 | 74,4 | d. 75 |
+| 62+35 | 97 | 101,4 | d. 102 |
+| 67+35 | 102 | 106,4 | d. 107 |
+| 62+62 | 124 | 128,4 | d. 129 |
+
+**Question:** does `d.` therefore describe the **overall depth of the finished
+end**, with the 2,2 cm panel board standing proud of the carcass by the
+thickness of the door it aligns with — or is the panel itself supplied at that
+depth? Everything we draw at the end of a run, and the whole back-to-back
+island case, depends on which.
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch and go out with the LayOut sheet. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q21 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.

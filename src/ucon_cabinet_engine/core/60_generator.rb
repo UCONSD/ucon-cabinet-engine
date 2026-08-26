@@ -382,6 +382,16 @@ module UCON
         unit = Registry.with_ordered_height(
           Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
         )
+        # BEFORE ANY DIMENSION IS READ. base_z_mm, plinth? and the placement
+        # transform all ask the unit where it stands, and for a panel the unit
+        # cannot answer until its neighbour has.
+        if unit['object_class'] == 'panel'
+          ground = panel_ground(model)
+          raise ArgumentError, panel_needs_a_ground_message(code) if ground.nil?
+
+          unit = unit.merge(ground)
+        end
+
         unless unit.fetch('buildable', true)
           raise ArgumentError,
                 "#{code} is in the registry but cannot be built yet.\n\n" \
@@ -578,6 +588,12 @@ module UCON
         end
 
         case layout['kind']
+        # A PANEL HAS NO FRONT, and the empty list is the whole answer. Stated
+        # rather than reached by absence: the `else` below hands anything it
+        # does not recognise a full-face slab, which for a 22 mm board beside a
+        # run would draw a door on the end of the kitchen.
+        when 'none'
+          []
         when 'vertical_split'
           n = layout['count'].to_i
           slab_w = w / n.to_f
@@ -1159,6 +1175,54 @@ module UCON
         nil
       end
 
+      # ---- an end panel's ground -------------------------------------------
+      #
+      # WHERE AN END PANEL'S BOTTOM SITS IS NOT A CATALOG FACT, and the panel
+      # pages are the first section in this registry where that is true. Every
+      # other object knows its own ground because its FAMILY does: a base unit
+      # stands on the H.78 plinth, a wall unit hangs. printed p.440 prices
+      # SIXTEEN heights in one table - H.36 beside H.278 - and says nothing
+      # about where any of them begins, because the honest answer is "wherever
+      # the run it joins begins". A panel is a board beside a kitchen, not a
+      # module in it.
+      #
+      # So the panel does not guess: it reads the ground off the unit it is
+      # placed beside, through that unit's CODE and the registry, not off its
+      # geometry. Going through the code is what makes the answer the same one
+      # the neighbour was built from - a measured bottom would also be a
+      # measurement of whatever anybody has since moved.
+      #
+      # Returns nil when there is nothing to read, and build refuses rather
+      # than defaulting. Standards::PLINTH_H_MM would have been RIGHT for the
+      # island and wrong for every wall-height panel in the same table, which
+      # is the kind of default that survives until it reaches a sheet.
+      def panel_ground(model)
+        sel = selected_unit(model)
+        return nil unless sel
+
+        attrs = Contract.read(sel.definition) || {}
+        code  = attrs['code'].to_s
+        return nil if code.empty?
+
+        neighbour = Registry.lookup(code)
+        { 'mounting'         => neighbour['mounting'],
+          'mounting_default' => neighbour['mounting_default'],
+          'plinth_h_mm'      => neighbour['plinth_h_mm'],
+          'ground_from_code' => code }
+      rescue StandardError
+        nil
+      end
+
+      def panel_needs_a_ground_message(code)
+        "#{code} is an end panel, and an end panel has no ground of its own.\n\n" \
+        "printed p.440 prices sixteen heights in one table and states where none " \
+        "of them begins, because that is a fact about the run, not about the " \
+        "article. Select the unit this panel finishes and build again: the panel " \
+        "takes that unit's mounting and plinth through its code.\n\n" \
+        "Nothing was drawn - a panel dropped on a guessed datum is a wrong " \
+        "elevation that looks like a right one."
+      end
+
       # ---- the run gap, B6 -------------------------------------------------
       #
       # A SPAN BETWEEN TWO CABINETS WHERE A FREESTANDING MACHINE STANDS ON THE
@@ -1708,10 +1772,33 @@ module UCON
         # 2026-08-26. FRONT_REVEAL_MM was deleted that day because nothing read
         # it, and the sentence outlived the number by one commit - it went on
         # telling every object about a 1,5 that no longer existed anywhere.
+        # AN END PANEL SAYS WHOSE GROUND IT IS STANDING ON, and what its two
+        # depths mean. Both because nobody reading the sheet can tell: the
+        # panel's bottom came from a neighbour rather than from its own family,
+        # and the depth it is drawn at is the catalog's DRAWN depth, which is
+        # not the carcass depth it serves.
+        panel_note =
+          if unit['object_class'] == 'panel'
+            base = unit['ground_from_code'] ?
+                   "Ground taken from #{unit['ground_from_code']}, the unit it finishes - " \
+                   'the catalog states no ground for a panel. ' : ''
+            label = unit['printed_depth_label']
+            depth = label ? "Drawn at the catalog's own d. #{unit['depth_mm']} mm, printed " \
+                            "'#{label}'. The two numbers differ by a door face per side and " \
+                            'which one describes the board is Elda Q21. ' : ''
+            " END PANEL, 2.2 cm thick - the FRONT thickness, because the board lies in the " \
+            "plane of the doors it adjoins. #{base}#{depth}" \
+            'No front is drawn: a panel does not open. The 45-degree edge must face the ' \
+            'door, which follows from which end it stands at and is placement, not an ' \
+            'attribute - but WHICH PAGE the code came from is a real choice and cannot be ' \
+            'undone by moving it.'
+          else
+            ''
+          end
         "Generated from registry/cesar.json (#{unit['registry_status']}). " \
         "#{interior_note}#{handed_note} Front drawn flush: the faces meet, and no reveal is " \
         'drawn or stored.' \
-        "#{scribe_note}#{glass_note}#{cutout_note}"
+        "#{scribe_note}#{glass_note}#{cutout_note}#{panel_note}"
       end
     end
   end

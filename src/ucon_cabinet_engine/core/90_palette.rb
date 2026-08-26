@@ -172,15 +172,26 @@ module UCON
       # every collection, and their rows are base, wall and tall at once - see
       # catalog_map, the section note. The FAMILY still decides how each one
       # meets the room.
+      # 'end_panel' is OURS for the same reason and one step further: a filler
+      # is at least a unit-shaped thing that fills a run, while an end panel is
+      # a board beside one. It spans base, wall and tall heights in a single
+      # printed table, so it belongs to no element class the book has.
       CLASS_LABELS = {
         'base' => 'Base units', 'wall' => 'Wall units', 'tall' => 'Tall units',
-        'filler' => 'Fillers and closing strips'
+        'filler' => 'Fillers and closing strips',
+        'end_panel' => 'End panels'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The
       # registry keeps the catalog's wording; this map never travels into data
       # or into an order. An unmapped type falls back to its key.
       TYPE_LABELS = {
+        'end_panel_45'            => 'End panel, 45° edge',
+        # THE LABEL SAYS WHAT DECIDES IT, not what it looks like. The two pages
+        # are different articles and the choice belongs to the neighbour: this
+        # one is for a unit with drawers, a push-up door, or hinges pointing
+        # away from the 45.
+        'end_panel_45_opposite_hinge' => 'End panel, drawers / hinges opposite',
         'filler_front'            => 'Filler, front only',
         'filler_base_unit'        => 'Base unit filler',
         'filler_wall_unit'        => 'Wall unit filler',

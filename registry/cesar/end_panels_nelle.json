@@ -1,0 +1,266 @@
+{
+  "section": "Adjoining end side panel for N_Elle",
+  "class": "end_panel",
+  "family": "End panels N_Elle",
+  "source_pages": "printed p.444-445 / PDF 446-447, both pages read whole 2026-08-26",
+  "extraction_note": "Taken with the Maxima pages on 2026-08-26 so that the collection question stops blocking work. WHICH COLLECTION THIS KITCHEN IS remains open - the glass row's page carries an N_Elle mark while the estimate header says MAXIMA 2.2 (see glass_wall_h96.json collection_note) - and holding all three files means the answer changes a picker choice and not an extraction.",
+  "height_note": "ONLY THREE HEIGHTS: 36,8 / 78 / 84. Not a subset of the Maxima table - 36,8 is a height that appears nowhere in the Maxima panel pages, and it is the same 36,8 the N_Elle fillers use on printed p.435. A different collection is a different height grammar.",
+  "band_note": "Bands 1-4 are '-' on every row, and band 11 carries a price where the Maxima pages print '-'. The band set is a property of the collection, not of the panel.",
+  "depth_note": "EVERY GROUP PRINTS TWO NUMBERS AND THEY ARE NOT THE SAME NUMBER. The label names the CARCASS depth the panel serves ('for 35-cm deep side panel + door thickness'); the 'd.' beside it is the depth the catalog DRAWS. Across all eight groups in this chapter the second is the first plus 2,2 per door face, rounded up - 35 -> 37,2 -> d.37,5; 70 -> 74,4 -> d.75; 124 -> 128,4 -> d.129. That arithmetic is DERIVED and is written here to explain the numbers, not to replace them: depth_mm below is the printed 'd.' verbatim. Whether 'd.' describes the finished end or the panel's own board is Elda Q21, and everything drawn at the end of a run depends on the answer.",
+  "label_collision_note": "TWO GROUPS ON THIS PAGE CARRY THE SAME PRINTED LABEL. Both the d.102 and the d.107 group are printed 'for 62+35-cm deep side panel'. They cannot both be. The codes disagree with the label: at the heights where the letters are unambiguous the d.102 rows carry the prefixes this same chapter uses for a 62-deep panel and the d.107 rows carry the 67-deep prefixes, and the arithmetic in depth_note gives 62+35 -> 101,4 -> d.102 and 67+35 -> 106,4 -> d.107. The label is kept verbatim in printed_depth_label; the reading is Elda Q20. NOTE the letters are only a witness at the SHORT heights - from H.138 up, both groups use F-prefixes and are told apart by the trailing digits alone, which is rule 5 restated: a code is a lookup, never a decode.",
+  "extra_depth_note": "This collection prints a group the Maxima pages do not: 'for 72+35-cm deep side panel', d.112. 72+35 = 107, plus two door faces = 111,4, rounded up = 112 - the same arithmetic as every other group, which is why it is worth recording that the rule survived a group it was not derived from.",
+  "surcharge_note": "Printed beside these tables: vertical edge of door, 48 points up to H.72 and 65 from H.75 to H.140 (the 86-point band above H.141 is absent - this collection stops at H.84). And a charge the Maxima pages do not carry: 'Adjoining end side panel with 45 degree LIP in FENIX NT-NTM and UNICOLOR finishes from Cesar palette' - 205 points for 1 side and 205 for 2 sides, with the lip drawn at 23 mm. Both figures being 205 is what the page prints.",
+  "data": {
+    "unit_types": {
+      "end_panel_45": {
+        "description": "Adjoining end side panel for N_Elle, 2.2 cm thick - with 45 degree vertical edge",
+        "object_class": "panel",
+        "opening": null,
+        "handed": false,
+        "handed_note": "The ARTICLE has no hand. A panel does not open, so there is no hinge to hand, and the catalog prints one code for either end of a run. What IS handed is the 45-degree edge, which must face the door - and that follows from which end you place it at, so it is placement and not an attribute. The choice the catalog DOES price is a different one: which page you are on. See the two unit types in this file.",
+        "interior_confirmed": [],
+        "source_ref": "printed p.444 / PDF 446",
+        "front_layout": {
+          "kind": "none",
+          "note": "A PANEL HAS NO FRONT. 'none' is stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board. A default is not a source."
+        },
+        "codes": [
+          {
+            "code": "Y00028",
+            "height_mm": 368,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y30028",
+            "height_mm": 780,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y60028",
+            "height_mm": 840,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y20028",
+            "height_mm": 368,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y40028",
+            "height_mm": 780,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y70028",
+            "height_mm": 840,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y0A028",
+            "height_mm": 368,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y50028",
+            "height_mm": 780,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y80028",
+            "height_mm": 840,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y00128",
+            "height_mm": 368,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y30128",
+            "height_mm": 780,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 444
+          },
+          {
+            "code": "Y60128",
+            "height_mm": 840,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 444
+          }
+        ]
+      },
+      "end_panel_45_opposite_hinge": {
+        "description": "Adjoining end side panel for N_Elle, 2.2 cm thick - for base units with drawers and jumbo drawers and doors whose hinges are on the side OPPOSITE the 45 degree edge",
+        "object_class": "panel",
+        "opening": null,
+        "handed": false,
+        "handed_note": "The ARTICLE has no hand. A panel does not open, so there is no hinge to hand, and the catalog prints one code for either end of a run. What IS handed is the 45-degree edge, which must face the door - and that follows from which end you place it at, so it is placement and not an attribute. The choice the catalog DOES price is a different one: which page you are on. See the two unit types in this file.",
+        "interior_confirmed": [],
+        "source_ref": "printed p.445 / PDF 447",
+        "front_layout": {
+          "kind": "none",
+          "note": "A PANEL HAS NO FRONT. 'none' is stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board. A default is not a source."
+        },
+        "codes": [
+          {
+            "code": "Y20128",
+            "height_mm": 368,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y40128",
+            "height_mm": 780,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y70128",
+            "height_mm": 840,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y0A128",
+            "height_mm": 368,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y50128",
+            "height_mm": 780,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y80128",
+            "height_mm": 840,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y00129",
+            "height_mm": 368,
+            "depth_mm": 1120,
+            "width_mm": 22,
+            "printed_depth_label": "for 72+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "112",
+            "source_page_printed": 445,
+            "printed_height_cm": "84",
+            "height_note": "PRINTED H.84; recorded at H.36,8 - see height_correction_2026_08_26."
+          },
+          {
+            "code": "Y30129",
+            "height_mm": 780,
+            "depth_mm": 1120,
+            "width_mm": 22,
+            "printed_depth_label": "for 72+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "112",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y60129",
+            "height_mm": 840,
+            "depth_mm": 1120,
+            "width_mm": 22,
+            "printed_depth_label": "for 72+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "112",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y20129",
+            "height_mm": 368,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y40129",
+            "height_mm": 780,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 445
+          },
+          {
+            "code": "Y70129",
+            "height_mm": 840,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 445
+          }
+        ],
+        "height_correction_2026_08_26": "Y00129, the first row of the d.112 group, is PRINTED at H.84 and is recorded here at H.36,8. Two witnesses against the page: the parallel framed-door page (printed p.447) prints the identical group as 36,8 / 78 / 84, and Y0/Y3/Y6 is the prefix triple that means 36,8 / 78 / 84 in every other group of this collection - printed as 84 the group would hold two H.84 rows and no short one. Verified against the rendered page image, so this is the CATALOG's misprint and not a text-extraction artifact. The printed value is kept in printed_height_cm on that row."
+      }
+    }
+  }
+}

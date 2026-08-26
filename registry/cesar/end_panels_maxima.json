@@ -1,0 +1,731 @@
+{
+  "section": "End elements for Maxima-Intarsio",
+  "class": "end_panel",
+  "family": "End panels Maxima-Intarsio",
+  "source_pages": "printed p.440-441 / PDF 442-443, both pages read whole 2026-08-26",
+  "extraction_note": "DEMAND-DRIVEN, 2026-08-26: the Avenida Primavera island needs finished ends, and the back-to-back depth groups are the only place in the book that prices them. Taken: the 2,2 cm ADJOINING END SIDE PANEL with 45-degree vertical edge, both pages. NOT taken from the same section: the L-shaped end side panel (printed p.436) and its three grip-recess variants (p.437-439), which need an L profile in 30_geometry that does not exist yet. NOT taken from the chapter: the Groove and lacquered-Intarsio edge pages (p.442-443), which price workmanship per square metre rather than pieces, and whose note - 'The Groove end side panel cannot be joined at 45 degrees with the door' - contradicts the geometry of everything in this file.",
+  "thickness_note": "2,2 cm, printed in the heading of every position. This is the FRONT thickness (Standards::FRONT_T_MM), and that is the whole point of the article: it lies in the plane of the doors it adjoins. The OTHER panel thickness in the book, 1,8 cm, is not an article at all - printed p.553 is titled 'Surcharge for finishing side panels, 1.8 cm thick | Replacing standard side panel'. It replaces the carcass's own side, so under rule 4 it draws nothing new and it has no code. Do not model the two as one object with a thickness field.",
+  "depth_note": "EVERY GROUP PRINTS TWO NUMBERS AND THEY ARE NOT THE SAME NUMBER. The label names the CARCASS depth the panel serves ('for 35-cm deep side panel + door thickness'); the 'd.' beside it is the depth the catalog DRAWS. Across all eight groups in this chapter the second is the first plus 2,2 per door face, rounded up - 35 -> 37,2 -> d.37,5; 70 -> 74,4 -> d.75; 124 -> 128,4 -> d.129. That arithmetic is DERIVED and is written here to explain the numbers, not to replace them: depth_mm below is the printed 'd.' verbatim. Whether 'd.' describes the finished end or the panel's own board is Elda Q21, and everything drawn at the end of a run depends on the answer.",
+  "label_collision_note": "TWO GROUPS ON THIS PAGE CARRY THE SAME PRINTED LABEL. Both the d.102 and the d.107 group are printed 'for 62+35-cm deep side panel'. They cannot both be. The codes disagree with the label: at the heights where the letters are unambiguous the d.102 rows carry the prefixes this same chapter uses for a 62-deep panel and the d.107 rows carry the 67-deep prefixes, and the arithmetic in depth_note gives 62+35 -> 101,4 -> d.102 and 67+35 -> 106,4 -> d.107. The label is kept verbatim in printed_depth_label; the reading is Elda Q20. NOTE the letters are only a witness at the SHORT heights - from H.138 up, both groups use F-prefixes and are told apart by the trailing digits alone, which is rule 5 restated: a code is a lookup, never a decode.",
+  "surcharge_note": "Charges printed beside the tables and NOT wired anywhere yet: vertical edge of door, each - 48 points up to H.72, 65 points from H.75 to H.140, 86 points above H.141; and 'Height reduction of side panel for side grip recess if an adjoined end side panel is present' - 84 points. Separately, printed p.549 prices an INCREASE of side panel depth, 62->67, 67->72 and 72->77, at 41 points a step. Points are commercial data and stay out of the object by Contract v2 1.2; they are recorded here because the exporter will need to find them.",
+  "finish_note": "Finishes and price bands for every 2,2 cm end side panel are printed p.448-449, shared by all three collections. Bands 9 and 11 are '-' on every panel row in the chapter: those finish families are not made as panels. Not extracted - there is no appearance layer yet (M1.8).",
+  "data": {
+    "unit_types": {
+      "end_panel_45": {
+        "description": "Adjoining end side panel, 2.2 cm thick - with 45 degree vertical edge",
+        "object_class": "panel",
+        "opening": null,
+        "handed": false,
+        "handed_note": "The ARTICLE has no hand. A panel does not open, so there is no hinge to hand, and the catalog prints one code for either end of a run. What IS handed is the 45-degree edge, which must face the door - and that follows from which end you place it at, so it is placement and not an attribute. The choice the catalog DOES price is a different one: which page you are on. See the two unit types in this file.",
+        "interior_confirmed": [],
+        "source_ref": "printed p.440 / PDF 442",
+        "front_layout": {
+          "kind": "none",
+          "note": "A PANEL HAS NO FRONT. 'none' is stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board. A default is not a source."
+        },
+        "codes": [
+          {
+            "code": "PB0030",
+            "height_mm": 360,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "B00030",
+            "height_mm": 390,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "BC0030",
+            "height_mm": 480,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "B30030",
+            "height_mm": 585,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "BE0030",
+            "height_mm": 600,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "PE0030",
+            "height_mm": 720,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "B70030",
+            "height_mm": 780,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "BK0030",
+            "height_mm": 840,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "PF0030",
+            "height_mm": 960,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "PJ0030",
+            "height_mm": 1200,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "C10030",
+            "height_mm": 1380,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CE0030",
+            "height_mm": 1980,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CQ0030",
+            "height_mm": 2100,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CG0030",
+            "height_mm": 2220,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "C00030",
+            "height_mm": 2340,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CC0031",
+            "height_mm": 2780,
+            "depth_mm": 375,
+            "width_mm": 22,
+            "printed_depth_label": "for 35-cm deep side panel + door thickness",
+            "printed_depth_cm": "37,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "X10030",
+            "height_mm": 390,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "XD0030",
+            "height_mm": 480,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "X40030",
+            "height_mm": 585,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "XF0030",
+            "height_mm": 600,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "X80030",
+            "height_mm": 780,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "XL0030",
+            "height_mm": 840,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "F20030",
+            "height_mm": 1380,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "FF0030",
+            "height_mm": 1980,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "FR0030",
+            "height_mm": 2100,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "FH0030",
+            "height_mm": 2220,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "F90030",
+            "height_mm": 2340,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "FD0031",
+            "height_mm": 2780,
+            "depth_mm": 645,
+            "width_mm": 22,
+            "printed_depth_label": "for 62-cm deep side panel + door thickness",
+            "printed_depth_cm": "64,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "B20030",
+            "height_mm": 390,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "BP0030",
+            "height_mm": 480,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "B50030",
+            "height_mm": 585,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "BG0030",
+            "height_mm": 600,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "B90030",
+            "height_mm": 780,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "BM0030",
+            "height_mm": 840,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "C20031",
+            "height_mm": 1380,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CF0031",
+            "height_mm": 1980,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CR0031",
+            "height_mm": 2100,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CH0031",
+            "height_mm": 2220,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "C90031",
+            "height_mm": 2340,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          },
+          {
+            "code": "CD0032",
+            "height_mm": 2780,
+            "depth_mm": 695,
+            "width_mm": 22,
+            "printed_depth_label": "for 67-cm deep side panel + door thickness",
+            "printed_depth_cm": "69,5",
+            "source_page_printed": 440
+          }
+        ]
+      },
+      "end_panel_45_opposite_hinge": {
+        "description": "Adjoining end side panel, 2.2 cm thick - for base units with drawers/jumbo drawers, wall units with push-up doors, and base/wall units whose hinges are on the side OPPOSITE the 45 degree edge",
+        "object_class": "panel",
+        "opening": null,
+        "handed": false,
+        "handed_note": "The ARTICLE has no hand. A panel does not open, so there is no hinge to hand, and the catalog prints one code for either end of a run. What IS handed is the 45-degree edge, which must face the door - and that follows from which end you place it at, so it is placement and not an attribute. The choice the catalog DOES price is a different one: which page you are on. See the two unit types in this file.",
+        "interior_confirmed": [],
+        "source_ref": "printed p.441 / PDF 443",
+        "front_layout": {
+          "kind": "none",
+          "note": "A PANEL HAS NO FRONT. 'none' is stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board. A default is not a source."
+        },
+        "codes": [
+          {
+            "code": "B30130",
+            "height_mm": 585,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "BE0130",
+            "height_mm": 600,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "B70130",
+            "height_mm": 780,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "BK0130",
+            "height_mm": 840,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "C10130",
+            "height_mm": 1380,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "CE0130",
+            "height_mm": 1980,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "CQ0130",
+            "height_mm": 2100,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "CG0130",
+            "height_mm": 2220,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "C00130",
+            "height_mm": 2340,
+            "depth_mm": 750,
+            "width_mm": 22,
+            "printed_depth_label": "for 35+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "75",
+            "source_page_printed": 441
+          },
+          {
+            "code": "X40032",
+            "height_mm": 585,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "XF0032",
+            "height_mm": 600,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "X80032",
+            "height_mm": 780,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "XL0032",
+            "height_mm": 840,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "F20032",
+            "height_mm": 1380,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FF0032",
+            "height_mm": 1980,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FR0032",
+            "height_mm": 2100,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FH0032",
+            "height_mm": 2220,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "F90032",
+            "height_mm": 2340,
+            "depth_mm": 1020,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "102",
+            "source_page_printed": 441
+          },
+          {
+            "code": "B60130",
+            "height_mm": 585,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "BF0130",
+            "height_mm": 600,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "B90130",
+            "height_mm": 780,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "BM0130",
+            "height_mm": 840,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "F20130",
+            "height_mm": 1380,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FF0130",
+            "height_mm": 1980,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FR0130",
+            "height_mm": 2100,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FH0130",
+            "height_mm": 2220,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "F90130",
+            "height_mm": 2340,
+            "depth_mm": 1070,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+35-cm deep side panel + door thickness",
+            "printed_depth_cm": "107",
+            "source_page_printed": 441
+          },
+          {
+            "code": "X40031",
+            "height_mm": 585,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "XF0031",
+            "height_mm": 600,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "X80031",
+            "height_mm": 780,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "XL0031",
+            "height_mm": 840,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "F20031",
+            "height_mm": 1380,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FF0031",
+            "height_mm": 1980,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FR0031",
+            "height_mm": 2100,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "FH0031",
+            "height_mm": 2220,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          },
+          {
+            "code": "F90031",
+            "height_mm": 2340,
+            "depth_mm": 1290,
+            "width_mm": 22,
+            "printed_depth_label": "for 62+62-cm deep side panel + door thickness",
+            "printed_depth_cm": "129",
+            "source_page_printed": 441
+          }
+        ],
+        "choice_note": "THIS IS A DIFFERENT ARTICLE, NOT A VARIANT. The two pages price the same heights and the same depth groups under different codes, and which one is right is decided by what the neighbouring unit does - drawers, a push-up door, or hinges away from the 45. That makes it the same kind of fact as hinge_side: never guessed, only chosen. The opposite-hinge page also carries FOUR back-to-back depth groups where the 45 page carries none, so an island end can only be ordered from this page."
+      }
+    }
+  }
+}

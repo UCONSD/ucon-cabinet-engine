@@ -1672,6 +1672,105 @@
             "note": "PRINTED ON EVERY POSITION: 'Cannot be reduced in width, height or depth.' The width half was already refused by WIDTH_MOD_FORBIDDEN's framed-glass rule from p.548; the HEIGHT half was wired on 2026-08-26 citing THIS page rather than borrowing the width list, and DEPTH is prohibited by the same sentence but has no modification path in the engine to refuse."
           }
         ]
+      },
+      {
+        "class": "end_panel",
+        "family": "Maxima-Intarsio",
+        "section": "End elements for Maxima-Intarsio",
+        "printed_pages": "436-441",
+        "status": "partial",
+        "extracted_on": "DEMAND-DRIVEN, 2026-08-26: the Avenida Primavera island needs finished ends. EXTRACTED: the adjoining end side panel, 2.2 cm thick, with 45 degree vertical edge - printed p.440 (hinges on the 45 side) and p.441 (hinges opposite, and the only page in the collection carrying the back-to-back depth groups an island needs). 76 codes, registry/cesar/end_panels_maxima.json. NOT EXTRACTED, from the same section: the L-shaped end side panel 7.5 cm wide (printed p.436) and its three intermediate grip-recess variants (p.437 at 35,7/44,7, p.438 at 16,2/55,2, p.439 at 19,2/55,2). They need an L profile in 30_geometry that does not exist, and their grip recesses belong to the gola axis. Chapter 'Fillers, end elements and open units', printed index p.433. Its running head is 'Fillers - End elements / Open units'.",
+        "note": "2026-08-26"
+      },
+      {
+        "class": "end_panel",
+        "family": "Maxima Groove",
+        "section": "Adjoining end side panel for Maxima Groove",
+        "printed_pages": "442",
+        "status": "excluded",
+        "note": "PRICED PER SQUARE METRE, NOT PER PIECE: the page prints 'Workmanship for Groove edge only, per m2' at 438 / 516 / 682 / 884 by finish family and no article codes at all. And it contradicts the geometry of the pages we did take: 'The Groove end side panel cannot be joined at 45 degrees with the door.' Excluded rather than not_extracted because taking it would mean modelling a per-area workmanship line, which is a different kind of object."
+      },
+      {
+        "class": "end_panel",
+        "family": "lacquered Intarsio",
+        "section": "Adjoining end side panel for lacquered Intarsio",
+        "printed_pages": "443",
+        "status": "excluded",
+        "note": "Same shape as the Groove page: 'Workmanship for lacquered Intarsio edge only, per m2' at 454 / 500 / 720, no codes, and the same note that it cannot be joined at 45 degrees with the door."
+      },
+      {
+        "class": "end_panel",
+        "family": "N_Elle",
+        "section": "Adjoining end side panel for N_Elle",
+        "printed_pages": "444-445",
+        "status": "extracted",
+        "extracted_on": "Both pages taken whole, 24 codes, registry/cesar/end_panels_nelle.json. Only three heights - 36,8 / 78 / 84 - and 36,8 appears nowhere in the Maxima panel tables; it is the height the N_Elle fillers use on printed p.435. Prints one depth group the Maxima pages do not: 72+35, d.112. TAKEN ALONGSIDE MAXIMA ON PURPOSE - which collection this kitchen is remains an Elda question (see the glass wall H.96 note), and holding all three files makes the answer a picker choice instead of an extraction.",
+        "note": "2026-08-26"
+      },
+      {
+        "class": "end_panel",
+        "family": "N_Elle framed door",
+        "section": "Adjoining end side panel for N_Elle with framed door",
+        "printed_pages": "446-447",
+        "status": "extracted",
+        "extracted_on": "Both pages taken whole, 24 codes, registry/cesar/end_panels_nelle_framed.json. BANDS 12 / 13 / 15, not 1-11 - the framed-door collection has its own band set, exactly as the N_Elle framed filler does on printed p.435. Relevant beyond the collection question: the filler beside the west glass row must be ordered in the colour of the glass door's FRAME, and a framed door is what this page prices.",
+        "note": "2026-08-26"
+      },
+      {
+        "class": "end_panel",
+        "family": "2.2 cm end side panels",
+        "section": "2.2 cm thick end side panels | Finishes and price bands",
+        "printed_pages": "448-449",
+        "status": "not_extracted",
+        "note": "The finish and price-band tables shared by all three collections above. Nothing reads them yet - there is no appearance layer (M1.8). Worth recording now: bands 9 and 11 are '-' on every panel row in the chapter, so those finish families are not made as panels."
+      },
+      {
+        "class": "open_unit",
+        "family": "2.2 cm open end units",
+        "section": "2.2 cm thick open end units",
+        "printed_pages": "450-454",
+        "status": "not_extracted",
+        "note": "Read only as far as the index. Chapter 'Fillers, end elements and open units', printed index p.433. Its running head is 'Fillers - End elements / Open units'."
+      },
+      {
+        "class": "open_unit",
+        "family": "Open units 15-45",
+        "section": "Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick",
+        "printed_pages": "455",
+        "status": "not_extracted",
+        "note": "Read only as far as the index."
+      },
+      {
+        "class": "open_unit",
+        "family": "Open units 45-90",
+        "section": "Open base, wall and tall units, from 45 to 90 cm wide th. 2.2",
+        "printed_pages": "456",
+        "status": "not_extracted",
+        "note": "Read only as far as the index."
+      },
+      {
+        "class": "open_unit",
+        "family": "Thin",
+        "section": "Thin | Finishes and price bands, Horizontal Thin, Thin H.36, Vertical Thin, accessories",
+        "printed_pages": "457-468",
+        "status": "not_extracted",
+        "note": "A whole open-shelving system, printed p.457-468. Read only as far as the index."
+      },
+      {
+        "class": "open_unit",
+        "family": "Trilli",
+        "section": "Trilli | Finishes and price bands, with light, for base / wall / tall units",
+        "printed_pages": "469-486",
+        "status": "not_extracted",
+        "note": "A second open-shelving system, printed p.469 onward. Read only as far as the index."
+      },
+      {
+        "class": "side_panel",
+        "family": "Finishing side panels 1.8",
+        "section": "Finishing side panels, 1.8 cm thick | Finishes, price bands and surcharge",
+        "printed_pages": "551-553",
+        "status": "not_extracted",
+        "note": "NOT AN ARTICLE AND NOT A SEPARATE OBJECT. Printed p.553 is titled 'Surcharge for finishing side panels, 1.8 cm thick | Replacing standard side panel' and prints no codes: a surcharge by height x depth (D.35 / 62 / 67 / 72) x price band that replaces the carcass's own side panel with a finished one. Under rule 4 it draws nothing new. It belongs on an existing unit as a chosen option and an order line, which is the properties panel's job, not the generator's. The page also states what gets finished: 2 visible sides for melamine / Technomat / Fenix NTA / Fenix NTM / Unicolor; 1 visible side with the reverse in carcass colour for every lacquer and veneer."
       }
     ]
   },

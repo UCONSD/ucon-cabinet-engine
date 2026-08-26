@@ -537,3 +537,80 @@ First concrete step next session: add the wall sections to `catalog_map` as
 `not_extracted` so the picker shows the whole chapter as grey rows, then
 extract ONE page (printed p.211, Wall units H. 36) and let the demand of the
 real kitchen choose the next.
+
+---
+
+## 7.3 Status update — 2026-08-26 (modifications parked, panels started)
+
+### M1.11 — Modified elements: the design questions, answered but NOT built
+
+Andriy proposed the UI: a **Modification** button on the palette → select an
+object → a floating menu with width / height / depth and a comment field; the
+same for a panel. Discussed 2026-08-26, **deliberately parked** in favour of
+panels. What the discussion settled, so it is not re-litigated later:
+
+1. **A button must not be what makes something a modification.** The spec's own
+   rule (`docs/Modifications_Design_Spec_v0.1.md`) is that *divergence itself*
+   is the trigger — a dimension that differs from the catalog standard attaches
+   its `989xxx` code and drops the unit to PRELIMINARY, with no mode switch and
+   no "make modifiable" click, precisely so it cannot be forgotten. The floating
+   dialog is a fine way to TYPE the numbers. It must not be the thing that
+   decides they count.
+2. **The dialog must rebuild through the registry, never scale geometry.** The
+   fault found the same morning in six `SD0631` — a unit changed and its fronts
+   stayed the old size — is exactly what stretching a group produces, and it
+   would also lie about shelves, plinth and cutout rails. The dialog calls
+   `Generator.build` with a modified unit hash.
+3. **The comment field needs a home that survives a rebuild.** Contract v2 §1.1
+   is a closed key list, so a human comment is a contract amendment, not a free
+   attribute — and it must be excluded from anything that regenerates geometry.
+   A comment eaten by the next rebuild is worse than no comment field.
+4. **Correction to an earlier claim in this repo's conversation:** depth was
+   said to have no modification path. It does. Reduction is coded
+   (989350 base/wall 92 pts, 989360 tall 143 pts) with limits D.350 → −20,
+   D.620 → −90, D.670 → −40; increase exists for a side panel only, 62→67→72→77
+   at 41 pts a step (printed p.549). What is missing is the wiring, not the
+   path.
+
+Unchanged from the original M1.11 entry: base code immutable, `989xxx`
+additive, the invariant "diverged ⟺ has modification ⟺ PRELIMINARY", the
+validator enforcing prohibited families and depth maxima, the exporter emitting
+the modification order lines.
+
+### M1.13 — Panels (NEW, in progress) — driven by the island
+
+Recon: `claude/findings-2026-08-26-panels-recon.md`. The chapter is
+"Fillers – End elements", printed p.436–449, plus the 1,8 surcharge at p.551–553
+and the depth-increase surcharge at p.549.
+
+The recon's load-bearing finding: **"a panel" is three different things**, and
+only one is an object.
+
+- **2,2 cm adjoining end side panel** — real article codes, a separate ordered
+  piece, joined at 45° to the door. *This* is what the module generates. Its
+  back-to-back depth groups (35+35 → d.75, 62+35 → d.102, 62+62 → d.129) are
+  what an island needs.
+- **1,8 cm finishing side panel** — printed p.553 is titled "Replacing standard
+  side panel". No code; a surcharge by height × depth × price band. Under rule 4
+  it draws NOTHING new, because the carcass already occupies that volume. It
+  belongs to the properties panel as a flag + order line, not to a generator.
+- **Custom panel per m²** — `DZAK22` / `DZAC00`, which are Metron *estimate*
+  codes and do not appear in the price list. The last resort, and the honest
+  label for what we drew beside the fridge.
+
+Consequences already accepted:
+
+- `object_class: 'panel'` has existed in the Contract since v2 and nothing has
+  ever built one; the fridge-bay panels were a hard-coded table inside a probe.
+  Getting them out of the probe and into the registry is part of this milestone.
+- A panel is handed and it is joined to a specific door. Printed p.440 (hinges
+  on the 45° side) and p.441 (hinges opposite) are **different articles**, so
+  the hand is a choice, never a guess — the `hinge_side` discipline, applied to
+  a second object.
+- Code grammar is per depth group with drifting suffixes (`0030` / `0130` /
+  `0077` / `0087` / `0097` / `0107`). Explicit registry rows only.
+
+New Elda questions: **Q20** (p.436 labels d.102 and d.107 both "62+35"; codes
+and arithmetic say d.107 is 67+35) and **Q21** (whether the printed `d.` is the
+overall assembly depth including door faces, which is what everything drawn
+depends on).
