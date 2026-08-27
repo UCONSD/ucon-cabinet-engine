@@ -30,9 +30,24 @@ Window -> Extension Manager -> Manage -> Loading Policy: ours is unsigned and
 needs "Unrestricted".
 
 Cloning onto a new machine gets you the code but NOT the catalog: `sources/`
-is git-ignored (factory/ alone is ~438 MB). Copy
-`CESAR - 2 Kitchen System.pdf` into `sources/factory/` before extracting any
-new section.
+is git-ignored (factory/ alone is ~400 MB). Copy the volumes into
+`sources/factory/` before extracting any new section.
+
+**THE TWO MACHINES CAN HOLD DIFFERENT CATALOGS AND NOTHING SAYS SO.**
+`sources/factory/` is git-ignored, so the shelf does not travel with the code.
+On 2026-08-26 the office Mac held ONE volume and three facts were recorded as
+"Cesar does not print this" after grepping it; all three were wrong, and the
+book that held them had been **on the laptop all along** — which is why an
+extract from it had sat in `sources/raw_dump/` for nine days. So: **`ls -la
+sources/factory/` at the start of every session**, and if the two machines
+differ, say so rather than quietly copying.
+
+**THERE ARE FIVE BOOKS, and until 2026-08-26 this repository had one of them.**
+`docs/Cesar_Volumes_Index.md` says what is in each and what each plausibly
+answers. Page offset is +2 in every volume (PDF = printed + 2); always cite
+PRINTED pages. **Before recording that Cesar does not print something, name
+which volume was searched** — three facts were called missing on 2026-08-26
+that were simply in another book.
 
 ## How we work: demand-driven
 
@@ -54,6 +69,10 @@ against the source), a one-off goes on that unit's attributes. Never let a
 project-specific choice harden into a global standard.
 
 ## Non-negotiable domain rules
+
+**Cite these as `domain rule N`.** There are four rule-numbering schemes in
+this repository and three of them start at 1 — `claude/rules.md` is the index,
+and a bare `rule N` anywhere in `src/`, `tools/` or `registry/` fails a check.
 
 1. **The source PDF wins.** Catalog facts enter the registry only after
    verification against `sources/factory/CESAR - 2 Kitchen System.pdf`
@@ -137,9 +156,29 @@ project-specific choice harden into a global standard.
 - **Commits:** small, one concern each; imperative subject with scope
   prefix (`feat(gola): …`, `fix(symbols): …`). Trailer:
   `Co-Authored-By: Claude <model> <noreply@anthropic.com>`.
-- **In Cowork sessions** git runs in Andriy's terminal, never through the
-  device bridge (it leaves `.git/index.lock`). In Claude Code, run git
-  directly.
+- **In Cowork sessions the split is by WHAT TAKES THE LOCK** (narrowed
+  2026-08-26; it used to say "git runs in Andriy's terminal", full stop).
+  `git add`, `git commit` and `git status` take `.git/index.lock`, and the
+  device bridge cannot delete a lock it leaves behind — so those stay in
+  Andriy's terminal. **`git push` does not touch the index and MAY go through
+  the bridge**, as may every read-only command already in use: `git show`,
+  `git log`, `git diff`, `cat .git/refs/…`. If a lock ever does get stuck,
+  `device_request_delete_permission` is the way out — one prompt to Andriy, and
+  `rm` works in that folder for the rest of the session. In Claude Code, run
+  git directly.
+- **ONE COMMAND, ALWAYS THE SAME ONE: `sh build/go.sh`.** Andriy is not a
+  developer and every extra line he has to copy is a place the evening goes
+  wrong — on 2026-08-26 a push went to the wrong repository, and then a pasted
+  terminal transcript was executed as commands, twice. So a Cowork session does
+  not hand him a new command per step: it REWRITES `build/go.sh` and he runs
+  that. The script must always (1) run all three suites under `/usr/bin/ruby`,
+  which is macOS's 2.6 and the ONLY place that version is exercised — the
+  bridge's shell is a Linux VM on ruby 3.0 and cannot stand in for it — (2) stop
+  without committing if any suite fails, (3) commit, (4) push. `build/` is
+  git-ignored, so the script itself is never committed.
+- **Never format a listing as a fenced code block.** A fenced block reads as
+  "run this". Three separate incidents, the last two on 2026-08-26: a file
+  listing, then a two-line ref report, both pasted straight into zsh.
 - **UI change rules:** menu items are permanent for a SketchUp session
   (no remove API) — shell stays minimal. HtmlDialogs bake their HTML and
   callbacks at open; close/reopen after changing them. Core logic reloads
