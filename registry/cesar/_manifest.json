@@ -1771,6 +1771,16 @@
         "printed_pages": "551-553",
         "status": "not_extracted",
         "note": "NOT AN ARTICLE AND NOT A SEPARATE OBJECT. Printed p.553 is titled 'Surcharge for finishing side panels, 1.8 cm thick | Replacing standard side panel' and prints no codes: a surcharge by height x depth (D.35 / 62 / 67 / 72) x price band that replaces the carcass's own side panel with a finished one. Under domain rule 4 it draws nothing new. It belongs on an existing unit as a chosen option and an order line, which is the properties panel's job, not the generator's. The page also states what gets finished: 2 visible sides for melamine / Technomat / Fenix NTA / Fenix NTM / Unicolor; 1 visible side with the reverse in carcass colour for every lacquer and veneer."
+      },
+      {
+        "class": "panel_sheet",
+        "family": "Panels (Linear Elements)",
+        "section": "Panels - Linear Elements",
+        "printed_pages": "214-220",
+        "source_pdf": "CESAR - 3 Linear Elements.pdf",
+        "status": "extracted",
+        "extracted_on": "DEMAND-DRIVEN, 2026-08-27: the Avenida Primavera island is clad across its back with two panels 1200 x 880, and no Kitchen System article prices a panel at 880 - that chapter is priced by CABINET height and stops at H.84 in two of the three collections. EXTRACTED WHOLE: all six price pages, printed p.215-220, 44 codes in ten blocks. printed p.214 carries no panel code - it is the notes page, and its fixing kits and adjustable foot are held in hardware.linear_element_panel_fixings because their quantity comes from the RUN, not from the panel. THE FIRST SECTION IN THIS REGISTRY FROM A BOOK OTHER THAN THE KITCHEN SYSTEM: source_pdf became a per-section fact the same day, and every code here cites Volume 3 by name. Account: claude/findings-2026-08-27-vol3-panels-read.md.",
+        "not_buildable_note": "Held and NOT buildable, all 44. A sheet is not an end panel turned sideways - its thickness is on y and it has no front edge - and the generator has neither that orientation nor a placement against the back of a run. Stated on every unit type in not_buildable_reason, in the same words, so the backlog is one grep."
       }
     ]
   },
@@ -2139,6 +2149,61 @@
       "zone_height_mm": 57,
       "profile_depth_mm": 27,
       "note": "Cross-section from the extract (printed p.615/620): upper dimension 30 fills the gola zone above the 750 door; full grip zone 57 below worktop, profile depth 27. Preliminary drawing shows the visible 30 mm strip at the front plane with front thickness; true section stays recorded here. Do not add to carcass height."
+    },
+    "linear_element_panel_fixings": {
+      "source_ref": "CESAR - 3 Linear Elements.pdf printed p.214 / PDF 216",
+      "note": "WHAT RIDES WITH A PANEL AND IS NOT A PANEL. The page states both in words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately' and 'If the panel is used behind a base unit, a kit to attach it to the rear of the base units will be supplied. This kit must be calculated separately.' HELD HERE RATHER THAN AS companion_refs ON THE PANEL, and the reason is the kit's quantity: it is priced PER BASE UNIT WIDTH, so a 2400 run of four 600 units behind TWO 1200 panels takes four kits. A companion whose count comes from the run and not from the article it rides on has no expression in Contract v2 4.2 today. Wiring it is owed; inventing a per-panel count would be worse than leaving it visible here.",
+      "fixing_kits": [
+        {
+          "code": "990483",
+          "base_unit_width_mm": 300,
+          "points": 48,
+          "um": "each"
+        },
+        {
+          "code": "990485",
+          "base_unit_width_mm": 450,
+          "points": 51,
+          "um": "each"
+        },
+        {
+          "code": "990486",
+          "base_unit_width_mm": 600,
+          "points": 69,
+          "um": "each"
+        },
+        {
+          "code": "990487",
+          "base_unit_width_mm": 750,
+          "points": 70,
+          "um": "each"
+        },
+        {
+          "code": "990489",
+          "base_unit_width_mm": 900,
+          "points": 72,
+          "um": "each"
+        },
+        {
+          "code": "990490",
+          "base_unit_width_mm": 1050,
+          "points": 72,
+          "um": "each"
+        },
+        {
+          "code": "990492",
+          "base_unit_width_mm": 1200,
+          "points": 72,
+          "um": "each"
+        }
+      ],
+      "adjustable_foot": {
+        "code": "990408",
+        "description": "Adjustable foot H. 0,5 cm",
+        "points": 6,
+        "um": "each",
+        "quantity_note": "HOW MANY PER PANEL IS NOT PRINTED. The page says feet 'will be mounted' and priced separately, and prints no count and no spacing. Not guessed - see docs/Elda_Open_Questions_v0.1.md. The 0,5 cm itself is settled: design height 0, and the 5 is travel - claude/repo-state.md, 'The 5 mm foot'."
+      }
     }
   },
   "fabrication_limits": {

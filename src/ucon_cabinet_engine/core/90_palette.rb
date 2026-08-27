@@ -191,7 +191,12 @@ module UCON
         'end_panel' => 'End panels',
         'glass' => 'Glass display units',
         'open_unit' => 'Open units',
-        'side_panel' => 'Finishing side panels'
+        'side_panel' => 'Finishing side panels',
+        # 2026-08-27, with the first Linear Elements section. NOT 'end_panel':
+        # these are boards sold BY THE SQUARE METRE and cut to size, and a
+        # person looking for one is not looking for the article that carries a
+        # 45-degree edge into a door. Two classes because they are two articles.
+        'panel_sheet' => 'Panels cut to size (per m²)'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The

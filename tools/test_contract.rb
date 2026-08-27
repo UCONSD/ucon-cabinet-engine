@@ -241,9 +241,12 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 880 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels)') do
+check('registry loads and holds 924 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels + 44 panel sheets)') do
+  # 2026-08-27: +44, and they are the first codes here out of a book that is not
+  # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
+  # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 880
+  raise "got #{n}" unless n == 924
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -427,15 +430,19 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 880 rows, each with code/dims/description/source') do
+check('registry catalog: 924 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 880
+  raise cat.length.to_s unless cat.length == 924
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
   # build - the front-only fillers have none and do not claim to be buildable.
   raise 'incomplete row' unless cat.all? { |c|
-    c['code'] && c['height_mm'] &&
+    # A HEIGHT OR THE STATEMENT THAT IT COMES FROM THE ORDER, 2026-08-27.
+    # The width clause below has had that escape since the fillers; the height
+    # never needed one until a panel priced by the square metre arrived, and
+    # the asymmetry was invisible while every article had a printed height.
+    c['code'] && (c['height_mm'] || c['height_range_mm']) &&
     (c['depth_mm'] || !c['buildable']) &&
     (c['width_mm'] || c['corner_geometry'] || c['width_range_mm']) &&
     c['description'] && c['source_ref'] && c['type_key']
@@ -529,6 +536,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 96',
                                              'End elements for Maxima-Intarsio',
                                              'Glass wall units H. 96',
+                                             'Panels - Linear Elements',
                                              'Sink base units H. 58.5',
                                              'Sink base units H. 78',
                                              'Tall unit top elements H. 36 | without fixings',
@@ -560,8 +568,14 @@ check('split storage: every catalog row is stamped with its section and class') 
   # any class. It is a board beside one, and it spans base, wall and tall
   # heights in a single table. So section and row agree here, and the class is
   # its own.
+  # 'panel_sheet' arrived 2026-08-27 with Linear Elements printed p.215-220, and
+  # it is deliberately NOT 'end_panel'. Two articles, two classes: the end panel
+  # is priced by CABINET height and carries a 45-degree edge into a door; this
+  # one is a board sold by the square metre with no height, no hand and no edge
+  # detail, out of a different book. Collapsing them would have made the picker
+  # offer 168 codes for one question that is really two.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
-    cat.map { |c| c['class'] }.uniq.sort == %w[base end_panel filler tall wall]
+    cat.map { |c| c['class'] }.uniq.sort == %w[base end_panel filler panel_sheet tall wall]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -7175,6 +7189,144 @@ check('and the index names every list that is cited') do
   status = File.read(File.expand_path('../claude/ucon-cabinet-engine-status.md', __dir__))
   learned = status[/^## RULES LEARNED THE HARD WAY.*?$(.+?)^## /m, 1].to_s.scan(/^\*\*\d{1,2}\. /).length
   raise "the status document holds #{learned} learned rules; rules.md lists 18" unless learned == 18
+end
+
+puts "\npanels priced by the square metre - Linear Elements printed p.214-220"
+
+check('THE REGISTRY NOW HOLDS TWO BOOKS, and every code says which') do
+  # THE DEFECT THIS EXISTS FOR, and it was live until this commit: source_pdf
+  # was one value in _manifest.json for the whole registry, so the first Linear
+  # Elements code would have cited "CESAR - 2 Kitchen System.pdf printed p.215".
+  # Both halves of that sentence are real - the Kitchen System HAS a p.215 - so
+  # nothing would have looked wrong. Learned rule 15: a successful write is not
+  # a correct write; check the identity fields.
+  sheet = Registry.lookup('DZAK22')
+  raise sheet['source_ref'].inspect unless
+    sheet['source_ref'] == 'CESAR - 3 Linear Elements.pdf printed p.217 / PDF 219'
+
+  # and the default did not move for the fifty-five sections that are Volume 2
+  raise Registry.lookup('B80601')['source_ref'].inspect unless
+    Registry.lookup('B80601')['source_ref'].start_with?('CESAR - 2 Kitchen System.pdf ')
+
+  # no leakage, either way, across all 924
+  wrong = Registry.catalog.reject do |r|
+    want = r['class'] == 'panel_sheet' ? 'CESAR - 3 Linear Elements.pdf' : 'CESAR - 2 Kitchen System.pdf'
+    r['source_ref'].to_s.start_with?("#{want} ")
+  end
+  raise "cite the wrong book: #{wrong.map { |r| r['code'] }.first(8).inspect}" unless wrong.empty?
+end
+
+check('a sheet is 44 codes in ten blocks, and none of them is buildable yet') do
+  rows = Registry.catalog.select { |c| c['class'] == 'panel_sheet' }
+  raise rows.length.to_s unless rows.length == 44
+  raise rows.map { |r| r['type_key'] }.uniq.length.to_s unless
+    rows.map { |r| r['type_key'] }.uniq.length == 10
+
+  # THE BACKLOG IS ONE GREP - the same shape the nineteen door_versions codes
+  # use. All 44 refuse for ONE reason and say it in the same words, so the day
+  # the generator learns the orientation, one edit clears all of them.
+  raise 'a sheet claims to be buildable' if rows.any? { |r| r['buildable'] }
+  reasons = rows.map { |r| r['not_buildable_reason'] }.uniq
+  raise "#{reasons.length} different reasons" unless reasons.length == 1
+  raise 'the reason does not say what is missing' unless
+    reasons.first.include?('thickness on y') && reasons.first.include?('placement')
+end
+
+check('A SHEET HAS NO WIDTH AND NO HEIGHT, and both refusals name the order') do
+  u = Registry.lookup('DZAD22')
+  raise 'a sheet must not state a width' if u['width_mm']
+  raise 'a sheet must not state a height' if u['height_mm']
+  raise u['width_range_mm'].inspect  unless u['width_range_mm']  == [1, 2050]
+  raise u['height_range_mm'].inspect unless u['height_range_mm'] == [1, 2780]
+  # thickness is on DEPTH, because that is the axis a board is thin on
+  raise u['depth_mm'].inspect unless u['depth_mm'] == 22
+
+  begin
+    Registry.with_ordered_height(u, nil)
+    raise 'built with no height'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('priced by the square metre')
+  end
+  begin
+    Registry.with_ordered_width(u, nil)
+    raise 'built with no width'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('stated per order')
+  end
+end
+
+check('880 is ordered, not modified - the whole point of the height range') do
+  # The island of 545 Avenida Primavera: 1200 x 880, floor to the underside of
+  # the top. Volume 1 printed p.73 and p.82 give the chain 780 + 100 = 880.
+  u = Registry.with_ordered_height(Registry.lookup('DZAK22'), 880)
+  raise u['height_mm'].inspect unless u['height_mm'] == 880
+  # AND NOT AS A MODIFICATION. Before the range path this method compared 880
+  # against a stated height and recorded the difference, which would have put a
+  # reduction surcharge on an order line the catalog never charges.
+  raise 'recorded as a modification' if u['height_reduced_from_mm'] || u['height_increased_from_mm']
+
+  w = Registry.with_ordered_width(u, 1200)
+  raise w['width_mm'].inspect unless w['width_mm'] == 1200
+  raise 'a sheet must not be scribed' if w['scribe_mm']
+end
+
+check('a panel bigger than the sheet is refused, and the message says so') do
+  # lacquer is cut from 120 x 300; the melamine beside it from 205 x 278.
+  begin
+    Registry.with_ordered_height(Registry.lookup('DZAK22'), 3200)
+    raise 'accepted a height no sheet holds'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('does not come out of it')
+  end
+  raise 'and 3000 is inside it' unless
+    Registry.with_ordered_height(Registry.lookup('DZAK22'), 3000)['height_mm'] == 3000
+  # the tallest sheet in the chapter, and the counter-example to "278 is the sheet"
+  raise 'laminate reaches 418 cm' unless
+    Registry.with_ordered_height(Registry.lookup('DZBZ22'), 4180)['height_mm'] == 4180
+end
+
+check("A SHEET'S WIDTH IS NOT A THICKNESS, and an end panel's still is") do
+  # learned rule 6, one day later: the predicate was written when there was one
+  # kind of panel. It keyed on the CLASS, so all 44 sheets would have answered
+  # "my width is a thickness, refuse to cut me" - about the one dimension that
+  # is genuinely theirs.
+  raise 'a sheet' if Registry.width_is_a_thickness?(Registry.lookup('DZAK22'))
+  raise 'an end panel' unless Registry.width_is_a_thickness?(Registry.lookup('YU0028'))
+  raise 'a cabinet' if Registry.width_is_a_thickness?(Registry.lookup('B80601'))
+end
+
+check('the minimum, the surcharges and the rate are held as the page prints them') do
+  reg = Registry.data
+  t = reg['families']['Panels (Linear Elements)']['unit_types']['panel_lacquered']
+  raise t['minimum_invoicing_m2'].inspect unless t['minimum_invoicing_m2'] == 0.5
+  raise 'the rate is per m2' unless t['codes'].find { |c| c['code'] == 'DZAK22' }['points_per_m2'] == 405
+  s = t['surcharges']
+  raise s.inspect unless s['cutout_for_electrical_socket']['points'] == 32 &&
+                         s['out_of_square_reduction']['points'] == 27 &&
+                         s['inner_or_outer_reduction']['points'] == 65
+  # AND THE PRICES ARE NOT MONOTONE. Printed twice in the veneer pages: group C
+  # costs more than group D. A reader tidying this would "fix" the catalog.
+  v = reg['families']['Panels (Linear Elements)']['unit_types']['panel_veneer_2sides_horizontal']['codes']
+  c_pts = v.find { |x| x['code'] == 'DV062Q' }['points_per_m2']
+  d_pts = v.find { |x| x['code'] == 'DV063Q' }['points_per_m2']
+  raise "C #{c_pts} D #{d_pts}" unless c_pts == 1038 && d_pts == 1002 && c_pts > d_pts
+end
+
+check('the fixing kit is priced per BASE UNIT, and that is why it is not a companion') do
+  # Four 600 units behind TWO 1200 panels take FOUR kits. A companion_ref hangs
+  # off the article it rides on and would have counted two. Held in the manifest
+  # until Contract v2 4.2 can say "quantity comes from the run".
+  hw = Registry.data['hardware']['linear_element_panel_fixings']
+  kits = hw['fixing_kits']
+  raise kits.length.to_s unless kits.length == 7
+  k600 = kits.find { |k| k['base_unit_width_mm'] == 600 }
+  raise k600.inspect unless k600['code'] == '990486' && k600['points'] == 69
+  raise 'the foot' unless hw['adjustable_foot']['code'] == '990408' &&
+                          hw['adjustable_foot']['points'] == 6
+  # HOW MANY FEET IS NOT PRINTED, and the absence is recorded rather than filled
+  raise 'a count was invented' if hw['adjustable_foot']['quantity_note'].to_s.empty?
+  raise 'no panel carries a companion for the kit' if
+    Registry.lookup('DZAK22')['companions'].any?
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

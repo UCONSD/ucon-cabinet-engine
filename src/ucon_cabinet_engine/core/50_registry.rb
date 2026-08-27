@@ -68,6 +68,20 @@ module UCON
           (payload['unit_types'] || {}).each do |key, unit_type|
             unit_type['section'] = sec['section'] if sec['section']
             unit_type['class']   = sec['class'] if sec['class']
+            # WHICH BOOK THIS SECTION CAME OUT OF, 2026-08-27.
+            #
+            # For nine days every section file in this registry was the Kitchen
+            # System, so source_pdf lived once in _manifest.json and lookup
+            # pasted it in front of every source_ref. The first Linear Elements
+            # code would therefore have cited the wrong volume - printed p.214
+            # of a book that has no p.214 of panels - and it would have looked
+            # right, because the page number is real in both.
+            #
+            # So it is a SECTION fact now, stamped here beside section and class
+            # for the same reason they are: the unit type is what lookup can
+            # see. The manifest's value stays as the default, which is honest -
+            # fifty-five of the fifty-six files really are Volume 2.
+            unit_type['source_pdf'] = sec['source_pdf'] if sec['source_pdf']
             (fam['unit_types'] ||= {})[key] = unit_type
           end
           merge_family_keys!(fam, payload, fam_name, File.basename(file),
@@ -201,6 +215,15 @@ module UCON
             # number. Absent means the ordinary case - the catalog stated the
             # width and it is right above this line.
             'width_range_mm'     => row['width_range_mm'],
+            # AND THE SAME FOR THE HEIGHT, 2026-08-27. This line is the exact
+            # bug the wall_hung key had on 2026-08-22: the data was written
+            # correctly in the section file and the loader did not carry it, so
+            # the escape hatch could not be reached from any code. Found by a
+            # check the same hour rather than by a day and a half of a wrong
+            # drawing - with_ordered_height fell through its range path to the
+            # modification path and recorded a cut sheet as a reduction.
+            'height_range_mm'    => row['height_range_mm'],
+            'points_per_m2'      => row['points_per_m2'],
             'depth_mm'           => row['depth_mm'],
             # THE LABEL BESIDE THE DEPTH, AND ONLY THE PANEL PAGES HAVE ONE.
             # An end panel's row prints two numbers - the carcass depth it
@@ -229,7 +252,11 @@ module UCON
             'door_width_mm'      => row['door_width_mm'],
             'carcass_length_mm'  => row['carcass_length_mm'],
             'companions'         => unit_type['companions'] || [],
-            'source_ref'         => "#{reg['source_pdf']} #{unit_type['source_ref']}",
+            # The SECTION's book if it declared one, the manifest's otherwise.
+            # See the note in data(): a registry that holds two volumes cannot
+            # keep one filename for all of them.
+            'source_ref'         => "#{unit_type['source_pdf'] || reg['source_pdf']} " \
+                                    "#{unit_type['source_ref']}",
             'registry_status'    => reg['registry_status']
           }
         end
@@ -334,8 +361,26 @@ module UCON
       # Added 2026-08-26 with the end-panel chapter, because the census check
       # below says it in the right order: a false NO is loud and a false YES is
       # silent. 124 codes silently answering "yes, cut me" is the silent kind.
+      # NARROWED 2026-08-27, and learned rule 6 called it a day early: a
+      # constant chosen when there was one case is a bug waiting for the second.
+      #
+      # This was written on 2026-08-26 for the adjoining end side panel, where
+      # width_mm really is the 22 of the board and cutting it down is nonsense.
+      # The second case arrived the next morning. Linear Elements printed
+      # p.214-220 prices a panel BY AREA: it has no width at all until somebody
+      # orders one, the page states only the maximum sheet, and its thickness
+      # lives on depth_mm. Refusing that width would refuse the article's only
+      # real dimension.
+      #
+      # So the test is no longer the class. A panel that states a width RANGE is
+      # a sheet - the range IS the statement that the width is ordered - and a
+      # sheet's width is not a thickness. This is a presence, not an absence:
+      # width_range_mm has meant "ask the order" everywhere in this file since
+      # the fillers, and with_ordered_width already refuses to build without it.
       def width_is_a_thickness?(unit)
-        (unit || {})['object_class'].to_s == 'panel'
+        return false unless (unit || {})['object_class'].to_s == 'panel'
+
+        (unit || {})['width_range_mm'].nil?
       end
 
       def width_modification_refusal(unit)
@@ -551,6 +596,62 @@ module UCON
       end
 
       def with_ordered_height(unit, height_mm)
+        # ---- THE HEIGHT THAT WAS NEVER PRINTED, 2026-08-27 -------------------
+        #
+        # Everything below this block treats a height as a MODIFICATION: it
+        # compares what was asked against what the page states and records
+        # height_increased_from_mm or height_reduced_from_mm. That is right for
+        # a cabinet, whose page prints a height.
+        #
+        # It is a lie about a sheet. Linear Elements printed p.214-220 prices a
+        # panel per square metre and prints NO height - only the maximum sheet
+        # it can be cut from. A panel ordered 880 tall is not an 840 modified by
+        # 40; it is a board cut to 880, which is what that article is. Recording
+        # it as a modification would put a surcharge code on an order line the
+        # catalog never charges, and would tell a reader the factory did
+        # something special.
+        #
+        # So a height_range_mm short-circuits the whole modification path, and
+        # it mirrors width_range_mm exactly - including the refusal, which is
+        # the important half: an article whose dimension comes from the order
+        # must not be buildable without one.
+        #
+        # IT DOES NOT ROUND. with_ordered_width rounds a filler UP, because a
+        # filler is scribed against a wall and up is the only direction a fitter
+        # can correct. Nothing here is scribed against anything: the sheet is cut
+        # to the number, and a number that is not whole millimetres is a question
+        # for the person, not for this method.
+        if (h_range = unit['height_range_mm'])
+          lo, hi = h_range
+          if height_mm.nil? || height_mm.to_s.empty?
+            raise ArgumentError,
+                  "#{unit['code']} has no height in the catalog: it is priced by " \
+                  "the square metre and cut to size, anywhere from #{lo} to #{hi} " \
+                  'mm. State the height before building.'
+          end
+
+          asked = begin
+            Float(height_mm)
+          rescue ArgumentError, TypeError
+            nil
+          end
+          raise ArgumentError, "A panel height is a number of millimetres; got #{height_mm.inspect}." if asked.nil?
+
+          unless asked == asked.round
+            raise ArgumentError,
+                  "A cut panel is ordered in whole millimetres; got #{height_mm.inspect}. " \
+                  'Nothing here is scribed against a wall, so this is not rounded for you.'
+          end
+          unless asked >= lo && asked <= hi
+            raise ArgumentError,
+                  "#{unit['code']} is cut from a sheet #{hi} mm on that axis; #{asked.round} " \
+                  'does not come out of it. That is a second panel or a different ' \
+                  'material, not a height nobody prints.'
+          end
+
+          return unit.merge('height_mm' => asked.round)
+        end
+
         return unit if height_mm.nil? || height_mm.to_s.empty?
 
         stated = unit['height_mm'].to_f
@@ -599,9 +700,20 @@ module UCON
             # A picker row for an end panel gets its height from the code.
             'depth_mm' => row['depth_mm'],
             'height_mm' => (row['height_mm'] || family['height_mm']),
+            # THE HEIGHT CAN COME FROM THE ORDER TOO, 2026-08-27, and until the
+            # Linear Elements panels arrived only the WIDTH could. A row that
+            # states a height range states that it has no printed height - the
+            # same sentence width_range_mm has meant since the fillers - and a
+            # picker row that dropped it would show a panel with no height at
+            # all and no reason given.
+            'height_range_mm' => row['height_range_mm'],
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],
-            'source_ref' => unit_type['source_ref'],
+            # NAMED WITH ITS BOOK, like lookup's. A picker row reading
+            # 'printed p.215' is ambiguous the moment the registry holds two
+            # volumes, and it has held two since this line was written.
+            'source_ref' => "#{unit_type['source_pdf'] || reg['source_pdf']} " \
+                            "#{unit_type['source_ref']}",
             'section' => unit_type['section'], 'class' => unit_type['class'],
             'geometry_kind' => unit_type['geometry_kind'] || 'linear',
             'buildable' => unit_type.fetch('buildable', true),

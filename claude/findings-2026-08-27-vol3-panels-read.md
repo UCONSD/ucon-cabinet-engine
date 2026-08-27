@@ -127,13 +127,21 @@ layer and from an older raw_dump extract; the renders narrow it.
 
 ## 5. What this does NOT settle
 
-- **Which height Andriy's back panels are, and it is arithmetic nobody has
-  done aloud.** p.214 says the panel stands on 0,5 cm feet and is attached
-  BEFORE the top goes on — so a back panel beside an H.78 run on a 100 plinth
-  runs floor to the underside of the stone, which is 880 measured minus the 5 of
-  foot travel this project sets to zero. His band is 700-740. Either the island's
-  units are not H.78, or the panel is not meant to reach the top. **Not guessed
-  here.**
+- ~~**Which height Andriy's back panels are.**~~ **ANSWERED THE SAME DAY, and
+  the answer was already in this registry with a source on it.** He settled the
+  width first — two panels of 120 rather than four of 60 — and asked for the
+  height. It is **880**, and it is not a UCON decision: `base_h78.json` → family
+  H.78 `plinth_note` cites **Volume 1 printed p.73 and p.82**, where the
+  dimension chain reads *78 H. Cesar door* over *10 Plinth H.*, and states
+  **780 + 100 = 880 to the worktop underside**. p.214's own rule — feet 0,5 cm,
+  attached before the top goes on — puts the panel from the floor to exactly
+  that line. The 700–740 band corresponds to nothing measured in this kitchen.
+  **Where the answer lived is the lesson.** Volume 1 — the book nobody has opened
+  yet, and the one holding the collection question — quoted second-hand in a
+  registry note written for a different reason. Section 5 of this document called
+  the height open three hours before anyone read the file that answers it.
+  *A reading that stays in a note is a reading the engine does not have; a
+  reading that stays in ONE note is a reading the next question cannot find.*
 - **Elda Q23 is untouched.** Whether a Volume 2 adjoining end side panel may be
   ordered floor-standing, or whether floor-standing always means this chapter,
   is still open. This reading makes the second more plausible and does not
@@ -147,3 +155,58 @@ layer and from an older raw_dump extract; the renders narrow it.
   `with_ordered_width` is exactly half of that mechanism already; the height
   half does not exist, and `with_ordered_height` would record a cut sheet as a
   MODIFICATION of a printed height that was never printed.
+
+---
+
+## 6. And then it was extracted, the same day (core 0.89.0)
+
+Andriy: *"Ты можешь сделать extraction? их панелей ставить на нашей модели?"* — so
+the chapter went in. `registry/cesar/panels_linear_elements.json`: **44 codes in
+ten blocks**, family `Panels (Linear Elements)`, class `panel_sheet`.
+
+**All 44 are `buildable: false`, and the reason is one sentence repeated
+verbatim** — the backlog is one grep, the same shape the nineteen `door_versions`
+codes use. A sheet is not an end panel turned sideways: an end panel carries its
+thickness on **x** and its front edge in the plane of the doors, a panel behind a
+run carries its thickness on **y** and has no front edge at all. Until the
+generator has that orientation and a placement against the BACK of a selected
+run, drawing one would put a board in the wrong plane and call it an order.
+
+### What had to change under it
+
+- **`source_pdf` is a per-section fact** (owed 14, closed). The manifest's value
+  is the default; a section may declare its own; `Registry.lookup` **and**
+  `Registry.catalog` both name the book. A check walks all 924 rows.
+- **`with_ordered_height` gained the range path** `with_ordered_width` has had
+  since the fillers. Without it, 880 was recorded as a height REDUCTION from a
+  height the page never printed — a surcharge code on an order line the catalog
+  does not charge.
+- **`width_is_a_thickness?` was narrowed** from "any panel" to "a panel with no
+  width range". Learned rule 6, one day later: it was written when there was one
+  kind of panel, and it would have refused all 44 sheets the one dimension that
+  is genuinely theirs.
+- **`class` is `panel_sheet`, not `end_panel`.** Two articles, two classes, two
+  picker headings.
+
+### The bug the new checks found, which is why they exist
+
+Three of the eight new checks **failed on their first run.** `height_range_mm`
+was written correctly in the section file and `Registry.lookup` did not carry it
+into the flat hash — so `with_ordered_height` fell straight past its new range
+path into the modification path, and a cut sheet came out recorded as a
+reduction. **This is exactly the `wall_hung` bug of 2026-08-22**: data written
+right, loader silent, and the escape hatch unreachable from any code. That one
+cost a day and a half because the note beside it was correct. This one cost
+four minutes, because a check was looking at the thing rather than at a proxy.
+
+> **A guard must prove itself before it is trusted** — learned rule 12, and the
+> proof arrived by itself.
+
+### Still owed, and new
+
+**A companion whose quantity comes from the RUN has no expression in Contract v2
+§4.2.** The fixing kit is priced per BASE UNIT width: four 600 units behind
+**two** 1200 panels take **four** kits. Hung off the panel as a `companion_ref`
+it would count two. Held in `_manifest.json` →
+`hardware.linear_element_panel_fixings`, visible rather than invented, with the
+foot beside it and the note that **how many feet per panel is not printed.**

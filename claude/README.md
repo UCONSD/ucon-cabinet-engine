@@ -68,7 +68,9 @@ date order; a finding is never edited to hide what it corrected.
   with no ground of its own, and the third volume),
   **`findings-2026-08-27-vol3-panels-read.md`** (Volume 3 printed p.214-220 read
   from the renders: 44 panel codes priced per m2, the fixing kits and the foot,
-  and three corrections to the note above).
+  three corrections to the note above, and — section 6 — the extraction that
+  followed the same day, source_pdf becoming a per-section fact, and the loader
+  bug three new checks caught on their first run).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
