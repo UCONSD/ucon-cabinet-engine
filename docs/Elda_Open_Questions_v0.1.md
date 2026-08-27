@@ -9,6 +9,42 @@ Cesar / DzineElements (Elda / Giorgio) confirmation is linked. Nothing here adva
 
 ---
 
+## Status at a glance — 2026-08-27
+
+**Maintained, and checked**: `tools/test_contract.rb` fails if a `## Q…` heading
+below is missing from this table. It went stale five times in one day before it
+existed.
+
+| | question | status |
+|---|---|---|
+| Q1 | order notation for the door-version choice | open |
+| Q2 | full-extension drawer travel, for the plan symbol | open |
+| Q3 | modification limits, and the 989346 ambiguity | **answered for WIDTH** 2026-08-24 (estimate 30831); height and the rest open |
+| Q4 | sink bases p.45 — what separates codes 90 and 91 | open |
+| Q5 | 75 cm dishwasher door — which side GBBF01 goes | **half closed** — the companion is settled, the side is not |
+| Q6 | does an appliance panel in a gola kitchen order its own profile | open |
+| Q7 | corner "rh or lh" — hinge or execution | **CLOSED** 2026-08-24 — the letter is the cabinet, the door follows |
+| Q8 | is the door version a FAMILY or an ARTICLE fact | open — gates 19 unbuildable codes |
+| Q9 | H.58.5 at d.67 — modularity offers it, the price pages do not | open |
+| Q10 | thickness of the front-only closing strip | open — **and we have acted on an assumption** |
+| Q11 | a top element at 610 where the widest printed is 600 | open — **blocks a live drawing** |
+| Q12 | `C68654` / `C68754` — one elevation where others print two | open |
+| Q13 | the fridge unit's hung pictogram with no hung surcharge | open |
+| Q14 | top elements at H.36 and H.72 with no closing strip to finish them | open |
+| Q15 | maximum load on ONE wall-hung element | open |
+| Q16 | is there a top element WITH fixings | open |
+| Q17 | does p.548's exclusion list govern HEIGHT as well as width | open |
+| Q18 | what article closes the 66-73 mm above an appliance housing | open |
+| Q19 | a door that opens UPWARD over the fridge, 1220 x 313 at d.62 | open — **blocks a live drawing** |
+| Q20 | p.436 labels two different depth groups with the same words | open |
+| Q21 | is the printed `d.` the panel or the whole assembly | open — **everything drawn at the end of a run depends on it** |
+| Q22 | what the second panel page's banner means | open |
+| Q23 | which article is a floor-standing end side panel | **mostly answered by the source** 2026-08-26 (Volume 3 p.214); the part that decides an order line is open |
+
+Three more were **answered without ever being numbered** — see that section below.
+
+---
+
 ## Q1 — Order notation for the door-version choice (opening method)
 
 **Status:** open
@@ -785,6 +821,8 @@ different directions is intended, not an oversight.
 
 ## Q20 — printed p.436 labels two different depth groups with the same words
 
+**Status:** open · added 2026-08-26
+
 On "End elements for Maxima-Intarsio | L-shaped end side panel", BOTH the
 **d. 102** group and the **d. 107** group are labelled *"for 62+35–cm deep side
 panel + door thickness"*.
@@ -802,6 +840,8 @@ d.107 group is again labelled 62+35.
 ---
 
 ## Q21 — is the printed `d.` the panel, or the whole assembly?
+
+**Status:** open · added 2026-08-26 · **everything drawn at the end of a run depends on it**
 
 Every adjoining end side panel group prints two numbers: the carcass depth it
 serves ("for 35–cm deep side panel **+ door thickness**") and a drawn depth
@@ -827,6 +867,8 @@ island case, depends on which.
 ---
 
 ## Q22 — what does the second panel page's banner actually mean?
+
+**Status:** open · added 2026-08-26
 
 Every collection prints the adjoining end side panel across two pages. The first
 is headed *"… | with 45° vertical edge"*. The second carries a banner: *"For base
@@ -870,8 +912,52 @@ headings and calls neither a choice.
 
 ---
 
+## Q23 — which article is a floor-standing end side panel?
+
+**Status:** MOSTLY ANSWERED BY THE SOURCE 2026-08-26 (Volume 3, printed p.214) · the part that decides an order line is still open
+
+**Mostly answered by the source the same evening, and kept because what is left
+is the part that decides an order.** Volume 3 (`CESAR - 3 Linear Elements`),
+printed p.214, prints:
+
+> *"If it is used as a floor-standing panel behind a base unit or as a
+> **floor-standing end side panel**, 0.5-cm high feet will be mounted that must
+> be calculated separately."*
+
+So a floor-standing end side panel is a **Volume 3 panel** — priced per square
+metre (minimum 0,5 m²), cut to any height up to the sheet, with `990408`
+adjustable feet at 6 points each. A base run H.78 on a 100 plinth needs 880 and
+gets it there. The same page adds *"The panel must be used with the doors"* and
+*"The panel must be attached before placing the top on the base units"*, and
+fixing kits by base-unit width when the panel goes behind a run
+(`990483`/`990485`/`990486`/`990487`/`990489`/`990490`/`990492`).
+
+**What is still open, and it decides which of two order lines we write:**
+
+1. When a run ends in a visible side and the design wants the **45° join to the
+   door**, is that necessarily the Volume 2 adjoining end side panel — which is
+   priced at CABINET heights, 780 or 840, and so cannot reach the floor? Or can
+   a Volume 3 panel be supplied with the 45° edge as well?
+2. If it is the Volume 2 article: **does it sit on the plinth** (780 covering
+   100…880, plinth returning in front of it), which is the only way its printed
+   heights make sense? We are drawing it on the floor, per Andriy's standard.
+3. *"The panel must be used with the doors"* — does that make the Volume 3 panel
+   a COMPANION to a doored run rather than an alternative to the Volume 2
+   article?
+4. Volume 2's Fronts chapter prints, four times: *"To determine the cost of
+   floor-standing / projecting door fronts, refer to the cost of the next
+   standard-height front up."* Is there an equivalent for panels, or does
+   floor-standing always mean Volume 3?
+
+**What the engine does meanwhile.** It DRAWS the panel to the floor, because
+that is the drawing standard and the sheet must show it. Which of the two
+articles that becomes is not decided, and the object says so.
+
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q22 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q23 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.

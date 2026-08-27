@@ -9,7 +9,7 @@
  * VENDORED, not shared. The check is what keeps the copies honest.
  *
  * TRUST ENCODING — this is not decoration. Both panels distinguish what the
- * factory PRINTED from what we reconstructed (rule 4, PLANNING vs catalog
+ * factory PRINTED from what we reconstructed (learned rule 4, PLANNING vs catalog
  * fact). The same distinction must look the same in both, or the colour means
  * two things:
  *

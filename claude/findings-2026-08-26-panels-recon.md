@@ -307,3 +307,174 @@ with the estimate header (MAXIMA 2.2, 2026/30829) against the glass page's
 N_Elle mark, that is worth putting in front of Elda alongside the glass
 question — it is the first place where the collection answer changes what CAN be
 ordered rather than only which code.
+
+---
+
+## 10. WHERE THE 880-TALL PANEL LIVES — a third volume (2026-08-26, late)
+
+Andriy, after the first two panels went in: *"H.84 is for an H.84 cabinet and
+H.78 for an H.78 — that's my mistake. But it leads to another problem. There
+must be panels 880 tall somewhere. Look in the sources."*
+
+There are, and §1 of this document was incomplete because it only ever looked at
+one volume.
+
+### 10.1 The book we have is Volume 2
+
+`CESAR - 2 Kitchen System.pdf` is the KITCHEN SYSTEM. Its adjoining end side
+panel (printed p.440-447) is priced by **cabinet height** — 39, 48, 58.5, 60,
+72, 78, 84, 96, 120, 138, 198, 210, 222, 234, 278 — because that is what the
+article IS: a board that matches a carcass and joins its door at 45°. It has no
+880 and never will, for the same reason it has no 880-high cabinet.
+
+### 10.2 `CESAR - 3 Linear Elements` prices panels BY AREA
+
+`sources/raw_dump/Linear_Elements_Source_Extract_v0.1.md` — an extract made in
+an earlier session from `CESAR - 3 Linear Elements(2).pdf` — holds a whole
+chapter of them, **printed p.214-220**, category *Panel*, application
+*finishing panel*:
+
+| printed | code | material | thickness | note |
+|---|---|---|---|---|
+| 214 | *(no code)* | Technomat / Fenix / Melamine / Lacquer / Wood veneer | — | associated family **base**; *"The panel must be used with the doors"* |
+| 215 | `DZAD12` | Melamine | — | ABS edge |
+| 216 | `DZDT00` | Technomat | — | ABS edge |
+| 217 | `DZAI12` | Lacquer | **22** | |
+| 218 | `DZ061Q` | Melamine / Wood veneer | **18** | horizontal and vertical grain |
+| 219 | `DZ075Q` | Wood veneer | **22** | horizontal grain |
+| 220 | `DZ745Q` | Wood veneer | **22** | vertical grain |
+
+Every one of them: **minimum invoicing quantity 0,5 m²**, a cutout reference on
+the page, points by band — **and no height in the article at all.** A panel of
+880, or 1637, or anything else, is ordered here as an area.
+
+Printed p.214 is also the page `claude/repo-state.md` already cites for the
+**adjustable foot `990408`, "Adjustable foot H. 0.5 cm", noting "0.5-cm high
+feet will be mounted"** — the foot exists on that page *because that is the
+floor-standing panel page*. The two facts were sitting in this repository
+separately for four days.
+
+### 10.3 CORRECTION to §1: `DZAK22` / `DZAC00` are articles after all
+
+§1 said the per-m² panel was *"`DZAK22` / `DZAC00`, Metron estimate codes, and
+they do not appear in the price list."* They do not appear in **Volume 2** —
+which is the only book anyone grepped. `DZ` is the Volume 3 panel prefix, and
+`DZAK22` (2,2) and `DZAC00` (1,8) sit in the same family as `DZAD12`, `DZAI12`,
+`DZ075Q`. The estimate was quoting the linear-elements price list, not inventing
+a code. **A code absent from the book you have is not a code absent from the
+book.**
+
+### 10.4 So there are THREE panel articles, not two
+
+| | where | priced by | height |
+|---|---|---|---|
+| adjoining end side panel, 2,2 | Vol. 2, p.440-447 | height × depth group | a CABINET height, on the plinth or not — see below |
+| finishing side panel, 1,8 | Vol. 2, p.553 | surcharge, H × D × band | replaces the carcass's own side |
+| **finishing panel, `DZ…`** | **Vol. 3, p.214-220** | **per m², min 0,5 m²** | **any — cut to size** |
+
+And the same volume prices side panels in ceramic, engineered and natural stone
+(p.105-133, max height 270 / 300 cm), stainless steel (p.148-177) and lacquer or
+veneer with two visible sides (p.205-207).
+
+### 10.5 What this does NOT settle, and must not be guessed
+
+The height question that started it. A floor-standing panel beside an H.78 run
+on a 100 plinth needs 880. Volume 3 sells that as an area. But Volume 2's
+adjoining end side panel is the article that carries the 45° join to the door,
+and it is priced at 780 or 840 — neither of which reaches the floor AND the
+carcass top. Three readings are open and the source does not choose between
+them:
+
+1. the adjoining end panel sits ON the plinth (780 = 100…880) and the plinth
+   returns in front of it — in which case Andriy's floor rule is a DRAWING
+   convention and the order is unaffected, exactly like the plinth cutout;
+2. a floor-standing end is a Volume 3 `DZ` panel at 880, and the Volume 2
+   article is for the non-floor-standing case only;
+3. it is a Volume 2 article with a height modification.
+
+Volume 3 prints one sentence that leans on this — *"The panel must be used with
+the doors"* on p.214 — and one from the Fronts chapter of Volume 2 that shows
+the house style for exactly this problem: **"To determine the cost of
+floor-standing / projecting door fronts, refer to the cost of the next
+standard-height front up"** (printed four times, p.554 onward). The book's own
+answer for a floor-standing FRONT is *round up to the next standard height*.
+Whether the same applies to a panel is **Elda Q23**.
+
+### 10.6 THE VOLUME ARRIVED, AND THE PAGE SAYS IT IN WORDS
+
+Andriy put the file in `Downloads` the same evening; it is now
+`sources/factory/CESAR - 3 Linear Elements.pdf` (git-ignored like Volume 2, same
+page offset: PDF = printed + 2, verified on the p.214 footer). §10.2 above was
+second-hand and is now READ. It was right, and the page says more than the
+extract carried.
+
+**Printed p.214, "Panels", in the catalog's own words:**
+
+> *"If it is used as a floor-standing panel behind a base unit or as a
+> **floor-standing end side panel**, 0.5-cm high feet will be mounted that must
+> be calculated separately."*
+
+> *"The panel must be used with the doors."*
+
+> *"The panel must be attached before placing the top on the base units."*
+
+So a **floor-standing end side panel is a named, drawn, priced case** — the page
+even illustrates it: *"panel used as a floor-standing end side panel with
+adjustable feet"*, beside *"panel used behind base units with adjustable feet
+and fixing kit"*. Andriy's rule that a panel meets the floor is the catalog's
+own, and this is the article that does it.
+
+What rides with it, all per piece and all recorded here rather than in the
+object (Contract v2 §1.2 — points are commercial data):
+
+| | code | points |
+|---|---|---|
+| Adjustable foot H. 0,5 cm, each | `990408` | 6 |
+| Kit to fix panel behind a 30 cm base unit | `990483` | 48 |
+| … 45 cm | `990485` | 51 |
+| … 60 cm | `990486` | 69 |
+| … 75 cm | `990487` | 70 |
+| … 90 cm | `990489` | 72 |
+| … 105 cm | `990490` | 72 |
+| … 120 cm | `990492` | 72 |
+
+**The panels themselves, printed p.215-220 — per m², minimum invoicing 0,5 m²**,
+and every one carries the same three surcharges: cutout for an electrical socket
+32, out-of-square reduction 27, inner or outer reduction 65.
+
+- p.215 melamine 2 sides: `DZAD12` (1,2) 118 · `DZAC00` (1,8) 129 ·
+  `DZAD00` (1,8) 118 / `DZAD22` (2,2) 129
+- p.216 Technomat 2 sides `DZDT00` / `DZDT22` 155 · laminate `DZBZ00` / `DZBZ22`
+  206, `DZDY00` / `DZDY22` 670
+- p.217 lacquered, four price groups A-D × three thicknesses × one or two sides:
+  `DZAI12` `DZAH00` `DZAI00` `DZAI22` `DZAK12` `DZAJ00` `DZAK00` **`DZAK22`**
+  `DZCP12` `DZCO00` `DZCP00` `DZCP22` `DZDX12` `DZDW00` `DZDX00` `DZDX22`
+- p.218-220 wood veneer, 1,8 and 2,2, plain and high-gloss and trama:
+  `DZ061Q` `DZ065Q` `DZ062Q` `DZ063Q` `DZ731Q` `DZ735Q` `DZ732Q` `DZ733Q`
+  `DZ075Q` `DZ745Q` and the `DV…` 2,2 series
+
+Maximum panel sizes are printed beside each drawing — 205 x 278 for melamine,
+180 x 278 for the 1,8, 120 and 126 for Technomat and laminate, **300 for the
+wood veneers**. That is almost certainly why Volume 2's adjoining end side panel
+tops out at **H.278**: it is the sheet, not a cabinet.
+
+### 10.7 §1 AND §10.3 CLOSED: DZAK22 and DZAC00 are real articles
+
+`docs/Cesar_Estimate_Teardown_v0.1.md` reads `DZAK22` (2,2 cm) and `DZAC00`
+(1,8 cm) off Metron estimate 2026/30831 and this document twice called them
+estimate codes with no article behind them. Printed p.217 prices `DZAK22` as
+*"Panel B, 2.2 cm thick, lacquered on 2 sides per m2"* at 405 points, and
+printed p.215 prices `DZAC00` as *"Panel in melamine on 2 sides, 1.8 cm thick
+with ABS edge"* at 129. The estimate was quoting the linear-elements price list
+exactly. **A code absent from the book you have is not a code absent from the
+book** — and this repository had the evidence in `raw_dump` for nine days.
+
+### 10.8 The decision this leaves, and it is architectural
+
+Nothing of §10.6 is in the registry, and putting it there is **not** a
+same-shape extraction. Every section file so far belongs to ONE book:
+`Registry.lookup` reads `reg['source_pdf']` from `_manifest.json`, once, for the
+whole registry. A second volume needs `source_pdf` to become a per-section fact
+before its first code can be held honestly — otherwise every Volume 3 article
+would cite Volume 2 as its source. That is a small change and a real one, and it
+is the first time this registry has had to hold two books.

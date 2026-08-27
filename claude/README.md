@@ -33,28 +33,51 @@ one names the date and what superseded it.
 
 | read this | when |
 |---|---|
+| **`rules.md`** | before writing `rule N` anywhere. FOUR numbering schemes, three of them starting at 1 — this says which is which, and a check fails on a bare citation in `src/`, `tools/` or `registry/`. |
 | **`repo-state.md`** | first, always. HEAD, version, check count, registry size, what is uncommitted, what is next. The only file allowed to carry volatile numbers. |
 | **`ucon-cabinet-engine-status.md`** | the long-form status: the rules, the environment, the architecture, the NEXT list. Points at `repo-state.md` for numbers and does not repeat them. |
 | **`debt-2026-08-24.md`** | how much of the catalog is held, measured rather than remembered. Superseded by a newer dated note, never edited. |
+| **`commit-chronicle-2026-08.md`** | only when you need the history. The day-by-day commit tables for 22-24 August, moved out of `repo-state.md` on 2026-08-27 so that the first-read file stays short. |
 | **`extraction-plan-2026-08-23.md`** | the groups and the reasoning for their order. Its §1-2 numbers are stale by design; §4-7 are the useful part. |
 
 ## The rest, by kind
 
-**Findings — a page said something we had assumed:**
-`findings-2026-08-23.md`, `findings-2026-08-23-tall.md`,
-`findings-2026-08-24-base-column.md`, `findings-2026-08-24-h58_5.md`,
-`findings-2026-08-24-pictogram-sweep.md`.
+**Findings — a page, a model or a check said something we had assumed.** In
+date order; a finding is never edited to hide what it corrected.
+
+- 08-23: `findings-2026-08-23.md` (H.96, H.120, base p.37-38, p.48),
+  `findings-2026-08-23-tall.md` (the five plain tall families).
+- 08-24: `findings-2026-08-24-base-column.md` (the base prefix),
+  `findings-2026-08-24-h58_5.md` (H.58.5 whole),
+  `findings-2026-08-24-pictogram-sweep.md` (the glyph debt, closed),
+  `findings-2026-08-24-filler-note.md`.
+- 08-25: `findings-2026-08-25-first-run.md` (both extensions running, in
+  SketchUp, for the first time),
+  `findings-2026-08-25-appliance-seam.md` (four things the seam found in what
+  the engine draws), `findings-2026-08-25-tall-h210-appliance-columns.md`,
+  `findings-2026-08-25-top-elements-and-the-ceiling.md`.
+- 08-26: `findings-2026-08-26-seam-findings-closed.md` (three of the four
+  decided), `findings-2026-08-26-east-fridge.md` (the fridge bay built by
+  probe, and the engine unable to rebuild it),
+  `findings-2026-08-26-gap-audit.md` (56 joints at 0,0 and one deliberate gap),
+  `findings-2026-08-26-filler-rounding.md` (a filler rounds UP),
+  `findings-2026-08-26-custom-fronts.md` (a model is not recomputed when the
+  engine changes), `findings-2026-08-26-glass-row.md` (the west wall's glass,
+  and a frame the catalog does not print),
+  **`findings-2026-08-26-panels-recon.md`** (the panel chapter, the first object
+  with no ground of its own, and the third volume).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
 `fillers-recon-2026-08-23.md`, `usa-elements-recon-2026-08-20.md`,
-`corner-units-m22-brief-2026-08-20.md`, `wine-cooler-aperture-2026-08-22.md`.
+`corner-units-m22-brief-2026-08-20.md`, `wine-cooler-aperture-2026-08-22.md`,
+`kits-availability-p568-2026-08-25.md`.
 
 **Appliances** — a SEPARATE extension (`UCON::Appliances`, own namespace, own
-dictionary, own four JSON files, own 48-check suite); `core/88_appliance_check.rb`
-is the only seam and it only asks questions. **The package moved into this
-repository on 2026-08-25** — `src/ucon_appliances/`, its own extension target
-beside `src/ucon_cabinet_engine/`, its own version, its own suite
+dictionary, own JSON files, own suite); `core/88_appliance_check.rb` is the only
+seam and it only asks questions. **The package moved into this repository on
+2026-08-25** — `src/ucon_appliances/`, its own extension target beside
+`src/ucon_cabinet_engine/`, its own version, its own suite
 (`tools/test_appliances.rb`). `appliance-rules-decided.md` is the prose behind
 its `data/rules.json`:
 `appliance-rules-decided.md`, `findings-2026-08-25-appliance-seam.md`,
@@ -67,10 +90,12 @@ its `data/rules.json`:
 `warehouse-architecture-2026-08-22.md`, `options-architecture-2026-08-20.md`,
 `placement-tool-design-2026-08-19.md`, `plinth-and-wall-hung-2026-08-22.md`,
 `finishes-and-price-bands-2026-08-22.md`, `contract-v16-companions-2026-08-22.md`,
-`picker-ui-backlog-2026-08-20.md`.
+`picker-ui-backlog-2026-08-20.md`, `price-trust-2026-08-25.md` (what a fetched
+number is worth), `plan-2026-08-25-b6-run-gap.md` (the alternatives that were
+rejected before the run gap was built).
 
-**For Elda:** `elda-mini-order-2026-08-20.md` — the open questions, numbered,
-the ones the book cannot answer.
+**For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
+themselves live in `docs/Elda_Open_Questions_v0.1.md`.
 
 ---
 
@@ -85,4 +110,10 @@ the ones the book cannot answer.
    a note records a catalog fact, the same session should put it in
    `registry/cesar/` and pin it with a check in `tools/test_contract.rb`.
 4. **Page numbers here are always PRINTED page numbers.** PDF page = printed
-   + 2, in both factory books.
+   + 2, in **all five** factory books — `docs/Cesar_Volumes_Index.md` says which
+   book holds what. **Before recording that Cesar does not print something, name
+   which volume was searched**; on 2026-08-26 three facts were called missing
+   that were simply in another one.
+5. **This index is checked.** A file in `claude/` that is not named here fails
+   the suite. An index nobody maintains is worse than none, because it reads as
+   a complete list.

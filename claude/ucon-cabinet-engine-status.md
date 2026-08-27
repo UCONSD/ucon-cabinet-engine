@@ -353,6 +353,11 @@ the same way a US appliance panel states a front it never swings.
 
 ## RULES LEARNED THE HARD WAY — all enforced by tests
 
+**Cite these as `learned rule N`**, never as a bare number: `domain rule 4` and
+`learned rule 4` are different rules, and until 2026-08-27 a dozen notes cited a
+bare four for a third thing that was in neither list. `claude/rules.md` is the
+index; a check fails on a bare citation in `src/`, `tools/` or `registry/`.
+
 **1. A section in `catalog_map` is one the printed index prints.** *(Scope, from
 printed p.433: the index is a SUFFICIENT condition, not a necessary one. That
 chapter's index lists nine entries where the pages head thirteen. A page the

@@ -19,7 +19,7 @@
         "codes": [
           { "code": "PB0151", "width_range_mm": [23, 150], "depth_mm": 350 }
         ],
-        "notes": "PB = H.36 is the same wall letter wall_h36.json already holds. THE SUFFIX 0151 MEANS SOMETHING ELSE HERE than it does on a B or C prefix, where it is a front-only strip with no carcass at all: this one is a box with a one-piece bottom. Same four digits, two different articles, one page apart - rule 4, and the reason the registry stores rows rather than a grammar."
+        "notes": "PB = H.36 is the same wall letter wall_h36.json already holds. THE SUFFIX 0151 MEANS SOMETHING ELSE HERE than it does on a B or C prefix, where it is a front-only strip with no carcass at all: this one is a box with a one-piece bottom. Same four digits, two different articles, one page apart - learned rule 4, and the reason the registry stores rows rather than a grammar."
       }
     }
   }

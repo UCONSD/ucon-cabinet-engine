@@ -13,7 +13,7 @@ require 'sketchup.rb'
 require 'extensions.rb'
 
 # The version lives in lib/appliances.rb, which needs no SketchUp. Reading it
-# here keeps one number in one file (rule 2) instead of two that drift.
+# here keeps one number in one file (learned rule 2) instead of two that drift.
 require File.join(File.dirname(__FILE__), 'ucon_appliances', 'lib', 'appliances')
 
 module UCON

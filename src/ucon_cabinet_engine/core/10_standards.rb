@@ -34,7 +34,7 @@ module UCON
       PLINTH_H_MM       = 100   # default plinth height
       PLINTH_H_ALT_MM   = 60    # alternate plinth height, special request only
       #
-      # CORRECTION, 2026-08-22 (rule 9: dated and added, the lines above are
+      # CORRECTION, 2026-08-22 (learned rule 9: dated and added, the lines above are
       # left standing). The two numbers are right and the comment on the
       # second one is wrong. 60 is NOT a special request: it is the DEFAULT
       # plinth of the H.84 family, printed on p.90 of the factory Project
@@ -68,7 +68,7 @@ module UCON
       # allowance as if it were a design intent.
       #
       # This is a DECISION, not a Cesar statement, and the scope matters
-      # (rule 4): the catalog prints only the phrase "adjustable feet H. 5 mm"
+      # (learned rule 4): the catalog prints only the phrase "adjustable feet H. 5 mm"
       # and never says where in that range a cabinet is meant to sit.
       #
       # The 5 is therefore not written down anywhere: a number we have decided

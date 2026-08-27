@@ -107,7 +107,7 @@ module UCON
 
         # 2. THE GEOMETRY. The appliance layer is the sole judge: it holds the
         # published openings and the page each was read from, and this file
-        # holds no copy of either. Rule 1 applies on that side of the seam
+        # holds no copy of either. Domain rule 1 applies on that side of the seam
         # exactly as it does on this one.
         niche = drawn_niche(unit, opts['depth_mm'])
         cmp = a.matches_niche?(niche, model, opts['installation'])

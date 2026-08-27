@@ -7,7 +7,7 @@
 # Plain Ruby, no SketchUp, no network. Runs on the Ruby macOS ships as well as
 # on 3.x, for the same reason the cabinet engine's own harness does.
 #
-# Rule 18 from the engine's notes applies here too: when a check fails for a
+# Learned rule 18 from the engine's notes applies here too: when a check fails for a
 # reason its title does not mention, the title is the bug.
 
 require 'digest'

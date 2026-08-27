@@ -8,7 +8,7 @@
 # It re-reads every file in core/ and then builds B80601, so one keystroke
 # covers edit -> reload -> rebuild.
 #
-# CORRECTED 2026-08-25 (rule 9 - added, not erased): there is no such MENU
+# CORRECTED 2026-08-25 (learned rule 9 - added, not erased): there is no such MENU
 # item and there has not been one. "Reload core" is a BUTTON IN THE PALETTE,
 # core/90_palette.rb. It reloads without building. Use that when you only want
 # fresh code; use this when you want to see the result immediately. The

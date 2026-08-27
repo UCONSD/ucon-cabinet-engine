@@ -67,7 +67,7 @@
         "front_layout": {
           "kind": "single",
           "mechanism": "pull_out_door",
-          "note": "One full-height front carried by a pull-out mechanism, not a swinging leaf - the same geometry the H.78 position gets. NO gola_stack: the page prints no second elevation for this position, and inventing one from its H.78 twin is what rule 8 forbids."
+          "note": "One full-height front carried by a pull-out mechanism, not a swinging leaf - the same geometry the H.78 position gets. NO gola_stack: the page prints no second elevation for this position, and inventing one from its H.78 twin is what learned rule 8 forbids."
         },
         "wall_hung": true,
         "wall_hung_note": "PROSE TURNED INTO DATA 2026-08-24. The hung glyph and the margin surcharge were read with the page on 2026-08-24 and stated in page_observations as prose; this key is that same reading where the loader can reach it. printed p.32."

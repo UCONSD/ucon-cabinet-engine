@@ -97,7 +97,7 @@
           { "code": "PC1506", "width_mm": 1500, "depth_mm": 350, "modules_mm": [600, 900] },
           { "code": "PC1806", "width_mm": 1800, "depth_mm": 350, "modules_mm": [900, 900] }
         ],
-        "notes": "Carries the same printed rule as its H.36 twin: 'In compound wall units, the dish-drainer rack is fitted in the widest unit.' NO width restriction on this position, while all four simple positions have one - the compounds are where the catalog stops forbidding it. CORRECTION 2026-08-23 (rule 9, added not erased): the last clause generalised from three families and printed p.249 breaks it - the compound dish-drainer at H.96, PF1092 / PF1292, DOES carry 'cannot be reduced in width'. What is true is the fact about THIS position: it does not carry one. Whether a compound carries it is read off its own page.",
+        "notes": "Carries the same printed rule as its H.36 twin: 'In compound wall units, the dish-drainer rack is fitted in the widest unit.' NO width restriction on this position, while all four simple positions have one - the compounds are where the catalog stops forbidding it. CORRECTION 2026-08-23 (learned rule 9, added not erased): the last clause generalised from three families and printed p.249 breaks it - the compound dish-drainer at H.96, PF1092 / PF1292, DOES carry 'cannot be reduced in width'. What is true is the fact about THIS position: it does not carry one. Whether a compound carries it is read off its own page.",
         "finish_restrictions": {
           "kind": "not_available",
           "source_ref": "printed p.218 / PDF 220, read off the render",

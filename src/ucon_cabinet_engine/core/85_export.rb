@@ -289,7 +289,7 @@ module UCON
       # that produced the example, and it does not have to be rewritten the
       # first time somebody orders CR1230.
       #
-      # SCOPE, and it is the whole of rule 4: THIS IS OUR READING, NOT A CESAR
+      # SCOPE, and it is the whole of learned rule 4: THIS IS OUR READING, NOT A CESAR
       # STATEMENT. The catalog nowhere prints how many handles an article
       # takes; the manifest already records handle `um: PZ` the same way. The
       # note on every such row says so, and position 14 of the estimate now
@@ -347,7 +347,7 @@ module UCON
 
       # front_layout is a catalog fact, so it is asked of the registry rather
       # than copied onto the object - exactly as the handle's name and um are.
-      # A code the registry no longer knows must not blow an export up: rule 7
+      # A code the registry no longer knows must not blow an export up: learned rule 7
       # says the answer is nil, and the note then says the count is unknown.
       def front_layout_for(attrs)
         code = (attrs || {})['code'].to_s

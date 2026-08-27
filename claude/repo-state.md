@@ -31,7 +31,7 @@ for what is uncommitted. **Never `git status` through the bridge** — it takes
 | **Pushed** | **READ THE TWO REFS. It is two `cat`s** and it is the only answer that is ever current: `cat .git/refs/heads/main` and `cat .git/refs/remotes/origin/main`. Equal means nothing is waiting; **equal does NOT mean up to date** — that is how the laptop looked while eleven commits behind. This cell said YES on 2026-08-26 while `063c373` sat unpushed, and the commit whose own message announced the push was the one that had not gone. |
 | **Working tree** | **READ IT FROM `git`, NEVER FROM THIS CELL.** What was uncommitted when this was written: the 0.86.0 glass repaint AND the 0.87.0 end-panel work, both in `60_generator.rb` at once. They are separated by `build/commit-panels.sh`, which stages the glass hunks into the INDEX with `git apply --cached` and leaves the working tree alone - two commits out of one edited file, in the right order. If that script has not been run, the two concerns are still tangled. |
 | **Core version** | **Read `git show -s --oneline HEAD`.** Two versions were in flight on 2026-08-26 evening: **0.86.0** - the glass pane stops being blue and the reading rests on the hatch; **0.87.0** - the end-panel chapter, 124 codes in three collections, and the first object in this registry that has NO GROUND OF ITS OWN. Shell **0.6.0**. **Appliances 0.2.0 - still untouched, and no `.rbz` rebuilt.** |
-| **Headless suite** | `tools/test_contract.rb` **480, 0** · `tools/test_appliances.rb` **68, 0** · `tools/test_appliance_seam.rb` **30, 0**. The end-panel work added **16**: the three collections and their code count, contract validity, height-from-the-row, the depth label the catalog contradicts itself about, no front, the width refusal, the one misprinted height, the refusal to draw on a guessed ground, the 1,8 cm surcharge that must never become an article, a picker label for every class in the registry AND in the map, and - added after the first lookup against the real kitchen contradicted a note - that THE TWO PAGES OF A COLLECTION NEVER PRICE THE SAME DEPTH GROUP, that the picker grid has something to put ON the button, and - a SOURCE check, because the grid is JavaScript and nothing headless could see it - that a selected code reaches the Build button whatever else the article still needs asked. **Run under the Ruby macOS ships (2.6) by the commit script, which will not proceed otherwise.** |
+| **Headless suite** | `tools/test_contract.rb` **485, 0** · `tools/test_appliances.rb` **68, 0** · `tools/test_appliance_seam.rb` **30, 0**. The end-panel work added **16**, and the 2026-08-27 tidy four more — a bare `rule N` anywhere in `src/`, `tools/` or `registry/`; the two rule lists still being the length `claude/rules.md` claims; every working note named in `claude/README.md`; every Elda question in the status table with a Status line of its own. Before: the three collections and their code count, contract validity, height-from-the-row, the depth label the catalog contradicts itself about, no front, the width refusal, the one misprinted height, the refusal to draw on a guessed ground, the 1,8 cm surcharge that must never become an article, a picker label for every class in the registry AND in the map, and - added after the first lookup against the real kitchen contradicted a note - that THE TWO PAGES OF A COLLECTION NEVER PRICE THE SAME DEPTH GROUP, that the picker grid has something to put ON the button, and - a SOURCE check, because the grid is JavaScript and nothing headless could see it - that a selected code reaches the Build button whatever else the article still needs asked. **Run under the Ruby macOS ships (2.6) by the commit script, which will not proceed otherwise.** |
 | **The Avenida Primavera model** | **THE EAST FRIDGE IS BUILT AND THE ENGINE CANNOT REBUILD IT.** `CL4850SD/S/T` named, its opening drawn at the published 1206 x 2127 x 610, three UCON overlay panels placed at a MEASURED datum off the Sub-Zero guide, and `UCON-BESP-001` — a custom cabinet with one upward-opening door — closing the 313 above. All of it drawn by ARMED probe runs (`build/42`, `build/44`) and verified by a read-only one (`build/43`), because no command in the engine can produce any of it. Account: `claude/findings-2026-08-26-east-fridge.md`. **AND THE 2026-08-25 READING BELOW IS NOW OVERTAKEN, kept rather than deleted (rule 9): FOUR objects on the east wall now carry NO article** — the three UCON panels and `UCON-BESP-001` — and each of them says why on itself and reaches the order as *CUSTOM SIZE - NO ARTICLE, to be quoted*. That is the honest state of a kitchen whose appliance side is ahead of its catalog side, not a regression. What follows was true on 2026-08-25: ~~**NO OBJECT ON EITHER WALL IS WITHOUT AN ARTICLE**~~ as of 2026-08-25 late evening. The seven CUSTOM boxes became `SD0631` x6 (four at 610x600, two at 610x720 - width and height INCREASE, unprinted, Q11) and `SD0930` x1 cut to 770 (width REDUCTION, printed, 989370). Read back from the model, not from the list of what was built. The walls: SOUTH is the range, EAST is the fridge niche - and a verification probe called the east run WEST for one run because it mapped a `+x` back vector to the wrong side. The model's own names were right. |
 | **Extensions** | **TWO, one repository**, and **both now RUN** (2026-08-25, SketchUp 2026, first time for the appliance one). `src/ucon_cabinet_engine.rb` + tree, `src/ucon_appliances.rb` + tree. Neither requires the other. **The engine is NOT copied into Plugins**: a one-line dev loader there requires the repository, so Extension Manager has nothing of it to uninstall — which is exactly how the copy was lost on 2026-08-25. Appliances stay an `.rbz` copy from `tools/build_rbz.rb`. One shared `UCON` submenu via `UCON.extensions_menu`. Design VENDORED from `design/panel_kit.css` by `tools/build_panel_kit.rb`; a hand-edited copy fails its own suite. Account: `claude/findings-2026-08-25-first-run.md`. |
 | **Object Contract** | **v2.1**, one of the two named gaps closed (the `remainder`; see `docs/Reserved_Void_Spec_v0.1.md`), and **two rules that were confirmed and unwired are now wired**: a WIDTH REDUCTION reaches the object as a variant (Elda 2026-08-24, Q3 closed for width), and §4.2 rule 4's *never a silent deletion* is finally true of the exporter. **printed p.414's gap - a front whose WIDTH comes from the opening - is NOT closed**, and Q11 is its live twin: 610 has no article because nothing above it can be cut down. **Q11's disposition was corrected the same evening**: the engine DRAWS 610 rather than refusing it, because the LayOut sheet is how the question gets asked - the catalog prints reduction only, and the object says so in its own variant instead of the registry inventing an article. |
@@ -262,8 +262,11 @@ leaves this list when it is done, not when it is mentioned.
    base, `989411` four for a tall — and the weight of a loaded cabinet and the
    wall behind it are site questions the catalog never answers.
 
-8. **Four things the appliance seam found in what the engine DRAWS today, all
-   four undecided.** Account: `claude/findings-2026-08-25-appliance-seam.md`.
+8. ~~**Four things the appliance seam found in what the engine DRAWS today, all
+   four undecided.**~~ **CLOSED 2026-08-26** — three decisions and one Elda
+   question (Q18). Account: `claude/findings-2026-08-26-seam-findings-closed.md`;
+   the decisions are `claude/appliance-rules-decided.md` §13. The original text
+   is kept below rather than deleted, learned rule 9. Account: `claude/findings-2026-08-25-appliance-seam.md`.
    (a) `usa_tall_h210` draws its housing from the **plinth top** to 2133.6, so
    the top is the right 84 in from the floor and the OPENING is 100 short;
    (b) `NICHE_DEFAULT_DEPTH_MM` 620 is shallower than a Designer column's 635;
@@ -276,6 +279,27 @@ leaves this list when it is done, not when it is mentioned.
    reverses a deliberate 2026-08-22 choice, and (b)/(c) would mean a Cesar unit
    cannot be drawn until a machine has been named. The seam reports; Andriy
    decides.
+
+9. **THE MODEL IS NOT RECOMPUTED WHEN THE ENGINE CHANGES**, and on 2026-08-26
+   that cost two corrections in one day — six `SD0631` kept fronts of the old
+   size, and the east fridge panels were built by a probe the engine cannot
+   reproduce. **Both were spotted by Andriy looking at a sheet, not by a check.**
+   Nothing in the suite can see a stale model. Until something can, a change to
+   the generator means the affected objects must be rebuilt by hand.
+10. **The engine cannot rebuild the east fridge bay.** Its panel table lives in
+    a probe (`build/45`), and it belongs in `appliances.json` behind the seam —
+    which means the first `.rbz` rebuild since 0.2.0.
+11. **`48 WOLF` is a mute body**: a component in the model carrying no contract
+    at all, so every walk skips it and every audit under-reports.
+12. **The LayOut sheet that carries Q11-Q23 to Elda** is not drawn. Two of those
+    questions are marked *blocks a live drawing*.
+13. **The island is not drawn.** Probe run 48 measured it: nothing in the model
+    stands back to back, so the back-to-back end panels have nothing to serve
+    yet.
+14. **Volume 3 cannot be extracted until `source_pdf` is a per-section fact.**
+    `Registry.lookup` reads it once from `_manifest.json` for the whole
+    registry, so the first Linear Elements code held today would cite the
+    Kitchen System as its source. Small change, real one.
 
 *(The item that stood here — moving the Project's handoff and spec into
 `claude/` — was wrong and was removed the same evening. Those two are session
@@ -339,86 +363,12 @@ has to be re-read; a sentence does not.
 
 ---
 
-### 2026-08-24 commits, newest first
+### The commit chronicle has moved
 
-| sha | what |
-|---|---|
-| `27ede4c` | chore: probe reports are measurements, not data |
-| `e9229d0` | fix(placement): a row is aligned at the FRONT, so a shallow neighbour stops being invisible (0.77.2) |
-| `467699b` | tools: read-only probes that write their reports into the repo |
-| `a6991bf` | fix(placement): a turned element takes the RUN's depth, so a shallow filler lands on the front line (0.77.1) |
-| `6f31f7d` | placement: a run turns at a corner's wasted end, back to the wall and shoulder to the 8x8 (0.77.0) |
-| `28091f3` | placement: both sides taken builds anyway, and the rule covers fillers (0.76.1) |
-| `c2d3475` | docs(repo-state): 422 checks, and the side rule with its untried half |
-| `b111343` | placement: the next element takes the free side, and refuses when both are taken (0.76.0) |
-| `e555f2f` | registry(fillers): the front-only strip is 22 deep and nine of twelve rows are held (0.75.0) |
-| `6458a0d` | registry: the hung capacity is a property of the fixing pair, and the count 2/4 leaves the code comment |
-| `8e211f1` | registry: tall units H.210 for base unit H.78, printed p.116 - and a split front that must not leak to its family (0.74.0) |
-| `cb80117` | registry(fillers): a note copied from H.78 claimed a front height three families do not have *(the same message as `ec3d8fb` below - the first commit went in without the new findings note, which needed `git add`)* |
-| `ec3d8fb` | registry(fillers): a note copied from H.78 claimed a front height three families do not have |
-| `7f1a3d8` | docs(repo-state): 405 checks |
-| `26753c7` | docs(repo-state): the Project holds session instructions, not repo documents |
-| `3168d35` | docs: the reverted corner seating reaches the teardown and the manifest |
-| `53afd00` | docs(repo-state): rewrite at 13e7754 - the numbers, the corner correction, and the owed list |
-| `13e7754` | generator: the dishwasher panel gets a drawn plinth, and DRAWN stops meaning ORDERED (0.73.0) |
-| `3652298` | fix(corner): the 8x8 is 77 x 80, and the node seats raw again (0.72.0) |
-| `ab492dc` | docs(elda): estimate 30831 teardown, and what the factory confirms and contradicts |
-| `30bbca1` | docs(repo-state): the day's four commits, and extraction paused by the real kitchen *(this file, written at `14158a5` — and the row below is what it therefore got backwards for three commits)* |
-| `8aee002` | chore: drop the corner probe |
-| `14158a5` | fix(corner): seat the node one front gap off the perpendicular wall (0.71.0) *(the seating was the wrong body — superseded by `3652298` the same day, and left in history: rule 9)* |
-| `848f10f` | fix(harness): the suite runs on the Ruby macOS ships (2.6) again |
-| `42288dc` | registry: the printed p.19 pictogram sweep, and an absent reading that is now a bug (0.70.0) |
-| `e0893dd` | registry: base and sink units H. 58.5, and a door version that may belong to the article (0.69.0) |
-| `6e06bbc` | chore(gitignore): keep rendered catalog pages out of git |
-| `2f54abf` | docs: repo-state records the move, what stayed behind, and where the next session starts |
-| `a775846` | docs: move the working notes out of the claude.ai Project and into the repo |
-| `0d31813` | registry: base units H.48 p.28, and a catalog cache the suite had outgrown (0.68.0) |
-| — | registry: base H.39 p.25, and two pages stopped on a height the page will not name (0.67.0) |
-| — | registry: base units H.39 p.24, and the base prefix that was never a family letter (0.66.0) |
-| — | registry: the plain tall column, five families that agree on everything but hanging (0.65.0) |
-
-*(shas other than HEAD are deliberately not copied here — `tail .git/logs/HEAD`
-is the source, and a transcribed sha is a number that can go wrong in exactly
-one place.)*
-
-### 2026-08-23 commits, newest first
-
-| sha | what |
-|---|---|
-| `2c312c6` | registry: tall H.138 p.90, and six codes we were offering wall-hung that the catalog does not (0.64.0) |
-| `f50a3d6` | registry: the three integrated-dishwasher doors of p.48, held on the axis p.38 found (0.63.0) |
-| `7843727` | registry: base units H.78 p.37-38, and the legend on p.19 nobody had read (0.62.0) |
-| `09c15e9` | registry: wall units H.120, and two things the pages did not actually say (0.61.0) |
-| `217153d` | registry: wall units H.96, dish-drainers H.96, and the sentence that derives nothing (0.60.0) |
-| `719eba7` | registry: wall units H.84 and dish-drainers H.84 (0.59.0) |
-| `0e3b421` | registry: wall units H.72 and dish-drainers H.72 |
-| `a8e75b9` | registry: wall H.60 compounds |
-| `3325f5c` | fix: the wall-hung checkbox reads the choice, not the result |
-| `0bc849f` | registry: dish-drainer units H.36 / H.48 / H.60 |
-| `52bb422` | registry: wall units H.48 |
-| `00115de` | palette: a filler grid is rows by depth, buttons by height (0.55.2) |
-| `21383ba` | fix: a rebuild must see the ordered width, not re-read a row that has none (0.55.1) |
-| `86bd15f` | palette: ask for the width a filler is ordered at (0.55.0) |
-| `27eab90` | registry: a filler's width is an order axis, not a catalog fact |
-
-### 2026-08-22 commits, newest first
-
-| sha | what |
-|---|---|
-| `bc546b2` | registry: two files may not disagree about one family fact |
-| `f2bf2db` | wall-hung: the panel offers it, and the rebuild asks the object |
-| `f5f671a` | wall-hung: the rules, and the first companion a person has to choose |
-| `a3b9927` | plinth: record what the 5 mm foot's range means, so zero reads as a decision |
-| `094a409` | plinth: say what the 5 mm foot actually is *(superseded by `a3b9927`)* |
-| `6a9ff1b` | plinth: the height is a family fact, and zero is one of its values |
-| `4f641ae` | export: count the handles — one per opening front |
-| `4d860ef` | contract v2.1 + gola profiles as order lines |
-| `cc34376` | export: walk the model |
-| `23230f7` | export: order rows level 1 |
-
-**`094a409` states the shim range wrongly.** `a3b9927` replaces it. Left in
-history rather than rebased away: rule 9 applies to the log as much as to a
-document.
+**`claude/commit-chronicle-2026-08.md`** holds the day-by-day tables for
+2026-08-22, 23 and 24, verbatim. They were eighty lines of history in the file
+that every session reads first. For anything newer, `git log` is the source and
+this file never transcribes a sha.
 
 ---
 

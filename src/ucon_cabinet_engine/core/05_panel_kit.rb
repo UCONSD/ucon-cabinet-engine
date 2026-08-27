@@ -21,7 +21,7 @@ module UCON
   module CabinetEngine
     module PanelKit
       KIT_VERSION = 1
-      KIT_SHA = '0a2fb89d8015b9f6'
+      KIT_SHA = '6505ab22222fadf8'
 
       CSS = <<~'CSS'
         /* UCON panel kit — the ONE authored copy. Everything else is generated.
@@ -35,7 +35,7 @@ module UCON
          * VENDORED, not shared. The check is what keeps the copies honest.
          *
          * TRUST ENCODING — this is not decoration. Both panels distinguish what the
-         * factory PRINTED from what we reconstructed (rule 4, PLANNING vs catalog
+         * factory PRINTED from what we reconstructed (learned rule 4, PLANNING vs catalog
          * fact). The same distinction must look the same in both, or the colour means
          * two things:
          *
