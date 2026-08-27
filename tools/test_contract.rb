@@ -6597,7 +6597,14 @@ check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
   raise 'the remainder has vanished from the registry' if found.zero?
   # 3 -> 5: printed p.121 and p.123 at H.210, printed p.143 at H.222. The count
   # is pinned so that a remainder appearing or vanishing is never silent.
-  raise "expected 7 remainder codes, got #{found}" unless found == 7
+  #
+  # 7 -> 6 ON 2026-08-27, AND THE CHECK FIRING IS WHY THE NUMBER IS PINNED.
+  # C92640's 1950 was DIVIDED - 750 door + 600 + 600 - because the east column of
+  # 545 Avenida Primavera was drawn without its door and a column with no door
+  # reads as an open shelf. The division is derived, not printed, and its
+  # provenance is in the section file's split_note. Nothing vanished quietly:
+  # this line went red first, which is exactly the job.
+  raise "expected 6 remainder codes, got #{found}" unless found == 6
   # AND THE TWO HEIGHTS ARE 120 APART, EVERYWHERE. The oven-and-microwave column
   # leaves 1710 at H.210 and 1830 at H.222; 1515 becomes 1635. That is the whole
   # difference between the families, and a transcription slip breaks it here.
@@ -6605,15 +6612,48 @@ check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
   # 1515 / 1635 / 1755 - every step 120, which is the whole difference between
   # H.210, H.222 and H.234. A transcription slip in any of the three files
   # breaks a rung instead of looking plausible.
+  #
+  # THE LADDER SURVIVES THE DIVISION, and that is the point of keeping it here
+  # rather than deleting the rung. C92640 no longer HAS a remainder, so its span
+  # is now the SUM of the parts the split left - 750 + 600 + 600 - and that sum
+  # must still stand 120 above C42640's 1830. A division that changed the total
+  # would break this rung, which is precisely the mistake a split can make.
+  span = lambda do |code|
+    stack = Registry.lookup(code)['front_layout']['stack_top_to_bottom']
+    r = stack.find { |e| e['kind'] == 'remainder' }
+    next r['h_mm'] if r
+
+    # divided: everything above the bottom front, which is the drawer
+    parts = stack[0...-1]
+    raise "#{code}: divided stack has no parts above the drawer" if parts.empty?
+
+    parts.sum { |e| e['h_mm'].to_f }
+  end
   pairs = { 'C63640' => 'C42640', 'C63659' => 'C43659',
             'C42640' => 'C92640', 'C43659' => 'C93659' }
   pairs.each do |low, high|
-    a = Registry.lookup(low)['front_layout']['stack_top_to_bottom']
-         .find { |e| e['kind'] == 'remainder' }['h_mm']
-    b = Registry.lookup(high)['front_layout']['stack_top_to_bottom']
-         .find { |e| e['kind'] == 'remainder' }['h_mm']
+    a = span.call(low)
+    b = span.call(high)
     raise "#{low} #{a} vs #{high} #{b}" unless b - a == 120
   end
+
+  # and the division itself: three parts, and they sum to the span they replaced
+  c = Registry.lookup('C92640')['front_layout']
+  handle = c['stack_top_to_bottom']
+  raise 'C92640 is not divided' if handle.any? { |e| e['kind'] == 'remainder' }
+  raise handle.inspect unless handle.map { |e| e['h_mm'] } == [750, 600, 600, 390]
+  raise 'the handle stack no longer sums to 2340' unless handle.sum { |e| e['h_mm'] } == 2340
+  gola = c['gola_stack_top_to_bottom']
+  raise gola.inspect unless gola.map { |e| e['h_mm'] } == [750, 600, 600, 30, 360]
+  raise 'the gola stack no longer sums to 2340' unless gola.sum { |e| e['h_mm'] } == 2340
+  # THE DOOR IS THE SAME 750 IN BOTH EXECUTIONS. That is the property the
+  # remainder had before it was divided, and losing it would mean the division
+  # had invented something the page does not support.
+  raise 'the custom-sized door differs between executions' unless
+    handle.first['h_mm'] == gola.first['h_mm']
+  # and it says on itself that it was derived rather than read
+  raise 'the derived door does not say it is derived' unless
+    handle.first['derivation'].to_s.include?('DERIVED')
 end
 
 check('the span is DRAWN - a remainder becomes a void slab, not an absence') do

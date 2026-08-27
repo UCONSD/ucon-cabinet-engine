@@ -111,15 +111,21 @@
           "note": "Elevation printed p.162: 39 handle, ⌐36 gola. EVERY STACK ON THIS PAGE SUMS TO 2340, in both executions. Third family to satisfy the same invariant after printed p.121-125 at 2100 and printed p.143 at 2220.",
           "stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1950,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h60_plus_microwave",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 750,
+              "derivation": "DERIVED, not printed: 2340 - 390 - 600 - 600. The page calls it a custom-sized door."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60",
+              "derivation": "ESTABLISHED: 600 for an oven H.60 - five front stacks (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1) and, on this very page, C92657's printed 96/39/39 leaving exactly 600."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60",
+              "derivation": "The second opening measures the same as the first on the 600-dpi render, which is what excludes a 450 microwave opening and therefore a 900 door."
             },
             {
               "kind": "front",
@@ -128,15 +134,19 @@
           ],
           "gola_stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1950,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h60_plus_microwave",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 750,
+              "derivation": "DERIVED: 2340 - 30 - 360 - 600 - 600. The same 750 both ways, which is what the remainder note already said of the 1950."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
             },
             {
               "kind": "zone",
@@ -149,7 +159,9 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
-          "remainder_note": "390 handle against 30 + 360 gola: the same 1950 both ways. 120 more than C42640 at H.222."
+          "remainder_note": "390 handle against 30 + 360 gola: the same 1950 both ways. 120 more than C42640 at H.222. | The 1950 is now divided - see split_note. It still sums to 1950 both ways, which is the invariant the old recording protected and the new one keeps.",
+          "split_note": "SPLIT 2026-08-27, and every part names where its number comes from. Until today this 1950 was ONE undivided remainder, because the page prints the SUM and refuses to divide it - and that was the right recording while nothing had asked. The kitchen asked: the door was not drawn, and a column with no door on a LayOut elevation reads as an open shelf. WHAT IS PRINTED on printed p.162: the family height 2340, the jumbo drawer front (39 handle, 36 gola), the contents list, and the words 'custom-sized door' - which is the catalog saying, in its own vocabulary, that this door's height is not an article dimension. WHAT IS ESTABLISHED: 600 for an oven H.60 opening, recovered from front stacks five times over (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1) and corroborated on THIS page by the position above it - C92657 prints 96/39/39, and 960+390+390 leaves exactly 600. WHAT IS DERIVED, and it is ours: 1950 - 600 - 600 = 750 for the door. WHAT THE RENDER SHOWS, read at 600 dpi 2026-08-27: door, opening, opening, drawer, and the two openings measure within a few per cent of each other - which excludes a 450 microwave opening, the only competing reading, since that would have left a 900 door. Andriy reached the same 750 independently by the same subtraction. SCOPE (learned rule 4): this is one position on one page. The twins C63640 at H.222 and C42640 at H.210 carry the same undivided shape and have NOT been split - nothing has asked them yet.",
+          "opening_note": "BOTH OPENINGS ARE 600 AND THE PAGE DOES NOT SAY WHICH MACHINE TAKES WHICH. The title is 'oven and microwave oven'; the drawing shows two equal openings with a divider between them and labels neither. So both carry the geometry class oven_h60 - a 600 opening - and which of the two the oven goes in is a per-order fact, not a catalog one. Naming the upper one 'microwave' would have been an invention with a 50 per cent chance of being backwards, and nothing geometric turns on it: they are the same size."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",
