@@ -621,7 +621,7 @@ check('the two remaining p.36 types are in: 4 pull-out door codes, 2 laundry') d
   # unique inside a family and nowhere else: H.58.5 opened with a
   # base_pull_out_door of its own on printed p.32 and this check, which counts
   # keys across the whole catalog, failed with 7 for a page that still prices
-  # exactly 4. The title says p.36; the count must say p.36 too. Rule 18.
+  # exactly 4. The title says p.36; the count must say p.36 too. Learned rule 18.
   by_type = Registry.catalog
                     .select { |c| c['section'] == 'Base units H. 78' }
                     .group_by { |c| c['type_key'] }.transform_values(&:length)
@@ -816,7 +816,7 @@ check('every corner article is still buildable and contract-valid') do
   # invariant that matters here was always about corners.
   #
   # AND THE REPLACEMENT WAS STILL A ROLL-CALL - %w[B70151 CQ0151] lasted until
-  # printed p.37 and p.38 added thirteen more (rule 18, seventh instance). What
+  # printed p.37 and p.38 added thirteen more (learned rule 18, seventh instance). What
   # is actually claimed: HOLDING SOMETHING WE CANNOT DRAW IS ALLOWED, SAYING
   # NOTHING ABOUT WHY IS NOT. Every unbuildable row names its reason, and the
   # reason is written where the row is, not in a list somebody has to retype.
@@ -928,7 +928,7 @@ check('THE DOOR-VERSION GAP HAS ONE NAME, and everything waiting on it says so')
   # The point of this check is not the count. It is that a backlog waiting on
   # ONE decision must not accumulate five different explanations of itself -
   # when the axis is finally narrowed to an article, whoever does it needs to
-  # find every row in one grep. Rule 18's lesson pointed the other way for
+  # find every row in one grep. Learned rule 18's lesson pointed the other way for
   # inventories; this one is about a reason, and a reason that drifts is a
   # reason nobody can act on.
   waiting = Registry.catalog.reject { |c| c['buildable'] }.select { |c|
@@ -940,7 +940,7 @@ check('THE DOOR-VERSION GAP HAS ONE NAME, and everything waiting on it says so')
   waiting.each do |row|
     reason = Registry.lookup(row['code'])['not_buildable_reason']
     raise "#{row['code']} does not say what it printed" unless reason.match?(/\d+ \+ \d+ = \d+/)
-    raise "#{row['code']} must own the inference" unless reason.include?('rule 4')
+    raise "#{row['code']} must own the inference" unless reason.include?('learned rule 4')
   end
 end
 
@@ -1235,7 +1235,7 @@ end
 
 check('92 codes refuse the hung version, and every move of that number is dated') do
   # A sweep that changed an availability would be a correction, and a
-  # correction gets a dated note of its own (rule 9). The printed p.19 sweep
+  # correction gets a dated note of its own (learned rule 9). The printed p.19 sweep
   # changed none, and that is worth pinning: if a later edit quietly flips a
   # true to a false, the count moves and this fails with the reason in its
   # title.
@@ -1382,7 +1382,7 @@ def hung_codes(axis)
     # WAS AN INVENTORY, NOW AN INVARIANT (2026-08-23). This check used to pin
     # two literal code lists. They reached 17 and 49 entries in one day of wall
     # extraction, and a list that has to be retyped on every commit stops being
-    # read - which is exactly how rule 18's invariant went unnoticed. What the
+    # read - which is exactly how learned rule 18's invariant went unnoticed. What the
     # check is actually about is that ONE rule decides the axis, everywhere.
     axis_of = lambda { |u| (u['front_layout'] || {})['hinge_axis'] }
     units = Registry.catalog.map { |c| Registry.lookup(c['code']) }
@@ -1899,7 +1899,7 @@ check('the wall grammar warning travels with the chapter, not with our memory of
   raise h60.inspect unless h60['note'].include?('PD0631') && h60['status'] == 'partial'
   # AND THE 'LETTER READ, PAGE NOT' SHELF IS EMPTY TOO. H.96 and H.120 were the
   # last two on it and both were read on 2026-08-23. The warnings are KEPT in
-  # their notes rather than deleted (rule 9): each section that spent its letter
+  # their notes rather than deleted (learned rule 9): each section that spent its letter
   # now carries both halves - the old 'LETTER READ' caution and the dated
   # extraction beside it - so the shape of the mistake stays visible after the
   # mistake is gone.
@@ -2040,7 +2040,7 @@ check('THE PAGE CAN FORBID IT, and the flag is read even though nothing sets it'
   # printed p.34 and p.37 print "not available wall hung" on three types -
   # a compact-oven base with a sheet-metal bottom, and the two 97 cm pull-out
   # table types. NONE of them is in this registry: those pages are not
-  # extracted and rule 1 forbids inventing the rows. The mechanism is proved
+  # extracted and domain rule 1 forbids inventing the rows. The mechanism is proved
   # here on a synthetic unit instead, so extracting the pages later is a data
   # change and not a code change.
   forbidden = Registry.lookup('B80601').merge('wall_hung' => false)
@@ -2132,7 +2132,7 @@ check('the panel REFUSES to hang what the catalog will not hang') do
   rescue ArgumentError => e
     raise e.message unless e.message.include?('already hangs')
   end
-  # A rule that lives only in the dialog is not a rule (rule 14): the refusal
+  # A rule that lives only in the dialog is not a rule (learned rule 14): the refusal
   # is here, in the pure half, and not merely a hidden checkbox.
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
   raise 'the check must be in the patch, not only in HTML' unless
@@ -2220,7 +2220,7 @@ check('the family states its plinth, and the generator asks the object') do
 end
 
 check('a family that says NOTHING falls back to the UCON standard, not to nil') do
-  # Rule 7 says unknown is nil - but this is not unknown, it is undeclared,
+  # Learned rule 7 says unknown is nil - but this is not unknown, it is undeclared,
   # and PLINTH_H_MM is a confirmed UCON decision that answers for it. Same
   # shape as `mounting || floor` one line above it in the lookup.
   raise Generator.plinth_h_mm({}).to_s unless
@@ -2275,7 +2275,7 @@ check('the housing behind a panel starts at THIS family plinth, not at a global 
   # the check started reporting 0.0 for a rule that was never about that unit.
   # The dishwasher panel still states `bottom: plinth_top`, deliberately and
   # with `bottom_is_representation` beside it, so it is the witness now. A check
-  # that follows its subject rather than its example is the point of rule 13.
+  # that follows its subject rather than its example is the point of learned rule 13.
   u = Registry.lookup('V80730').merge('plinth_h_mm' => 60)
   raise u['appliance_niche'].inspect unless u['appliance_niche']['bottom'] == 'plinth_top'
   raise Generator.niche_bottom_mm(u).to_s unless Generator.niche_bottom_mm(u) == 60
@@ -3031,7 +3031,7 @@ check('the USA width field is recorded as UNDECODABLE, with the evidence') do
   # prefix names a family. The end-panel chapter falsified it in one commit:
   # printed p.440 prices BM0030 and printed p.444 prices Y40028, three hundred
   # pages away from the USA elements, and neither has anything to do with them.
-  # A PREFIX IS NOT A CHAPTER - which is rule 5 arriving from the other side.
+  # A PREFIX IS NOT A CHAPTER - which is domain rule 5 arriving from the other side.
   # What the check is actually for survives: nothing may enter the catalog from
   # a USA page we have not extracted.
   usa = Registry.catalog.select { |r| r['section'].to_s.start_with?('USA elements') }
@@ -3520,7 +3520,7 @@ check('the plinth height is not copied into the registry') do
   raise 'the bottom must be named, not numbered' unless
     %w[floor plinth_top].include?(niche['bottom'])
   raise 'a second copy of the plinth height has appeared' if niche.key?('bottom_mm')
-  raise 'the reversal must be recorded, not erased (rule 9)' unless
+  raise 'the reversal must be recorded, not erased (learned rule 9)' unless
     niche['bottom_correction_2026_08_26'].to_s.include?('2133,6')
   raise 'the section file must point at the measured table' unless
     section.include?('us_appliance_housing_cutouts')
@@ -3754,7 +3754,7 @@ check('no registry JSON file carries a duplicated key') do
 end
 
 check('THE COLLISION GUARD PROVES ITSELF before the real files are trusted to it') do
-  # Rule 12. Run it against the defect it exists for, on a fixture, so that a
+  # Learned rule 12. Run it against the defect it exists for, on a fixture, so that a
   # green suite means the guard works and not merely that today's files happen
   # to agree.
   fam = {}
@@ -3893,7 +3893,7 @@ check('a line is checked field by field') do
 end
 
 check('a line may carry NO code - the unresolvable chosen option (§4.2 rule 4)') do
-  # W.750 has no kit on printed p.569 at all. Rule 7 applied to articles:
+  # W.750 has no kit on printed p.569 at all. Learned rule 7 applied to articles:
   # unknown is nil, not a stale code quietly kept and not a silent deletion.
   Contract.validate!(VALID.merge('companion_refs' => [LINE.merge('code' => nil)]))
 end
@@ -4120,7 +4120,7 @@ end
 check('SENTINEL: the picker still offers Lume, and the reason is recorded') do
   # A DELIBERATE gap, not an oversight. The restriction is COMPOSITION-scoped -
   # one grip system per kitchen, set once in the estimate header - so a
-  # per-unit filter would be a rule generalising past its evidence (rule 4).
+  # per-unit filter would be a rule generalising past its evidence (learned rule 4).
   # Not even the tempting case decides it: Tall H.210 declares no gola version
   # at all, and printed p.587 still never says a handle unit cannot stand in a
   # straight-grip composition. If someone adds a per-unit filter anyway, this
@@ -4246,7 +4246,7 @@ check("a corner unit's fixed 8x8 filler opens on nothing, so it takes one") do
 end
 
 check('THE COUNT IS OUR READING, AND THE ROW SAYS SO') do
-  # Rule 4 in its enforceable form. The catalog never prints how many handles
+  # Learned rule 4 in its enforceable form. The catalog never prints how many handles
   # an article takes. If this ever silently becomes a claim about Cesar, the
   # note is where the lie would live, so the note is what is pinned.
   note = handle_row('CR0631')['note'].to_s
@@ -4256,7 +4256,7 @@ check('THE COUNT IS OUR READING, AND THE ROW SAYS SO') do
 end
 
 check('an unknown front_layout gives nil, never a plausible number') do
-  # Rule 7 at the exporter boundary, twice: a shape nobody has taught it, and
+  # Learned rule 7 at the exporter boundary, twice: a shape nobody has taught it, and
   # a code the registry has never heard of. Neither may guess 1.
   raise 'an unteachable layout must be nil' unless
     Export.fronts_in('kind' => 'origami').nil?
@@ -4984,7 +4984,7 @@ check('a width restriction is recorded where the page prints it, and read nowher
   # the finishes, under the same symbol. It is one of the ten facts waiting on
   # `restrictions`, so it is stored with its page and nothing acts on it.
   # STRUCTURAL, not a roll-call: listing the positions by name meant retyping
-  # six entries per family, which is the habit rule 18 punished.
+  # six entries per family, which is the habit learned rule 18 punished.
   #
   # CORRECTED 2026-08-23. This check used to assert 'a compound must NOT carry
   # it', which was true of H.36, H.48, H.60, H.72 and H.84 and therefore looked
@@ -5074,7 +5074,7 @@ check('THE MICROWAVE-NICHE UNIT IS ITS SECTION HEIGHT MINUS 360 - three times, a
   # check enforces is the part that is not arithmetic - each one is held under
   # the family its own HEIGHT names, never the one its letter does.
   #
-  # And the roll-call is gone with it (rule 18): it read %w[PE0696 PG0696] and
+  # And the roll-call is gone with it (learned rule 18): it read %w[PE0696 PG0696] and
   # had to be retyped the moment a third turned up.
   niches = Registry.catalog.select { |c| c['code'].to_s.end_with?('96') }
   raise 'the microwave niches have vanished' if niches.length < 3
@@ -5297,12 +5297,12 @@ check('the H.120 section holds 23 codes over three pages, and every one of them 
     Registry.codes.any? { |c| c.start_with?('OJ') }
   # THE DISH-DRAINERS ARE IN THIS SECTION AND NOT IN ONE OF THEIR OWN. The wall
   # chapter index never names a dish-drainer section at H.120, so printed p.254
-  # is held as a PAGE of the section whose range contains it - rule 1 untouched.
+  # is held as a PAGE of the section whose range contains it - learned rule 1 untouched.
   dish = rows.select { |c| c['type_key'].to_s.start_with?('dish_drainer_') }
   raise dish.length.to_s unless dish.length == 9
   raise 'the reason must travel with the file, not with our memory of it' unless
     JSON.parse(File.read(File.expand_path('../registry/cesar/dish_drainer_h120.json', __dir__)))
-        .fetch('section_note').downcase.include?('rule 1')
+        .fetch('section_note').downcase.include?('learned rule 1')
   heights = rows.map { |c| Registry.lookup(c['code'])['height_mm'] }.uniq.sort
   raise heights.inspect unless heights == [840, 1200]
 end
@@ -5384,7 +5384,7 @@ check('A SECTION FILE THAT JOINS AN EXISTING FAMILY DECLARES NO FAMILY KEY') do
   end
 end
 
-check('RULE 1 SCOPE: a page the index forgot is mapped as a PAGE, twice now') do
+check('LEARNED RULE 1 SCOPE: a page the index forgot is mapped as a PAGE, twice now') do
   # printed p.433 forced the note: the printed index is a SUFFICIENT condition
   # for a section, not a necessary one. The wall chapter is the second instance
   # and it is a stronger one, because the omission is inconsistent - every other
@@ -5401,7 +5401,7 @@ check('RULE 1 SCOPE: a page the index forgot is mapped as a PAGE, twice now') do
     raise "p.#{printed} must say the index forgot it" unless
       (page['note'].to_s + page['types'].to_s).match?(/ABSENT FROM THE CHAPTER INDEX/i)
   end
-  # And neither may exist as a section of its own - that is the half rule 1 guards.
+  # And neither may exist as a section of its own - that is the half learned rule 1 guards.
   names = Registry.map_sections.map { |x| x['section'] }
   raise 'a page was promoted to a section' if
     names.any? { |n| n.include?('N_Elle and N_Elle with framed door') } ||
@@ -5442,7 +5442,7 @@ end
 check('REGRESSION: every rebuild sees the ordered width, or the front collapses') do
   # 2026-08-23, found in SketchUp and not here: "Non-positive dimension for
   # FRONT: w=". Panel.apply re-reads the registry row, and a filler row has no
-  # width - THE THIRD INSTANCE OF RULE 11, in the very method written to settle
+  # width - THE THIRD INSTANCE OF LEARNED RULE 11, in the very method written to settle
   # the second. Every layer involved is pure, so the suite could have caught it
   # and did not. This is that sweep.
   Registry.codes.each do |code|
@@ -5811,7 +5811,7 @@ def foreign_front_height_quotes(pairs)
 end
 
 check('THE PROSE READER PROVES ITSELF before the registry is trusted to it') do
-  # Rule 12: run it against the defect it exists for, on a fixture, so a green
+  # Learned rule 12: run it against the defect it exists for, on a fixture, so a green
   # suite means the reader works and not that today's files happen to agree.
   legal = ['ok.json', '{"family":"H.78","data":{"door_versions":{"gola_mm":750},' \
            '"unit_types":{"x":{"note":"the front shortens to 750 with the run"}}}}']
@@ -6875,7 +6875,7 @@ check('THE TWO PAGES OF A COLLECTION NEVER PRICE THE SAME DEPTH GROUP') do
   n = groups.call('Adjoining end side panel for N_Elle', 'end_panel_45')
   # BETWEEN DIGITS. The first version matched a bare '+' and every label on
   # every page ends '+ door thickness', so it called all of them paired and the
-  # check failed on true data. Rule 18's shape again: the title said back-to-back
+  # check failed on true data. Learned rule 18's shape again: the title said back-to-back
   # and the matcher said plus sign.
   paired = ->(g) { g.any? { |x| x =~ /\d\+\d/ } }
   raise 'the collections now agree - re-read the pages and Q22' unless
@@ -6927,7 +6927,7 @@ check('the drawn depth is the catalog\'s, and the label it disagrees with is kep
 end
 
 check('the picker grid must have something to put ON the button') do
-  # The rule 90_palette.sizeGrid routes on: a width is worth a button only when
+  # The routing rule in 90_palette.sizeGrid: a width is worth a button only when
   # it tells the codes apart. Pinned in DATA here, because the grid itself is
   # JavaScript and cannot be reached from this suite.
   #
@@ -6971,6 +6971,32 @@ check('a selected code reaches the Build button, whatever else it still needs as
   raise 'the width-range early return is gone - so is the reason for this check' unless guard
   raise 'the Build button is behind the width-range return again' unless sync < guard
   raise 'the card is behind it too' unless body.index('showCard(c);') < guard
+end
+
+check('A PANEL STANDS ON THE FLOOR AND ITS FRONT IS IN THE PLANE OF THE DOORS') do
+  # Andriy, 2026-08-26, on the first two YU0028 in the model: "the panel must
+  # stand on the floor - lower it 100" and "the front edge must line up with the
+  # door - move it forward 22". Both were wrong because a panel was being built
+  # through the ordinary cabinet path, which answers a CABINET's questions: a
+  # cabinet stands on its plinth, and a cabinet is drawn from the carcass front.
+  panel = Registry.lookup('YU0028').merge(
+    'mounting' => 'floor', 'mounting_default' => 'floor', 'plinth_h_mm' => 100
+  )
+  raise 'a panel is still standing on the plinth' unless Generator.base_z_mm(panel).zero?
+  raise 'a plinth is still being drawn under it' if Generator.plinth?(panel)
+  raise 'the front did not move' unless
+    Generator.panel_front_y_mm(panel) == -Standards::FRONT_T_MM
+
+  # THE NEIGHBOUR IS UNTOUCHED. The ground it hands over is a whole ground -
+  # plinth_h_mm included - and only the panel reads it differently.
+  cab = Registry.lookup('B80653')
+  raise 'a cabinet left its plinth' unless Generator.base_z_mm(cab) == 100
+  raise 'a cabinet lost its plinth' unless Generator.plinth?(cab)
+  raise 'a cabinet moved forward' unless Generator.panel_front_y_mm(cab).zero?
+
+  # and a HUNG panel keeps the hung datum - "on the floor" means nothing 1400 up
+  hung = panel.merge('mounting' => 'wall_hung', 'mounting_default' => 'wall_hung')
+  raise 'a hung panel fell to the floor' unless Generator.base_z_mm(hung).positive?
 end
 
 check('a panel has no front, and the empty list is stated rather than reached') do
@@ -7025,7 +7051,7 @@ end
 
 check('the 1,8 cm panel is held as a SURCHARGE and never as an article') do
   # printed p.553: "Surcharge for finishing side panels, 1.8 cm thick | Replacing
-  # standard side panel". No codes on the page, and under rule 4 it draws
+  # standard side panel". No codes on the page, and under domain rule 4 it draws
   # nothing - the carcass already occupies that volume. The map must say so, and
   # no registry row may claim it.
   sec = Registry.map_sections.find { |s| s['printed_pages'].to_s == '551-553' }
@@ -7058,6 +7084,97 @@ check('every class the catalog holds has a picker label') do
   raise "a label exists for a class nothing holds: " \
         "#{(Palette::CLASS_LABELS.keys - classes).inspect}" unless
     (Palette::CLASS_LABELS.keys - classes).empty?
+end
+
+puts "\nthe rules — which list a number belongs to"
+
+check('A BARE "rule N" IS A DEFECT: every citation names its list') do
+  # 2026-08-27, while tidying. This repository cites rules by bare number about
+  # ninety times and there are FOUR numbering schemes, three of them starting at
+  # 1: domain rules (CLAUDE.md, 1-9), learned rules (the status document, 1-18),
+  # the Object Contract's own §-scoped rules, and - discovered by this tidy - a
+  # dozen notes citing a bare four for "this is a UCON decision", which is in NO
+  # list at all. The bare one meant two different things four files apart; the
+  # bare four meant three.
+  #
+  # Numbers are NOT renumbered: that would silently change what every historical
+  # note and commit message says, which is exactly what learned rule 9 forbids.
+  # Instead every citation names its list, and this keeps the new ones honest.
+  # claude/rules.md is the index.
+  ok = /(domain|learned|§[\d.]+|SS[\d.]+)\s+rule\s+\d/i
+  any = /\brule\s+\d{1,2}/i
+  bad = []
+  root = File.expand_path('..', __dir__)
+  paths = Dir[File.join(root, 'registry', '**', '*.json')] +
+          Dir[File.join(root, 'src', '**', '*.rb')] +
+          Dir[File.join(root, 'tools', '*.rb')]
+  paths.each do |f|
+    next if f.include?('probe_inbox')
+
+    File.readlines(f).each_with_index do |line, i|
+      next unless line =~ any
+
+      # a line may hold several; strip the qualified ones and see what is left
+      rest = line.gsub(ok, '')
+      next unless rest =~ any
+
+      bad << "#{f.sub(root + '/', '')}:#{i + 1}"
+    end
+  end
+  raise "bare rule citations: #{bad.first(12).inspect}#{bad.length > 12 ? " (+#{bad.length - 12})" : ''}" unless
+    bad.empty?
+end
+
+check('every Elda question is in the status table') do
+  # 2026-08-27. The register's summary line - "Q11 to Q19 are the Avenida
+  # Primavera batch..." - was hand-patched five times in one day and was wrong
+  # by the end of it. A table that nothing checks is a table that lies quietly.
+  doc = File.read(File.expand_path('../docs/Elda_Open_Questions_v0.1.md', __dir__))
+  table = doc[/^## Status at a glance.*?^---$/m].to_s
+  raise 'the status table is gone' if table.empty?
+
+  # every numbered question heading, minus the CLOSED follow-up sections which
+  # repeat a number they do not own
+  asked = doc.scan(/^## (Q\d{1,2}) [—-]/).flatten.uniq
+  raise 'no questions found - the heading format changed' if asked.length < 20
+
+  missing = asked.reject { |q| table =~ /^\| #{q} \|/ }
+  raise "not in the status table: #{missing.inspect}" unless missing.empty?
+
+  # and every question must still say its own status where it is answered
+  no_status = asked.reject do |q|
+    body = doc[/^## #{q} [—-].*?(?=^## |\z)/m].to_s
+    body.include?('**Status:**')
+  end
+  raise "no Status line: #{no_status.inspect}" unless no_status.empty?
+end
+
+check('every working note is named in claude/README.md') do
+  # 2026-08-27. The index had stopped at 2026-08-24 and fifteen files were
+  # missing from it, including every finding of the two busiest days. An index
+  # nobody maintains is worse than no index, because it reads as a complete
+  # list - which is learned rule 13 wearing a different hat: a record of
+  # something outside the code is only true if something checks it.
+  dir = File.expand_path('../claude', __dir__)
+  readme = File.read(File.join(dir, 'README.md'))
+  missing = Dir.children(dir).sort.reject do |f|
+    f == 'README.md' || !File.file?(File.join(dir, f)) || readme.include?(f)
+  end
+  raise "not named in claude/README.md: #{missing.inspect}" unless missing.empty?
+end
+
+check('and the index names every list that is cited') do
+  rules = File.read(File.expand_path('../claude/rules.md', __dir__))
+  ['domain rule', 'learned rule', '§4.2 rule'].each do |scheme|
+    raise "claude/rules.md does not explain #{scheme}" unless rules.include?(scheme)
+  end
+  # the two lists it reproduces must still be the length it claims
+  claude = File.read(File.expand_path('../CLAUDE.md', __dir__))
+  domain = claude[/^## Non-negotiable domain rules$(.+?)^## /m, 1].to_s.scan(/^\d+\. \*\*/).length
+  raise "CLAUDE.md holds #{domain} domain rules; rules.md lists 9" unless domain == 9
+  status = File.read(File.expand_path('../claude/ucon-cabinet-engine-status.md', __dir__))
+  learned = status[/^## RULES LEARNED THE HARD WAY.*?$(.+?)^## /m, 1].to_s.scan(/^\*\*\d{1,2}\. /).length
+  raise "the status document holds #{learned} learned rules; rules.md lists 18" unless learned == 18
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

@@ -272,7 +272,7 @@ module UCON
           # stands FRONT_GAP_MM proud of its carcass - so a leg of a full 80
           # overshoots the front it is supposed to meet by exactly that gap.
           # Measured in Avenida Primavera 2026-08-24; the return leg, which
-          # meets nothing, keeps its 80. (Rule 4 - a UCON decision.)
+          # meets nothing, keeps its 80. (A UCON decision, its scope recorded - learned rule 4.)
           out_x  = fill_l + FILLER_MM - s::FRONT_GAP_MM
           in_x   = out_x - s::FRONT_T_MM
           plan   = [[fill_l, back_y], [out_x, back_y], [out_x, out_y],
@@ -530,7 +530,10 @@ module UCON
 
           draw_plinth(e, unit, model)
 
-          Geometry.box(e, 'CARCASS', 0, 0, z0, w, d, h, carcass_mat)
+          # The group keeps the name CARCASS even for a panel, which is not
+          # what a panel is: selected_top_mm and the gap audits measure a box
+          # by that name, and renaming it would make a panel invisible to them.
+          Geometry.box(e, 'CARCASS', 0, panel_front_y_mm(unit), z0, w, d, h, carcass_mat)
 
           front_slabs(unit).each do |slab|
             draw_front_slab(e, slab, unit, z0, front_mat)
@@ -971,7 +974,7 @@ module UCON
         # family fact rather than a global 100. The older comment here said
         # "the plinth height is a standard and stays one"; the factory
         # drawings say otherwise for H.84, so it is asked of the object like
-        # everything else (rule 5). Still no second copy of the number: the
+        # everything else (domain rule 5). Still no second copy of the number: the
         # family states it once and this reads it.
         return plinth_h_mm(unit) if niche['bottom'] == 'plinth_top'
 
@@ -1020,7 +1023,7 @@ module UCON
         # the elevation will show. There the box was raised to keep the line;
         # here the line is kept in front of a housing that starts on the floor.
         # Both are representations and both have to admit it - which is the
-        # whole of rule 4 applied to our own drawing.
+        # whole of learned rule 4 applied to our own drawing.
         if niche['bottom'] == 'floor' && unit['plinth_continues']
           note += 'The machine stands on the FINISHED FLOOR and the housing is ' \
                   'drawn from it. The plinth box in front is a REPRESENTATION ' \
@@ -1175,6 +1178,41 @@ module UCON
         nil
       end
 
+      # ---- where an end panel sits, once it has a ground --------------------
+      #
+      # BOTH OF THESE ARE ANDRIY'S, 2026-08-26, looking at the first two YU0028
+      # in the model. Both are drawing decisions the catalog does not make, and
+      # both were wrong in the first version because the panel was built through
+      # the ordinary cabinet path, which answers a cabinet's questions.
+      #
+      # ON THE FLOOR, NOT ON THE PLINTH. A cabinet stands on its plinth and the
+      # plinth is drawn under it. A panel runs PAST the plinth to the floor -
+      # the plinth returns behind it - so its bottom is the floor and nothing is
+      # drawn beneath it. The first version inherited plinth_h_mm from the
+      # neighbour and used it as a datum, which is what panel_ground is for; the
+      # ground answers WHICH FLOOR, not how high above it.
+      #
+      # A hung panel is the other case and keeps the hung datum: "on the floor"
+      # is meaningless 1400 up a wall.
+      def panel_base_z_mm(unit)
+        wall_hung?(unit) ? mount_bottom_mm(unit) : 0.0
+      end
+
+      # ITS FRONT EDGE IS IN THE PLANE OF THE DOORS. Every unit is drawn from
+      # its origin BACKWARDS from the front line, so y = 0 is the CARCASS front
+      # and a door occupies the 22 mm in front of it. A panel drawn at y = 0
+      # therefore finished 22 mm behind the fronts it adjoins - which is exactly
+      # what Andriy saw. It starts one front thickness further forward.
+      #
+      # The 3 mm this leaves at the back is the catalog's own rounding: d.64,5
+      # is 620 of carcass plus 22 of door rounded up from 642. The panel is
+      # longer than the thing it finishes, and the surplus has to be at one end
+      # or the other. It goes at the BACK, where a wall hides it - the front is
+      # the edge that must line up, and that is the whole point of the article.
+      def panel_front_y_mm(unit)
+        (unit || {})['object_class'].to_s == 'panel' ? -Standards::FRONT_T_MM.to_f : 0.0
+      end
+
       # ---- an end panel's ground -------------------------------------------
       #
       # WHERE AN END PANEL'S BOTTOM SITS IS NOT A CATALOG FACT, and the panel
@@ -1250,7 +1288,7 @@ module UCON
       # project, because no model here draws one. The object says which is which.
       #
       # CORRECTED 2026-08-25, the same evening, from the first run in the real
-      # kitchen (rule 9). The reservation was drawn to 880 - the carcass - and
+      # kitchen (learned rule 9). The reservation was drawn to 880 - the carcass - and
       # the answer was that a gap in the run is a gap in the FINISHED run: floor
       # to the top of the stone. 880 + 40 = 920, and the range's own 928,4 stands
       # 8,4 proud of it, which is what a pro range does.
@@ -1400,7 +1438,7 @@ module UCON
       # stands on 100 (Project Guidelines printed p.73 and p.82), H.84 on 60
       # (p.90), and N_Elle repeats both pairings, so it follows the height
       # family and not the collection. A constant chosen when there was one
-      # family is rule 6 waiting for the second, and the H.84 chapter is
+      # family is learned rule 6 waiting for the second, and the H.84 chapter is
       # already mapped in catalog_map.
       #
       # ZERO IS A REAL VALUE, NOT A MISSING ONE: it means the carcass stands
@@ -1418,6 +1456,12 @@ module UCON
       # no, and the drawing cannot tell them apart: a hung unit never meets the
       # floor, and a shim-footed one meets it directly.
       def plinth?(unit)
+        # A THIRD REASON FOR NO, added 2026-08-26: a panel runs past the plinth
+        # to the floor and the plinth returns behind it. It still INHERITS
+        # plinth_h_mm from its neighbour - panel_ground needs the whole ground,
+        # not a piece of it - so the flag cannot be read off that number.
+        return false if (unit || {})['object_class'].to_s == 'panel'
+
         !wall_hung?(unit) && plinth_h_mm(unit) > 0
       end
 
@@ -1509,7 +1553,7 @@ module UCON
         # the first filler to meet the properties panel did, with
         # "Non-positive dimension for FRONT: w=".
         #
-        # THE THIRD INSTANCE OF RULE 11, and in the very method written to
+        # THE THIRD INSTANCE OF LEARNED RULE 11, and in the very method written to
         # settle the second one. Validated on the way back in, so an edited
         # object cannot smuggle a width the article cannot be made at.
         u = Registry.with_ordered_width(u, a['width_mm']) if u['width_range_mm']
@@ -1580,6 +1624,8 @@ module UCON
       end
 
       def base_z_mm(unit)
+        return panel_base_z_mm(unit) if (unit || {})['object_class'].to_s == 'panel'
+
         wall_hung?(unit) ? mount_bottom_mm(unit) : plinth_h_mm(unit)
       end
 
