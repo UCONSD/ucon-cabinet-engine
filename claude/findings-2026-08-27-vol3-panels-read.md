@@ -265,3 +265,40 @@ these leave null.
 So the engine can draw it and the dialog cannot order it. That is one commit —
 an H field beside the W, a third argument, and a branch in `sizeGrid` — and it is
 named here rather than discovered by clicking Build.
+
+**CLOSED THE SAME HOUR, core 0.91.0.** `sketchup.build` takes three arguments;
+`syncBuild` validates both dimensions and shows one instruction at a time;
+`sizeGrid` sends a range-carrying, height-less article to a new `sheetGrid` whose
+columns are THICKNESSES and whose buttons carry the price group and the number of
+faced sides — because a sheet has no width, no height, and a depth that is a
+thickness, so those three facts are the only things telling `DZAK22` from
+`DZAK00`. They had to be added to the catalog row first: a button cannot show
+what the picker was never given.
+
+And the W/H widget was lifted out of `heightGrid` into `dimRows`, so the two
+grids share one implementation rather than a copy.
+
+**The check that went red was doing its job.** *"A selected code reaches the
+Build button, whatever else it still needs asked"* pinned the ORDER of two lines
+inside `heightGrid`, and the widget had moved. Nothing was broken — the guard it
+named had not disappeared, only relocated. It is repointed at `dimRows` and now
+holds the claim of **both** grids, which is more than it held before.
+
+### The dry run, before anything was built
+
+Probe run 54, read-only, called `placement_transform` and printed the box rather
+than drawing it — because `Generator.build` opens an operation of its own, the
+bridge's outer one closes with it, and two boards in the wrong plane would have
+had to be deleted by hand. It landed exactly where the rule says:
+
+    panel 1   x 1733,8 .. 2933,8 (1200,0)   y 2332,9 .. 2354,9 (22,0)   z 0,0 .. 880,0
+    panel 2   x 2933,8 .. 4133,8 (1200,0)   y 2332,9 .. 2354,9 (22,0)   z 0,0 .. 880,0
+
+The two cover the 2400 run end to end and meet at 2933,8. And **y 2332,9 is the
+run's own back**, measured independently by probe 53 as the high edge of its
+bodies — the board's face touches the carcass with no gap and no overlap, and
+nobody typed that number.
+
+*(One wart in the probe, not in the engine: it printed the host's carcass top as
+780,0, adding `height_mm` to a `plinth_h_mm` the object does not carry. The
+measured top is 880,0, from run 53. The probe's arithmetic, not a disagreement.)*

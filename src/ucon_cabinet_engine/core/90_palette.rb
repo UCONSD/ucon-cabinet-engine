@@ -153,11 +153,16 @@ module UCON
         # catalog dimensions itself. Empty becomes nil here and nowhere else,
         # so Registry.with_ordered_width sees one shape however the dialog
         # spells "nothing typed".
-        @picker.add_action_callback('build') do |_, code, width|
+        # THREE ARGUMENTS SINCE 0.91.0, and the third exists because an article
+        # can state neither dimension. A panel out of Linear Elements p.215-220
+        # is priced by the square metre and cut to size: the picker asks for both
+        # numbers or the build is refused for a height nothing could type.
+        @picker.add_action_callback('build') do |_, code, width, height|
           begin
             Generator.build(
               code,
               width_mm: (width.to_s.strip.empty? ? nil : width.to_s.strip),
+              height_mm: (height.to_s.strip.empty? ? nil : height.to_s.strip),
               appliance: appliance_for(code)
             )
           rescue StandardError => e
@@ -554,38 +559,11 @@ module UCON
               // missing, it was constant, and a constant on a button is a
               // button that says nothing. So the routing rule below is not
               // 'is it a filler' but 'does the width distinguish anything'.
-              function heightGrid(el){
-                var rs = rs_by_depth(rows());
-                var cols = document.createElement('div'); cols.className='dcols';
-                rs.depths.forEach(function(d){
-                  var col = document.createElement('div'); col.className='dcol';
-                  var head = document.createElement('div'); head.className='dch';
-                  head.textContent = d ? 'd. ' + (d/10) : 'front';
-                  col.appendChild(head);
-                  rs.by[d].forEach(function(c){
-                    var b = document.createElement('button'); b.className='wbtn';
-                    if(st.code===c.code) b.className += ' sel';
-                    b.innerHTML = 'H. ' + (c.height_mm/10) +
-                                  '<small>' + esc(c.code) + '</small>';
-                    b.onclick = function(){ st.w = null; st.code = c.code; render(); };
-                    col.appendChild(b);
-                  });
-                  cols.appendChild(col);
-                });
-                el.appendChild(cols);
-                if(!st.code) return;
-                var c = CAT.find(function(x){ return x.code===st.code; });
-                if(!c) return;
-                // THE CARD AND THE BUILD BUTTON COME FIRST, and until 2026-08-26
-                // they came LAST - after a `return` that only a filler ever got
-                // past. This function was written for fillers, where the width
-                // widget below always runs and ends by calling both. An end
-                // panel states no width range, so it took the early return and
-                // reached neither: Andriy picked B90030 and had nothing to press.
-                // A selected code is a selected code, whatever else the article
-                // still needs asked.
-                showCard(c);
-                syncBuild(c);
+              // THE W AND H WIDGETS, LIFTED OUT OF heightGrid 2026-08-27.
+              // They were written inside it because only a filler ever reached
+              // them; the sheet grid needs the same two rows and copying them
+              // would have been two places to change one behaviour.
+              function dimRows(el, c){
                 if(!c.width_range_mm) return;
                 var lo = c.width_range_mm[0], hi = c.width_range_mm[1];
                 var wrap = document.createElement('div'); wrap.className='drow';
@@ -618,11 +596,109 @@ module UCON
                 inp.oninput = function(){ st.w = inp.value; syncBuild(c); };
                 wrap.appendChild(inp);
                 el.appendChild(wrap);
+                // AND A HEIGHT, WHEN THE ARTICLE STATES NONE. A filler has a
+                // height from its family and only the width is asked. A sheet
+                // out of Linear Elements p.215-220 has neither: it is priced by
+                // the square metre and cut, and the page prints only the board
+                // it comes off. No presets here - 88 is this kitchen's number,
+                // not the article's, and a preset is a recommendation.
+                if(c.height_range_mm){
+                  var hlo = c.height_range_mm[0], hhi = c.height_range_mm[1];
+                  var hrow = document.createElement('div'); hrow.className='drow';
+                  var hlab = document.createElement('div'); hlab.className='dlab';
+                  hlab.textContent = 'H mm';
+                  hrow.appendChild(hlab);
+                  var hinp = document.createElement('input');
+                  hinp.type = 'number';
+                  hinp.value = (st.h == null ? '' : st.h);
+                  hinp.min = hlo; hinp.max = hhi;
+                  hinp.placeholder = hlo + '\u2013' + hhi;
+                  hinp.style.cssText = 'flex:1;min-width:60px;padding:6px;font-size:11px;' +
+                                       'border:1px solid #d4d4d4;border-radius:5px;text-align:center';
+                  hinp.oninput = function(){ st.h = hinp.value; syncBuild(c); };
+                  hrow.appendChild(hinp);
+                  el.appendChild(hrow);
+                  var note = document.createElement('div');
+                  note.className='src'; note.style.margin='4px 0 0';
+                  note.textContent = 'per m\u00b2, minimum 0,5 m\u00b2 \u2014 ' +
+                    'a board off a ' + (hhi/10) + ' cm sheet, cut to what you type';
+                  el.appendChild(note);
+                }
                 var hint = document.createElement('div');
                 hint.className='src'; hint.id='whint'; hint.style.margin='6px 0 0';
                 el.appendChild(hint);
                 showCard(c);
                 syncBuild(c);
+              }
+              // THE SHEET GRID. Columns are THICKNESSES, because that is the one
+              // dimension a sheet states and the page groups its blocks by. The
+              // button carries the price group and the number of faced sides -
+              // 'B / 2 sides' - with the code and the rate under it, because
+              // those are the only things that tell one of these codes from
+              // another. Points are shown here and nowhere else: they are
+              // commercial data and never reach the object (Contract v2 1.2).
+              function sheetGrid(el){
+                var rs = rs_by_depth(rows());
+                var cols = document.createElement('div'); cols.className='dcols';
+                rs.depths.forEach(function(d){
+                  var col = document.createElement('div'); col.className='dcol';
+                  var head = document.createElement('div'); head.className='dch';
+                  head.textContent = d ? String(d/10).replace('.', ',') + ' cm' : 'sheet';
+                  col.appendChild(head);
+                  rs.by[d].forEach(function(c){
+                    var b = document.createElement('button'); b.className='wbtn';
+                    if(st.code===c.code) b.className += ' sel';
+                    var lab = (c.price_group ? c.price_group + ' \u00b7 ' : '') +
+                              (c.faced_sides === 1 ? '1 side' : '2 sides');
+                    b.innerHTML = esc(lab) + '<small>' + esc(c.code) +
+                                  (c.points_per_m2 ? ' \u00b7 ' + c.points_per_m2 + ' pt/m\u00b2' : '') +
+                                  '</small>';
+                    b.onclick = function(){ st.w = null; st.h = null; st.code = c.code; render(); };
+                    col.appendChild(b);
+                  });
+                  cols.appendChild(col);
+                });
+                el.appendChild(cols);
+                if(!st.code) return;
+                var c = CAT.find(function(x){ return x.code===st.code; });
+                if(!c) return;
+                showCard(c);
+                syncBuild(c);
+                dimRows(el, c);
+              }
+              function heightGrid(el){
+                var rs = rs_by_depth(rows());
+                var cols = document.createElement('div'); cols.className='dcols';
+                rs.depths.forEach(function(d){
+                  var col = document.createElement('div'); col.className='dcol';
+                  var head = document.createElement('div'); head.className='dch';
+                  head.textContent = d ? 'd. ' + (d/10) : 'front';
+                  col.appendChild(head);
+                  rs.by[d].forEach(function(c){
+                    var b = document.createElement('button'); b.className='wbtn';
+                    if(st.code===c.code) b.className += ' sel';
+                    b.innerHTML = 'H. ' + (c.height_mm/10) +
+                                  '<small>' + esc(c.code) + '</small>';
+                    b.onclick = function(){ st.w = null; st.code = c.code; render(); };
+                    col.appendChild(b);
+                  });
+                  cols.appendChild(col);
+                });
+                el.appendChild(cols);
+                if(!st.code) return;
+                var c = CAT.find(function(x){ return x.code===st.code; });
+                if(!c) return;
+                // THE CARD AND THE BUILD BUTTON COME FIRST, and until 2026-08-26
+                // they came LAST - after a `return` that only a filler ever got
+                // past. This function was written for fillers, where the width
+                // widget below always runs and ends by calling both. An end
+                // panel states no width range, so it took the early return and
+                // reached neither: Andriy picked B90030 and had nothing to press.
+                // A selected code is a selected code, whatever else the article
+                // still needs asked.
+                showCard(c);
+                syncBuild(c);
+                dimRows(el, c);
               }
               // Depths in order, and the codes under each in height order.
               function rs_by_depth(rs){
@@ -637,16 +713,29 @@ module UCON
                 return { by: by, depths: depths };
               }
               function syncBuild(c){
-                var ok = true;
+                var ok = true, why = '';
                 if(c && c.width_range_mm){
                   var w = parseInt(st.w, 10);
-                  ok = (w >= c.width_range_mm[0] && w <= c.width_range_mm[1]);
+                  if(!(w >= c.width_range_mm[0] && w <= c.width_range_mm[1])){
+                    ok = false;
+                    why = 'This article is made from ' + c.width_range_mm[0] + ' to ' +
+                          c.width_range_mm[1] + ' mm \u2014 type the width to order.';
+                  }
+                }
+                // BOTH DIMENSIONS, since a sheet states neither. The width hint
+                // wins when both are missing: one instruction at a time is what
+                // a person can act on.
+                if(ok && c && c.height_range_mm){
+                  var hh = parseInt(st.h, 10);
+                  if(!(hh >= c.height_range_mm[0] && hh <= c.height_range_mm[1])){
+                    ok = false;
+                    why = 'Cut to size, up to ' + c.height_range_mm[1] +
+                          ' mm on this axis \u2014 type the height to order.';
+                  }
                 }
                 document.getElementById('buildBtn').style.display = ok ? 'block' : 'none';
                 var h = document.getElementById('whint');
-                if(h) h.textContent = ok ? '' :
-                  'This article is made from ' + c.width_range_mm[0] + ' to ' +
-                  c.width_range_mm[1] + ' mm \u2014 type the width to order.';
+                if(h) h.textContent = why;
               }
               function sizeGrid(el){
                 var rs = rows();
@@ -657,6 +746,12 @@ module UCON
                 // whole article. Both go one dimension over.
                 var ws = uniq(rs.map(function(c){return c.width_mm;}));
                 var hs = uniq(rs.map(function(c){return c.height_mm;}));
+                // A SHEET FIRST, because it breaks the rule the two grids below
+                // share: they both put a printed DIMENSION on the button, and a
+                // sheet has none. Sent to heightGrid it drew one button per code
+                // reading 'H. 0'. What separates its codes is the lacquer or
+                // veneer group and how many sides are faced.
+                if(rs.length && rs[0].height_range_mm){ sheetGrid(el); return; }
                 if(rs.length && (rs[0].width_range_mm ||
                                  (ws.length === 1 && hs.length > 1))){
                   heightGrid(el); return;
@@ -749,7 +844,8 @@ module UCON
                 if(!st.code) return;
                 var c = CAT.find(function(x){ return x.code===st.code; });
                 sketchup.build(st.code,
-                  (c && c.width_range_mm) ? String(parseInt(st.w, 10)) : '');
+                  (c && c.width_range_mm)  ? String(parseInt(st.w, 10)) : '',
+                  (c && c.height_range_mm) ? String(parseInt(st.h, 10)) : '');
               }
               window.onload = function(){
                 if(INCH) document.getElementById('units').className = 'on';

@@ -728,6 +728,15 @@ module UCON
             # picker row that dropped it would show a panel with no height at
             # all and no reason given.
             'height_range_mm' => row['height_range_mm'],
+            # WHAT TELLS TWO SHEETS APART ON A BUTTON. A sheet's width and
+            # height are both blank and its depth is a thickness, so the picker
+            # has nothing to print unless the row carries the three facts the
+            # page separates them by: the lacquer or veneer GROUP, how many
+            # sides are faced, and the rate. Same reason nominal_in is here -
+            # display needs it and the object must never see it.
+            'price_group' => row['price_group'],
+            'faced_sides' => row['faced_sides'],
+            'points_per_m2' => row['points_per_m2'],
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],
             # NAMED WITH ITS BOOK, like lookup's. A picker row reading

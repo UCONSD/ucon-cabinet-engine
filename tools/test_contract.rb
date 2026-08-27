@@ -6982,16 +6982,37 @@ check('a selected code reaches the Build button, whatever else it still needs as
   # so it hit the early return above them and Andriy picked B90030 with nothing
   # to press. Nothing headless could see it - the grid is JavaScript - so what
   # is pinned is the ORDER of two lines in the file.
+  #
+  # REPOINTED 2026-08-27, and the failure was the check doing its job. The
+  # widget moved out of heightGrid into dimRows so the SHEET grid could use the
+  # same one instead of a copy, and this check went red naming a guard that had
+  # not disappeared, only moved. Learned rule 18 in its other form: when a check
+  # fails for a reason its title does not mention, look at the check. What the
+  # title claims - a selected code always reaches the button - is still exactly
+  # what is being held; it is now held of BOTH grids, which is more than before,
+  # because a sheet reaches the button through the other one.
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
-  body = src[/function heightGrid\(el\)\{(.+?)\n              \}/m, 1]
-  raise 'heightGrid is gone or renamed - re-read this check before deleting it' unless body
+  guard_body = src[/function dimRows\(el, c\)\{(.+?)\n              \}\n/m, 1]
+  raise 'dimRows is gone or renamed - re-read this check before deleting it' unless guard_body
+  raise 'the width-range early return is gone - so is the reason for this check' unless
+    guard_body.index('if(!c.width_range_mm) return;')
 
-  sync  = body.index('syncBuild(c);')
-  guard = body.index('if(!c.width_range_mm) return;')
-  raise 'syncBuild is no longer called in heightGrid' unless sync
-  raise 'the width-range early return is gone - so is the reason for this check' unless guard
-  raise 'the Build button is behind the width-range return again' unless sync < guard
-  raise 'the card is behind it too' unless body.index('showCard(c);') < guard
+  %w[sheetGrid heightGrid].each do |fn|
+    body = src[/function #{fn}\(el\)\{(.+?)\n              \}/m, 1]
+    raise "#{fn} is gone or renamed" unless body
+
+    sync = body.index('syncBuild(c);')
+    card = body.index('showCard(c);')
+    dims = body.index('dimRows(el, c);')
+    raise "#{fn} no longer calls syncBuild" unless sync
+    raise "#{fn} no longer calls showCard" unless card
+    raise "#{fn} no longer offers the dimension rows" unless dims
+    # THE ORDER IS THE CLAIM: the card and the button come BEFORE the widget
+    # that may return early, so a code that still needs a dimension asked is
+    # still a code you can see and press.
+    raise "#{fn}: the Build button is behind the width-range return again" unless sync < dims
+    raise "#{fn}: the card is behind it too" unless card < dims
+  end
 end
 
 check('A PANEL STANDS ON THE FLOOR AND ITS FRONT IS IN THE PLANE OF THE DOORS') do
@@ -7369,6 +7390,48 @@ check('the fixing kit is priced per BASE UNIT, and that is why it is not a compa
   raise 'a count was invented' if hw['adjustable_foot']['quantity_note'].to_s.empty?
   raise 'no panel carries a companion for the kit' if
     Registry.lookup('DZAK22')['companions'].any?
+end
+
+check('THE PICKER CAN ASK FOR A HEIGHT, and until 0.91.0 it could not') do
+  # A SOURCE CHECK, because the grid is JavaScript and nothing headless can run
+  # it - the same reason the Build-button check exists two hundred lines up.
+  #
+  # THE DEFECT: the palette knew width_range_mm and only that. One W field, one
+  # validation, and doBuild sent two arguments. A panel priced by the square
+  # metre states NEITHER dimension, so it reached the Build button and was
+  # refused by the guard that makes it honest - the engine could draw it and the
+  # dialog could not order it. Found by reading the palette after the geometry
+  # landed, and named in the 0.90.0 commit rather than left for a click.
+  html = Palette.picker_html(Registry.catalog, Registry.gaps)
+  raise 'no height field' unless html.include?("hlab.textContent = 'H mm'")
+  raise 'the height is not read back into the state' unless
+    html.include?('st.h = hinp.value')
+  raise 'build still sends two arguments' unless
+    html.include?('(c && c.height_range_mm) ? String(parseInt(st.h, 10))')
+  raise 'the height is not validated against the sheet' unless
+    html.include?('c.height_range_mm[1]')
+  raise 'a sheet is not routed to its own grid' unless
+    html.include?('if(rs.length && rs[0].height_range_mm){ sheetGrid(el); return; }')
+  # and the two grids share ONE widget rather than a copy
+  raise 'dimRows is not shared' unless html.scan('dimRows(el, c);').length >= 2
+end
+
+check('and the sheet grid has something to put ON its buttons') do
+  # THE SAME SHAPE AS THE END-PANEL BUTTON READING '22' TWENTY-SEVEN TIMES.
+  # A sheet has no width and no height, and its depth is a thickness, so the
+  # only things that tell two of its codes apart are the price group, the number
+  # of faced sides and the rate. All three had to reach the catalog row; a
+  # button cannot show what the picker was never given.
+  rows = Registry.catalog.select { |c| c['class'] == 'panel_sheet' }
+  blind = rows.reject { |r| r['faced_sides'] && r['points_per_m2'] }
+  raise "nothing to label: #{blind.map { |r| r['code'] }.first(6).inspect}" unless blind.empty?
+  # the lacquered block is the one that needs the group letter: sixteen codes,
+  # four groups, four executions, and the thickness alone separates none of them
+  lac = rows.select { |r| r['type_key'] == 'panel_lacquered' }
+  raise lac.length.to_s unless lac.length == 16
+  raise 'no price group' unless lac.map { |r| r['price_group'] }.uniq.sort == %w[A B C D]
+  # one side or two, and it is a real distinction: 1,8 is sold both ways
+  raise 'sides' unless lac.map { |r| r['faced_sides'] }.uniq.sort == [1, 2]
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
