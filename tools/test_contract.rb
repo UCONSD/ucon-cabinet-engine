@@ -269,6 +269,11 @@ check('EVERY BUILDABLE registry code yields contract-valid attributes') do
     # ordered (printed p.434). The sweep ORDERS one rather than inventing a
     # column, because the honest claim is "valid once ordered".
     u = Registry.with_ordered_width(u, u['width_range_mm'][0]) if u['width_range_mm']
+    # AND THE HEIGHT CAN BE THE SAME KIND OF ABSENCE, 2026-08-27. A panel sold
+    # by the square metre states neither dimension; the sweep orders both, for
+    # the same reason it orders the width, and "valid once ordered" stays the
+    # honest claim.
+    u = Registry.with_ordered_height(u, u['height_range_mm'][0]) if u['height_range_mm']
     # And one that is not buildable is not required to be dimensionable: the
     # front-only fillers have no depth on the page, which is exactly why they
     # carry buildable false and a reason. Checked on its own below.
@@ -5464,6 +5469,8 @@ check('REGRESSION: every rebuild sees the ordered width, or the front collapses'
     next unless row.fetch('buildable', true)
 
     ordered = row['width_range_mm'] ? Registry.with_ordered_width(row, row['width_range_mm'][0]) : row
+    # both dimensions, for a sheet - see the whole-registry sweep near the top
+    ordered = Registry.with_ordered_height(ordered, ordered['height_range_mm'][0]) if ordered['height_range_mm']
     attrs   = Generator.attributes_for(ordered)
     # A fresh lookup, exactly as Panel.apply does it - the object is the only
     # place the ordered width survives.
@@ -7216,20 +7223,55 @@ check('THE REGISTRY NOW HOLDS TWO BOOKS, and every code says which') do
   raise "cite the wrong book: #{wrong.map { |r| r['code'] }.first(8).inspect}" unless wrong.empty?
 end
 
-check('a sheet is 44 codes in ten blocks, and none of them is buildable yet') do
+check('a sheet is 44 codes in ten blocks, and all of them build') do
   rows = Registry.catalog.select { |c| c['class'] == 'panel_sheet' }
   raise rows.length.to_s unless rows.length == 44
   raise rows.map { |r| r['type_key'] }.uniq.length.to_s unless
     rows.map { |r| r['type_key'] }.uniq.length == 10
 
-  # THE BACKLOG IS ONE GREP - the same shape the nineteen door_versions codes
-  # use. All 44 refuse for ONE reason and say it in the same words, so the day
-  # the generator learns the orientation, one edit clears all of them.
-  raise 'a sheet claims to be buildable' if rows.any? { |r| r['buildable'] }
-  reasons = rows.map { |r| r['not_buildable_reason'] }.uniq
-  raise "#{reasons.length} different reasons" unless reasons.length == 1
-  raise 'the reason does not say what is missing' unless
-    reasons.first.include?('thickness on y') && reasons.first.include?('placement')
+  # HELD NOT-BUILDABLE AND RELEASED THE SAME DAY, 0.89.0 -> 0.90.0. The ten
+  # blocks carried ONE refusal in ONE wording precisely so that the day the
+  # generator learned the orientation, a single edit would clear all of them.
+  # It did. The check turned over with the work instead of being deleted, and
+  # what it holds now is that nothing was left behind.
+  stuck = rows.reject { |r| r['buildable'] }
+  raise "still not buildable: #{stuck.map { |r| r['code'] }.inspect}" unless stuck.empty?
+  raise 'a reason survived the release' if rows.any? { |r| r['not_buildable_reason'] }
+end
+
+check('A SHEET IS DRAWN AS A BOARD, NOT AS AN END PANEL TURNED SIDEWAYS') do
+  sheet = Registry.lookup('DZAK22')
+  end_p = Registry.lookup('YU0028')
+  raise 'a sheet' unless Registry.sheet_panel?(sheet)
+  raise 'an end panel' if Registry.sheet_panel?(end_p)
+  raise 'a cabinet' if Registry.sheet_panel?(Registry.lookup('B80601'))
+
+  # NO FRONT EDGE. An end panel is pushed one door thickness forward so its edge
+  # lands in the plane of the doors. A board behind a run has no such edge, and
+  # the same shift would drive it into the carcass it is bolted to.
+  raise Generator.panel_front_y_mm(sheet).inspect unless
+    Generator.panel_front_y_mm(sheet) == 0.0
+  raise Generator.panel_front_y_mm(end_p).inspect unless
+    Generator.panel_front_y_mm(end_p) == -Standards::FRONT_T_MM.to_f
+
+  # ON THE FLOOR, AND NOTHING INHERITED. printed p.214 stands it on 0,5 cm feet
+  # whatever it is bolted to, so unlike an end panel it does not take its
+  # neighbour's plinth - which on this island would have raised it 100 mm. That
+  # is the exact error the two YU0028 in the model still carry from 0.87.4,
+  # measured by probe run 53: drawn 940 against an article of 840.
+  ordered = Registry.with_ordered_height(
+    Registry.with_ordered_width(sheet.merge('mounting' => 'floor', 'plinth_h_mm' => 0), 1200), 880
+  )
+  raise Generator.base_z_mm(ordered).inspect unless Generator.base_z_mm(ordered).zero?
+  raise 'a sheet must not carry a plinth box' if Generator.plinth?(ordered)
+
+  # the board itself: 1200 along the run, 22 thick, 880 tall - floor to the
+  # underside of the stone on a 620-deep H.78 run.
+  attrs = Generator.attributes_for(ordered)
+  raise attrs.inspect unless attrs['width_mm'] == 1200 &&
+                             attrs['depth_mm'] == 22 &&
+                             attrs['height_mm'] == 880
+  Contract.validate!(attrs)
 end
 
 check('A SHEET HAS NO WIDTH AND NO HEIGHT, and both refusals name the order') do

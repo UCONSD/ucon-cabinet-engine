@@ -380,7 +380,28 @@ module UCON
       def width_is_a_thickness?(unit)
         return false unless (unit || {})['object_class'].to_s == 'panel'
 
-        (unit || {})['width_range_mm'].nil?
+        !sheet_panel?(unit)
+      end
+
+      # THE TWO KINDS OF PANEL, named once so nothing has to spell the test out
+      # again. Both are object_class 'panel' and they are different articles out
+      # of different books:
+      #
+      #   the ADJOINING END SIDE PANEL - Kitchen System p.440-447 - is a board
+      #   beside a run. Its width IS its thickness, its depth is the carcass
+      #   depth it serves plus the door, and its height is a CABINET height.
+      #
+      #   the SHEET - Linear Elements p.215-220 - is cut to order and priced by
+      #   the square metre. It states neither width nor height, only the maximum
+      #   sheet, and its thickness is on depth_mm.
+      #
+      # The test is the width RANGE, which is the article's own statement that
+      # its width comes from the order. Not the class, not the section title,
+      # not the code prefix: a fact the row carries about itself.
+      def sheet_panel?(unit)
+        return false unless (unit || {})['object_class'].to_s == 'panel'
+
+        !(unit || {})['width_range_mm'].nil?
       end
 
       def width_modification_refusal(unit)

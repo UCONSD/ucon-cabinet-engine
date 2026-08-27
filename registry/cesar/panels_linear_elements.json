@@ -33,8 +33,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -92,8 +91,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -151,8 +149,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -225,8 +222,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -297,8 +293,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -401,8 +396,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -685,8 +679,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -793,8 +786,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -901,8 +893,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -1025,8 +1016,7 @@
           "kind": "none",
           "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
         },
-        "buildable": false,
-        "not_buildable_reason": "The registry holds it and the picker will offer it; the generator cannot draw it yet. A sheet is not an end panel turned sideways: an end panel carries its thickness on x and its front edge in the plane of the doors, and a panel behind a run carries its thickness on y and no front edge at all. Until Generator has that orientation and a placement against the BACK of a selected run, drawing one would put a board in the wrong plane and call it an order. Geometry is the next commit.",
+        "buildable": true,
         "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
         "surcharges": {
           "cutout_for_electrical_socket": {
@@ -1128,5 +1118,6 @@
         "notes": "Same points as the horizontal block; the same C-over-D inversion, printed twice."
       }
     }
-  }
+  },
+  "buildable_note": "BUILDABLE AS OF 0.90.0, 2026-08-27, the same day it was held. The ten blocks were extracted not-buildable because the generator drew a panel only as an END panel - thickness on x, front edge in the plane of the doors, placed BESIDE a selected unit. A sheet is thickness on y, no front edge, and placed BEHIND. Both are now in 60_generator.rb: panel_front_y_mm returns 0 for a sheet, sheet_ground puts it on the floor without inheriting anything, and placement_transform seats it at the selected unit's origin stepped back by THAT unit's depth. It still refuses without a selection - a board behind a run has to know which run."
 }

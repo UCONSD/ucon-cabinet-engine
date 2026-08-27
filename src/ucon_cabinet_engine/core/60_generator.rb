@@ -38,6 +38,39 @@ module UCON
         # looked like a placement.
         return Geom::Transformation.new unless span
 
+        # ---- BEHIND, NOT BESIDE ------------------------------------------
+        #
+        # A sheet is the first element in this engine that does not continue a
+        # run. Everything below asks WHICH SIDE - left, right, or the turn at a
+        # corner - because every element so far stood in the row. A panel behind
+        # base units stands across the BACK of the row, and the question "which
+        # side" has no answer for it.
+        #
+        # So it seats at the selected unit's own origin - no x offset at all,
+        # because the panel starts where the person said it starts - and steps
+        # back along that unit's OWN y by that unit's depth. Its own thickness
+        # then grows further back from there, which is what the box does. Two
+        # 1200 panels across four 600 units means selecting the first unit and
+        # then the third: the person places the joints, because the catalog
+        # prices the area and says nothing about where a board is cut.
+        #
+        # The selected unit's depth, NOT the panel's: the same trap that was
+        # caught at the corner on 2026-08-24, where the new element's depth
+        # turned a filler onto the wall. What the panel must clear is the run.
+        if new_unit && Registry.sheet_panel?(new_unit)
+          back = (sel_attrs['depth_mm'] || 0).to_f
+          if back <= 0
+            raise ArgumentError,
+                  "#{sel_attrs['code']} states no depth, so there is no back to " \
+                  'stand behind. Select a unit that carries one.'
+          end
+
+          behind = sel.transformation *
+                   Geom::Transformation.translation(Geom::Vector3d.new(0, back.mm, 0))
+          o = behind.origin
+          return Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * behind
+        end
+
         side = placement_side(model, sel, span)
         new_width_mm = new_unit && new_unit['width_mm']
         new_depth_mm = new_unit && new_unit['depth_mm']
@@ -386,8 +419,19 @@ module UCON
         # transform all ask the unit where it stands, and for a panel the unit
         # cannot answer until its neighbour has.
         if unit['object_class'] == 'panel'
-          ground = panel_ground(model)
-          raise ArgumentError, panel_needs_a_ground_message(code) if ground.nil?
+          # TWO PANELS, TWO QUESTIONS, AND THEY ARE NOT THE SAME ONE.
+          #
+          # An END panel has no ground of its own and takes mounting and plinth
+          # off the unit it finishes - that is panel_ground, and the long note
+          # beside it says why.
+          #
+          # A SHEET's ground is never in doubt: printed p.214 says it stands on
+          # the floor on 0,5 cm feet, whatever it is bolted to, so nothing is
+          # inherited. It still REFUSES without a selection, and for the other
+          # reason: a board behind a run has to know which run, and there is no
+          # honest default for that either.
+          ground = Registry.sheet_panel?(unit) ? sheet_ground(model) : panel_ground(model)
+          raise ArgumentError, panel_needs_a_ground_message(code, unit) if ground.nil?
 
           unit = unit.merge(ground)
         end
@@ -1209,8 +1253,17 @@ module UCON
       # longer than the thing it finishes, and the surplus has to be at one end
       # or the other. It goes at the BACK, where a wall hides it - the front is
       # the edge that must line up, and that is the whole point of the article.
+      # AND A SHEET IS THE OTHER CASE, 2026-08-27. Everything above is about an
+      # end panel, which finishes a run from the SIDE and therefore has a front
+      # edge that must land in the plane of the doors. A panel behind a run has
+      # no front edge at all - it is seen from the room side, its face is its
+      # width, and shifting it forward by a door thickness would push it into
+      # the carcass it is bolted to. Its y is where the placement puts it.
       def panel_front_y_mm(unit)
-        (unit || {})['object_class'].to_s == 'panel' ? -Standards::FRONT_T_MM.to_f : 0.0
+        return 0.0 unless (unit || {})['object_class'].to_s == 'panel'
+        return 0.0 if Registry.sheet_panel?(unit)
+
+        -Standards::FRONT_T_MM.to_f
       end
 
       # ---- an end panel's ground -------------------------------------------
@@ -1251,7 +1304,33 @@ module UCON
         nil
       end
 
-      def panel_needs_a_ground_message(code)
+      # A SHEET DOES NOT INHERIT - it stands on the floor and says so. What the
+      # selection gives it is WHERE, not how high: placement_transform seats it
+      # against the back of whatever is selected.
+      def sheet_ground(model)
+        sel = selected_unit(model)
+        return nil unless sel
+
+        attrs = Contract.read(sel.definition) || {}
+        code  = attrs['code'].to_s
+        return nil if code.empty?
+
+        { 'mounting' => 'floor', 'plinth_h_mm' => 0, 'ground_from_code' => code }
+      rescue StandardError
+        nil
+      end
+
+      def panel_needs_a_ground_message(code, unit = nil)
+        if unit && Registry.sheet_panel?(unit)
+          return "#{code} is a panel cut to size, and it needs a run to stand behind.\n\n" \
+                 'Linear Elements printed p.214 prices it by the square metre and ' \
+                 'draws it in one place: behind base units, on adjustable feet, ' \
+                 'fixed to their backs with a kit. Which units decides where the ' \
+                 "board goes and how many kits the order carries.\n\n" \
+                 'Select the unit the panel starts behind and build again. Nothing ' \
+                 'was drawn - a board dropped at the origin is not a placement.'
+        end
+
         "#{code} is an end panel, and an end panel has no ground of its own.\n\n" \
         "printed p.440 prices sixteen heights in one table and states where none " \
         "of them begins, because that is a fact about the run, not about the " \

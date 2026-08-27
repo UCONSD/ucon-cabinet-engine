@@ -210,3 +210,58 @@ four minutes, because a check was looking at the thing rather than at a proxy.
 it would count two. Held in `_manifest.json` →
 `hardware.linear_element_panel_fixings`, visible rather than invented, with the
 foot beside it and the note that **how many feet per panel is not printed.**
+
+---
+
+## 7. And then it was drawn (core 0.90.0, same day)
+
+The ten blocks were released the day they were held. What the generator learned:
+
+**A sheet is not an end panel turned sideways, and three lines say where they
+differ.** `panel_front_y_mm` returns 0 for a sheet — an end panel is pushed one
+door thickness forward so its edge lands in the plane of the doors, and a board
+behind a run has no such edge; the same shift would drive it into the carcass it
+is bolted to. `sheet_ground` puts it on the floor without inheriting anything —
+printed p.214 stands it on 0,5 cm feet whatever it is bolted to, where an end
+panel takes its neighbour's plinth. And `placement_transform` gained its first
+branch that does not continue a run.
+
+**BEHIND, NOT BESIDE.** Every element in this engine until now stood in the row,
+so placement asked *which side* — left, right, or the turn at a corner. A panel
+across the back of a row has no answer to that question. It seats at the selected
+unit's own origin, no x offset at all, and steps back along that unit's OWN y by
+**that unit's** depth — the selected one's, not the panel's, which is the trap
+that turned a filler onto the wall at the corner on 2026-08-24. Two 1200 panels
+across four 600 units means selecting the first unit and then the third: the
+person places the joints, because the catalog prices the area and says nothing
+about where a board is cut.
+
+It still refuses without a selection, and the message says why in the sheet's own
+terms — a board behind a run has to know which run, and how many fixing kits the
+order carries follows from the same answer.
+
+### Measured first, by probe run 53
+
+The run: four `B80653`, x 1733,8…4133,8 (**2400,0**), carcass top **880,0
+measured**, finished 920,0 with the 40 stated on the model. **Nothing within 3000
+mm behind any of the four — free floor.** So the back this chapter exists for is
+real, and 880 is not only Volume 1's dimension chain but the height of the body
+standing there.
+
+The same run confirmed the two `YU0028` by measurement rather than by reading a
+diff: **drawn 940 against an article of 840, with a `PLINTH` group inside** —
+built by 0.87.4, before both of the panel corrections. Owed 9 in one line: the
+model is not recomputed when the engine changes. They have to be rebuilt.
+
+### What is NOT done, and it is the next thing a person will hit
+
+**The picker cannot ask for a height.** The palette knows `width_range_mm` and
+only that: one W field, one validation, and `doBuild` sends two arguments. A
+sheet states neither dimension, so today it reaches the Build button and is
+refused by the very guard that makes it honest. `sizeGrid` also routes any
+range-carrying article to `heightGrid`, which groups by a `height_mm` all 44 of
+these leave null.
+
+So the engine can draw it and the dialog cannot order it. That is one commit —
+an H field beside the W, a third argument, and a branch in `sizeGrid` — and it is
+named here rather than discovered by clicking Build.
