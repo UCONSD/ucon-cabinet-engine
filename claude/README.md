@@ -65,7 +65,10 @@ date order; a finding is never edited to hide what it corrected.
   engine changes), `findings-2026-08-26-glass-row.md` (the west wall's glass,
   and a frame the catalog does not print),
   **`findings-2026-08-26-panels-recon.md`** (the panel chapter, the first object
-  with no ground of its own, and the third volume).
+  with no ground of its own, and the third volume),
+  **`findings-2026-08-27-vol3-panels-read.md`** (Volume 3 printed p.214-220 read
+  from the renders: 44 panel codes priced per m2, the fixing kits and the foot,
+  and three corrections to the note above).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
