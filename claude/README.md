@@ -70,7 +70,10 @@ date order; a finding is never edited to hide what it corrected.
   from the renders: 44 panel codes priced per m2, the fixing kits and the foot,
   three corrections to the note above, and — section 6 — the extraction that
   followed the same day, source_pdf becoming a per-section fact, and the loader
-  bug three new checks caught on their first run).
+  bug three new checks caught on their first run),
+  **`findings-2026-08-27-island-back-built.md`** (the six panels measured in the
+  model, the breakfast top at exactly 30 inches that explains the slot, the
+  material fork still open, and a lacquer refusal that would have been wrong).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,

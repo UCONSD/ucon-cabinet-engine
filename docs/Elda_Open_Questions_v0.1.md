@@ -40,8 +40,74 @@ existed.
 | Q21 | is the printed `d.` the panel or the whole assembly | open — **everything drawn at the end of a run depends on it** |
 | Q22 | what the second panel page's banner means | open |
 | Q23 | which article is a floor-standing end side panel | **mostly answered by the source** 2026-08-26 (Volume 3 p.214); the part that decides an order line is open |
+| Q24 | what finishes the EDGE of a veneered panel, and can it be veneer | **open** 2026-08-27 · blocks an order line on the island's back |
 
 Three more were **answered without ever being numbered** — see that section below.
+
+---
+
+## How these get answered — decided 2026-08-27, and it is not by sending them
+
+**The questions are kept and NOT sent.** Andriy's plan, in his words: finish
+building the kitchen, produce the drawing, send it, and when the **Metron
+estimate** comes back, diff our extraction against theirs. *"И получим ответы на
+большую часть вопросов."*
+
+**Why this is stronger than asking, for the questions it reaches.** A Metron
+estimate is a SECOND INDEPENDENT EXTRACTION OF THE SAME CATALOG, made by people
+who order from it daily. This project has already been corrected by one twice:
+estimate 2026/30831 named `DZAK22` and `DZAC00` while this repository was calling
+them "estimate codes with no article behind them" — they were Volume 3 articles
+and the estimate was right; and the factory's own SketchUp export of 2026/30831
+settled the corner filler when a symptom pointed at two bodies and only a
+measurement could say which had moved. An answer in prose can be misread. A
+priced line cannot: it names an article, a quantity and a surcharge for a thing
+we also drew.
+
+**What it costs: nothing but order.** The questions do not expire, and asking
+them after the estimate is cheaper — most will be gone, and the ones left will be
+sharper for having a real order line beside them.
+
+### But an estimate answers only what it happens to contain
+
+It settles a question **only if this kitchen orders the thing the question is
+about.** That is worth knowing before deciding not to ask, because the list is
+not uniform.
+
+**Should be settled by 545 Avenida Primavera's own estimate** — the kitchen
+demonstrably contains the case:
+
+- **Q11** — a top element at 610 where the widest printed is 600. Six `SD0631`
+  in this kitchen are exactly that, and how Elda writes them IS the answer.
+- **Q19** — the upward-opening door over the fridge, 1220 × 313 at d.62
+  (`UCON-BESP-001`). Whatever line she writes for it is the article we could not
+  find.
+- **Q18** — what closes the 66-73 above an appliance housing. The east run has it.
+- **Q23** — which article a floor-standing end side panel is. **The island's ends
+  are the live case**, and see the warning below.
+- **Q24** — the veneer edge. If an edge line or a surcharge appears against the
+  panels, that is the answer; if nothing appears, that is also an answer.
+- **Q1** — the order notation for the door version, on any H.78 run.
+- **Q3 / Q17** partially — the height increases in this kitchen are priced or
+  they are not, and either way the rule shows.
+
+**Cannot be reached by this estimate**, because the kitchen does not order the
+thing: **Q2** (runner travel — a plan-symbol fact, not an order line),
+**Q9** (H.58.5 at d.67), **Q12** (`C68654` / `C68754`), **Q13**, **Q15** (a load
+limit is an engineering answer, not a priced line), **Q16**.
+
+### AND ONE THAT TODAY'S OWN DECISION TOOK OFF THE LIST
+
+**Q20, Q21 and Q22 are all about Volume 2's adjoining end side panel — and as of
+2026-08-27 this kitchen does not order one.** Both `YU0028` were deleted and the
+island's ends are Volume 3 sheets, because the Kitchen System has no 880 at
+d.645 in any collection. That was the right call for the kitchen, and its side
+effect is that **the order line which would have answered the three panel
+questions no longer exists.** They are not harmed — they are simply no longer on
+the path, and if they matter they need asking, or another project.
+
+*Written down because "the estimate will answer most of them" is true, and
+"most" is doing real work in that sentence.*
 
 ---
 
@@ -952,6 +1018,60 @@ fixing kits by base-unit width when the panel goes behind a run
 **What the engine does meanwhile.** It DRAWS the panel to the floor, because
 that is the drawing standard and the sheet must show it. Which of the two
 articles that becomes is not decided, and the object says so.
+
+
+---
+
+## Q24 — what finishes the EDGE of a wood-veneered panel, and can it be veneer?
+
+**Status:** OPEN, asked 2026-08-27 · blocks an order line on the Avenida Primavera island
+
+The panel chapter of Volume 3 (`CESAR - 3 Linear Elements`, printed p.215-220)
+states the edge treatment for **three** of its six blocks and for none of the
+other three:
+
+| printed | block | edge, as printed |
+|---|---|---|
+| 215 | melamine, 1,2 / 1,8 / 1,8-2,2 | *"with ABS edge"* |
+| 216 | Technomat; laminate | *"with ABS edge"* |
+| 217 | lacquered, four groups | **nothing printed** |
+| 218 | veneer 1 side, 1,8 | **nothing printed** |
+| 219-220 | veneer 2 sides, 1,8 and 2,2 | **nothing printed**, except a warning that *"Trama finishes: 1 side with trama, 1 side polished and Trama edge"* |
+
+That the ABS edge is named on the melamine and laminate blocks and NOT on the
+veneer blocks is a difference the page makes deliberately enough to be worth
+asking about, and the Trama note shows the book does say "edge" when it means to.
+
+**Questions:**
+
+1. What is the standard edge on a veneered panel, `DZ061Q` / `DZ731Q` (1,8, one
+   side) and `DV061Q` / `DV731Q` (2,2, two sides) — veneer, ABS, or raw?
+2. **Can a veneer edge be ordered**, and if so is it a surcharge, an option on
+   the code, or simply what is supplied? The chapter prices three surcharges per
+   piece — socket cutout 32, out-of-square 27, inner or outer reduction 65 — and
+   no edge among them.
+3. On the **one-side** panel of printed p.218, whose reverse is *"melamine
+   matching the carcass"*, does a veneer edge even make sense, or does the
+   one-side construction imply its own edge treatment?
+
+**Why it decides a real order line.** 545 Avenida Primavera's island is clad
+across its back in two courses with a breakfast top slid between them, so the
+horizontal edges facing into that slot are **seen at sitting height, from the
+room**, and so is the vertical seam where the two 1200 boards meet. Andriy has
+asked for those edges in veneer. Nothing on the page says whether that is a code,
+a surcharge or a conversation.
+
+**What the engine does meanwhile.** Nothing: the registry records the edge only
+where the page prints it, and the three veneer blocks carry no edge key at all
+rather than a guessed one. Domain rule 1.
+
+**Andriy's expectation, 2026-08-27, and it is an EXPECTATION and not an answer:**
+*"По опыту, кромку они делают из того же шпона, что и всё остальное."* From
+experience the edge comes in the same veneer as the face. That is very likely
+right and it is still not the page: it is one supplier's practice remembered,
+and this registry's first rule is that the source wins. **It is recorded here
+rather than in the data**, and the question stays open, because the thing that
+will settle it is now scheduled — see *How these get answered* below.
 
 
 ---

@@ -235,8 +235,19 @@ leaves this list when it is done, not when it is mentioned.
 4. **Layer 3 of the Elda work** — FRN fronts as their own order lines,
    composition-scoped companions, and the wine-cooler door being `FRN…` rather
    than `CR96xx`.
-5. **The Elda draft email is written and unsent** — Gmail thread
-   `1a0252a76b71d5d0`, draft `r-9182472239550867935`.
+5. ~~**The Elda draft email is written and unsent**~~ — Gmail thread
+   `1a0252a76b71d5d0`, draft `r-9182472239550867935`. **PARKED ON PURPOSE
+   2026-08-27, and it stops being a pending job.** Andriy's plan: finish the
+   kitchen, produce the drawing, send THAT, and diff our extraction against the
+   Metron estimate that comes back. A priced line names an article, a quantity
+   and a surcharge for a thing we also drew, and this project has been corrected
+   by such a line twice already - 2026/30831 named `DZAK22` and `DZAC00` while
+   this repository was calling them codes with no article behind them. The
+   questions do not expire and will be sharper for having a real order beside
+   them. **Which ones the estimate can and cannot reach is written out** in
+   `docs/Elda_Open_Questions_v0.1.md` -> *How these get answered*, including the
+   three it lost today: Q20-Q22 are about Volume 2's end panel, and this kitchen
+   stopped ordering one the moment the island's ends became Volume 3 sheets.
 6. **The wording of the FIRST `contradicts` line in `_manifest.json` — the
    corner filler measured from the carcass plane, our 703 against the factory's
    700.** It still ends `NOT YET FIXED`, which was true when it was written and
@@ -293,6 +304,18 @@ leaves this list when it is done, not when it is mentioned.
     at all, so every walk skips it and every audit under-reports.
 12. **The LayOut sheet that carries Q11-Q23 to Elda** is not drawn. Two of those
     questions are marked *blocks a live drawing*.
+13. ~~**The island is not drawn.**~~ **ITS BACK AND ENDS ARE, 2026-08-27** -
+    six `DZAK22` measured by probe run 56, and **both `YU0028` deleted**: the
+    island is finished ENTIRELY from Volume 3, because the Kitchen System prices
+    an end panel by cabinet height and has no 880 at d.645 in any collection.
+    Still back-to-back-free, so the paired depth groups still serve nothing.
+    **What is now owed instead:** the material is undecided and the code in the
+    model is lacquer where it will be wood (a different page, a different
+    thickness, and the grain direction IS the code); **the breakfast top at 30
+    inches is not drawn** - there is no `object_class: worktop` anywhere, so the
+    surface the whole slot is built around exists only as a gap; and the panels
+    were dragged into their courses by hand, which no placement rule reproduces.
+    Account: `claude/findings-2026-08-27-island-back-built.md`. Original:
 13. **The island is not drawn.** Probe run 48 measured it: nothing in the model
     stands back to back, so the back-to-back end panels have nothing to serve
     yet.
@@ -308,6 +331,13 @@ leaves this list when it is done, not when it is mentioned.
     kits - so it cannot hang off the panel as a `companion_ref`, which would
     count two. Held in `_manifest.json` under
     `hardware.linear_element_panel_fixings` and visible rather than invented.
+    **AND A SECOND, FOUND BY THE ISLAND'S OWN ORDER: the lacquered sheet is
+    recorded width <= 1200, height <= 3000, straight off the drawing's 120 x
+    300.** For VENEER that fixing is right, because the grain direction is in the
+    code and the board has an orientation. For lacquer it almost certainly is
+    not - a 2400 x 116 board would be cut along the three-metre axis and no
+    printed sentence forbids it. So the engine would refuse a panel the factory
+    can make. Elda question or UCON decision; not fixed silently.
     **Original:**
 14. **Volume 3 cannot be extracted until `source_pdf` is a per-section fact.**
     `Registry.lookup` reads it once from `_manifest.json` for the whole
