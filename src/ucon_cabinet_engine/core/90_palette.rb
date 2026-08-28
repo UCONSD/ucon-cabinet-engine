@@ -964,7 +964,23 @@ module UCON
                   '<br>' + dims + '<br>' +
                   '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
                 el.style.display='block';
-                document.getElementById('buildBtn').style.display='block';
+                // A BUTTON THAT ALWAYS REFUSES IS A BAD BUTTON, 2026-08-28.
+                // Generator.build refuses a worktop in a sentence about the
+                // run, which is the right refusal - but it arrives AFTER the
+                // press, and the press was invited by a Build button that
+                // looked like every other one. A top is still worth showing
+                // here (its code, its thickness, its price groups are what
+                // somebody came to read); what it is not is buildable from a
+                // list. So the card says where it IS built and the button goes
+                // away, and the refusal behind it stays as the backstop for
+                // anything that reaches build another way.
+                var top = c['class'] === 'worktop';
+                if(top){
+                  el.innerHTML += '<br><i>A top is not built from a list: it is as ' +
+                    'long as the run it covers and its depth is a band chosen against ' +
+                    'it. Select the run and press Worktop.</i>';
+                }
+                document.getElementById('buildBtn').style.display = top ? 'none' : 'block';
               }
               function doSearch(){
                 var q = document.getElementById('search').value.trim().toUpperCase();

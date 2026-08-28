@@ -8668,6 +8668,30 @@ check('AND THE FINISH NAME IS OPTIONAL, but its absence is written down') do
   raise 'a named finish still claims to be unchosen' if named[:finish_note].include?('NOT CHOSEN')
 end
 
+check('THE PICKER MUST NOT OFFER A BUILD IT WILL ALWAYS REFUSE') do
+  # Generator.build refuses a worktop in a sentence about the run, and that
+  # refusal is right - but it arrives AFTER the press, and the press was invited
+  # by a Build button that looked like every other one. Andriy pressed it twice
+  # on 2026-08-28, which is exactly the right number of times to press a button
+  # that is there.
+  #
+  # A SOURCE check, because the picker is JavaScript and nothing headless can
+  # click. It pins THE PAIR: the button hidden for the class, and the refusal
+  # kept behind it as the backstop for anything reaching build another way.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  card = src[/function showCard.+?\n              \}/m]
+  raise 'showCard is gone' unless card
+  raise 'the picker still offers a Build for a worktop' unless
+    card.include?("c['class'] === 'worktop'") &&
+    card.include?("top ? 'none' : 'block'")
+  raise 'and it must say where a top IS built' unless
+    card.include?('Select the run and press Worktop')
+
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'the refusal behind the hidden button is gone' unless
+    gen.include?('is a worktop, and a worktop is not built from the picker')
+end
+
 check('THE WORKTOP DIALOG PRE-CHOOSES NEITHER THE BAND NOR THE GROUP') do
   # A SketchUp inputbox selects its first dropdown entry, so whatever is put
   # first is what somebody gets by pressing OK without reading. Both of these
