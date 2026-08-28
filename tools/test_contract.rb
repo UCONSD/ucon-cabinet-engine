@@ -8156,9 +8156,27 @@ check('the bridge button never arms, and is drawn only in a dev checkout') do
   dev  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/95_dev_bridge.rb', __dir__))
   pal  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
   main = File.read(File.expand_path('../src/ucon_cabinet_engine/main.rb', __dir__))
-  [dev, pal, main].each do |src|
-    body = src.gsub(/^\s*#.*$/, '')
-    raise 'something offers a one-click arm' if body.include?('arm!')
+  # THE INVARIANT IS "NO ONE-CLICK ARM", NOT "THE WORD NEVER APPEARS" - and the
+  # difference was found the moment the reload answer started TELLING the person
+  # to arm again. A message that names the method is the opposite of a hazard;
+  # a callback that CALLS it is the hazard. This asks the sharper question.
+  #
+  # main.rb must not mention it at all - it has no bridge code left.
+  raise 'the shell must not touch the bridge at all' if
+    main.gsub(/^\s*#.*$/, '').include?('arm!')
+
+  # In the palette, the reload callback itself must not call it.
+  cb2 = pal[/add_action_callback\('reload_bridge'\).*?\n        end\n/m] or
+    raise 'the reload_bridge callback could not be found'
+  raise 'the palette button arms in one click' if
+    cb2.gsub(/^\s*#.*$/, '').include?('arm!')
+
+  # In DevBridge, every occurrence must sit inside a quoted string - i.e. it is
+  # something the tool SAYS, never something it does.
+  dev.gsub(/^\s*#.*$/, '').lines.each do |ln|
+    next unless ln.include?('arm!')
+    raise "DevBridge calls arm! rather than naming it: #{ln.strip}" unless
+      ln =~ /['"][^'"]*arm!/
   end
 
   raise 'the palette must have a reload_bridge callback' unless
@@ -8173,6 +8191,16 @@ check('the bridge button never arms, and is drawn only in a dev checkout') do
   # Learned rule 13: a record of an outside action is only true if something checks it.
   raise 'the result must be read back from the bridge' unless
     pal.include?('DevBridge.announce')
+
+  # AND IT MUST SAY THAT STARTING THE BRIDGE CLEARED THE ARM. probe_bridge.rb's
+  # `start` sets @armed = false, so this button silently disarms - and the next
+  # probe after it was going to be one that calls Generator.build, which applies
+  # whether armed or not. The bridge would have reported "rolled back" over a
+  # kitchen that had changed. A convenience that quietly changes state has to
+  # announce the state it changed.
+  raise 'the reload answer must warn that the arm was cleared' unless
+    dev.include?('CLEARED any arm')
+  raise 'and it must name the way back' unless dev.include?('arm!')
 
   # A SUCCESS MUST NOT BE MODAL, and this is not a style rule. UI.messagebox
   # blocks SketchUp's timer loop, and the thing this button reports on IS a
@@ -8355,6 +8383,30 @@ check('the armed probes order the OAK group, and every code they name is oak') d
   # 663 = 667 - 4, and the 4 is the back going from 22 to 18. If the back's
   # thickness ever changes, this number is wrong and the check says where.
   raise 'the ends must be cut to 663' unless plan.include?('663, 880')
+end
+
+check('a new chapter may not add another unlabelled type to the picker') do
+  # FOUND 2026-08-28, in the picker, by Andriy looking at it: the Linear Elements
+  # panels head their cards with `panel_veneer_2sides_vertical` - a programmer's
+  # key. TYPE_LABELS falls back to the key when a type is unmapped, and it says
+  # so in its own comment, so nothing was broken. But it was written early and NO
+  # CHAPTER SINCE HAS ADDED TO IT: 74 of the 100 type keys in the catalog show a
+  # raw key today, across base, wall, tall, dish-drainer, USA and Linear Elements
+  # alike. This is not a panels defect; the panels only made it visible.
+  #
+  # THIS IS A RATCHET, NOT A FIX. Failing on all 74 would fail the suite for a
+  # week and teach nobody anything. What it refuses is GROWTH: extract a new
+  # chapter and either label its types or come here and say, in a commit, that
+  # you chose not to. The number only goes down.
+  labels = UCON::CabinetEngine::Palette::TYPE_LABELS
+  keys   = Registry.catalog.map { |c| c['type_key'] }.compact.uniq
+  unlabelled = keys.reject { |k| labels.key?(k) }
+  raise "the picker shows #{unlabelled.length} raw type keys, was 74 - update this number DOWN" if
+    unlabelled.length > 74
+  # And it must not silently go stale the other way either: if somebody labels
+  # them all, this check should be deleted rather than left passing vacuously.
+  raise 'every type is labelled now - delete this check rather than leave it vacuous' if
+    unlabelled.empty?
 end
 
 check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do

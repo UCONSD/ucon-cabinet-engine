@@ -332,3 +332,153 @@ changes no code. Both are written, armed and unrun, and both now carry group A:
 - **`probe_inbox_hold_82.rb`** — the east wall's open end: two `DV061Q` boards,
   seated by a −90° rotation about Y, the lower one checked before the upper is
   built.
+
+---
+
+# PART THREE — what the picker showed once it was reopened
+
+## 12. The panels were there all along; the palette was not
+
+*"Не вижу панелей в пикере. Не вижу панелей на проекте."*
+
+**The project half was mine**: Andriy armed the bridge, I asked which probe to
+drop, and the oak question intervened. Nothing was ever dropped — the inbox was
+empty and the last run was 81. No panels because none were built.
+
+**The picker half was the two clocks again.** The data was never in doubt —
+checked headlessly before saying anything: `DZ731Q` sits in `Registry.catalog`
+under class `panel_sheet`, labelled *"Panels cut to size (per m²)"*, 44 codes,
+carrying the `height_range_mm` that triggers the sheet grid. Closing and
+reopening the palette showed all ten types immediately.
+
+**And the screenshot proved the staleness before the picker did.** The bridge
+button answered with a MESSAGEBOX, and the current code answers on the status bar
+— `announce`, added an hour earlier precisely because a modal blocks the timer.
+A dialog bakes its callbacks at open, so that button was still running the
+pre-16:17 closure. `Reload core` cannot reach it; only closing the panel can.
+
+> The version dialog was honest throughout: `core v1.1.0, deployed 09:17:44,
+> 18 files`, and the newest core file on disk is exactly 16:17:44 UTC = 09:17:44
+> PDT, 18 of them. **The engine was current and the window was not**, and only
+> one of those two says so on itself.
+
+## 13. AND PRESSING THE BRIDGE BUTTON DISARMS THE BRIDGE
+
+`reload!` loads `probe_bridge.rb`, whose last line calls `start`, and `start`
+does `@armed = false` on its fifth line. So the arm Andriy had set was silently
+cleared by the convenience I built to save him typing.
+
+**The run counter survives and the arm does not** — `@runs ||= 0` against
+`@armed = false` — which is why the dialog could truthfully say *"ON, 7 runs"*
+while being disarmed.
+
+That is not a bug in the bridge: a freshly started bridge SHOULD be unarmed.
+It is a trap in the pairing, and the worse half is what would have happened next:
+probe 71 calls `Generator.build`, which commits its own operation, so **it would
+have applied anyway** while the bridge's own accounting said it had not.
+Armed-vs-not is honesty, not safety, and here the two would have disagreed.
+
+**The order is therefore: reload the bridge FIRST, arm SECOND.** The button's own
+comment says it never arms; it now has to say it also un-arms.
+
+## 14. 74 of 100 picker types show a raw key, and it is not a panels defect
+
+The panels' cards head themselves `panel_veneer_2sides_vertical`. `TYPE_LABELS`
+falls back to the key for an unmapped type and says so in its own comment — but
+it was written early and **no chapter since has added to it**:
+
+| | |
+|---|---|
+| type keys in the catalog | 100 |
+| with a label | 26 |
+| **showing a raw key** | **74** |
+
+Across base, wall, tall, dish-drainer, USA and Linear Elements alike —
+`tall_oven_h60_two_jumbo`, `dish_drainer_top_hung_doors_stacked`,
+`base_compound_2_compartments_bottom_hung`. **The panels only made it visible.**
+
+**Nothing is wrong**: each card carries the catalog's own description underneath,
+which is accurate and readable. It is legibility, and it touches neither the
+order nor the drawing.
+
+**Andriy, 2026-08-28: later — panels and the Counter-Top first.** So what went in
+is a **ratchet, not a fix**: a check that refuses to let the number GROW. Failing
+on all 74 would fail the suite for a week and teach nobody anything; refusing the
+75th means the next chapter either labels its types or says in a commit that it
+chose not to. It also fails if the number reaches zero, so it gets deleted rather
+than left passing vacuously. Proved by inventing a type and watching it report
+*"the picker shows 75 raw type keys, was 74"*.
+
+### And the fix made its own guard fire, correctly
+
+`status_line` now ends: *"Starting it CLEARED any arm: type
+`UCON::ProbeBridge.arm!` again if you meant to."* — and the check written
+yesterday, *"the bridge button never arms"*, failed at once, because it greps the
+non-comment body for `arm!`.
+
+**It was right to fire and it was asking the wrong question.** The invariant is
+*no one-click arm*, not *the word never appears* — and a message that NAMES the
+method is the opposite of a hazard. It now asks three sharper questions instead:
+`main.rb` must not mention it at all; the `reload_bridge` callback must not call
+it; and in `DevBridge` every occurrence must sit inside a quoted string — something
+the tool SAYS, never something it does. Proved by adding a real
+`::UCON::ProbeBridge.arm!` after the `load` and watching it report
+*"DevBridge calls arm! rather than naming it"*.
+
+> A guard that forbids a WORD stops the thing it was aimed at and also stops you
+> explaining it. The fix was to name the behaviour instead of the token.
+
+---
+
+# PART FOUR — the island is wood
+
+**Run 71 applied**, and the bridge said so in its own words rather than pretending
+otherwise:
+
+> *WARNING: THIS RUN APPLIED. THE ROLLBACK DID NOT HOLD.
+> entities 63 → 63, definitions 779 → 791, positions 348053 → 346763.*
+
+Exactly as the probe's header promised: `Generator.build` commits an operation of
+its own and that commit closes the bridge's outer one. Entities unchanged because
+six were erased and six built.
+
+## 15. Verified by reading the model, not the builder's report
+
+Run 83, read-only — the same discipline run 43 applied to the east fridge:
+
+| | |
+|---|---|
+| `DZAK22` remaining | **0** |
+| `DZ731Q` backs | **4** |
+| `DV731Q` ends | **2** |
+
+**The drawn thickness agrees with the attribute on all six** — 18 on every back,
+22 on both ends. That is the check that would have caught a wrong article, because
+a `DV731Q` drawn 18 thick would mean the generator had taken its depth from
+somewhere other than the code.
+
+### And the 4 mm landed
+
+The whole reason this was a rebuild and not an attribute edit:
+
+```
+back OUTER face at y : 2350.9
+end (left)  far edge : 2350.9   FLUSH
+end (right) far edge : 2350.9   FLUSH
+end LENGTH along y   : 663.0    (was 667 when the back was 22)
+```
+
+The back went 22 → 18, so the end that wraps its edge went 667 → 663, and both
+ends finish exactly on the backs' outer face. **Measured out of the model, not
+computed from the plan.**
+
+### The order side
+
+Both codes reach the order as `manufacturer: cesar`, `status: PLANNING`, citing
+`CESAR - 3 Linear Elements.pdf` printed p.218 for the one-sided backs and p.220
+for the two-sided ends — the right page for each, which matters because those two
+pages are where the grain and the finish family differ.
+
+**What is still owed on the island:** the finish NAME, one of the seven First
+oaks, chosen in front of real veneer and not from a render. It is an order field
+and changes no code.

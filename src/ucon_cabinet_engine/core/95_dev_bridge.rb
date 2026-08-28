@@ -30,6 +30,19 @@
 # next run COMMIT instead of roll back, and that is a decision somebody types out
 # in full, every time, with the model in front of them. A one-click arm is how a
 # probe applies to a kitchen nobody meant to change.
+#
+# AND IT UN-ARMS, WHICH THE SENTENCE ABOVE DID NOT SAY UNTIL IT BIT — 2026-08-28.
+# `reload!` loads probe_bridge.rb, whose last line calls `start`, and `start` sets
+# `@armed = false` on its fifth line. So pressing this button silently clears an
+# arm that was already set. The RUN COUNTER survives and the arm does not, which
+# is why the panel could truthfully report "ON, 7 runs" while disarmed.
+#
+# That is correct of the bridge — a freshly started bridge SHOULD be unarmed — and
+# it is a trap in this pairing, because the next probe would have been 71, which
+# calls Generator.build and therefore APPLIES WHETHER ARMED OR NOT. The bridge's
+# accounting would have said "rolled back" over a kitchen that had changed.
+#
+# So the answer now says so out loud. THE ORDER IS: reload the bridge, THEN arm.
 
 module UCON
   module CabinetEngine
@@ -114,7 +127,8 @@ module UCON
           rescue StandardError
             0
           end
-          "Probe bridge is ON — #{runs} run(s) so far, watching tools/probe_inbox/."
+          "Probe bridge is ON — #{runs} run(s) so far, watching tools/probe_inbox/. " \
+            'Starting it CLEARED any arm: type UCON::ProbeBridge.arm! again if you meant to.'
         else
           'Probe bridge is OFF.'
         end

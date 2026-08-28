@@ -344,7 +344,13 @@ leaves this list when it is done, not when it is mentioned.
     island is finished ENTIRELY from Volume 3, because the Kitchen System prices
     an end panel by cabinet height and has no 880 at d.645 in any collection.
     Still back-to-back-free, so the paired depth groups still serve nothing.
-    **What is now owed instead:** the material is undecided and the code in the
+    **CLOSED 2026-08-28: THE ISLAND IS WOOD.** Run 71 applied and run 83 verified
+    it by reading the model - zero DZAK22, four DZ731Q backs and two DV731Q ends,
+    group A First (the oak group), drawn thickness agreeing with the attribute on
+    all six, and the ends at 663 flush with the backs' outer face because the back
+    went 22 -> 18. The finish NAME is still unchosen and is an order field.
+    Account: `claude/findings-2026-08-28-panels-the-letter-is-a-lookup.md`.
+    Original, kept (learned rule 9): the material is undecided and the code in the
     model is lacquer where it will be wood (a different page, a different
     thickness, and the grain direction IS the code); **the breakfast top at 30
     inches is not drawn** - there is no `object_class: worktop` anywhere, so the
