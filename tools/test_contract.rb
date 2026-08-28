@@ -8258,7 +8258,7 @@ check('B AT 1,8 IS NOT B AT 2,2 - the two-sided veneer letter is per THICKNESS')
   end
 end
 
-check('the two codes this kitchen is about to order name a readable finish list') do
+check('the island pair names a readable finish list, and both sides share it') do
   file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
   d = JSON.parse(File.read(file))
   found = {}
@@ -8271,6 +8271,12 @@ check('the two codes this kitchen is about to order name a readable finish list'
     raise "#{code} lists no finishes" unless c['finishes'].is_a?(Array) && c['finishes'].size == 7
     raise "#{code} must offer Rovere Sbiancato" unless c['finishes'].include?('Rovere Sbiancato')
   end
+  # AND UNLIKE PRIME, THE TWO SIDES SHARE THE WHOLE LIST. That is the property
+  # that makes A safe for an island clad with a one-sided back and two-sided
+  # ends: in B the back can carry nine of the sixteen and every Trama is
+  # end-only, so a finish can be picked that cannot be matched.
+  raise 'in the oak group both sides must offer the same seven' unless
+    found['DZ731Q']['finishes'].sort == found['DV731Q']['finishes'].sort
   # And they are the pair the island needs: a 1,8 ONE-sided back and a 2,2
   # TWO-sided end, which is why the ends lose 4 mm when the back stops being 22.
   raise 'the back must be 18 and faced on one side' unless
@@ -8309,15 +8315,36 @@ check('a one-sided PRIME back and a two-sided PRIME end cannot both be Trama') d
     back['finishes'].any? { |f| f.include?('Trama') }
 end
 
-check('the held island probe orders the group Andriy chose, and nothing older') do
-  # probe_inbox_hold_71.rb is ARMED and rebuilds the island's six panels. It was
-  # written assuming group A and the group was decided as B on 2026-08-28; a
-  # script carrying the old codes would have been discovered by an order.
+check('the armed probes order the OAK group, and every code they name is oak') do
+  # THE GROUP MOVED TWICE ON 2026-08-28 and this check is what makes that safe.
+  # probe 71 was written assuming A and nobody had confirmed it; the letters were
+  # then named off the pages and Andriy chose B; then the designer's render made
+  # the kitchen OAK, and A is the oak group - all seven First veneers are Rovere,
+  # while B holds only two oaks both faces can carry.
+  #
+  # So this does not pin a letter. IT PINS THE PROPERTY THE DECISION WAS MADE ON:
+  # every code these armed scripts name must be a wood the kitchen can be, and a
+  # letter that stops meaning oak must fail here rather than in an order.
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  all = {}
+  d['data']['unit_types'].each_value { |t| t['codes'].each { |c| all[c['code']] = c } }
+
   src = File.read(File.expand_path('../tools/probe_inbox_hold_71.rb', __dir__))
   plan = src[/PLAN = \[.*?\]\.freeze/m] or raise 'the probe has no PLAN table'
-  raise 'the probe still orders the group A codes' if plan.include?('DZ731Q') || plan.include?('DV731Q')
-  raise 'the backs must be DZ735Q' unless plan.scan('DZ735Q').size == 4
-  raise 'the ends must be DV735Q'  unless plan.scan('DV735Q').size == 2
+  raise 'the backs must be DZ731Q' unless plan.scan('DZ731Q').size == 4
+  raise 'the ends must be DV731Q'  unless plan.scan('DV731Q').size == 2
+
+  east = File.read(File.expand_path('../tools/probe_inbox_hold_82.rb', __dir__))
+  eplan = east[/PLAN = \[.*?\]\.freeze/m] or raise 'probe 82 has no PLAN table'
+  raise 'the east end must be DV061Q' unless eplan.scan('DV061Q').size == 2
+
+  %w[DZ731Q DV731Q DV061Q].each do |code|
+    c = all[code] or raise "#{code} is not held"
+    raise "#{code} is not in the oak group" unless c['finish_family'] == 'First wood veneers'
+    oak = c['finishes'].select { |f| f.start_with?('Rovere') }
+    raise "#{code} offers a finish that is not oak" unless oak.size == c['finishes'].size
+  end
   # And both codes must actually be held, at the thicknesses the 663 depends on.
   file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
   d = JSON.parse(File.read(file))

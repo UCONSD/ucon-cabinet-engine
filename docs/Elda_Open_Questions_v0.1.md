@@ -42,6 +42,7 @@ existed.
 | Q23 | which article is a floor-standing end side panel | **mostly answered by the source** 2026-08-26 (Volume 3 p.214); the part that decides an order line is open |
 | Q24 | what finishes the EDGE of a veneered panel, and can it be veneer | **open** 2026-08-27 · blocks an order line on the island's back |
 | Q25 | the Strip reel (p.534) prints NO colour temperature - what ships | **open** 2026-08-27 · the only lamp in the book whose temperature is not stated |
+| Q26 | does "horizontal / vertical grain" describe the SHEET or the INSTALLED panel | **open** 2026-08-28 · **decides whether a 2440-tall veneer end panel can be ordered at all** |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1108,3 +1109,61 @@ a silent spec is the shape of the mistake this project is trying not to repeat.
 Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q23 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. Q24 the veneered edge, Q25 the Strip reel's missing temperature. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.
+
+
+---
+
+## Q26 — does "horizontal / vertical grain" describe the SHEET, or the INSTALLED panel?
+
+**Status:** open · added 2026-08-28 · **decides whether a 2440-tall veneer end panel exists**
+
+**Asked because:** the east wall of 545 Avenida Primavera ends in the open — a
+`C90635` tall unit exposed floor to 2440 with an `SD0631` top element to 3040
+above it — and Andriy has chosen to close it with a Volume 3 sheet, as the island
+was closed.
+
+### What the pages draw
+
+printed p.218–220 draw the SAME sheet in every veneer block, **300 × 120 cm**,
+and the only difference between a "horizontal grain" block and a "vertical grain"
+one is which way the grain glyph runs. Read off 300-dpi renders, because at text
+level the two are identical:
+
+| block | grain glyph runs along | so the grain is limited to |
+|---|---|---|
+| horizontal grain | the **300** axis | **3000 mm** |
+| vertical grain | the **120** axis | **1200 mm** |
+
+Both are recorded `width ≤ 3000, height ≤ 1200`, faithfully.
+
+### Why that is a question and not an answer
+
+The island's ends are ordered **663 × 880** on `DV735Q`, a *vertical grain*
+article, and they stand 880 tall — so there the ordered HEIGHT is the installed
+height, and vertical grain runs up it. Consistent, and inside the 1200.
+
+**The east wall's end is 2440 tall.** If the ordered height must be the installed
+height, then no vertical-grain article can reach it — 2440 > 1200 — and **a
+2440-tall veneered end panel cannot be ordered in this chapter at all.**
+
+The alternative is to order it **2440 wide × 645 high from the HORIZONTAL-grain
+block** (`DV061Q`, group A First — the oak group), where the grain runs along the
+2440, and to install that board with its ordered width standing vertical. The grain then runs up the finished panel, which
+is what the kitchen wants, and every printed limit is respected.
+
+**Question:** is that a legitimate order — does Cesar read `width` and `height` as
+the board's own axes, so that a "horizontal grain" panel installed on its side
+gives vertical grain? Or does `height` mean the installed height, in which case
+this end cannot be veneer and needs a different material or a Volume 2 article?
+
+### Why it cannot be settled here
+
+It changes the ARTICLE — `DV065Q` against `DV735Q` — and Q24 is already open on
+what finishes the edge of a veneered panel. A wrong reading orders a board whose
+grain runs across a 2,4-metre end, which is the one mistake nobody can hide.
+
+**Related:** Q21 (is the printed `d.` the panel or the whole assembly). The model
+answers Q21's arithmetic independently: this end measures **645** from the door
+face to the wall — 620 carcass + 22 door + 2,5 gap — which is exactly the `d. 64,5`
+Volume 2 prints for a 62-cm carcass. That is corroboration and not proof, and it
+is recorded as such.

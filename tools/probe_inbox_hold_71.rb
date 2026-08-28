@@ -22,6 +22,27 @@
 # and because the back is now 18 and not 22, the ends that WRAP its edge go
 # from 667 to 663. Four millimetres, and they are the reason this is a rebuild
 # and not an attribute edit.
+#
+# THE GROUP IS A - FIRST WOOD VENEERS, AND IT MOVED TWICE IN ONE DAY. 2026-08-28,
+# and both moves are kept because the second is only legible against the first.
+#
+#   this probe was written assuming A, and nobody had ever confirmed it;
+#   the letters were then given their names off printed p.217-220 and Andriy
+#     chose B, Prime;
+#   then the designer's render arrived and the kitchen is OAK - at which point
+#     the groups stop being a price ladder and become a species list.
+#
+# GROUP A IS THE OAK GROUP: all seven First veneers are Rovere - Sbiancato,
+# Nordico, Mediterraneo, Fossile, Dark, Corvino, Cortado - and the one-sided back
+# and the two-sided end offer THE SAME SEVEN, so any of them matches across this
+# island. Group B holds only two oaks that both sides can carry (Termocotto and
+# Rigatino Sbiancato); its other seven oaks are all Trama and exist on the END
+# ONLY. C and D contain no oak at all. And A is the cheaper of the two: 343/549
+# against 358/579.
+#
+# So the original codes were right for the wrong reason, and are right again for
+# the right one. THE FINISH NAME IS STILL UNCHOSEN and it is an ORDER field that
+# changes no code here - which is exactly why nothing in this script can catch it.
 begin
   m   = Sketchup.active_model
   ce  = UCON::CabinetEngine

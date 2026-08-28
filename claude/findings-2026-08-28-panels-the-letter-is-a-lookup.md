@@ -102,3 +102,173 @@ does not block the rebuild.
 - **The finish NAME within Prime is unchosen**, and must come from the nine.
 - The lacquer finish lists on printed p.217 remain unread — harmless now that the
   island is leaving lacquer, and recorded rather than assumed away.
+
+---
+
+# PART TWO — the east wall ends in the open
+
+**Andriy:** *"the wall with high cabinets ends with nothing. One high, the second
+ordinary. 235 and 60 high."*
+
+Probe 79 asked and got a useless answer, because it sorted every run by **X** and
+the east wall runs along **Y** — X is that wall's depth axis, so its "ends" were
+two faces of the same cabinets. Probe 80 re-asked on the right axis. **Third time
+this week that a measurement had to be re-taken because it was taken along the
+wrong axis**, after the hood's X-only collision test and the run gap's own
+depth/width confusion.
+
+| | |
+|---|---|
+| the run | y 646,1 → 4915,3 |
+| the LOW end | already closed — `C00151` filler 50 × 2340 and `BE0151` 50 × 600 |
+| the HIGH end | **nothing** — `C90635` 600 × 620 × 2340 (z 100→2440) and `SD0631` 600 × 620 × 600 (z 2440→3040) |
+
+Exactly what Andriy said: two exposed sides, 2340 and 600.
+
+## 6. The catalog had an answer, and the answer was a collection question
+
+Maxima-Intarsio prints **both** heights at the depth group for a 62-cm carcass
+(printed p.440): `F90030` at 2340 and `XF0030` at 600, d.645, 2,2 thick, held and
+buildable. **N_Elle prints neither** — its end panels stop at 368 / 780 / 840, in
+both the plain and framed versions. So whether a catalog end panel exists here at
+all depends on the collection question that `repo-state` has been carrying.
+
+**Q22 does not bite here, and that is worth recording**: the second end-panel
+page's depth groups are all back-to-back sums — 750, 1020, 1070, 1290 — while
+this is a single 620 run, so only the first page offers a 645 at all. Whatever
+Q22 turns out to mean, the article for this end is on page one.
+
+**Andriy chose the Volume 3 sheet, as the island was closed** — which bypasses
+the collection question entirely, the same way the island did.
+
+## 7. And then the sheet limits bit
+
+### The end is 3040 and no sheet in the chapter exceeds 3000
+
+Floor to the top of the upper box is 3040. Every veneer block is `width ≤ 3000,
+height ≤ 1200`; lacquer is `1200 × 3000`; the tallest anything in the chapter
+reaches is laminate's 4180. **One board was never possible.** Andriy: two sheets,
+joint at 2440 — where the real joint between the two carcasses already is, which
+is how the island's back was split at the breakfast top.
+
+### The grain glyph, read off 300-dpi renders
+
+Both veneer blocks draw the **same** 300 × 120 sheet. The only difference is the
+grain glyph, and at text level the two pages are identical — this had to be seen:
+
+| block | glyph runs along | grain limited to |
+|---|---|---|
+| horizontal grain | the **300** axis | **3000 mm** |
+| vertical grain | the **120** axis | **1200 mm** |
+
+**So the island worked and this end cannot, in the same article.** The island's
+ends are 663 × 880 on `DV735Q`, vertical grain, 880 of grain inside the 1200.
+This end needs **2440 of grain running up the board**, and no vertical-grain
+article can carry it.
+
+### The engine refused it in as many words, which is the check working
+
+```
+645 x 2440  -> REFUSED: DV065Q is cut from a sheet 1200 mm on that axis;
+               2440 does not come out of it. That is a second panel or a
+               different material, not a height nobody prints.
+2440 x 645  -> ok
+```
+
+So the board is ordered **2440 wide × 645 high from the HORIZONTAL-grain block**
+and stood on its side. The grain then runs up the finished panel, and every
+printed limit is respected. **`DV065Q`** — 2,2, two sides, group B Prime — 2,2 and
+two-sided to match the island's ends, B because Andriy chose Prime today.
+
+**Whether that is a legitimate order is Elda Q26**, added today: does
+"horizontal / vertical grain" describe the SHEET or the INSTALLED panel? A wrong
+reading orders a board whose grain runs across a 2,4-metre end, which is the one
+mistake nobody can hide.
+
+## 8. The seat, measured — and it produced the catalog's own number
+
+Probe 81, off the bodies:
+
+```
+C90635  CARCASS  x 5612,5..6232,5   y 4315,3..4915,3   z  100..2440
+SD0631  CARCASS  x 5612,5..6232,5   y 4315,3..4915,3   z 2440..3040
+FRONT (door face)  x 5587,5..5609,5
+```
+
+So the finished end spans **x 5587,5 → 6232,5 = 645**: carcass 620 + door 22 +
+the 2,5 front gap. **That is exactly the `d. 64,5` Volume 2 prints** for a 62-cm
+carcass — arrived at from our own drawn model, not copied from the page.
+
+> It is corroboration for **Q21** and it is not proof. Q21 asks whether the
+> printed `d.` is the panel or the whole assembly, and a number our drawing
+> happens to reproduce is evidence about our drawing. *Arithmetic that closes
+> exactly is not evidence* — the 120 mm fridge base closed exactly and was false.
+> Recorded as corroboration, and Q21 stays open.
+
+## 9. `tools/probe_inbox_hold_82.rb` — written, armed, not run
+
+The engine seats a sheet **behind** a run — `sheet_ground` and
+`placement_transform` — and has **no rule for finishing an end**. That is the same
+gap probe 71 works around for the island, and one kitchen is still not enough to
+invent the rule from.
+
+**And this seat is a rotation nothing else in this project has needed.**
+`60_generator.rb:642` boxes a panel as `(0, front_y, z0)` by `(w, d, h)` — width
+along its own X, thickness along Y, height along Z — so a 2440 × 645 board is
+drawn **lying down**. Standing it up is **−90° about the Y axis**, not a yaw.
+Every other seat here has been a yaw, which is why this one is written out in the
+probe rather than copied from a sibling.
+
+The probe **builds the lower board, measures it, and refuses to build the second
+if it did not land within 0,5 mm** of what probe 81 measured. `Generator.build`
+commits its own operation, so nothing in it can be rolled back; the most it can
+do is stop after one wrong object instead of two, and say that one must be
+deleted by hand.
+
+---
+
+## 10. THE GROUP MOVED TWICE IN ONE DAY, AND THE SECOND MOVE IS THE INTERESTING ONE
+
+Both are kept (learned rule 9), because the second is only legible against the
+first.
+
+1. Probe 71 was written assuming **A**, and nobody had ever confirmed it.
+2. The letters were given their names off printed p.217–220, and Andriy chose
+   **B — Prime**, reasonably: it is the larger and dearer list.
+3. Then the designer's render arrived. **The kitchen is oak.**
+
+At that point the groups stop being a price ladder and become a species list:
+
+| group | family | oak on BOTH back and end | back/end pts |
+|---|---|---|---|
+| **A** | First wood veneers | **all seven** — Sbiancato, Nordico, Mediterraneo, Fossile, Dark, Corvino, Cortado | 343 / 549 |
+| B | Prime wood veneers | only two — Termocotto, Rigatino Sbiancato | 358 / 579 |
+| C | Special | none | 508 / 1038 |
+| D | High-gloss | none | 809 / 1002 |
+
+**Group A is the oak group**, and it is also the one where the one-sided back and
+the two-sided end offer *the same seven*, so any choice matches across the island.
+B's other seven oaks are all Trama and exist on the end only — the constraint §4
+found, now with teeth: in B a designer can pick an oak that **cannot be carried
+onto the backs at all**.
+
+So the codes go back to what the held probe had before I touched it: `DZ731Q`,
+`DV731Q`, and `DV061Q` for the east end.
+
+> **The original codes were right for the wrong reason, and are right again for
+> the right one.** They were a guess when written and are a decision now, and the
+> difference is not visible in the file — only in this note and in what the check
+> asserts.
+
+### So the check stopped pinning a letter
+
+It pinned `DZ735Q`/`DV735Q` for about an hour, which would have made this
+correction *fail the suite* — a guard defending a decision instead of a property.
+It now pins **the property the decision was made on**: every code the armed
+scripts name must have `finish_family: First wood veneers` and offer **only**
+Rovere finishes. A letter that stops meaning oak fails here rather than in an
+order. Proved by putting the group B codes back and watching it fail.
+
+**What is still not chosen is the finish NAME**, and it will not be chosen from a
+render: colour in a JPEG is not a finish sample, and one of the seven is a
+decision for Andriy and the client in front of real veneer.
