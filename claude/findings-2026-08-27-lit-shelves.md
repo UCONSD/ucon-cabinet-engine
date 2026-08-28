@@ -229,3 +229,81 @@ possible to diagnose at all.
 **And the probe found in one run what two rounds of reasoning did not.** The
 model can be asked. When the complaint is "I don't see it", ask the model where
 it is before theorising about tags — the answer arrives with coordinates on it.
+
+---
+
+## 2026-08-28 — the cone turned over, and the facing question was DELETED rather than solved
+
+Two notes from Andriy on the office Mac, and the second is the more interesting.
+
+### The cone was a funnel
+
+> Трапеция должна быть широкая внизу и усеченная вверху.
+
+It was wide at the top and narrow at the foot. That is the shape of something
+draining away, not of light. It had survived a round of review because I was
+checking whether the mark *fitted* — the 25 mm clearance from yesterday — and
+never asked what it *depicted*.
+
+Both constraints hold at once when it is the right way up: the WIDE edge is the
+foot, and the foot is what gets capped 25 mm short of each end, so *a symbol
+never leaves the footprint of its object* is untouched. The truncated top is
+narrower again by the same 25, about 22,6° from vertical at the standard drop.
+On an 874 shelf: lamp 1,5→872,5, cone top 50→824, foot 25→849.
+
+`led_cone_top_mm` **refuses** rather than inverting: a board too narrow for the
+splay gets the lamp line and no cone. A cone drawn inside out is the exact
+mistake being corrected, and it must not come back through the short-board door.
+
+### The label is supposed to disappear
+
+> Тоненькая, как можно тоньше. Еле-еле заметная, светло-серая.
+
+`add_3d_text` with `filled: false` — outlines rather than solid glyphs, the
+thinnest a letter can be drawn — and its own material, `UCON_Symbol_Pale` at 190
+grey against the 128 every other symbol here uses. A note on a drawing, not a
+heading: readable when looked for, invisible when not.
+
+### AND THEN THE FACING QUESTION WAS TAKEN AWAY
+
+> Уже не будет значения, где лицо, где не лицо. Буквы будут написаны наоборот.
+> Я просто его разверну руками обычными инструментами со скетчапом. Потому что
+> стены могут быть под разными углами.
+
+This is the good one, and it undoes a feature I had shipped the day before.
+
+**The chain of reasoning that produced the turn buttons was sound and the
+conclusion was still wrong.** An object could be built back-to-front; there was
+no way to correct it; therefore give the person a way to turn it. Every step
+follows. What none of them questioned was why the drawing needed a facing at
+all — and the answer is that it did not. The symbol sat 1 mm proud of the face,
+so the symbol *asserted* a front, so the object needed a front to be right, so
+the person needed a control to fix the front.
+
+Move the light to **half the depth** and the whole chain evaporates. That is the
+one position equally right from either side. The label reads backwards from one
+of them, and Andriy accepted that explicitly rather than asking me to solve it —
+which is the correct trade, because the alternative was an engine that has to
+know which way a wall faces.
+
+**And the buttons were the wrong tool even on their own terms.** 90/180/270 does
+not serve a wall at 37°, and SketchUp's rotate tool serves every angle already.
+*A control that handles the easy quarter of the cases while silently failing the
+rest is worse than no control, because it looks like the answer.*
+
+Removed: `Panel#turn`, `footprint_centre`, `instance_yaw`, `facing_word`, the
+callback, the fieldset, the readout. A check now holds that all of it is gone —
+a half-removed control is worse than either state, since a callback without
+buttons is dead code and buttons without a callback do nothing.
+
+**What survives is the better half of the original fix**: a shelf seats on the
+wall the selected cabinet is against, in that cabinet's own frame. That made the
+facing right *by construction*, and it never needed a button.
+
+### The shape of it
+
+Yesterday's lesson was *when someone with the scar tells you the choice exists,
+look again*. Today's is its mirror: **when the fix is a control, ask first
+whether the thing it controls needs to exist.** I built a way to answer a
+question instead of noticing the question was optional. Andriy deleted the
+question, and the feature with it.

@@ -2219,21 +2219,34 @@ check('a CHOICE the catalog has no opinion about survives the merge that draws i
   raise 'no light was chosen and none may appear' if Symbols.led_variant(dark)
 end
 
-check('the light hangs off the face the object actually has') do
-  # Every other symbol sits 1 mm proud of the DOOR, and the door stands 25 mm
-  # clear of the carcass. A shelf has no door, so that same y would float the
-  # light 26 mm out in front of the board with nothing between them.
-  y_face = Generator.front_y_mm - 1
-  raise 'the front line is where the door is' unless y_face < -20
+check('THE LIGHT TAKES NO VIEW ON WHICH SIDE IS THE FRONT') do
+  # It used to sit 1 mm proud of the face, which meant the symbol ASSERTED a
+  # facing - and a facing turned out to be a thing this engine is bad at. Andriy
+  # settled it by taking the question away: "Уже не будет значения, где лицо, где
+  # не лицо. […] Потому что стены могут быть под разными углами."
+  #
+  # Half the depth is the one position equally right from either side. The label
+  # reads backwards from one of them and that is accepted, not worked around.
+  shelf = Registry.lookup('MNS040038')
+  raise shelf['depth_mm'].inspect unless shelf['depth_mm'] == 380
+  raise 'the light hangs under the middle of the board' unless
+    Symbols.led_y_mm(shelf) == 190.0
 
-  shelf = Registry.lookup('MNS040060')
-  raise 'a shelf states it has no front' unless
-    (shelf['front_layout'] || {})['kind'] == 'none'
-  raise 'so its light sits on its own face' unless Symbols.led_y_mm(shelf, y_face) == -1
-
+  # THE SAME RULE FOR EVERYTHING, and that is the point: no branch on class, no
+  # branch on front_layout, nothing to get the front wrong with.
   door = Registry.lookup('B80601')
-  raise 'and a cabinet keeps the front line' unless
-    Symbols.led_y_mm(door, y_face) == y_face
+  raise 'a cabinet is treated no differently' unless
+    Symbols.led_y_mm(door) == door['depth_mm'].to_f / 2
+
+  # No depth stated is not a reason to raise - the light still gets drawn, on
+  # the object's own origin plane.
+  raise 'a depthless object still gets its light' unless Symbols.led_y_mm({}) == 0.0
+  raise 'and nil must not blow up' unless Symbols.led_y_mm(nil) == 0.0
+
+  # The old signature took the front line as an argument. It must be gone, or a
+  # caller could still hand one in and quietly reinstate the claim.
+  raise 'led_y_mm must not accept a front line any more' unless
+    Symbols.method(:led_y_mm).arity == 1
 end
 
 check('the plinth has ONE writer, and the panel is not it') do
@@ -7926,56 +7939,101 @@ check('A CHOSEN LIGHT IS DRAWN, and it goes off with the elevation symbols') do
     src =~ /LED_END_INSET_MM\s+= 1\.5/
 end
 
-check('A SHELF GOES ON THE WALL, NOT BESIDE - and a person can turn anything round') do
+check('A SHELF GOES ON THE WALL, NOT BESIDE') do
   # THE BUG, in Andriy's words: the label was going into the wall. A shelf built
   # off an island unit inherited the island's facing, was dragged to the north
-  # wall where everything faces the other way, and ended up back-to-front - with
-  # its front symbols, its light and its label inside the plaster. Read out of
-  # the model rather than reasoned about: 50 objects, the north run at yaw -180,
-  # the island at yaw 0, and the shelf sitting on the north wall at yaw 0.
+  # wall where everything faces the other way, and ended up back-to-front. Read
+  # out of the model rather than reasoned about: 50 objects, the north run at
+  # yaw -180, the island at 0, and the shelf on the north wall at 0.
   #
-  # A SOURCE CHECK for the placement branch, because placement_transform needs a
-  # live selection and nothing headless has one; the arithmetic it performs is
-  # one line and is stated here so a later edit cannot quietly invert it.
+  # TWO FIXES WENT IN AND ONLY THIS ONE SURVIVED. The other was three
+  # quarter-turn buttons in the panel, removed the next morning: a wall at 37
+  # degrees is not served by 90/180/270, SketchUp's own rotate tool serves every
+  # angle, and a control that handles the easy quarter of the cases while
+  # silently failing the rest is worse than none because it looks like the
+  # answer. What remains is the half that made facing right by CONSTRUCTION.
+  #
+  # A SOURCE CHECK, because placement_transform needs a live selection and
+  # nothing headless has one; the arithmetic is one line and is stated here so a
+  # later edit cannot quietly invert it.
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
   body = src[/def placement_transform.+?\n      end\n/m]
   raise 'placement_transform is gone' unless body
 
   raise 'a shelf must be recognised before the run logic' unless
     body.include?("new_unit['object_class'].to_s == 'shelf'")
-  # BEFORE the side branch, or the run wins and the wall rule never runs.
   shelf = body.index("== 'shelf'")
   side  = body.index('side = placement_side(')
   raise 'the wall rule must come before the run rule' unless shelf && side && shelf < side
-  # Its back on the selected unit's back: y = that unit's depth less its own.
   raise 'the shelf seats by depth difference' unless
     body.include?("y = back - (new_unit['depth_mm'] || 0).to_f")
-  # And it refuses rather than guessing, exactly as the sheet panel does.
   raise 'no depth, no wall, no guess' unless
     body.include?('there is no wall behind it to')
 
-  # THE OPTION HE DID NOT HAVE. Every other placement decision can be corrected
-  # by dragging; facing could not be corrected at all.
+  # AND THE BUTTONS ARE GONE. Checked, because a half-removed control is worse
+  # than either state: the callback without the buttons is dead code, and the
+  # buttons without the callback are a button that does nothing.
   pan = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
-  raise 'there must be a way to turn an object' unless pan.include?("add_action_callback('turn')")
-  turn = pan[/def turn\(degrees\).+?\n      end\n/m]
-  raise 'turn is gone' unless turn
-  raise 'it must turn about the footprint, not the origin' unless
-    turn.include?('footprint_centre(inst')
-  raise 'and be one undoable operation' unless turn.include?("start_operation(")
-  raise 'the dialog must offer the three quarter turns' unless
-    pan.include?('turn(90)') && pan.include?('turn(180)') && pan.include?('turn(270)')
+  raise 'the turn callback must be gone' if pan.include?("add_action_callback('turn')")
+  raise 'and the buttons with it' if pan.include?('sketchup.turn')
+  raise 'and the facing readout it fed' if pan.include?('faceNote')
+  # The reason is recorded rather than the code just vanishing (learned rule 9).
+  raise 'why it went must be written down' unless
+    pan.include?('THE TURN BUTTONS ARE GONE')
+end
 
-  # The readout is pure and is checked against the convention the model uses:
-  # a unit's own +y runs BACKWARDS, so the front is at negative y.
-  raise Panel.facing_word(0) unless Panel.facing_word(0).include?('\u2212Y')
-  raise Panel.facing_word(180) unless Panel.facing_word(180).include?('+Y')
-  raise Panel.facing_word(-180) unless Panel.facing_word(-180).include?('+Y')
-  raise Panel.facing_word(90) unless Panel.facing_word(90).include?('\u2212X')
-  raise Panel.facing_word(-90) unless Panel.facing_word(-90).include?('+X')
-  raise Panel.facing_word(270) unless Panel.facing_word(270).include?('+X')
-  # Anything off-axis says so rather than being rounded into a lie.
-  raise Panel.facing_word(37) unless Panel.facing_word(37).include?('not square')
+check('A HAND COPY IS ONE OBJECT UNTIL SOMEBODY EDITS IT') do
+  # Andriy copied a shelf in SketchUp, took the light off one, and it came off
+  # the other. Copy a component and you get a second INSTANCE of one DEFINITION,
+  # and every fact this engine keeps - code, mounting, hinge, variants - lives on
+  # the definition. So Apply on either copy rewrote both.
+  #
+  # SketchUp is not wrong to share. This engine is wrong to let it: a unit here
+  # is an ORDER LINE, and two lines that cannot differ in hinge side, mounting or
+  # light are not two lines.
+  #
+  # A SOURCE CHECK, because it needs a live model and nothing headless has one.
+  pan = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  body = pan[/def apply\(payload\).+?\n      end\n/m]
+  raise 'apply is gone' unless body
+  raise 'apply must split a shared definition' unless body.include?('make_instance_unique!(inst)')
+
+  # ORDER MATTERS TWICE OVER and both are easy to undo by accident:
+  # the split must happen INSIDE the operation, so one undo puts it back...
+  op    = body.index('start_operation')
+  split = body.index('make_instance_unique!(inst)')
+  write = body.index('Contract.write!')
+  raise 'the split must be inside the undoable operation' unless op && split && op < split
+  # ...and BEFORE the definition is read, because make_unique replaces the
+  # definition the instance points at. Reading it earlier writes to the one
+  # still being shared - which is the original bug wearing a fix.
+  dref = body.index('defn = inst.definition')
+  raise 'defn must be read AFTER the split' unless dref && split < dref && dref < write
+  raise 'and not before apply even starts' if
+    pan[/def apply\(payload\).+?start_operation/m].include?('defn  = inst.definition')
+
+  helper = pan[/def make_instance_unique!\(inst\).+?\n      end\n/m]
+  raise 'the helper is gone' unless helper
+  raise 'it must be a no-op when the instance is already alone' unless
+    helper.include?('count_instances <= 1')
+  raise 'and rename in this engine\'s convention, not SketchUp\'s #1' unless
+    helper.include?("Time.now.strftime('%Y%m%d_%H%M%S')")
+
+  # THE GENERATOR ALREADY KNEW THIS and the panel did not inherit it. Named here
+  # so the two cannot drift apart again.
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'swap_corner_execution! must still guard the same way' unless
+    gen.include?('instance.make_unique if instance.definition.count_instances > 1')
+
+  # AND THE ORDER WAS NEVER WRONG - collect walks INSTANCES, so two instances
+  # sharing a definition already produced two rows. Pinned, because "the copy is
+  # missing from the schedule" would have been the far worse version of this bug
+  # and the reason it is not true is one line in 86_export_run.
+  run = File.read(File.expand_path('../src/ucon_cabinet_engine/core/86_export_run.rb', __dir__))
+  col = run[/def collect\(entities, out, depth = 0\).+?\n      end\n/m]
+  raise 'collect is gone' unless col
+  raise 'the order must count instances, not definitions' unless
+    col.include?('ComponentInstance') && col.include?('out << attrs')
 end
 
 check('CONTRACT v2.3 - a variant may say the same thing shorter, for a drawing') do
@@ -8045,7 +8103,38 @@ check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do
   raise 'a 60 mm board cannot hold a cone' unless Symbols.led_cone_feet_mm(60).nil?
   sym = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
   raise 'and the drawing must ask before drawing one' unless
-    sym[/def draw_led\(.+?\n      end\n/m].include?('if feet')
+    sym[/def draw_led\(.+?\n      end\n/m].include?('if feet && top')
+
+  # AND IT POINTS DOWNWARD. The first version that stayed inside the board was
+  # wide at the TOP - a funnel, not light. Andriy: "широкая внизу и усеченная
+  # вверху." The two constraints hold together: the WIDE edge is the foot, and
+  # the foot is what is capped 25 mm short of each end.
+  [400, 874, 1200, 3000].each do |w|
+    f = Symbols.led_cone_feet_mm(w)
+    t = Symbols.led_cone_top_mm(w)
+    raise "no cone at #{w}" unless f && t
+    raise "the foot escapes the board at #{w}" unless f[0] >= 0 && f[1] <= w
+    raise "the top is not narrower than the foot at #{w}" unless
+      (t[1] - t[0]) < (f[1] - f[0])
+    raise "the top is not inside the foot at #{w}" unless t[0] > f[0] && t[1] < f[1]
+    raise "the splay is not the one declared at #{w}" unless
+      (t[0] - f[0] - Symbols::LED_BEAM_SPLAY_MM).abs < 0.001
+  end
+  # Rather than draw one inside out, refuse. That is the mistake this shape was
+  # correcting, and it must not come back through the short-board door.
+  raise 'a board too narrow for a splay must get no cone' unless
+    Symbols.led_cone_top_mm(100).nil?
+
+  # THE LABEL IS MEANT TO BE ALMOST INVISIBLE. Unfilled glyphs - the thinnest a
+  # letter is drawn - in a grey lighter than every other symbol in the file.
+  lab = sym[/def draw_led_label\(.+?\n      end\n/m]
+  raise 'draw_led_label is gone' unless lab
+  raise 'the label must be OUTLINES, not filled glyphs' unless
+    lab =~ /add_3d_text\([^)]*false,\s*0\.0\)/m
+  raise 'and it must be paler than the other symbols' unless
+    Symbols::LED_LABEL_RGB.first > Symbols::SYMBOL_RGB.first
+  raise 'it gets its own material, not the symbol grey' unless
+    lab.include?('label_material(definition)')
 
   # THE WORDS. A label wider than the lamp is worse than no label, and the
   # temperature is on it because that is the fact that arrives wrong.

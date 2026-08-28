@@ -102,7 +102,12 @@ date order; a finding is never edited to hide what it corrected.
   **`findings-2026-08-27-facing.md`** (the label was inside the wall: a shelf
   inherits the facing of whatever it was built off, there was NO WAY AT ALL to
   turn an object round, and a shelf should never have been placed beside
-  anything - Andriy's wall rule, and the turn buttons).
+  anything - Andriy's wall rule, and the turn buttons; **superseded in part
+  2026-08-28**, when the facing question was deleted instead of answered),
+  **`findings-2026-08-28-a-copy-is-not-a-copy.md`** (a hand-copied shelf shared
+  its definition, so taking the light off one took it off the other - the order
+  was never wrong, only the editing; and the guard already existed in the
+  generator and had never been generalised to the panel).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,

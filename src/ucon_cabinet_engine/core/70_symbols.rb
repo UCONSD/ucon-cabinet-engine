@@ -115,6 +115,16 @@ module UCON
         Geometry.material(model, 'UCON_Symbol_Gray', SYMBOL_RGB)
       end
 
+      # Lighter than every other symbol, on purpose. Asked of the definition
+      # rather than handed down, because only the label wants it and threading a
+      # second material through four call sites to be used at one of them is how
+      # signatures rot.
+      def label_material(definition)
+        Geometry.material(definition.model, 'UCON_Symbol_Pale', LED_LABEL_RGB)
+      rescue StandardError
+        nil
+      end
+
       # Symbols render gray only when edge color mode is by-material (0).
       # Ordinary edges carry no material and keep the foreground color.
       def enable_material_edges(model)
@@ -386,31 +396,55 @@ module UCON
       # The beam angle is not lost, it moved to where it is true: led_rule
       # carries beam_angle_deg and the illuminance table, which is the place a
       # person asking "how far does this throw" should be reading anyway.
+      #
+      # AND IT POINTS THE RIGHT WAY ROUND NOW. The first version that stayed
+      # inside the board was WIDE AT THE TOP and narrow at the foot - which is
+      # the shape of a funnel, not of light. Andriy: "трапеция должна быть
+      # широкая внизу и усеченная вверху." Obvious once said: light leaves a
+      # narrow source and spreads. The two constraints are met at once by
+      # putting the WIDE edge at the bottom and capping it 25 mm short of each
+      # end, and narrowing the top from there.
       LED_END_INSET_MM  = 1.5   # each end: the lamp is the shelf less 3 (p.224)
       LED_GAP_MM        = 6     # lamp line below the board, clear of its edge
-      LED_BEAM_INSET_MM = 25    # the cone's foot stops this short of each end
+      LED_BEAM_INSET_MM = 25    # the cone's WIDE foot stops this short of each end
+      LED_BEAM_SPLAY_MM = 25    # and its truncated top is this much narrower again
       LED_BEAM_DROP_MM  = 60    # how far down the cone is drawn (symbol, ours)
       LED_LABEL_MM      = 26    # cap height of the label inside the cone
       LED_LABEL_FONT    = 'Arial'
+      # THE LABEL IS DELIBERATELY ALMOST INVISIBLE. "Тоненькая, как можно тоньше.
+      # Еле-еле заметная, светло-серая." It is a note on a drawing, not a title:
+      # it should be readable when looked for and should disappear when not. So
+      # it is drawn as OUTLINES rather than filled glyphs - the thinnest a letter
+      # can be - in a grey lighter than every other symbol in this file.
+      LED_LABEL_RGB     = [190, 190, 190].freeze
 
       def led_variant(unit)
         Array((unit || {})['variants']).find { |v| v['key'].to_s == 'led' }
       end
 
-      # AN OBJECT WITH NO FRONT HAS NO FRONT LINE TO SIT PROUD OF. Every other
-      # symbol here is drawn 1 mm in front of the DOOR, which itself stands 25 mm
-      # clear of the carcass - and a shelf has no door, so that same y would hang
-      # the light 26 mm out in mid-air ahead of the board. A shelf's face IS the
-      # carcass face, so the light sits 1 mm proud of that instead. Pure, and
-      # separate from the drawing, so the decision can be checked headlessly.
-      # WHERE THE CONE'S FOOT LANDS, in the object's own x. Inside the board and
-      # never outside it: nil when the board is too short to hold a cone at all,
-      # and then only the lamp line is drawn. Pure, so the suite can hold the
-      # one rule that matters - that the symbol stays within 0..w.
+      # WHERE THE CONE'S WIDE FOOT LANDS, in the object's own x. Inside the board
+      # and never outside it: nil when the board is too short to hold a cone at
+      # all, and then only the lamp line is drawn. Pure, so the suite can hold
+      # the one rule that matters - that the symbol stays within 0..w.
       def led_cone_feet_mm(width_mm)
         a = LED_BEAM_INSET_MM.to_f
         b = width_mm.to_f - LED_BEAM_INSET_MM
         return nil unless b - a >= LED_BEAM_INSET_MM
+
+        [a, b]
+      end
+
+      # AND ITS TRUNCATED TOP, narrower than the foot because light spreads
+      # downward. Narrower than the foot ALWAYS - if the splay would close the
+      # top to nothing on a short board, the cone is refused rather than drawn
+      # inside out, which is the exact mistake this shape was correcting.
+      def led_cone_top_mm(width_mm)
+        feet = led_cone_feet_mm(width_mm)
+        return nil unless feet
+
+        a = feet[0] + LED_BEAM_SPLAY_MM
+        b = feet[1] - LED_BEAM_SPLAY_MM
+        return nil unless b - a > 0
 
         [a, b]
       end
@@ -438,13 +472,28 @@ module UCON
         text.length * height_mm * 0.6 <= lamp_length_mm.to_f
       end
 
-      def led_y_mm(unit, y_face)
-        return -1 if ((unit || {})['front_layout'] || {})['kind'].to_s == 'none'
-
-        y_face
+      # THE LIGHT HANGS UNDER THE MIDDLE OF THE BOARD AND TAKES NO VIEW ON WHICH
+      # SIDE IS THE FRONT. It used to sit 1 mm proud of the face, which meant the
+      # symbol ASSERTED a facing - and a facing turned out to be a thing this
+      # engine is bad at. Andriy settled it:
+      #
+      #   "Уже не будет значения, где лицо, где не лицо. Буквы будут написаны
+      #    наоборот. Я просто его разверну руками обычными инструментами со
+      #    скетчапом. Потому что стены могут быть под разными углами."
+      #
+      # Half the depth is the one position equally right from either side. The
+      # label then reads backwards from one of them, and that is ACCEPTED rather
+      # than worked around: a symbol that claims a front is worse than a symbol a
+      # person turns by hand, because walls are not all square and the engine
+      # cannot know which way any given one faces.
+      #
+      # Falls back to zero rather than raising - an object with no stated depth
+      # still gets its light, drawn on its own origin plane.
+      def led_y_mm(unit)
+        ((unit || {})['depth_mm'] || 0).to_f / 2.0
       end
 
-      def draw_led(definition, unit, z0, y_face, led_tag, mat)
+      def draw_led(definition, unit, z0, led_tag, mat)
         return unless led_variant(unit)
 
         w = (unit['width_mm'] || 0).to_f
@@ -453,29 +502,36 @@ module UCON
         x1   = LED_END_INSET_MM
         x2   = w - LED_END_INSET_MM
         z    = z0.to_f - LED_GAP_MM
-        y    = led_y_mm(unit, y_face)
+        y    = led_y_mm(unit)
         drop = LED_BEAM_DROP_MM
         feet = led_cone_feet_mm(w)
+        top  = led_cone_top_mm(w)
 
         g = definition.entities.add_group
         g.name = 'SYM_LED'
         e = g.entities
         # THE LAMP: a plain line at the length the page gives it.
         e.add_line([x1.mm, y.mm, z.mm], [x2.mm, y.mm, z.mm])
-        # THE CONE, and its foot is INSIDE the board - see LED_BEAM_INSET_MM.
-        # A board too short to hold one gets the lamp line and nothing else,
-        # which is honest: there is no room to say more.
-        if feet
+        # THE CONE: narrow at the lamp, WIDE at the bottom, because that is what
+        # light does. Its wide foot is still inside the board - see
+        # LED_BEAM_INSET_MM - so nothing has to be given up to point it the right
+        # way round. A board too short to hold a cone gets the lamp line and
+        # nothing else, which is honest: there is no room to say more.
+        if feet && top
           f1, f2 = feet
+          t1, t2 = top
           zb = z - drop
-          e.add_line([x1.mm, y.mm, z.mm], [f1.mm, y.mm, zb.mm])
-          e.add_line([x2.mm, y.mm, z.mm], [f2.mm, y.mm, zb.mm])
-          e.add_line([f1.mm, y.mm, zb.mm], [f2.mm, y.mm, zb.mm])
+          e.add_line([t1.mm, y.mm, z.mm], [t2.mm, y.mm, z.mm])   # truncated top
+          e.add_line([t1.mm, y.mm, z.mm], [f1.mm, y.mm, zb.mm])
+          e.add_line([t2.mm, y.mm, z.mm], [f2.mm, y.mm, zb.mm])
+          e.add_line([f1.mm, y.mm, zb.mm], [f2.mm, y.mm, zb.mm]) # wide foot
         end
         finalize(g, led_tag, mat)
 
-        draw_led_label(definition, unit, (x1 + x2) / 2.0, z - drop / 2.0, y,
-                       feet ? feet[1] - feet[0] : x2 - x1, led_tag, mat)
+        # The label goes in the WIDE half, low in the cone, because that is where
+        # the room is once the top is truncated.
+        draw_led_label(definition, unit, (x1 + x2) / 2.0, z - drop * 0.62, y,
+                       feet ? feet[1] - feet[0] : x2 - x1, led_tag)
         g
       end
 
@@ -485,16 +541,22 @@ module UCON
       # font being resolvable and a missing font must cost the label and not the
       # light.
       def draw_led_label(definition, unit, x_center, z_center, y,
-                         lamp_length_mm, led_tag, mat)
+                         lamp_length_mm, led_tag)
         text = led_label(unit)
         text = 'LED' unless led_label_fits?(text, lamp_length_mm)
         return nil unless led_label_fits?(text, lamp_length_mm)
 
         g = definition.entities.add_group
         g.name = 'SYM_LED_LABEL'
+        # FILLED: FALSE is the whole point. A filled glyph is a solid shape and
+        # reads as a heading; an unfilled one is its outline, which is the
+        # thinnest a letter can be drawn and the closest thing here to a
+        # hairline. Paired with a grey lighter than any other symbol, it is
+        # legible when looked for and invisible when not - which is what a note
+        # on a drawing should be.
         ok = g.entities.add_3d_text(text, TextAlignCenter, LED_LABEL_FONT,
                                     false, false, LED_LABEL_MM.mm, 0.0, 0.0,
-                                    true, 0.0)
+                                    false, 0.0)
         unless ok && !g.entities.to_a.empty?
           g.erase! if g.valid?
           return nil
@@ -510,12 +572,18 @@ module UCON
                         z_center.mm - (b.min.z.to_f + b.max.z.to_f) / 2.0]
                      ))
         g.layer = led_tag
+        pale = label_material(definition)
+        g.entities.grep(Sketchup::Edge).each do |ed|
+          ed.layer = led_tag
+          ed.material = pale
+        end
+        # There should be none - filled: false - but a font that ignores the
+        # flag must not put solid black letters on the drawing.
         g.entities.grep(Sketchup::Face).each do |f|
           f.layer = led_tag
-          f.material = mat
-          f.back_material = mat
+          f.material = pale
+          f.back_material = pale
         end
-        g.entities.grep(Sketchup::Edge).each { |ed| ed.layer = led_tag }
         g
       rescue StandardError
         nil
@@ -659,7 +727,7 @@ module UCON
 
         # The light, and it is here for the third time for the same reason:
         # before any branch can return without it.
-        draw_led(definition, unit, z0, y_face, led_tag, mat)
+        draw_led(definition, unit, z0, led_tag, mat)
 
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'

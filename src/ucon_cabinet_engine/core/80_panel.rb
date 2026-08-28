@@ -282,7 +282,6 @@ module UCON
         @dialog.set_html(html)
         @dialog.add_action_callback('ready')  { |_| push_selection }
         @dialog.add_action_callback('apply')  { |_, json| apply(JSON.parse(json)) }
-        @dialog.add_action_callback('turn')   { |_, deg| turn(deg.to_i) }
         @dialog.show
         install_observer
         nil
@@ -374,36 +373,7 @@ module UCON
         inst  = selected_unit_instance
         attrs = inst && Contract.read(inst.definition)
         unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
-        state = selection_state(unit, attrs)
-        # THE FACING IS ON THE INSTANCE AND NOWHERE ELSE. selection_state is
-        # pure and is handed the registry row and the stored attributes; which
-        # way a particular copy is turned is in its transformation and in no
-        # attribute, so it is added here rather than faked into the pure half.
-        state['yaw'] = inst && instance_yaw(inst)
-        state['facing'] = state['yaw'] && facing_word(state['yaw'])
-        @dialog.execute_script("render(#{state.to_json})")
-      end
-
-      # A unit is drawn with its FRONT at negative y and its depth running to
-      # positive y, so the local +y axis is "backwards, into the wall". Where
-      # that axis points in the model is the object's facing.
-      def instance_yaw(inst)
-        v = inst.transformation.yaxis
-        (Math.atan2(v.x, v.y) * 180 / Math::PI).round
-      end
-
-      # Said in MODEL AXES and not in compass points, because this engine holds
-      # no compass: the scene tabs are named north and east by a person, nothing
-      # in the code knows which way north is, and a readout that guessed would be
-      # wrong in some other kitchen. The axes are on screen; this names them.
-      def facing_word(yaw)
-        case ((yaw.to_i % 360) + 360) % 360
-        when 0        then 'front faces \u2212Y'
-        when 90       then 'front faces \u2212X'
-        when 180      then 'front faces +Y'
-        when 270      then 'front faces +X'
-        else "turned #{yaw}\u00b0 - not square to the axes"
-        end
+        @dialog.execute_script("render(#{selection_state(unit, attrs).to_json})")
       end
 
       # THE LIGHT IS A VARIANT, NOT A COMPANION LINE, and the difference is that we
@@ -476,66 +446,6 @@ module UCON
         }] }
       end
 
-      # ---- TURNING AN OBJECT ROUND ---------------------------------------
-      #
-      # THE MISSING OPTION, and its absence was a real bug rather than a gap.
-      # A new object inherits the FACING of whatever was selected when it was
-      # built - that is how placement continues a run and it is right. But a
-      # shelf built off an island unit and then dragged to the north wall keeps
-      # the island's facing, and the north wall faces the other way: the object
-      # ends up back-to-front, its front symbols pointing into the wall. Andriy
-      # found it by looking for a label that was inside the plaster.
-      #
-      #   "я даже не могу её развернуть, потому что не дают мне такой опции"
-      #
-      # He was right, and there was no workaround: every other placement
-      # decision in this engine can be corrected by dragging, and this one could
-      # not be corrected at all.
-      #
-      # ABOUT THE FOOTPRINT'S OWN CENTRE, not about the origin. A unit is drawn
-      # from its origin forwards and backwards, so rotating about the origin
-      # swings the whole box somewhere else and the person has to re-place it.
-      # Rotating about the middle of its own plan leaves it exactly where it is
-      # and only turns it round - which is what a person means by "turn it".
-      #
-      # RELATIVE, not absolute. There is no stored facing to set: the
-      # transformation IS the facing, exactly as it is for every object Andriy
-      # has moved by hand. So the buttons say "quarter turn", not "face north".
-      def turn(degrees)
-        inst = selected_unit_instance
-        return UI.messagebox('Select a UCON unit first.') unless inst
-
-        model = Sketchup.active_model
-        attrs = Contract.read(inst.definition)
-        unit  = Registry.lookup(attrs['code'])
-        pivot = footprint_centre(inst, Generator.effective(unit, attrs))
-
-        model.start_operation("UCON: turn #{degrees}°", true)
-        begin
-          inst.transform!(Geom::Transformation.rotation(pivot, Geom::Vector3d.new(0, 0, 1),
-                                                        degrees.degrees))
-          model.commit_operation
-        rescue StandardError => e
-          model.abort_operation
-          UI.messagebox("Nothing was turned.\n\n#{e.class}: #{e.message}")
-          return
-        end
-        push_selection
-      rescue StandardError => e
-        UI.messagebox("Turn failed:\n\n#{e.message}")
-      end
-
-      # The middle of the object's own plan, in world space. Falls back to the
-      # instance's bounding box when the registry has no dimensions to offer -
-      # a custom box with no article still has to be turnable.
-      def footprint_centre(inst, unit)
-        w = ((unit || {})['width_mm'] || 0).to_f
-        d = ((unit || {})['depth_mm'] || 0).to_f
-        return inst.bounds.center if w <= 0 || d <= 0
-
-        inst.transformation * Geom::Point3d.new((w / 2).mm, (d / 2).mm, 0)
-      end
-
       # WHAT THE ORDER IS TOLD, and the unchosen case is the one that matters.
       # Nobody can be sent the wrong lamp - there is only one lamp - so the way
       # this goes wrong is that nobody says which temperature and the device is
@@ -555,15 +465,51 @@ module UCON
         offer['label'] || 'LED'
       end
 
+      # THE TURN BUTTONS ARE GONE, AND THAT IS A SIMPLIFICATION RATHER THAN A
+      # RETREAT. They were added because an object could be built back-to-front
+      # and there was no way to correct it. The real fix landed instead: the
+      # light no longer takes a view on which side is the front (Symbols#led_y_mm
+      # draws it under the middle of the board), so nothing in the drawing
+      # depends on facing any more.
+      #
+      # And three quarter-turn buttons were the wrong tool anyway. Andriy:
+      # "Я просто его разверну руками обычными инструментами со скетчапом. Потому
+      # что стены могут быть под разными углами." A wall at 37 degrees is not
+      # served by 90/180/270, and SketchUp's own rotate tool serves every angle.
+      # A control that handles the easy quarter of the cases and silently fails
+      # the rest is worse than no control: it looks like the answer.
+      #
+      # What stays is the placement rule that made facing right by CONSTRUCTION -
+      # a shelf seats on the wall the selected cabinet is against, in that
+      # cabinet's own frame (Generator#placement_transform). That was always the
+      # better half of the fix.
+
+      # Gives the instance a definition of its own when it is sharing one, and a
+      # name in the engine's own convention rather than SketchUp's `…#1`, so the
+      # outliner stays readable. A no-op when the instance is already alone.
+      def make_instance_unique!(inst)
+        return false if inst.definition.count_instances <= 1
+
+        was = inst.definition.name
+        inst.make_unique
+        code = Contract.read(inst.definition)['code'].to_s
+        stem = code.empty? ? was.split('_').first.to_s : "CESAR_#{code}"
+        inst.definition.name = "#{stem}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
+        true
+      rescue StandardError
+        # A name is a nicety; the split itself is what matters and has happened.
+        true
+      end
+
       def apply(payload)
         inst = selected_unit_instance
         return UI.messagebox('Select a UCON unit first.') unless inst
 
         model = Sketchup.active_model
-        defn  = inst.definition
-        attrs = Contract.read(defn)
+        attrs = Contract.read(inst.definition)
         unit  = Registry.lookup(attrs['code'])
         patch = attributes_patch(unit, payload)
+        # `defn` is deliberately NOT read yet - make_unique below replaces it.
         # THE REGISTRY ROW IS NOT THIS OBJECT. Everything below asks the
         # generator where geometry goes, and the generator must be asked about
         # the unit AS CHOSEN - otherwise a base unit somebody has just hung is
@@ -582,6 +528,25 @@ module UCON
         step = 'writing the attributes'
         model.start_operation('UCON: apply unit properties', true)
         begin
+          # A COPY MADE BY HAND IS THE SAME OBJECT UNTIL SOMEBODY SAYS OTHERWISE.
+          # Copy a unit in SketchUp and you get a second INSTANCE of one
+          # DEFINITION - and every fact this engine keeps lives on the
+          # definition. So editing either copy edited both: Andriy took the
+          # light off one shelf and it came off the other.
+          #
+          # SketchUp is not wrong to share; this engine is wrong to let it.
+          # A unit here is an ORDER LINE, and two order lines that cannot differ
+          # in hinge side, mounting or light are not two lines. Every unit the
+          # generator builds already gets its own definition; sharing only ever
+          # arises from a hand copy, and this is the moment it has to end.
+          #
+          # INSIDE the operation, so one undo puts it back, and BEFORE `defn` is
+          # read, because make_unique replaces the definition the instance points
+          # at - reading it earlier would write to the one still being shared.
+          # The same guard already existed in Generator#swap_corner_execution!,
+          # with the same comment. It was never carried here.
+          make_instance_unique!(inst)
+          defn = inst.definition
           Contract.write!(defn, attrs.merge(patch))
           gola = patch['opening_method'] == 'gola'
           step = 'rebuilding the fronts'
@@ -738,16 +703,6 @@ module UCON
               <label><input type="checkbox" id="wallHung" onchange="rules()"> Wall-hung (no plinth)</label>
               <div id="mountNote" class="muted" style="margin:2px 0 0"></div>
             </fieldset>
-            <fieldset><legend>Facing</legend>
-              <div id="faceNote" class="muted" style="margin:0 0 4px"></div>
-              <div style="display:flex;gap:4px">
-                <button type="button" onclick="turn(90)" style="flex:1">&#8630; 90&deg;</button>
-                <button type="button" onclick="turn(180)" style="flex:1">180&deg;</button>
-                <button type="button" onclick="turn(270)" style="flex:1">&#8631; 270&deg;</button>
-              </div>
-              <div class="muted" style="margin:4px 0 0">Turns about the middle of its own
-                plan, so it stays where it is. Takes effect at once &mdash; no Apply.</div>
-            </fieldset>
             <button onclick="apply()">Apply</button>
           </div>
           <script>
@@ -839,8 +794,6 @@ module UCON
               // A SHELF HAS NOTHING TO OPEN. Offering it a handle was a control
               // that could not be used - the same fault the mounting fieldset
               // already avoids for a wall unit.
-              document.getElementById('faceNote').textContent =
-                (st.facing||'') + (st.yaw===null||st.yaw===undefined?'':' ('+st.yaw+'\u00b0)');
               document.getElementById('openFs').style.display=st.opens?'':'none';
               LED=st.led||null;
               document.getElementById('ledFs').style.display=LED?'':'none';
@@ -893,7 +846,6 @@ module UCON
               if(st.attrs.hinge_side)document.getElementById('hinge').value=st.attrs.hinge_side;
               rules();
             }
-            function turn(d){ sketchup.turn(String(d)); }
             function apply(){
               var gola=document.querySelector('input[name=dv]:checked').value==='75';
               var p={door_version:gola?'75':'78',

@@ -113,3 +113,31 @@ now twice in one day that a question put to the model beat a theory about it.
   have caught this the moment it happened.
 * This engine holds **no compass**. `claude/` has a `10_10_compass.rb` probe from
   an earlier day and the scene tabs carry wall names; none of it is in code.
+
+
+---
+
+## SUPERSEDED IN PART, 2026-08-28 — the buttons are gone
+
+Kept rather than deleted (learned rule 9), because the reasoning above is worth
+reading and the conclusion is worth knowing was wrong.
+
+**§2.1 above — "There was no way to turn anything round" — described a real
+defect, and the control it produced was still the wrong answer.** Andriy removed
+the requirement the next morning:
+
+> Уже не будет значения, где лицо, где не лицо. […] Я просто его разверну руками
+> обычными инструментами со скетчапом. Потому что стены могут быть под разными
+> углами.
+
+The light now hangs under the **middle of the board's depth** (`Symbols#led_y_mm`
+returns `depth/2`), so no symbol asserts a front and nothing in the drawing
+depends on facing. With the requirement gone, `Panel#turn` and its three
+quarter-turn buttons went too — they never served a wall at 37° anyway, and
+SketchUp's own rotate tool serves every angle.
+
+**§2.2 stands unchanged and is the half that mattered**: a shelf seats on the
+wall the selected cabinet is against, in that cabinet's own frame. Right by
+construction, no button required.
+
+The full account is at the end of `findings-2026-08-27-lit-shelves.md`.
