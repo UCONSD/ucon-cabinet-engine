@@ -42,6 +42,22 @@ module UCON
         # nobody should have to type a model number the other tree already
         # holds; with no module there is nothing to offer and the button says so
         # rather than opening an empty box.
+        # THE WORKTOP. Everything about it is measured except the thickness,
+        # which no model can be measured for - core/08_project.rb. If it has not
+        # been stated, ask once here rather than defaulting: a slab drawn at a
+        # number nobody chose is a wrong elevation that looks like a right one.
+        @dialog.add_action_callback('worktop') do |_|
+          begin
+            su = Sketchup.active_model
+            if Project.worktop_t_mm(su).nil?
+              ans = UI.inputbox(['Worktop thickness, mm'], ['40'], 'UCON — worktop')
+              Project.worktop_t_mm!(ans[0]) if ans
+            end
+            Generator.build_worktop(su) if Project.worktop_t_mm(su)
+          rescue StandardError => e
+            UI.messagebox("Worktop not drawn:\n\n#{e.message}")
+          end
+        end
         @dialog.add_action_callback('reserve_run_gap') do |_|
           begin
             models = ApplianceCheck.run_gap_models
@@ -201,7 +217,8 @@ module UCON
         # these are boards sold BY THE SQUARE METRE and cut to size, and a
         # person looking for one is not looking for the article that carries a
         # 45-degree edge into a door. Two classes because they are two articles.
-        'panel_sheet' => 'Panels cut to size (per m²)'
+        'panel_sheet' => 'Panels cut to size (per m²)',
+        'shelf' => 'Shelves'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The
@@ -574,7 +591,15 @@ module UCON
                 // number chosen for tidiness: printed p.11 asks for a closing
                 // strip of AT LEAST 5 cm, so it is the size this article is
                 // reached for most. A preset outside the range is not offered.
-                [50, 100, 150].filter(function(mm){ return mm >= lo && mm <= hi; })
+                //
+                // AND THEY ARE A FILLER'S PRESETS, NOT EVERY ARTICLE'S, 2026-08-27.
+                // A shelf covers 1 to 3000 and nobody reaches for a 5 cm one, so
+                // three buttons offering it were three wrong answers taking up
+                // the row. Andriy: "не нужны предустановленные опции, это для
+                // филлеров". Keyed on the CLASS, because that is what the presets
+                // were chosen for.
+                ((c['class'] === 'filler') ? [50, 100, 150] : [])
+                  .filter(function(mm){ return mm >= lo && mm <= hi; })
                   .forEach(function(mm){
                     var pb = document.createElement('button'); pb.className='wbtn';
                     pb.style.cssText = 'flex:0 0 auto;min-width:52px';
@@ -875,6 +900,7 @@ module UCON
             <button onclick="sketchup.panel()">Unit Properties panel</button>
             <button onclick="sketchup.export_order()">Order schedule (CSV)…</button>
             <button onclick="sketchup.reserve_run_gap()">Reserve run gap…</button>
+            <button onclick="sketchup.worktop()">Worktop over selected run…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             <div class="grp">Opening symbols</div>
             <div class="row">

@@ -41,6 +41,7 @@ existed.
 | Q22 | what the second panel page's banner means | open |
 | Q23 | which article is a floor-standing end side panel | **mostly answered by the source** 2026-08-26 (Volume 3 p.214); the part that decides an order line is open |
 | Q24 | what finishes the EDGE of a veneered panel, and can it be veneer | **open** 2026-08-27 · blocks an order line on the island's back |
+| Q25 | the Strip reel (p.534) prints NO colour temperature - what ships | **open** 2026-08-27 · the only lamp in the book whose temperature is not stated |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1076,8 +1077,34 @@ will settle it is now scheduled — see *How these get answered* below.
 
 ---
 
+## Q25 — the Strip reel prints no colour temperature at all. What arrives?
+
+**Status:** OPEN, asked 2026-08-27 · not used at Avenida Primavera, asked because the silence is conspicuous
+
+Every lit product in the Kitchen System states what it adjusts between —
+3000/4000K on the Sky-B, Kiton, Bali, Oslo, Mini noor, Easy Sunrise, Sunrise,
+Wall waiter, Vivara and Across; 2700>6500K on the Solaris back panel. Swept all
+five volumes: **not one lamp anywhere is sold at a fixed temperature.**
+
+Except one. **Strip reel, printed p.534** — `991B50` per lm, `991B55` a 3-metre
+cable, 120° beam, 5 m reel, cut to size — prints **no temperature anywhere on the
+page**, neither a figure nor a range. Checked on the render and not only the text
+layer.
+
+**The question:** what colour temperature does `991B50` ship at, and is it
+adjustable? If it is a fixed warm white, this is the **only article in the book
+where "the wrong temperature arrived" can mean the factory rather than the
+installer** — and it is the one lamp a person would reach for on a curved or
+narrow element, where nothing else fits.
+
+*Why it matters here:* not used at Avenida Primavera today. Asked because the
+silence is conspicuous next to twelve pages that all state a range, and because
+a silent spec is the shape of the mistake this project is trying not to repeat.
+
+---
+
 ## Still open after all this
 
-Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q23 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. And one new one, asked but not
+Q1, Q2, Q4, Q6, Q8, Q9 — untouched. Q11 to Q19 are the Avenida Primavera batch, Q20-Q23 the panel chapter (2026-08-26) and go out with the LayOut sheet. Q5's side. Q24 the veneered edge, Q25 the Strip reel's missing temperature. And one new one, asked but not
 yet numbered: **what the `O` option of the interior drawer kit gives**, where
 Elda chose `L` and had to add the stainless-steel upcharge by hand.

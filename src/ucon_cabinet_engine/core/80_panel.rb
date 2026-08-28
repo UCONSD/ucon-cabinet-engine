@@ -32,7 +32,82 @@ module UCON
       #   'hardware_mode' => 'factory' | 'client'   (handle only)
       #   'hardware_ref'  => 'M00001' / 'GOL001' / ''
       #   'hinge_side'    => 'rh' | 'lh' | ''
+      # DOES THIS OBJECT OPEN AT ALL? A shelf does not, and neither does a panel
+      # or a filler. Until 0.95.0 the dialog offered every one of them a handle
+      # and a push-to-open, because the fieldset was unconditional - Andriy saw
+      # it on a shelf: "доступные опции ручки не нужны по определению."
+      #
+      # Asked of the FRONT LAYOUT and not of the class, because that is where the
+      # answer already lives: `kind: none` is stated on exactly the things with
+      # no front, and it was stated for a different reason - so that nothing
+      # defaults a door onto them.
+      def core_version
+        CabinetEngine::CORE_VERSION
+      rescue NameError
+        nil
+      end
+
+      def opens?(unit)
+        return false if unit.nil?
+        return false if (unit['front_layout'] || {})['kind'].to_s == 'none'
+
+        !unit['opening'].nil?
+      end
+
+      # THE LED RULE OF A SECTION, and the length it computes for THIS object.
+      # printed p.224: the Sky-B fits on these shelves, the light is the shelf
+      # minus 3 mm, and it stops at 3 metres. The rule is data on the section;
+      # what varies is the shelf, so the arithmetic is done here and shown.
+      def led_offer(unit, attrs)
+        rule = section_led_rule(unit)
+        return nil unless rule
+
+        w = ((attrs || {})['width_mm'] || (unit || {})['width_mm']).to_f
+        return nil unless w.positive?
+
+        len = w - 3
+        over = len > rule['max_light_length_mm'].to_f
+        { 'lamp' => rule['lamp'], 'length_mm' => len.round,
+          'max_mm' => rule['max_light_length_mm'],
+          'over_max' => over,
+          'depth_mm' => rule['lamp_position_in_depth_mm'],
+          # THE TEMPERATURE, carried from the page to the panel to the drawing.
+          # It is the fact about a lamp that most often arrives wrong, so it is
+          # shown wherever there is room for it rather than only in the order.
+          'temperature' => rule['colour_temperature_k'],
+          'temperature_options' => rule['colour_temperature_options'],
+          'label' => rule['label'],
+          'source_ref' => rule['source_ref'],
+          'lamp_source' => rule['lamp_source'] }
+      end
+
+      def section_led_rule(unit)
+        return nil unless unit
+
+        dir = File.expand_path('../../../registry/cesar', __dir__)
+        Dir.glob(File.join(dir, '*.json')).each do |f|
+          next if File.basename(f) == '_manifest.json'
+
+          sec = JSON.parse(File.read(f))
+          next unless sec['family'] == unit['family']
+
+          rule = (sec['data'] || {})['led_rule']
+          return rule if rule
+        end
+        nil
+      rescue StandardError
+        nil
+      end
+
       def attributes_patch(unit, payload)
+        # AN OBJECT THAT DOES NOT OPEN TAKES NONE OF WHAT FOLLOWS. Everything
+        # below is about a front - the door version, the opening method, the
+        # handle, the hinge - and a shelf has no front to ask about. It returns
+        # early with the one choice it DOES have.
+        unless opens?(unit)
+          return led_patch(unit, payload)
+        end
+
         gola = payload['door_version'] == '75'
         method = gola ? 'gola' : payload['opening_method']
         raise ArgumentError, 'Door 78 cannot use gola profile logic' if method == 'gola' && !gola
@@ -207,6 +282,7 @@ module UCON
         @dialog.set_html(html)
         @dialog.add_action_callback('ready')  { |_| push_selection }
         @dialog.add_action_callback('apply')  { |_, json| apply(JSON.parse(json)) }
+        @dialog.add_action_callback('turn')   { |_, deg| turn(deg.to_i) }
         @dialog.show
         install_observer
         nil
@@ -254,6 +330,19 @@ module UCON
         # Computed here, in the pure half, because a rule that lives only in
         # the HTML is not a rule - the same reason gola_available? is checked
         # in attributes_patch and not only in the dialog.
+        # What this object can be ASKED, decided here rather than in the HTML -
+        # same rule as wall_hung_available? below it.
+        # What the LOADED core is, so the dialog can notice it was baked earlier.
+        # GUARDED, because 00_version.rb is not in the headless suite's load
+        # list: the suite exercises the pure half and a version string is not
+        # part of it. nil simply means "cannot compare", and the banner then
+        # never fires - which is the right answer, not a failure.
+        state['core_version'] = core_version
+        state['opens'] = opens?(unit)
+        state['led'] = led_offer(unit, attrs)
+        state['led_chosen'] =
+          Array((attrs || {})['variants']).any? { |v| v['key'] == LED_VARIANT_KEY }
+        state['led_temperature'] = led_temperature_of(attrs)
         state['wall_hung_available'] = Generator.wall_hung_available?(unit)
         ref = Generator.wall_hung_ref(unit)
         state['wall_hung_ref'] = ref && ref['code']
@@ -285,7 +374,185 @@ module UCON
         inst  = selected_unit_instance
         attrs = inst && Contract.read(inst.definition)
         unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
-        @dialog.execute_script("render(#{selection_state(unit, attrs).to_json})")
+        state = selection_state(unit, attrs)
+        # THE FACING IS ON THE INSTANCE AND NOWHERE ELSE. selection_state is
+        # pure and is handed the registry row and the stored attributes; which
+        # way a particular copy is turned is in its transformation and in no
+        # attribute, so it is added here rather than faked into the pure half.
+        state['yaw'] = inst && instance_yaw(inst)
+        state['facing'] = state['yaw'] && facing_word(state['yaw'])
+        @dialog.execute_script("render(#{state.to_json})")
+      end
+
+      # A unit is drawn with its FRONT at negative y and its depth running to
+      # positive y, so the local +y axis is "backwards, into the wall". Where
+      # that axis points in the model is the object's facing.
+      def instance_yaw(inst)
+        v = inst.transformation.yaxis
+        (Math.atan2(v.x, v.y) * 180 / Math::PI).round
+      end
+
+      # Said in MODEL AXES and not in compass points, because this engine holds
+      # no compass: the scene tabs are named north and east by a person, nothing
+      # in the code knows which way north is, and a readout that guessed would be
+      # wrong in some other kitchen. The axes are on screen; this names them.
+      def facing_word(yaw)
+        case ((yaw.to_i % 360) + 360) % 360
+        when 0        then 'front faces \u2212Y'
+        when 90       then 'front faces \u2212X'
+        when 180      then 'front faces +Y'
+        when 270      then 'front faces +X'
+        else "turned #{yaw}\u00b0 - not square to the axes"
+        end
+      end
+
+      # THE LIGHT IS A VARIANT, NOT A COMPANION LINE, and the difference is that we
+      # cannot name the article. printed p.224 says the Sky-B fits and gives the
+      # arithmetic; the lamp itself is priced in the KITCHEN SYSTEM at printed
+      # p.526, which this registry does not hold. A companion line must carry a
+      # code, and inventing one would be exactly the thing domain rule 1
+      # forbids - so the object states the CHOICE and its size, with the page
+      # that says so, and the order gets a line when that page is extracted.
+      #
+      # A variant may not carry what it costs (Contract v2 §4.2 and a check),
+      # which is right here for the same reason: the points are in the other book.
+      LED_VARIANT_KEY = 'led'
+
+      # READ BACK OFF THE OBJECT, from the INSTRUCTION and not from the label.
+      # The label is the short form for a drawing and it is deliberately allowed
+      # to say 'LED 3000/4000K' when nothing was chosen - which a naive match
+      # reads as 4000. 'SET TO 3000K' is the sentence that means a decision was
+      # taken, so that is the one parsed. The first version got this wrong and a
+      # check caught it before Andriy did.
+      def led_temperature_of(attrs)
+        v = Array((attrs || {})['variants']).find { |x| x['key'] == LED_VARIANT_KEY }
+        return nil unless v
+
+        m = v['value'].to_s.match(/SET TO (\d{4})K/)
+        m && m[1]
+      end
+
+      def led_patch(unit, payload)
+        offer = led_offer(unit, payload['attrs'] || {})
+        others = Array((payload['attrs'] || {})['variants'])
+                 .reject { |v| v['key'] == LED_VARIANT_KEY }
+        return { 'variants' => others } unless payload['led'] && offer
+
+        # UNREACHABLE TODAY, AND SAID SO RATHER THAN LEFT TO LOOK LIKE A GUARD
+        # THAT WORKS. The shelf's own max.L is 300 cm and the light stops at the
+        # same 300, so a light computed as the shelf less 3 can never exceed it.
+        # The guard stays because the two limits come from different sentences on
+        # different pages and either can move; a check pins the fact that it is
+        # currently vacuous, so the day it stops being vacuous is visible.
+        if offer['over_max']
+          raise ArgumentError,
+                "The light would be #{offer['length_mm']} mm and printed p.224 stops at " \
+                "#{offer['max_mm']}. A shelf longer than #{offer['max_mm'].to_i + 3} mm " \
+                'cannot be lit in one run; the page prints no second lamp rule.'
+        end
+
+        # THE TEMPERATURE IS A SETTING AND NOT A CODE, and it is validated here
+        # rather than trusted from the dialog for the reason gola_available? is:
+        # a rule that lives only in HTML is not a rule. Only what the page offers
+        # may be chosen; anything else is refused by name.
+        want = payload['led_temperature'].to_s
+        allowed = Array(offer['temperature_options'])
+        unless want.empty? || allowed.include?(want)
+          raise ArgumentError,
+                "#{want}K is not a temperature this lamp offers. printed p.528 gives " \
+                "#{allowed.join(' and ')}, adjusted on site by the Emotion Dual Color device."
+        end
+
+        set = want.empty? ? nil : want
+        { 'variants' => others + [{
+          'key' => LED_VARIANT_KEY,
+          'value' => "#{offer['lamp']} #{offer['length_mm']} mm - the shelf less 3, " \
+                     "lamp #{offer['depth_mm']} in from the edge in depth. " \
+                     "#{led_temperature_sentence(set, allowed)} " \
+                     "NOT PRICED HERE: #{offer['lamp_source']}",
+          # The short form, for the elevation. Contract v2.3 §1.4.
+          'label' => led_short_label(offer, set),
+          'source_ref' => offer['source_ref']
+        }] }
+      end
+
+      # ---- TURNING AN OBJECT ROUND ---------------------------------------
+      #
+      # THE MISSING OPTION, and its absence was a real bug rather than a gap.
+      # A new object inherits the FACING of whatever was selected when it was
+      # built - that is how placement continues a run and it is right. But a
+      # shelf built off an island unit and then dragged to the north wall keeps
+      # the island's facing, and the north wall faces the other way: the object
+      # ends up back-to-front, its front symbols pointing into the wall. Andriy
+      # found it by looking for a label that was inside the plaster.
+      #
+      #   "я даже не могу её развернуть, потому что не дают мне такой опции"
+      #
+      # He was right, and there was no workaround: every other placement
+      # decision in this engine can be corrected by dragging, and this one could
+      # not be corrected at all.
+      #
+      # ABOUT THE FOOTPRINT'S OWN CENTRE, not about the origin. A unit is drawn
+      # from its origin forwards and backwards, so rotating about the origin
+      # swings the whole box somewhere else and the person has to re-place it.
+      # Rotating about the middle of its own plan leaves it exactly where it is
+      # and only turns it round - which is what a person means by "turn it".
+      #
+      # RELATIVE, not absolute. There is no stored facing to set: the
+      # transformation IS the facing, exactly as it is for every object Andriy
+      # has moved by hand. So the buttons say "quarter turn", not "face north".
+      def turn(degrees)
+        inst = selected_unit_instance
+        return UI.messagebox('Select a UCON unit first.') unless inst
+
+        model = Sketchup.active_model
+        attrs = Contract.read(inst.definition)
+        unit  = Registry.lookup(attrs['code'])
+        pivot = footprint_centre(inst, Generator.effective(unit, attrs))
+
+        model.start_operation("UCON: turn #{degrees}°", true)
+        begin
+          inst.transform!(Geom::Transformation.rotation(pivot, Geom::Vector3d.new(0, 0, 1),
+                                                        degrees.degrees))
+          model.commit_operation
+        rescue StandardError => e
+          model.abort_operation
+          UI.messagebox("Nothing was turned.\n\n#{e.class}: #{e.message}")
+          return
+        end
+        push_selection
+      rescue StandardError => e
+        UI.messagebox("Turn failed:\n\n#{e.message}")
+      end
+
+      # The middle of the object's own plan, in world space. Falls back to the
+      # instance's bounding box when the registry has no dimensions to offer -
+      # a custom box with no article still has to be turnable.
+      def footprint_centre(inst, unit)
+        w = ((unit || {})['width_mm'] || 0).to_f
+        d = ((unit || {})['depth_mm'] || 0).to_f
+        return inst.bounds.center if w <= 0 || d <= 0
+
+        inst.transformation * Geom::Point3d.new((w / 2).mm, (d / 2).mm, 0)
+      end
+
+      # WHAT THE ORDER IS TOLD, and the unchosen case is the one that matters.
+      # Nobody can be sent the wrong lamp - there is only one lamp - so the way
+      # this goes wrong is that nobody says which temperature and the device is
+      # left wherever it powers up. An empty choice therefore SAYS SO on the
+      # object rather than staying quiet about it.
+      def led_temperature_sentence(set, allowed)
+        return "SET TO #{set}K on commissioning - a setting, not a code: the same " \
+               'article is supplied either way.' if set
+
+        "TEMPERATURE NOT SPECIFIED. The device adjusts #{allowed.join('/')}K and will be " \
+          'left wherever it powers up unless somebody sets it.'
+      end
+
+      def led_short_label(offer, set)
+        return "LED #{set}K" if set
+
+        offer['label'] || 'LED'
       end
 
       def apply(payload)
@@ -304,12 +571,24 @@ module UCON
         # order does not. Same shape as the gola pairing that went missing.
         chosen = Generator.effective(unit, attrs.merge(patch))
 
+        # WHICH STEP FAILED, AND SAY SO. Until 0.96.1 this rescued, aborted and
+        # re-raised - and a raise inside an HtmlDialog callback goes nowhere a
+        # person will look. So a failure in ANY step after the write rolled the
+        # write back too, in silence: Andriy ticked the light, pressed Apply,
+        # came back and found an untouched object with no error anywhere. The
+        # operation stays atomic, which is right - a half-applied unit is worse
+        # than an unapplied one - but the failure now names its step and reaches
+        # the screen.
+        step = 'writing the attributes'
         model.start_operation('UCON: apply unit properties', true)
         begin
           Contract.write!(defn, attrs.merge(patch))
           gola = patch['opening_method'] == 'gola'
+          step = 'rebuilding the fronts'
           rebuild_fronts(model, defn, chosen, gola)
+          step = 'rebuilding the plinth'
           rebuild_plinth(model, defn, chosen)
+          step = 'drawing the symbols'
           Symbols.draw(model, defn, chosen,
                        patch['hinge_side'] || attrs['hinge_side'],
                        patch['front_height_mm'],
@@ -319,9 +598,12 @@ module UCON
                        # argument later.
                        effective_slabs(chosen, gola))
           model.commit_operation
-        rescue StandardError
+        rescue StandardError => e
           model.abort_operation
-          raise
+          UI.messagebox("Nothing was applied.\n\nFailed while #{step}:\n#{e.class}: " \
+                        "#{e.message}\n\nThe whole change was rolled back, including the " \
+                        'attributes - one operation, so a half-applied unit is not possible.')
+          return
         end
         push_selection
       rescue StandardError => e
@@ -406,6 +688,8 @@ module UCON
             #empty{color:var(--muted);padding:30px 0;text-align:center}
           </style></head><body>
           <div class="peer#{UCON::CabinetEngine::Panel.peer_state[:ok] ? '' : ' off'}" style="margin:-14px -14px 10px;padding:7px 14px;border-bottom:1px solid var(--line);background:var(--bg)">#{UCON::CabinetEngine::Panel.peer_state[:text]}</div>
+          <div id="stale" style="display:none;margin:-4px 0 10px;padding:7px 9px;border-radius:6px;
+               background:#fde68a;color:#7c2d12;font-size:12px;line-height:1.35"></div>
           <div id="empty">Select a UCON unit in the model</div>
           <div id="form" style="display:none">
             <h3 id="code"></h3><div class="muted" id="desc"></div>
@@ -415,7 +699,7 @@ module UCON
               <label><input type="radio" name="dv" value="75" onchange="rules()">
                 <span id="dvGola">gola</span></label>
             </fieldset>
-            <fieldset><legend>Opening</legend>
+            <fieldset id="openFs"><legend>Opening</legend>
               <select id="om" onchange="rules()">
                 <option value="handle">Handle</option>
                 <option value="push_to_open">Push-to-open</option>
@@ -438,14 +722,50 @@ module UCON
                 <option value="rh">Right (hinges right)</option>
               </select>
             </fieldset>
+            <fieldset id="ledFs" style="display:none"><legend>Light</legend>
+              <label style="display:flex;align-items:center;gap:6px;margin:0 0 4px">
+                <input type="checkbox" id="led" onchange="rules()" style="margin:0;width:auto">
+                <span>Integrated led</span></label>
+              <div id="ledTempRow" style="display:none;margin:2px 0 0">
+                <label style="display:block;margin:0 0 2px">Colour temperature</label>
+                <select id="ledTemp" onchange="rules()"></select>
+              </div>
+              <div id="ledNote" class="muted" style="margin:2px 0 0"></div>
+              <div id="ledTempWarn" class="flag" style="display:none"></div>
+              <div id="ledWarn" class="flag" style="display:none"></div>
+            </fieldset>
             <fieldset id="mountFs"><legend>Mounting</legend>
               <label><input type="checkbox" id="wallHung" onchange="rules()"> Wall-hung (no plinth)</label>
               <div id="mountNote" class="muted" style="margin:2px 0 0"></div>
             </fieldset>
+            <fieldset><legend>Facing</legend>
+              <div id="faceNote" class="muted" style="margin:0 0 4px"></div>
+              <div style="display:flex;gap:4px">
+                <button type="button" onclick="turn(90)" style="flex:1">&#8630; 90&deg;</button>
+                <button type="button" onclick="turn(180)" style="flex:1">180&deg;</button>
+                <button type="button" onclick="turn(270)" style="flex:1">&#8631; 270&deg;</button>
+              </div>
+              <div class="muted" style="margin:4px 0 0">Turns about the middle of its own
+                plan, so it stays where it is. Takes effect at once &mdash; no Apply.</div>
+            </fieldset>
             <button onclick="apply()">Apply</button>
           </div>
           <script>
-            var HANDED=false, WALL_HUNG_REF='';
+            // STATE is the last thing render() was given. It exists because
+            // apply() needs the object's CURRENT attributes to build a patch on
+            // top of, and `st` is render's parameter and nothing else - reaching
+            // for it from apply() throws a ReferenceError and the button then
+            // does nothing at all, silently, for every unit in the model.
+            // THE VERSION THIS HTML WAS BAKED UNDER. An HtmlDialog builds its
+            // markup and its callbacks ONCE, at open, and Reload core does not
+            // touch a window that is already up - CLAUDE.md has said so since
+            // 0.23 and it has cost an evening more than once, most recently
+            // 2026-08-27 when a fixed apply() sat on disk while the open panel
+            // kept running the broken one and the button did nothing, silently.
+            // So the dialog now compares what it was baked from with what is
+            // loaded, and says so itself instead of leaving a person to guess.
+            var BAKED='#{UCON::CabinetEngine::Panel.core_version}';
+            var HANDED=false, WALL_HUNG_REF='', LED=null, STATE=null;
             function opt(s,items,sel){s.innerHTML='';items.forEach(function(it){
               var v=(it.value!==undefined&&it.value!==null)?it.value:it.code;
               var o=document.createElement('option');o.value=v;
@@ -464,6 +784,32 @@ module UCON
               document.getElementById('hingeFs').style.display=HANDED?'':'none';
               // The surcharge article is shown only while the option is on, so
               // the code on screen is always the code that will be ordered.
+              // The length is COMPUTED and shown while the box is on, so the
+              // number on screen is the number that reaches the object.
+              if(LED){
+                var on=document.getElementById('led').checked;
+                var t=document.getElementById('ledTemp').value;
+                document.getElementById('ledTempRow').style.display=on?'':'none';
+                document.getElementById('ledNote').textContent = on
+                  ? (LED.lamp+' '+LED.length_mm+' mm \u2014 the shelf less 3 mm, '+
+                     LED.depth_mm+' in from the edge in depth. Priced in another book: '+
+                     LED.lamp_source)
+                  : 'No light. printed p.224 fits a '+LED.lamp+' on these shelves.';
+                // THE ONE THING THAT ACTUALLY GOES WRONG. Nobody can be sent the
+                // wrong lamp - there is only one lamp - so the failure is that
+                // nobody says which temperature and the device is left wherever
+                // it powers up. An unset choice is therefore a WARNING, not a
+                // blank: silence is the defect.
+                document.getElementById('ledTempWarn').style.display=(on&&!t)?'':'none';
+                document.getElementById('ledTempWarn').textContent=
+                  'No temperature set. The same article is supplied either way \u2014 '+
+                  'so nothing can arrive wrong, but nothing tells the installer '+
+                  'either, and the device stays wherever it powers up.';
+                document.getElementById('ledWarn').style.display=(on&&LED.over_max)?'':'none';
+                document.getElementById('ledWarn').textContent=
+                  'The light would be '+LED.length_mm+' mm and the page stops at '+
+                  LED.max_mm+'. Apply will refuse.';
+              }
               var wh=document.getElementById('wallHung').checked;
               document.getElementById('mountNote').textContent=
                 wh?('Orders '+(WALL_HUNG_REF||'the wall-hung surcharge')+
@@ -472,6 +818,15 @@ module UCON
                   :'Stands on its plinth.';
             }
             function render(st){
+              STATE=st;
+              if(st.core_version && st.core_version!==BAKED){
+                var b=document.getElementById('stale');
+                b.style.display='';
+                b.textContent='This window was opened under core '+BAKED+
+                  ' and '+st.core_version+' is loaded. An HtmlDialog bakes its '+
+                  'markup and its callbacks at open, so Apply here is still the '+
+                  'old one. Close this panel and open it again.';
+              }
               var has=st.attrs&&st.attrs.code;
               document.getElementById('empty').style.display=has?'none':'';
               document.getElementById('form').style.display=has?'':'none';
@@ -481,6 +836,29 @@ module UCON
               // hangs and an appliance front is bolted to the machine, so for
               // those the whole fieldset goes away rather than showing a
               // control that cannot be used.
+              // A SHELF HAS NOTHING TO OPEN. Offering it a handle was a control
+              // that could not be used - the same fault the mounting fieldset
+              // already avoids for a wall unit.
+              document.getElementById('faceNote').textContent =
+                (st.facing||'') + (st.yaw===null||st.yaw===undefined?'':' ('+st.yaw+'\u00b0)');
+              document.getElementById('openFs').style.display=st.opens?'':'none';
+              LED=st.led||null;
+              document.getElementById('ledFs').style.display=LED?'':'none';
+              document.getElementById('led').checked=!!st.led_chosen;
+              // The options come from the PAGE, through led_rule, and never from
+              // this file - a lamp with a 2700-6500 range offers that instead
+              // without a line of JavaScript changing.
+              if(LED){
+                var ts=document.getElementById('ledTemp');
+                ts.innerHTML='';
+                var none=document.createElement('option');
+                none.value='';none.textContent='\u2014 not set \u2014';ts.add(none);
+                (LED.temperature_options||[]).forEach(function(k){
+                  var o=document.createElement('option');
+                  o.value=k;o.textContent=k+'K';
+                  if(k===st.led_temperature)o.selected=true;ts.add(o);});
+                if(!st.led_temperature)none.selected=true;
+              }
               WALL_HUNG_REF=st.wall_hung_ref||'';
               document.getElementById('mountFs').style.display=
                 st.wall_hung_available?'':'none';
@@ -515,9 +893,13 @@ module UCON
               if(st.attrs.hinge_side)document.getElementById('hinge').value=st.attrs.hinge_side;
               rules();
             }
+            function turn(d){ sketchup.turn(String(d)); }
             function apply(){
               var gola=document.querySelector('input[name=dv]:checked').value==='75';
               var p={door_version:gola?'75':'78',
+                     led:document.getElementById('led').checked,
+                     led_temperature:document.getElementById('ledTemp').value,
+                     attrs:(STATE&&STATE.attrs)||{},
                      opening_method:gola?'gola':document.getElementById('om').value,
                      hardware_mode:document.getElementById('hmode').value,
                      gola_system:gola?document.getElementById('gol').value:'',

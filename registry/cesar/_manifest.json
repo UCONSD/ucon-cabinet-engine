@@ -1,7 +1,7 @@
 {
   "manufacturer": "cesar",
   "schema_version": "2",
-  "contract_revision": "2",
+  "contract_revision": "2.3",
   "catalog_edition": "2021 price list (later update notation)",
   "source_pdf": "CESAR - 2 Kitchen System.pdf",
   "page_notation": "printed page / PDF page; PDF = printed + 2 in this file",
@@ -1752,9 +1752,9 @@
         "class": "open_unit",
         "family": "Thin",
         "section": "Thin | Finishes and price bands, Horizontal Thin, Thin H.36, Vertical Thin, accessories",
-        "printed_pages": "457-468",
+        "printed_pages": "457, 460-468",
         "status": "not_extracted",
-        "note": "A whole open-shelving system, printed p.457-468. Read only as far as the index."
+        "note": "THE CHAPTER MINUS THE ONE PAGE THIS KITCHEN NEEDED. p.457 finishes and price bands, p.460 the same four Horizontal Thin positions for base units H.84 (BA prefix), p.461 and p.468 accessories, p.462-467 Vertical Thin - a different element, fitted between two tall units of equal height. The extracted page has its own row below."
       },
       {
         "class": "open_unit",
@@ -1781,6 +1781,25 @@
         "status": "extracted",
         "extracted_on": "DEMAND-DRIVEN, 2026-08-27: the Avenida Primavera island is clad across its back with two panels 1200 x 880, and no Kitchen System article prices a panel at 880 - that chapter is priced by CABINET height and stops at H.84 in two of the three collections. EXTRACTED WHOLE: all six price pages, printed p.215-220, 44 codes in ten blocks. printed p.214 carries no panel code - it is the notes page, and its fixing kits and adjustable foot are held in hardware.linear_element_panel_fixings because their quantity comes from the RUN, not from the panel. THE FIRST SECTION IN THIS REGISTRY FROM A BOOK OTHER THAN THE KITCHEN SYSTEM: source_pdf became a per-section fact the same day, and every code here cites Volume 3 by name. Account: claude/findings-2026-08-27-vol3-panels-read.md.",
         "not_buildable_note": "Held and NOT buildable, all 44. A sheet is not an end panel turned sideways - its thickness is on y and it has no front edge - and the generator has neither that orientation nor a placement against the back of a run. Stated on every unit type in not_buildable_reason, in the same words, so the backlog is one grep."
+      },
+      {
+        "class": "open_unit",
+        "family": "Thin H.39 | for base unit H.78",
+        "section": "Thin | Horizontal Thin H. 39, for base units H. 78",
+        "printed_pages": "458-459",
+        "status": "extracted",
+        "extracted_on": "DEMAND-DRIVEN 2026-08-27: printed p.459 only - Horizontal Thin H. 39 for base units H. 78, four codes, registry/cesar/thin_horizontal_h39_base78.json. printed p.458 is the rules page and carries no code. NOT EXTRACTED: p.457 finishes and price bands, p.460 the same four positions for base units H.84 (BA prefix), p.461 and p.468 accessories, p.462-467 Vertical Thin - a different element, fitted between two tall units of equal height.",
+        "rule_note": "printed p.458 carries no code and is the reason the element exists where it does: 'Can only be fitted below a top.' It sits on a base run and a top sits on it."
+      },
+      {
+        "class": "shelf",
+        "family": "Shelves (Linear Elements)",
+        "section": "Shelves - Linear Elements",
+        "printed_pages": "223-224",
+        "source_pdf": "CESAR - 3 Linear Elements.pdf",
+        "status": "extracted",
+        "extracted_on": "DEMAND-DRIVEN 2026-08-27: Andriy wanted a horizontal shelf 38-44 mm thick and printed p.223's second block is 4 cm. Nine codes, three thicknesses x three ways of selling. printed p.228's fixings are held in hardware.shelf_fixings as ORDER LINES with no geometry, and p.224's 'Rules to install led lights' is held on the section. NOT EXTRACTED and deliberately so: the Luminous glass shelf, Kitchen System printed p.539 - it prints 'Not available version 110V' and this is a 110V project. Andriy, 2026-08-27: on principle.",
+        "not_buildable_note": "All nine held and not drawn: a shelf hangs at a mount_bottom_mm that comes from the order, and no rule here says where."
       }
     ]
   },
@@ -2204,6 +2223,112 @@
         "um": "each",
         "quantity_note": "HOW MANY PER PANEL IS NOT PRINTED. The page says feet 'will be mounted' and priced separately, and prints no count and no spacing. Not guessed - see docs/Elda_Open_Questions_v0.1.md. The 0,5 cm itself is settled: design height 0, and the 5 is travel - claude/repo-state.md, 'The 5 mm foot'."
       }
+    },
+    "shelf_fixings": {
+      "source_ref": "CESAR - 3 Linear Elements.pdf printed p.228 / PDF 230",
+      "note": "ORDER LINES ONLY - NEVER GEOMETRY. Andriy, 2026-08-27: the fixings are not drawn in the model, they go to the warehouse. Same split as the plinth with a cutout and the gola profile: being drawn is a separate question from being ordered. THE COUNT IS THE CATALOG'S AND THE POSITIONS ARE OURS - every family prints '2 needed every 100 cm' and no position at all. The rules, and the table that comes out of them, are in claude/findings-2026-08-27-shelf-fixings-rules.md 3.",
+      "count_rule": "n = max(2, ceil(L / 500)) - the catalog's density of 2 per metre, rounded UP because up is the direction a fitter can correct.",
+      "spacing_rule": "UCON: equal load. pitch = L / n, outermost supports at pitch/2 from each end. Pitch can then never exceed 500 and the end overhang never 250, so the printed density is satisfied by construction. NOT the catalog's - it prints no position.",
+      "conflict_note": "MNS040038 IS 380 DEEP AND THE WALL SUPPORTS ARE RECOMMENDED TO 350. The catalog sells a shelf 30 mm deeper than the fixing it recommends for it; only the L-bracket reaches 380 and that one needs a vertical partition, not a wall. Named, not resolved. And there is NO back-panel support for a 4 cm shelf at all - 990307 is 2,2 only.",
+      "items": [
+        {
+          "code": "990331",
+          "points": 61,
+          "um": "each",
+          "what": "L-shaped bracket for breakfast bar",
+          "fixes_to": "a 4-6 cm partition",
+          "max_depth_mm": 380,
+          "restriction": "laminate, lacquered and veneered breakfast bars only",
+          "density": "2 every 100 cm"
+        },
+        {
+          "code": "990316",
+          "points": 16,
+          "um": "each",
+          "what": "Concealed shelf support for walls",
+          "for_thickness_mm": [
+            40,
+            60
+          ],
+          "fixes_to": "a wall",
+          "min_depth_mm": 180,
+          "max_depth_mm": 350,
+          "density": "2 every 100 cm"
+        },
+        {
+          "code": "990315",
+          "points": 16,
+          "um": "each",
+          "what": "Concealed shelf support for walls",
+          "for_thickness_mm": [
+            22
+          ],
+          "fixes_to": "a wall",
+          "min_depth_mm": 180,
+          "max_depth_mm": 350,
+          "density": "2 every 100 cm"
+        },
+        {
+          "code": "990317",
+          "points": 16,
+          "um": "each",
+          "what": "Concealed shelf support for walls, into plasterboard",
+          "for_thickness_mm": [
+            40,
+            60
+          ],
+          "fixes_to": "4/6 thick plaster",
+          "density": "2 every 100 cm"
+        },
+        {
+          "code": "990307",
+          "points": 23,
+          "um": "each",
+          "what": "Concealed shelf support for back panel",
+          "for_thickness_mm": [
+            22
+          ],
+          "fixes_to": "a back panel",
+          "max_depth_mm": 350,
+          "density": "2 every 100 cm"
+        }
+      ]
+    },
+    "thin_led_lights": {
+      "source_ref": "CESAR - 2 Kitchen System.pdf printed p.461 / PDF 463",
+      "note": "MINI NOOR led lamps, sold as accessories for Thin units. HELD BESIDE THE THIN'S OWN 'Surcharge for lights' (274/303/331/360 on printed p.459-460) AND NOT RECONCILED WITH IT: two different numbers for what looks like the same lamp on the same module, and neither page says whether the surcharge is the preparation and the accessory the lamp, or whether they are alternatives. Recorded as two facts so nothing can silently sum them. Elda.",
+      "items": [
+        {
+          "code": "991M10",
+          "points": 91,
+          "um": "each",
+          "what": "MINI NOOR led light, for shelf",
+          "width_mm": 1800,
+          "lamp_length_cm": 84.5
+        },
+        {
+          "code": "991M11",
+          "points": 120,
+          "um": "each",
+          "what": "MINI NOOR led light, for shelf",
+          "width_mm": 2400,
+          "lamp_length_cm": 115.4
+        },
+        {
+          "code": "991M20",
+          "points": 183,
+          "um": "each",
+          "what": "MINI NOOR led light, full-length for back panel",
+          "width_mm": 1800
+        },
+        {
+          "code": "991M21",
+          "points": 240,
+          "um": "each",
+          "what": "MINI NOOR led light, full-length for back panel",
+          "width_mm": 2400
+        }
+      ]
     }
   },
   "fabrication_limits": {

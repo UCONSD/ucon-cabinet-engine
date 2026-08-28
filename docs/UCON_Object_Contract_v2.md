@@ -1,7 +1,7 @@
 # UCON Object Contract — v2
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v2 (revision v2.1) · **Date:** 2026-08-22 · **Status:** Locked (change only via versioned migration)
+**Version:** v2 (revision v2.2) · **Date:** 2026-08-27 · **Status:** Locked (change only via versioned migration)
 **Supersedes:** `docs/UCON_Object_Contract_v1.md` (revision v1.5), which is kept as the
 historical record and must not be edited.
 
@@ -49,7 +49,7 @@ article code once survived on an object that said the client supplies the hardwa
 | Key | Type | Required | Allowed / format | Meaning |
 |-----|------|:--:|---|---|
 | `schema_version` | string | yes | `"2"` | Contract version that produced this object |
-| `object_class` | string | yes | `cabinet` · `worktop` · `panel` · `filler` · `accessory` · `appliance` · `appliance_front` · `corner_unit` | What kind of thing this is |
+| `object_class` | string | yes | `cabinet` · `worktop` · **`shelf`** · `panel` · `filler` · `accessory` · `appliance` · `appliance_front` · `corner_unit` · `void` | What kind of thing this is |
 | `manufacturer` | string | yes | `cesar` (lowercase id), or `client` | Source manufacturer |
 | `collection` | string | no | e.g. `Maxima`, `Intarsio`, `Tangram` | Product collection/system |
 | `family` | string | no | e.g. `H.78`, `Wall H.36`, `Tall H.210` | Manufacturer family (for cabinets, the height family) |
@@ -126,6 +126,7 @@ VARIANT        : { key, value, source_ref }
 | `source_ref` | string | no | page reference | Where the rule was read. **Optional on purpose**: a resolved code's provenance lives in the registry row that produced it, and a second copy is a second thing to keep true — the same argument that kept a `role` field out |
 | `variants` | list | no | `[ VARIANT ]` | Variant lines carried by THIS companion |
 | `key` / `value` | string | yes | free text as printed | e.g. `FINISH` / `Stainless steel` |
+| `label` | string | no | short free text | **v2.3.** The same choice in three words, for a symbol on a drawing. `value` is written to be read in a properties panel and on an order sheet; an elevation has room for `LED 3000/4000K` and no more. Never a second opinion — a check holds it to being shorter than `value` |
 
 **No recursion, and the reason is evidential, not aesthetic.** The catalog shows exactly
 one level of nesting — printed p.569, where an interior drawer kit is a companion article
@@ -344,6 +345,25 @@ its v1 attributes on disk and reads correctly forever.
 
 ## 8. Change log
 
+- **v2.3 (2026-08-27)** — Additive, non-breaking. A variant may carry **`label`**:
+  the short form of the same choice, for a drawing. Driven by the lit shelf. Its
+  `value` is a full sentence — the lamp, the length, the arithmetic that produced
+  it, the depth position and the book it is priced in — which is right for a
+  panel and an order sheet and impossible on an elevation symbol 60 mm deep. The
+  alternative was to have the drawing code compose its own short text from the
+  variant, which puts the wording in Ruby instead of on the page; `label` keeps it
+  where every other piece of catalog wording lives. Optional, so every variant
+  written before today stays valid, and §0 makes it a revision.
+- **v2.2 (2026-08-27)** — Additive, non-breaking. `object_class` gains **`shelf`**.
+  Driven by Linear Elements printed p.223-224: a board that HANGS, is cut to
+  length and is priced by the linear metre or the square metre. Neither existing
+  word fits — a `panel` finishes something and its width is a thickness, a
+  `worktop` rests on a run and in this project is drawn and NOT ordered, while a
+  shelf is ordered and rests on nothing. Andriy chose the new word over
+  stretching either. **This row also records that `void` was in the code and not
+  in this table**, since v2 shipped with `void` in the enum; the table is now
+  correct rather than being made correct silently. Widening an enum invalidates
+  no existing object, so §0 makes it a revision.
 - **v2.1 (2026-08-22)** — Additive, non-breaking. `qty` on a companion line may
   be **null**, meaning the quantity is not determinable from this object. Driven
   by the first real export run: gola grip-recess profiles are ordered by the

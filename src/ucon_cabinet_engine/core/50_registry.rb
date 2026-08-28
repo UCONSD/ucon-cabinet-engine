@@ -223,6 +223,16 @@ module UCON
             # drawing - with_ordered_height fell through its range path to the
             # modification path and recorded a cut sheet as a reduction.
             'height_range_mm'    => row['height_range_mm'],
+            # THE DATUM THAT IS ANOTHER UNIT, and it has to be lifted in BOTH
+            # places - lookup builds what the generator reads, build_catalog
+            # what the picker reads, and a key added to one and not the other is
+            # exactly the wall_hung bug of 2026-08-22.
+            'stands_on'          => unit_type['stands_on'],
+            'shelf_length_mm'    => row['shelf_length_mm'],
+            'max_length_mm'      => row['max_length_mm'],
+            'sold_by'            => row['sold_by'],
+            'points_by_band'     => row['points_by_band'],
+            'lights_surcharge_points' => row['lights_surcharge_points'],
             'points_per_m2'      => row['points_per_m2'],
             'depth_mm'           => row['depth_mm'],
             # THE LABEL BESIDE THE DEPTH, AND ONLY THE PANEL PAGES HAVE ONE.
@@ -734,6 +744,14 @@ module UCON
             # page separates them by: the lacquer or veneer GROUP, how many
             # sides are faced, and the rate. Same reason nominal_in is here -
             # display needs it and the object must never see it.
+            # THE DATUM THAT IS ANOTHER UNIT. printed p.458: 'Can only be fitted
+            # below a top.' A Horizontal Thin sits on a base run, so its bottom
+            # is that run's top and never the floor - the first article here
+            # whose ground is a different object. Carried on the unit type, so
+            # it has to be lifted here like section and class.
+            'stands_on'   => unit_type['stands_on'],
+            'shelf_length_mm' => row['shelf_length_mm'],
+            'lights_surcharge_points' => row['lights_surcharge_points'],
             'price_group' => row['price_group'],
             'faced_sides' => row['faced_sides'],
             'points_per_m2' => row['points_per_m2'],

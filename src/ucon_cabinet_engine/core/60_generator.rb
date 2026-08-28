@@ -71,6 +71,53 @@ module UCON
           return Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * behind
         end
 
+        # ---- ON THE SAME WALL, NOT BESIDE --------------------------------
+        #
+        # ANDRIY'S RULE, and it fixes a bug the run logic could only ever get
+        # right by luck: "Я выделяю кабинет. Полка генерируется по задней стене,
+        # к которой этот кабинет приторочен."
+        #
+        # A shelf is not a run element. It butts against nothing, it is cut to
+        # any length, and it hangs wherever a person wants it - so "which side
+        # of the selected unit" is the wrong question, exactly as it was for the
+        # sheet panel above. What a shelf actually needs from the selection is
+        # THE WALL: the plane the cabinet's back is against, and the direction
+        # that cabinet faces.
+        #
+        # What went wrong without this: a shelf built off an ISLAND unit
+        # inherited the island's facing, and was then dragged to the north wall,
+        # where everything faces the other way. It ended up back-to-front - its
+        # front symbols, the light and its label pointing into the plaster. The
+        # placement was never checked because it looked right in plan.
+        #
+        # Its BACK lands on the selected unit's back, which is where the wall is;
+        # its own depth then comes forward from there into the room. x is zero
+        # for the sheet panel's reason - the person places it, and the catalog
+        # prices a length without an opinion about where it starts.
+        if new_unit && new_unit['object_class'].to_s == 'shelf'
+          back = (sel_attrs['depth_mm'] || 0).to_f
+          if back <= 0
+            raise ArgumentError,
+                  "#{sel_attrs['code']} states no depth, so there is no wall behind it to " \
+                  'hang a shelf on. Select a unit that carries one.'
+          end
+
+          y = back - (new_unit['depth_mm'] || 0).to_f
+          on_wall = sel.transformation *
+                    Geom::Transformation.translation(Geom::Vector3d.new(0, y.mm, 0))
+          o = on_wall.origin
+          return Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * on_wall
+        end
+
+        # ON TOP OF, so the x offset is zero: it starts where the run it stands
+        # on starts. The lift itself is in base_z_mm and not here - the box is
+        # drawn from z0 upward, exactly as a wall unit's is.
+        if new_unit && new_unit['stands_on_top_mm']
+          on = sel.transformation
+          o  = on.origin
+          return Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * on
+        end
+
         side = placement_side(model, sel, span)
         new_width_mm = new_unit && new_unit['width_mm']
         new_depth_mm = new_unit && new_unit['depth_mm']
@@ -432,6 +479,21 @@ module UCON
           # honest default for that either.
           ground = Registry.sheet_panel?(unit) ? sheet_ground(model) : panel_ground(model)
           raise ArgumentError, panel_needs_a_ground_message(code, unit) if ground.nil?
+
+          unit = unit.merge(ground)
+        end
+
+        # ---- AN ELEMENT WHOSE GROUND IS ANOTHER UNIT ------------------------
+        # printed p.458, in the catalog's own words: 'Can only be fitted below a
+        # top.' A Horizontal Thin stands on a base run and a top stands on it.
+        # Like an end panel it has no ground of its own, and like an end panel it
+        # takes one from the unit it is placed against - through that unit's CODE
+        # and the registry, never off its geometry, so the answer is the one the
+        # neighbour was built from rather than a measurement of whatever anybody
+        # has since moved.
+        if stands_on_unit_below?(unit)
+          ground = unit_below_ground(model)
+          raise ArgumentError, stands_on_needs_a_unit_message(code) if ground.nil?
 
           unit = unit.merge(ground)
         end
@@ -1320,6 +1382,39 @@ module UCON
         nil
       end
 
+      def stands_on_unit_below?(unit)
+        (unit || {})['stands_on'].to_s == 'unit_below'
+      end
+
+      # The CARCASS TOP of the selected unit, from its code: where it stands plus
+      # how tall it is. A floor unit's plinth is part of the answer; a hung one's
+      # mount height is.
+      def unit_below_ground(model)
+        sel = selected_unit(model)
+        return nil unless sel
+
+        attrs = Contract.read(sel.definition) || {}
+        code  = attrs['code'].to_s
+        return nil if code.empty?
+
+        below = Registry.lookup(code)
+        top = base_z_mm(below).to_f + below['height_mm'].to_f
+        return nil unless top.positive?
+
+        { 'stands_on_top_mm' => top, 'stands_on_code' => code }
+      rescue StandardError
+        nil
+      end
+
+      def stands_on_needs_a_unit_message(code)
+        "#{code} cannot stand on the floor.\n\n" \
+        "printed p.458 opens with 'Can only be fitted below a top', and the page " \
+        'draws the three in order: a set of base units underneath, this module, ' \
+        "and a mandatory top above. So its bottom is the top of the run it joins, " \
+        "and there is no honest default for which run.\n\n" \
+        'Select the unit it sits on and build again. Nothing was drawn.'
+      end
+
       def panel_needs_a_ground_message(code, unit = nil)
         if unit && Registry.sheet_panel?(unit)
           return "#{code} is a panel cut to size, and it needs a run to stand behind.\n\n" \
@@ -1338,6 +1433,127 @@ module UCON
         "takes that unit's mounting and plinth through its code.\n\n" \
         "Nothing was drawn - a panel dropped on a guessed datum is a wrong " \
         "elevation that looks like a right one."
+      end
+
+      # ---- THE WORKTOP, 2026-08-27 -----------------------------------------
+      #
+      # THE FIRST OBJECT IN THIS MODEL WITH object_class 'worktop'. The Contract
+      # has allowed the word since v1; nothing ever wrote it, which is why
+      # core/08_project.rb says in as many words that the thickness "cannot be
+      # measured, in that model or in any other like it". It still cannot. What
+      # CAN be measured is everything else, and this method measures all of it.
+      #
+      #   LENGTH and DEPTH  - from the selected run.
+      #   THE TOP IT SITS ON - from each selected unit's CODE and the registry,
+      #                        the same way an end panel takes its ground.
+      #   THICKNESS          - STATED on the model, and refused if nobody stated it.
+      #
+      # AND IT REFUSES A RUN THAT DOES NOT AGREE WITH ITSELF. Two units of
+      # different heights under one slab is not a worktop, it is two; drawing one
+      # would put a surface through the middle of a cabinet and call it a
+      # measurement. The message names both heights.
+      #
+      # DRAWN, NOT ORDERED. The tops chapter is Volume 3 printed p.9-71 and is
+      # not extracted, so this object carries no code and says so on itself -
+      # the same shape as the run gap, and for the same reason: a factory must
+      # not receive a line nobody can make, and a person must see the surface.
+      def build_worktop(model = Sketchup.active_model)
+        t = Project.worktop_t_mm(model)
+        if t.nil?
+          raise ArgumentError,
+                "No worktop thickness is stated on this model.\n\n" \
+                'A worktop is 20, 30, 40 or 60 depending on what the client chose, ' \
+                'and no drawn body here can be measured for it. State it once - it ' \
+                'is kept on the model and every run uses the same number.'
+        end
+
+        picked = model.selection.grep(Sketchup::ComponentInstance).select do |i|
+          a = (Contract.read(i.definition) rescue nil)
+          a && a['code'] && %w[cabinet corner_unit].include?(a['object_class'].to_s)
+        end
+        if picked.empty?
+          raise ArgumentError,
+                "Select the run this top covers.\n\n" \
+                'A worktop has no length of its own: it is as long as what is under ' \
+                'it. Select one unit for one unit, or the whole run for the whole run.'
+        end
+
+        anchor = picked.min_by { |i| i.transformation.origin.x.to_mm }
+        frame  = anchor.transformation
+        inv    = frame.inverse
+
+        tops = {}
+        lo = nil
+        hi = nil
+        picked.each do |i|
+          a = Contract.read(i.definition)
+          u = Registry.lookup(a['code'])
+          tops[(base_z_mm(u).to_f + u['height_mm'].to_f).round(1)] ||= a['code']
+          w = drawn_width_mm(u).to_f
+          [0.0, w].each do |x|
+            pt = Geom::Point3d.new(x.mm, 0, 0).transform(i.transformation).transform(inv)
+            v  = pt.x.to_mm
+            lo = lo.nil? || v < lo ? v : lo
+            hi = hi.nil? || v > hi ? v : hi
+          end
+        end
+
+        if tops.length > 1
+          raise ArgumentError,
+                "That is two worktops, not one.\n\n" \
+                "The selection stands at #{tops.keys.sort.join(' and ')} mm - " \
+                "#{tops.values.join(', ')}. One slab across two heights would run " \
+                'through the middle of a cabinet. Select one run at a time.'
+        end
+
+        top   = tops.keys.first
+        depth = Registry.lookup(Contract.read(anchor.definition)['code'])['depth_mm'].to_f
+        y0    = front_y_mm
+        d     = depth - y0
+        w     = (hi - lo).round(1)
+
+        attrs = {
+          'schema_version' => Contract::SCHEMA_VERSION,
+          'object_class'   => 'worktop',
+          # Nobody has chosen the article. Volume 3 prints tops on p.9-71 and
+          # this registry holds none of it, so the honest manufacturer is the
+          # one who has not been asked yet.
+          'manufacturer'   => 'client',
+          'unit_type'      => 'Worktop - drawn, not ordered',
+          'geometry_kind'  => 'linear',
+          'width_mm'       => w,
+          'depth_mm'       => d.round(1),
+          'height_mm'      => t,
+          'code'           => nil,
+          'code_status'    => 'PRELIMINARY',
+          'status'         => 'PLANNING',
+          'source_ref'     => 'no article chosen - CESAR - 3 Linear Elements.pdf printed p.9-71 is the tops chapter and is not extracted',
+          'notes'          => "Length #{w.round} and depth #{d.round} MEASURED off the run; " \
+                              "it starts at #{top.round}, which is that run's top taken through its " \
+                              "code and not off a body somebody may have moved; thickness #{t.round} " \
+                              'STATED on the model. NOT ORDERED: no top article is chosen, and this ' \
+                              'object must not reach a factory as a line.'
+        }
+        Contract.validate!(attrs)
+
+        model.start_operation('UCON: build worktop', true)
+        begin
+          defn = model.definitions.add("UCON_WORKTOP_#{Time.now.strftime('%Y%m%d_%H%M%S')}")
+          mat  = Geometry.material(model, 'UCON_Worktop_Stone', [200, 200, 198])
+          Geometry.box(defn.entities, 'CARCASS', lo, y0, top, w, d, t, mat)
+          Contract.write!(defn, attrs)
+          o = frame.origin
+          seat = Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * frame
+          inst = model.active_entities.add_instance(defn, seat)
+          inst.name = "UCON worktop - #{w.round} x #{d.round} x #{t.round}, drawn not ordered"
+          model.selection.clear
+          model.selection.add(inst)
+          model.commit_operation
+          inst
+        rescue StandardError
+          model.abort_operation
+          raise
+        end
       end
 
       # ---- the run gap, B6 -------------------------------------------------
@@ -1636,6 +1852,21 @@ module UCON
         # settle the second one. Validated on the way back in, so an edited
         # object cannot smuggle a width the article cannot be made at.
         u = Registry.with_ordered_width(u, a['width_mm']) if u['width_range_mm']
+        # AND THE VARIANTS, which are neither of the two above. An INSTANCE_KEY
+        # overrides what the catalog said; the ordered width restores what it
+        # never said; a VARIANT is a choice the catalog has no opinion about at
+        # all - stainless rather than lacquer, a light under the shelf. It lives
+        # only on the object, so the merge that hands the object to the drawing
+        # code must carry it or the drawing cannot see the choice.
+        #
+        # THIS IS WHY THE LED WAS NEVER DRAWN. Panel#apply wrote the variant
+        # correctly, Contract stored and read it back correctly, and then handed
+        # Symbols.draw a `chosen` built here - with the variant dropped on the
+        # floor. Symbols#draw_led asks led_variant(unit) first and returned
+        # immediately, every time, silently. Same shape as the wall-hung overlay
+        # two screens above: a key written correctly that the thing which needs
+        # it is never given. Fourth time this year (learned rule 11).
+        u['variants'] = a['variants'] unless a['variants'].nil?
         u
       end
 
@@ -1703,6 +1934,11 @@ module UCON
       end
 
       def base_z_mm(unit)
+        # Set by unit_below_ground before anything reads a dimension: the top of
+        # the run this element sits on.
+        on = (unit || {})['stands_on_top_mm']
+        return on.to_f if on
+
         return panel_base_z_mm(unit) if (unit || {})['object_class'].to_s == 'panel'
 
         wall_hung?(unit) ? mount_bottom_mm(unit) : plinth_h_mm(unit)

@@ -1,0 +1,65 @@
+{
+  "section": "Thin | Horizontal Thin H. 39, for base units H. 78",
+  "class": "open_unit",
+  "family": "Thin H.39 | for base unit H.78",
+  "source_pages": "printed p.458-459 / PDF 460-461, read from a 170-dpi render 2026-08-27",
+  "extraction_note": "DEMAND-DRIVEN 2026-08-27: 545 Avenida Primavera wants a horizontal open shelf. Only the H.78 page (printed p.459) is taken. printed p.460 is the same four positions for base units H.84 with a BA prefix, and p.462-467 are Vertical Thin - a different element between tall units. Not extracted, and the catalog_map says so.",
+  "data": {
+    "unit_types": {
+      "horizontal_thin": {
+        "description": "Horizontal Thin H. 39 - open module fitted between a base run and its top, with a matt black lacquered metal shelf",
+        "object_class": "cabinet",
+        "opening": null,
+        "handed": false,
+        "interior_confirmed": [
+          "1 shelf in matt black lacquered metal"
+        ],
+        "source_ref": "printed p.459 / PDF 461",
+        "front_layout": {
+          "kind": "none",
+          "note": "AN OPEN MODULE HAS NO FRONT, and 'none' is stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door across the opening. printed p.458's front view shows a 1,8 rail at the top, a 1,4 rail at the bottom and the shelf between them - nothing that closes."
+        },
+        "stands_on": "unit_below",
+        "stands_on_note": "PRINTED, not inferred. printed p.458: 'Can only be fitted below a top.' The drawing beside it labels the three things in order - 'Set of base units' underneath, the module, and a 'Mandatory top' above - so this element's ground is the TOP OF THE RUN IT SITS ON and never the floor. It is the first article in this registry whose datum is another unit; the island's second course of back panels wanted the same thing that morning and had no rule to ask for. Taken through the unit's CODE and the registry, like an end panel's ground, never off its geometry.",
+        "mandatory_top_note": "'Can only be fitted below a top' is an ORDER fact as well as a drawing one: the module cannot stand alone. And 'Use only with a top/side panels with the option of 2 visible sides (excluding 45 degree tops)' plus 'If the module is fitted adjacent to a carcass, add a finished side panel to the latter' are two more obligations the exporter will have to carry. NOT wired: companion_refs cannot express 'the run above you must exist'. Recorded rather than invented.",
+        "wall_hung": false,
+        "wall_hung_note": "No hung glyph and no wall-hung surcharge in the margin of printed p.459; the element sits on a run by definition.",
+        "buildable": false,
+        "notes": "Depth 35 in the price table; printed p.458's side view gives 29,2 overall with the shelf at 14,2 and a 10 return at the top, and the top view gives 35 with a 1,2 back. The 35 is what the table sells and what the carcass occupies. Light is OPTIONAL and is a per-position surcharge, not part of the code - 'Power adapter not included' is printed beside every one of the four.",
+        "codes": [
+          {
+            "code": "B01869",
+            "width_mm": 1800,
+            "depth_mm": 350,
+            "shelf_length_mm": 874,
+            "lights_surcharge_points": 274
+          },
+          {
+            "code": "B01862",
+            "width_mm": 1800,
+            "depth_mm": 350,
+            "shelf_length_mm": 1174,
+            "lights_surcharge_points": 303
+          },
+          {
+            "code": "B02469",
+            "width_mm": 2400,
+            "depth_mm": 350,
+            "shelf_length_mm": 874,
+            "lights_surcharge_points": 331
+          },
+          {
+            "code": "B02462",
+            "width_mm": 2400,
+            "depth_mm": 350,
+            "shelf_length_mm": 1174,
+            "lights_surcharge_points": 360
+          }
+        ],
+        "not_buildable_reason": "STUB, 2026-08-27, by Andriy after looking at what came out: 'мы сделали параллелепипед, это никак не полка.' He is right. Envelope-only geometry draws a carcass as ONE VOLUME, and a Horizontal Thin has no volume to draw - it is a top rail, a back, two sides and a floating shelf with air where a box would be. The solid the generator produced is not a bad drawing of this article, it is a drawing of a different article. THIS IS THE FIRST OBJECT WHERE DOMAIN RULE 4's OWN EXCEPTION FIRES: 'no interior modelled unless the source states it AND a drawing needs it.' printed p.458 states it - front, side and top views with every member dimensioned - and a LayOut elevation needs it, because the whole point of this element is the gap. The codes stay held: findable, orderable, priced, and out of the drawing until the geometry is written. See claude/findings-2026-08-27-horizontal-thin-is-not-a-box.md for the dimensions already read off the page and the two ways forward."
+      }
+    },
+    "height_mm": 390,
+    "height_note": "DECLARED AT FAMILY LEVEL because Registry.lookup reads height from the ROW or the FAMILY and never from the unit type - the same trap the wall_hung key fell into on 2026-08-22. printed p.459's positions are titled 'Thin H. 39' and the front view on p.458 dimensions the module 36/39: 39 is the one for base units H.78, 36 is p.460's for H.84."
+  }
+}

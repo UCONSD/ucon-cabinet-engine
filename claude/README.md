@@ -76,7 +76,33 @@ date order; a finding is never edited to hide what it corrected.
   material fork still open, and a lacquer refusal that would have been wrong),
   **`findings-2026-08-27-c92640-the-door-nobody-printed.md`** (the custom-sized
   door the page declines to dimension, derived as the remainder and confirmed
-  against the render, and the census check that went red first).
+  against the render, and the census check that went red first),
+  **`findings-2026-08-27-horizontal-thin-is-not-a-box.md`** (why the open module
+  came out a solid, the first time domain rule 4's exception fires, the p.458
+  dimensions already read, and the two ways forward),
+  **`findings-2026-08-27-shelves-38-44-search.md`** (all five volumes searched
+  for a 38-44 mm horizontal shelf: the Shelves chapter prints 2,2 and 6,0 only,
+  and the 40 mm board is a breakfast bar / Living top with concealed wall
+  supports that name the thickness — **corrected the same hour, see the next
+  note**),
+  **`findings-2026-08-27-shelf-fixings-rules.md`** (printed p.223 carries a 4 cm
+  block the search note missed, the MNS code grammar, the fixings as order-only
+  lines, and the three spacing rules with their table),
+  **`findings-2026-08-27-lit-shelves.md`** (three shapes a lit shelf takes, the
+  power adapter never included, the luminous glass shelf's 110V exclusion, and -
+  appended the same day - the FOURTH instance of learned rule 11: the light was
+  written onto the object and `Generator.effective` never handed it to the
+  drawing, plus why reloading the core cannot fix an open HtmlDialog, plus the
+  third round where it was drawn correctly and was five pixels tall),
+  **`findings-2026-08-27-colour-temperature.md`** (the whole Lighting chapter
+  read: every Cesar lamp is dual-colour and adjusted on site, so no order states
+  a temperature and none can arrive wrong - the real risk is ordering a lamp with
+  nothing to adjust it with; the lamp and transformer codes; and the catalog's own
+  cross-reference to p.526, which is a page about waste bins),
+  **`findings-2026-08-27-facing.md`** (the label was inside the wall: a shelf
+  inherits the facing of whatever it was built off, there was NO WAY AT ALL to
+  turn an object round, and a shelf should never have been placed beside
+  anything - Andriy's wall rule, and the turn buttons).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,

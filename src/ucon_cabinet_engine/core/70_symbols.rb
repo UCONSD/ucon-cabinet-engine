@@ -37,6 +37,15 @@ module UCON
       # this is the only honest thing that can be drawn for it.
       TAG_DOOR  = 'UCON — Opening (door)'
 
+      # THE LIGHT GETS ITS OWN TAG, AND THAT REVERSES WHAT THIS FILE SAID
+      # YESTERDAY. It said a tag of its own would be a control nobody asked
+      # for, and rode TAG_FRONT instead. Then Andriy asked for the light to be
+      # drawn in SOLID lines - and the line style is a property OF THE TAG, so
+      # a solid mark cannot live on a dashed tag. Two tags, one button:
+      # show_mode switches this one exactly when it switches TAG_FRONT, which
+      # is what he actually asked for - the same button, not the same tag.
+      TAG_LED   = 'UCON — Lighting'
+
       # How far a plan symbol sits above the bottom of ITS OWN ROW. Not above
       # the floor: that was the rule while every unit stood on the floor, and
       # it broke the moment a second row existed — a base unit and the wall
@@ -73,9 +82,12 @@ module UCON
         front = tag(model, TAG_FRONT)
         plan  = tag(model, TAG_PLAN)
         door  = tag(model, TAG_DOOR)
+        # SOLID, and switched by the elevation button all the same.
+        led   = tag(model, TAG_LED, dashed: false)
         front.visible = %i[front all].include?(mode)
         plan.visible  = %i[plan all].include?(mode)
         door.visible  = %i[door all].include?(mode)
+        led.visible   = front.visible
         model.active_view.invalidate
         mode
       end
@@ -90,11 +102,11 @@ module UCON
         ro['DrawSilhouettes'] ? 'profiles ON (thick)' : 'profiles OFF (thin)'
       end
 
-      def tag(model, name)
+      def tag(model, name, dashed: true)
         layer = model.layers[name] || model.layers.add(name)
         if layer.respond_to?(:line_style=) && model.respond_to?(:line_styles)
-          dash = model.line_styles['Dash']
-          layer.line_style = dash if dash && layer.line_style != dash
+          want = model.line_styles[dashed ? 'Dash' : 'Solid']
+          layer.line_style = want if want && layer.line_style != want
         end
         layer
       end
@@ -313,6 +325,202 @@ module UCON
       end
 
       # Twelve edges from two rings of four. z is relative to the carcass base.
+      # ---- THE LIGHT UNDER A SHELF ----------------------------------------
+      #
+      # A CHOICE HAS TO BE VISIBLE OR IT IS NOT A DRAWING. The led is recorded as
+      # a variant on the object - the article is in a book we do not hold, so
+      # there is no order line to see it in - and a choice that shows up nowhere
+      # on the sheet is one nobody checks. Andriy asked for it in the same terms
+      # as the door swing: a dashed mark, on the same tag, off with the same
+      # button.
+      #
+      # IT USED TO RIDE TAG_FRONT, and this comment used to argue that a tag of
+      # its own would be a control nobody asked for. Andriy then asked for solid
+      # lines, and a line style belongs to the TAG - so the light moved to
+      # TAG_LED, which show_mode switches in lockstep with TAG_FRONT. The same
+      # button, which is what he asked for; not the same tag, which was only ever
+      # how I had implemented it.
+      #
+      # WHAT IS DRAWN, and every number is the page's: printed p.224 gives the
+      # light as the SHELF LESS 3 MM, so the line is inset 1,5 at each end and a
+      # person can see it is shorter than the board. The ticks are ours - the
+      # line alone reads as an edge, and this has to read as a lamp.
+      #
+      # It is drawn at the FRONT PLANE like every other symbol in this file,
+      # because an elevation is what it is for. The lamp's real place, 18 in from
+      # the edge in depth, is on the object in the variant and not guessable from
+      # a line at the front - said here so nobody reads this symbol as a position.
+      #
+      # AND IT HAS TO BE VISIBLE AT DRAWING SCALE, which the first version was
+      # not. Measured rather than guessed: on the north-wall elevation as Andriy
+      # had it on screen, 874 mm of shelf spanned about 350 px - 0,4 px per mm.
+      # A spine drawn 1 mm under the board landed 0,4 px from the board's OWN
+      # bottom edge, which is to say on top of it, and 12 mm ticks were 5 px
+      # long. The symbol was in the model, on a visible tag, unhidden, gray, in
+      # exactly the right place - and 5 px tall. A probe found it before a person
+      # could.
+      #
+      # So the numbers below are sized to READ, not to be small: the spine drops
+      # clear of the board's edge line, the rays are long enough to survive a
+      # dashed line style, and their COUNT comes from a pitch instead of being
+      # fixed at five - five rays across 3 metres is a dotted line, five across
+      # 400 mm is a comb.
+      #
+      # AND THE THIRD VERSION IS A CONE, NOT A COMB. Rays hanging off a line read
+      # as a comb at any size; what a person recognises is the spread.
+      #
+      # IT WAS THE REAL BEAM FOR ONE VERSION, AND THAT WAS WRONG. printed p.528
+      # gives the Sky-B 96 degrees, so the cone was drawn at half of that off
+      # vertical and overhung the board by 67 mm at each end - true to the lamp,
+      # and it flew straight into the wall the moment a shelf was hung against
+      # one. Andriy: "если полка стоит рядом со стеной, то трапеция улетает
+      # внутрь стены."
+      #
+      # A TRUE 96-DEGREE CONE CANNOT BE DRAWN INSIDE THE BOARD AT ANY DEPTH -
+      # it overhangs at every drop, that is what a wide beam means - so the mark
+      # stops claiming to be the beam. THE RULE INSTEAD: a symbol never leaves
+      # the footprint of the object it belongs to. Its bottom edge stops 25 mm
+      # short of each END of the board, so it cannot collide with anything the
+      # object does not already collide with, on any wall, in any elevation.
+      #
+      # The beam angle is not lost, it moved to where it is true: led_rule
+      # carries beam_angle_deg and the illuminance table, which is the place a
+      # person asking "how far does this throw" should be reading anyway.
+      LED_END_INSET_MM  = 1.5   # each end: the lamp is the shelf less 3 (p.224)
+      LED_GAP_MM        = 6     # lamp line below the board, clear of its edge
+      LED_BEAM_INSET_MM = 25    # the cone's foot stops this short of each end
+      LED_BEAM_DROP_MM  = 60    # how far down the cone is drawn (symbol, ours)
+      LED_LABEL_MM      = 26    # cap height of the label inside the cone
+      LED_LABEL_FONT    = 'Arial'
+
+      def led_variant(unit)
+        Array((unit || {})['variants']).find { |v| v['key'].to_s == 'led' }
+      end
+
+      # AN OBJECT WITH NO FRONT HAS NO FRONT LINE TO SIT PROUD OF. Every other
+      # symbol here is drawn 1 mm in front of the DOOR, which itself stands 25 mm
+      # clear of the carcass - and a shelf has no door, so that same y would hang
+      # the light 26 mm out in mid-air ahead of the board. A shelf's face IS the
+      # carcass face, so the light sits 1 mm proud of that instead. Pure, and
+      # separate from the drawing, so the decision can be checked headlessly.
+      # WHERE THE CONE'S FOOT LANDS, in the object's own x. Inside the board and
+      # never outside it: nil when the board is too short to hold a cone at all,
+      # and then only the lamp line is drawn. Pure, so the suite can hold the
+      # one rule that matters - that the symbol stays within 0..w.
+      def led_cone_feet_mm(width_mm)
+        a = LED_BEAM_INSET_MM.to_f
+        b = width_mm.to_f - LED_BEAM_INSET_MM
+        return nil unless b - a >= LED_BEAM_INSET_MM
+
+        [a, b]
+      end
+
+      # WHAT THE MARK SAYS IN WORDS. The temperature is on the label on purpose:
+      # it is the single fact about a lamp that most often arrives wrong, and a
+      # drawing that carries it is one more place the mistake has to get past.
+      # The text comes from the section's led_rule, so the PAGE writes the label
+      # and not this file. Falls back to bare 'LED' when nothing is stated.
+      def led_label(unit)
+        v = led_variant(unit)
+        return nil unless v
+
+        t = (v['label'] || '').to_s.strip
+        t.empty? ? 'LED' : t
+      end
+
+      # A LABEL WIDER THAN THE LAMP IS NOT A LABEL. Roughly 0,6 of the cap height
+      # per character is close enough for a proportional face; the point is to
+      # refuse rather than to be exact, so a 400 mm shelf drops to 'LED' and a
+      # shelf too short even for that gets the cone and no words.
+      def led_label_fits?(text, lamp_length_mm, height_mm = LED_LABEL_MM)
+        return false if text.nil? || text.empty?
+
+        text.length * height_mm * 0.6 <= lamp_length_mm.to_f
+      end
+
+      def led_y_mm(unit, y_face)
+        return -1 if ((unit || {})['front_layout'] || {})['kind'].to_s == 'none'
+
+        y_face
+      end
+
+      def draw_led(definition, unit, z0, y_face, led_tag, mat)
+        return unless led_variant(unit)
+
+        w = (unit['width_mm'] || 0).to_f
+        return unless w > 2 * LED_END_INSET_MM
+
+        x1   = LED_END_INSET_MM
+        x2   = w - LED_END_INSET_MM
+        z    = z0.to_f - LED_GAP_MM
+        y    = led_y_mm(unit, y_face)
+        drop = LED_BEAM_DROP_MM
+        feet = led_cone_feet_mm(w)
+
+        g = definition.entities.add_group
+        g.name = 'SYM_LED'
+        e = g.entities
+        # THE LAMP: a plain line at the length the page gives it.
+        e.add_line([x1.mm, y.mm, z.mm], [x2.mm, y.mm, z.mm])
+        # THE CONE, and its foot is INSIDE the board - see LED_BEAM_INSET_MM.
+        # A board too short to hold one gets the lamp line and nothing else,
+        # which is honest: there is no room to say more.
+        if feet
+          f1, f2 = feet
+          zb = z - drop
+          e.add_line([x1.mm, y.mm, z.mm], [f1.mm, y.mm, zb.mm])
+          e.add_line([x2.mm, y.mm, z.mm], [f2.mm, y.mm, zb.mm])
+          e.add_line([f1.mm, y.mm, zb.mm], [f2.mm, y.mm, zb.mm])
+        end
+        finalize(g, led_tag, mat)
+
+        draw_led_label(definition, unit, (x1 + x2) / 2.0, z - drop / 2.0, y,
+                       feet ? feet[1] - feet[0] : x2 - x1, led_tag, mat)
+        g
+      end
+
+      # THE WORDS, as real geometry rather than a screen label: an elevation is
+      # printed, and a Text entity that always faces the camera is not on the
+      # drawing, it is on the screen. Wrapped, because add_3d_text depends on a
+      # font being resolvable and a missing font must cost the label and not the
+      # light.
+      def draw_led_label(definition, unit, x_center, z_center, y,
+                         lamp_length_mm, led_tag, mat)
+        text = led_label(unit)
+        text = 'LED' unless led_label_fits?(text, lamp_length_mm)
+        return nil unless led_label_fits?(text, lamp_length_mm)
+
+        g = definition.entities.add_group
+        g.name = 'SYM_LED_LABEL'
+        ok = g.entities.add_3d_text(text, TextAlignCenter, LED_LABEL_FONT,
+                                    false, false, LED_LABEL_MM.mm, 0.0, 0.0,
+                                    true, 0.0)
+        unless ok && !g.entities.to_a.empty?
+          g.erase! if g.valid?
+          return nil
+        end
+
+        # add_3d_text builds flat in XY with the glyphs running up +y. Stand it
+        # up into XZ so it faces the same way every other elevation symbol does.
+        g.transform!(Geom::Transformation.rotation(ORIGIN, X_AXIS, 90.degrees))
+        b = g.bounds
+        g.transform!(Geom::Transformation.translation(
+                       [x_center.mm - (b.min.x.to_f + b.max.x.to_f) / 2.0,
+                        y.mm - b.center.y.to_f,
+                        z_center.mm - (b.min.z.to_f + b.max.z.to_f) / 2.0]
+                     ))
+        g.layer = led_tag
+        g.entities.grep(Sketchup::Face).each do |f|
+          f.layer = led_tag
+          f.material = mat
+          f.back_material = mat
+        end
+        g.entities.grep(Sketchup::Edge).each { |ed| ed.layer = led_tag }
+        g
+      rescue StandardError
+        nil
+      end
+
       def draw_box(group, rings, z0)
         a, b = rings
         [a, b].each do |ring|
@@ -434,6 +642,8 @@ module UCON
         front_tag = tag(model, TAG_FRONT)
         plan_tag  = tag(model, TAG_PLAN)
         door_tag  = tag(model, TAG_DOOR)
+        # SOLID, unlike its three neighbours, and switched with the front one.
+        led_tag   = tag(model, TAG_LED, dashed: false)
         mat       = symbol_material(model)
         enable_material_edges(model)
 
@@ -446,6 +656,10 @@ module UCON
         # returns, so anything that must apply to all door types is drawn here
         # or it is quietly missed by one of them.
         draw_glass_hatch(definition, unit, z0, y_face, front_tag, mat, slabs)
+
+        # The light, and it is here for the third time for the same reason:
+        # before any branch can return without it.
+        draw_led(definition, unit, z0, y_face, led_tag, mat)
 
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'

@@ -241,12 +241,12 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 924 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels + 44 panel sheets)') do
+check('registry loads and holds 937 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves)') do
   # 2026-08-27: +44, and they are the first codes here out of a book that is not
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 924
+  raise "got #{n}" unless n == 937
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -435,9 +435,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 924 rows, each with code/dims/description/source') do
+check('registry catalog: 937 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 924
+  raise cat.length.to_s unless cat.length == 937
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -542,6 +542,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'End elements for Maxima-Intarsio',
                                              'Glass wall units H. 96',
                                              'Panels - Linear Elements',
+                                             'Shelves - Linear Elements',
                                              'Sink base units H. 58.5',
                                              'Sink base units H. 78',
                                              'Tall unit top elements H. 36 | without fixings',
@@ -555,6 +556,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Tall units H. 222 | for base unit H. 78',
                                              'Tall units H. 234',
                                              'Tall units H. 234 | for base unit H. 78',
+                                             'Thin | Horizontal Thin H. 39, for base units H. 78',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 120',
                                              'Wall units H. 36',
@@ -580,7 +582,7 @@ check('split storage: every catalog row is stamped with its section and class') 
   # detail, out of a different book. Collapsing them would have made the picker
   # offer 168 codes for one question that is really two.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
-    cat.map { |c| c['class'] }.uniq.sort == %w[base end_panel filler panel_sheet tall wall]
+    cat.map { |c| c['class'] }.uniq.sort == %w[base end_panel filler open_unit panel_sheet shelf tall wall]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -1252,7 +1254,7 @@ check('AFTER THE SWEEP, AN ABSENT HUNG READING IS A BUG') do
     man.dig('page_symbols', 'sweep_done', 'wall_chapter').to_s.include?('no pictogram column')
 end
 
-check('92 codes refuse the hung version, and every move of that number is dated') do
+check('96 codes refuse the hung version, and every move of that number is dated') do
   # A sweep that changed an availability would be a correction, and a
   # correction gets a dated note of its own (learned rule 9). The printed p.19 sweep
   # changed none, and that is worth pinning: if a later edit quietly flips a
@@ -1288,9 +1290,15 @@ check('92 codes refuse the hung version, and every move of that number is dated'
   # top elements and printed p.162 four columns, and all thirteen refuse - the
   # top elements in the catalog's own words again, the columns by the absent
   # glyph. Tall 75 -> 88, base still 4.
-  raise refused.length.to_s unless refused.length == 92
+  #
+  # 2026-08-27: 92 -> 96, and a THIRD class joins. The four Horizontal Thin
+  # modules of printed p.459 refuse, and like the top elements they refuse in
+  # the catalog's own words rather than by an absent glyph: printed p.458 opens
+  # with 'Can only be fitted below a top.' An element that must have a run under
+  # it and a top over it is not a thing that hangs. base 4, tall 88, open_unit 4.
+  raise refused.length.to_s unless refused.length == 96
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 88 }
+  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 88, 'open_unit' => 4 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -2185,6 +2193,47 @@ check('THE REBUILD ASKS ABOUT THE CHOSEN UNIT, NOT THE CATALOG ROW') do
   raise 'the catalog must win on facts' unless
     liar['code'] == 'B80601' && liar['width_mm'] == 600
   raise 'nil unit must not blow up' unless Generator.effective(nil, {}).is_a?(Hash)
+end
+
+check('a CHOICE the catalog has no opinion about survives the merge that draws it') do
+  # THE LED WAS WRITTEN AND NEVER DRAWN, and every part in the chain was right
+  # except the join. Panel#apply wrote the variant, Contract encoded, stored and
+  # decoded it, Symbols#draw_led knew how to draw it - and Generator.effective,
+  # which builds the `chosen` object that apply hands to the drawing, carried
+  # only INSTANCE_KEYS and the ordered width. The variant was dropped on the
+  # floor between the write and the draw, so draw_led returned at its first line
+  # every time, in silence. Fourth instance of learned rule 11 this year: a key
+  # written correctly that the thing needing it is never given.
+  unit = Registry.lookup('MNS040060')
+  raise 'the shelf must be in the registry' unless unit
+  raise 'and the registry row has no opinion about lights' unless unit['variants'].nil?
+
+  lit = Generator.effective(unit, 'width_mm' => 1200, 'variants' => [
+          { 'key' => 'led', 'value' => 'Sky-B 1197 mm', 'source_ref' => 'printed p.224' }
+        ])
+  raise 'the choice must reach the object that gets drawn' unless
+    Array(lit['variants']).any? { |v| v['key'] == 'led' }
+  raise 'and the drawing must be able to find it' unless Symbols.led_variant(lit)
+  # An object nobody has lit stays unlit - the merge must not invent one.
+  dark = Generator.effective(unit, 'width_mm' => 1200)
+  raise 'no light was chosen and none may appear' if Symbols.led_variant(dark)
+end
+
+check('the light hangs off the face the object actually has') do
+  # Every other symbol sits 1 mm proud of the DOOR, and the door stands 25 mm
+  # clear of the carcass. A shelf has no door, so that same y would float the
+  # light 26 mm out in front of the board with nothing between them.
+  y_face = Generator.front_y_mm - 1
+  raise 'the front line is where the door is' unless y_face < -20
+
+  shelf = Registry.lookup('MNS040060')
+  raise 'a shelf states it has no front' unless
+    (shelf['front_layout'] || {})['kind'] == 'none'
+  raise 'so its light sits on its own face' unless Symbols.led_y_mm(shelf, y_face) == -1
+
+  door = Registry.lookup('B80601')
+  raise 'and a cabinet keeps the front line' unless
+    Symbols.led_y_mm(door, y_face) == y_face
 end
 
 check('the plinth has ONE writer, and the panel is not it') do
@@ -4796,7 +4845,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'units with jumbo drawers' => 155,
                  'units with interior drawers' => 24,
                  'end panels, whose width is a thickness' => 124,
-                 'tall or wall units with framed glass doors' => 3 } && allowed == 530
+                 'tall or wall units with framed glass doors' => 3 } && allowed == 534
 end
 
 check('an ordered filler satisfies the contract') do
@@ -7277,8 +7326,12 @@ check('THE REGISTRY NOW HOLDS TWO BOOKS, and every code says which') do
     Registry.lookup('B80601')['source_ref'].start_with?('CESAR - 2 Kitchen System.pdf ')
 
   # no leakage, either way, across all 924
+  # TWO CLASSES COME OUT OF VOLUME 3 NOW - the per-m2 panels and, since
+  # 2026-08-27, the shelves. The list is written out rather than derived so that
+  # a third one has to be added here on purpose.
+  volume_three = %w[panel_sheet shelf]
   wrong = Registry.catalog.reject do |r|
-    want = r['class'] == 'panel_sheet' ? 'CESAR - 3 Linear Elements.pdf' : 'CESAR - 2 Kitchen System.pdf'
+    want = volume_three.include?(r['class']) ? 'CESAR - 3 Linear Elements.pdf' : 'CESAR - 2 Kitchen System.pdf'
     r['source_ref'].to_s.start_with?("#{want} ")
   end
   raise "cite the wrong book: #{wrong.map { |r| r['code'] }.first(8).inspect}" unless wrong.empty?
@@ -7472,6 +7525,542 @@ check('and the sheet grid has something to put ON its buttons') do
   raise 'no price group' unless lac.map { |r| r['price_group'] }.uniq.sort == %w[A B C D]
   # one side or two, and it is a real distinction: 1,8 is sold both ways
   raise 'sides' unless lac.map { |r| r['faced_sides'] }.uniq.sort == [1, 2]
+end
+
+puts "\nHorizontal Thin - the first element whose ground is another unit"
+
+check('four codes, and the page decides where they stand') do
+  rows = Registry.catalog.select { |c| c['class'] == 'open_unit' }
+  raise rows.length.to_s unless rows.length == 4
+  raise rows.map { |r| r['code'] }.sort.inspect unless
+    rows.map { |r| r['code'] }.sort == %w[B01862 B01869 B02462 B02469]
+  u = Registry.lookup('B01869')
+  raise u['height_mm'].inspect unless u['height_mm'] == 390
+  raise u['depth_mm'].inspect  unless u['depth_mm'] == 350
+  raise u['width_mm'].inspect  unless u['width_mm'] == 1800
+  raise 'the shelf length is what separates the pairs' unless
+    Registry.lookup('B01869')['shelf_length_mm'] == 874 &&
+    Registry.lookup('B01862')['shelf_length_mm'] == 1174
+  # the light is an OPTION with its own points, not part of the code
+  raise 'lights' unless u['lights_surcharge_points'] == 274
+  # an open module has no front, and the empty list is stated
+  raise Generator.front_slabs(u).inspect unless Generator.front_slabs(u).empty?
+end
+
+check('IT CANNOT STAND ON THE FLOOR, and the refusal quotes the page') do
+  # printed p.458: 'Can only be fitted below a top.' The datum is the run below,
+  # and there is no honest default for which run - the same shape as an end
+  # panel's ground, and the first time the catalog itself demands it.
+  u = Registry.lookup('B01869')
+  raise 'not marked' unless Generator.stands_on_unit_below?(u)
+  raise 'a base unit must not be' if Generator.stands_on_unit_below?(Registry.lookup('B80601'))
+
+  msg = Generator.stands_on_needs_a_unit_message('B01869')
+  raise msg unless msg.include?('Can only be fitted below a top')
+  raise msg unless msg.include?('Nothing was drawn')
+
+  # and once it HAS a ground, the bottom is that run's top - 100 of plinth plus
+  # 780 of H.78 carcass, taken through the code and not off a body
+  grounded = u.merge('stands_on_top_mm' => 880.0, 'stands_on_code' => 'B80653')
+  raise Generator.base_z_mm(grounded).inspect unless Generator.base_z_mm(grounded) == 880.0
+  # which puts its own top at 1270, and the mandatory top above that
+  raise 'the module tops out at 1270' unless
+    Generator.base_z_mm(grounded) + grounded['height_mm'] == 1270
+end
+
+puts "\nshelves - Linear Elements printed p.223-224"
+
+check('nine codes, three thicknesses, and the thickness is in the code') do
+  rows = Registry.catalog.select { |c| c['class'] == 'shelf' }
+  raise rows.length.to_s unless rows.length == 9
+  rows.each do |r|
+    u = Registry.lookup(r['code'])
+    # MNS + thickness x10 + depth in cm. A row that disagreed with its own code
+    # would be a transcription slip that looks like data.
+    # MNS + thickness in MILLIMETRES, three digits (022 = 2,2 cm = 22 mm) + depth
+    th = r['code'][3, 3].to_i
+    raise "#{r['code']}: code says #{th}, row says #{u['height_mm']}" unless u['height_mm'] == th
+    raise "#{r['code']}: no thickness" unless [22, 40, 60].include?(u['height_mm'])
+  end
+  raise 'three thicknesses' unless rows.map { |r| Registry.lookup(r['code'])['height_mm'] }.uniq.sort == [22, 40, 60]
+  # and the depth field: 038 / 060 / 000, the last meaning per m2 at D.120
+  d = rows.map { |r| Registry.lookup(r['code'])['depth_mm'] }.uniq.sort
+  raise d.inspect unless d == [380, 600, 1200]
+end
+
+check('A SHELF HANGS, and it took three tries to make the loader agree') do
+  # IT SAT NOT BUILDABLE IN THE PICKER, and Andriy saw it before any check did.
+  # mounting was declared on the UNIT TYPE; Registry.lookup reads it from
+  # family['mounting'] and nowhere else, so all nine came out 'floor', inherited
+  # the default plinth of 100 and failed the contract's own rule that a hung
+  # object needs a positive datum.
+  #
+  # THIS IS THE THIRD INSTANCE IN ONE DAY of one shape - a key written correctly
+  # into a section file that the loader does not lift: the Horizontal Thin's
+  # height this morning, height_range_mm on the sheets before that, and the
+  # wall_hung key of 2026-08-22 that started the list. The fix is always one
+  # line; finding it is not.
+  u = Registry.with_ordered_width(Registry.lookup('MNS040038'), 1800)
+  raise u['mounting'].inspect unless u['mounting'] == 'wall_hung'
+  raise 'it must hang BY NATURE, or the datum falls through to a plinth' unless
+    Generator.hangs_by_nature?(u)
+  raise Generator.base_z_mm(u).inspect unless Generator.base_z_mm(u) == Standards::WALL_MOUNT_BOTTOM_MM
+  raise 'a hung board has no plinth' if Generator.plinth?(u)
+  raise 'and no front' unless Generator.front_slabs(u).empty?
+
+  a = Generator.attributes_for(u)
+  raise a['mount_bottom_mm'].inspect unless a['mount_bottom_mm'] == Standards::WALL_MOUNT_BOTTOM_MM
+  raise a.values_at('width_mm', 'depth_mm', 'height_mm').inspect unless
+    [a['width_mm'], a['depth_mm'], a['height_mm']] == [1800, 380, 40]
+  Contract.validate!(a)
+  # THE DATUM IS WRITTEN ONTO THE OBJECT, which is what makes moving it safe:
+  # mount_bottom_mm recomputes only when nothing has stated one.
+  moved = Generator.mount_bottom_mm(u.merge('mount_bottom_mm' => 1650))
+  raise moved.inspect unless moved == 1650.0
+end
+
+check('THE 4 CM SHELF EXISTS, and the first search said it did not') do
+  # The search note said this chapter prints 2,2 and 6,0 only. It was done on the
+  # text layer; printed p.223 carries TWO blocks and the second is 4 cm.
+  # learned rule 10 - look at the render - and this check is that correction with
+  # teeth on it. NOTE the wrap: a citation must not be split across two lines, or
+  # the bare-rule check sees the number stranded on the second one - which is the
+  # defect it exists for, and it caught this comment twice while it was written.
+  u = Registry.lookup('MNS040038')
+  raise u['height_mm'].inspect unless u['height_mm'] == 40
+  raise u['depth_mm'].inspect  unless u['depth_mm'] == 380
+  raise 'the order states the length' unless u['width_range_mm'] == [1, 3000]
+  raise 'and the table governs it' unless u['max_length_mm'] == 3000
+  raise u['source_ref'].inspect unless
+    u['source_ref'] == 'CESAR - 3 Linear Elements.pdf printed p.223 / PDF 225'
+end
+
+check('a price band the page leaves EMPTY stays empty') do
+  # Band 2 is blank on all three 4 cm rows and bands 1 AND 2 on all three 6 cm
+  # rows - read off the renders. A missing band is a fact about the article; a
+  # filled-in one would be an invented price.
+  b40 = Registry.data['families']['Shelves (Linear Elements)']['unit_types']['shelf_40']['codes']
+  b60 = Registry.data['families']['Shelves (Linear Elements)']['unit_types']['shelf_60']['codes']
+  b40.each { |c| raise "#{c['code']} band 2" if c['points_by_band'].key?('2') }
+  b40.each { |c| raise "#{c['code']} band 1" unless c['points_by_band'].key?('1') }
+  b60.each do |c|
+    raise "#{c['code']} band 1" if c['points_by_band'].key?('1')
+    raise "#{c['code']} band 2" if c['points_by_band'].key?('2')
+    raise "#{c['code']} band 4" unless c['points_by_band']['4']
+  end
+  raise 'MNS040038 band 1' unless b40.first['points_by_band']['1'] == 91
+  raise 'MNS060038 band 4' unless b60.first['points_by_band']['4'] == 234
+end
+
+check('THE FIXINGS ARE ORDER LINES AND NEVER GEOMETRY') do
+  # Andriy, 2026-08-27: they are not drawn, they go to the warehouse. So they are
+  # in hardware and NOT in any section - a code in a section file is a thing the
+  # picker offers to build.
+  hw = Registry.data['hardware']['shelf_fixings']
+  codes = hw['items'].map { |i| i['code'] }.sort
+  raise codes.inspect unless codes == %w[990307 990315 990316 990317 990331]
+  raise 'a fixing leaked into the catalog' unless (Registry.codes & codes).empty?
+
+  # the count rule is the catalog's, the spacing rule is ours, and both say so
+  raise 'count rule' unless hw['count_rule'].include?('ceil(L / 500)')
+  raise 'the spacing rule must name itself as ours' unless hw['spacing_rule'].start_with?('UCON')
+
+  # the thickness gate, and the hole in it: nothing takes a 4 cm shelf on a back panel
+  by_th = hw['items'].select { |i| Array(i['for_thickness_mm']).include?(40) }.map { |i| i['code'] }
+  raise by_th.inspect unless by_th.sort == %w[990316 990317]
+  back = hw['items'].find { |i| i['fixes_to'] == 'a back panel' }
+  raise 'a back-panel support for 4 cm appeared' if Array(back['for_thickness_mm']).include?(40)
+end
+
+check('the led is a RULE on the shelf, not a surcharge - and its lamp is in another book') do
+  led = Registry.data['families'] && Registry.data['catalog_map'] # touch, then read the section
+  rule = JSON.parse(File.read(File.expand_path('../registry/cesar/shelves_linear_elements.json', __dir__)))['data']['led_rule']
+  raise 'no led rule' unless rule
+  raise rule['light_length_mm'].inspect unless rule['light_length_mm'] == 'shelf length - 3'
+  raise rule['max_light_length_mm'].inspect unless rule['max_light_length_mm'] == 3000
+  raise rule['lamp_position_in_depth_mm'].inspect unless rule['lamp_position_in_depth_mm'] == 18
+  # THE LAMP IS PRICED IN VOLUME 2 AND WE HOLD NONE OF THAT PAGE. One order line,
+  # two books - said out loud rather than half-held.
+  raise 'the lamp must name its book' unless rule['lamp_source'].include?('Kitchen System')
+  raise 'and say it is not extracted' unless rule['lamp_source'].include?('NOT YET EXTRACTED')
+  # AND THE PAGE IT IS ACTUALLY ON. printed p.224 sends the reader to "page 526"
+  # of the Kitchen System, and printed p.526 of the Kitchen System is waste bins.
+  # The Sky-B is p.528-529. Our own earlier note copied the 526 without checking
+  # it, which is how a wrong cross-reference becomes our wrong cross-reference.
+  raise 'the lamp must cite the page it is really on' unless
+    rule['lamp_source'].include?('p.528')
+  raise 'and the catalog\'s own error must be recorded, not silently corrected' unless
+    rule['cross_reference_error'].to_s.include?('526')
+
+  # THE TEMPERATURE, which is the thing that arrives wrong. printed p.528: the
+  # Emotion Dual Color device is PROVIDED and adjusts 3000K to 4000K, so there is
+  # nothing to specify on the order - and the registry must say that rather than
+  # leave a silence somebody fills with a guess.
+  raise 'the temperature must be stated' unless
+    rule['colour_temperature_k'].to_s.include?('3000/4000')
+  raise 'and stated as adjustable' unless
+    rule['colour_temperature_k'].to_s.include?('adjustable')
+  raise 'the beam angle is the page\'s' unless rule['beam_angle_deg'] == 96
+  # The LAMP's limit and the SHELF's limit are different numbers from different
+  # pages, and the shorter one wins. Holding both is what stops one being read
+  # as the other.
+  raise 'the lamp has its own maximum' unless rule['lamp_max_length_mm'] == 3900
+  raise 'and it is longer than the shelf can ever be' unless
+    rule['lamp_max_length_mm'] > rule['max_light_length_mm']
+  raise 'a lit shelf is never one line' unless
+    rule['transformer_note'].to_s.include?('mandatory')
+  raise 'the lamp code must not be invented' if Registry.codes.include?('Sky-B')
+end
+
+check('the Luminous glass shelf is NOT held, and the reason is 110V') do
+  # printed p.539, Kitchen System: 'Not available version 110V' - the only such
+  # exclusion in that book, and this is a 110V project. Andriy, 2026-08-27: on
+  # principle. A deliberate absence has to be recorded or it reads as an oversight.
+  sec = Registry.map_sections.find { |x| x['section'] == 'Shelves - Linear Elements' }
+  raise 'the shelves section is unmapped' unless sec
+  raise 'the deliberate absence is not recorded' unless
+    sec['extracted_on'].include?('110V') && sec['extracted_on'].include?('p.539')
+  raise 'a luminous shelf leaked in' if Registry.catalog.any? { |c| c['description'].to_s =~ /luminous/i }
+end
+
+puts "\nthe properties panel: what an object can be ASKED"
+
+check('A SHELF IS NOT OFFERED A HANDLE, and a cabinet still is') do
+  # Andriy, 2026-08-27, looking at the dialog on a shelf: "доступные опции ручки
+  # не нужны по определению." The Opening fieldset was unconditional, so every
+  # object got a handle and a push-to-open - including the things with no front.
+  #
+  # Asked of the FRONT LAYOUT rather than the class, because `kind: none` is
+  # already stated on exactly those things, and stated for a different reason:
+  # so that nothing defaults a door onto them. One fact, two readers.
+  raise 'a shelf' if Panel.opens?(Registry.lookup('MNS040038'))
+  raise 'a sheet' if Panel.opens?(Registry.lookup('DZAK22'))
+  raise 'an end panel' if Panel.opens?(Registry.lookup('YU0028'))
+  raise 'a cabinet must still open' unless Panel.opens?(Registry.lookup('B80601'))
+  raise 'and a tall unit' unless Panel.opens?(Registry.lookup('C92640'))
+
+  # and the patch takes none of the door machinery for something that cannot open
+  shelf = Registry.with_ordered_width(Registry.lookup('MNS040038'), 847)
+  patch = Panel.attributes_patch(shelf, {})
+  raise patch.inspect unless patch.keys == ['variants']
+end
+
+check('THE LIGHT IS A CHOICE ON THE OBJECT, and it carries the arithmetic') do
+  shelf = Registry.with_ordered_width(Registry.lookup('MNS040038'), 847)
+  attrs = Generator.attributes_for(shelf)
+  offer = Panel.led_offer(shelf, attrs)
+  raise 'no offer' unless offer
+  # printed p.224: length of light = length of the shelf minus 3 mm
+  raise offer['length_mm'].inspect unless offer['length_mm'] == 844
+  raise offer['depth_mm'].inspect unless offer['depth_mm'] == 18
+  raise offer['lamp'].inspect unless offer['lamp'] == 'Sky-B'
+
+  on = Panel.attributes_patch(shelf, 'led' => true, 'attrs' => attrs)
+  v = on['variants'].find { |x| x['key'] == 'led' }
+  raise on.inspect unless v
+  raise 'the length must be on the object' unless v['value'].include?('844')
+  raise 'and the page that says so' unless v['source_ref'].include?('p.224')
+  # A VARIANT AND NOT A COMPANION LINE: the lamp is priced in a book we do not
+  # hold, a line must carry a code, and inventing one is domain rule 1's whole
+  # subject. The object says the choice; the order gets its line when p.526 is
+  # extracted, and the variant says that in as many words.
+  raise 'it must name the book it is not priced in' unless v['value'].include?('p.528')
+  raise 'and carry the temperature onto the object' unless v['value'].include?('3000/4000')
+  # v2.3: the short form, for a symbol that has room for three words.
+  raise 'a variant that gets drawn needs a label' unless v['label']
+  raise 'and the label must be shorter than the sentence' unless
+    v['label'].length < v['value'].length
+  raise 'a variant may not carry what it costs' if v.key?('points')
+  Contract.validate!(attrs.merge(on))
+
+  off = Panel.attributes_patch(shelf, 'led' => false, 'attrs' => attrs.merge(on))
+  raise off.inspect unless off['variants'].none? { |x| x['key'] == 'led' }
+
+  # a cabinet is offered nothing of the sort
+  raise 'a cabinet has no led rule' if Panel.led_offer(Registry.lookup('B80601'), {})
+end
+
+check('THE TEMPERATURE IS A SETTING, NOT A CODE - and silence is the defect') do
+  # Andriy: "Должна быть опция выбора температуры цвета. Смотри в каталогах."
+  # I had told him there was nothing to choose. Looking again, in all five books:
+  # THERE IS NOT ONE LAMP SOLD AT A FIXED TEMPERATURE ANYWHERE. Every stated
+  # temperature is a range the Emotion Dual Color device adjusts. So he is right
+  # that there is a choice and I was right that it is not an article - it is a
+  # COMMISSIONING INSTRUCTION, and the way it goes wrong is that nobody states
+  # it and the device is left wherever it powers up. That is exactly the failure
+  # he has been burned by, and it is the unset case, not a wrong case.
+  shelf = Registry.lookup('MNS040038')
+  attrs = { 'width_mm' => 847 }
+  offer = Panel.led_offer(shelf, attrs)
+  raise 'the page must offer the temperatures' unless
+    offer['temperature_options'] == %w[3000 4000]
+
+  # CHOSEN: the object says SET TO, and says it is not a different article.
+  on = Panel.attributes_patch(shelf, 'led' => true, 'attrs' => attrs,
+                                     'led_temperature' => '3000')
+  v = on['variants'].find { |x| x['key'] == 'led' }
+  raise v.inspect unless v['value'].include?('SET TO 3000K')
+  raise 'and must say it is not a code' unless v['value'].include?('not a code')
+  raise 'the elevation carries the chosen one' unless v['label'] == 'LED 3000K'
+
+  # UNSET: the object says so, out loud, rather than staying quiet.
+  none = Panel.attributes_patch(shelf, 'led' => true, 'attrs' => attrs)
+  nv = none['variants'].find { |x| x['key'] == 'led' }
+  raise nv.inspect unless nv['value'].include?('NOT SPECIFIED')
+  raise 'and must say what happens then' unless nv['value'].include?('powers up')
+  raise 'the label falls back to the range' unless nv['label'] == 'LED 3000/4000K'
+
+  # ONLY WHAT THE PAGE OFFERS. Checked in Ruby and not only in the dialog, for
+  # the reason gola_available? is: a rule that lives only in HTML is not a rule.
+  begin
+    Panel.attributes_patch(shelf, 'led' => true, 'attrs' => attrs,
+                                  'led_temperature' => '2700')
+    raise 'a temperature this lamp does not offer must be refused'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('2700K is not a temperature')
+    raise 'and the refusal must name the page' unless e.message.include?('p.528')
+  end
+
+  # IT SURVIVES A ROUND TRIP, and it is read from the INSTRUCTION rather than
+  # from the label - the label is allowed to say 'LED 3000/4000K' when nothing
+  # was chosen, and a naive match on that reads 4000 as a decision nobody took.
+  # The first version did exactly that and this check caught it.
+  raise 'it must read back off the object' unless
+    Panel.led_temperature_of('variants' => [v]) == '3000'
+  raise 'and answer nothing when nothing was set' unless
+    Panel.led_temperature_of('variants' => [nv]).nil?
+  raise 'the range in a label is not a decision' unless
+    Panel.led_temperature_of('variants' => [{ 'key' => 'led', 'label' => 'LED 3000/4000K',
+                                              'value' => 'no instruction here' }]).nil?
+
+  # THE REGISTRY MUST SAY WHY THIS IS NOT AN ARTICLE, or the next person to read
+  # it will add a second code for 4000K.
+  rule = JSON.parse(File.read(File.expand_path(
+    '../registry/cesar/shelves_linear_elements.json', __dir__)))['data']['led_rule']
+  why = rule['colour_temperature_is_a_setting_not_a_code'].to_s
+  raise 'the reason must be recorded' unless why.include?('not one')
+  raise 'and the sweep that established it' unless why.include?('all five volumes')
+end
+
+check('the light guard is VACUOUS TODAY, and that is recorded rather than hidden') do
+  # learned rule 18, taken early: the shelf's own max.L is 3000 and the light
+  # stops at 3000, so a light of length-minus-3 can never exceed it. The guard is
+  # correct and unreachable. Pinning the fact means the day the two limits stop
+  # agreeing - they come from different sentences on different pages - somebody
+  # sees it here instead of discovering the refusal for the first time in a
+  # dialog.
+  longest = Registry.with_ordered_width(Registry.lookup('MNS040038'), 3000)
+  offer = Panel.led_offer(longest, Generator.attributes_for(longest))
+  raise offer.inspect unless offer['length_mm'] == 2997
+  raise 'the guard has become reachable - re-read this check' if offer['over_max']
+  raise 'the shelf limit must be the stricter one' unless
+    Registry.lookup('MNS040038')['max_length_mm'] <= offer['max_mm']
+end
+
+check('APPLY MUST NOT REACH FOR render(st) - the button dies silently if it does') do
+  # THE DEFECT THIS EXISTS FOR, and it was live for one commit: the led work
+  # added `attrs:st.attrs` inside apply(). `st` is render's PARAMETER and there
+  # is no global by that name, so apply() threw a ReferenceError - and an
+  # exception in an HtmlDialog callback is invisible. The button did nothing, on
+  # every unit in the model, not only on a shelf. Andriy found it by ticking a
+  # box and coming back to an untouched object.
+  #
+  # A SOURCE CHECK, because nothing headless runs this JavaScript - the same
+  # reason the picker's Build-button check is one.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  body = src[/function apply\(\)\{(.+?)\n            \}/m, 1]
+  raise 'apply() is gone or renamed' unless body
+
+  bare = body.scan(/(?<![\w.])st\./)
+  raise "apply() reaches for render's parameter #{bare.length} time(s)" unless bare.empty?
+  raise 'apply() must read the state through STATE' unless body.include?('STATE')
+  # and render must actually put it there, or STATE is null and the patch is empty
+  rend = src[/function render\(st\)\{(.+?)\n            \}/m, 1]
+  raise 'render() is gone or renamed' unless rend
+  raise 'render() does not publish the state' unless rend.include?('STATE=st;')
+end
+
+check('A CHOSEN LIGHT IS DRAWN, and it goes off with the elevation symbols') do
+  # A SOURCE CHECK - Symbols needs SketchUp and nothing here can run it, the same
+  # reason the picker and panel checks are source checks.
+  #
+  # WHY IT MATTERS: the led is a VARIANT, and the article is priced in a book
+  # this registry does not hold, so there is no order line it could show up in.
+  # A choice that appears nowhere on the sheet is a choice nobody checks. Andriy
+  # asked for it in the same terms as the door swing - a dashed mark, same tag,
+  # same button - and the tag is what makes the button work.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  body = src[/def draw_led\(.+?\n      end\n/m]
+  raise 'draw_led is gone or renamed' unless body
+
+  raise 'the light must be drawn from the VARIANT, not from a class' unless
+    body.include?('led_variant(unit)')
+  raise 'nothing is drawn without the choice' unless body =~ /return unless led_variant/
+  # THE BUTTON IS THE POINT, AND THE TAG IS NOT. It rode TAG_FRONT until Andriy
+  # asked for solid lines - and a line style belongs to the tag, so a solid mark
+  # cannot live on the dashed one. It has its own tag now, and show_mode switches
+  # that tag with TAG_FRONT rather than on a control of its own. Both halves are
+  # checked, because either alone would let the button and the mark drift apart.
+  raise 'the led must ride its own tag' unless body.include?('led_tag')
+  mode = src[/def show_mode\(model, mode\).+?\n      end\n/m]
+  raise 'show_mode is gone' unless mode
+  raise 'the led tag must exist' unless src.include?("TAG_LED   = 'UCON")
+  raise 'and be solid, which is why it is not on the front tag' unless
+    mode.include?('tag(model, TAG_LED, dashed: false)')
+  raise 'and go on and off with the elevation symbols' unless
+    mode.include?('led.visible   = front.visible')
+  raise 'and be a real named group, or clear() will not remove it' unless
+    body.include?("g.name = 'SYM_LED'")
+
+  # and it is called before any branch of draw() can return without it - the
+  # mistake glass and the open leaf were both moved up to avoid.
+  drawm = src[/def draw\(model, definition, unit, hinge_side.+?\n      end\n/m]
+  raise 'draw() is gone' unless drawm
+  led = drawm.index('draw_led(')
+  raise 'draw() never draws the led' unless led
+  kinds = drawm.index("if kind == 'horizontal'")
+  raise 'the led is drawn after a branch that can return' unless kinds && led < kinds
+
+  # the length is the page's: the shelf less 3, so 1,5 inset at each end
+  raise 'the inset must come from the page' unless
+    src =~ /LED_END_INSET_MM\s+= 1\.5/
+end
+
+check('A SHELF GOES ON THE WALL, NOT BESIDE - and a person can turn anything round') do
+  # THE BUG, in Andriy's words: the label was going into the wall. A shelf built
+  # off an island unit inherited the island's facing, was dragged to the north
+  # wall where everything faces the other way, and ended up back-to-front - with
+  # its front symbols, its light and its label inside the plaster. Read out of
+  # the model rather than reasoned about: 50 objects, the north run at yaw -180,
+  # the island at yaw 0, and the shelf sitting on the north wall at yaw 0.
+  #
+  # A SOURCE CHECK for the placement branch, because placement_transform needs a
+  # live selection and nothing headless has one; the arithmetic it performs is
+  # one line and is stated here so a later edit cannot quietly invert it.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  body = src[/def placement_transform.+?\n      end\n/m]
+  raise 'placement_transform is gone' unless body
+
+  raise 'a shelf must be recognised before the run logic' unless
+    body.include?("new_unit['object_class'].to_s == 'shelf'")
+  # BEFORE the side branch, or the run wins and the wall rule never runs.
+  shelf = body.index("== 'shelf'")
+  side  = body.index('side = placement_side(')
+  raise 'the wall rule must come before the run rule' unless shelf && side && shelf < side
+  # Its back on the selected unit's back: y = that unit's depth less its own.
+  raise 'the shelf seats by depth difference' unless
+    body.include?("y = back - (new_unit['depth_mm'] || 0).to_f")
+  # And it refuses rather than guessing, exactly as the sheet panel does.
+  raise 'no depth, no wall, no guess' unless
+    body.include?('there is no wall behind it to')
+
+  # THE OPTION HE DID NOT HAVE. Every other placement decision can be corrected
+  # by dragging; facing could not be corrected at all.
+  pan = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'there must be a way to turn an object' unless pan.include?("add_action_callback('turn')")
+  turn = pan[/def turn\(degrees\).+?\n      end\n/m]
+  raise 'turn is gone' unless turn
+  raise 'it must turn about the footprint, not the origin' unless
+    turn.include?('footprint_centre(inst')
+  raise 'and be one undoable operation' unless turn.include?("start_operation(")
+  raise 'the dialog must offer the three quarter turns' unless
+    pan.include?('turn(90)') && pan.include?('turn(180)') && pan.include?('turn(270)')
+
+  # The readout is pure and is checked against the convention the model uses:
+  # a unit's own +y runs BACKWARDS, so the front is at negative y.
+  raise Panel.facing_word(0) unless Panel.facing_word(0).include?('\u2212Y')
+  raise Panel.facing_word(180) unless Panel.facing_word(180).include?('+Y')
+  raise Panel.facing_word(-180) unless Panel.facing_word(-180).include?('+Y')
+  raise Panel.facing_word(90) unless Panel.facing_word(90).include?('\u2212X')
+  raise Panel.facing_word(-90) unless Panel.facing_word(-90).include?('+X')
+  raise Panel.facing_word(270) unless Panel.facing_word(270).include?('+X')
+  # Anything off-axis says so rather than being rounded into a lie.
+  raise Panel.facing_word(37) unless Panel.facing_word(37).include?('not square')
+end
+
+check('CONTRACT v2.3 - a variant may say the same thing shorter, for a drawing') do
+  base = VALID.merge('code' => 'MNS040038')
+  ok = Contract.validate!(base.merge('variants' => [
+        { 'key' => 'led', 'value' => 'Sky-B 397 mm - the shelf less 3, 3000/4000K',
+          'label' => 'LED 3000/4000K', 'source_ref' => 'printed p.224' }
+      ]))
+  raise 'label must survive validation' unless
+    ok['variants'][0]['label'] == 'LED 3000/4000K'
+  # Optional, so nothing written before v2.3 becomes invalid.
+  Contract.validate!(base.merge('variants' => [{ 'key' => 'f', 'value' => 'steel' }]))
+  # And still no commercial data - a short form is not a loophole.
+  begin
+    Contract.validate!(base.merge('variants' => [
+      { 'key' => 'led', 'value' => 'x', 'label' => 'y', 'points' => 96 }
+    ]))
+    raise 'a price on a variant must still be refused'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('commercial')
+  end
+  # The manifest states the revision the registry was written under.
+  man = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+  raise man['contract_revision'].inspect unless man['contract_revision'] == '2.3'
+  doc = File.read(File.expand_path('../docs/UCON_Object_Contract_v2.md', __dir__))
+  raise 'the change log must carry v2.3' unless doc.include?('**v2.3 (2026-08-27)**')
+end
+
+check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do
+  # It was in the model, on a visible tag, unhidden, gray, correct to the
+  # millimetre - and invisible. A probe found it before a person could: on the
+  # north-wall elevation 874 mm of shelf spanned about 350 px, so the spine sat
+  # 0,4 px below the board's own bottom edge and the ticks were 5 px long.
+  # Being right is not the same as being legible, and the suite now says so.
+  #
+  # The scale is the drawing's, not the screen's - a symbol is sized in model
+  # units so it survives being plotted - but the ratios below are what stop it
+  # collapsing back onto the edge it hangs from.
+  raise 'the spine must clear the board it hangs under' unless
+    Symbols::LED_GAP_MM >= 5
+  raise 'and the cone must be deep enough to hold its own label' unless
+    Symbols::LED_BEAM_DROP_MM >= Symbols::LED_LABEL_MM
+  raise 'the cone must outrun the gap it starts from' unless
+    Symbols::LED_BEAM_DROP_MM > Symbols::LED_GAP_MM
+
+  # AND THE CONE STAYS INSIDE THE BOARD. It was the REAL 96 degree beam for one
+  # version - true to printed p.528, overhanging 67 mm at each end - and it flew
+  # into the wall the first time a shelf was hung against one. A true 96 degree
+  # cone cannot be drawn inside the board at any depth, which is what a wide
+  # beam means, so the mark stopped claiming to be the beam. The rule that
+  # replaced it is general: A SYMBOL NEVER LEAVES ITS OBJECT'S FOOTPRINT.
+  feet = Symbols.led_cone_feet_mm(874)
+  raise 'a normal board gets a cone' unless feet
+  raise 'and its foot is inside the board' unless feet[0] >= 0 && feet[1] <= 874
+  raise 'stopping short of each end' unless
+    feet[0] == Symbols::LED_BEAM_INSET_MM && feet[1] == 874 - Symbols::LED_BEAM_INSET_MM
+  raise 'the clearance is the 25 mm Andriy asked for' unless
+    Symbols::LED_BEAM_INSET_MM == 25
+  # The widest shelf the page allows, and the narrowest thing that can hold a
+  # cone at all - both inside, or the rule is not a rule.
+  [400, 1200, 3000].each do |w|
+    f = Symbols.led_cone_feet_mm(w)
+    raise "cone escapes at #{w}" unless f && f[0] >= 0 && f[1] <= w
+  end
+  # Too short to say anything: the lamp line alone, rather than a cone folded
+  # inside out.
+  raise 'a 60 mm board cannot hold a cone' unless Symbols.led_cone_feet_mm(60).nil?
+  sym = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'and the drawing must ask before drawing one' unless
+    sym[/def draw_led\(.+?\n      end\n/m].include?('if feet')
+
+  # THE WORDS. A label wider than the lamp is worse than no label, and the
+  # temperature is on it because that is the fact that arrives wrong.
+  raise 'the label comes from the variant' unless
+    Symbols.led_label('variants' => [{ 'key' => 'led', 'label' => 'LED 3000/4000K' }]) ==
+    'LED 3000/4000K'
+  raise 'and falls back rather than drawing nothing' unless
+    Symbols.led_label('variants' => [{ 'key' => 'led', 'value' => 'x' }]) == 'LED'
+  raise 'no light, no label' unless Symbols.led_label('variants' => []).nil?
+  raise 'a long label must not overrun a short shelf' unless
+    !Symbols.led_label_fits?('LED 3000/4000K', 200)
+  raise 'and must fit a long one' unless
+    Symbols.led_label_fits?('LED 3000/4000K', 1200)
+  raise 'the bare word fits where the sentence does not' unless
+    Symbols.led_label_fits?('LED', 200)
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

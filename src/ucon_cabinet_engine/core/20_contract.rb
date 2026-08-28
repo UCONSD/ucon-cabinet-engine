@@ -43,7 +43,14 @@ module UCON
         # whose division is not yet decided. It sits beside `appliance` and
         # `appliance_front` for the same reason they are here: it is a thing the
         # drawing owns and the factory does not make. docs/Reserved_Void_Spec_v0.1.md
-        'object_class'    => %w[cabinet worktop panel filler accessory appliance appliance_front corner_unit void],
+        # `shelf` added v2.2, 2026-08-27. A board that HANGS, is cut to length
+        # and is priced by the linear metre - Linear Elements printed p.223-224.
+        # Not `panel`: a panel finishes something and its width is a thickness.
+        # Not `worktop`: a worktop rests on a run and, in this project, is drawn
+        # and NOT ordered, while a shelf is ordered and hangs on nothing. Andriy
+        # chose the new word over reusing either, 2026-08-27, and §0 makes
+        # widening an enum a revision rather than a major version.
+        'object_class'    => %w[cabinet worktop shelf panel filler accessory appliance appliance_front corner_unit void],
         'geometry_kind'   => %w[linear corner non_dim],
         'mounting'        => %w[floor wall_hung],
         'code_status'     => %w[PRELIMINARY CONFIRMED],
@@ -67,7 +74,12 @@ module UCON
       # code's provenance lives in the registry row that produced it, and a
       # second copy is a second thing to keep true.
       LINE_KEYS    = %w[code qty um origin source_ref variants].freeze
-      VARIANT_KEYS = %w[key value source_ref].freeze
+      # v2.3 adds `label`: the SHORT FORM of this choice, for a drawing. `value`
+      # is a sentence written to be read in a properties panel and on an order;
+      # a symbol on an elevation has room for three words. Optional, and never a
+      # second opinion - it says the same thing shorter, and a check holds it to
+      # being shorter.
+      VARIANT_KEYS = %w[key value label source_ref].freeze
       COMPANION_UMS = %w[PZ ML MQ].freeze
       # §4.2 rule 3 — behavioural, not descriptive. An implied line is recomputed
       # on every rebuild; a chosen one survives, because a hinge-side change must
@@ -79,8 +91,13 @@ module UCON
 
       # §1.2 — no key may carry commercial data. pricing_group_ref is the one
       # structural exception and records the group label only, never a price.
+      # `points` was missing until 2026-08-27, and it is THE unit this whole
+      # catalog is priced in - the single most likely commercial key anybody
+      # would write onto an object. It was caught only by the unknown-key sweep,
+      # which reports a typo; §1.2 wants a scope breach reported as one. Found by
+      # writing a check that tried to smuggle one in.
       COMMERCIAL_MARKERS = %w[
-        price cost margin coefficient discount surcharge
+        price cost margin coefficient discount surcharge points
         lead_time leadtime availability stock
       ].freeze
 

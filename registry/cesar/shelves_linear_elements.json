@@ -1,0 +1,301 @@
+{
+  "section": "Shelves - Linear Elements",
+  "class": "shelf",
+  "family": "Shelves (Linear Elements)",
+  "source_pdf": "CESAR - 3 Linear Elements.pdf",
+  "source_pages": "printed p.223-224 / PDF 225-226, both read from 170-dpi renders 2026-08-27",
+  "extraction_note": "DEMAND-DRIVEN 2026-08-27. Andriy wanted a horizontal shelf 38-44 mm thick. The first search said this chapter prints only 2,2 and 6,0 - it was done on the text layer and it was WRONG: printed p.223 carries TWO blocks and the second is 4 cm. Corrected against the render the same hour (learned rule 10), and the correction is why this section exists. Account: claude/findings-2026-08-27-shelf-fixings-rules.md.",
+  "code_grammar": "MNS + thickness x10 in three digits + depth in cm in three digits. 022/040/060 are the three thicknesses. A depth field of 000 means the row is sold PER SQUARE METRE at D.120 instead of per linear metre - it is not a missing number.",
+  "max_length_note": "THREE MAXIMA ARE PRINTED AND THEY DISAGREE. Every table row says max.L. 300; the 2,2 block is headed 'L. max 278'; the chapter heading says '(Melamine, Unicolor and Fenix max. L. 418)'. Andriy, 2026-08-27: the TABLE governs the order, because 300 sits in the row beside the code and is article data. 2780 and 4180 are recorded here as printed facts and go to Elda. Do not read one of them across from another block.",
+  "data": {
+    "unit_types": {
+      "shelf_22": {
+        "description": "Shelf, 2,2 cm thick - cut to size, sold per linear metre or per square metre",
+        "object_class": "shelf",
+        "opening": null,
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.223 / PDF 225",
+        "height_note": "THE THICKNESS IS THE HEIGHT of a horizontal board: it is the axis the shelf is thin on, and it is the one dimension the article states. Length comes from the order, depth from the code.",
+        "front_layout": {
+          "kind": "none",
+          "note": "A shelf has no front. Stated, because a missing layout defaults to 'single' and would hang a door on a board."
+        },
+        "priced_by": "linear_metre_or_area",
+        "buildable": true,
+        "finish_note": "Price band 1: everything EXCEPT Bianco, Cenere and Grigio Fumo - Canapa, Antracite, Scandio, Lutezio, Riace, Lantanio, Noce Moro, Quercia Grigia, Quercia Corvina, Quercia Mediterranea, Quercia Nordica, Frassino Nero, Frassino Brown, Resina Nube, Resina Deserto, Noce Avena, Noce Miele, Noce Castano. THE COMPLEMENT OF THE 4 CM BLOCK'S LIST, which is easy to misread as the same list.",
+        "trama_note": "Trama band 8 finish: 1 side with trama, 1 polished side, trama edge.",
+        "codes": [
+          {
+            "code": "MNS022038",
+            "sold_by": "per_linear_metre",
+            "depth_mm": 380,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "1": 45,
+              "2": 100,
+              "4": 130,
+              "5": 140,
+              "6": 148,
+              "7": 176,
+              "8": 255,
+              "10": 304
+            },
+            "height_mm": 22
+          },
+          {
+            "code": "MNS022060",
+            "sold_by": "per_linear_metre",
+            "depth_mm": 600,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "1": 72,
+              "2": 121,
+              "4": 181,
+              "5": 207,
+              "6": 234,
+              "7": 277,
+              "8": 402,
+              "10": 481
+            },
+            "height_mm": 22
+          },
+          {
+            "code": "MNS022000",
+            "sold_by": "per_square_metre",
+            "depth_mm": 1200,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "1": 118,
+              "2": 161,
+              "4": 281,
+              "5": 335,
+              "6": 389,
+              "7": 461,
+              "8": 670,
+              "10": 800
+            },
+            "height_mm": 22
+          }
+        ],
+        "thickness_note": "THE THICKNESS IS ON EVERY ROW, not on the type and not on the family. Registry.lookup reads height from the ROW or the FAMILY and never from the unit type - the wall_hung trap of 2026-08-22 and the Horizontal Thin's the same morning. And it could not go on the family in any case: three thicknesses share one family here, which is the whole shape of this chapter. It is also literally in the code - MNS02... - so a row that disagreed with its own code would be visible."
+      },
+      "shelf_40": {
+        "description": "Shelf, 4 cm thick - cut to size, sold per linear metre or per square metre",
+        "object_class": "shelf",
+        "opening": null,
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.223 / PDF 225",
+        "front_layout": {
+          "kind": "none"
+        },
+        "priced_by": "linear_metre_or_area",
+        "buildable": true,
+        "finish_note": "Price band 1 is ONLY Bianco, Cenere and Grigio Fumo - the exact complement of the 2,2 block's list.",
+        "trama_note": "Trama band 8 and band 10 finishes: 2 sides with trama, trama edge. Note the 2,2 block says ONE side with trama and a polished side; this block says two. Different articles, different rule.",
+        "band_gap_note": "PRICE BAND 2 IS EMPTY on all three rows, read off the render. Not a transcription loss - the column is blank on the page.",
+        "codes": [
+          {
+            "code": "MNS040038",
+            "sold_by": "per_linear_metre",
+            "depth_mm": 380,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "1": 91,
+              "4": 130,
+              "5": 141,
+              "6": 177,
+              "7": 262,
+              "8": 388,
+              "10": 432
+            },
+            "height_mm": 40
+          },
+          {
+            "code": "MNS040060",
+            "sold_by": "per_linear_metre",
+            "depth_mm": 600,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "1": 120,
+              "4": 225,
+              "5": 247,
+              "6": 268,
+              "7": 372,
+              "8": 555,
+              "10": 629
+            },
+            "height_mm": 40
+          },
+          {
+            "code": "MNS040000",
+            "sold_by": "per_square_metre",
+            "depth_mm": 1200,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "1": 200,
+              "4": 363,
+              "5": 391,
+              "6": 420,
+              "7": 576,
+              "8": 861,
+              "10": 986
+            },
+            "height_mm": 40
+          }
+        ],
+        "thickness_note": "THE THICKNESS IS ON EVERY ROW, not on the type and not on the family. Registry.lookup reads height from the ROW or the FAMILY and never from the unit type - the wall_hung trap of 2026-08-22 and the Horizontal Thin's the same morning. And it could not go on the family in any case: three thicknesses share one family here, which is the whole shape of this chapter. It is also literally in the code - MNS04... - so a row that disagreed with its own code would be visible."
+      },
+      "shelf_60": {
+        "description": "Shelf, 6 cm thick - cut to size, sold per linear metre or per square metre",
+        "object_class": "shelf",
+        "opening": null,
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.224 / PDF 226",
+        "front_layout": {
+          "kind": "none"
+        },
+        "priced_by": "linear_metre_or_area",
+        "buildable": true,
+        "finish_note": "NOT AVAILABLE in Technomat Latte, Ecru, Nocciola, Digione, Borgogna, Salvia, Bosco, Balena, Tempesta - a refusal in the catalog's own words, printed with a no-entry sign.",
+        "trama_note": "Trama band 8 and band 10 finishes: 2 sides with trama, trama edge.",
+        "band_gap_note": "PRICE BANDS 1 AND 2 ARE BOTH EMPTY on all three rows, read off the render. The 6 cm shelf starts at band 4.",
+        "codes": [
+          {
+            "code": "MNS060038",
+            "sold_by": "per_linear_metre",
+            "depth_mm": 380,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "4": 234,
+              "5": 243,
+              "6": 253,
+              "7": 309,
+              "8": 436,
+              "10": 485
+            },
+            "height_mm": 60
+          },
+          {
+            "code": "MNS060060",
+            "sold_by": "per_linear_metre",
+            "depth_mm": 600,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "4": 289,
+              "5": 318,
+              "6": 347,
+              "7": 429,
+              "8": 621,
+              "10": 699
+            },
+            "height_mm": 60
+          },
+          {
+            "code": "MNS060000",
+            "sold_by": "per_square_metre",
+            "depth_mm": 1200,
+            "max_length_mm": 3000,
+            "width_range_mm": [
+              1,
+              3000
+            ],
+            "points_by_band": {
+              "4": 529,
+              "5": 555,
+              "6": 581,
+              "7": 654,
+              "8": 955,
+              "10": 1086
+            },
+            "height_mm": 60
+          }
+        ],
+        "thickness_note": "THE THICKNESS IS ON EVERY ROW, not on the type and not on the family. Registry.lookup reads height from the ROW or the FAMILY and never from the unit type - the wall_hung trap of 2026-08-22 and the Horizontal Thin's the same morning. And it could not go on the family in any case: three thicknesses share one family here, which is the whole shape of this chapter. It is also literally in the code - MNS06... - so a row that disagreed with its own code would be visible."
+      }
+    },
+    "surcharges": {
+      "source_ref": "printed p.224 / PDF 226, printed once for the whole chapter",
+      "out_of_square_reduction": {
+        "points": 83,
+        "um": "each"
+      },
+      "internal_or_external_cutout": {
+        "points": 56,
+        "um": "each"
+      },
+      "shaping_of_hood_chimney": {
+        "points": 137,
+        "um": "each"
+      },
+      "angled_or_rounded_front_edge": {
+        "points": 83,
+        "um": "each",
+        "note": "check for feasibility and request a quotation for Fenix, Unicolor and stainless steel"
+      }
+    },
+    "led_rule": {
+      "source_ref": "printed p.224 / PDF 226, 'Rules to install led lights'",
+      "note": "THE LIT SHELF, AND IT IS A RULE RATHER THAN A SURCHARGE. The page says the Sky-B lamp can be fitted ON these shelves and gives the arithmetic: LENGTH OF LIGHT = LENGTH OF THE SHELF MINUS 3 MM, maximum 3 metres of light, and the lamp sits 18 in from the edge in depth. So an illuminated shelf here is the shelf code plus a Sky-B ordered to a length this rule computes - not an option flag on the article. The lamp is priced in the KITCHEN SYSTEM list, which this registry does not yet hold as articles - see lamp_source.",
+      "lamp": "Sky-B",
+      "lamp_source": "CESAR - 2 Kitchen System.pdf printed p.528 (the lamp) and p.529 (the prices) - READ 2026-08-27, NOT YET EXTRACTED AS ARTICLES.",
+      "light_length_mm": "shelf length - 3",
+      "max_light_length_mm": 3000,
+      "lamp_position_in_depth_mm": 18,
+      "cross_reference_error": "printed p.224 says 'see the Kitchen System price list on page 526'. IT IS WRONG BY TWO. Printed p.526 of the Kitchen System is Waste bins | Monolith; the Lighting chapter opens on printed p.527 and the Sky-B is p.528-529. Verified by reading both books 2026-08-27. Recorded because a cross-reference that lands on waste bins is exactly the kind of thing that costs a day, and because our own earlier note repeated the 526 without checking it.",
+      "beam_angle_deg": 96,
+      "illuminance_lux": {
+        "300": 900,
+        "500": 425,
+        "1000": 135
+      },
+      "colour_temperature": "DUAL, ADJUSTABLE, NOT ORDERED. printed p.528: 'Emotion Dual Color device provided to adjust the light from 3000K to 4000K'. The device comes WITH the lamp - there is no temperature to state on the order and therefore no temperature that can arrive wrong. What must be ordered is the thing that DOES the adjusting: the touch-switch version of the lamp, an IR sensor, a remote, or the IR door tube (printed p.544, which adjusts by shutting the door 3 times).",
+      "colour_temperature_k": "3000/4000 adjustable",
+      "label": "LED 3000/4000K",
+      "lamp_max_length_mm": 3900,
+      "lamp_max_length_note": "printed p.529: the per-metre lamp is 'per lm.W. max 3,9m'. The 3000 above is the SHELF's maximum, not the lamp's - the light is the shorter of the two and it is always the shelf that runs out first.",
+      "transformer_note": "printed p.543: 'Transformer kit (mandatory for all lamps)'. A lit shelf is never one line. The kit's cable goes 110V to 220V, max 45W, and one power distributor serves 8 lamps.",
+      "colour_temperature_options": [
+        "3000",
+        "4000"
+      ],
+      "colour_temperature_is_a_setting_not_a_code": "THE CHOICE IS REAL AND IT IS NOT AN ARTICLE. Swept all five volumes 2026-08-27: there is not one lamp in any of them sold at a fixed colour temperature. Every stated temperature is a RANGE the Emotion Dual Color device adjusts - 3000/4000K throughout the Kitchen System, 2700>6500K on the Solaris back panel, 2700>6000K on the Bathroom mirrors. So the same code arrives whichever temperature is wanted, and nothing on the order can be wrong. What CAN be wrong is that nobody ever says which one, and the device is left wherever it powers up. That is a COMMISSIONING INSTRUCTION, and this engine records it as one: chosen on the object, printed on the elevation, carried to the order as an instruction line - never as a different code."
+    },
+    "mounting": "wall_hung",
+    "mounting_note": "A shelf hangs, and the contract already had the pair for it: mounting wall_hung + mount_bottom_mm. mounting_default is what makes Generator.hangs_by_nature? say yes, and without it the datum fell through to a plinth height of zero, which the contract refuses - so all nine sat NOT BUILDABLE for a key nobody had set. HOW HIGH IS A PROJECT DECISION AND CESAR SAYS NOTHING ABOUT IT. A shelf therefore starts at Standards::WALL_MOUNT_BOTTOM_MM, the same 1400 every wall unit starts at, marked in Standards as project_default_pending_m1_6 - and the number is WRITTEN ONTO THE OBJECT, so moving the shelf or setting the height in the properties panel replaces it and nothing recomputes it behind the person's back. Not a guessed datum: the same seam wall units have used since 0.52. DECLARED AT FAMILY LEVEL, and it is the THIRD key today that had to move there. Registry.lookup reads mounting from family['mounting'] and never from the unit type - exactly as it reads height from the row or the family. Set on the type it did nothing: all nine came out 'floor', took a default plinth of 100 and sat NOT BUILDABLE. Same shape as the wall_hung key of 2026-08-22 and the Horizontal Thin's height this morning: data written correctly, loader silent."
+  }
+}
