@@ -1617,35 +1617,91 @@ module UCON
                 'is kept on the model and every run uses the same number.'
         end
 
+        # A FILLER IS PART OF THE RUN, AND THIS DID NOT KNOW IT. Andriy,
+        # 2026-08-28: 'над кабинетом рисует, а над филлером нет'. The stone runs
+        # over the strip that closes a run exactly as it runs over the boxes -
+        # ask any fitter - and the filter here named two classes and left the
+        # third out, so a filler in the middle of a selection contributed
+        # nothing to the length and a filler on its own was refused as 'not a
+        # run'. The top came out short by the width of the strip, which is the
+        # quiet half of the bug: the refusal at least announced itself.
         picked = model.selection.grep(Sketchup::ComponentInstance).select do |i|
           a = (Contract.read(i.definition) rescue nil)
-          a && a['code'] && %w[cabinet corner_unit].include?(a['object_class'].to_s)
+          a && a['code'] && %w[cabinet corner_unit filler].include?(a['object_class'].to_s)
         end
         if picked.empty?
           raise ArgumentError,
                 "Select the run this top covers.\n\n" \
                 'A worktop has no length of its own: it is as long as what is under ' \
-                'it. Select one unit for one unit, or the whole run for the whole run.'
+                'it. Select one unit for one unit, or the whole run for the whole run - ' \
+                'the fillers that close it included, because the stone runs over them too.'
         end
 
-        anchor = picked.min_by { |i| i.transformation.origin.x.to_mm }
+        # BUT A FILLER IS NOT A BODY, and the difference decides two numbers.
+        # Its LENGTH counts - that is the fix above. Its DEPTH and its TOP do
+        # not: a closing strip takes both from the run it closes, which is why
+        # the catalog prints it in a chapter of its own with a width RANGE and
+        # no dimensions to speak of. So the span is measured over everything
+        # picked and the datum is read off the boxes.
+        #
+        # OURS, NOT THE BOOK'S. printed p.548 says nothing about what a top
+        # covers. This is the engine's rule, written here so it can be argued
+        # with rather than discovered.
+        bodies = picked.select do |i|
+          %w[cabinet corner_unit].include?(Contract.read(i.definition)['object_class'].to_s)
+        end
+        if bodies.empty?
+          raise ArgumentError,
+                "That is a filler and nothing else.\n\n" \
+                'A closing strip takes its depth and its height from the run it closes, ' \
+                'so a top over fillers alone has no depth to be drawn to. Select the run ' \
+                'the strip belongs to.'
+        end
+
+        anchor = bodies.min_by { |i| i.transformation.origin.x.to_mm }
         frame  = anchor.transformation
         inv    = frame.inverse
 
-        tops = {}
+        tops   = {}
+        depths = {}
         lo = nil
         hi = nil
         picked.each do |i|
           a = Contract.read(i.definition)
-          u = Registry.lookup(a['code'])
-          tops[(base_z_mm(u).to_f + u['height_mm'].to_f).round(1)] ||= a['code']
-          w = drawn_width_mm(u).to_f
+          # THE OBJECT AS IT WAS ORDERED, not the catalog row. effective()
+          # restores the width an article never printed - a filler carries a
+          # width RANGE and no width at all - and the recorded width_mm is the
+          # one that was drawn, which is the only honest number for a span:
+          # a unit cut from 450 to 437 occupies 437 of the run, and the row
+          # still says 450.
+          u = effective(Registry.lookup(a['code']), a)
+          w = a['width_mm'] ? a['width_mm'].to_f : drawn_width_mm(u).to_f
+          if bodies.include?(i)
+            tops[(base_z_mm(u).to_f + u['height_mm'].to_f).round(1)] ||= a['code']
+            depths[u['depth_mm'].to_f.round(1)] ||= a['code']
+          end
           [0.0, w].each do |x|
             pt = Geom::Point3d.new(x.mm, 0, 0).transform(i.transformation).transform(inv)
             v  = pt.x.to_mm
             lo = lo.nil? || v < lo ? v : lo
             hi = hi.nil? || v > hi ? v : hi
           end
+        end
+
+        # THE SAME REFUSAL THE HEIGHTS ALREADY HAD, and it was missing. Two
+        # depths under one slab is two worktops for the same reason two heights
+        # are: the top would be drawn to whichever box happened to sit leftmost
+        # and would leave the deeper one uncovered, or overhang the shallower
+        # one by 270. It is exactly the decision Andriy had already made by hand
+        # for the west run - 'только глубокая часть, хвост без камня' - and
+        # nothing in the code was holding him to it.
+        if depths.length > 1
+          raise ArgumentError,
+                "That is two worktops, not one.\n\n" \
+                "The selection is #{depths.keys.sort.join(' and ')} mm deep - " \
+                "#{depths.values.join(', ')}. One slab over two depths either leaves " \
+                'the deeper run uncovered or overhangs the shallower one. Select one ' \
+                'depth at a time.'
         end
 
         if tops.length > 1
@@ -1657,7 +1713,10 @@ module UCON
         end
 
         top     = tops.keys.first
-        carcass = Registry.lookup(Contract.read(anchor.definition)['code'])['depth_mm'].to_f
+        # ONE DEPTH, PROVEN ABOVE, so this may take it from the census rather
+        # than from whichever box happened to be leftmost. Same number, and it
+        # no longer depends on the anchor being the right one.
+        carcass = depths.keys.first.to_f
         w       = (hi - lo).round(1)
 
         # THE FRONT OF THE FINISHED RUN, and it is not the carcass. front_y_mm

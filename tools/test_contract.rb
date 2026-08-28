@@ -8668,6 +8668,42 @@ check('AND THE FINISH NAME IS OPTIONAL, but its absence is written down') do
   raise 'a named finish still claims to be unchosen' if named[:finish_note].include?('NOT CHOSEN')
 end
 
+check('A FILLER IS PART OF THE RUN THE TOP COVERS - and not part of its datum') do
+  # Andriy, 2026-08-28, in the model: the top drew over a cabinet and refused
+  # over a filler. The stone runs over the strip that closes a run exactly as
+  # it runs over the boxes; the selection filter named two classes and left the
+  # third out. The LOUD half was the refusal. The quiet half was worse - a
+  # filler in the middle of a selection contributed nothing to the length, so
+  # the top came out short by the width of the strip and looked right.
+  #
+  # A SOURCE check: build_worktop needs a SketchUp selection and cannot be
+  # called from here. It pins the THREE halves of the rule together, because
+  # any one of them alone is a defect: the filler counts toward the LENGTH, it
+  # does not carry the DATUM, and a selection of nothing but fillers is refused
+  # rather than drawn to a depth of zero.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  m = src[/def build_worktop.+?\n      end\n/m]
+  raise 'build_worktop is gone' unless m
+  raise 'a filler is not counted into the run' unless
+    m.include?("%w[cabinet corner_unit filler].include?")
+  raise 'the datum must come from the boxes, not from a strip' unless
+    m.include?('bodies = picked.select') && m.include?('if bodies.include?(i)')
+  raise 'fillers alone must be refused, not drawn' unless
+    m.include?('That is a filler and nothing else')
+
+  # AND THE SPAN IS THE DRAWN WIDTH. A filler carries a width RANGE and no
+  # width at all, and a unit cut from 450 to 437 occupies 437 of the run while
+  # its catalog row still says 450. Reading the row would be wrong twice.
+  raise 'the span reads the catalog row instead of the object' unless
+    m.include?("u = effective(Registry.lookup(a['code']), a)") &&
+    m.include?("w = a['width_mm'] ? a['width_mm'].to_f : drawn_width_mm(u).to_f")
+
+  # AND TWO DEPTHS ARE TWO WORKTOPS, exactly as two heights already were. This
+  # is the rule Andriy had been keeping by hand for the west run.
+  raise 'two depths under one slab are still accepted' unless
+    m.include?('if depths.length > 1')
+end
+
 check('THE PICKER MUST NOT OFFER A BUILD IT WILL ALWAYS REFUSE') do
   # Generator.build refuses a worktop in a sentence about the run, and that
   # refusal is right - but it arrives AFTER the press, and the press was invited
