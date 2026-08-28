@@ -272,3 +272,63 @@ order. Proved by putting the group B codes back and watching it fail.
 **What is still not chosen is the finish NAME**, and it will not be chosen from a
 render: colour in a JPEG is not a finish sample, and one of the seven is a
 decision for Andriy and the client in front of real veneer.
+
+---
+
+## 11. "The one with the least points" — and why that is not a finish
+
+**Andriy asked for the cheapest.** Within a group there isn't one: **points are
+per CODE, and the code is group + thickness + faced sides.** All seven Rovere in
+group A carry the same 343 for a one-sided back and 549 for a two-sided end. The
+finish name has no price at all.
+
+And group A is already the cheapest veneer group — 343/549 against B's 358/579,
+C's 508/1038 and D's 809/1002. **So the least-points decision was taken when the
+kitchen turned out to be oak**, and the finish name is free: it is chosen on looks
+and nothing else.
+
+### The real lever was faced sides, and it was declined on purpose
+
+Every one of these panels has its inner face against a carcass where nobody sees
+it, so all of them *could* be the one-sided 1,8 article:
+
+| | points |
+|---|---:|
+| as planned — one-sided backs, **two-sided 2,2 ends** | **2716,5** |
+| all one-sided 1,8, melamine reverse matching the carcass | 2048,9 |
+| **difference** | **667,6 — 25%** |
+
+**Andriy, 2026-08-28: the ends stay 2,2 and two-sided.** 2,2 is Cesar's own
+convention for an end — every adjoining end side panel in Volume 2 is 2,2 — the
+exposed EDGE is thinner at 1,8, and **Q24 is open on what finishes that edge at
+all.** A quarter of the panel cost is a real number and it was looked at, which is
+the point of writing it down: the next session finds a decision with its price
+beside it instead of an unexamined default.
+
+### And 0,97 m² of what is invoiced is air
+
+The chapter's minimum is 0,5 m² per piece, and three of the eight pieces are
+under it:
+
+| piece | actual | invoiced |
+|---|---:|---:|
+| island back upper, left | 0,139 | 0,500 |
+| island back upper, right | 0,139 | 0,500 |
+| east end upper | 0,387 | 0,500 |
+
+**That is the price of putting the seams where the real joints are** — the
+breakfast top on the island, the carcass joint at 2440 on the east wall. Moving
+the east seam to 2264 would clear the minimum and save 0,11 m², and would draw a
+line across the middle of a tall door. Recorded so the figure is not a surprise on
+Elda's estimate, and deliberately not optimised.
+
+### Where the panels stand
+
+Nothing about the finish name blocks either probe: it is an order field and
+changes no code. Both are written, armed and unrun, and both now carry group A:
+
+- **`probe_inbox_hold_71.rb`** — the island's six: four `DZ731Q` backs, two
+  `DV731Q` ends, at the seats run 56 measured.
+- **`probe_inbox_hold_82.rb`** — the east wall's open end: two `DV061Q` boards,
+  seated by a −90° rotation about Y, the lower one checked before the upper is
+  built.
