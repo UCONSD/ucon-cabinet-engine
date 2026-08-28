@@ -1734,6 +1734,33 @@ module UCON
           # drawing.
           d  = article[:depth_mm].to_f
           y0 = carcass - d
+          # A RUN LONGER THAN THE SHEET IS TWO TOPS AND A JOINT, and it needs
+          # saying in those words. with_ordered_width refuses it correctly and
+          # in the wrong voice: its message was written for a FILLER, so it
+          # talks about a clear space rounding up and about two fillers, and
+          # neither sentence is about stone. Nothing here is scribed and nothing
+          # rounds; what is true is that the slab does not come out of one
+          # sheet.
+          #
+          # THE JOINT IS NOT PLACED HERE. Where the stone is cut is a decision
+          # with a person's name on it - it is visible forever, it wants to fall
+          # over a carcass side rather than over a drawer, and it is not the
+          # midpoint just because the midpoint is arithmetic. So this says what
+          # has to happen and stops: build the run in two selections, and the
+          # joint falls where the selection is split, which puts it on a cabinet
+          # boundary by construction.
+          max = article[:unit]['max_length_mm'].to_f
+          if max.positive? && w > max
+            shortfall = (w - max).round
+            raise ArgumentError,
+                  "That run is #{w.round} mm and one top is #{max.round} at most.\n\n" \
+                  "This is two tops and a JOINT between them, not a longer top. Where the " \
+                  "stone is cut is visible forever and wants to fall over a carcass side, " \
+                  "so nothing here places it for you.\n\n" \
+                  "Build the run in two selections: the joint falls where you split them, " \
+                  "which puts it on a cabinet boundary. Neither part may exceed #{max.round}, " \
+                  "so at least #{shortfall} mm has to go in the second one."
+          end
           Registry.with_ordered_width(article[:unit], w)
           over = (finished - d).round(1)
           overhang = if over.negative?

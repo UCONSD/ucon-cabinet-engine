@@ -173,3 +173,39 @@ wrong band. It does not: at 545 Avenida Primavera the carcass stands against the
 wall, so *to the wall* and *to the carcass back* are the same plane. Asked
 rather than assumed, because this engine has no notion of a wall at all, and
 inventing one to measure would have been a day's work built on a guess.
+
+## And then the approach itself changed
+
+Late on 2026-08-28, after the third refusal in a row came out of the model rather
+than out of the suite, Andriy stopped it: *"То, что мы сделали, сейчас ставим на
+паузу… я их рисую вручную. А ты делаешь мне интерфейс, чтобы я делал как штамп…
+Потому что у нас сложные стены: угловые, подрезанные, под 45°. Мы просто
+замучаемся писать правила."*
+
+He is right, and the reason is the project's own discipline turned on itself.
+Every rule that generated a worktop shape would have been **inferred from one
+kitchen** — the thing this engine refuses to do everywhere else, and the reason
+the registry is trustworthy. A generator for tops would have been a rulebook
+written from a single sample, and the rules would never have ended: mitres,
+scribes, 45° returns, angled walls, notches around a column.
+
+So the division of labour moved. **He draws the stone. The engine names it.**
+
+What that keeps is everything the chapter was worth: the article, the two price
+axes, the eight bands, the 3140 sheet, and every refusal — enforced at the stamp
+now instead of at the generator. `Generator.build_worktop` keeps its code and its
+checks and loses its button, because two ways to make a worktop are two ways to
+be wrong.
+
+What it costs is one real thing, and it is written into `core/62_top_stamp.rb`
+at the top: **a stamped top does not know the run beneath it**, so nothing checks
+that the stone covers the cabinets. `build_worktop` knew, because it measured
+them. That has to come back one day as a report over the model — *carcasses with
+no stone above them* — and until then, covering the run is Andriy's eye.
+
+**The one assumption is Elda Q28.** A top is priced per linear metre at a band; a
+mitred piece has no single length; so the order figure is the piece's **bounding
+rectangle**, the sheet it is cut from, and everything the shape does inside that
+rectangle is a workmanship. The catalog does not say this. It is written onto
+every object the stamp touches, so that if she answers otherwise the numbers move
+and nothing else does.

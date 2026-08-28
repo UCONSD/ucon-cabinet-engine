@@ -43,6 +43,8 @@ existed.
 | Q24 | what finishes the EDGE of a veneered panel, and can it be veneer | **open** 2026-08-27 · blocks an order line on the island's back |
 | Q25 | the Strip reel (p.534) prints NO colour temperature - what ships | **open** 2026-08-27 · the only lamp in the book whose temperature is not stated |
 | Q26 | does "horizontal / vertical grain" describe the SHEET or the INSTALLED panel | **open** 2026-08-28 · **decides whether a 2440-tall veneer end panel can be ordered at all** |
+| Q27 | what a JOINT in a ceramic top costs, and what it is called on an order | **open** 2026-08-28 · this kitchen has one: a 3552 mm run against a 3140 mm sheet |
+| Q28 | is a shaped top ordered by its BOUNDING RECTANGLE — the sheet it is cut from | **open** 2026-08-28 · **every top in this kitchen is priced on this assumption** |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1167,3 +1169,94 @@ answers Q21's arithmetic independently: this end measures **645** from the door
 face to the wall — 620 carcass + 22 door + 2,5 gap — which is exactly the `d. 64,5`
 Volume 2 prints for a 62-cm carcass. That is corroboration and not proof, and it
 is recorded as such.
+
+---
+
+## Q27 — what does a JOINT in a ceramic top cost, and what is it called on an order?
+
+**Status:** open · added 2026-08-28 · **545 Avenida Primavera cannot avoid it**
+
+**Asked because:** one run of this kitchen measures **3552 mm** and printed p.110
+states a maximum length of **314 cm** for every one of its eight depth bands. The
+run therefore takes **two tops and a joint**, and the joint is not a detail we
+can leave to the fitter: it is visible for the life of the kitchen, and it is a
+line somebody has to price.
+
+### What the page holds and what it does not
+
+Printed p.110 prices the top **per linear metre** by finish group and depth band,
+and lists its surcharges: a visible side edge at 273/lm, an integrated bowl at
+1671 each, a ceramic plug at 228, a melamine reverse panel at 118/m². **A joint
+is not among them.**
+
+The same chapter points, at printed p.172, to a separate *table of workmanships
+on tops*, which is **not extracted and not read**. That table is the likely home
+of the joint — and of the hob and sink cutouts this kitchen also needs, which are
+equally unpriced today.
+
+### The question, in three parts
+
+1. **Is a joint a priced line at all**, or is it included in the per-metre price
+   once a run exceeds the sheet?
+2. **If it is priced, under what code and at what unit** — per joint, per linear
+   metre of joint, or as a workmanship on the smaller of the two pieces?
+3. **Does the factory place it, or do we?** Our drawing puts it where the
+   selection is split, which lands it on a carcass side. If the factory decides
+   instead, that is a fact the drawing must not contradict.
+
+### Why it is not urgent for the drawing and is urgent for the estimate
+
+The model can be drawn today: two tops, butted, the joint on a cabinet boundary.
+Nothing is blocked. But an estimate that shows two tops and no joint is an
+estimate that will move, and this is exactly the sort of line that is discovered
+after a client has seen a number.
+
+---
+
+## Q28 — is a shaped top ordered by its BOUNDING RECTANGLE?
+
+**Status:** open · added 2026-08-28 · **every top in this kitchen is priced on
+the answer, and we are holding one of the two readings**
+
+**Asked because:** from 2026-08-28 the tops of 545 Avenida Primavera are drawn by
+hand rather than generated — the walls are angled, the ends are scribed, and
+there are 45° returns, so no rule this engine could hold would produce the right
+shape. The engine stamps the article onto what Andriy draws. That works for
+everything except **the number the order is written in**.
+
+### The problem in one sentence
+
+Printed p.110 prices a top **per linear metre** at a depth band. A piece with a
+mitre, a scribe or a 45° return **has no single length**.
+
+### What we are holding, and why
+
+The order figure is taken from the piece's **bounding rectangle** — the smallest
+rectangle the piece is cut from — because that is the sheet the factory consumes,
+and everything the shape does inside that rectangle is a **workmanship** (the
+unread table at printed p.172, the same one that owes us Q27's joint and the hob
+and sink cutouts).
+
+It is the reading that matches how stone is normally sold, and it is the
+conservative one: it can only over-state, never under-state, what the factory
+uses. **The catalog does not say it.** It is written onto every object it
+touches, so no drawing carries it silently.
+
+### The question, in three parts
+
+1. **Is the linear metre measured on the bounding rectangle**, or along some
+   other line — the front edge, the longest edge, a developed length?
+2. **Where a piece is cut down from a wider band** — a 620 run buys the 650 band
+   because no 620 exists — is the metre priced at the **band** or at the drawn
+   depth? We hold the band, and the difference is 30 mm on every metre of this
+   kitchen.
+3. **Is an angled or mitred piece a workmanship line of its own**, and is that
+   line on p.172?
+
+### What moves if she answers otherwise
+
+Numbers, and nothing else. The drawing is Andriy's and the stamp records what it
+measured, so a different rule is a different arithmetic over the same recorded
+facts — which is the whole reason the assumption is kept in one file
+(`core/62_top_stamp.rb`) and repeated on every object rather than being spread
+through the engine.

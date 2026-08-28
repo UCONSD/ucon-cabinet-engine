@@ -46,7 +46,8 @@ module UCON
         # which no model can be measured for - core/08_project.rb. If it has not
         # been stated, ask once here rather than defaulting: a slab drawn at a
         # number nobody chose is a wrong elevation that looks like a right one.
-        @dialog.add_action_callback('worktop') { |_| build_worktop_from_dialog }
+        @dialog.add_action_callback('worktop') { |_| stamp_tops_from_dialog }
+        @dialog.add_action_callback('sink') { |_| mark_sink_from_dialog }
         @dialog.add_action_callback('reserve_run_gap') do |_|
           begin
             models = ApplianceCheck.run_gap_models
@@ -235,25 +236,157 @@ module UCON
         @picker.show
       end
 
-      # ---- THE WORKTOP BUTTON, rewritten 2026-08-28 ------------------------
+      # ---- THE SINK MARK, 2026-08-28 ---------------------------------------
       #
-      # It used to ask one number - the thickness - because there was no article
-      # to ask about. Now there is, and the thickness is the ARTICLE'S, so the
-      # question changed shape rather than growing a field.
+      # Andriy's spec: three or four sizes, drawn as a dashed rectangle 1 mm
+      # above the stone. core/64_sink_mark.rb carries the reasoning; this is the
+      # part that needs a model.
       #
-      # NOTHING IS PRE-CHOSEN. Both dropdowns open on "— choose —" and building
+      # IT REFUSES WITHOUT STONE, AND THAT IS NOT A CONVENIENCE CHECK. When
+      # build_worktop lost its button, the model lost the only thing that
+      # verified stone actually covered the cabinets. This cannot mark a sink
+      # without finding a stamped top above the unit, so it is the first thing
+      # since that change which will not pretend there is stone where there is
+      # none. It looks at one cabinet and not at the kitchen - the report that
+      # walks every run is still owed.
+      def mark_sink_from_dialog
+        su = Sketchup.active_model
+        units = su.selection.grep(Sketchup::ComponentInstance).select do |i|
+          a = (Contract.read(i.definition) rescue nil)
+          a && a['code'] && %w[cabinet corner_unit].include?(a['object_class'].to_s)
+        end
+        unless units.length == 1
+          UI.messagebox("Select ONE unit - the one the sink sits in.\n\n" \
+                        'The mark centres on that unit, so a selection of two says ' \
+                        'nothing about where the bowl goes.')
+          return
+        end
+
+        unit  = units.first
+        uattr = Contract.read(unit.definition)
+        urow  = Generator.effective(Registry.lookup(uattr['code']), uattr)
+        uw    = (uattr['width_mm'] || Generator.drawn_width_mm(urow)).to_f
+        ud    = urow['depth_mm'].to_f
+
+        # THE STONE ABOVE IT, found and not assumed. In plan the unit's centre
+        # has to fall inside the piece; in section the piece has to start at or
+        # above the carcass top. The 5 mm is for a slab somebody nudged, not for
+        # a slab somebody put on the wrong run.
+        c = unit.bounds.center
+        tops = su.active_entities.select do |e|
+          next false unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
+
+          a = (Contract.read(e) rescue nil)
+          a = (Contract.read(e.definition) rescue nil) if a.nil? || a['object_class'].nil?
+          next false unless a && a['object_class'].to_s == 'worktop'
+
+          b = e.bounds
+          b.min.x <= c.x && c.x <= b.max.x && b.min.y <= c.y && c.y <= b.max.y &&
+            b.min.z >= unit.bounds.max.z - 5.mm
+        end
+        if tops.empty?
+          UI.messagebox("There is no stone over #{uattr['code']}.\n\n" \
+                        'A sink is a hole in a worktop, so the worktop has to exist and be ' \
+                        "stamped before the hole can be marked or priced.\n\n" \
+                        'Draw the top, stamp it, then mark the sink.')
+          return
+        end
+        top  = tops.min_by { |e| e.bounds.min.z }
+        tatr = (Contract.read(top) rescue nil)
+        tatr = Contract.read(top.definition) if tatr.nil? || tatr['object_class'].nil?
+
+        bowls = SinkMark.catalog_bowls
+        answer = UI.inputbox(
+          ['Sink', 'If your own: width mm', 'If your own: depth mm'],
+          [SinkMark.options.first, '', ''],
+          [SinkMark.options.join('|'), '', ''],
+          "UCON - sink over #{uattr['code']}"
+        )
+        return unless answer
+
+        chosen = bowls.find { |b| b['label'] == answer[0] }
+        bowl   = chosen || SinkMark.client_bowl(answer[1], answer[2])
+        notes  = SinkMark.fit(bowl, tatr)
+
+        su.start_operation('UCON: mark sink', true)
+        begin
+          # THE ORDER FACT GOES ON THE TOP, because that is the line it is
+          # charged on - printed p.110 prices a bowl beside the metres, and a
+          # bowl has no code of its own.
+          Contract.write!(top.is_a?(Sketchup::Group) ? top : top.definition,
+                          tatr.merge('variants' =>
+                            SinkMark.variants_with(tatr, bowl, uattr['code'])))
+
+          # AND THE DRAWING FACT IS A LINE, NOT A HOLE. Nothing here cuts the
+          # stone: a cutout is a workmanship on the unread table at printed
+          # p.172, and cutting Andriy's geometry is not this engine's business
+          # any more.
+          z = top.bounds.max.z + SinkMark::LIFT_MM.mm
+          pts = SinkMark.rect_mm(bowl, uw, ud).map do |x, y|
+            w = Geom::Point3d.new(x.mm, y.mm, 0).transform(unit.transformation)
+            Geom::Point3d.new(w.x, w.y, z)
+          end
+          g = su.active_entities.add_group
+          g.entities.add_edges(pts + [pts.first])
+          g.name = "UCON sink mark - #{bowl['label']} over #{uattr['code']}"
+          layer = su.layers[SinkMark::MARK_TAG] || su.layers.add(SinkMark::MARK_TAG)
+          if layer.respond_to?(:line_style=) && su.respond_to?(:line_styles)
+            dash = su.line_styles['Dash']
+            layer.line_style = dash if dash && layer.line_style != dash
+          end
+          g.layer = layer
+          su.commit_operation
+        rescue StandardError
+          su.abort_operation
+          raise
+        end
+
+        UI.messagebox("#{bowl['label']} marked over #{uattr['code']}.\n\n" \
+                      "It is a surcharge on #{tatr['code']} - the top under it - and not a " \
+                      "line of its own.#{notes.empty? ? '' : "\n\nNoted: #{notes.join('; ')}."}")
+      rescue StandardError => e
+        UI.messagebox("Nothing was marked:\n\n#{e.message}")
+      end
+
+      # ---- THE STAMP, 2026-08-28 -------------------------------------------
+      #
+      # THE BUTTON THAT DREW A WORKTOP IS GONE AND THIS ONE NAMES ONE. Andriy's
+      # call, and the division of labour is better: he draws the stone, because
+      # real kitchens have angled walls, scribes, mitres and 45-degree returns
+      # and every rule that generated such a shape would have been inferred from
+      # ONE kitchen. The engine names it - article, group, band, what it
+      # measures, whether it comes out of a sheet - which is the half that is
+      # invisible in geometry and is what the engine is for. core/62_top_stamp.rb
+      # carries the reasoning and all of the arithmetic.
+      #
+      # TWO BUTTONS WOULD BE TWO WAYS TO BE WRONG, so Generator.build_worktop
+      # keeps its code and its checks and loses its button.
+      #
+      # ONE STAMP IS ONE PIECE OF STONE IS ONE ORDER LINE. Several may be
+      # selected at once - they all get the same article, which is the point of
+      # a stamp - and each is measured on its own.
+      #
+      # NOTHING IS PRE-CHOSEN. Both dropdowns open on "— choose —" and the stamp
       # refuses if either comes back that way. A SketchUp inputbox selects its
-      # first entry, so any real value put first is a value somebody gets by
-      # pressing OK without reading - and both of these are decisions with a
-      # price behind them. The depth band decides an overhang and the finish
-      # group decides the money; neither is this dialog's to guess.
+      # first entry, so any real value put first is what somebody gets by
+      # pressing OK without reading, and both of these carry a price.
       #
       # THE ARTICLE IS REMEMBERED AND THE BAND IS NOT. A kitchen has one top
       # material and several depths - 650 over the 620 runs, 380 for the 350
       # counter - so core/08_project.rb keeps the code, the group and the finish
       # and this asks the band every time.
-      def build_worktop_from_dialog
+      def stamp_tops_from_dialog
         su = Sketchup.active_model
+        picked = su.selection.to_a.select do |e|
+          e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
+        end
+        if picked.empty?
+          UI.messagebox("Select the stone.\n\n" \
+                        'A stamp names a piece somebody drew: select one group per piece ' \
+                        'of stone, or several at once if they are all the same article.')
+          return
+        end
+
         tops = Registry.catalog.select { |c| c['class'] == 'worktop' }
         if tops.empty?
           UI.messagebox("No worktop article is held.\n\n" \
@@ -261,12 +394,12 @@ module UCON
           return
         end
 
-        bands = (tops.first['depth_bands_mm'] || []).map { |b| b.to_i.to_s }
+        bands  = (tops.first['depth_bands_mm'] || []).map { |b| b.to_i.to_s }
         groups = (Registry.lookup(tops.first['code'])['points_per_lm_by_group_and_band'] || {})
                  .keys.sort
-        # Double-quoted: in single quotes \u2014 is a backslash and a u, and the
-        # dropdown would read literally "\u2014 choose \u2014".
-        chose = "\u2014 choose \u2014"
+        # Double-quoted: in single quotes — is a backslash and a u, and the
+        # dropdown would read literally "— choose —".
+        chose = "— choose —"
 
         codes = tops.map { |c| "#{c['code']} - #{c['height_mm'].to_i} mm" }
         prev  = Project.worktop_code(su)
@@ -274,14 +407,16 @@ module UCON
           ['Article (the thickness is the code\'s)',
            'Depth band, mm - CHOSEN, not measured',
            'Finish group - not in the code, and it decides the price',
-           'Finish name - an order field, may be left blank'],
+           'Finish name - an order field, may be left blank',
+           'Visible side edges on each piece (0, 1 or 2)'],
           [codes.find { |c| prev && c.start_with?(prev) } || codes.first,
            chose,
            Project.worktop_finish_group(su) || chose,
-           Project.worktop_finish(su).to_s],
+           Project.worktop_finish(su).to_s,
+           '0'],
           [codes.join('|'), ([chose] + bands).join('|'),
-           ([chose] + groups).join('|'), ''],
-          'UCON - worktop'
+           ([chose] + groups).join('|'), '', '0|1|2'],
+          "UCON - stamp #{picked.length} piece(s) of stone"
         )
         return unless answer
 
@@ -289,25 +424,54 @@ module UCON
         band  = answer[1]
         group = answer[2]
         if band == chose || group == chose
-          UI.messagebox("Nothing was drawn.\n\n" \
+          UI.messagebox("Nothing was stamped.\n\n" \
                         'The depth band and the finish group are both choices with a price ' \
-                        "behind them - the band decides how far the top stands past the door " \
-                        'face, the group decides what it costs - and neither is this dialog\'s ' \
-                        'to guess.')
+                        "behind them - the band is what the stone is ordered at, the group " \
+                        'decides what it costs - and neither is this dialog\'s to guess.')
           return
         end
 
+        article = Generator.worktop_article(code, band, group, answer[3])
         Project.worktop_article!(code, group, answer[3], su)
-        # The stated thickness follows the article rather than contradicting it,
-        # and only where nothing has stated one yet: build_worktop refuses on a
-        # disagreement, and this must not resolve that refusal behind its back.
-        t = Registry.lookup(code)['height_mm'].to_f
-        Project.worktop_t_mm!(t, su) if Project.worktop_t_mm(su).nil?
+        Project.worktop_t_mm!(article[:thickness_mm], su) if Project.worktop_t_mm(su).nil?
 
-        Generator.build_worktop(su, code: code, depth_band_mm: band,
-                                    finish_group: group, finish: answer[3])
+        stamped = []
+        su.start_operation('UCON: stamp worktops', true)
+        begin
+          picked.each do |e|
+            # THE PIECE'S OWN BOX, NOT THE WORLD'S. definition.bounds is measured
+            # in the group's own axes, so a piece drawn at an angle measures as
+            # the sheet it is cut from IF its axes follow it. A group left on the
+            # world axes measures its world box instead, which is bigger - which
+            # is exactly why every number is reported back below rather than
+            # written and forgotten.
+            b = e.definition.bounds
+            m = TopStamp.measure([b.width.to_mm, b.height.to_mm, b.depth.to_mm], band)
+            TopStamp.verify(m, article)
+            attrs = TopStamp.attributes_for(m, article,
+                                            visible_side_edges: answer[4].to_i,
+                                            drawn_on: Time.now.strftime('%Y-%m-%d'))
+            Contract.write!(e, attrs)
+            e.name = "UCON top #{code} - #{m[:length_mm].round} x #{article[:depth_mm].round} x " \
+                     "#{m[:thickness_mm].round}, group #{group}"
+            stamped << [e.name, TopStamp.remarks(m, article)]
+          end
+          su.commit_operation
+        rescue StandardError
+          su.abort_operation
+          raise
+        end
+
+        # WHAT WAS WRITTEN, IN THE NUMBERS IT WAS WRITTEN IN. A stamp is silent
+        # by nature - it changes no geometry and nothing on screen moves - so
+        # without this there is no way to see that a piece measured its world box
+        # instead of itself.
+        lines = stamped.map do |name, notes|
+          notes.empty? ? name : "#{name}\n    #{notes.join('; ')}"
+        end
+        UI.messagebox("Stamped #{stamped.length} piece(s):\n\n#{lines.join("\n")}")
       rescue StandardError => e
-        UI.messagebox("Worktop not drawn:\n\n#{e.message}")
+        UI.messagebox("Nothing was stamped:\n\n#{e.message}")
       end
 
       # 'filler' is OUR class, not one of the catalog's three element classes.
@@ -1049,7 +1213,8 @@ module UCON
             <button onclick="sketchup.export_order()">Order schedule (CSV)…</button>
             <button onclick="sketchup.reserve_run_gap()">Reserve run gap…</button>
             <button onclick="sketchup.reserve_wall()">Reserve wall volume (hood)…</button>
-            <button onclick="sketchup.worktop()">Worktop over selected run…</button>
+            <button onclick="sketchup.worktop()">Stamp article on drawn top…</button>
+            <button onclick="sketchup.sink()">Sink over selected unit…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             #{DevBridge.available? ? '<button onclick="sketchup.reload_bridge()">Reload probe bridge (dev)</button>' : ''}
             <div class="grp">Opening symbols</div>

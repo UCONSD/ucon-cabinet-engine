@@ -27,6 +27,14 @@ require_relative '../src/ucon_cabinet_engine/core/50_registry'
 # what lets it be checked against a real factory estimate headlessly.
 require_relative '../src/ucon_cabinet_engine/core/85_export'
 require_relative '../src/ucon_cabinet_engine/core/60_generator'
+# 62_top_stamp is PURE - it measures three numbers and writes an order line, and
+# it touches SketchUp nowhere at all. That is deliberate: the engine stopped
+# drawing tops on 2026-08-28 and the only thing left worth checking is the
+# arithmetic and the refusals.
+require_relative '../src/ucon_cabinet_engine/core/62_top_stamp'
+# 64_sink_mark is pure except for the drawing, which lives in the palette. The
+# sizes and the points are read out of the section file, so this loads JSON.
+require_relative '../src/ucon_cabinet_engine/core/64_sink_mark'
 # 70_symbols touches the SketchUp API only when drawing; the geometry rules
 # themselves are pure and are checked here.
 require_relative '../src/ucon_cabinet_engine/core/70_symbols' rescue nil
@@ -8668,6 +8676,29 @@ check('AND THE FINISH NAME IS OPTIONAL, but its absence is written down') do
   raise 'a named finish still claims to be unchosen' if named[:finish_note].include?('NOT CHOSEN')
 end
 
+check('A RUN LONGER THAN THE SHEET IS TWO TOPS AND A JOINT, in those words') do
+  # 545 Avenida Primavera has a 3552 mm run and a top is 3140 at most, so this
+  # kitchen meets it for real. with_ordered_width refuses correctly and in the
+  # WRONG VOICE: its message was written for a filler, so it says a clear space
+  # "rounds up" and offers "two fillers or a different article". Nothing about
+  # stone is scribed and nothing rounds - what is true is that the slab does not
+  # come out of one sheet.
+  #
+  # AND THE JOINT IS NOT PLACED FOR HIM. It is visible forever and wants to fall
+  # over a carcass side rather than over a drawer; the midpoint is arithmetic,
+  # not a decision. Building the run in two selections puts it on a cabinet
+  # boundary by construction, which is what the message asks for.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  m = src[/def build_worktop.+?\n      end\n/m]
+  raise 'the over-length refusal speaks in the filler\'s voice' unless
+    m.include?('This is two tops and a JOINT between them')
+  raise 'and it must be raised BEFORE with_ordered_width answers for it' unless
+    m.index('two tops and a JOINT') < m.index('Registry.with_ordered_width(article[:unit], w)')
+  raise 'the maximum must come from the row, not from a constant here' unless
+    m.include?("max = article[:unit]['max_length_mm'].to_f")
+  raise 'it must not place the joint' unless m.include?('nothing here places it for you')
+end
+
 check('TWO SLABS AT ONE HEIGHT LOOK LIKE ONE - so the second is refused') do
   # Stone under 3140 is ONE piece: a run that has grown a filler is drawn again
   # over the whole run rather than patched beside itself (Andriy, 2026-08-28,
@@ -8766,31 +8797,34 @@ check('THE PICKER MUST NOT OFFER A BUILD IT WILL ALWAYS REFUSE') do
     gen.include?('is a worktop, and a worktop is not built from the picker')
 end
 
-check('THE WORKTOP DIALOG PRE-CHOOSES NEITHER THE BAND NOR THE GROUP') do
-  # A SketchUp inputbox selects its first dropdown entry, so whatever is put
-  # first is what somebody gets by pressing OK without reading. Both of these
-  # are decisions with a price behind them - the band decides how far the top
-  # stands past the door face, the group decides what it costs - so both lists
-  # open on a sentinel and the build refuses if the sentinel comes back.
+check('THE STAMP DIALOG PRE-CHOOSES NEITHER THE BAND NOR THE GROUP') do
+  # Carried over from the button this replaced, because the discipline is the
+  # same and the price behind it is the same. A SketchUp inputbox selects its
+  # first dropdown entry, so whatever is put first is what somebody gets by
+  # pressing OK without reading. Both lists open on a sentinel and the stamp
+  # refuses if it comes back.
   #
-  # A SOURCE check, like the picker's Build-button one, because nothing
-  # headless can open an inputbox.
+  # A SOURCE check, like the picker's, because nothing headless can open an
+  # inputbox.
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
-  m = src[/def build_worktop_from_dialog.+?\n      end\n/m]
-  raise 'build_worktop_from_dialog is gone' unless m
-  raise 'the sentinel must be double-quoted or it prints as a backslash' unless
-    m.include?('chose = "\u2014 choose \u2014"')
-  raise 'the band list must open on the sentinel' unless
-    m.include?('([chose] + bands)')
-  raise 'the group list must open on the sentinel' unless
-    m.include?('([chose] + groups)')
+  m = src[/def stamp_tops_from_dialog.+?\n      end\n/m]
+  raise 'stamp_tops_from_dialog is gone' unless m
+  raise 'the band list must open on the sentinel' unless m.include?('([chose] + bands)')
+  raise 'the group list must open on the sentinel' unless m.include?('([chose] + groups)')
   raise 'and the sentinel must refuse, not fall through' unless
     m.include?('if band == chose || group == chose')
-  # AND THE THICKNESS MUST NOT BE RESOLVED BEHIND THE REFUSAL. build_worktop
-  # raises when the project states one thickness and the article is another;
-  # a dialog that overwrote the project would answer that refusal for it.
   raise 'the dialog must only state a thickness where none is stated' unless
     m.include?('if Project.worktop_t_mm(su).nil?')
+
+  # AND THE STAMP MUST SAY WHAT IT WROTE. It changes no geometry, so nothing on
+  # screen moves - and a piece that measured its WORLD box instead of its own
+  # would be silently wrong. The numbers come back in a box.
+  raise 'a silent stamp cannot be checked by eye' unless m.include?('Stamped #{stamped.length}')
+  raise 'the piece must be measured in its own axes' unless m.include?('e.definition.bounds')
+
+  # TWO BUTTONS WOULD BE TWO WAYS TO BE WRONG. build_worktop keeps its code and
+  # its checks and loses its button; nothing in the palette may call it.
+  raise 'the old worktop button is still wired' if src.include?('Generator.build_worktop(')
 end
 
 check('a top is ordered by LENGTH, and 3140 is the end of the sheet') do
@@ -8804,6 +8838,247 @@ check('a top is ordered by LENGTH, and 3140 is the end of the sheet') do
     # same page's text says 319 for MDi Inalco only. 3140 is held.
     raise e.message unless e.message =~ /3140/
   end
+end
+
+puts "\nthe stamp: the engine stopped drawing tops and started naming them"
+Stamp = UCON::CabinetEngine::TopStamp
+
+check('A SLAB IS THIN IN ONE DIRECTION - and that is the only convention there is') do
+  # No group axes to set, nothing to remember, and it survives a piece drawn at
+  # 45 degrees: the thickness is the smallest of the three dimensions, always.
+  m = Stamp.measure([2400, 650, 40], 650)
+  raise m.inspect unless m[:thickness_mm] == 40.0 && m[:depth_mm] == 650.0 &&
+                         m[:length_mm] == 2400.0
+  # the same slab handed in any order measures the same
+  raise 'the order of the dimensions changed the answer' unless
+    Stamp.measure([40, 2400, 650], 650) == m
+end
+
+check('AND THE BAND DECIDES WHICH OF THE OTHER TWO IS THE DEPTH') do
+  # A RETURN PIECE IS SHORTER THAN IT IS DEEP. Sorting would call a 300 x 650
+  # return '650 long and 300 deep', which is backwards, and it would be priced
+  # at a band it was never cut to. The band is already chosen in the dialog, so
+  # the dimension NEARER THE BAND is the depth - a decision that has been made,
+  # rather than a second one invented here.
+  m = Stamp.measure([300, 650, 40], 650)
+  raise m.inspect unless m[:depth_mm] == 650.0 && m[:length_mm] == 300.0
+  # and a square-ish piece still answers, deterministically
+  sq = Stamp.measure([650, 650, 40], 650)
+  raise sq.inspect unless sq[:depth_mm] == 650.0 && sq[:length_mm] == 650.0
+  begin
+    Stamp.measure([2400, 650], 650)
+    raise 'two dimensions were accepted as a slab'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('three dimensions')
+  end
+end
+
+check('THE STAMP REFUSES A LIE AND ALLOWS AN EXPENSIVE CHOICE') do
+  art = Generator.worktop_article('TOPDR008040', 650, 'D', 'Marmorio')
+
+  # A LIE: the order would say 40 and the elevation would show 30.
+  begin
+    Stamp.verify(Stamp.measure([2400, 650, 30], 650), art)
+    raise 'a 30 mm slab was stamped as a 40 mm article'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('thick')
+  end
+
+  # CANNOT BE MADE: 3140 is the sheet.
+  begin
+    Stamp.verify(Stamp.measure([3552, 650, 40], 650), art)
+    raise 'a piece longer than the sheet was stamped'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('Cut it into two pieces')
+  end
+
+  # THE BAND IS WRONG, NOT THE DRAWING: stone cannot be wider than its band.
+  begin
+    Stamp.verify(Stamp.measure([2400, 700, 40], 650), art)
+    raise 'stone wider than its band was stamped'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('BAND is what')
+  end
+
+  # AND A PIECE CUT DOWN FROM A WIDER BAND IS LEGAL - it is what a 644,5 run
+  # buys, because no 620 band exists. It is a decision, so it is NAMED.
+  narrow = Stamp.measure([2400, 620, 40], 650)
+  raise 'a legal cut-down piece was refused' unless Stamp.verify(narrow, art).nil?
+  raise Stamp.remarks(narrow, art).inspect unless
+    Stamp.remarks(narrow, art).first.to_s.include?('paid for and not drawn')
+  raise 'an exact piece has nothing to remark on' unless
+    Stamp.remarks(Stamp.measure([2400, 650, 40], 650), art).empty?
+end
+
+check('HAND-DRAWN GEOMETRY LANDS ON FRACTIONS, and a refusal must be about stone') do
+  # A refusal at 0,3 mm would be a refusal about SketchUp. One millimetre,
+  # everywhere, stated once in the file.
+  art = Generator.worktop_article('TOPDR008040', 650, 'D')
+  raise 'half a millimetre of thickness was refused' unless
+    Stamp.verify(Stamp.measure([2400, 650, 40.4], 650), art).nil?
+  raise 'half a millimetre of length was refused' unless
+    Stamp.verify(Stamp.measure([3140.4, 650, 40], 650), art).nil?
+end
+
+check('A STAMPED PIECE IS A CONTRACT-VALID ORDER LINE, and carries no price') do
+  art = Generator.worktop_article('TOPDR008040', 650, 'D', 'Marmorio')
+  a = Stamp.attributes_for(Stamp.measure([2400, 650, 40], 650), art,
+                           visible_side_edges: 1, drawn_on: '2026-08-28')
+  Contract.validate!(a)
+  raise a['code'] unless a['code'] == 'TOPDR008040'
+  raise a['pricing_group_ref'] unless a['pricing_group_ref'] == 'D'
+  raise a['object_class'] unless a['object_class'] == 'worktop'
+  raise a['manufacturer'] unless a['manufacturer'] == 'cesar'
+  # THE LENGTH IS MEASURED AND THE DEPTH IS STATED, and they are different
+  # kinds of number: the band is what the stone is ORDERED at, whatever the
+  # drawing measures.
+  raise a['width_mm'].to_s unless a['width_mm'] == 2400.0
+  raise a['depth_mm'].to_s unless a['depth_mm'] == 650
+
+  # NO POINTS ANYWHERE. Contract SS1.2 - pricing_group_ref holds the reference
+  # and never a number, and the exporter looks the rest up where it is printed.
+  # 806 is group D at band 650; if it ever appears on an object, a price has
+  # been baked into a drawing.
+  raise 'a price reached the object' if a.values.map(&:to_s).any? { |v| v.include?('806') }
+
+  # AND THE ASSUMPTION TRAVELS WITH THE OBJECT. Ordering by the bounding
+  # rectangle is OUR reading of how stone is sold - the catalog does not say it
+  # - so every piece it touches says so, and Elda Q28 asks.
+  raise 'the bounding-rectangle assumption is not written down' unless
+    a['notes'].include?('THE CATALOG DOES NOT SAY THIS') && a['notes'].include?('Q28')
+  raise 'the hand-drawn origin is not recorded' unless a['notes'].include?('DRAWN BY HAND')
+  raise 'the measurement has no date, so a stale number cannot be spotted' unless
+    a['notes'].include?('2026-08-28')
+
+  # THE VISIBLE EDGE IS A VARIANT, not a key of its own and not a number.
+  v = a['variants'].find { |x| x['key'] == 'visible_side_edge' }
+  raise 'the visible edge was dropped' if v.nil?
+  raise v.inspect unless v['value'].include?('650')
+  raise 'an unmarked piece still claims an edge' unless
+    Stamp.attributes_for(Stamp.measure([2400, 650, 40], 650), art)['variants'].empty?
+  begin
+    Stamp.attributes_for(Stamp.measure([2400, 650, 40], 650), art, visible_side_edges: 3)
+    raise 'three side edges were accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('two side edges at most')
+  end
+end
+
+puts "\nthe sink: a drawing fact and an order fact, and they live in different places"
+Sink = UCON::CabinetEngine::SinkMark
+
+check('THE SIZES COME OFF THE PAGE, not out of this file') do
+  # Retyping them here would make a second, staler copy of the catalog. The keys
+  # are the catalog's own and they print CENTIMETRES, which is how p.110 gives
+  # every size on it.
+  b = Sink.catalog_bowls
+  raise b.map { |x| x['key'] }.inspect unless b.map { |x| x['key'] } ==
+    %w[integrated_bowl_40x40x19 integrated_bowl_50x40x19 integrated_bowl_70x40x19]
+  raise b.first.inspect unless b.first['w_mm'] == 400 && b.first['d_mm'] == 400
+  raise b.last.inspect unless b.last['w_mm'] == 700
+  raise 'the points stopped coming from the section' unless b.all? { |x| x['points'] == 1671 }
+  raise 'the fourth option must not look like a catalog one' unless
+    Sink.options.length == 4 && Sink.options.last.include?("Client's own")
+end
+
+check("A SINK OF THE CLIENT'S OWN CARRIES NO POINTS AND SAYS WHY") do
+  c = Sink.client_bowl(860, 440)
+  raise c.inspect unless c['w_mm'] == 860.0 && c['d_mm'] == 440.0
+  raise 'a client sink was given a price' unless c['points'].nil?
+  [[0, 400], [nil, 400], ['', '']].each do |w, d|
+    Sink.client_bowl(w, d)
+    raise "#{w.inspect} was accepted as a size"
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('still has a size')
+  end
+
+  # AND THE UNPRICED CUTOUT IS NAMED ON THE ORDER LINE. Cesar charges nothing
+  # for the sink; the HOLE is a workmanship on the unread table at printed
+  # p.172, and an order that mentions neither reads as complete.
+  v = Sink.variants_with({}, c, 'B81087').first
+  raise v.inspect unless v['value'].include?('p.172') && v['value'].include?('unread')
+end
+
+check('THE BOWL HAS TO FIT THE STONE, and a tight fit is remarked not refused') do
+  big = Sink.catalog_bowls.last                      # 700 x 400
+  raise 'a 400-deep bowl was refused by a 650 top' unless
+    Sink.fit(big, { 'depth_mm' => 650, 'width_mm' => 2400 }).empty?
+
+  # 380 band, 400 bowl: there is no stone left at all.
+  begin
+    Sink.fit(big, { 'depth_mm' => 380, 'width_mm' => 2400 })
+    raise 'a bowl deeper than the top was accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('no stone left around it')
+  end
+
+  # and a piece too short for it
+  begin
+    Sink.fit(big, { 'depth_mm' => 650, 'width_mm' => 600 })
+    raise 'a bowl wider than the piece was accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('does not fit in this piece')
+  end
+
+  # 440 band would leave 20 mm front and back - legal, cuttable, and worth a
+  # sentence before anybody cuts it. (No such band exists; the arithmetic is
+  # what is being checked.)
+  thin = Sink.fit(big, { 'depth_mm' => 440, 'width_mm' => 2400 })
+  raise thin.inspect unless thin.first.to_s.include?('20.0 mm of stone')
+end
+
+check('RUNNING IT TWICE ON ONE UNIT DOES NOT ORDER TWO BOWLS') do
+  b50 = Sink.catalog_bowls[1]
+  b70 = Sink.catalog_bowls[2]
+  first  = Sink.variants_with({}, b50, 'B81087')
+  second = Sink.variants_with({ 'variants' => first }, b70, 'B81087')
+  raise second.inspect unless second.length == 1
+  raise second.inspect unless second.first['label'].include?('70')
+
+  # A SECOND SINK UNIT ON THE SAME TOP IS A SECOND BOWL, which is correct.
+  both = Sink.variants_with({ 'variants' => second }, b50, 'B80681')
+  raise both.length.to_s unless both.length == 2
+
+  # and an unrelated variant is never collateral damage
+  led = [{ 'key' => 'led', 'label' => 'LED', 'value' => 'x' }]
+  kept = Sink.variants_with({ 'variants' => led }, b50, 'B81087')
+  raise 'a variant that is not a sink was dropped' unless kept.any? { |v| v['key'] == 'led' }
+
+  # NO POINTS TRAVEL - Contract SS1.2. 1671 is the bowl's price and it belongs in
+  # the registry, not on a drawing.
+  raise 'a price reached the object' if kept.map(&:to_s).any? { |v| v.include?('1671') }
+end
+
+check('THE MARK CENTRES ON THE UNIT, in the unit\'s own frame') do
+  b = Sink.catalog_bowls[1]                          # 500 x 400
+  r = Sink.rect_mm(b, 1050, 620)
+  raise r.inspect unless r == [[275.0, 110.0], [775.0, 110.0], [775.0, 510.0], [275.0, 510.0]]
+  # 1050 wide, 500 bowl -> 275 each side; 620 deep, 400 bowl -> 110 each side.
+  raise 'the rectangle is not closed by four corners' unless r.length == 4
+end
+
+check('A SINK IS A LINE ABOVE THE STONE, NOT A HOLE IN IT') do
+  # Nothing cuts the top. A cutout is a workmanship on the unread table at
+  # printed p.172, and cutting hand-drawn geometry is not this engine's business
+  # since the tops stopped being generated.
+  #
+  # AND IT REFUSES WITHOUT STONE, which is not a convenience check: when
+  # build_worktop lost its button the model lost the only thing that verified
+  # stone covered the cabinets. This is the first thing since that will not
+  # pretend there is stone where there is none.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  m = src[/def mark_sink_from_dialog.+?\n      end\n/m]
+  raise 'mark_sink_from_dialog is gone' unless m
+  raise 'the mark must refuse where there is no stamped top' unless
+    m.include?('There is no stone over')
+  raise 'the mark must be edges, not a solid and not a cut' unless
+    m.include?('add_edges') && !m.include?('erase') && !m.include?('intersect_with')
+  raise 'the 1 mm lift is Andriy\'s spec and must come from the module' unless
+    m.include?('SinkMark::LIFT_MM')
+  raise 'the order fact must be written on the TOP, not on the mark' unless
+    m.include?('SinkMark.variants_with(tatr, bowl,')
+  raise 'the dashed tag is what makes it read as a mark' unless
+    m.include?("su.line_styles['Dash']")
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
