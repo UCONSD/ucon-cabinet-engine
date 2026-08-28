@@ -8172,7 +8172,43 @@ check('the bridge button never arms, and is drawn only in a dev checkout') do
   # It reports the TIMER afterwards, not the return value of load.
   # Learned rule 13: a record of an outside action is only true if something checks it.
   raise 'the result must be read back from the bridge' unless
-    pal.include?('DevBridge.status_line')
+    pal.include?('DevBridge.announce')
+
+  # A SUCCESS MUST NOT BE MODAL, and this is not a style rule. UI.messagebox
+  # blocks SketchUp's timer loop, and the thing this button reports on IS a
+  # timer: on its first use in the model the confirmation box sat open saying
+  # "Probe bridge is ON — 0 run(s)" while preventing the bridge from taking the
+  # probe already queued in the inbox. It told the truth and stopped it from
+  # staying true. A failure may still be modal - there is no timer left to block,
+  # and a failure is something you must not miss.
+  cb = pal[/add_action_callback\('reload_bridge'\).*?\n        end\n/m] or
+    raise 'the reload_bridge callback could not be found'
+  success = cb.split('rescue').first
+  raise 'the success path is modal and will block the bridge it just started' if
+    success.include?('UI.messagebox')
+  raise 'a failure must still be impossible to miss' unless
+    cb.include?('rescue') && cb.split('rescue').last.include?('UI.messagebox')
+end
+
+check('every appliance-maker question is in its own status table') do
+  # The same guard the Elda register has, and for the reason that one records:
+  # it went stale five times in one day before it existed. A register whose
+  # summary table disagrees with its body is worse than no summary.
+  path = File.expand_path('../docs/Appliance_Open_Questions_v0.1.md', __dir__)
+  doc  = File.read(path)
+  headings = doc.scan(/^## (A\d+)/).flatten
+  raise 'the register has no questions' if headings.empty?
+  rows = doc.scan(/^\| (A\d+) \|/).flatten
+  missing = headings - rows
+  raise "not in the status table: #{missing.inspect}" unless missing.empty?
+  extra = rows - headings
+  raise "in the table with no section: #{extra.inspect}" unless extra.empty?
+
+  # AND IT IS NOT THE ELDA REGISTER. These go to a different counterparty on a
+  # different day; filing them together would put questions in a letter to Elda
+  # that she cannot answer.
+  elda = File.read(File.expand_path('../docs/Elda_Open_Questions_v0.1.md', __dir__))
+  raise 'an appliance question leaked into the Elda register' if elda.match?(/^## A\d+/)
 end
 
 check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do

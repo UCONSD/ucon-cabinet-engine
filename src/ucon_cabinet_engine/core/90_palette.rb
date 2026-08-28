@@ -149,7 +149,12 @@ module UCON
             # true says the file was read, not that a timer is ticking.
             # Learned rule 13: a record of an outside action is only true if
             # something checks it.
-            UI.messagebox(DevBridge.status_line)
+            #
+            # AND IT IS NOT A MESSAGEBOX. A modal blocks SketchUp's timer loop,
+            # and the thing being reported IS a timer - the first press left the
+            # queued probe unrun for four minutes behind a dialog that said the
+            # bridge was on. Status bar and console; see core/95_dev_bridge.rb.
+            DevBridge.announce
           rescue StandardError => e
             UI.messagebox("The probe bridge was not reloaded.\n\n#{e.message}")
           end

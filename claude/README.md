@@ -115,7 +115,9 @@ date order; a finding is never edited to hide what it corrected.
   no OPENING - so the geometry review silently stopped at the moment the front
   system changed the machine; then the three manufacturer guides were found in
   ~/Downloads, the three ADA openings and the hood's envelope and mounting range
-  were read off their pages, and the appliance package went 0.2.0 -> 0.3.0).
+  were read off their pages, and the appliance package went 0.2.0 -> 0.3.0; and the hood turned out to be
+  BUILT IN, which made the cabinets over the range the hood rather than an
+  obstruction to it).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,

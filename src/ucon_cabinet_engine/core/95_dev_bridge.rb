@@ -81,6 +81,29 @@ module UCON
         true
       end
 
+      # THE ANSWER GOES TO THE STATUS BAR, NOT TO A MESSAGEBOX, AND THAT IS THE
+      # WHOLE POINT — found 2026-08-28, in the model, on the button's first use.
+      #
+      # UI.messagebox IS MODAL, AND A MODAL DIALOG BLOCKS SKETCHUP'S TIMER LOOP.
+      # The bridge IS a timer. So the confirmation box sat there saying "Probe
+      # bridge is ON — 0 run(s)" while PREVENTING the bridge from taking the
+      # single run that was already queued in the inbox. It was telling the truth
+      # and stopping it from staying true.
+      #
+      # A success here has nothing a person must acknowledge, and the bridge's own
+      # start already writes both lines it needs — Sketchup.status_text and a
+      # console line. So success is silent-but-visible, and only a FAILURE gets a
+      # modal, because a failure is something you must not miss and there is no
+      # timer left to block.
+      def announce
+        return unless defined?(::Sketchup)
+
+        ::Sketchup.status_text = status_line
+        puts status_line
+      rescue StandardError
+        nil
+      end
+
       # The sentence a person reads after pressing it. It reports what is TRUE
       # AFTERWARDS rather than what was attempted — learned rule 13, a record of
       # an outside action is only true if something checks it.

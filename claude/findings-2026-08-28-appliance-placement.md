@@ -639,3 +639,245 @@ file to install. The palette bakes its HTML at open, so **the button appears
 after the palette is closed and reopened**, not on `Reload core` alone.
 
 Suites **521 / 84 / 46**.
+
+---
+
+## 17. The button's first press proved the button was wrong
+
+It worked, and the dialog it put up said:
+
+> *Probe bridge is ON — 0 run(s) so far, watching tools/probe_inbox/.*
+
+**And the probe already queued in the inbox did not run for four minutes.**
+
+`UI.messagebox` is MODAL, and a modal dialog blocks SketchUp's timer loop. **The
+bridge IS a timer.** So the confirmation box sat there truthfully reporting that
+the bridge was on while preventing it from taking the one run it had waiting.
+
+> **It told the truth and stopped it from staying true.** The status line was
+> not wrong — `running?` really did see a live timer, and the count really was 0.
+> The dialog reporting the state was the reason the state could not change.
+
+Fixed: success goes to `Sketchup.status_text` and the console — which is what the
+bridge's own `start` already writes — and **only a failure is modal**, because a
+failure is something you must not miss and there is no timer left to block. A
+check now reads the callback apart at `rescue` and requires the success half to
+contain no `UI.messagebox` and the failure half to contain one. Proved against
+the defect: put a modal back beside `announce` and it fails with *"the success
+path is modal and will block the bridge it just started."*
+
+---
+
+## 18. THE KITCHEN AS DRAWN CANNOT TAKE THE HOOD
+
+Before choosing any mounting height, the model was asked what is actually above
+the range. Probe 75 asked, probe 76 asked properly — **75 compared X and Z and
+never Y**, which cannot tell a real collision from two things on different walls
+sharing an x-range, so its answer was not usable until 76 re-asked in all three
+axes.
+
+```
+RANGE GAP   x 1903.0..3123.0   y 0.0..620.0   z 0.0..920.0
+
+  SD0631 610x720 [SOUTH wall]   x 1903.0..2513.0  y 0.0..1253.7  z 1720.0..2440.0  YES
+  SD0631 610x720 [SOUTH wall]   x 2513.0..3123.0  y 0.0..1253.7  z 1720.0..2440.0  YES
+  SD0631 610x600 [SOUTH wall]   x 1903.0..2513.0  y 0.0..1253.7  z 2440.0..3040.0  YES
+  SD0631 610x600 [SOUTH wall]   x 2513.0..3123.0  y 0.0..1253.7  z 2440.0..3040.0  YES
+```
+
+**Two `SD0631` stand exactly across the range's span, starting at 1720**, with two
+more above them to 3040 and the ceiling at 3048. The x-range matches the gap to
+the millimetre — 1903…3123 against 1903…3123 — so these were placed over the
+range on purpose.
+
+### The arithmetic, and it is not a near miss
+
+| | |
+|---|---|
+| clear band above the countertop | 920 → 1720 = **800 mm** |
+| Wolf's minimum mounting height (p.144) | **762** above the countertop |
+| so the lowest legal hood bottom | 1682 |
+| room left between that and the cabinets | **38 mm** |
+| shallowest Pro body (low-profile, p.141) | **254** |
+| the 24" deep hood in `48_Core` | **457** |
+
+**No Wolf Pro hood fits, and no smaller one would either.** The binding
+constraint is not the hood's height — it is that **the minimum mounting height
+alone consumes 762 of the 800 available.** A hood of zero height would have 38 mm.
+The hood liner does not rescue it: printed p.145 gives the liner the same
+762–914 bottom-to-countertop rule.
+
+> **`48_Core` says this kitchen has a hood. The model says there is nowhere to
+> put one. Those two facts had never been compared.**
+
+That is the whole of the task Andriy named — *place the machines already named in
+the model* — arriving at the answer nobody expected: three of the four slots were
+already drawn, and the fourth is not absent by oversight. **It is absent because
+the wall is full.**
+
+### And the seam could not have caught this
+
+`Appliances.set_problems` checks that a hood is at least as wide as its cooking
+surface — printed p.144's other rule — and `48_Core` passes it: 1219 over 1219.
+**Nothing anywhere checks a hood against the wall it has to hang on**, because
+until today no reservation knew what a wall was. `build_wall_reservation` would
+have refused this one on its own arithmetic, which is the guard working; but it
+would have refused it at the moment of drawing, with the person waiting, rather
+than as a fact about the kitchen.
+
+**This is not a bug to fix. It is a decision for Andriy**, and it is his kind of
+decision: the two `SD0631` over the range and a Pro hood are mutually exclusive,
+and which one the kitchen keeps is a design choice with an order behind it —
+those `SD0631` are the Q11 unprinted width-and-height increases, so removing two
+changes what gets quoted.
+
+---
+
+## 19. §18 WAS RIGHT ABOUT THE ARITHMETIC AND WRONG ABOUT THE QUESTION
+
+**Andriy, 2026-08-28:** *«Шкафы просто placeholder пока что. По идее, они будут
+кастомизированы, и в них будет врезана вытяжка. Вытяжка должна быть built-in.»*
+
+Kept rather than rewritten (learned rule 9). Every number in §18 is correct and
+the conclusion drawn from them — *"the kitchen as drawn cannot take the hood"* —
+was **framed on an assumption nobody stated: that the hood hangs FREE, BELOW the
+cabinets.**
+
+Under that assumption the 800 mm band between countertop and cabinets is the
+space the hood must fit inside, and 762 of mounting height leaves 38. Under the
+real intention the same 800 is not a gap to fit into — **it IS the mounting
+height**, and 800 sits almost exactly mid-range in Wolf's printed 762–914. The
+cabinets are not in the way.
+
+> **THE CABINETS ARE THE HOOD.** I measured what was free *below* them, which is
+> the right measurement for the wrong question. The probe was fine; the frame
+> around it was mine and it was never checked against what the kitchen is for.
+>
+> Same family as the turn buttons: *when the fix is a control, ask first whether
+> the thing it controls needs to exist.* Here — **before measuring a clearance,
+> ask whether the thing needs a clearance at all.**
+
+## 20. What a built-in actually needs, read off printed p.141–145
+
+**Wolf sells the part for exactly this: a Pro hood LINER**, ten models,
+`PL341912` … `PL582212` (printed p.148–149).
+
+**Read off a 200-dpi render of p.142, not from the extracted text:** the liner is
+the same WEDGE as the wall hood, one size down — top face **305** back from the
+wall at full height, chamfering to a **102** front face.
+
+| | |
+|---|---|
+| height | **308** (12⅛") |
+| depth | **492** (19⅜") or **575** (22⅝") — two models per width |
+| widths | **873 · 1026 · 1178 · 1330 · 1483** |
+| top width | liner width **minus 152** |
+
+The model number decodes as width·depth·height, but **that is an observation and
+not a rule** — the widths and depths are taken from the printed table, never from
+the digits.
+
+### printed p.144, the two sentences that govern a built-in
+
+> *"Wolf Pro hood liners are for use in custom hood applications. The decorative
+> hood can be created out of wood, plaster, tile, or metal. **The shape of the
+> hood is not critical, however, the bottom of the hood and liner must be on the
+> same plane.** The height of the liner does not need to accommodate the entire
+> height of the decorative hood."*
+
+So the liner's bottom is flush with the custom cabinet's bottom — **1720, which
+is 800 above the countertop, inside the printed 762–914.** The liner being
+shorter than the cabinet is explicitly fine.
+
+### And the cabinets are 620 deep, which is what makes it possible
+
+Measured off the **CARCASS body, not the instance** — an instance box is inflated
+by its symbols, and these read 1253,7 deep that way against a true 620.
+
+| | |
+|---|---|
+| each cabinet over the range | **610 w × 620 d × 720 h**, two of them, z 1720–2440 |
+| combined span | **1220** — matching the run gap to the millimetre |
+| a `PL46…12` liner | 1178 × 492 or 575 × 308 |
+| fit inside one 1220 × 620 × 720 box | **21 mm each side, 128 or 45 of depth spare, 412 of height spare** |
+
+**A built-in liner fits with room in every axis.** Had those cabinets been a
+normal 350-deep wall unit, no liner would have gone in at all — 492 is the
+shallowest made.
+
+### The one thing that is NOT printed, and it decides the model
+
+**No liner is 1219.** The range is 1219 and the two candidates are **1178**
+(41 narrower — about 20 each side) and **1330** (111 wider than the 1220 the
+cabinets occupy, so it does not fit without taking width from a neighbour).
+
+printed p.144 says *"**Wall hoods** should be at least as wide as the cooking
+surface and island hoods should be 3" (76) wider on each side."* It says nothing
+about liners, and a liner is not a wall hood. **So whether a 1178 liner may sit
+over a 1219 range is not something this guide answers** — domain rule 1: the
+source wins, and where it is silent the answer is a question, not a derivation.
+
+Two ways to settle it and both are Andriy's: ask Wolf, or take the wider liner
+and let the cabinetry grow. **Nothing is encoded until it is settled.**
+
+### What this makes the object, and it is a shape this project has built before
+
+One custom cabinet 1220 × 620 × 720 replacing two `SD0631` placeholders, with a
+machine's niche inside it — **the `UCON-BESP-001` pattern from the east fridge
+exactly**: a bespoke carcass carrying no Cesar article, plus a niche that is
+drawn and never ordered (domain rule 8). It is not a `wall_reservation` at all;
+that role was built for a hood hanging on a wall, and this hood hangs in a
+cabinet.
+
+**`PW482418` is therefore the wrong product for this kitchen**, and `48_Core`
+naming it is the set being a budget template rather than a plan. Recorded; the
+set is not edited.
+
+---
+
+## 21. The width question goes to Wolf, and it needed a register of its own
+
+**Andriy, 2026-08-28: ask Wolf.** So nothing is encoded — no liner in
+`appliances.json`, no cabinet drawn, no width chosen.
+
+It could not go in `docs/Elda_Open_Questions_v0.1.md`. That register is addressed
+to Cesar / DzineElements, its own check pins every `## Q…` heading to its table,
+and **a question filed there travels in a letter to Elda that she cannot
+answer.** New: **`docs/Appliance_Open_Questions_v0.1.md`**, same shape, same
+guard — which was proved by deleting a table row and watching it fail with
+*"not in the status table: [A2]"*.
+
+Two questions, and the second was already sitting in this note unaddressed:
+
+- **A1 — may a 1178 liner sit over a 1219 range?** printed p.144 states the
+  width rule for **wall hoods** and for **island hoods** and says nothing about
+  liners. Silence is not permission and it is not refusal. And it cannot be
+  reasoned out: the liner widths are all ⅜" sizes, which *look* designed to sit
+  inside a nominal-size decorative hood — a plausible reading of a pattern, and
+  **the 120 mm fridge base was a plausible reading of a pattern that closed to
+  the millimetre and was false.**
+- **A2 — does the charbroiler recommendation reach a liner at all?** p.144
+  recommends a **27" deep** hood over a charbroiler range; `DF48650C/S/P` is the
+  charbroiler model, so `48_Core`'s 24" `PW482418` was already on the wrong side
+  of it. **But a liner has no 24/27 choice**: its depths are 492 and 575, both
+  shallower than either. The sentence is written in the wall hood's vocabulary
+  and there is no way to satisfy or violate it with a liner — so what the
+  recommendation is actually about (projection, capture volume, CFM) decides
+  whether a liner equivalent exists. printed p.146–149 carry the CFM and blower
+  tables per model and are **unread**.
+
+### What is now owed on the hood
+
+1. **A1 and A2 to Wolf**, and until A1 comes back the cabinet above the range has
+   no width and the liner has no model.
+2. **printed p.146–149 unread** — CFM and blowers per model, which A2 needs and
+   which nothing has looked at.
+3. **The custom cabinet is not designed.** When A1 lands it is the
+   `UCON-BESP-001` shape: one bespoke carcass 1220 × 620 × 720 replacing two
+   `SD0631` placeholders, carrying no Cesar article, with the liner's niche
+   inside it — drawn and never ordered, domain rule 8.
+4. **`wall_reservation` remains built, correct and unused here.** It is right for
+   a hood that hangs on a wall and this one hangs in a cabinet. It was not wasted
+   — v2.4, the seam, the refusals and the p.144 width comparison all stand — but
+   **this kitchen will not be the thing that first draws one**, and the note says
+   so rather than letting a later session assume it was tried.
