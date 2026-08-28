@@ -307,6 +307,136 @@ check('every named ADA variant has a price') do
   A.all.map { |a| a['ada_variant'] }.compact.all? { |m| !A.price(m).nil? }
 end
 
+# ------------------------------------------------- the ADA rows, 2026-08-28
+#
+# THE CHECK ABOVE PASSED THROUGHOUT, AND THAT IS THE POINT. Every named ADA
+# variant had a PRICE; not one of the three had an OPENING. prices.json knew
+# DW2451/ADA, DEU2450R/ADA/L and DEU2450W/ADA/L all along - the wine one at a
+# different figure from its parent, so they are distinct products and not a
+# labelling variant - while appliances.json had never heard of them. Two data
+# files disagreeing about which models exist, and nothing comparing them.
+#
+# What that cost: for_front_system substituted a model `find` could not find, so
+# matches_niche? answered "no published opening for this model" and THE GEOMETRY
+# CHECK SILENTLY STOPPED HAPPENING at exactly the moment the front system changed
+# the machine. A check can only fail on what it looks at.
+
+check('every named ADA variant has an OPENING, not only a price') do
+  A.all.map { |a| a['ada_variant'] }.compact.all? { |m| !A.find(m).nil? }
+end
+
+check('the price file and the opening file agree about which models exist') do
+  priced  = A.prices['prices'].map { |p| p['model'] }
+  opened  = A.all.map { |a| a['model'] }
+  (priced - opened).empty?
+end
+
+check('an ADA row states its height and points at no further variant') do
+  %w[DW2451/ADA DEU2450R/ADA/L DEU2450W/ADA/L].all? do |m|
+    a = A.find(m)
+    a['ada_height'] == true && a['ada_variant'].nil?
+  end
+end
+
+check('the three ADA openings are the printed ones, and only the height moved') do
+  { 'DW2451/ADA'     => [600, 826, 610],
+    'DEU2450R/ADA/L' => [610, 826, 610],
+    'DEU2450W/ADA/L' => [610, 826, 610] }.all? do |m, (w, h, dd)|
+    i = A.opening(m)
+    i['w'] == w && i['h'] == h && i['d'] == dd
+  end
+end
+
+check('each ADA row keeps its parent width and depth, and differs only in height') do
+  { 'DW2451' => 'DW2451/ADA',
+    'DEU2450R/L' => 'DEU2450R/ADA/L',
+    'DEU2450W/L' => 'DEU2450W/ADA/L' }.all? do |parent, ada|
+    pi = A.opening(parent)
+    ai = A.opening(ada)
+    pi['w'] == ai['w'] && pi['d'] == ai['d'] && pi['h'] == 876 && ai['h'] == 826
+  end
+end
+
+check('gola leaves a machine that is ALREADY ADA alone, and offers no swap') do
+  # The false refusal the new rows would otherwise have created: an ADA row's
+  # own ada_variant is null, so the "no ADA variant" branch would have refused
+  # the one machine that is correct under a grip recess.
+  %w[DW2451/ADA DEU2450R/ADA/L DEU2450W/ADA/L].all? do |m|
+    r = A.for_front_system(m, 'gola')
+    r['ok'] && r['model'] == m && r['substituted'].nil?
+  end
+end
+
+check('a gola substitution now lands on a model that can actually be measured') do
+  r = A.for_front_system('DW2451', 'gola')
+  r['ok'] && r['substituted'] && !A.opening(r['model']).nil?
+end
+
+# -------------------------------------------- the wall reservation, 2026-08-28
+#
+# A hood is built into nothing - `installations` is empty for every PW model and
+# that is the guide speaking, not a gap. It is therefore neither a niche nor a
+# run gap, and it still occupies a volume no wall unit may be planned into.
+
+check('every hood states an envelope and a mounting range, and cites a page for each') do
+  A.all.select { |a| a['install_class'] == 'wall_mounted' }.all? do |a|
+    e = a['envelope']
+    m = a['mounting']
+    e && m && e['source'].to_s.match?(/p\.\d+/) && m['source'].to_s.match?(/p\.\d+/) &&
+      e['w'] && e['d'] == 610 && e['h'] == 457
+  end
+end
+
+check('a hood still publishes NO opening, and that stays true') do
+  A.all.select { |a| a['install_class'] == 'wall_mounted' }
+   .all? { |a| a['installations'].empty? && A.opening_h(a['model']).nil? }
+end
+
+check('the reservation refuses when the countertop is not stated') do
+  r = A.wall_reservation('PW482418')
+  !r['applies'] && r['reason'].include?('countertop')
+end
+
+check('the reservation refuses when the mounting height is not stated, and says it is a RANGE') do
+  r = A.wall_reservation('PW482418', countertop_mm: 920)
+  !r['applies'] && r['reason'].include?('RANGE') &&
+    r['reason'].include?('762') && r['reason'].include?('914')
+end
+
+check('a mounting height outside the printed range is refused at both ends') do
+  lo = A.wall_reservation('PW482418', countertop_mm: 920, bottom_above_top_mm: 761)
+  hi = A.wall_reservation('PW482418', countertop_mm: 920, bottom_above_top_mm: 915)
+  !lo['applies'] && !hi['applies'] &&
+    lo['reason'].include?('outside') && hi['reason'].include?('outside')
+end
+
+check('a stated mounting height inside the range answers with the envelope and both edges') do
+  r = A.wall_reservation('PW482418', countertop_mm: 920, bottom_above_top_mm: 800)
+  r['applies'] && r['role'] == 'wall_reservation' &&
+    r['w'] == 1219 && r['d'] == 610 && r['h'] == 457 &&
+    r['bottom_mm'] == 1720.0 && r['top_mm'] == 2177.0
+end
+
+check('a hood is not a run gap and not a housing, on either list') do
+  !A.run_gap?('PW482418') && A.opening_h('PW482418').nil? &&
+    A.wall_reservation_models == %w[PW362418 PW482418 PW602418]
+end
+
+check('the three hood widths are the ones the width table prints') do
+  { 'PW362418' => 914, 'PW482418' => 1219, 'PW602418' => 1524 }.all? do |m, w|
+    A.find(m)['envelope']['w'] == w
+  end
+end
+
+check('the wedge is recorded rather than drawn: the profile keeps both numbers') do
+  # 305 of flat top from the wall, then a chamfer to a 102 front face at 610.
+  # The reservation is the ENVELOPE (domain rule 4); this keeps the shape so a
+  # later elevation does not have to re-read the page.
+  A.all.select { |a| a['install_class'] == 'wall_mounted' }.all? do |a|
+    a['profile']['top_flat_d'] == 305 && a['profile']['front_face_h'] == 102
+  end
+end
+
 # ------------------------------------------------------------------- sets
 
 check('all nine sets exist') do

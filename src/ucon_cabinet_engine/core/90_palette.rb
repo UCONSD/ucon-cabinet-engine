@@ -87,6 +87,44 @@ module UCON
             UI.messagebox("Nothing was reserved.\n\n#{e.message}")
           end
         end
+        @dialog.add_action_callback('reserve_wall') do |_|
+          begin
+            models = ApplianceCheck.wall_reservation_models
+            if models.empty?
+              why = ApplianceCheck.wall_reservation_reason ||
+                    'it knows no machine that hangs on a wall'
+              UI.messagebox("Nothing to reserve.\n\n#{why.to_s.capitalize}.\n\n" \
+                            'The envelope of a hood and the height it hangs at are the ' \
+                            'appliance maker\'s numbers, and this extension does not hold them.')
+            else
+              su = Sketchup.active_model
+              # THE RANGE IS OFFERED AND NOT PRE-ANSWERED. Wolf printed p.144
+              # gives 762 to 914 from the bottom of the hood to the countertop,
+              # and the field opens EMPTY on purpose: a prefilled 762 is a
+              # default wearing a question's clothes, and 152 mm of decision
+              # would then be made by whoever pressed OK without reading.
+              answer = UI.inputbox(
+                ['Machine hanging on the wall',
+                 'Bottom above the countertop, mm — 762 to 914, printed as a range'],
+                [models.first, ''],
+                [models.join('|'), ''], 'Reserve a wall volume'
+              )
+              if answer
+                if answer[1].to_s.strip.empty?
+                  UI.messagebox("Nothing was reserved.\n\n" \
+                                'Wolf printed p.144 gives the mounting height as a RANGE, ' \
+                                '762 to 914 above the countertop. A range is a decision, so ' \
+                                'nothing here chooses it for you.')
+                else
+                  Generator.build_wall_reservation(answer[0], su,
+                                                   bottom_above_top_mm: answer[1].to_f)
+                end
+              end
+            end
+          rescue StandardError => e
+            UI.messagebox("Nothing was reserved.\n\n#{e.message}")
+          end
+        end
         # The tool lives in core, so it arrives with a Reload core - no restart.
         @dialog.add_action_callback('place') do |_|
           begin
@@ -900,6 +938,7 @@ module UCON
             <button onclick="sketchup.panel()">Unit Properties panel</button>
             <button onclick="sketchup.export_order()">Order schedule (CSV)…</button>
             <button onclick="sketchup.reserve_run_gap()">Reserve run gap…</button>
+            <button onclick="sketchup.reserve_wall()">Reserve wall volume (hood)…</button>
             <button onclick="sketchup.worktop()">Worktop over selected run…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             <div class="grp">Opening symbols</div>

@@ -284,6 +284,70 @@ module UCON
         { 'checked' => true, 'gaps' => gaps }
       end
 
+      # ------------------------------------------------- the wall reservation
+      #
+      # THE THIRD RESERVATION, AND THE SAME ARROW. A hood publishes no opening at
+      # all - `installations` is empty for every PW model, which is the guide
+      # speaking and not a gap - so it can be neither a niche nor a run gap, and
+      # it still occupies a volume no wall unit may be planned into.
+      #
+      # The appliance module answers with the envelope and the printed mounting
+      # range; THE ENGINE DRAWS, for the reason B6 settled: a reservation nobody
+      # can see is worse than an empty wall, and only this tree may write this
+      # contract. This file still never writes an attribute and never draws.
+      #
+      # WHAT THE ENGINE MUST STATE, because the guide cannot know it: where this
+      # kitchen's countertop is. And what the PERSON must state, because the
+      # guide prints a RANGE rather than a number: how far above it the hood
+      # hangs. Neither is defaulted - 762 to 914 is 152 mm of decision.
+      #
+      # THE OLD-PACKAGE GUARD IS HERE FROM THE FIRST LINE, and that is deliberate.
+      # The run gap learned it the expensive way, in the model, as
+      # `undefined method 'run_gap?'`: the engine is loaded from the repository by
+      # a dev loader and `Reload core` updates it in a second, while the appliance
+      # package is an installed .rbz copy that moves only when somebody rebuilds
+      # it. On 2026-08-28 the installed copy was 0.2.0 and knew none of this, and
+      # a probe said so before a single line of it ran. An installed package that
+      # is too old is a STATE, like an absent one, and not a Ruby error.
+      def wall_reservations_supported?
+        available? && ::UCON::Appliances.respond_to?(:wall_reservation) &&
+          ::UCON::Appliances.respond_to?(:wall_reservation_models)
+      end
+
+      # nil when the question can be asked; otherwise the sentence a person
+      # needs. One place, so the palette and the generator say the same thing.
+      def wall_reservation_reason
+        return 'the UCON Appliances extension is not installed in this session' unless available?
+        return nil if wall_reservations_supported?
+
+        'the installed UCON Appliances package is older than this engine and knows ' \
+        'nothing about a hood on a wall. Rebuild it — ruby tools/build_rbz.rb — ' \
+        'reinstall the .rbz through Extension Manager, and restart SketchUp.'
+      end
+
+      def wall_reservation(model_no, opts = {})
+        unless wall_reservations_supported?
+          return { 'checked' => false, 'applies' => false, 'reason' => wall_reservation_reason }
+        end
+
+        r = ::UCON::Appliances.wall_reservation(
+          model_no,
+          countertop_mm: opts['countertop_mm'],
+          bottom_above_top_mm: opts['bottom_above_top_mm']
+        )
+        r.merge('checked' => true, 'model' => model_no)
+      end
+
+      # Every model the appliance layer says hangs on a wall rather than standing
+      # in an opening or in a run. The palette's list, sorted for the same reason
+      # housing_models is: a list a person picks from must not reorder itself
+      # between two openings of the dialog.
+      def wall_reservation_models
+        return [] unless wall_reservations_supported?
+
+        ::UCON::Appliances.wall_reservation_models
+      end
+
       # A SENTENCE FOR A HUMAN, because a hash of findings is not a report.
       # Deliberately not written onto the object: an appliance disagreement is
       # a fact about the SPECIFICATION, and the moment it is stamped into a

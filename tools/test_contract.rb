@@ -8062,6 +8062,51 @@ check('CONTRACT v2.3 - a variant may say the same thing shorter, for a drawing')
   raise 'the change log must carry v2.3' unless doc.include?('**v2.3 (2026-08-27)**')
 end
 
+check('CONTRACT v2.4 - a void may be a wall reservation, and the datum is why') do
+  base = { 'schema_version' => '2', 'object_class' => 'void', 'manufacturer' => 'client',
+           'geometry_kind' => 'linear', 'code_status' => 'PRELIMINARY', 'status' => 'PLANNING',
+           'width_mm' => 1219, 'depth_mm' => 610, 'height_mm' => 457,
+           'source_ref' => 'wolf-design-guide.pdf rev 7/2025 p.141' }
+
+  # The fourth role validates, and a hood is wall-hung, which the contract
+  # already had the words for: mount_bottom_mm is required with it and
+  # forbidden without it, and nothing about that changed.
+  Contract.validate!(base.merge('void_role' => 'wall_reservation',
+                                'mounting' => 'wall_hung', 'mount_bottom_mm' => 1720))
+
+  # The three older roles are untouched - widening an enum invalidates nothing.
+  %w[above_housing run_gap front_remainder].each do |role|
+    Contract.validate!(base.merge('void_role' => role))
+  end
+
+  # And an invented fourth word is still refused.
+  begin
+    Contract.validate!(base.merge('void_role' => 'hood'))
+    raise 'an unknown void_role was accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('void_role')
+  end
+
+  doc = File.read(File.expand_path('../docs/UCON_Object_Contract_v2.md', __dir__))
+  raise 'the change log must carry v2.4' unless doc.include?('**v2.4 (2026-08-28)**')
+  raise 'the header must name the current revision' unless doc.include?('revision v2.4')
+  # v2.2 had to record that `void` was in the code and not in the table; v2.4
+  # records the same for `void_role` itself, and the row is now there.
+  raise 'void_role must now be IN the table' unless doc.include?('| `void_role` |')
+
+  # THE MANIFEST DELIBERATELY STILL READS 2.3, and this is the check that stops
+  # a later session "fixing" it. contract_revision states the revision THE
+  # REGISTRY was written under. v2.2 added an object_class the registry uses and
+  # v2.3 a variant key it uses; v2.4 adds a void_role that is produced while
+  # DRAWING and appears in no registry row, so the registry was not touched and
+  # must not claim it was.
+  man = JSON.parse(File.read(File.expand_path('../registry/cesar/_manifest.json', __dir__)))
+  raise man['contract_revision'].inspect unless man['contract_revision'] == '2.3'
+  raise 'no registry row may carry the new role' if
+    Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
+      .any? { |f| File.read(f).include?('wall_reservation') }
+end
+
 check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do
   # It was in the model, on a visible tag, unhidden, gray, correct to the
   # millimetre - and invisible. A probe found it before a person could: on the

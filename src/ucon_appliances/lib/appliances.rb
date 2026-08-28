@@ -29,7 +29,7 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.2.0'
+    VERSION = '0.3.0'
 
     module_function
 
@@ -259,6 +259,73 @@ module UCON
        "Source: #{opening_row['source']}"].compact.join(' | ')
     end
 
+    # ------------------------------------------------- the wall reservation
+    #
+    # THE THIRD RESERVATION, AND IT IS STILL ONLY AN ANSWER. A hood is built
+    # into nothing: `installations` is empty for every PW model and that is not
+    # a gap in the data, it is what the guide says. So it can never be a niche
+    # and it can never be a run gap - and it still occupies a volume that no
+    # wall unit may be planned into, which is exactly what a reservation is for.
+    #
+    # THE ENGINE DRAWS IT, this module only answers - §11's arrow, and the same
+    # decision B6 took for the run gap: a reservation nobody can see is worse
+    # than an empty wall, and only the engine's tree may write that contract.
+    #
+    # AND IT REFUSES RATHER THAN DEFAULTING, for a reason printed on the page.
+    # p.144 gives the mounting height as a RANGE - 762 to 914 from the bottom of
+    # the hood to the countertop - and a range is a decision somebody makes, not
+    # a constant this file may pick. The countertop is the engine's to state,
+    # because only the engine knows where this kitchen's worktop is.
+    #
+    # Nothing is drawn until BOTH numbers are stated, which is the run gap's
+    # rule one axis over.
+    def wall_reservation(model, countertop_mm: nil, bottom_above_top_mm: nil)
+      a = find(model)
+      return { 'applies' => false, 'reason' => "unknown model #{model}" } unless a
+
+      env = a['envelope']
+      unless env && a['mounting']
+        return { 'applies' => false,
+                 'reason' => 'this model publishes no envelope and no mounting height' }
+      end
+      if countertop_mm.to_f <= 0
+        return { 'applies' => false,
+                 'reason' => 'the countertop height is not stated - the engine must measure or declare it' }
+      end
+
+      m = a['mounting']
+      if bottom_above_top_mm.nil?
+        return { 'applies' => false,
+                 'reason' => format('the mounting height is not stated - the guide prints a RANGE, ' \
+                                    '%d to %d above the countertop, and a range is a decision',
+                                    m['bottom_min_mm'], m['bottom_max_mm']) }
+      end
+      b = bottom_above_top_mm.to_f
+      if b < m['bottom_min_mm'] || b > m['bottom_max_mm']
+        return { 'applies' => false,
+                 'reason' => format('%g is outside the printed mounting range %d to %d above the countertop',
+                                    b, m['bottom_min_mm'], m['bottom_max_mm']) }
+      end
+
+      bottom = countertop_mm.to_f + b
+      { 'applies' => true, 'model' => model, 'role' => 'wall_reservation',
+        'w' => env['w'], 'd' => env['d'], 'h' => env['h'],
+        'bottom_mm' => bottom, 'top_mm' => bottom + env['h'],
+        'datum' => 'countertop',
+        'source' => env['source'],
+        'note' => format('RESERVED - %s (%s), envelope %d x %d x %d, bottom %g above the ' \
+                         'countertop within the printed %d-%d. The body is a wedge and the ' \
+                         'reservation is its envelope. Source: %s',
+                         model, a['product_name'], env['w'], env['d'], env['h'], b,
+                         m['bottom_min_mm'], m['bottom_max_mm'], m['source']) }
+    end
+
+    # Every model this module says hangs on a wall rather than sitting in an
+    # opening. The palette's list, so nobody types a model number twice.
+    def wall_reservation_models
+      all.map { |x| x['model'] }.select { |m| find(m)['envelope'] && find(m)['mounting'] }.sort
+    end
+
     # ------------------------------------------------------------------- gola
     #
     # A grip recess takes the top of the base opening, so every undercounter
@@ -269,6 +336,19 @@ module UCON
       a = find(model) or return { 'ok' => false, 'error' => "unknown model #{model}" }
       return { 'ok' => true, 'model' => model } unless front_system.to_s == 'gola'
       return { 'ok' => true, 'model' => model } unless a['install_class'] == 'undercounter'
+
+      # ALREADY THE ADA MACHINE, added 2026-08-28 WITH the three ADA rows - and
+      # the rows are what exposed it. Until today `find` returned nil for every
+      # ADA model, so this method could never reach the question: an ADA model
+      # was an unknown model and died one line up. Now DW2451/ADA is a row whose
+      # own ada_variant is null, and without this line the branch below would
+      # refuse THE ONE MACHINE THAT IS CORRECT under a grip recess, in the words
+      # "has no ADA variant".
+      #
+      # A row that IS the ADA height needs no substitution, and needing none is
+      # not an error. Substituted is deliberately absent from this answer rather
+      # than false: nothing was swapped, so the caller must not offer a swap.
+      return { 'ok' => true, 'model' => model } if a['ada_height']
 
       if a['ada_variant']
         { 'ok' => true, 'model' => a['ada_variant'], 'substituted' => true, 'from' => model }

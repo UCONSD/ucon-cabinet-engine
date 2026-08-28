@@ -455,6 +455,46 @@
    "product_name": "24\" Designer Undercounter Refrigerator - Panel Ready"
   },
   {
+   "model": "DEU2450R/ADA/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "refrigeration_undercounter",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 826,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.86"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 51,
+     "w": 127,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 102,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "dimensions read from p.87; confirm A/B assignment on the drawing",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.87"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "the guide prints this model as DEU2450RADA; the slashed spelling here is OURS, and it must match the ada_variant string on DEU2450R/L or the gola substitution finds nothing",
+    "opening 610 x 826 x 610, printed p.86 - the same table as the standard model, one row down",
+    "services copied from the parent because the guide's services page is CHAPTER-WIDE and prints no ADA-specific zone - read, not assumed",
+    "prices.json has carried this model all along at the same MSRP as the parent - the PRICE file knew it and the OPENING file did not, and nothing compared the two"
+   ],
+   "product_name": "24\" Designer Undercounter Refrigerator - Panel Ready, ADA height",
+   "ada_height": true
+  },
+  {
    "model": "DEU1550W/L",
    "brand": "Sub-Zero",
    "series": "Designer",
@@ -523,6 +563,46 @@
    "ada_variant": "DEU2450W/ADA/L",
    "notes": [],
    "product_name": "24\" Designer Undercounter Wine Storage - Panel Ready"
+  },
+  {
+   "model": "DEU2450W/ADA/L",
+   "brand": "Sub-Zero",
+   "series": "Designer",
+   "type": "wine_undercounter",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 826,
+     "d": 610,
+     "source": "subzero-design-guide.pdf rev 4/2026 p.56"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "right_side_of_opening",
+     "x": 51,
+     "w": 127,
+     "datum_y": "floor",
+     "y": 0,
+     "h": 102,
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong grounding-type",
+     "note": "dimensions read from p.87; confirm A/B assignment on the drawing",
+     "source": "subzero-design-guide.pdf rev 4/2026 p.87"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "the guide prints this model as DEU2450WADA; the slashed spelling here is OURS, and it must match the ada_variant string on DEU2450W/L or the gola substitution finds nothing",
+    "opening 610 x 826 x 610, printed p.56 - the same table as the standard model, one row down",
+    "services copied from the parent because the guide's services page is CHAPTER-WIDE and prints no ADA-specific zone - read, not assumed",
+    "prices.json has carried this model all along at 3995 against the parent's 5045 - a DIFFERENT price, so these are distinct products and not a labelling variant"
+   ],
+   "product_name": "24\" Designer Undercounter Wine Storage - Panel Ready, ADA height",
+   "ada_height": true
   },
   {
    "model": "DEU1550I/L",
@@ -614,6 +694,66 @@
     "600 gives minimum reveals; 610 is also common with larger reveals"
    ],
    "product_name": "24\" Dishwasher - Panel Ready"
+  },
+  {
+   "model": "DW2451/ADA",
+   "brand": "Cove",
+   "series": "Cove",
+   "type": "dishwasher",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "installations": {
+    "standard": {
+     "w": 600,
+     "h": 826,
+     "d": 610,
+     "source": "cv_dg_nws.pdf p.6"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "115 VAC, 60 Hz, 15 amp dedicated circuit, 3-prong, 6ft cord",
+     "note": "receptacle in an adjacent cabinet, within reach of the cord",
+     "source": "cv_dg_nws.pdf p.7"
+    },
+    {
+     "service": "water",
+     "datum_x": "back_of_opening",
+     "x": 51,
+     "w": null,
+     "datum_y": "floor",
+     "y": 38,
+     "h": 140,
+     "spec": "5ft braided tubing, 3/8\" female compression, 30-140 psi, max 140F",
+     "note": "routed at the back, above the toe kick",
+     "source": "cv_dg_nws.pdf p.7"
+    },
+    {
+     "service": "drain",
+     "datum_x": "back_of_opening",
+     "x": 51,
+     "w": null,
+     "datum_y": "floor",
+     "y": 508,
+     "h": 584,
+     "spec": "5ft corrugated tubing, high loop factory installed",
+     "note": "connection 508-1092 above the bottom of the leveling legs",
+     "source": "cv_dg_nws.pdf p.7"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "opening 600 x 826 x 610 min depth, printed p.6; the width and depth are the parent's and only the height changes",
+    "600 gives minimum reveals; 610 is also common with larger reveals",
+    "overall height 826 with a range of 810 MIN to 835 MAX printed on p.5 - the unit allows 25 of total height adjustment",
+    "services copied from the parent because the guide's services page is CHAPTER-WIDE and prints no ADA-specific zone - read, not assumed",
+    "prices.json has carried this model all along at the same MSRP as the parent - the PRICE file knew it and the OPENING file did not, and nothing compared the two"
+   ],
+   "product_name": "24\" Dishwasher - Panel Ready, ADA height",
+   "ada_height": true
   },
   {
    "model": "DF36650/S/P",
@@ -893,9 +1033,31 @@
    ],
    "ada_variant": null,
    "notes": [
-    "a hood is not built into an opening"
+    "a hood is not built into an opening",
+    "p.144: wall hoods should be at least as wide as the cooking surface - 1219 over a 1219 range satisfies it exactly, with nothing to spare",
+    "p.144: a Pro 27in deep wall hood is RECOMMENDED over a range with a charbroiler or griddle, and DF48650C/S/P is the charbroiler model - recorded, not acted on: this is a specification question for Andriy, not a drawing one",
+    "duct 254 round, vertical discharge on the 24in deep wall hood; a horizontal discharge kit exists through a dealer (p.144)"
    ],
-   "product_name": "36\" Pro Wall Hood - 24\" Depth"
+   "product_name": "36\" Pro Wall Hood - 24\" Depth",
+   "envelope": {
+    "w": 914,
+    "d": 610,
+    "h": 457,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.141",
+    "note": "24in DEEP WALL HOOD, read off the p.141 figure and its WIDTH table. The body is a WEDGE, not a box: the top face runs 305 back from the wall at full height and then chamfers down and forward to a front face 102 tall at the 610 front edge. The envelope is what a reservation keeps clear (domain rule 4), so the chamfer is recorded and not drawn."
+   },
+   "profile": {
+    "top_flat_d": 305,
+    "front_face_h": 102,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.141"
+   },
+   "mounting": {
+    "datum": "countertop",
+    "bottom_min_mm": 762,
+    "bottom_max_mm": 914,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.144 and the figure on p.145",
+    "note": "printed as a RANGE - 30in (762) to 36in (914) from the BOTTOM OF THE HOOD to the countertop, for all Pro hoods except the outdoor wall hood. A range is a decision, not a constant, so nothing may default it: the same argument B6 settled for the run gap's depth."
+   }
   },
   {
    "model": "PW482418",
@@ -916,9 +1078,31 @@
    ],
    "ada_variant": null,
    "notes": [
-    "a hood is not built into an opening"
+    "a hood is not built into an opening",
+    "p.144: wall hoods should be at least as wide as the cooking surface - 1219 over a 1219 range satisfies it exactly, with nothing to spare",
+    "p.144: a Pro 27in deep wall hood is RECOMMENDED over a range with a charbroiler or griddle, and DF48650C/S/P is the charbroiler model - recorded, not acted on: this is a specification question for Andriy, not a drawing one",
+    "duct 254 round, vertical discharge on the 24in deep wall hood; a horizontal discharge kit exists through a dealer (p.144)"
    ],
-   "product_name": "48\" Pro Wall Hood - 24\" Depth"
+   "product_name": "48\" Pro Wall Hood - 24\" Depth",
+   "envelope": {
+    "w": 1219,
+    "d": 610,
+    "h": 457,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.141",
+    "note": "24in DEEP WALL HOOD, read off the p.141 figure and its WIDTH table. The body is a WEDGE, not a box: the top face runs 305 back from the wall at full height and then chamfers down and forward to a front face 102 tall at the 610 front edge. The envelope is what a reservation keeps clear (domain rule 4), so the chamfer is recorded and not drawn."
+   },
+   "profile": {
+    "top_flat_d": 305,
+    "front_face_h": 102,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.141"
+   },
+   "mounting": {
+    "datum": "countertop",
+    "bottom_min_mm": 762,
+    "bottom_max_mm": 914,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.144 and the figure on p.145",
+    "note": "printed as a RANGE - 30in (762) to 36in (914) from the BOTTOM OF THE HOOD to the countertop, for all Pro hoods except the outdoor wall hood. A range is a decision, not a constant, so nothing may default it: the same argument B6 settled for the run gap's depth."
+   }
   },
   {
    "model": "PW602418",
@@ -939,9 +1123,31 @@
    ],
    "ada_variant": null,
    "notes": [
-    "a hood is not built into an opening"
+    "a hood is not built into an opening",
+    "p.144: wall hoods should be at least as wide as the cooking surface - 1219 over a 1219 range satisfies it exactly, with nothing to spare",
+    "p.144: a Pro 27in deep wall hood is RECOMMENDED over a range with a charbroiler or griddle, and DF48650C/S/P is the charbroiler model - recorded, not acted on: this is a specification question for Andriy, not a drawing one",
+    "duct 254 round, vertical discharge on the 24in deep wall hood; a horizontal discharge kit exists through a dealer (p.144)"
    ],
-   "product_name": "60\" Pro Wall Hood - 24\" Depth"
+   "product_name": "60\" Pro Wall Hood - 24\" Depth",
+   "envelope": {
+    "w": 1524,
+    "d": 610,
+    "h": 457,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.141",
+    "note": "24in DEEP WALL HOOD, read off the p.141 figure and its WIDTH table. The body is a WEDGE, not a box: the top face runs 305 back from the wall at full height and then chamfers down and forward to a front face 102 tall at the 610 front edge. The envelope is what a reservation keeps clear (domain rule 4), so the chamfer is recorded and not drawn."
+   },
+   "profile": {
+    "top_flat_d": 305,
+    "front_face_h": 102,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.141"
+   },
+   "mounting": {
+    "datum": "countertop",
+    "bottom_min_mm": 762,
+    "bottom_max_mm": 914,
+    "source": "wolf-design-guide.pdf rev 7/2025 p.144 and the figure on p.145",
+    "note": "printed as a RANGE - 30in (762) to 36in (914) from the BOTTOM OF THE HOOD to the countertop, for all Pro hoods except the outdoor wall hood. A range is a decision, not a constant, so nothing may default it: the same argument B6 settled for the run gap's depth."
+   }
   },
   {
    "model": "CL3650UFD/O",

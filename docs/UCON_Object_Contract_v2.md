@@ -1,7 +1,7 @@
 # UCON Object Contract — v2
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v2 (revision v2.2) · **Date:** 2026-08-27 · **Status:** Locked (change only via versioned migration)
+**Version:** v2 (revision v2.4) · **Date:** 2026-08-28 · **Status:** Locked (change only via versioned migration)
 **Supersedes:** `docs/UCON_Object_Contract_v1.md` (revision v1.5), which is kept as the
 historical record and must not be edited.
 
@@ -50,6 +50,7 @@ article code once survived on an object that said the client supplies the hardwa
 |-----|------|:--:|---|---|
 | `schema_version` | string | yes | `"2"` | Contract version that produced this object |
 | `object_class` | string | yes | `cabinet` · `worktop` · **`shelf`** · `panel` · `filler` · `accessory` · `appliance` · `appliance_front` · `corner_unit` · `void` | What kind of thing this is |
+| `void_role` | string | only with `void` | `above_housing` · `run_gap` · `front_remainder` · **`wall_reservation`** | **v2.4 puts this row in the table; the key itself is as old as `void`.** Which KIND of reserved space this is — and the role decides the DATUM, which is why it is read while drawing: `above_housing` and `front_remainder` sit on a body, `run_gap` on the FLOOR, `wall_reservation` on the COUNTERTOP. Required when `object_class` is `void`, forbidden otherwise |
 | `manufacturer` | string | yes | `cesar` (lowercase id), or `client` | Source manufacturer |
 | `collection` | string | no | e.g. `Maxima`, `Intarsio`, `Tangram` | Product collection/system |
 | `family` | string | no | e.g. `H.78`, `Wall H.36`, `Tall H.210` | Manufacturer family (for cabinets, the height family) |
@@ -345,6 +346,22 @@ its v1 attributes on disk and reads correctly forever.
 
 ## 8. Change log
 
+- **v2.4 (2026-08-28)** — Additive, non-breaking. `void_role` gains
+  **`wall_reservation`**. Driven by the Wolf hood: `PW482418` publishes NO
+  opening — `installations` is empty for every hood in the appliance data, and
+  that is the guide speaking rather than a gap, because a hood is built into
+  nothing. It is therefore neither an `above_housing` void nor a `run_gap`: a
+  run gap is a span on the FLOOR between two runs, and this hangs. **The datum is
+  what earns the fourth word.** A void's role decides where it is measured from,
+  and this one is measured from the COUNTERTOP — Wolf printed p.144 gives the
+  mounting height as 762 to 914 from the bottom of the hood to the countertop,
+  and nothing else in this contract is measured from there. Stretching `run_gap`
+  to mean "any reservation" would have made the one key that carries the datum
+  stop carrying it.
+  **This row also records that `void_role` was in the code and not in the §1
+  table**, exactly as v2.2 had to record for `void` itself — the table is now
+  correct rather than being made correct silently. Widening an enum invalidates
+  no existing object, so §0 makes it a revision.
 - **v2.3 (2026-08-27)** — Additive, non-breaking. A variant may carry **`label`**:
   the short form of the same choice, for a drawing. Driven by the lit shelf. Its
   `value` is a full sentence — the lamp, the length, the arithmetic that produced

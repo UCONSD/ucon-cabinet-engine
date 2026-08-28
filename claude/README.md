@@ -107,7 +107,15 @@ date order; a finding is never edited to hide what it corrected.
   **`findings-2026-08-28-a-copy-is-not-a-copy.md`** (a hand-copied shelf shared
   its definition, so taking the light off one took it off the other - the order
   was never wrong, only the editing; and the guard already existed in the
-  generator and had never been generalised to the panel).
+  generator and had never been generalised to the panel),
+  **`findings-2026-08-28-appliance-placement.md`** (48_Core read against the
+  model: the dishwasher was drawn before anybody named its machine, the datum
+  that looks like a missed call site is a decision in one file and a defect in
+  the other, and the gola rule substituted three machines that had a PRICE and
+  no OPENING - so the geometry review silently stopped at the moment the front
+  system changed the machine; then the three manufacturer guides were found in
+  ~/Downloads, the three ADA openings and the hood's envelope and mounting range
+  were read off their pages, and the appliance package went 0.2.0 -> 0.3.0).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,

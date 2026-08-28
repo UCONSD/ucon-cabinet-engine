@@ -1719,6 +1719,200 @@ module UCON
         end
       end
 
+      # ---- the wall reservation, the hood ---------------------------------
+      #
+      # A hood is built into nothing. It is not a niche, because nothing decides
+      # its division; it is not a run gap, because a run gap is a span on the
+      # FLOOR between two runs and this hangs. What it is, is a volume that no
+      # wall unit may be planned into - and Contract v2.4 gives that its own
+      # void_role because THE DATUM IS DIFFERENT: this one is measured from the
+      # countertop, and nothing else in the contract is.
+      #
+      # TWO NUMBERS, TWO NATURES, exactly as the run gap's top has. The
+      # countertop is MEASURED off the object the hood hangs over; the height
+      # above it is STATED by a person, because Wolf printed p.144 gives a RANGE
+      # - 762 to 914 - and 152 mm of decision is not something this file may
+      # settle. The object says which is which.
+
+      # Anything in the selection carrying our dictionary, not only a coded unit.
+      # The thing a hood hangs over in this kitchen is a run-gap VOID, which has
+      # no code at all, so selected_unit cannot see it.
+      def selected_contract_instance(model)
+        model.selection.grep(Sketchup::ComponentInstance).find do |i|
+          i.definition.attribute_dictionary(Contract::DICTIONARY)
+        end
+      end
+
+      # WHERE THIS KITCHEN'S COUNTERTOP IS, measured off the thing below and
+      # never assumed - and it answers WHY as well as WHAT, because a number
+      # whose provenance is not written down becomes a constant within a week.
+      #
+      # Two honest paths and they are not the same measurement:
+      #   * a run-gap void is already drawn floor-to-FINISHED-run, so its own
+      #     height IS the countertop and nothing is added to it;
+      #   * a cabinet is drawn to its CARCASS, so the stated worktop is added -
+      #     the same two-natured sum run_gap_attributes makes.
+      def countertop_from(model, inst, attrs)
+        if attrs['object_class'].to_s == 'void' && attrs['void_role'].to_s == 'run_gap'
+          top = attrs['height_mm'].to_f
+          return [top, "#{top.round} MEASURED off the run-gap reservation below, which is " \
+                       'already drawn floor to the finished run']
+        end
+
+        carcass = begin
+          body = inst.definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
+          body ? (inst.transformation.origin.z + body.bounds.max.z).to_mm : inst.bounds.max.z.to_mm
+        rescue StandardError
+          nil
+        end
+        return [nil, nil] unless carcass.to_f.positive?
+
+        worktop = Project.worktop_t_mm(model)
+        return [nil, nil] unless worktop.to_f.positive?
+
+        [carcass.to_f + worktop.to_f,
+         "#{(carcass.to_f + worktop.to_f).round} = #{carcass.round} MEASURED off the body below " \
+         "+ #{worktop.round} STATED for the worktop"]
+      end
+
+      # PURE, and it RAISES instead of defaulting, for the same reasons the run
+      # gap's does. Reachable from the headless suite.
+      def wall_reservation_attributes(model_no, width_mm:, depth_mm:, height_mm:,
+                                      bottom_mm:, countertop_mm:, bottom_above_top_mm:,
+                                      source_ref:, note: nil, countertop_note: nil)
+        unless width_mm.to_f.positive? && depth_mm.to_f.positive? && height_mm.to_f.positive?
+          raise ArgumentError,
+                "#{model_no} publishes no envelope - a hood reservation is its envelope or nothing"
+        end
+        unless countertop_mm.to_f.positive?
+          raise ArgumentError,
+                "the countertop is not measured - select what the hood hangs over"
+        end
+        unless bottom_mm.to_f > countertop_mm.to_f
+          raise ArgumentError,
+                "a hood cannot hang at or below the countertop (#{bottom_mm.round} vs #{countertop_mm.round})"
+        end
+
+        { 'schema_version' => Contract::SCHEMA_VERSION,
+          'object_class'   => 'void',
+          'void_role'      => 'wall_reservation',
+          # The client's own machine, exactly as a run gap holds one. The
+          # exporter keeps a void out of the order by CLASS, so this key is here
+          # for a person to read and not for a filter.
+          'manufacturer'   => 'client',
+          'unit_type'      => "Reserved wall volume - #{model_no}",
+          'geometry_kind'  => 'linear',
+          # THE CONTRACT ALREADY HAD THE WORDS FOR THIS, and finding that out is
+          # why the void_role is the only thing v2.4 added. A hood IS wall-hung,
+          # and §1.3 says mount_bottom_mm is 'a PROJECT decision at trust level
+          # PLANNING, never a catalog fact' - which is exactly what a mounting
+          # height chosen inside a printed range is. The first draft wrote
+          # mount_bottom_mm without mounting and the contract refused it, which
+          # is the invariant doing its job.
+          'mounting'       => 'wall_hung',
+          'width_mm'       => width_mm,
+          'depth_mm'       => depth_mm,
+          'height_mm'      => height_mm,
+          'mount_bottom_mm' => bottom_mm,
+          'code'           => nil,
+          'code_status'    => 'PRELIMINARY',
+          'status'         => 'PLANNING',
+          'source_ref'     => source_ref,
+          'notes'          => [note,
+                               "Countertop #{countertop_note}; the hood hangs #{bottom_above_top_mm.round} " \
+                               "above it, which is STATED - the guide prints a range and not a number - " \
+                               "so the bottom is #{bottom_mm.round} and the top #{(bottom_mm + height_mm).round}.",
+                               'DRAWN, NEVER ORDERED: the machine is the client\'s and no Cesar article ' \
+                               'carries a hood.']
+                              .compact.join(' | ') }
+      end
+
+      # THE COMMAND. Measure the countertop off what the hood hangs over, take
+      # the envelope and the printed range from the appliance layer, and refuse
+      # with a sentence rather than inventing any of it.
+      def build_wall_reservation(model_no, model = Sketchup.active_model, bottom_above_top_mm: nil)
+        inst = selected_contract_instance(model)
+        unless inst
+          raise ArgumentError,
+                "Select what the hood hangs over first.\n\n" \
+                'A hood is measured from the COUNTERTOP, and no page can know where this ' \
+                "kitchen's is. Select the range's reservation, or the unit the cooking " \
+                'surface stands in.'
+        end
+        attrs = Contract.read(inst.definition)
+        countertop, countertop_note = countertop_from(model, inst, attrs)
+        unless countertop
+          raise ArgumentError,
+                "That selection cannot say where the countertop is.\n\n" \
+                'A cabinet is drawn to its carcass, so this project must also state its ' \
+                'worktop thickness; a run-gap reservation already carries the finished top. ' \
+                'Nothing is defaulted here on purpose.'
+        end
+
+        r = ApplianceCheck.wall_reservation(model_no,
+                                            'countertop_mm' => countertop,
+                                            'bottom_above_top_mm' => bottom_above_top_mm)
+        raise ArgumentError, r['reason'].to_s unless r['checked']
+        raise ArgumentError, "#{model_no}: #{r['reason']}" unless r['applies']
+
+        # printed p.144: a wall hood should be AT LEAST AS WIDE as the cooking
+        # surface. Refused rather than drawn narrow, because a hood that does not
+        # cover what it hangs over is a wrong drawing that looks right - and the
+        # selection is the cooking surface by construction, since that is what
+        # the command asked to be selected.
+        below_w = attrs['width_mm'].to_f
+        if below_w.positive? && r['w'].to_f < below_w
+          raise ArgumentError,
+                "#{model_no} is #{r['w'].round} wide and it hangs over #{below_w.round}.\n\n" \
+                'Wolf printed p.144: a wall hood should be at least as wide as the cooking ' \
+                'surface. Pick the wider hood rather than drawing this one short.'
+        end
+
+        below_d = attrs['depth_mm'].to_f
+        wall_y  = below_d.positive? ? below_d : r['d'].to_f
+        x0      = below_w.positive? ? ((below_w - r['w'].to_f) / 2.0) : 0.0
+        y0      = wall_y - r['d'].to_f
+
+        full = wall_reservation_attributes(
+          model_no,
+          width_mm: r['w'], depth_mm: r['d'], height_mm: r['h'],
+          bottom_mm: r['bottom_mm'], countertop_mm: countertop,
+          bottom_above_top_mm: bottom_above_top_mm.to_f,
+          source_ref: r['source'], note: r['note'], countertop_note: countertop_note
+        )
+        Contract.validate!(full)
+
+        frame = inst.transformation
+        model.start_operation("UCON: reserve wall volume #{model_no}", true)
+        begin
+          mat = Geometry.material(model, 'UCON_Void_Red', VOID_RGB)
+          mat.alpha = 0.35 if mat.respond_to?(:alpha=)
+          defn = model.definitions.add(
+            "UCON_VOID_WALL_#{full['width_mm'].round}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
+          )
+          Geometry.box(defn.entities, "VOID_WALL_#{full['width_mm'].round}",
+                       x0, y0, full['mount_bottom_mm'],
+                       full['width_mm'], full['depth_mm'], full['height_mm'], mat)
+          Contract.write!(defn, full)
+
+          o    = frame.origin
+          seat = Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * frame
+          i    = model.active_entities.add_instance(defn, seat)
+          i.name = "UCON void - wall reservation #{full['width_mm'].round} mm " \
+                   "(#{model_no}, client's machine)"
+          i.layer = model.layers[RESERVED_TAG] || model.layers.add(RESERVED_TAG)
+
+          model.selection.clear
+          model.selection.add(i)
+          model.commit_operation
+          model.active_view.zoom(i)
+          i
+        rescue StandardError
+          model.abort_operation
+          raise
+        end
+      end
+
       # Does this unit hang? Catalog-level fact, carried by the registry
       # family. Asked in one place so nothing downstream has to know the
       # spelling.

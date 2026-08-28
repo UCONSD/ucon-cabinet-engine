@@ -61,7 +61,16 @@ module UCON
         'priority'        => %w[P1 P2 P3],
         # The role decides the DATUM and the fill offer, and both are read while
         # drawing - which is what earns a key under Object Contract v2 SS4.2 rule 6.
-        'void_role'       => %w[above_housing run_gap front_remainder]
+        #
+        # `wall_reservation` added v2.4, 2026-08-28. A hood is built into NOTHING:
+        # its `installations` are empty in the appliance data and that is the
+        # guide speaking, not a gap. So it is neither a niche (which is decided by
+        # a machine standing IN an opening) nor a run gap (a span on the FLOOR
+        # between two runs) - and it still occupies a volume no wall unit may be
+        # planned into. Its datum is the COUNTERTOP and not the floor, which is
+        # the third distinct datum a void can have, and that is what earns the
+        # fourth word rather than stretching `run_gap` to mean 'any reservation'.
+        'void_role'       => %w[above_housing run_gap front_remainder wall_reservation]
       }.freeze
 
       # §1.4 — the two keys that hold structure rather than a scalar. They are

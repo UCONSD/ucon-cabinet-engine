@@ -197,6 +197,55 @@ check('a handled front changes no model anywhere') do
   raise 'model moved' unless Check.review(u, 'DW2451')['model'] == 'DW2451'
 end
 
+# THE HOLE THESE TWO CHECKS LEFT, found 2026-08-28 and closed the same day.
+#
+# The two checks above assert that the substitution HAPPENED and that the offer
+# names the ADA model. Neither of them asks the seam to measure anything
+# afterwards - and until today it could not: DW2451/ADA was named as a
+# substitution target by appliances.json and was not a row in it, so
+# matches_niche? answered 'no published opening for this model' and the geometry
+# review SILENTLY STOPPED, at precisely the moment the front system changed which
+# machine was being judged. Both checks stayed green throughout.
+#
+# A check can only fail on what it looks at. So this one looks at the thing the
+# other two could not see: that a review AFTER a substitution still measures.
+
+check('after a gola substitution the geometry is still measured, not skipped') do
+  u = Registry.lookup('V80630').merge('opening_method' => 'gola')
+  r = Check.review(u, 'DW2451', 'depth_mm' => 610)
+  raise r.inspect unless r['checked']
+  raise r['model'] unless r['model'] == 'DW2451/ADA'
+  raise 'the substituted model was never measured' if r['niche'].nil?
+  # and it must judge against the ADA opening, 826, not the parent's 876
+  raise r['findings'].inspect unless r['findings'].any? { |f| f.include?('826') }
+  raise r['findings'].inspect if r['findings'].any? { |f| f.include?('876') }
+end
+
+check('a model that is already ADA is not refused under a grip recess') do
+  u = Registry.lookup('V80630').merge('opening_method' => 'gola')
+  r = Check.review(u, 'DW2451/ADA', 'depth_mm' => 610)
+  raise r.inspect unless r['checked']
+  raise r['model'] unless r['model'] == 'DW2451/ADA'
+  raise 'a swap was offered for a machine that needed none' if
+    r['offers'].any? { |o| o.include?('rather than') }
+  # AND IT MUST NOT PASS BY BEING UNKNOWN. Written after this check went green
+  # against the very defect it exists for: with the row absent, the gola branch
+  # refuses with "unknown model", the review still returns checked, no swap is
+  # offered, and all three assertions above hold - for the wrong reason. That is
+  # learned rule 18's cousin, an invariant asserted sideways, and it is caught here
+  # because the guard was run against the defect (learned rule 12).
+  raise r['findings'].inspect if r['findings'].any? { |f| f.include?('unknown model') }
+  raise 'the machine was never measured' if r['niche'].nil?
+end
+
+check('every substitution target the appliance data names can be measured') do
+  # The one-line version of the whole finding: a target that cannot be found is
+  # a review that cannot happen, and nothing else in either suite says so.
+  a = ::UCON::Appliances
+  missing = a.all.map { |x| x['ada_variant'] }.compact.reject { |m| a.find(m) }
+  raise "unmeasurable substitution targets: #{missing.inspect}" unless missing.empty?
+end
+
 puts "\nthe run gap — B6, and the engine states what the guide cannot know"
 
 check('a run gap comes back with the printed width and the depth the engine states') do
@@ -256,6 +305,107 @@ check('an unknown set is answered, not raised') do
   r = Check.run_gaps_in_set('no_such_set', 'depth_mm' => 620, 'section_top_mm' => 880)
   raise r.inspect if r['checked']
   raise r.inspect unless r['gaps'] == [] && r['reason'].include?('no_such_set')
+end
+
+puts "\nthe wall reservation - the hood, and Contract v2.4"
+
+check('the seam supports wall reservations, and a supported package gives no reason') do
+  raise 'the tree in this repo must support them' unless Check.wall_reservations_supported?
+  raise 'a supported package must give no reason' unless Check.wall_reservation_reason.nil?
+end
+
+check('an installed package too old for a HOOD is a state, not a Ruby error') do
+  # The run gap learned this in SketchUp as `undefined method run_gap?`. This one
+  # was guarded from its first line, and on 2026-08-28 a probe found the installed
+  # package really was 0.2.0 - so the guard was true before the feature shipped.
+  src  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/88_appliance_check.rb', __dir__))
+  code = src.gsub(/^\s*#.*$/, '')
+  raise 'every wall-reservation entry point must ask' unless
+    code.scan('wall_reservations_supported?').size >= 3
+  raise 'the rebuild instruction must be in the sentence' unless src.include?('tools/build_rbz.rb')
+end
+
+check('the seam lists the machines that hang on a wall, and only those') do
+  m = Check.wall_reservation_models
+  raise m.inspect unless m == %w[PW362418 PW482418 PW602418]
+  raise 'a range is not a wall reservation' if m.include?('DF48650C/S/P')
+  raise 'a column is not a wall reservation' if m.include?('DEC3050R/L')
+end
+
+check('the three reservation kinds are three different lists, with nothing in two of them') do
+  hang = Check.wall_reservation_models
+  run  = Check.run_gap_models
+  hous = Check.housing_models
+  raise 'a model is in two lists' unless (hang & run).empty? && (hang & hous).empty? && (run & hous).empty?
+end
+
+check('a hood refuses without a countertop, and the engine is told whose job that is') do
+  r = Check.wall_reservation('PW482418')
+  raise r.inspect if r['applies']
+  raise r['reason'] unless r['reason'].include?('countertop')
+end
+
+check('a hood refuses without a mounting height, and the refusal names the RANGE') do
+  r = Check.wall_reservation('PW482418', 'countertop_mm' => 920)
+  raise r.inspect if r['applies']
+  raise r['reason'] unless r['reason'].include?('RANGE') &&
+                           r['reason'].include?('762') && r['reason'].include?('914')
+end
+
+check('a height outside the printed range is refused at both ends') do
+  lo = Check.wall_reservation('PW482418', 'countertop_mm' => 920, 'bottom_above_top_mm' => 761)
+  hi = Check.wall_reservation('PW482418', 'countertop_mm' => 920, 'bottom_above_top_mm' => 915)
+  raise 'the low end was accepted'  if lo['applies']
+  raise 'the high end was accepted' if hi['applies']
+end
+
+check('a stated height inside the range answers with the envelope and both edges') do
+  r = Check.wall_reservation('PW482418', 'countertop_mm' => 920, 'bottom_above_top_mm' => 800)
+  raise r.inspect unless r['applies'] && r['checked']
+  raise r.inspect unless r['w'] == 1219 && r['d'] == 610 && r['h'] == 457
+  raise r.inspect unless r['bottom_mm'] == 1720.0 && r['top_mm'] == 2177.0
+  raise r.inspect unless r['datum'] == 'countertop'
+end
+
+check('the attributes the generator would write pass Contract v2.4') do
+  r = Check.wall_reservation('PW482418', 'countertop_mm' => 920, 'bottom_above_top_mm' => 800)
+  a = UCON::CabinetEngine::Generator.wall_reservation_attributes(
+    'PW482418', width_mm: r['w'], depth_mm: r['d'], height_mm: r['h'],
+    bottom_mm: r['bottom_mm'], countertop_mm: 920, bottom_above_top_mm: 800,
+    source_ref: r['source'], note: r['note'], countertop_note: '920 MEASURED off the reservation below'
+  )
+  UCON::CabinetEngine::Contract.validate!(a)
+  raise a.inspect unless a['void_role'] == 'wall_reservation'
+  # A HOOD IS WALL-HUNG AND THE CONTRACT ALREADY SAID SO. The first draft wrote
+  # mount_bottom_mm without mounting and validate! refused it - the invariant
+  # doing its job, and the reason v2.4 had to add only the void_role.
+  raise a.inspect unless a['mounting'] == 'wall_hung' && a['mount_bottom_mm'] == 1720.0
+  raise a.inspect unless a['code'].nil? && a['manufacturer'] == 'client'
+end
+
+check('the object says which number was measured and which was stated') do
+  r = Check.wall_reservation('PW482418', 'countertop_mm' => 920, 'bottom_above_top_mm' => 800)
+  a = UCON::CabinetEngine::Generator.wall_reservation_attributes(
+    'PW482418', width_mm: r['w'], depth_mm: r['d'], height_mm: r['h'],
+    bottom_mm: r['bottom_mm'], countertop_mm: 920, bottom_above_top_mm: 800,
+    source_ref: r['source'], note: r['note'], countertop_note: '920 MEASURED off the reservation below'
+  )
+  raise a['notes'] unless a['notes'].include?('MEASURED') && a['notes'].include?('STATED')
+  raise a['notes'] unless a['notes'].include?('NEVER ORDERED')
+  raise a['notes'] unless a['source_ref'].to_s.match?(/p\.\d+/)
+end
+
+check('the pure attributes refuse a hood at or below the countertop') do
+  begin
+    UCON::CabinetEngine::Generator.wall_reservation_attributes(
+      'PW482418', width_mm: 1219, depth_mm: 610, height_mm: 457,
+      bottom_mm: 900, countertop_mm: 920, bottom_above_top_mm: -20,
+      source_ref: 'p.141'
+    )
+    raise 'a hood below the countertop was accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('cannot hang')
+  end
 end
 
 check('this file still writes nothing and draws nothing') do

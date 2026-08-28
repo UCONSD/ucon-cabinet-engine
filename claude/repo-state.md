@@ -310,9 +310,31 @@ leaves this list when it is done, not when it is mentioned.
    reproduce. **Both were spotted by Andriy looking at a sheet, not by a check.**
    Nothing in the suite can see a stale model. Until something can, a change to
    the generator means the affected objects must be rebuilt by hand.
+9b. **THE HOOD HAS A RESERVATION AND IT IS UNTRIED IN THE MODEL** (2026-08-28,
+    core 1.1.0, contract v2.4). `Generator.build_wall_reservation` + a palette
+    button; the appliance module answers with the envelope off Wolf printed
+    p.141 and REFUSES on the mounting height, which p.144 prints as a RANGE
+    (762-914 above the countertop). Headless-green and never drawn - the same
+    place B6 stood before its first run, and for the same reason: **the
+    installed package is 0.2.0** and the seam correctly refuses against it.
+    Order: install `ucon-appliances-0.3.0.rbz`, restart SketchUp, `Reload core`,
+    select the range's run-gap reservation, reserve the hood. Account:
+    `claude/findings-2026-08-28-appliance-placement.md`.
+    **AND THE 48_Core LIST IS NOW CHECKED AGAINST THE MODEL** (probe run 62):
+    fridge drawn, range reserved, **dishwasher drawn and its machine never
+    named** - `V80630`'s niche still says "client-supplied" - and the hood
+    absent. The dishwasher's `plinth_top` datum is NOT a missed call site: it is
+    the 2026-08-24 drawn-plinth decision, and `usa_tall_h210`'s `floor` is the
+    2026-08-26 fix, and from inside the seam the two are indistinguishable.
+    **Andriy: not touched.**
+
 10. **The engine cannot rebuild the east fridge bay.** Its panel table lives in
     a probe (`build/45`), and it belongs in `appliances.json` behind the seam —
     which means the first `.rbz` rebuild since 0.2.0.
+    **THE REBUILD HAS NOW HAPPENED for other reasons - 0.3.0, 2026-08-28** (the
+    three ADA openings and the hood envelope), so the cost this line warned
+    about is paid and the east fridge panels are no longer behind it. What
+    remains owed here is the panel table itself.
 11. **`48 WOLF` is a mute body**: a component in the model carrying no contract
     at all, so every walk skips it and every audit under-reports.
 12. **The LayOut sheet that carries Q11-Q23 to Elda** is not drawn. Two of those
