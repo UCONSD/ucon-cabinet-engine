@@ -34,6 +34,9 @@ require_relative '../src/ucon_cabinet_engine/core/80_panel' rescue nil
 # 90_palette touches the SketchUp API only inside show/show_picker; the HTML
 # builders are pure string work and are checked here.
 require_relative '../src/ucon_cabinet_engine/core/90_palette' rescue nil
+# 95_dev_bridge is pure file-system questions and NEVER loads what it points at,
+# which is the whole reason it can be required here at all.
+require_relative '../src/ucon_cabinet_engine/core/95_dev_bridge'
 
 Contract  = UCON::CabinetEngine::Contract
 Standards = UCON::CabinetEngine::Standards
@@ -8105,6 +8108,71 @@ check('CONTRACT v2.4 - a void may be a wall reservation, and the datum is why') 
   raise 'no registry row may carry the new role' if
     Dir[File.expand_path('../registry/cesar/*.json', __dir__)]
       .any? { |f| File.read(f).include?('wall_reservation') }
+end
+
+check('the probe bridge stays a DEV TOOL: nothing in src/ requires it') do
+  # The bridge's own first lines promise this - "nothing in src/ requires it, it
+  # carries no version, and it never goes into an .rbz" - and a button is exactly
+  # the convenience that quietly breaks such a promise. A `require` at the top of
+  # a palette file would make the engine refuse to load wherever tools/ is absent.
+  offenders = Dir[File.expand_path('../src/**/*.rb', __dir__)].select do |f|
+    src = File.read(f)
+    src.match?(/^\s*require(_relative)?\s+.*probe_bridge/)
+  end
+  raise "src/ requires the bridge: #{offenders.inspect}" unless offenders.empty?
+
+  # And it is only ever NAMED behind a defined? guard, so a missing bridge is a
+  # state and not a NameError.
+  Dir[File.expand_path('../src/**/*.rb', __dir__)].each do |f|
+    src = File.read(f)
+    next unless src.include?('ProbeBridge')
+
+    body = src.gsub(/^\s*#.*$/, '')
+    next unless body.include?('ProbeBridge')
+    raise "#{File.basename(f)} names ProbeBridge without a defined? guard" unless
+      body.include?('defined?(::UCON::ProbeBridge)')
+  end
+end
+
+check('the dev bridge door answers without loading anything') do
+  D = UCON::CabinetEngine::DevBridge
+  # It points at the repository's own tools/, derived from where core actually is.
+  raise D.path unless D.path.end_with?('tools/probe_bridge.rb')
+  raise 'this IS a dev checkout, so it must be available' unless D.available?
+  raise D.path unless File.file?(D.path)
+
+  # RUNNING? IS ABOUT A TIMER, NOT A CONSTANT. Headless there is no ProbeBridge
+  # at all, and the honest answer is false rather than an exception - which is
+  # also the answer after every Reload core, when the constant still exists and
+  # the timer does not.
+  raise 'nothing is running headless' if D.running?
+  raise D.status_line unless D.status_line.include?('OFF')
+end
+
+check('the bridge button never arms, and is drawn only in a dev checkout') do
+  # arm! makes the next probe COMMIT instead of roll back. That is typed out in
+  # full, every time, with the model in front of you - a one-click arm is how a
+  # probe applies to a kitchen nobody meant to change.
+  dev  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/95_dev_bridge.rb', __dir__))
+  pal  = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  main = File.read(File.expand_path('../src/ucon_cabinet_engine/main.rb', __dir__))
+  [dev, pal, main].each do |src|
+    body = src.gsub(/^\s*#.*$/, '')
+    raise 'something offers a one-click arm' if body.include?('arm!')
+  end
+
+  raise 'the palette must have a reload_bridge callback' unless
+    pal.include?("add_action_callback('reload_bridge')")
+  raise 'the palette button must be conditional on there being a bridge' unless
+    pal.include?('DevBridge.available? ?')
+  # AND THE MENU MUST NOT HAVE GROWN ONE. The item was tried and taken back
+  # out: a SketchUp menu item is permanent for the session, which is what the
+  # 'entry point, not a control panel' guard exists to protect.
+  raise 'the menu grew a dev item' if main.include?("menu.add_item('Reload probe bridge")
+  # It reports the TIMER afterwards, not the return value of load.
+  # Learned rule 13: a record of an outside action is only true if something checks it.
+  raise 'the result must be read back from the bridge' unless
+    pal.include?('DevBridge.status_line')
 end
 
 check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do

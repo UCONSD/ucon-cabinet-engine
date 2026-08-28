@@ -544,3 +544,98 @@ install**, verified by re-opening the archive and diffing every entry against th
 tree.
 
 Suites **518 / 84 / 46**.
+
+---
+
+## 16. A button for the probe bridge, and the guard that refused it a menu item
+
+Andriy: *«Давай виведемо де-небудь кнопку в SketchUp, щоб я міг робити "reload
+bridge"»*. `Reload core` re-reads core/ in a second and **kills the bridge's
+timer** with it, and putting it back meant typing an absolute path into the Ruby
+Console — the one piece of typing the bridge exists to remove.
+
+### Keeping a dev tool optional while giving it a button
+
+`tools/probe_bridge.rb` promises, in its own first lines, that *nothing in src/
+requires it, it carries no version, and it never goes into an `.rbz`*. **A button
+is exactly the convenience that quietly breaks such a promise**: one `require` at
+the top of a palette file and the engine refuses to load wherever `tools/` is
+absent.
+
+`core/95_dev_bridge.rb` is a door, not a dependency. It never requires the
+bridge and names `::UCON::ProbeBridge` only behind a `defined?`. It answers two
+questions **at call time, never memoised** — the same shape as
+`ApplianceCheck.available?`, and for the same reason: a session changes the
+answer without restarting.
+
+- **`available?`** — is there a bridge on disk to load. The path is derived from
+  where `core/` actually is, so a packaged engine (owed, Andriy's call when)
+  simply has none, and **the button is not drawn at all** rather than drawn dead.
+- **`running?`** — is a timer *ticking*. `defined?` alone would say yes forever
+  once the module has loaded once, **and the whole problem is that the module
+  outlives its timer**: after `Reload core` the constant is still there and the
+  bridge is deaf. `ProbeBridge.timer` is nil when it is not ticking, and that is
+  the honest question.
+
+Pressing it `load`s the file, which restarts the bridge — `probe_bridge.rb` ends
+with `start`, and `start` calls `stop` first, so **pressing twice leaves one
+timer, not two**. `load` and not `require`, for the same reason `load_core` uses
+it: `require` caches by path and the second press would do nothing.
+
+The message afterwards is read back **from the timer, not from `load`'s return
+value**. Learned rule 13: a record of an outside action is only true if something
+checks it.
+
+**It never arms.** `ProbeBridge.arm!` makes the next run COMMIT instead of roll
+back; that stays something typed out in full, every time, with the model in
+front of you. A one-click arm is how a probe applies to a kitchen nobody meant to
+change. A check greps all three files to keep it that way.
+
+### The menu refused it, and the guard was right
+
+The first version added an *"Extensions → UCON → Reload probe bridge (dev)"*
+item, because a menu survives `Reload core` while a dialog has to be reopened.
+`test_contract.rb` failed immediately — **the menu is pinned to exactly two
+items**, and the check carries its reason:
+
+> *SketchUp cannot remove a menu item once added, so every one of these is
+> permanent for the session and costs a restart to change. The palette is the
+> day-to-day surface; the menu opens it and says what version this is.*
+
+**A dev convenience is the first thing that argument excludes.** The item was
+taken back out and main.rb now says so where it stood, so the next session does
+not re-add it. The button lives in the palette instead — **directly under
+`Reload core`, which is the button that kills the bridge**, so the pair sits
+together.
+
+### Proved rather than trusted (learned rule 12)
+
+The bridge was renamed away and the whole thing re-asked:
+
+| | bridge present | bridge hidden |
+|---|---|---|
+| `available?` | true | **false** |
+| palette draws the button | **true** | **false** |
+| `reload!` | loads and runs it | **refuses with a sentence** |
+
+With it present, `reload!` reached `probe_bridge.rb`'s own `start` and died
+headless on `uninitialized constant Sketchup` — **which is the proof that it
+really loaded and ran**, since nothing else in this suite can reach that line.
+
+### Two smaller things the suite caught, both mine
+
+**A citation broke because of where the line wrapped.** I wrote `learned` at the
+end of one line and `rule 13` at the start of the next, and the bare-`rule N`
+check saw exactly what it exists to see. It was right: a reader scanning that
+comment sees `rule 13` with no list. Both were rewritten so the citation and its
+number stay on one line.
+
+> `claude/rules.md` argues that *a citation that carries its own claim survives a
+> collision; a bare number does not.* This adds a mechanical corollary: **a
+> citation has to survive the line break too.**
+
+Core only — **no `.rbz` rebuild**, and `ucon-appliances-0.3.0.rbz` is still the
+file to install. The palette bakes its HTML at open, so **the button appears
+after the palette is closed and reopened**, not on `Reload core` alone.
+
+Suites **521 / 84 / 46**.

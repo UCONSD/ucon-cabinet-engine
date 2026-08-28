@@ -139,6 +139,21 @@ module UCON
         @dialog.add_action_callback('thin') do |_|
           Symbols.toggle_thin_lines(Sketchup.active_model)
         end
+        # THE PAIR. `Reload core` kills the bridge's timer, so the button that
+        # puts it back sits beside the button that breaks it. Never arms - see
+        # core/95_dev_bridge.rb for why that is not an oversight.
+        @dialog.add_action_callback('reload_bridge') do |_|
+          begin
+            DevBridge.reload!
+            # REPORTED FROM THE TIMER, NOT FROM THE RETURN VALUE. `load` returning
+            # true says the file was read, not that a timer is ticking.
+            # Learned rule 13: a record of an outside action is only true if
+            # something checks it.
+            UI.messagebox(DevBridge.status_line)
+          rescue StandardError => e
+            UI.messagebox("The probe bridge was not reloaded.\n\n#{e.message}")
+          end
+        end
         @dialog.add_action_callback('reload') do |_|
           begin
             files = CabinetEngine.load_core
@@ -941,6 +956,7 @@ module UCON
             <button onclick="sketchup.reserve_wall()">Reserve wall volume (hood)…</button>
             <button onclick="sketchup.worktop()">Worktop over selected run…</button>
             <button onclick="sketchup.reload()">Reload core</button>
+            #{DevBridge.available? ? '<button onclick="sketchup.reload_bridge()">Reload probe bridge (dev)</button>' : ''}
             <div class="grp">Opening symbols</div>
             <div class="row">
               <button class="seg" onclick="sketchup.symbols('plan')">Plan</button>

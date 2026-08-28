@@ -91,6 +91,14 @@ module UCON
       # order they appear in, and it is not guaranteed.
       menu = UCON.extensions_menu
       menu.add_item('Cabinet palette…') { open_palette }
+
+      # A 'Reload probe bridge' ITEM WAS TRIED HERE AND TAKEN BACK OUT, 2026-08-28.
+      # The suite pins this menu to exactly two items and gives the reason: a
+      # SketchUp menu item cannot be removed once added, so every one is permanent
+      # for the session and costs a RESTART to change. A dev convenience is the
+      # first thing that argument excludes, and the guard was right to refuse it.
+      # The button lives in the palette instead, beside Reload core - which is the
+      # button that kills the bridge, so the pair sits together.
       menu.add_separator
       menu.add_item('About Cabinet Engine') { UI.messagebox(about_text) }
 
