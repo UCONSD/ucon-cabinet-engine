@@ -502,6 +502,9 @@ note beside it was false, because it read a proxy instead of the recorded fact.)
   written with the bridge's path baked into a `cd` and died on its third line in
   his terminal — *No such file or directory* — after the suites had passed here.
   **Anything Andriy runs derives its own location: `cd "$(dirname "$0")/.."`.**
+  **And the line handed to him carries the cd in front of it**, every time -
+  `cd ~/dev/ucon-cabinet-engine && sh build/go.sh` - because he often runs it in
+  a fresh terminal window, where the working directory is his home.
   The same trap is waiting in any path written into a file for him rather than
   for this session.
 - **A bridge call is capped at about 45 seconds and each one runs in its own

@@ -148,3 +148,28 @@ without reading — and both of these are decisions with a price behind them. Bo
 lists open on a sentinel and the build refuses if it comes back. The article,
 group and finish are kept on the model, because a kitchen has one top material;
 the **band** is asked every time, because it is genuinely per-run.
+
+## Two questions the model raised, and their answers
+
+**A filler is part of the run.** *"Над кабинетом рисует, а над филлером нет."* The
+selection filter named `cabinet` and `corner_unit` and left `filler` out. The
+refusal was the loud half; the quiet half was a filler in the **middle** of a
+selection contributing nothing to the length, so the top came out short by the
+width of the strip and looked right. A filler now counts toward the **length**
+and not toward the **datum** — a closing strip takes its depth and its height
+from the run it closes — and fillers alone are refused rather than drawn to a
+depth of zero. That split is ours; printed p.548 says nothing about what a top
+covers.
+
+**And the way to cover one is to draw the run again, not to patch beside it.**
+Andriy's call when both were put to him: stone under 3140 is one piece and no
+fabricator puts a seam beside a 50 mm strip. So `build_worktop` refuses a slab
+that overlaps one already drawn, names what is in the way, and deletes nothing.
+
+**"Глубина по фасаду, до стены" changed nothing, and that is worth writing
+down.** It could have meant the stone has to reach a wall standing behind the
+carcass — which would have made the back edge a **measurement** and 650 the
+wrong band. It does not: at 545 Avenida Primavera the carcass stands against the
+wall, so *to the wall* and *to the carcass back* are the same plane. Asked
+rather than assumed, because this engine has no notion of a wall at all, and
+inventing one to measure would have been a day's work built on a guess.

@@ -1688,35 +1688,35 @@ module UCON
           end
         end
 
-        # THE SAME REFUSAL THE HEIGHTS ALREADY HAD, and it was missing. Two
-        # depths under one slab is two worktops for the same reason two heights
-        # are: the top would be drawn to whichever box happened to sit leftmost
-        # and would leave the deeper one uncovered, or overhang the shallower
-        # one by 270. It is exactly the decision Andriy had already made by hand
-        # for the west run - 'только глубокая часть, хвост без камня' - and
-        # nothing in the code was holding him to it.
-        if depths.length > 1
-          raise ArgumentError,
-                "That is two worktops, not one.\n\n" \
-                "The selection is #{depths.keys.sort.join(' and ')} mm deep - " \
-                "#{depths.values.join(', ')}. One slab over two depths either leaves " \
-                'the deeper run uncovered or overhangs the shallower one. Select one ' \
-                'depth at a time.'
-        end
-
-        if tops.length > 1
-          raise ArgumentError,
-                "That is two worktops, not one.\n\n" \
-                "The selection stands at #{tops.keys.sort.join(' and ')} mm - " \
-                "#{tops.values.join(', ')}. One slab across two heights would run " \
-                'through the middle of a cabinet. Select one run at a time.'
-        end
+        # ---- TWO DEPTHS ARE ONE WORKTOP, AFTER ALL --------------------------
+        #
+        # This was a REFUSAL for about an hour on 2026-08-28, written to mirror
+        # the two-heights one above, and the model refused a real run within
+        # minutes: B81087 at 620 beside B70501 at 350.
+        #
+        # THE MIRROR WAS FALSE, and the asymmetry is the whole point. Two
+        # HEIGHTS under one slab is impossible - the surface would pass through
+        # the middle of a cabinet, and no thickness of stone fixes it. Two
+        # DEPTHS is ordinary joinery: a top runs at one depth and a shallower
+        # unit sits under it with more room in front. What is wrong is only the
+        # other direction - a top NARROWER than something beneath it, which
+        # leaves a carcass uncovered.
+        #
+        # So the depth is the DEEPEST, which is the only value that covers
+        # everything picked, and the shallower units are named on the object
+        # with the overhang each one gets. Andriy's call when it was put to him;
+        # the control he loses is none, because a tail he does not want under
+        # stone is a tail he does not select - which is exactly how he had
+        # already decided to draw the west run.
+        deepest = depths.keys.max
+        overhung = depths.reject { |mm, _| mm == deepest }
+                          .map { |mm, code| "#{code} at #{mm.round} (#{(deepest - mm).round} clear)" }
 
         top     = tops.keys.first
-        # ONE DEPTH, PROVEN ABOVE, so this may take it from the census rather
-        # than from whichever box happened to be leftmost. Same number, and it
-        # no longer depends on the anchor being the right one.
-        carcass = depths.keys.first.to_f
+        # THE DEEPEST, not whichever box happened to be leftmost. With one depth
+        # in the selection these are the same number; with two the anchor's was
+        # a coin toss that could leave a carcass uncovered.
+        carcass = deepest.to_f
         w       = (hi - lo).round(1)
 
         # THE FRONT OF THE FINISHED RUN, and it is not the carcass. front_y_mm
@@ -1778,6 +1778,7 @@ module UCON
                                         "eight and no ninth - seated against the carcass back, so it " \
                                         "stands #{overhang} (the finished run is #{finished.round}). " \
                                         "Thickness #{t.round} is the ARTICLE'S, not stated. " \
+                                        "#{overhung.empty? ? '' : "Runs over shallower units: #{overhung.join('; ')} mm of clear front under the stone. "}" \
                                         "#{article[:finish_note]}" }
                 else
                   { 'schema_version' => Contract::SCHEMA_VERSION,
@@ -1801,9 +1802,56 @@ module UCON
                                         "it starts at #{top.round}, which is that run's top taken through its " \
                                         "code and not off a body somebody may have moved; thickness #{t.round} " \
                                         'STATED on the model. NOT ORDERED: no top article is chosen, and this ' \
-                                        'object must not reach a factory as a line.' }
+                                        'object must not reach a factory as a line. ' \
+                                        "#{overhung.empty? ? '' : "Runs over shallower units: #{overhung.join('; ')} mm of clear front under the stone."}" }
                 end
         Contract.validate!(attrs)
+
+        # ---- AND NOT A SECOND SLAB ON TOP OF THE FIRST, 2026-08-28 ----------
+        #
+        # A run whose top was drawn before a filler was added has to be drawn
+        # AGAIN, over the whole run, because stone under 3140 is one piece and a
+        # fabricator would not put a seam beside a 50 mm strip - Andriy's call
+        # when the two ways of covering a filler were put to him. Rebuilding
+        # means deleting the old slab first, and forgetting to is invisible:
+        # two 40 mm slabs at the same height read as one surface from every
+        # angle a kitchen is ever looked at, and the order goes out with two
+        # tops on it.
+        #
+        # IT REFUSES AND DOES NOT DELETE. Removing geometry somebody else drew
+        # to make room for our own is the kind of help that loses work - and the
+        # old slab may be the one that is right. So it names what is in the way
+        # and stops.
+        seat_here = Geom::Transformation.translation(
+          Geom::Vector3d.new(0, 0, -frame.origin.z)
+        ) * frame
+        planned = Geom::BoundingBox.new
+        [lo, hi].each do |x|
+          [y0, y0 + d].each do |y|
+            [top, top + t].each do |z|
+              planned.add(Geom::Point3d.new(x.mm, y.mm, z.mm).transform(seat_here))
+            end
+          end
+        end
+        in_the_way = model.active_entities.grep(Sketchup::ComponentInstance).select do |i|
+          att = (Contract.read(i.definition) rescue nil)
+          next false unless att && att['object_class'].to_s == 'worktop'
+
+          # A shared EDGE is not an overlap. Two tops that meet at a joint touch
+          # on one plane and nothing is stacked; the tolerance is a millimetre
+          # so that a butted pair passes and a duplicate cannot.
+          box = i.bounds.intersect(planned)
+          box.valid? && box.width.to_mm > 1.0 && box.depth.to_mm > 1.0
+        end
+        unless in_the_way.empty?
+          raise ArgumentError,
+                "There is already a worktop here.\n\n" \
+                "#{in_the_way.map(&:name).first(3).join("\n")}\n\n" \
+                'Stone under 3140 mm is ONE piece, so a run that has grown a filler is ' \
+                'drawn again over the whole run rather than patched beside itself - and ' \
+                'two slabs at the same height look like one from every angle. Delete the ' \
+                'old top and build again. Nothing was drawn and nothing was deleted.'
+        end
 
         model.start_operation('UCON: build worktop', true)
         begin
@@ -1811,9 +1859,11 @@ module UCON
           mat  = Geometry.material(model, 'UCON_Worktop_Stone', [200, 200, 198])
           Geometry.box(defn.entities, 'CARCASS', lo, y0, top, w, d, t, mat)
           Contract.write!(defn, attrs)
-          o = frame.origin
-          seat = Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * frame
-          inst = model.active_entities.add_instance(defn, seat)
+          # THE SAME SEAT THE OVERLAP TEST USED. It was computed twice, once
+          # here and once above, which is how the guard and the geometry drift
+          # apart: a check that measures a different box from the one that gets
+          # drawn stops being a check without ever going red.
+          inst = model.active_entities.add_instance(defn, seat_here)
           # THE NAME IS READ IN THE OUTLINER AND NOWHERE ELSE, and the two
           # paths must not look alike there: one of these is an order line and
           # the other is a placeholder, and the outliner is where somebody

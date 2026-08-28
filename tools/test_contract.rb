@@ -8668,6 +8668,32 @@ check('AND THE FINISH NAME IS OPTIONAL, but its absence is written down') do
   raise 'a named finish still claims to be unchosen' if named[:finish_note].include?('NOT CHOSEN')
 end
 
+check('TWO SLABS AT ONE HEIGHT LOOK LIKE ONE - so the second is refused') do
+  # Stone under 3140 is ONE piece: a run that has grown a filler is drawn again
+  # over the whole run rather than patched beside itself (Andriy, 2026-08-28,
+  # asked and answered). Rebuilding means deleting the old slab first, and
+  # forgetting to is invisible - two 40 mm slabs at the same height read as one
+  # surface from every angle a kitchen is ever looked at, and the order goes out
+  # with two tops on it.
+  #
+  # A SOURCE check; the overlap test needs a model. It pins three things: that
+  # the guard exists, that it REFUSES rather than deleting somebody's geometry,
+  # and that a butted joint is not mistaken for a stack.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  m = src[/def build_worktop.+?\n      end\n/m]
+  raise 'the duplicate-slab guard is gone' unless
+    m.include?('There is already a worktop here')
+  raise 'it must not delete what it found' unless
+    m.include?('Nothing was drawn and nothing was deleted')
+  raise 'a shared edge must not read as an overlap' unless
+    m.include?('box.width.to_mm > 1.0 && box.depth.to_mm > 1.0')
+
+  # AND THE GUARD MUST MEASURE THE BOX THAT GETS DRAWN. Computing the seat
+  # twice is how a check and its geometry drift apart without ever going red.
+  raise 'the guard and the placement use different seats' unless
+    m.scan(/seat_here/).length >= 2 && !m.include?('seat = Geom::Transformation')
+end
+
 check('A FILLER IS PART OF THE RUN THE TOP COVERS - and not part of its datum') do
   # Andriy, 2026-08-28, in the model: the top drew over a cabinet and refused
   # over a filler. The stone runs over the strip that closes a run exactly as
@@ -8698,10 +8724,22 @@ check('A FILLER IS PART OF THE RUN THE TOP COVERS - and not part of its datum') 
     m.include?("u = effective(Registry.lookup(a['code']), a)") &&
     m.include?("w = a['width_mm'] ? a['width_mm'].to_f : drawn_width_mm(u).to_f")
 
-  # AND TWO DEPTHS ARE TWO WORKTOPS, exactly as two heights already were. This
-  # is the rule Andriy had been keeping by hand for the west run.
-  raise 'two depths under one slab are still accepted' unless
-    m.include?('if depths.length > 1')
+  # AND TWO DEPTHS ARE ONE WORKTOP, which is NOT the mirror of two heights.
+  # That mirror was written and lived about an hour on 2026-08-28 before the
+  # model refused a real run - B81087 at 620 beside B70501 at 350. Two HEIGHTS
+  # under one slab is impossible: the surface passes through the middle of a
+  # cabinet and no thickness of stone fixes it. Two DEPTHS is ordinary joinery -
+  # a shallower unit sits under the top with more room in front. Only the other
+  # direction is wrong: a top NARROWER than something beneath it.
+  #
+  # So the check is that the deepest wins AND that the shallower ones are named
+  # on the object. Silently overhanging a carcass by 300 mm is the kind of thing
+  # a drawing does not show and an order does not mention.
+  raise 'the depth is not the deepest, so a carcass can be left uncovered' unless
+    m.include?('deepest = depths.keys.max') && m.include?('carcass = deepest.to_f')
+  raise 'a unit running under an overhang is not named on the object' unless
+    m.include?('Runs over shallower units')
+  raise 'the old two-depths refusal is still standing' if m.include?('if depths.length > 1')
 end
 
 check('THE PICKER MUST NOT OFFER A BUILD IT WILL ALWAYS REFUSE') do
