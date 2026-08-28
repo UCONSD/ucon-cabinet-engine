@@ -8211,6 +8211,125 @@ check('every appliance-maker question is in its own status table') do
   raise 'an appliance question leaked into the Elda register' if elda.match?(/^## A\d+/)
 end
 
+check('a panel price group NAMES its finish family, because a letter is not a finish') do
+  # Until 2026-08-28 every code in this chapter carried a price_group letter and
+  # nothing said what the letter meant, so an order for "group A" chose an
+  # unnamed species list. The letter is a lookup, read the row.
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  types = d['data']['unit_types']
+  types.each do |name, t|
+    t['codes'].each do |c|
+      next unless c['price_group']
+
+      raise "#{c['code']} has a group and no finish family" if c['finish_family'].to_s.empty?
+      # A named family with an empty list is only honest where the list is
+      # declared unread - the lacquer blocks, whose finishes are on p.217.
+      next unless c['finishes'].nil?
+      raise "#{c['code']} names no finishes and does not say why" if c['finishes_note'].to_s.empty?
+    end
+  end
+end
+
+check('B AT 1,8 IS NOT B AT 2,2 - the two-sided veneer letter is per THICKNESS') do
+  # printed p.219 and p.220 each print TWO finish blocks: "Available finishes
+  # Th. 1.8" offers only B Trama, and "Available finishes Th. 2.2" offers A
+  # First, B Prime, C Special, D High-gloss. Same letter, same page, two lists.
+  # Read off a render, because the extracted text interleaves the columns and
+  # would have let either reading through (learned rule 10).
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  %w[panel_veneer_2sides_horizontal panel_veneer_2sides_vertical].each do |name|
+    codes = d['data']['unit_types'][name]['codes']
+    thin = codes.select { |c| c['depth_mm'] == 18 }
+    raise "#{name}: expected exactly one 1,8 code" unless thin.size == 1
+    t = thin.first
+    raise "#{name}: the 1,8 code must be group B" unless t['price_group'] == 'B'
+    raise "#{name}: the 1,8 code must be TRAMA, not Prime" unless
+      t['finish_family'] == 'Trama wood veneers'
+    raise "#{name}: and it must say why, or the next reader will 'fix' it" if
+      t['finish_note'].to_s.empty?
+
+    thick_b = codes.find { |c| c['depth_mm'] == 22 && c['price_group'] == 'B' }
+    raise "#{name}: no 2,2 group B" unless thick_b
+    raise "#{name}: B at 2,2 must be Prime" unless thick_b['finish_family'] == 'Prime wood veneers'
+    # The point, asserted directly: one letter, one page, two different lists.
+    raise "#{name}: the two B lists must differ" if t['finishes'] == thick_b['finishes']
+  end
+end
+
+check('the two codes this kitchen is about to order name a readable finish list') do
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  found = {}
+  d['data']['unit_types'].each_value do |t|
+    t['codes'].each { |c| found[c['code']] = c }
+  end
+  %w[DZ731Q DV731Q].each do |code|
+    c = found[code] or raise "#{code} is not held"
+    raise "#{code} is not First wood veneers" unless c['finish_family'] == 'First wood veneers'
+    raise "#{code} lists no finishes" unless c['finishes'].is_a?(Array) && c['finishes'].size == 7
+    raise "#{code} must offer Rovere Sbiancato" unless c['finishes'].include?('Rovere Sbiancato')
+  end
+  # And they are the pair the island needs: a 1,8 ONE-sided back and a 2,2
+  # TWO-sided end, which is why the ends lose 4 mm when the back stops being 22.
+  raise 'the back must be 18 and faced on one side' unless
+    found['DZ731Q']['depth_mm'] == 18 && found['DZ731Q']['faced_sides'] == 1
+  raise 'the end must be 22 and faced on two sides' unless
+    found['DV731Q']['depth_mm'] == 22 && found['DV731Q']['faced_sides'] == 2
+end
+
+check('a one-sided PRIME back and a two-sided PRIME end cannot both be Trama') do
+  # Within one price group and one grain direction, the two blocks print
+  # DIFFERENT lists: printed p.218's Prime has nine finishes, printed p.220's has
+  # sixteen - the same nine plus the seven Trama. So an island clad with a
+  # one-sided back and two-sided ends can only be finished in the NINE they
+  # share, and a Trama choice cannot be matched across it.
+  #
+  # NOTHING IN THE CODES SAYS SO. Both are 'group B, Prime wood veneers' and the
+  # finish name is an order field that changes no article, which is exactly why
+  # this needs a check rather than a comment.
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  all = {}
+  d['data']['unit_types'].each_value { |t| t['codes'].each { |c| all[c['code']] = c } }
+
+  back = all['DZ735Q']
+  endp = all['DV735Q']
+  raise 'both must be Prime' unless
+    back['finish_family'] == 'Prime wood veneers' && endp['finish_family'] == 'Prime wood veneers'
+  raise 'the two Prime lists must differ' if back['finishes'] == endp['finishes']
+  raise 'the back must be the SHORTER list' unless back['finishes'].size < endp['finishes'].size
+
+  shared = endp['finishes'] & back['finishes']
+  raise "expected nine shared finishes, got #{shared.size}" unless shared.size == 9
+  end_only = endp['finishes'] - back['finishes']
+  raise 'the end-only finishes must all be Trama' unless end_only.all? { |f| f.include?('Trama') }
+  raise 'no Trama may be offered on the one-sided back' if
+    back['finishes'].any? { |f| f.include?('Trama') }
+end
+
+check('the held island probe orders the group Andriy chose, and nothing older') do
+  # probe_inbox_hold_71.rb is ARMED and rebuilds the island's six panels. It was
+  # written assuming group A and the group was decided as B on 2026-08-28; a
+  # script carrying the old codes would have been discovered by an order.
+  src = File.read(File.expand_path('../tools/probe_inbox_hold_71.rb', __dir__))
+  plan = src[/PLAN = \[.*?\]\.freeze/m] or raise 'the probe has no PLAN table'
+  raise 'the probe still orders the group A codes' if plan.include?('DZ731Q') || plan.include?('DV731Q')
+  raise 'the backs must be DZ735Q' unless plan.scan('DZ735Q').size == 4
+  raise 'the ends must be DV735Q'  unless plan.scan('DV735Q').size == 2
+  # And both codes must actually be held, at the thicknesses the 663 depends on.
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  all = {}
+  d['data']['unit_types'].each_value { |t| t['codes'].each { |c| all[c['code']] = c } }
+  raise 'the back must be 18 thick' unless all['DZ735Q']['depth_mm'] == 18
+  raise 'the end must be 22 thick'  unless all['DV735Q']['depth_mm'] == 22
+  # 663 = 667 - 4, and the 4 is the back going from 22 to 18. If the back's
+  # thickness ever changes, this number is wrong and the check says where.
+  raise 'the ends must be cut to 663' unless plan.include?('663, 880')
+end
+
 check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do
   # It was in the model, on a visible tag, unhidden, gray, correct to the
   # millimetre - and invisible. A probe found it before a person could: on the

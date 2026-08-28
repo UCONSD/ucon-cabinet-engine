@@ -1,1123 +1,1344 @@
 {
-  "section": "Panels - Linear Elements",
-  "class": "panel_sheet",
-  "family": "Panels (Linear Elements)",
-  "source_pdf": "CESAR - 3 Linear Elements.pdf",
-  "source_pdf_note": "THE FIRST SECTION IN THIS REGISTRY THAT IS NOT THE KITCHEN SYSTEM. Until 2026-08-27 Registry.lookup built source_ref from _manifest.json's single source_pdf, so a code held here would have cited the wrong book. source_pdf is now a per-section fact and the manifest's value is only the default. Volume named because docs/Cesar_Volumes_Index.md requires it: a code absent from the book you have is not a code absent from the book.",
-  "source_pages": "printed p.214-220 / PDF 216-222, all seven read from 150-dpi renders 2026-08-27",
-  "family_note": "A family in this registry has meant a CABINET height - H.78, Wall H.48. This one is not a height at all: a sheet has no height until somebody orders one. The key is kept because the loader requires it and because these codes genuinely share their grammar, their minimum and their surcharges; it is named for the book and the chapter rather than for a dimension, and nothing should read a number out of it.",
-  "extraction_note": "Demand-driven, 2026-08-27: the island of 545 Avenida Primavera is clad across its back with two panels 1200 wide and 880 tall, and no article in the Kitchen System prices a panel at 880 - that chapter is priced by CABINET height and stops at 84 in two of the three collections. Account: claude/findings-2026-08-27-vol3-panels-read.md.",
-  "pricing_note": "points_per_m2 is a rate, not a price. Contract v2 1.2 keeps points out of the object; they live here because the order needs them and the drawing must not.",
-  "companions_note": "p.214 prices two things that ride with a panel and neither is a panel: the fixing kit, PER BASE UNIT WIDTH, and the adjustable foot, each. They are held in _manifest.json under hardware.linear_element_panel_fixings because the kit's quantity comes from the RUN and not from this article - four 600 units behind two 1200 panels take four kits - and companion_refs has no way to say that today.",
-  "data": {
-    "unit_types": {
-      "panel_melamine_12": {
-        "description": "Panel in melamine on 2 sides, 1,2 cm thick with ABS edge",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.215 / PDF 217",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          2050,
-          2780
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 205 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZAD12",
-            "width_range_mm": [
-              1,
-              2050
-            ],
-            "height_range_mm": [
-              1,
-              2780
-            ],
-            "depth_mm": 12,
-            "points_per_m2": 118,
-            "faced_sides": 2,
-            "finish_family": "melamine 3 finishes"
-          }
-        ],
-        "notes": "Finishes printed beside the block: Bianco, Canapa, Grigio fumo."
-      },
-      "panel_melamine_18_abs": {
-        "description": "Panel in melamine on 2 sides, 1,8 cm thick with ABS edge",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.215 / PDF 217",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          1800,
-          2780
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 180 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZAC00",
-            "width_range_mm": [
-              1,
-              1800
-            ],
-            "height_range_mm": [
-              1,
-              2780
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 129,
-            "faced_sides": 2,
-            "finish_family": "melamine 3 finishes"
-          }
-        ],
-        "notes": "Finishes: Cenere, Grigio fumo, Rovere bruno. DZAC00 is one of the two codes Metron estimate 2026/30831 quotes - see docs/Cesar_Estimate_Teardown_v0.1.md, where it was twice called an estimate code with no article behind it."
-      },
-      "panel_melamine_18_22": {
-        "description": "Panel in melamine on 2 sides, 1,8 / 2,2 cm thick with ABS edge",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.215 / PDF 217",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          2050,
-          2780
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 205 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZAD00",
-            "width_range_mm": [
-              1,
-              2050
-            ],
-            "height_range_mm": [
-              1,
-              2780
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 118,
-            "faced_sides": 2,
-            "finish_family": "melamine 23 finishes"
-          },
-          {
-            "code": "DZAD22",
-            "width_range_mm": [
-              1,
-              2050
-            ],
-            "height_range_mm": [
-              1,
-              2780
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 129,
-            "faced_sides": 2,
-            "finish_family": "melamine 23 finishes"
-          }
-        ],
-        "notes": "Twenty-three finishes printed beside the block, from Neve to Quercia Tabacco. NOTE THE ORDER OF THE TWO PRICES: the 1,8 is 118 and the 2,2 is 129, while the 1,8 of the block above - a different finish list - is 129. Thickness alone does not predict the points."
-      },
-      "panel_technomat": {
-        "description": "Panel faced with Technomat on 2 sides with ABS edge",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.216 / PDF 218",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          1200,
-          2780
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 120 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZDT00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              2780
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 155,
-            "faced_sides": 2
-          },
-          {
-            "code": "DZDT22",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              2780
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 155,
-            "faced_sides": 2
-          }
-        ],
-        "notes": "Nineteen finishes. The two thicknesses cost the SAME, 155 each - the only block in the chapter where they do."
-      },
-      "panel_laminate": {
-        "description": "Panel in laminate on 2 sides with ABS edge",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.216 / PDF 218",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          1260,
-          4180
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 126 x 418 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZBZ00",
-            "width_range_mm": [
-              1,
-              1260
-            ],
-            "height_range_mm": [
-              1,
-              4180
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 206,
-            "faced_sides": 2,
-            "price_group": "A"
-          },
-          {
-            "code": "DZDY00",
-            "width_range_mm": [
-              1,
-              1260
-            ],
-            "height_range_mm": [
-              1,
-              4180
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 670,
-            "faced_sides": 2,
-            "price_group": "B"
-          },
-          {
-            "code": "DZBZ22",
-            "width_range_mm": [
-              1,
-              1260
-            ],
-            "height_range_mm": [
-              1,
-              4180
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 206,
-            "faced_sides": 2,
-            "price_group": "A"
-          },
-          {
-            "code": "DZDY22",
-            "width_range_mm": [
-              1,
-              1260
-            ],
-            "height_range_mm": [
-              1,
-              4180
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 670,
-            "faced_sides": 2,
-            "price_group": "B"
-          }
-        ],
-        "notes": "Two finish groups: A eleven finishes from Bianco Kos to Nero, B three metallics - Acciaio Hamilton, Argento Dukat, Oro Cortez. THE TALLEST SHEET IN THE CHAPTER AT 418 CM, and it is the counter-example to the guess that 278 is 'the sheet' - see the correction in claude/findings-2026-08-27-vol3-panels-read.md."
-      },
-      "panel_lacquered": {
-        "description": "Panel lacquered, 1,2 / 1,8 / 2,2 cm thick, on one or two sides",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.217 / PDF 219",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          1200,
-          3000
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 120 x 300 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZAI12",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 12,
-            "points_per_m2": 307,
-            "faced_sides": 2,
-            "price_group": "A"
-          },
-          {
-            "code": "DZAH00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 171,
-            "faced_sides": 1,
-            "price_group": "A"
-          },
-          {
-            "code": "DZAI00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 263,
-            "faced_sides": 2,
-            "price_group": "A"
-          },
-          {
-            "code": "DZAI22",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 274,
-            "faced_sides": 2,
-            "price_group": "A"
-          },
-          {
-            "code": "DZAK12",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 12,
-            "points_per_m2": 382,
-            "faced_sides": 2,
-            "price_group": "B"
-          },
-          {
-            "code": "DZAJ00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 252,
-            "faced_sides": 1,
-            "price_group": "B"
-          },
-          {
-            "code": "DZAK00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 389,
-            "faced_sides": 2,
-            "price_group": "B"
-          },
-          {
-            "code": "DZAK22",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 405,
-            "faced_sides": 2,
-            "price_group": "B"
-          },
-          {
-            "code": "DZCP12",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 12,
-            "points_per_m2": 345,
-            "faced_sides": 2,
-            "price_group": "C"
-          },
-          {
-            "code": "DZCO00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 250,
-            "faced_sides": 1,
-            "price_group": "C"
-          },
-          {
-            "code": "DZCP00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 362,
-            "faced_sides": 2,
-            "price_group": "C"
-          },
-          {
-            "code": "DZCP22",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 339,
-            "faced_sides": 2,
-            "price_group": "C"
-          },
-          {
-            "code": "DZDX12",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 12,
-            "points_per_m2": 572,
-            "faced_sides": 2,
-            "price_group": "D"
-          },
-          {
-            "code": "DZDW00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 474,
-            "faced_sides": 1,
-            "price_group": "D"
-          },
-          {
-            "code": "DZDX00",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 670,
-            "faced_sides": 2,
-            "price_group": "D"
-          },
-          {
-            "code": "DZDX22",
-            "width_range_mm": [
-              1,
-              1200
-            ],
-            "height_range_mm": [
-              1,
-              3000
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 670,
-            "faced_sides": 2,
-            "price_group": "D"
-          }
-        ],
-        "notes": "FOUR PRICE GROUPS BY LACQUER TYPE, and the group is the finish list, not the thickness: A silk-effect (18 finishes plus custom colours), B gloss (18 plus custom), C structured (13), D metallic-effect (14). Each group prints the same four executions - 1,2 on two sides, 1,8 on ONE side, 1,8 on two, 2,2 on two. DZAK22 is the code Metron estimate 2026/30831 quotes, at the 405 the page prints. AND THE POINTS ARE NOT MONOTONE: C at 2,2 costs 339 against B's 405, and D's 1,8 and 2,2 are both 670. Recorded as printed."
-      },
-      "panel_veneer_1side_horizontal": {
-        "description": "Panel 1,8 cm thick, wood veneered on 1 side with a melamine reverse matching the carcass - horizontal grain",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.218 / PDF 220",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          3000,
-          1200
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZ061Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 343,
-            "faced_sides": 1,
-            "price_group": "A",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DZ065Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 358,
-            "faced_sides": 1,
-            "price_group": "B",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DZ062Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 508,
-            "faced_sides": 1,
-            "price_group": "C",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DZ063Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 809,
-            "faced_sides": 1,
-            "price_group": "D",
-            "grain": "horizontal"
-          }
-        ],
-        "notes": "Groups: A first wood veneers (7), B prime (9), C special (Palissandro Santos, Ebano Macassar), D high-gloss (Acacia, Noce Desaturato, Sicomoro). THE SHEET IS LANDSCAPE - 300 wide by 120 tall - and the grain direction is IN THE CODE, so turning a panel is ordering a different article."
-      },
-      "panel_veneer_1side_vertical": {
-        "description": "Panel 1,8 cm thick, wood veneered on 1 side with a melamine reverse matching the carcass - vertical grain",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.218 / PDF 220",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          3000,
-          1200
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZ731Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 343,
-            "faced_sides": 1,
-            "price_group": "A",
-            "grain": "vertical"
-          },
-          {
-            "code": "DZ735Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 358,
-            "faced_sides": 1,
-            "price_group": "B",
-            "grain": "vertical"
-          },
-          {
-            "code": "DZ732Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 508,
-            "faced_sides": 1,
-            "price_group": "C",
-            "grain": "vertical"
-          },
-          {
-            "code": "DZ733Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 809,
-            "faced_sides": 1,
-            "price_group": "D",
-            "grain": "vertical"
-          }
-        ],
-        "notes": "Same four groups and the same points as the horizontal block above; only the grain and the codes differ."
-      },
-      "panel_veneer_2sides_horizontal": {
-        "description": "Panel 1,8 and 2,2 cm thick, wood veneered on 2 sides - horizontal grain",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.219 / PDF 221",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          3000,
-          1200
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZ075Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 579,
-            "faced_sides": 2,
-            "price_group": "B",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DV061Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 549,
-            "faced_sides": 2,
-            "price_group": "A",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DV065Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 579,
-            "faced_sides": 2,
-            "price_group": "B",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DV062Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 1038,
-            "faced_sides": 2,
-            "price_group": "C",
-            "grain": "horizontal"
-          },
-          {
-            "code": "DV063Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 1002,
-            "faced_sides": 2,
-            "price_group": "D",
-            "grain": "horizontal"
-          }
-        ],
-        "notes": "AT 1,8 THE PAGE PRINTS ONLY GROUP B, and only the trama veneers - the 2,2 carries all four groups. The page also warns: 'Trama finishes: 1 side with trama, 1 side polished and Trama edge.' AND C COSTS MORE THAN D - 1038 against 1002 - which is what the page prints and is not a transcription slip."
-      },
-      "panel_veneer_2sides_vertical": {
-        "description": "Panel 1,8 and 2,2 cm thick, wood veneered on 2 sides - vertical grain",
-        "object_class": "panel",
-        "opening": null,
-        "handed": false,
-        "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
-        "interior_confirmed": [],
-        "source_ref": "printed p.220 / PDF 222",
-        "priced_by": "area",
-        "minimum_invoicing_m2": 0.5,
-        "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
-        "max_sheet_mm": [
-          3000,
-          1200
-        ],
-        "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
-        "mounting": "floor",
-        "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
-        "front_layout": {
-          "kind": "none",
-          "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
-        },
-        "buildable": true,
-        "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
-        "surcharges": {
-          "cutout_for_electrical_socket": {
-            "points": 32,
-            "um": "each"
-          },
-          "out_of_square_reduction": {
-            "points": 27,
-            "um": "each"
-          },
-          "inner_or_outer_reduction": {
-            "points": 65,
-            "um": "each"
-          },
-          "note": "Identical on all six pages of the chapter, each per piece."
-        },
-        "codes": [
-          {
-            "code": "DZ745Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 18,
-            "points_per_m2": 579,
-            "faced_sides": 2,
-            "price_group": "B",
-            "grain": "vertical"
-          },
-          {
-            "code": "DV731Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 549,
-            "faced_sides": 2,
-            "price_group": "A",
-            "grain": "vertical"
-          },
-          {
-            "code": "DV735Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 579,
-            "faced_sides": 2,
-            "price_group": "B",
-            "grain": "vertical"
-          },
-          {
-            "code": "DV732Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 1038,
-            "faced_sides": 2,
-            "price_group": "C",
-            "grain": "vertical"
-          },
-          {
-            "code": "DV733Q",
-            "width_range_mm": [
-              1,
-              3000
-            ],
-            "height_range_mm": [
-              1,
-              1200
-            ],
-            "depth_mm": 22,
-            "points_per_m2": 1002,
-            "faced_sides": 2,
-            "price_group": "D",
-            "grain": "vertical"
-          }
-        ],
-        "notes": "Same points as the horizontal block; the same C-over-D inversion, printed twice."
-      }
-    }
+ "section": "Panels - Linear Elements",
+ "class": "panel_sheet",
+ "family": "Panels (Linear Elements)",
+ "source_pdf": "CESAR - 3 Linear Elements.pdf",
+ "source_pdf_note": "THE FIRST SECTION IN THIS REGISTRY THAT IS NOT THE KITCHEN SYSTEM. Until 2026-08-27 Registry.lookup built source_ref from _manifest.json's single source_pdf, so a code held here would have cited the wrong book. source_pdf is now a per-section fact and the manifest's value is only the default. Volume named because docs/Cesar_Volumes_Index.md requires it: a code absent from the book you have is not a code absent from the book.",
+ "source_pages": "printed p.214-220 / PDF 216-222, all seven read from 150-dpi renders 2026-08-27",
+ "family_note": "A family in this registry has meant a CABINET height - H.78, Wall H.48. This one is not a height at all: a sheet has no height until somebody orders one. The key is kept because the loader requires it and because these codes genuinely share their grammar, their minimum and their surcharges; it is named for the book and the chapter rather than for a dimension, and nothing should read a number out of it.",
+ "extraction_note": "Demand-driven, 2026-08-27: the island of 545 Avenida Primavera is clad across its back with two panels 1200 wide and 880 tall, and no article in the Kitchen System prices a panel at 880 - that chapter is priced by CABINET height and stops at 84 in two of the three collections. Account: claude/findings-2026-08-27-vol3-panels-read.md.",
+ "pricing_note": "points_per_m2 is a rate, not a price. Contract v2 1.2 keeps points out of the object; they live here because the order needs them and the drawing must not.",
+ "companions_note": "p.214 prices two things that ride with a panel and neither is a panel: the fixing kit, PER BASE UNIT WIDTH, and the adjustable foot, each. They are held in _manifest.json under hardware.linear_element_panel_fixings because the kit's quantity comes from the RUN and not from this article - four 600 units behind two 1200 panels take four kits - and companion_refs has no way to say that today.",
+ "data": {
+  "unit_types": {
+   "panel_melamine_12": {
+    "description": "Panel in melamine on 2 sides, 1,2 cm thick with ABS edge",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.215 / PDF 217",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     2050,
+     2780
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 205 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZAD12",
+      "width_range_mm": [
+       1,
+       2050
+      ],
+      "height_range_mm": [
+       1,
+       2780
+      ],
+      "depth_mm": 12,
+      "points_per_m2": 118,
+      "faced_sides": 2,
+      "finish_family": "melamine 3 finishes"
+     }
+    ],
+    "notes": "Finishes printed beside the block: Bianco, Canapa, Grigio fumo."
+   },
+   "panel_melamine_18_abs": {
+    "description": "Panel in melamine on 2 sides, 1,8 cm thick with ABS edge",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.215 / PDF 217",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     1800,
+     2780
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 180 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZAC00",
+      "width_range_mm": [
+       1,
+       1800
+      ],
+      "height_range_mm": [
+       1,
+       2780
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 129,
+      "faced_sides": 2,
+      "finish_family": "melamine 3 finishes"
+     }
+    ],
+    "notes": "Finishes: Cenere, Grigio fumo, Rovere bruno. DZAC00 is one of the two codes Metron estimate 2026/30831 quotes - see docs/Cesar_Estimate_Teardown_v0.1.md, where it was twice called an estimate code with no article behind it."
+   },
+   "panel_melamine_18_22": {
+    "description": "Panel in melamine on 2 sides, 1,8 / 2,2 cm thick with ABS edge",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.215 / PDF 217",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     2050,
+     2780
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 205 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZAD00",
+      "width_range_mm": [
+       1,
+       2050
+      ],
+      "height_range_mm": [
+       1,
+       2780
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 118,
+      "faced_sides": 2,
+      "finish_family": "melamine 23 finishes"
+     },
+     {
+      "code": "DZAD22",
+      "width_range_mm": [
+       1,
+       2050
+      ],
+      "height_range_mm": [
+       1,
+       2780
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 129,
+      "faced_sides": 2,
+      "finish_family": "melamine 23 finishes"
+     }
+    ],
+    "notes": "Twenty-three finishes printed beside the block, from Neve to Quercia Tabacco. NOTE THE ORDER OF THE TWO PRICES: the 1,8 is 118 and the 2,2 is 129, while the 1,8 of the block above - a different finish list - is 129. Thickness alone does not predict the points."
+   },
+   "panel_technomat": {
+    "description": "Panel faced with Technomat on 2 sides with ABS edge",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.216 / PDF 218",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     1200,
+     2780
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 120 x 278 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZDT00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       2780
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 155,
+      "faced_sides": 2
+     },
+     {
+      "code": "DZDT22",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       2780
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 155,
+      "faced_sides": 2
+     }
+    ],
+    "notes": "Nineteen finishes. The two thicknesses cost the SAME, 155 each - the only block in the chapter where they do."
+   },
+   "panel_laminate": {
+    "description": "Panel in laminate on 2 sides with ABS edge",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.216 / PDF 218",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     1260,
+     4180
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 126 x 418 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZBZ00",
+      "width_range_mm": [
+       1,
+       1260
+      ],
+      "height_range_mm": [
+       1,
+       4180
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 206,
+      "faced_sides": 2,
+      "price_group": "A",
+      "finish_family": "Bianco Kos",
+      "finishes": [
+       "Bianco Kos"
+      ]
+     },
+     {
+      "code": "DZDY00",
+      "width_range_mm": [
+       1,
+       1260
+      ],
+      "height_range_mm": [
+       1,
+       4180
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 670,
+      "faced_sides": 2,
+      "price_group": "B",
+      "finish_family": "metallic laminates",
+      "finishes": [
+       "Acciaio Hamilton",
+       "Argento Dukat",
+       "Oro Cortez"
+      ]
+     },
+     {
+      "code": "DZBZ22",
+      "width_range_mm": [
+       1,
+       1260
+      ],
+      "height_range_mm": [
+       1,
+       4180
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 206,
+      "faced_sides": 2,
+      "price_group": "A",
+      "finish_family": "Bianco Kos",
+      "finishes": [
+       "Bianco Kos"
+      ]
+     },
+     {
+      "code": "DZDY22",
+      "width_range_mm": [
+       1,
+       1260
+      ],
+      "height_range_mm": [
+       1,
+       4180
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 670,
+      "faced_sides": 2,
+      "price_group": "B",
+      "finish_family": "metallic laminates",
+      "finishes": [
+       "Acciaio Hamilton",
+       "Argento Dukat",
+       "Oro Cortez"
+      ]
+     }
+    ],
+    "notes": "Two finish groups: A eleven finishes from Bianco Kos to Nero, B three metallics - Acciaio Hamilton, Argento Dukat, Oro Cortez. THE TALLEST SHEET IN THE CHAPTER AT 418 CM, and it is the counter-example to the guess that 278 is 'the sheet' - see the correction in claude/findings-2026-08-27-vol3-panels-read.md."
+   },
+   "panel_lacquered": {
+    "description": "Panel lacquered, 1,2 / 1,8 / 2,2 cm thick, on one or two sides",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.217 / PDF 219",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     1200,
+     3000
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 120 x 300 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZAI12",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 12,
+      "points_per_m2": 307,
+      "faced_sides": 2,
+      "price_group": "A",
+      "finish_family": "Silk-effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAH00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 171,
+      "faced_sides": 1,
+      "price_group": "A",
+      "finish_family": "Silk-effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAI00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 263,
+      "faced_sides": 2,
+      "price_group": "A",
+      "finish_family": "Silk-effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAI22",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 274,
+      "faced_sides": 2,
+      "price_group": "A",
+      "finish_family": "Silk-effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAK12",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 12,
+      "points_per_m2": 382,
+      "faced_sides": 2,
+      "price_group": "B",
+      "finish_family": "Gloss lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAJ00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 252,
+      "faced_sides": 1,
+      "price_group": "B",
+      "finish_family": "Gloss lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAK00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 389,
+      "faced_sides": 2,
+      "price_group": "B",
+      "finish_family": "Gloss lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZAK22",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 405,
+      "faced_sides": 2,
+      "price_group": "B",
+      "finish_family": "Gloss lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZCP12",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 12,
+      "points_per_m2": 345,
+      "faced_sides": 2,
+      "price_group": "C",
+      "finish_family": "Structured lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZCO00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 250,
+      "faced_sides": 1,
+      "price_group": "C",
+      "finish_family": "Structured lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZCP00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 362,
+      "faced_sides": 2,
+      "price_group": "C",
+      "finish_family": "Structured lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZCP22",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 339,
+      "faced_sides": 2,
+      "price_group": "C",
+      "finish_family": "Structured lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZDX12",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 12,
+      "points_per_m2": 572,
+      "faced_sides": 2,
+      "price_group": "D",
+      "finish_family": "Metallic effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZDW00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 474,
+      "faced_sides": 1,
+      "price_group": "D",
+      "finish_family": "Metallic effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZDX00",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 670,
+      "faced_sides": 2,
+      "price_group": "D",
+      "finish_family": "Metallic effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     },
+     {
+      "code": "DZDX22",
+      "width_range_mm": [
+       1,
+       1200
+      ],
+      "height_range_mm": [
+       1,
+       3000
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 670,
+      "faced_sides": 2,
+      "price_group": "D",
+      "finish_family": "Metallic effect lacquers",
+      "finishes_note": "the finish LIST for this group is on printed p.217 and has not been read - only the group NAME is held"
+     }
+    ],
+    "notes": "FOUR PRICE GROUPS BY LACQUER TYPE, and the group is the finish list, not the thickness: A silk-effect (18 finishes plus custom colours), B gloss (18 plus custom), C structured (13), D metallic-effect (14). Each group prints the same four executions - 1,2 on two sides, 1,8 on ONE side, 1,8 on two, 2,2 on two. DZAK22 is the code Metron estimate 2026/30831 quotes, at the 405 the page prints. AND THE POINTS ARE NOT MONOTONE: C at 2,2 costs 339 against B's 405, and D's 1,8 and 2,2 are both 670. Recorded as printed."
+   },
+   "panel_veneer_1side_horizontal": {
+    "description": "Panel 1,8 cm thick, wood veneered on 1 side with a melamine reverse matching the carcass - horizontal grain",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.218 / PDF 220",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     3000,
+     1200
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZ061Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 343,
+      "faced_sides": 1,
+      "price_group": "A",
+      "grain": "horizontal",
+      "finish_family": "First wood veneers",
+      "finishes": [
+       "Rovere Sbiancato",
+       "Rovere Nordico",
+       "Rovere Mediterraneo",
+       "Rovere Fossile",
+       "Rovere Dark",
+       "Rovere Corvino",
+       "Rovere Cortado"
+      ]
+     },
+     {
+      "code": "DZ065Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 358,
+      "faced_sides": 1,
+      "price_group": "B",
+      "grain": "horizontal",
+      "finish_family": "Prime wood veneers",
+      "finishes": [
+       "Rovere Termocotto",
+       "Castagno Sbiancato",
+       "Castagno Grigio",
+       "Castagno Toscano",
+       "Noce Desaturato",
+       "Noce Sgubbiato",
+       "Eucalipto",
+       "Abete Nero",
+       "Rovere Rigatino Sbiancato"
+      ]
+     },
+     {
+      "code": "DZ062Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 508,
+      "faced_sides": 1,
+      "price_group": "C",
+      "grain": "horizontal",
+      "finish_family": "Special wood veneers",
+      "finishes": [
+       "Palissandro Santos",
+       "Ebano Macassar"
+      ]
+     },
+     {
+      "code": "DZ063Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 809,
+      "faced_sides": 1,
+      "price_group": "D",
+      "grain": "horizontal",
+      "finish_family": "High-gloss wood veneers",
+      "finishes": [
+       "Acacia",
+       "Noce Desaturato",
+       "Sicomoro"
+      ]
+     }
+    ],
+    "notes": "Groups: A first wood veneers (7), B prime (9), C special (Palissandro Santos, Ebano Macassar), D high-gloss (Acacia, Noce Desaturato, Sicomoro). THE SHEET IS LANDSCAPE - 300 wide by 120 tall - and the grain direction is IN THE CODE, so turning a panel is ordering a different article."
+   },
+   "panel_veneer_1side_vertical": {
+    "description": "Panel 1,8 cm thick, wood veneered on 1 side with a melamine reverse matching the carcass - vertical grain",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.218 / PDF 220",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     3000,
+     1200
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZ731Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 343,
+      "faced_sides": 1,
+      "price_group": "A",
+      "grain": "vertical",
+      "finish_family": "First wood veneers",
+      "finishes": [
+       "Rovere Sbiancato",
+       "Rovere Nordico",
+       "Rovere Mediterraneo",
+       "Rovere Fossile",
+       "Rovere Dark",
+       "Rovere Corvino",
+       "Rovere Cortado"
+      ]
+     },
+     {
+      "code": "DZ735Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 358,
+      "faced_sides": 1,
+      "price_group": "B",
+      "grain": "vertical",
+      "finish_family": "Prime wood veneers",
+      "finishes": [
+       "Rovere Termocotto",
+       "Castagno Sbiancato",
+       "Castagno Grigio",
+       "Castagno Toscano",
+       "Noce Desaturato",
+       "Noce Sgubbiato",
+       "Eucalipto",
+       "Abete Nero",
+       "Rovere Rigatino Sbiancato"
+      ]
+     },
+     {
+      "code": "DZ732Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 508,
+      "faced_sides": 1,
+      "price_group": "C",
+      "grain": "vertical",
+      "finish_family": "Special wood veneers",
+      "finishes": [
+       "Palissandro Santos",
+       "Ebano Macassar"
+      ]
+     },
+     {
+      "code": "DZ733Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 809,
+      "faced_sides": 1,
+      "price_group": "D",
+      "grain": "vertical",
+      "finish_family": "High-gloss wood veneers",
+      "finishes": [
+       "Acacia",
+       "Noce Desaturato",
+       "Sicomoro"
+      ]
+     }
+    ],
+    "notes": "Same four groups and the same points as the horizontal block above; only the grain and the codes differ."
+   },
+   "panel_veneer_2sides_horizontal": {
+    "description": "Panel 1,8 and 2,2 cm thick, wood veneered on 2 sides - horizontal grain",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.219 / PDF 221",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     3000,
+     1200
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZ075Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 579,
+      "faced_sides": 2,
+      "price_group": "B",
+      "grain": "horizontal",
+      "finish_family": "Trama wood veneers",
+      "finishes": [
+       "Rovere Sbiancato Trama",
+       "Rovere Nordico Trama",
+       "Rovere Mediterraneo Trama",
+       "Rovere Cortado Trama",
+       "Rovere Dark Trama",
+       "Rovere Fossile Trama",
+       "Rovere Corvino Trama"
+      ],
+      "finish_note": "B AT 1,8 IS NOT B AT 2,2 ON THIS PAGE. The page prints two separate blocks - \"Available finishes Th. 1.8\" offers ONLY group B Trama, and \"Available finishes Th. 2.2\" offers A First, B Prime, C Special, D High-gloss. Same letter, same page, two lists. A warning triangle beside it adds: \"Trama finishes: 1 side with trama, 1 side polished and Trama edge\" - so a two-sided Trama panel is not trama on both sides."
+     },
+     {
+      "code": "DV061Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 549,
+      "faced_sides": 2,
+      "price_group": "A",
+      "grain": "horizontal",
+      "finish_family": "First wood veneers",
+      "finishes": [
+       "Rovere Sbiancato",
+       "Rovere Nordico",
+       "Rovere Mediterraneo",
+       "Rovere Fossile",
+       "Rovere Dark",
+       "Rovere Corvino",
+       "Rovere Cortado"
+      ]
+     },
+     {
+      "code": "DV065Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 579,
+      "faced_sides": 2,
+      "price_group": "B",
+      "grain": "horizontal",
+      "finish_family": "Prime wood veneers",
+      "finishes": [
+       "Rovere Termocotto",
+       "Castagno Sbiancato",
+       "Castagno Grigio",
+       "Castagno Toscano",
+       "Noce Desaturato",
+       "Noce Sgubbiato",
+       "Eucalipto",
+       "Abete Nero",
+       "Rovere Rigatino Sbiancato",
+       "Rovere Sbiancato Trama",
+       "Rovere Nordico Trama",
+       "Rovere Mediterraneo Trama",
+       "Rovere Cortado Trama",
+       "Rovere Dark Trama",
+       "Rovere Fossile Trama",
+       "Rovere Corvino Trama"
+      ]
+     },
+     {
+      "code": "DV062Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 1038,
+      "faced_sides": 2,
+      "price_group": "C",
+      "grain": "horizontal",
+      "finish_family": "Special wood veneers",
+      "finishes": [
+       "Palissandro Santos",
+       "Ebano Macassar"
+      ]
+     },
+     {
+      "code": "DV063Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 1002,
+      "faced_sides": 2,
+      "price_group": "D",
+      "grain": "horizontal",
+      "finish_family": "High-gloss wood veneers",
+      "finishes": [
+       "Acacia",
+       "Noce Desaturato",
+       "Sicomoro"
+      ]
+     }
+    ],
+    "notes": "AT 1,8 THE PAGE PRINTS ONLY GROUP B, and only the trama veneers - the 2,2 carries all four groups. The page also warns: 'Trama finishes: 1 side with trama, 1 side polished and Trama edge.' AND C COSTS MORE THAN D - 1038 against 1002 - which is what the page prints and is not a transcription slip."
+   },
+   "panel_veneer_2sides_vertical": {
+    "description": "Panel 1,8 and 2,2 cm thick, wood veneered on 2 sides - vertical grain",
+    "object_class": "panel",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A sheet has no hand. It is cut from a board and has no hinge, no 45-degree edge and no end it belongs at - which is exactly what separates it from the adjoining end side panel of Volume 2.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.220 / PDF 222",
+    "priced_by": "area",
+    "minimum_invoicing_m2": 0.5,
+    "minimum_note": "Printed at the head of every one of the six pages: 'Minimum invoicing quantity: 0.5 m2.' A panel smaller than that is invoiced AT 0,5 m2 - the surface is the order line, not the piece.",
+    "max_sheet_mm": [
+     3000,
+     1200
+    ],
+    "max_sheet_note": "The only dimensional fact the page states, drawn beside the block as 300 x 120 cm. It is the SHEET, not the article: the article has no width and no height, and both come from the order.",
+    "mounting": "floor",
+    "mounting_note": "printed p.214, in the catalog's own words: 'If it is used as a floor-standing panel behind a base unit or as a floor-standing end side panel, 0.5-cm high feet will be mounted that must be calculated separately.' The foot is 990408 and is a separate order line; its design height is 0 with 5 mm of travel - see claude/repo-state.md, 'The 5 mm foot'.",
+    "front_layout": {
+     "kind": "none",
+     "note": "A PANEL HAS NO FRONT. Stated rather than left absent because Panel.effective_slabs defaults a missing layout to 'single' and would hang a door leaf on a flat board."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's ONLY fixed dimension and it is carried in depth_mm, because that is the axis a sheet is thin on: a board standing across the back of a run is wide on x, tall on z and thin on y. The Volume 2 end panel puts its 22 on width_mm instead, and the two must not be read the same way.",
+    "surcharges": {
+     "cutout_for_electrical_socket": {
+      "points": 32,
+      "um": "each"
+     },
+     "out_of_square_reduction": {
+      "points": 27,
+      "um": "each"
+     },
+     "inner_or_outer_reduction": {
+      "points": 65,
+      "um": "each"
+     },
+     "note": "Identical on all six pages of the chapter, each per piece."
+    },
+    "codes": [
+     {
+      "code": "DZ745Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 18,
+      "points_per_m2": 579,
+      "faced_sides": 2,
+      "price_group": "B",
+      "grain": "vertical",
+      "finish_family": "Trama wood veneers",
+      "finishes": [
+       "Rovere Sbiancato Trama",
+       "Rovere Nordico Trama",
+       "Rovere Mediterraneo Trama",
+       "Rovere Cortado Trama",
+       "Rovere Dark Trama",
+       "Rovere Fossile Trama",
+       "Rovere Corvino Trama"
+      ],
+      "finish_note": "B AT 1,8 IS NOT B AT 2,2 ON THIS PAGE. The page prints two separate blocks - \"Available finishes Th. 1.8\" offers ONLY group B Trama, and \"Available finishes Th. 2.2\" offers A First, B Prime, C Special, D High-gloss. Same letter, same page, two lists. A warning triangle beside it adds: \"Trama finishes: 1 side with trama, 1 side polished and Trama edge\" - so a two-sided Trama panel is not trama on both sides."
+     },
+     {
+      "code": "DV731Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 549,
+      "faced_sides": 2,
+      "price_group": "A",
+      "grain": "vertical",
+      "finish_family": "First wood veneers",
+      "finishes": [
+       "Rovere Sbiancato",
+       "Rovere Nordico",
+       "Rovere Mediterraneo",
+       "Rovere Fossile",
+       "Rovere Dark",
+       "Rovere Corvino",
+       "Rovere Cortado"
+      ]
+     },
+     {
+      "code": "DV735Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 579,
+      "faced_sides": 2,
+      "price_group": "B",
+      "grain": "vertical",
+      "finish_family": "Prime wood veneers",
+      "finishes": [
+       "Rovere Termocotto",
+       "Castagno Sbiancato",
+       "Castagno Grigio",
+       "Castagno Toscano",
+       "Noce Desaturato",
+       "Noce Sgubbiato",
+       "Eucalipto",
+       "Abete Nero",
+       "Rovere Rigatino Sbiancato",
+       "Rovere Sbiancato Trama",
+       "Rovere Nordico Trama",
+       "Rovere Mediterraneo Trama",
+       "Rovere Cortado Trama",
+       "Rovere Dark Trama",
+       "Rovere Fossile Trama",
+       "Rovere Corvino Trama"
+      ]
+     },
+     {
+      "code": "DV732Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 1038,
+      "faced_sides": 2,
+      "price_group": "C",
+      "grain": "vertical",
+      "finish_family": "Special wood veneers",
+      "finishes": [
+       "Palissandro Santos",
+       "Ebano Macassar"
+      ]
+     },
+     {
+      "code": "DV733Q",
+      "width_range_mm": [
+       1,
+       3000
+      ],
+      "height_range_mm": [
+       1,
+       1200
+      ],
+      "depth_mm": 22,
+      "points_per_m2": 1002,
+      "faced_sides": 2,
+      "price_group": "D",
+      "grain": "vertical",
+      "finish_family": "High-gloss wood veneers",
+      "finishes": [
+       "Acacia",
+       "Noce Desaturato",
+       "Sicomoro"
+      ]
+     }
+    ],
+    "notes": "Same points as the horizontal block; the same C-over-D inversion, printed twice."
+   }
   },
-  "buildable_note": "BUILDABLE AS OF 0.90.0, 2026-08-27, the same day it was held. The ten blocks were extracted not-buildable because the generator drew a panel only as an END panel - thickness on x, front edge in the plane of the doors, placed BESIDE a selected unit. A sheet is thickness on y, no front edge, and placed BEHIND. Both are now in 60_generator.rb: panel_front_y_mm returns 0 for a sheet, sheet_ground puts it on the floor without inheriting anything, and placement_transform seats it at the selected unit's origin stepped back by THAT unit's depth. It still refuses without a selection - a board behind a run has to know which run."
+  "finish_note": "READ 2026-08-28 off printed p.217-220 and, for the veneer blocks, off a 200-dpi RENDER of p.220 because the extracted text interleaves the two thickness columns and cannot be trusted to say which list a letter belongs to (learned rule 10). Until today every code carried a price_group letter and NOTHING SAID WHAT THE LETTER MEANT, so choosing 'group A' chose an unnamed species list. THE LETTER IS A LOOKUP, READ THE ROW - and on the two-sided veneer pages the same letter B is Trama at 1,8 and Prime at 2,2, which is why finish_family is recorded PER CODE and not per price_group."
+ },
+ "buildable_note": "BUILDABLE AS OF 0.90.0, 2026-08-27, the same day it was held. The ten blocks were extracted not-buildable because the generator drew a panel only as an END panel - thickness on x, front edge in the plane of the doors, placed BESIDE a selected unit. A sheet is thickness on y, no front edge, and placed BEHIND. Both are now in 60_generator.rb: panel_front_y_mm returns 0 for a sheet, sheet_ground puts it on the floor without inheriting anything, and placement_transform seats it at the selected unit's origin stepped back by THAT unit's depth. It still refuses without a selection - a board behind a run has to know which run."
 }

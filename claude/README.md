@@ -117,7 +117,11 @@ date order; a finding is never edited to hide what it corrected.
   ~/Downloads, the three ADA openings and the hood's envelope and mounting range
   were read off their pages, and the appliance package went 0.2.0 -> 0.3.0; and the hood turned out to be
   BUILT IN, which made the cabinets over the range the hood rather than an
-  obstruction to it).
+  obstruction to it),
+  **`findings-2026-08-28-panels-the-letter-is-a-lookup.md`** (every panel code
+  carried a price-group letter and nothing said what the letter meant, so the
+  held island probe was ordering an unnamed species list - and on the two-sided
+  veneer pages the same letter B is Trama at 1,8 and Prime at 2,2).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
