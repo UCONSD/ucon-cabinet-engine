@@ -348,6 +348,58 @@ module UCON
         ::UCON::Appliances.wall_reservation_models
       end
 
+      # ------------------------------- which machine is that object reserving?
+      #
+      # A reservation carries its machine in PROSE - "Reserved run gap —
+      # DF48650C/S/P" - and prose is not a key. This does not parse it: it asks
+      # the appliance module for its list of models and looks for one of THOSE in
+      # the text, which is a lookup against a closed list rather than a decode by
+      # analogy (domain rule 5's distinction, on the appliance side of the seam).
+      #
+      # LONGEST MATCH WINS, because DW2451 is a substring of DW2451/ADA and the
+      # shorter answer would be confidently wrong. No match returns nil, and every
+      # caller must be able to carry on without an answer - not knowing which
+      # machine stands there is a normal state, not a fault.
+      def model_named_in(text)
+        return nil unless available?
+
+        t = text.to_s
+        return nil if t.empty?
+
+        ::UCON::Appliances.all.map { |a| a['model'] }
+                          .select { |m| t.include?(m) }
+                          .max_by(&:length)
+      end
+
+      # printed p.144: a wall hood should be AT LEAST AS WIDE as the cooking
+      # surface. TWO PUBLISHED NUMBERS AND NEVER A DRAWN ONE - which is the whole
+      # point of this method existing at all.
+      #
+      # WHY IT IS NOT A COMPARISON AGAINST WHAT IS DRAWN, found 2026-08-28 before
+      # it ever ran: the south run gap in the Avenida Primavera model is drawn
+      # 1220,0 and says why on itself - "(DF48650C/S/P, 0,8 breathing space)". The
+      # hood is 1219 and the range is 1219, so p.144 is satisfied exactly - and a
+      # check against the DRAWN box would have refused the hood for being 1 mm
+      # narrower than our own breathing space. A drawn number carries decisions a
+      # published one does not, and comparing across that line is how this project
+      # has been wrong before.
+      #
+      # nil when either side is unknown: a comparison that cannot be made is not a
+      # comparison that failed.
+      def covers?(hood_model, machine_model)
+        return nil unless available?
+
+        hood = ::UCON::Appliances.find(hood_model)
+        hw   = hood && hood['envelope'] && hood['envelope']['w']
+        mw   = begin
+          o = ::UCON::Appliances.opening(machine_model)
+          o && o['w']
+        end
+        return nil unless hw && mw
+
+        hw.to_f >= mw.to_f
+      end
+
       # A SENTENCE FOR A HUMAN, because a hash of findings is not a report.
       # Deliberately not written onto the object: an appliance disagreement is
       # a fact about the SPECIFICATION, and the moment it is stamped into a

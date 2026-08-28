@@ -1857,16 +1857,31 @@ module UCON
 
         # printed p.144: a wall hood should be AT LEAST AS WIDE as the cooking
         # surface. Refused rather than drawn narrow, because a hood that does not
-        # cover what it hangs over is a wrong drawing that looks right - and the
-        # selection is the cooking surface by construction, since that is what
-        # the command asked to be selected.
-        below_w = attrs['width_mm'].to_f
-        if below_w.positive? && r['w'].to_f < below_w
+        # cover what it hangs over is a wrong drawing that looks right.
+        #
+        # AGAINST THE MACHINE BELOW, NEVER AGAINST THE BOX BELOW. The first draft
+        # compared the hood's published width to the SELECTION's drawn width and
+        # would have refused this kitchen's own hood on its first use: the south
+        # run gap is drawn 1220,0 - it says "(DF48650C/S/P, 0,8 breathing space)"
+        # on itself - while the range is 1219 and the hood is 1219, so p.144 is
+        # satisfied exactly. A drawn number carries decisions a published one does
+        # not. Both numbers in this comparison are the appliance maker's.
+        #
+        # And when the object below names no machine we know, NOTHING IS COMPARED
+        # and the reservation says so. A comparison that cannot be made is not a
+        # comparison that failed.
+        below_model = ApplianceCheck.model_named_in(
+          "#{attrs['unit_type']} #{attrs['notes']}"
+        )
+        covers = below_model && ApplianceCheck.covers?(model_no, below_model)
+        if covers == false
+          below_w = ::UCON::Appliances.opening(below_model)['w']
           raise ArgumentError,
-                "#{model_no} is #{r['w'].round} wide and it hangs over #{below_w.round}.\n\n" \
+                "#{model_no} is #{r['w'].round} wide and #{below_model} is #{below_w.round}.\n\n" \
                 'Wolf printed p.144: a wall hood should be at least as wide as the cooking ' \
                 'surface. Pick the wider hood rather than drawing this one short.'
         end
+        below_w = attrs['width_mm'].to_f
 
         below_d = attrs['depth_mm'].to_f
         wall_y  = below_d.positive? ? below_d : r['d'].to_f

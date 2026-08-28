@@ -408,6 +408,34 @@ check('the pure attributes refuse a hood at or below the countertop') do
   end
 end
 
+check('a reservation names its machine in prose, and the seam finds it by lookup') do
+  # The exact string the run-gap builder writes.
+  raise 'the range was not found' unless
+    Check.model_named_in('Reserved run gap — DF48650C/S/P') == 'DF48650C/S/P'
+  # LONGEST MATCH WINS: DW2451 is a substring of DW2451/ADA, and the short answer
+  # would be confidently wrong about which machine stands there.
+  raise 'the short model won' unless
+    Check.model_named_in('Reserved opening — DW2451/ADA') == 'DW2451/ADA'
+  # And an unknown text is nil, not a guess.
+  raise 'something was invented' unless Check.model_named_in('a cupboard').nil?
+  raise 'empty text must be nil' unless Check.model_named_in('').nil?
+end
+
+check('p.144 is judged on TWO PUBLISHED WIDTHS and never on a drawn one') do
+  # THE REGRESSION THIS EXISTS FOR, and it was caught before it ever ran. The
+  # south run gap in the Avenida Primavera model is drawn 1220,0 - "(DF48650C/S/P,
+  # 0,8 breathing space)" - while the range is 1219 and the hood is 1219. A check
+  # against the DRAWN box refuses this kitchen's own hood by 1 mm of our own
+  # breathing space; a check against the MACHINE passes it exactly.
+  raise 'a 1219 hood must cover a 1219 range' unless Check.covers?('PW482418', 'DF48650C/S/P')
+  raise 'a 914 hood must NOT cover a 1219 range' if Check.covers?('PW362418', 'DF48650C/S/P')
+  raise 'a 1524 hood covers it too' unless Check.covers?('PW602418', 'DF48650C/S/P')
+  # nil, not false, when either side is unknown - a comparison that cannot be
+  # made is not a comparison that failed.
+  raise 'unknown machine must be nil' unless Check.covers?('PW482418', 'NOPE').nil?
+  raise 'a non-hood has no envelope, so nil' unless Check.covers?('DW2451', 'DF48650C/S/P').nil?
+end
+
 check('this file still writes nothing and draws nothing') do
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/88_appliance_check.rb', __dir__))
   forbidden = ['set_attribute', 'add_group', 'add_instance', 'start_operation']

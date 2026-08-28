@@ -454,3 +454,93 @@ order is: commit, install `ucon-appliances-0.3.0.rbz`, restart SketchUp,
 
 Suites **518 / 84 / 44**, core **1.0.1 → 1.1.0**, contract **v2.3 → v2.4**.
 The appliance package is unchanged this step and stays **0.3.0**.
+
+---
+
+## 14. `probe_inbox_hold_71.rb` is tracked now, and it was not meant to be
+
+**The commit swept in a file that was being held out of git on purpose.**
+`tools/probe_inbox_hold_71.rb` — the armed probe that would rebuild the six
+island panels in wood, written and deliberately kept OUT of `tools/probe_inbox/`
+— was the one untracked file in the working tree, and the handoff described the
+tree by it: *"clean but for `tools/probe_inbox_hold_71.rb`, held on purpose."*
+
+**The cause was mine and it is exactly the shape this repository keeps finding.**
+The previous `build/go.sh` staged `tools/test_contract.rb` **by name**. This step
+added two more suites, and instead of naming them I widened the line to `tools`.
+`tools/probe_inbox/` is git-ignored; a file sitting one level up beside it is
+not, so `git add -A … tools` took it.
+
+> **A pattern widened to cover two new cases quietly covered a third nobody
+> looked at.** The narrow version was not clumsy — it was load-bearing, and
+> nothing said so.
+
+**Andriy, 2026-08-28: leave it tracked.** Its siblings — `wall_probe.rb`,
+`corner_probe.rb`, `void_probe.rb` — are tracked too, and being in the repository
+runs nothing: a probe only executes when it is dropped into
+`tools/probe_inbox/`, which is still ignored and still empty of it.
+
+**What is lost, and is recorded here instead:** the working tree no longer says
+"held" by being dirty. *Armed and not in the inbox* was a fact carried by git
+status, and from today it is carried only by the filename and by this paragraph.
+**A file named `..._hold_...` in `tools/` is armed and is not to be moved into
+`tools/probe_inbox/` without asking** — it commits its own operation, so the
+bridge's rollback does not apply to it.
+
+`build/go.sh` now names the three suites explicitly again rather than staging
+`tools`, so the next step cannot repeat this without somebody deciding to.
+
+---
+
+## 15. The width check was wrong, and the model said so before it ever ran
+
+Before telling Andriy to install anything, one number in the new command was
+checked against what the model actually holds. It did not survive.
+
+`build_wall_reservation` compared the hood's published width against **the
+selection's drawn width** to enforce printed p.144. Probe run 64, read-only:
+
+```
+run gap found: UCON void — run gap 1220.0 mm (DF48650C/S/P, 0.8 breathing space)
+  width_mm  attribute : 1220.0
+  drawn box           : 1220.000 x 620.000 x 920.000 mm
+```
+
+**The south run gap is drawn 1220,0 and says why on itself — 0,8 of breathing
+space.** The range is 1219 and the hood is 1219, so p.144 is satisfied *exactly*.
+The check would have refused this kitchen's own hood, on its first use, for being
+1 mm narrower than **our own drawing decision**.
+
+> **A published number compared against a drawn one.** The drawn number carries
+> decisions the published one never had — breathing space here, and elsewhere the
+> no-gaps rule that makes the fridge doors 486,5 and 733,5 while the ORDER still
+> says 483 and 730. Crossing that line is how this project has been wrong before,
+> and it is the same line the east fridge panels are careful about in the other
+> direction.
+
+**Fixed by comparing two published numbers and no drawn one.** The reservation
+carries its machine in PROSE — `Reserved run gap — DF48650C/S/P` — so
+`ApplianceCheck.model_named_in` finds it by **looking for one of the appliance
+module's own model strings inside the text**, which is a lookup against a closed
+list rather than a decode by analogy. Longest match wins, because `DW2451` is a
+substring of `DW2451/ADA` and the short answer would be confidently wrong.
+`ApplianceCheck.covers?` then compares hood envelope against machine opening.
+
+**And when the object below names no machine we know, nothing is compared.**
+`covers?` returns **nil rather than false**: a comparison that cannot be made is
+not a comparison that failed.
+
+Both new checks are in the seam suite, and the p.144 one carries the story so it
+cannot be "simplified" back into a drawn-width comparison.
+
+### It cost no rebuild, and that was the reason for putting it where it is
+
+Both methods went into `core/88_appliance_check.rb` — the ENGINE's tree, which a
+dev loader refreshes with `Reload core` in a second — rather than into the
+appliance package, which moves only through Extension Manager and a restart.
+Precedent: `run_gap_models` and `housing_models` already ask `Appliances.all` and
+select from it in this file. **`ucon-appliances-0.3.0.rbz` is still the file to
+install**, verified by re-opening the archive and diffing every entry against the
+tree.
+
+Suites **518 / 84 / 46**.
