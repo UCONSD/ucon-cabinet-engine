@@ -458,9 +458,50 @@ module UCON
       # whether the change is a printed modification or an unprinted request -
       # this method never decides that and must not learn how.
       def build(code, model = Sketchup.active_model, width_mm: nil, height_mm: nil,
-                appliance: nil, installation: nil)
-        unit = Registry.with_ordered_height(
-          Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
+                depth_mm: nil, appliance: nil, installation: nil)
+        # THREE DIMENSIONS CAN COME FROM THE ORDER, and until 2026-08-28 this
+        # line ordered two. The third arrived with the ceramic tops and was
+        # found by the picker rather than by the suite: printed p.110 prices one
+        # code at eight depths, so a top has no depth until a band is chosen,
+        # and this method handed the nil straight to the geometry. Andriy pressed
+        # the new Worktops button and got
+        #
+        #     Non-positive dimension for CARCASS: w=847 d= h=40
+        #
+        # which is the right refusal in the wrong voice, three layers below the
+        # question. with_ordered_depth refuses in a sentence that names the eight
+        # bands; it is called HERE so that the refusal reaches the person who
+        # pressed the button.
+        #
+        # THE SUITE HAD MISSED IT because its whole-registry sweep ORDERS a
+        # depth before validating - "valid once ordered" is the honest claim and
+        # it stayed true. What nothing asked was whether an unordered one could
+        # still reach the geometry. It could. That check now exists.
+        # AND A TOP IS NOT BUILT FROM A LIST OF CODES AT ALL. Refused before the
+        # dimensions are ordered, because the depth refusal below - true, and
+        # about bands - would answer a question nobody asked. Every other article
+        # here is a thing you choose and then place. A worktop is the opposite:
+        # it has no length, no position and no height of its own, it is as long
+        # as what it covers and it starts on top of it, and all three come off
+        # the RUN. The picker knows nothing about a selection.
+        #
+        # Same shape as an end panel without a ground, and found the same way -
+        # in the model, 2026-08-28, the moment the tops chapter put a Worktops
+        # button in the picker. It read as an offer, and the offer bottomed out
+        # three layers down in Geometry.box.
+        if Registry.lookup(code)['object_class'].to_s == 'worktop'
+          raise ArgumentError,
+                "#{code} is a worktop, and a worktop is not built from the picker.\n\n" \
+                "It has no length, no depth and no height of its own: it is as long as " \
+                "the run it covers, it starts on top of that run, and its depth is a band " \
+                "chosen against it. Nothing in a list of codes knows which run you mean.\n\n" \
+                "Select the run and press Worktop. The article is asked for there."
+        end
+
+        unit = Registry.with_ordered_depth(
+          Registry.with_ordered_height(
+            Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
+          ), depth_mm
         )
         # BEFORE ANY DIMENSION IS READ. base_z_mm, plinth? and the placement
         # transform all ask the unit where it stands, and for a panel the unit
@@ -1435,6 +1476,71 @@ module UCON
         "elevation that looks like a right one."
       end
 
+      # ---- WHICH TOP, EXACTLY, 2026-08-28 ----------------------------------
+      #
+      # PURE, AND IT RAISES RATHER THAN DEFAULTING - the same shape as
+      # run_gap_attributes and for the same reason. Three things have to be true
+      # before a top is an order line, and only one of them is in the code:
+      #
+      #   the CODE gives the thickness (40 or 60) and nothing else;
+      #   the BAND gives the depth, chosen from eight (Registry.with_ordered_depth);
+      #   the GROUP gives the price, and it is not in the code at all.
+      #
+      # The group is the part that will be forgotten, because every other
+      # article in this registry prices itself from its code. Here one code
+      # spans five groups and eight bands - forty numbers - so a top without a
+      # group is not a cheap top, it is an unpriceable one that LOOKS complete.
+      # That is why this refuses instead of leaving the key off the object.
+      #
+      # The FINISH NAME is a different thing again: it is an order field, it
+      # changes no code and no price, and it may legitimately be unchosen while
+      # the drawing is being made. So it is optional, and the object says which
+      # of the two it has.
+      def worktop_article(code, depth_band_mm, finish_group, finish = nil)
+        unit = Registry.lookup(code)
+        unless unit['object_class'].to_s == 'worktop'
+          raise ArgumentError,
+                "#{code} is not a worktop - it is #{unit['object_class']}. " \
+                'A run is covered by a top, and nothing else in this registry is one.'
+        end
+
+        matrix = unit['points_per_lm_by_group_and_band']
+        if matrix.nil?
+          raise ArgumentError,
+                "#{code} carries no finish groups, so this engine cannot tell what " \
+                'it costs. The section it came from is incomplete.'
+        end
+
+        g = finish_group.to_s.strip.upcase
+        unless matrix.key?(g)
+          raise ArgumentError,
+                "A ceramic top needs its FINISH GROUP, and #{finish_group.inspect} is " \
+                "not one of #{matrix.keys.sort.join(', ')}.\n\n" \
+                'The group is not in the article code: one code is priced across all ' \
+                'of them, so a top without a group cannot be priced at all - and it ' \
+                'would reach the factory looking like a finished line.'
+        end
+
+        ordered = Registry.with_ordered_depth(unit, depth_band_mm)
+        band    = ordered['depth_mm']
+
+        { unit: ordered,
+          code: code,
+          thickness_mm: unit['height_mm'].to_f,
+          depth_mm: band,
+          pricing_group_ref: g,
+          family: unit['family'],
+          unit_type: "#{unit['description'] || 'Ceramic top'} - group #{g}",
+          source_ref: unit['source_ref'],
+          finish_note: if finish.to_s.strip.empty?
+                         "Finish group #{g}; THE FINISH IS NOT CHOSEN - an order field " \
+                         'that changes no code and no price, and it has to be named ' \
+                         'before this line is sent.'
+                       else
+                         "Finish group #{g}, #{finish.to_s.strip}."
+                       end }
+      end
+
       # ---- THE WORKTOP, 2026-08-27 -----------------------------------------
       #
       # THE FIRST OBJECT IN THIS MODEL WITH object_class 'worktop'. The Contract
@@ -1453,12 +1559,56 @@ module UCON
       # would put a surface through the middle of a cabinet and call it a
       # measurement. The message names both heights.
       #
-      # DRAWN, NOT ORDERED. The tops chapter is Volume 3 printed p.9-71 and is
-      # not extracted, so this object carries no code and says so on itself -
-      # the same shape as the run gap, and for the same reason: a factory must
-      # not receive a line nobody can make, and a person must see the surface.
-      def build_worktop(model = Sketchup.active_model)
-        t = Project.worktop_t_mm(model)
+      # DRAWN AND, SINCE 2026-08-28, ORDERABLE. It was written the day before
+      # with no article at all: Volume 3's tops chapter was unextracted, so the
+      # object carried code nil and manufacturer 'client' and said so on itself
+      # - the run gap's shape, and for the run gap's reason.
+      #
+      # Linear Elements printed p.110 is now held (the 4 and 6 cm ceramic tops),
+      # and an article changes three things rather than one:
+      #
+      #   THICKNESS stops being stated and becomes the CODE'S. TOPDR008040 is
+      #   40 and TOPDR008060 is 60; there is nothing to state and nothing to
+      #   default. If the project already states a different number the two are
+      #   in contradiction and this refuses - overwriting the project silently
+      #   would move every run gap's top by the difference.
+      #
+      #   DEPTH stops being measured and becomes a CHOSEN BAND. The page prices
+      #   eight and no ninth, so it is not derived from the carcass under it -
+      #   see the section's own depth_note, and Registry.with_ordered_depth.
+      #   The band is anchored at the carcass BACK and the difference goes to
+      #   the FRONT, as an overhang past the door face, because the back is
+      #   against a wall and cannot absorb anything.
+      #
+      #   LENGTH stops being merely measured and becomes ORDERED: 3140 is the
+      #   sheet, and a run longer than that is two tops with a joint somebody
+      #   has to place. with_ordered_width raises for us; this only makes the
+      #   message say what the number means.
+      #
+      # WITH NO ARTICLE IT STILL DRAWS THE OLD SLAB, unchanged, because a
+      # kitchen whose top nobody has chosen still needs a surface in the
+      # elevation. The two paths are told apart by one argument and they say
+      # different things on the object.
+      #
+      # THE FINISH GROUP IS NOT IN THE CODE. One code spans five groups and
+      # eight bands, so the group rides on `pricing_group_ref` - the one key
+      # Contract SS1.2 lets near a price list, and it holds the REFERENCE and
+      # never a number. Nothing here computes points; the exporter looks them up.
+      def build_worktop(model = Sketchup.active_model, code: nil, depth_band_mm: nil,
+                        finish_group: nil, finish: nil)
+        article = worktop_article(code, depth_band_mm, finish_group, finish) if code
+        t = article ? article[:thickness_mm] : Project.worktop_t_mm(model)
+        if article && (stated = Project.worktop_t_mm(model)) &&
+           (stated - article[:thickness_mm]).abs > 0.001
+          raise ArgumentError,
+                "This project states a #{stated.round} mm worktop and " \
+                "#{article[:code]} is #{article[:thickness_mm].round}.\n\n" \
+                'Both numbers are already in the model - every run gap and hood ' \
+                'reservation was drawn to the stated one - so one of them is ' \
+                'wrong and nothing here may choose which. State the thickness ' \
+                'that matches the article, or order the article that matches the ' \
+                'thickness.'
+        end
         if t.nil?
           raise ArgumentError,
                 "No worktop thickness is stated on this model.\n\n" \
@@ -1506,34 +1656,94 @@ module UCON
                 'through the middle of a cabinet. Select one run at a time.'
         end
 
-        top   = tops.keys.first
-        depth = Registry.lookup(Contract.read(anchor.definition)['code'])['depth_mm'].to_f
-        y0    = front_y_mm
-        d     = depth - y0
-        w     = (hi - lo).round(1)
+        top     = tops.keys.first
+        carcass = Registry.lookup(Contract.read(anchor.definition)['code'])['depth_mm'].to_f
+        w       = (hi - lo).round(1)
 
-        attrs = {
-          'schema_version' => Contract::SCHEMA_VERSION,
-          'object_class'   => 'worktop',
-          # Nobody has chosen the article. Volume 3 prints tops on p.9-71 and
-          # this registry holds none of it, so the honest manufacturer is the
-          # one who has not been asked yet.
-          'manufacturer'   => 'client',
-          'unit_type'      => 'Worktop - drawn, not ordered',
-          'geometry_kind'  => 'linear',
-          'width_mm'       => w,
-          'depth_mm'       => d.round(1),
-          'height_mm'      => t,
-          'code'           => nil,
-          'code_status'    => 'PRELIMINARY',
-          'status'         => 'PLANNING',
-          'source_ref'     => 'no article chosen - CESAR - 3 Linear Elements.pdf printed p.9-71 is the tops chapter and is not extracted',
-          'notes'          => "Length #{w.round} and depth #{d.round} MEASURED off the run; " \
-                              "it starts at #{top.round}, which is that run's top taken through its " \
-                              "code and not off a body somebody may have moved; thickness #{t.round} " \
-                              'STATED on the model. NOT ORDERED: no top article is chosen, and this ' \
-                              'object must not reach a factory as a line.'
-        }
+        # THE FRONT OF THE FINISHED RUN, and it is not the carcass. front_y_mm
+        # is negative - the door and its gap stand proud of the box - so the run
+        # measures carcass - front_y_mm from face to back. That number, 644,5 on
+        # a 620 carcass, is what an unordered slab has always been drawn to.
+        finished = (carcass - front_y_mm).round(1)
+
+        if article
+          # THE BAND IS THE DEPTH, AND THE BACK IS THE DATUM. A wall cannot
+          # absorb 5,5 mm; a front edge can, and that is what an overhang IS.
+          # A band NARROWER than the finished run is not refused here - a top
+          # set back off the door face is a design somebody may want - but it is
+          # named on the object, because it does not look deliberate in a
+          # drawing.
+          d  = article[:depth_mm].to_f
+          y0 = carcass - d
+          Registry.with_ordered_width(article[:unit], w)
+          over = (finished - d).round(1)
+          overhang = if over.negative?
+                       "#{(-over).round(1)} proud of the door face"
+                     elsif over.zero?
+                       'flush with the door face'
+                     else
+                       "#{over.round(1)} SHORT of the door face - the top is set back"
+                     end
+        else
+          y0 = front_y_mm
+          d  = finished
+        end
+
+        attrs = if article
+                  { 'schema_version' => Contract::SCHEMA_VERSION,
+                    'object_class'   => 'worktop',
+                    'manufacturer'   => 'cesar',
+                    'family'         => article[:family],
+                    'unit_type'      => article[:unit_type],
+                    'geometry_kind'  => 'linear',
+                    'width_mm'       => w,
+                    'depth_mm'       => d.round(1),
+                    'height_mm'      => t,
+                    'code'           => article[:code],
+                    # PRELIMINARY, and it stays that way until Elda prices it.
+                    # The article is chosen; the order is not confirmed, and
+                    # this project has never used CONFIRMED for a line nobody
+                    # outside has seen.
+                    'code_status'    => 'PRELIMINARY',
+                    'status'         => 'PLANNING',
+                    # THE REFERENCE, NEVER THE NUMBER - Contract SS1.2. The group
+                    # is an ORDER AXIS the code does not carry (domain rule 6),
+                    # so without this key the line is unpriceable and looks
+                    # complete, which is the worst way to be wrong.
+                    'pricing_group_ref' => article[:pricing_group_ref],
+                    'source_ref'     => article[:source_ref],
+                    'notes'          => "Length #{w.round} MEASURED off the run; it starts at " \
+                                        "#{top.round}, which is that run's top taken through its code " \
+                                        "and not off a body somebody may have moved. Depth #{d.round} " \
+                                        "is a CHOSEN BAND, not a measurement - printed p.110 prices " \
+                                        "eight and no ninth - seated against the carcass back, so it " \
+                                        "stands #{overhang} (the finished run is #{finished.round}). " \
+                                        "Thickness #{t.round} is the ARTICLE'S, not stated. " \
+                                        "#{article[:finish_note]}" }
+                else
+                  { 'schema_version' => Contract::SCHEMA_VERSION,
+                    'object_class'   => 'worktop',
+                    # Nobody has chosen the article, so the honest manufacturer
+                    # is the one who has not been asked yet. The tops chapter IS
+                    # extracted now (printed p.110, the 4 and 6 cm ceramics) -
+                    # this path means nobody picked from it, which is a different
+                    # sentence from the one written here on 2026-08-27.
+                    'manufacturer'   => 'client',
+                    'unit_type'      => 'Worktop - drawn, not ordered',
+                    'geometry_kind'  => 'linear',
+                    'width_mm'       => w,
+                    'depth_mm'       => d.round(1),
+                    'height_mm'      => t,
+                    'code'           => nil,
+                    'code_status'    => 'PRELIMINARY',
+                    'status'         => 'PLANNING',
+                    'source_ref'     => 'no article chosen - CESAR - 3 Linear Elements.pdf printed p.110 holds the 4 and 6 cm ceramic tops and nobody has picked one',
+                    'notes'          => "Length #{w.round} and depth #{d.round} MEASURED off the run; " \
+                                        "it starts at #{top.round}, which is that run's top taken through its " \
+                                        "code and not off a body somebody may have moved; thickness #{t.round} " \
+                                        'STATED on the model. NOT ORDERED: no top article is chosen, and this ' \
+                                        'object must not reach a factory as a line.' }
+                end
         Contract.validate!(attrs)
 
         model.start_operation('UCON: build worktop', true)
@@ -1545,7 +1755,16 @@ module UCON
           o = frame.origin
           seat = Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * frame
           inst = model.active_entities.add_instance(defn, seat)
-          inst.name = "UCON worktop - #{w.round} x #{d.round} x #{t.round}, drawn not ordered"
+          # THE NAME IS READ IN THE OUTLINER AND NOWHERE ELSE, and the two
+          # paths must not look alike there: one of these is an order line and
+          # the other is a placeholder, and the outliner is where somebody
+          # notices they built the wrong one.
+          inst.name = if article
+                        "UCON worktop #{article[:code]} - #{w.round} x #{d.round} x " \
+                        "#{t.round}, group #{article[:pricing_group_ref]}"
+                      else
+                        "UCON worktop - #{w.round} x #{d.round} x #{t.round}, drawn not ordered"
+                      end
           model.selection.clear
           model.selection.add(inst)
           model.commit_operation

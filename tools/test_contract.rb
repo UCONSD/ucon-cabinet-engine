@@ -8590,6 +8590,111 @@ check('the thickness is on height_mm, because a top is thin on Z') do
     Registry.lookup('TOPDR008060')['height_mm'] == 60
 end
 
+check('AN UNORDERED DEPTH MUST NOT REACH THE GEOMETRY - the picker found this') do
+  # 2026-08-28, in the model and not here. The moment the picker grew a
+  # Worktops button, Generator.build handed a nil depth to Geometry.box and
+  # SketchUp said
+  #
+  #     Non-positive dimension for CARCASS: w=847 d= h=40
+  #
+  # which is the right refusal in the wrong voice, three layers below the
+  # question that was actually asked.
+  #
+  # THE SWEEP ABOVE COULD NOT HAVE CAUGHT IT: it ORDERS a width, a height and
+  # now a depth before validating, because "valid once ordered" is the honest
+  # claim. Nothing asked the opposite question - whether an UNordered one can
+  # still be built - and that is this check. Same for width and height, so that
+  # the next dimension that comes from the order is covered before it exists.
+  begin
+    Generator.build('TOPDR008040', nil, width_mm: 847)
+    raise 'a top was built from the picker'
+  rescue ArgumentError => e
+    # AND THE REFUSAL IS ABOUT THE RUN, NOT ABOUT THE BAND. The band refusal is
+    # true and it answers a question nobody asked: a top reached through a list
+    # of codes is wrong before its depth is - it has no length and no position
+    # either, and all three come off the run. So the message names the run.
+    raise e.message unless e.message.include?('Select the run and press Worktop')
+  end
+  # the band refusal is still the one a top gets once it IS built off a run
+  begin
+    Registry.with_ordered_depth(Registry.lookup('TOPDR008040'), nil)
+    raise 'a top with no depth band was accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('chosen with the order')
+  end
+  begin
+    Generator.build('MNS022038', nil)
+    raise 'a sheet with no width was built'
+  rescue ArgumentError => e
+    raise e.message unless e.message =~ /width|order|state/i
+  end
+end
+
+check('a top needs its FINISH GROUP, and the code does not carry one') do
+  a = Generator.worktop_article('TOPDR008040', 650, 'D')
+  raise a[:thickness_mm].to_s unless a[:thickness_mm] == 40.0
+  raise a[:depth_mm].to_s unless a[:depth_mm] == 650
+  raise a[:pricing_group_ref] unless a[:pricing_group_ref] == 'D'
+  # lower case is a typist, not a different group
+  raise 'case matters where it should not' unless
+    Generator.worktop_article('TOPDR008040', 380, 'd')[:pricing_group_ref] == 'D'
+
+  # NO GROUP IS A REFUSAL, not a default. An unpriceable line that looks
+  # complete is worse than no line.
+  [nil, '', 'F', 'Dekton'].each do |g|
+    Generator.worktop_article('TOPDR008040', 650, g)
+    raise "#{g.inspect} was accepted as a group"
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('FINISH GROUP')
+  end
+
+  # and the article is not a top at all
+  begin
+    Generator.worktop_article('B80601', 650, 'D')
+    raise 'a base unit was accepted as a top'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('is not a worktop')
+  end
+end
+
+check('AND THE FINISH NAME IS OPTIONAL, but its absence is written down') do
+  # It changes no code and no price - it is an order field - so a drawing may
+  # legitimately be made before it is chosen. What may not happen is the line
+  # going out with nobody noticing it was never named.
+  quiet = Generator.worktop_article('TOPDR008040', 650, 'D')
+  raise quiet[:finish_note] unless quiet[:finish_note].include?('NOT CHOSEN')
+  named = Generator.worktop_article('TOPDR008040', 650, 'D', 'Marmorio')
+  raise named[:finish_note] unless named[:finish_note].include?('Marmorio')
+  raise 'a named finish still claims to be unchosen' if named[:finish_note].include?('NOT CHOSEN')
+end
+
+check('THE WORKTOP DIALOG PRE-CHOOSES NEITHER THE BAND NOR THE GROUP') do
+  # A SketchUp inputbox selects its first dropdown entry, so whatever is put
+  # first is what somebody gets by pressing OK without reading. Both of these
+  # are decisions with a price behind them - the band decides how far the top
+  # stands past the door face, the group decides what it costs - so both lists
+  # open on a sentinel and the build refuses if the sentinel comes back.
+  #
+  # A SOURCE check, like the picker's Build-button one, because nothing
+  # headless can open an inputbox.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  m = src[/def build_worktop_from_dialog.+?\n      end\n/m]
+  raise 'build_worktop_from_dialog is gone' unless m
+  raise 'the sentinel must be double-quoted or it prints as a backslash' unless
+    m.include?('chose = "\u2014 choose \u2014"')
+  raise 'the band list must open on the sentinel' unless
+    m.include?('([chose] + bands)')
+  raise 'the group list must open on the sentinel' unless
+    m.include?('([chose] + groups)')
+  raise 'and the sentinel must refuse, not fall through' unless
+    m.include?('if band == chose || group == chose')
+  # AND THE THICKNESS MUST NOT BE RESOLVED BEHIND THE REFUSAL. build_worktop
+  # raises when the project states one thickness and the article is another;
+  # a dialog that overwrote the project would answer that refusal for it.
+  raise 'the dialog must only state a thickness where none is stated' unless
+    m.include?('if Project.worktop_t_mm(su).nil?')
+end
+
 check('a top is ordered by LENGTH, and 3140 is the end of the sheet') do
   u = Registry.lookup('TOPDR008040')
   raise u['width_range_mm'].inspect unless u['width_range_mm'] == [1, 3140]

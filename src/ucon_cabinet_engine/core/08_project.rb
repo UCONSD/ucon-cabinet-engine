@@ -59,6 +59,50 @@ module UCON
         v
       end
 
+      # ---- WHICH TOP THIS KITCHEN IS GETTING, 2026-08-28 -------------------
+      #
+      # A PROJECT FACT, exactly like the thickness above and for a stronger
+      # reason: a kitchen has ONE worktop material. The south run, the west run,
+      # the island and the breakfast counter are four objects and one article -
+      # asking again at each of them is four chances to answer differently, and
+      # a model with two ceramics in it is a defect nobody would see in a
+      # drawing.
+      #
+      # THE DEPTH BAND IS NOT HERE, ON PURPOSE. It is the one part of the choice
+      # that is genuinely per-run: 650 over the 620 carcasses, 380 for the 350
+      # counter. Keeping it out means it is asked every time, which is right.
+      #
+      # The thickness is NOT kept here either - it is the code's, and
+      # worktop_t_mm already holds the project's stated number. If the two ever
+      # disagree, Generator.build_worktop refuses rather than choosing.
+      def worktop_code(model = Sketchup.active_model)
+        v = model.get_attribute(DICTIONARY, 'worktop_code')
+        v.to_s.empty? ? nil : v.to_s
+      rescue StandardError
+        nil
+      end
+
+      def worktop_finish_group(model = Sketchup.active_model)
+        v = model.get_attribute(DICTIONARY, 'worktop_finish_group')
+        v.to_s.empty? ? nil : v.to_s
+      rescue StandardError
+        nil
+      end
+
+      def worktop_finish(model = Sketchup.active_model)
+        v = model.get_attribute(DICTIONARY, 'worktop_finish')
+        v.to_s.empty? ? nil : v.to_s
+      rescue StandardError
+        nil
+      end
+
+      def worktop_article!(code, finish_group, finish, model = Sketchup.active_model)
+        model.set_attribute(DICTIONARY, 'worktop_code', code.to_s)
+        model.set_attribute(DICTIONARY, 'worktop_finish_group', finish_group.to_s)
+        model.set_attribute(DICTIONARY, 'worktop_finish', finish.to_s)
+        [code.to_s, finish_group.to_s, finish.to_s]
+      end
+
       # The sentence that goes onto anything drawn from a project number, so the
       # object carries its own provenance and nobody has to remember it.
       def stated_note(key, value)

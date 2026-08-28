@@ -91,9 +91,60 @@ adding a key to `lookup` and not to `build_catalog` is the `wall_hung` bug of
 The counter is the same material and the same thickness as the worktop; that was
 Andriy's instruction, and it is why it shares the code rather than getting one.
 
-**Not done, and named so it is not mistaken for done:**
-`Generator.build_worktop` still writes `code: nil` / `manufacturer: 'client'`,
-and takes its depth off the carcass under it. With a chapter in hand, both of
-those are now wrong in a way they were not wrong yesterday — the article exists,
-and the depth is a band that overhangs rather than a measurement. Nothing has
-been drawn from this chapter yet.
+## And then the picker found the hole, the same afternoon
+
+Andriy pressed the **Worktops** button that appeared in the picker the moment
+the chapter loaded, and SketchUp said:
+
+> Non-positive dimension for CARCASS: w=847 d= h=40
+
+The right refusal in the wrong voice, three layers below the question. Two
+defects behind it.
+
+**`Generator.build` ordered a width and a height and never a depth.** Three
+dimensions can come from the order as of that morning; that one line knew about
+two. It now calls `with_ordered_depth`, so the refusal is the sentence that
+names the eight bands.
+
+**And the real one: a top must not be built from the picker at all.** Every
+other article here is a thing you choose and then place. A worktop is the
+opposite — it has no length, no position and no height of its own; it is as long
+as the run it covers, it starts on top of that run, and its depth is a band
+chosen against it. All three come off a **selection**, and a list of codes has
+none. So it refuses with the run in the message, *before* the depth refusal can
+answer a question nobody asked. The same shape as an end panel without a ground
+— and found the same way, in the model.
+
+**Why the suite missed it.** The whole-registry sweep *orders* a width, a height
+and now a depth before validating, because "valid once ordered" is the honest
+claim, and it stayed true. Nothing asked the opposite question — whether an
+**un**ordered one could still reach the geometry. It could. That check now
+exists for all three dimensions, so the fourth is covered before it is invented.
+
+## What a worktop is now
+
+`Generator.build_worktop` takes an article and writes a real order line:
+
+- **thickness from the code** — 40 or 60, not stated any more. If the project
+  already states a different number, it refuses: both numbers are in the model
+  (every run gap and hood reservation was drawn to the stated one), so one of
+  them is wrong and nothing may choose which.
+- **depth from a chosen band**, seated against the carcass **back**, so the
+  difference falls at the **front** as an overhang past the door face. A wall
+  cannot absorb 5,5 mm; a front edge can, and that is what an overhang is.
+- **length measured off the run and then ordered** through
+  `with_ordered_width`, so 3140 refuses by itself.
+- **the finish group on `pricing_group_ref`** — the one key Contract §1.2 allows
+  near a price list, and it holds the reference and never a number.
+
+Without an article it still draws the old placeholder slab, unchanged, because a
+kitchen whose top nobody has chosen still needs a surface in the elevation. The
+two paths say different things on the object and in the outliner.
+
+The palette's Worktop button asks the article, the band and the group, and
+**pre-chooses neither of the last two**: a SketchUp inputbox selects its first
+dropdown entry, so anything real put first is what somebody gets by pressing OK
+without reading — and both of these are decisions with a price behind them. Both
+lists open on a sentinel and the build refuses if it comes back. The article,
+group and finish are kept on the model, because a kitchen has one top material;
+the **band** is asked every time, because it is genuinely per-run.

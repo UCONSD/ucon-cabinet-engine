@@ -46,18 +46,7 @@ module UCON
         # which no model can be measured for - core/08_project.rb. If it has not
         # been stated, ask once here rather than defaulting: a slab drawn at a
         # number nobody chose is a wrong elevation that looks like a right one.
-        @dialog.add_action_callback('worktop') do |_|
-          begin
-            su = Sketchup.active_model
-            if Project.worktop_t_mm(su).nil?
-              ans = UI.inputbox(['Worktop thickness, mm'], ['40'], 'UCON — worktop')
-              Project.worktop_t_mm!(ans[0]) if ans
-            end
-            Generator.build_worktop(su) if Project.worktop_t_mm(su)
-          rescue StandardError => e
-            UI.messagebox("Worktop not drawn:\n\n#{e.message}")
-          end
-        end
+        @dialog.add_action_callback('worktop') { |_| build_worktop_from_dialog }
         @dialog.add_action_callback('reserve_run_gap') do |_|
           begin
             models = ApplianceCheck.run_gap_models
@@ -244,6 +233,81 @@ module UCON
           end
         end
         @picker.show
+      end
+
+      # ---- THE WORKTOP BUTTON, rewritten 2026-08-28 ------------------------
+      #
+      # It used to ask one number - the thickness - because there was no article
+      # to ask about. Now there is, and the thickness is the ARTICLE'S, so the
+      # question changed shape rather than growing a field.
+      #
+      # NOTHING IS PRE-CHOSEN. Both dropdowns open on "— choose —" and building
+      # refuses if either comes back that way. A SketchUp inputbox selects its
+      # first entry, so any real value put first is a value somebody gets by
+      # pressing OK without reading - and both of these are decisions with a
+      # price behind them. The depth band decides an overhang and the finish
+      # group decides the money; neither is this dialog's to guess.
+      #
+      # THE ARTICLE IS REMEMBERED AND THE BAND IS NOT. A kitchen has one top
+      # material and several depths - 650 over the 620 runs, 380 for the 350
+      # counter - so core/08_project.rb keeps the code, the group and the finish
+      # and this asks the band every time.
+      def build_worktop_from_dialog
+        su = Sketchup.active_model
+        tops = Registry.catalog.select { |c| c['class'] == 'worktop' }
+        if tops.empty?
+          UI.messagebox("No worktop article is held.\n\n" \
+                        'The tops chapter has to be extracted before one can be ordered.')
+          return
+        end
+
+        bands = (tops.first['depth_bands_mm'] || []).map { |b| b.to_i.to_s }
+        groups = (Registry.lookup(tops.first['code'])['points_per_lm_by_group_and_band'] || {})
+                 .keys.sort
+        # Double-quoted: in single quotes \u2014 is a backslash and a u, and the
+        # dropdown would read literally "\u2014 choose \u2014".
+        chose = "\u2014 choose \u2014"
+
+        codes = tops.map { |c| "#{c['code']} - #{c['height_mm'].to_i} mm" }
+        prev  = Project.worktop_code(su)
+        answer = UI.inputbox(
+          ['Article (the thickness is the code\'s)',
+           'Depth band, mm - CHOSEN, not measured',
+           'Finish group - not in the code, and it decides the price',
+           'Finish name - an order field, may be left blank'],
+          [codes.find { |c| prev && c.start_with?(prev) } || codes.first,
+           chose,
+           Project.worktop_finish_group(su) || chose,
+           Project.worktop_finish(su).to_s],
+          [codes.join('|'), ([chose] + bands).join('|'),
+           ([chose] + groups).join('|'), ''],
+          'UCON - worktop'
+        )
+        return unless answer
+
+        code  = answer[0].to_s.split(' - ').first
+        band  = answer[1]
+        group = answer[2]
+        if band == chose || group == chose
+          UI.messagebox("Nothing was drawn.\n\n" \
+                        'The depth band and the finish group are both choices with a price ' \
+                        "behind them - the band decides how far the top stands past the door " \
+                        'face, the group decides what it costs - and neither is this dialog\'s ' \
+                        'to guess.')
+          return
+        end
+
+        Project.worktop_article!(code, group, answer[3], su)
+        # The stated thickness follows the article rather than contradicting it,
+        # and only where nothing has stated one yet: build_worktop refuses on a
+        # disagreement, and this must not resolve that refusal behind its back.
+        t = Registry.lookup(code)['height_mm'].to_f
+        Project.worktop_t_mm!(t, su) if Project.worktop_t_mm(su).nil?
+
+        Generator.build_worktop(su, code: code, depth_band_mm: band,
+                                    finish_group: group, finish: answer[3])
+      rescue StandardError => e
+        UI.messagebox("Worktop not drawn:\n\n#{e.message}")
       end
 
       # 'filler' is OUR class, not one of the catalog's three element classes.
