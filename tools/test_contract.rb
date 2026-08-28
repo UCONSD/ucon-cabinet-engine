@@ -244,12 +244,12 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 937 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves)') do
+check('registry loads and holds 939 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
   # 2026-08-27: +44, and they are the first codes here out of a book that is not
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 937
+  raise "got #{n}" unless n == 939
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -277,6 +277,10 @@ check('EVERY BUILDABLE registry code yields contract-valid attributes') do
     # the same reason it orders the width, and "valid once ordered" stays the
     # honest claim.
     u = Registry.with_ordered_height(u, u['height_range_mm'][0]) if u['height_range_mm']
+    # AND SO CAN THE DEPTH, 2026-08-28, and it is not a range but a LIST. A
+    # ceramic top is priced at eight depths and has none until one is picked;
+    # the sweep picks the first for the same reason it orders the other two.
+    u = Registry.with_ordered_depth(u, u['depth_bands_mm'][0]) if u['depth_bands_mm']
     # And one that is not buildable is not required to be dimensionable: the
     # front-only fillers have no depth on the page, which is exactly why they
     # carry buildable false and a reason. Checked on its own below.
@@ -438,9 +442,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 937 rows, each with code/dims/description/source') do
+check('registry catalog: 939 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 937
+  raise cat.length.to_s unless cat.length == 939
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -451,7 +455,11 @@ check('registry catalog: 937 rows, each with code/dims/description/source') do
     # never needed one until a panel priced by the square metre arrived, and
     # the asymmetry was invisible while every article had a printed height.
     c['code'] && (c['height_mm'] || c['height_range_mm']) &&
-    (c['depth_mm'] || !c['buildable']) &&
+    # AND A DEPTH CAN COME FROM THE ORDER TOO, 2026-08-28. A ceramic top is one
+    # code at eight depths (printed p.110): it has no depth of its own, and the
+    # list of the ones it is priced at IS the statement that the order picks
+    # one - the same sentence the two ranges above make about width and height.
+    (c['depth_mm'] || c['depth_bands_mm'] || !c['buildable']) &&
     (c['width_mm'] || c['corner_geometry'] || c['width_range_mm']) &&
     c['description'] && c['source_ref'] && c['type_key']
   }
@@ -535,6 +543,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Base units H. 58.5',
                                              'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
+                                             'Ceramic tops - Linear Elements',
                                              'Closing strips and fillers for Maxima and Intarsio',
                                              'Dish-drainer units H. 36',
                                              'Dish-drainer units H. 48',
@@ -584,8 +593,14 @@ check('split storage: every catalog row is stamped with its section and class') 
   # one is a board sold by the square metre with no height, no hand and no edge
   # detail, out of a different book. Collapsing them would have made the picker
   # offer 168 codes for one question that is really two.
+  # 'worktop' arrived 2026-08-28 with Linear Elements printed p.110. The first
+  # object in this registry that is not a box, not a board and not a shelf: it
+  # is priced BY THE LINEAR METRE across two axes the code does not carry - a
+  # depth band and a finish group - and it has no depth of its own until the
+  # order picks one.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
-    cat.map { |c| c['class'] }.uniq.sort == %w[base end_panel filler open_unit panel_sheet shelf tall wall]
+    cat.map { |c| c['class'] }.uniq.sort ==
+      %w[base end_panel filler open_unit panel_sheet shelf tall wall worktop]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -7345,7 +7360,9 @@ check('THE REGISTRY NOW HOLDS TWO BOOKS, and every code says which') do
   # TWO CLASSES COME OUT OF VOLUME 3 NOW - the per-m2 panels and, since
   # 2026-08-27, the shelves. The list is written out rather than derived so that
   # a third one has to be added here on purpose.
-  volume_three = %w[panel_sheet shelf]
+  # THIRD ONE 2026-08-28, added on purpose exactly as the comment above asks:
+  # the ceramic tops are printed p.110 of the same book.
+  volume_three = %w[panel_sheet shelf worktop]
   wrong = Registry.catalog.reject do |r|
     want = volume_three.include?(r['class']) ? 'CESAR - 3 Linear Elements.pdf' : 'CESAR - 2 Kitchen System.pdf'
     r['source_ref'].to_s.start_with?("#{want} ")
@@ -8497,6 +8514,93 @@ check('the light is drawn to be SEEN, and the first one was 5 pixels tall') do
     Symbols.led_label_fits?('LED 3000/4000K', 1200)
   raise 'the bare word fits where the sentence does not' unless
     Symbols.led_label_fits?('LED', 200)
+end
+
+puts "\nceramic tops - Linear Elements printed p.110 (the first worktop)"
+
+check('A TOP HAS NO DEPTH UNTIL SOMEBODY PICKS A BAND') do
+  u = Registry.lookup('TOPDR008040')
+  raise 'a depth was invented' unless u['depth_mm'].nil?
+  raise u['depth_bands_mm'].inspect unless
+    u['depth_bands_mm'] == [380, 650, 700, 750, 800, 1030, 1080, 1300]
+
+  # The refusal is the important half - an article whose dimension comes from
+  # the order must not be buildable without one. Same sentence the sheets got.
+  begin
+    Registry.with_ordered_depth(u, nil)
+    raise 'built with no depth'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('chosen with the order')
+  end
+
+  raise 'the band did not land' unless Registry.with_ordered_depth(u, 650)['depth_mm'] == 650
+end
+
+check('AND THE BAND IS A LIST, NOT A RANGE - 660 is not rounded to 650') do
+  u = Registry.lookup('TOPDR008040')
+  # A sheet is cut anywhere between two numbers. A top is not: the page prints
+  # eight columns and there is no ninth. Rounding would choose an overhang and
+  # a price on somebody's behalf.
+  [660, 400, 1200].each do |d|
+    Registry.with_ordered_depth(u, d)
+    raise "#{d} was accepted"
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('not rounded for you')
+  end
+  # and a fraction of a millimetre is not a band either
+  begin
+    Registry.with_ordered_depth(u, 650.5)
+    raise 'accepted 650,5'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('nothing in between')
+  end
+end
+
+check('THE CODE DOES NOT DETERMINE THE PRICE - two axes outside it') do
+  # domain rule 6: per-order axes live outside the article code. This is the
+  # first section where the PRICE itself needs two of them. One code, five
+  # finish groups, eight depth bands - forty numbers, and the code names none.
+  u = Registry.lookup('TOPDR008040')
+  m = u['points_per_lm_by_group_and_band']
+  raise 'the matrix is not carried through lookup' if m.nil?
+  raise m.keys.sort.inspect unless m.keys.sort == %w[A B C D E]
+  raise m['D'].keys.length.to_s unless m['D'].keys.length == 8
+  raise u['priced_by'].to_s unless u['priced_by'] == 'linear_metre'
+
+  # 545 Avenida Primavera: Dekton Marmorio is group D, 4 cm.
+  raise m['D']['650'].to_s unless m['D']['650'] == 806   # the 620 runs and the island
+  raise m['D']['380'].to_s unless m['D']['380'] == 618   # the 350-deep breakfast counter
+
+  # AND THE SAME MATRIX MUST REACH THE CATALOG. Adding a key to lookup and not
+  # to build_catalog is the wall_hung bug of 2026-08-22, and this is the check
+  # that would have caught it.
+  row = Registry.catalog.find { |c| c['code'] == 'TOPDR008040' }
+  raise 'the catalog row lost the matrix' if row['points_per_lm_by_group_and_band'].nil?
+  raise row['depth_bands_mm'].inspect unless row['depth_bands_mm'] == u['depth_bands_mm']
+  raise row['max_length_mm'].to_s unless row['max_length_mm'] == 3140
+end
+
+check('the thickness is on height_mm, because a top is thin on Z') do
+  # A sheet panel is thin on Y and carries its thickness in depth_mm. A top is
+  # thin on Z. Same word, different axis, different object - and getting this
+  # backwards would draw a 40 mm deep worktop 650 mm thick.
+  raise Registry.lookup('TOPDR008040')['height_mm'].to_s unless
+    Registry.lookup('TOPDR008040')['height_mm'] == 40
+  raise Registry.lookup('TOPDR008060')['height_mm'].to_s unless
+    Registry.lookup('TOPDR008060')['height_mm'] == 60
+end
+
+check('a top is ordered by LENGTH, and 3140 is the end of the sheet') do
+  u = Registry.lookup('TOPDR008040')
+  raise u['width_range_mm'].inspect unless u['width_range_mm'] == [1, 3140]
+  begin
+    Registry.with_ordered_width(u, 3200)
+    raise 'accepted a length off the sheet'
+  rescue ArgumentError => e
+    # the contradiction is recorded in the section: the table says 314 cm, the
+    # same page's text says 319 for MDi Inalco only. 3140 is held.
+    raise e.message unless e.message =~ /3140/
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

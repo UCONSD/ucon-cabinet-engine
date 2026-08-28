@@ -276,7 +276,12 @@ module UCON
         # person looking for one is not looking for the article that carries a
         # 45-degree edge into a door. Two classes because they are two articles.
         'panel_sheet' => 'Panels cut to size (per m²)',
-        'shelf' => 'Shelves'
+        'shelf' => 'Shelves',
+        # 2026-08-28, the first worktop this engine has ever held. NOT a panel
+        # and not a shelf: a top is priced by the LINEAR METRE across a depth
+        # band and a finish group, which is a different order line from anything
+        # above it.
+        'worktop' => 'Worktops'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The
@@ -315,7 +320,12 @@ module UCON
         'wall_compound_2_top_hung' => 'Compound, 2 modules, top-hung',
         'wall_compound_2_push_up'  => 'Compound, 2 modules, push-up',
         'wall_compound_3_top_hung' => 'Compound, 3 modules, top-hung',
-        'wall_compound_3_push_up'  => 'Compound, 3 compartments, push-up'
+        'wall_compound_3_push_up'  => 'Compound, 3 compartments, push-up',
+        # The page heading again, and the thickness with it, because thickness
+        # is the ONLY thing that tells the three ceramic-top pages apart -
+        # printed p.104 (1,2), p.107 (2,2) and p.110 (4 and 6) carry identical
+        # headings. Only p.110 is held.
+        'ceramic_top'             => 'Ceramic tops — 4 / 6 cm'
       }.freeze
 
       # JSON that is safe to paste inside an inline <script>: a literal

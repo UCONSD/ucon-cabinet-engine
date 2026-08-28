@@ -482,3 +482,56 @@ pages are where the grain and the finish family differ.
 **What is still owed on the island:** the finish NAME, one of the seven First
 oaks, chosen in front of real veneer and not from a render. It is an order field
 and changes no code.
+
+---
+
+# PART FIVE — the east wall's end is closed
+
+**Run 82 applied**, and both boards landed with **worst error 0.00** against what
+run 81 measured. The first-board check never had to fire.
+
+## 16. The rotation was right, and the model says so in the shape of the numbers
+
+```
+заказан 2440 x 645   нарисован 645.0 x 22.0 x 2440.0
+заказан  600 x 645   нарисован 645.0 x 22.0 x  600.0
+```
+
+**The ordered WIDTH became the drawn HEIGHT.** That is the −90° about Y doing
+exactly what it was derived to do — and it is also Q26 made visible: the article
+is ordered 2440 wide because its height range stops at 1200, and it stands up
+2440 tall in the kitchen. The order and the drawing describe the same board with
+their axes swapped, on purpose, and the object's own note says so.
+
+| | |
+|---|---|
+| `DV061Q` in the model | **2** |
+| thickness drawn vs attribute | **22 = 22**, both |
+| seam between the boards | 2440 to 2440, gap **−0.0** — встык |
+| panel's near face vs the cabinet's end | 4915.3 vs 4915.3 — **вплотную** |
+| span across the end | **5587.5 → 6232.5 = 645** |
+
+645 is the door face to the wall: carcass 620 + door 22 + the 2,5 front gap —
+the number Volume 2 prints as `d. 64,5`, reached again from the drawn model.
+
+**And the source citation is the right page**: `printed p.219`, the
+horizontal-grain two-sided block — not p.220, which is where the island's ends
+came from. Two ends of one kitchen, two different pages, because one needed 880
+of grain and the other 2440.
+
+Objects with the contract: **59** (57 + 2).
+
+## 17. What the panels leave behind
+
+**Done:** the island in oak, the east wall's open end closed, every price group
+named, the Trama trap pinned, the oak property pinned.
+
+**Owed:**
+1. **The finish NAME** — one of the seven First oaks. An order field; changes no code.
+2. **Elda Q26** — whether ordering a horizontal-grain board and standing it up is
+   legitimate. **Two boards in the model now depend on the answer**, and they say
+   so on themselves.
+3. **Elda Q21** — the printed `d.` corroborated twice now by our own geometry, and
+   still not proof.
+4. **Elda Q24** — what finishes the edge of a veneered panel.
+5. **74 raw type keys in the picker** — ratcheted, not fixed.

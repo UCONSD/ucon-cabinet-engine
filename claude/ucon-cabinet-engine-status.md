@@ -478,7 +478,16 @@ note beside it was false, because it read a proxy instead of the recorded fact.)
 - A fresh clone has NO catalog: `sources/**/*.pdf` is git-ignored (~438 MB), and
   `sources/**/*.png` too, which is where page renders go.
 - **NEVER run git through the device bridge — not even `git status`.** It needs
-  `.git/index.lock` and the mount cannot delete files. **Safe:**
+  `.git/index.lock` and the mount cannot delete files. **AND `sh build/go.sh` IS
+  GIT** — obvious afterwards, and broken anyway on 2026-08-28 by running the
+  commit script through the bridge to *check that it worked*. It reached
+  `git add`, left a zero-byte `.git/index.lock` and an unlinkable
+  `.git/objects/**/tmp_obj_*`. `sh -n build/go.sh` checks the syntax and touches
+  nothing; the suite lines can be run on their own; the git half is Andriy's
+  terminal and only his. **Clearing a stuck lock: `mv` it aside**
+  (`mv .git/index.lock .git/index.lock.stale-$(date +%H%M%S)`) — the mount
+  cannot unlink but it can rename, which is cheaper than the delete-permission
+  prompt. **Safe:**
   `git show HEAD:<path>`, `git show -s HEAD`, and reading `.git/logs/HEAD`,
   `.git/refs/heads/main`, `.git/refs/remotes/origin/main`.
   `git show HEAD:<f> | diff - <f>` shows what is uncommitted.
@@ -487,6 +496,14 @@ note beside it was false, because it read a proxy instead of the recorded fact.)
   2026-08-23.)*
 - **The bridge VM runs Ruby 3.0.2 and mounts the repo.** Andriy's terminal is
   the authority. **The bridge can drop mid-session.**
+- **ONE DIRECTORY, TWO NAMES, AND A SCRIPT MUST KNOW NEITHER.** The bridge sees
+  the repository at `~/mnt/ucon-cabinet-engine`; Andriy's own terminal sees the
+  same directory at `~/dev/ucon-cabinet-engine`. On 2026-08-28 `build/go.sh` was
+  written with the bridge's path baked into a `cd` and died on its third line in
+  his terminal — *No such file or directory* — after the suites had passed here.
+  **Anything Andriy runs derives its own location: `cd "$(dirname "$0")/.."`.**
+  The same trap is waiting in any path written into a file for him rather than
+  for this session.
 - **A bridge call is capped at about 45 seconds and each one runs in its own
   process namespace**, so a background job does not survive the call that
   started it. Discovered 2026-08-24 when the suite outgrew the cap; the real fix

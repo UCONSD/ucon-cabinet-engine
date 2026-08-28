@@ -229,11 +229,29 @@ module UCON
             # exactly the wall_hung bug of 2026-08-22.
             'stands_on'          => unit_type['stands_on'],
             'shelf_length_mm'    => row['shelf_length_mm'],
-            'max_length_mm'      => row['max_length_mm'],
+            # ROW FIRST, THEN THE TYPE. A shelf states its own maximum; a
+            # ceramic top's is one number for the whole page and belongs on the
+            # type, not copied onto both codes. Additive - every existing row
+            # keeps answering exactly as it did.
+            'max_length_mm'      => row['max_length_mm'] || scoped.call('max_length_mm'),
             'sold_by'            => row['sold_by'],
             'points_by_band'     => row['points_by_band'],
             'lights_surcharge_points' => row['lights_surcharge_points'],
             'points_per_m2'      => row['points_per_m2'],
+            # A PRICE WITH TWO AXES, 2026-08-28, and the first in this registry.
+            # A ceramic top's code spans FIVE finish groups and EIGHT depth
+            # bands - forty prices behind one article - because the finish group
+            # is an ORDER axis under domain rule 6 and not part of the code.
+            # points_per_m2 above is one number; points_by_band is one axis; this
+            # is two, and it is named for both so nobody reads it as one.
+            #
+            # Lifted here AND in build_catalog. The line above `stands_on` says
+            # why in as many words: a key added to one and not the other is the
+            # wall_hung bug of 2026-08-22, where the data was right in the file
+            # and unreachable from any code for a day and a half.
+            'points_per_lm_by_group_and_band' => row['points_per_lm_by_group_and_band'],
+            'priced_by'          => scoped.call('priced_by'),
+            'depth_bands_mm'     => scoped.call('depth_bands_mm'),
             'depth_mm'           => row['depth_mm'],
             # THE LABEL BESIDE THE DEPTH, AND ONLY THE PANEL PAGES HAVE ONE.
             # An end panel's row prints two numbers - the carcass depth it
@@ -704,6 +722,63 @@ module UCON
         unit.merge('height_mm' => asked.round, key => stated.round)
       end
 
+      # ---- A DEPTH THAT IS CHOSEN FROM A LIST, 2026-08-28 -------------------
+      #
+      # THE THIRD DIMENSION TO COME FROM THE ORDER, and the first one that is
+      # not a range. A cabinet's depth is printed beside its code. A ceramic
+      # top's is not: Linear Elements printed p.110 prices ONE code across EIGHT
+      # depths, and until somebody says which, the article has no depth at all -
+      # the same absence width_range_mm has meant since the fillers and
+      # height_range_mm since the sheets.
+      #
+      # WHAT IS NEW IS THE SHAPE OF THE ANSWER. A sheet is cut anywhere between
+      # two numbers, so its statement is a RANGE. A top is not: the page prints
+      # eight columns and there is no ninth. 660 is not a top cut slightly deep,
+      # it is a top nobody prices. So this REFUSES anything off the list rather
+      # than clamping to it, and it does not round to the nearest band either -
+      # choosing 700 for somebody who asked for 660 is choosing an overhang and
+      # a price, and that is a decision with a person's name on it. Same reason
+      # with_ordered_height gives for not rounding a sheet: nothing here is
+      # scribed against a wall.
+      #
+      # AND THE BAND IS NOT DERIVED FROM THE CARCASS. The section's depth_note
+      # says it in full: the bands happen to sit 30 mm above the carcass depths
+      # this book sells (35->38, 62->65, 67->70), and that is an OBSERVATION
+      # about this catalog, not a printed rule (learned rule 4). Computing one
+      # from the other here would quietly turn it into a rule.
+      def banded_depth?(unit)
+        !(unit || {})['depth_bands_mm'].nil?
+      end
+
+      def with_ordered_depth(unit, depth_mm)
+        bands = unit['depth_bands_mm']
+        return unit if bands.nil?
+
+        if depth_mm.nil? || depth_mm.to_s.empty?
+          raise ArgumentError,
+                "#{unit['code']} has no depth in the catalog: one code is priced at " \
+                "#{bands.length} depths (#{bands.join(', ')} mm) and the depth is " \
+                'chosen with the order. State it before building.'
+        end
+
+        asked = begin
+          Float(depth_mm)
+        rescue ArgumentError, TypeError
+          nil
+        end
+        raise ArgumentError, "A top depth is a number of millimetres; got #{depth_mm.inspect}." if asked.nil?
+
+        unless asked == asked.round && bands.include?(asked.round)
+          raise ArgumentError,
+                "#{unit['code']} is priced at #{bands.join(', ')} mm and at nothing in " \
+                "between; #{depth_mm} is not one of them. The band is CHOSEN - a deeper " \
+                'band is a bigger overhang and a higher price - so it is not rounded ' \
+                'for you.'
+        end
+
+        unit.merge('depth_mm' => asked.round)
+      end
+
       # CACHED ALONGSIDE data, AND FOR THE SAME REASON. catalog is a pure
       # function of data - it walks every code and flattens it - and rebuilding
       # it took 0,38 s once the registry passed 600 codes. The headless suite
@@ -755,6 +830,13 @@ module UCON
             'price_group' => row['price_group'],
             'faced_sides' => row['faced_sides'],
             'points_per_m2' => row['points_per_m2'],
+            # THE OTHER HALF OF THE TWO-AXIS PRICE. See lookup for why it
+            # exists; it is here because a key in one and not the other is the
+            # bug this file has already had once.
+            'points_per_lm_by_group_and_band' => row['points_per_lm_by_group_and_band'],
+            'priced_by' => (unit_type['priced_by'] || family['priced_by']),
+            'depth_bands_mm' => (unit_type['depth_bands_mm'] || family['depth_bands_mm']),
+            'max_length_mm' => (row['max_length_mm'] || unit_type['max_length_mm']),
             'family' => family_name, 'type_key' => type_key,
             'description' => unit_type['description'],
             # NAMED WITH ITS BOOK, like lookup's. A picker row reading

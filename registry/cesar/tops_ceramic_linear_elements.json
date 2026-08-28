@@ -1,0 +1,257 @@
+{
+ "section": "Ceramic tops - Linear Elements",
+ "class": "worktop",
+ "family": "Ceramic tops (Linear Elements)",
+ "source_pdf": "CESAR - 3 Linear Elements.pdf",
+ "source_pages": "printed p.110 / PDF 112 (4 and 6 cm); finish swatches printed p.17-18 / PDF 19-20. Read 2026-08-28, the swatch pages off 200-dpi renders.",
+ "extraction_note": "DEMAND-DRIVEN 2026-08-28: 545 Avenida Primavera needs worktops and no object_class worktop existed in the model at all. Andriy chose CERAMIC, then Dekton Marmorio (group D) after seeing the swatches. Only the 4/6 cm page is held - printed p.104 (1,2 cm) and p.107 (2,2 cm) are the same grammar at other thicknesses and are NOT extracted. The three pages are told apart by THICKNESS, not by collection, which is worth saying because their headings are identical.",
+ "pricing_note": "A NEW GRAMMAR FOR THIS REGISTRY: THE CODE DOES NOT DETERMINE THE PRICE. One code spans FIVE finish groups and EIGHT depth bands - forty prices - and every other section held here so far has had the code decide, or a single price band decide. Here the finish group is an ORDER AXIS, which is exactly what domain rule 6 describes: per-order axes live outside the article code, like door version 78/75 and hinge side. So the group is NOT in the code and must be carried on the order line beside it. points_per_lm_by_group_and_band is deliberately named for both axes so nobody reads it as one.",
+ "depth_note": "THE BAND IS CHOSEN, NOT DECODED. The printed depths are the TOP's own depth; our runs are 620 carcass, and the finished front is 644,5 (620 + 22 door + 2,5 front gap). The 650 band therefore overhangs the door face by 5,5 and is the band this kitchen orders; 380 serves the 350-deep units. The catalog states no rule mapping a carcass depth to a band - the bands happen to sit 30 above the carcass depths this book sells (35->38, 62->65, 67->70), and that is an OBSERVATION, not a printed rule (learned rule 4: record the scope). A deeper band is a legitimate design choice for a bigger overhang.",
+ "contradicts": [
+  {
+   "what": "maximum length",
+   "table_says": "314 cm, printed in the table for every one of the eight depth bands",
+   "text_says": "'Maximum length of MDi Inalco tops: 319 cm', in the TOP SPECIFICATIONS block on the same page",
+   "held": 3140,
+   "note": "Both are on printed p.110. 3140 is held because it is the number in the PRICE TABLE and it applies to every finish, while the 319 sentence names MDi Inalco only - which is group A and B, and this kitchen is group D. NOT YET ASKED. If a run ever needs between 3140 and 3190 in an Inalco finish, this has to be settled first."
+  }
+ ],
+ "availability_note": "printed p.110 carries 'Not available for Unit tops'. This kitchen is not Unit.",
+ "finish_groups": {
+  "A": {
+   "family": "MDi Inalco",
+   "finishes": [
+    "Blanco Abujardado Silk",
+    "Blanco Natural Silk",
+    "Negro Abujardado Silk"
+   ]
+  },
+  "B": {
+   "family": "MDi Inalco",
+   "finishes": [
+    "Blanco Plus Abujardado Pacific",
+    "Moka Abujardado Jasper",
+    "Gris Abujardado Pacific",
+    "Gris Abujardado Geo",
+    "Gris Abujardado Iseo",
+    "Negro Natural Azalai",
+    "Marron Abujardado Umbra",
+    "Atalaia Super Blanco DT"
+   ]
+  },
+  "C": {
+   "family": "Iris ceramic",
+   "finishes": [
+    "Nude",
+    "Ochre",
+    "Ivory",
+    "Light grey",
+    "Marsala red",
+    "Chester green",
+    "Azure",
+    "Steel blue"
+   ]
+  },
+  "D": {
+   "family": "Dekton ceramic",
+   "finishes": [
+    "Avorio",
+    "Grigio",
+    "Grafite",
+    "Marmorio",
+    "Lunar",
+    "Creta",
+    "Kelya"
+   ]
+  },
+  "E": {
+   "family": "Dekton ceramic",
+   "finishes": [
+    "Aura"
+   ]
+  }
+ },
+ "finish_group_wording_note": "The finish NAMES here are the price page's wording, because that is the page the order is written from. The swatch page (printed p.17) prints some of them in a different word order - 'Pacific Gris Abujardado' there against 'Gris Abujardado Pacific' here - and carries the CE codes. The CE codes are NOT held against these names: matching them would mean deciding that two differently-ordered strings are the same finish, and that is a reading nobody has checked.",
+ "surcharges": {
+  "visible_side_edge": {
+   "points": 273,
+   "um": "per lm"
+  },
+  "integrated_bowl_40x40x19": {
+   "points": 1671,
+   "um": "each"
+  },
+  "integrated_bowl_50x40x19": {
+   "points": 1671,
+   "um": "each"
+  },
+  "integrated_bowl_70x40x19": {
+   "points": 1671,
+   "um": "each"
+  },
+  "ceramic_plug_for_integrated_bowl": {
+   "points": 228,
+   "um": "each"
+  },
+  "matching_melamine_reverse_panel": {
+   "points": 118,
+   "um": "per m2"
+  },
+  "note": "printed p.110. The cutouts for a hob or an undercounter sink are NOT here - printed p.172 points at a separate 'table of workmanships on tops' which is UNREAD. Any cutout this kitchen needs is therefore not yet priced."
+ },
+ "data": {
+  "unit_types": {
+   "ceramic_top": {
+    "description": "Ceramic top, 4 or 6 cm thick",
+    "object_class": "worktop",
+    "opening": null,
+    "handed": false,
+    "handed_note": "A top has no hand. It is cut to the run it covers.",
+    "interior_confirmed": [],
+    "source_ref": "printed p.110 / PDF 112",
+    "priced_by": "linear_metre",
+    "depth_bands_mm": [
+     380,
+     650,
+     700,
+     750,
+     800,
+     1030,
+     1080,
+     1300
+    ],
+    "max_length_mm": 3140,
+    "mounting": "floor",
+    "front_layout": {
+     "kind": "none",
+     "note": "A TOP HAS NO FRONT."
+    },
+    "buildable": true,
+    "thickness_note": "Thickness is the article's only fixed dimension and it is carried in height_mm, because a top is thin on Z - unlike a sheet panel, which is thin on Y and carries its thickness in depth_mm. Same word, different axis, because they are different objects.",
+    "codes": [
+     {
+      "code": "TOPDR008040",
+      "height_mm": 40,
+      "width_range_mm": [
+       1,
+       3140
+      ],
+      "points_per_lm_by_group_and_band": {
+       "A": {
+        "380": 686,
+        "650": 686,
+        "700": 844,
+        "750": 891,
+        "800": 927,
+        "1030": 1389,
+        "1080": 1424,
+        "1300": 1579
+       },
+       "B": {
+        "380": 815,
+        "650": 815,
+        "700": 1035,
+        "750": 1097,
+        "800": 1144,
+        "1030": 1677,
+        "1080": 1725,
+        "1300": 1937
+       },
+       "C": {
+        "380": 483,
+        "650": 613,
+        "700": 693,
+        "750": 721,
+        "800": 748,
+        "1030": 1123,
+        "1080": 1151,
+        "1300": 1271
+       },
+       "D": {
+        "380": 618,
+        "650": 806,
+        "700": 842,
+        "750": 889,
+        "800": 923,
+        "1030": 1386,
+        "1080": 1421,
+        "1300": 1575
+       },
+       "E": {
+        "380": 732,
+        "650": 993,
+        "700": 1043,
+        "750": 1103,
+        "800": 1151,
+        "1030": 1687,
+        "1080": 1735,
+        "1300": 1949
+       }
+      }
+     },
+     {
+      "code": "TOPDR008060",
+      "height_mm": 60,
+      "width_range_mm": [
+       1,
+       3140
+      ],
+      "points_per_lm_by_group_and_band": {
+       "A": {
+        "380": 688,
+        "650": 688,
+        "700": 858,
+        "750": 905,
+        "800": 941,
+        "1030": 1417,
+        "1080": 1452,
+        "1300": 1607
+       },
+       "B": {
+        "380": 819,
+        "650": 819,
+        "700": 1055,
+        "750": 1116,
+        "800": 1163,
+        "1030": 1716,
+        "1080": 1764,
+        "1300": 1975
+       },
+       "C": {
+        "380": 492,
+        "650": 622,
+        "700": 705,
+        "750": 732,
+        "800": 759,
+        "1030": 1134,
+        "1080": 1162,
+        "1300": 1281
+       },
+       "D": {
+        "380": 632,
+        "650": 820,
+        "700": 856,
+        "750": 903,
+        "800": 937,
+        "1030": 1414,
+        "1080": 1449,
+        "1300": 1603
+       },
+       "E": {
+        "380": 751,
+        "650": 1013,
+        "700": 1062,
+        "750": 1122,
+        "800": 1171,
+        "1030": 1725,
+        "1080": 1774,
+        "1300": 1988
+       }
+      }
+     }
+    ],
+    "notes": "TWO CODES, ONE PER THICKNESS, and the depth and the finish group are both order axes. The 4 cm is what 545 Avenida Primavera declares: Project.worktop_t_mm is already 40 on that model and the range reservation stands on it (920 = 880 carcass + 40 top), so changing the thickness moves that reservation too."
+   }
+  }
+ }
+}

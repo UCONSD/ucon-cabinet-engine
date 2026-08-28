@@ -121,7 +121,13 @@ date order; a finding is never edited to hide what it corrected.
   **`findings-2026-08-28-panels-the-letter-is-a-lookup.md`** (every panel code
   carried a price-group letter and nothing said what the letter meant, so the
   held island probe was ordering an unnamed species list - and on the two-sided
-  veneer pages the same letter B is Trama at 1,8 and Prime at 2,2).
+  veneer pages the same letter B is Trama at 1,8 and Prime at 2,2),
+  **`findings-2026-08-28-the-first-worktop.md`** (Linear Elements printed p.110,
+  the ceramic tops: the first `object_class: worktop`, the first section where
+  THE CODE DOES NOT DETERMINE THE PRICE - five finish groups x eight depth bands
+  under one code - and the first dimension that comes from the order as a CLOSED
+  LIST rather than a range, so 660 is refused instead of rounded to 650; and the
+  seven suite checks that failed the moment it loaded, all seven correctly).
 
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
