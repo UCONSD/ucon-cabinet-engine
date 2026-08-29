@@ -117,12 +117,22 @@ begin
                   mm[lb.width], mm[lb.height], bbox / 1_000_000.0)
       puts format('   real top surface        : %.3f m2, outline %d vertices',
                   area / 1_000_000.0, faces.map { |f| f.outer_loop.vertices.length }.inject(0, :+))
-      if pct > 2.0
-        puts format('   >>> ORDERED AND NOT DRAWN: %.3f m2, %.0f%% of the sheet. THIS IS NOT A',
+      # THE SHAPE IS DECIDED BY THE OUTLINE, THE COST BY THE AREA - and they are
+      # two different sentences. A percentage threshold alone called a six-sided
+      # piece "a rectangle" on 2026-08-29 because its notch happened to be under
+      # 2% of the sheet, which is true about the price and false about the shape.
+      verts = faces.map { |f| f.outer_loop.vertices.length }.inject(0, :+)
+      if verts > 4
+        puts format('   >>> NOT A RECTANGLE: %d outline vertices.', verts)
+        puts format('       Ordered and not drawn: %.3f m2, %.1f%% of the sheet - what the',
                     waste / 1_000_000.0, pct)
-        puts '       RECTANGLE, and the bounding-rectangle order (Elda Q28) is what it costs.'
-        puts '       Cutting it into rectangles at the corner makes that cost zero and is'
-        puts '       also how it gets under the sheet length. The joint is Elda Q27.'
+        puts '       bounding-rectangle order (Elda Q28) costs on THIS piece.'
+        if pct < 5.0
+          puts '       Small. A mitred or clipped end is what this looks like, and Q28 was'
+          puts '       always cheap on those - the assumption is doing its job here.'
+        else
+          puts '       Cutting it into rectangles makes that cost zero. The joint is Q27.'
+        end
       else
         puts '   the piece IS its bounding rectangle - Q28 costs nothing here'
       end
@@ -160,20 +170,62 @@ begin
 
   # The carcass, in world coordinates, out of the unit's own definition. This is
   # the whole point: an instance box carries the plan symbols with it.
+  # Anything drawn on one of these is a MARK, not a body. Its extent says where a
+  # door swings or a drawer travels, never where stone has to be.
+  SYMBOL_TAGS = ['UCON — Opening (front)', 'UCON — Opening (plan)',
+                 'UCON — Opening (door)', 'UCON — Lighting',
+                 'UCON — Sink marks', 'UCON — Wasted space'].freeze
+
   carcass_box = lambda do |inst|
     d = (inst.respond_to?(:definition) ? inst.definition : nil)
-    sub = d && d.entities.find do |x|
-      (x.is_a?(Sketchup::Group) || x.is_a?(Sketchup::ComponentInstance)) &&
-        x.name.to_s.upcase.start_with?('CARCASS')
-    end
-    return [inst.bounds, false] unless sub
-
-    b = sub.bounds
     t = inst.transformation
-    pts = (0..7).map { |k| b.corner(k).transform(t) }
-    bb = Geom::BoundingBox.new
-    pts.each { |p| bb.add(p) }
-    [bb, true]
+    world = lambda do |b|
+      bb = Geom::BoundingBox.new
+      (0..7).each { |k| bb.add(b.corner(k).transform(t)) }
+      bb
+    end
+
+    # CARCASS **AND FRONT**, unioned - 2026-08-29, and the correction matters
+    # more than the first one did. A top that covers the carcass exactly, and
+    # stops there, does not reach the doors: this run's carcass front is at 620
+    # and its finished front at 644,5. Measuring the carcass alone scores such a
+    # slab 100% while the stone ends 24,5 mm BEHIND the door face - a covering
+    # check that passes the one case it exists to catch. The plinth is left out
+    # on purpose: it is set back under the unit and stone never reaches it.
+    parts = (d ? d.entities : []).select do |x|
+      (x.is_a?(Sketchup::Group) || x.is_a?(Sketchup::ComponentInstance)) &&
+        x.name.to_s.upcase.start_with?('CARCASS', 'FRONT')
+    end
+    unless parts.empty?
+      bb = Geom::BoundingBox.new
+      parts.each { |x| bb.add(x.bounds) }
+      names = parts.map { |x| x.name.to_s.upcase.split.first }.uniq.sort.join('+')
+      return [world.call(bb), names.downcase]
+    end
+
+    # NO CARCASS GROUP - and the instance box is NOT the answer. An appliance
+    # front's fallen leaf reaches a full front height out in front of it
+    # (Drawing_Spec: the leaf falls to horizontal, projection = front height),
+    # so on 2026-08-29 V80630 measured 839 mm wide and read as 7% covered while
+    # its actual panel sat comfortably under the stone. Take every sub-body that
+    # is NOT on a symbol tag instead, and only fall back to the whole instance
+    # when there is nothing else to take.
+    unless d.nil?
+      bb = Geom::BoundingBox.new
+      taken = 0
+      d.entities.each do |x|
+        next unless x.respond_to?(:bounds)
+        lay = (x.respond_to?(:layer) && x.layer) ? x.layer.name : ''
+        next if SYMBOL_TAGS.include?(lay)
+        next if x.is_a?(Sketchup::Edge) || x.is_a?(Sketchup::ConstructionLine)
+
+        bb.add(x.bounds)
+        taken += 1
+      end
+      return [world.call(bb), 'bodies, symbols excluded'] if taken.positive? && !bb.empty?
+    end
+
+    [inst.bounds, 'INSTANCE BOX - symbols included, read with suspicion']
   end
 
   puts '== DOES THE STONE COVER THE RUN (carcass measured, symbols excluded) =='
@@ -186,7 +238,7 @@ begin
          (od && (od.get_attribute(dict, 'object_class') rescue nil))
     next unless %w[cabinet filler corner_unit appliance_front].include?(oc.to_s)
 
-    box, real = carcass_box.call(o)
+    box, how = carcass_box.call(o)
     top_z = mm[box.max.z]
     next unless top_z > 700 && top_z < 1000
 
@@ -206,9 +258,8 @@ begin
 
     any = true
     onm = (o.name.to_s.empty? ? (od ? od.name.to_s : '?') : o.name.to_s)
-    puts format('  %-42s %5.0f%%  x %.1f..%.1f  y %.1f..%.1f  %s',
-                onm[0, 42], cov, ox1, ox2, oy1, oy2,
-                real ? '' : '(NO CARCASS GROUP - instance box, symbols included)')
+    puts format('  %-42s %5.0f%%  x %.1f..%.1f  y %.1f..%.1f  [%s]',
+                onm[0, 42], cov, ox1, ox2, oy1, oy2, how)
   end
   puts '  every carcass under the stone is covered' unless any
 

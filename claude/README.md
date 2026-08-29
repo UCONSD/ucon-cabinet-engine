@@ -148,6 +148,13 @@ date order; a finding is never edited to hide what it corrected.
   plus the band with nothing between 650 and 700, and the covering pass that read
   four covered units as 53%% because an instance box carries the drawer symbols).
 
+  **`decisions-2026-08-29-finishes.md`** (thirteen finish decisions taken in one
+  sitting off the order form itself: Maxima 2.2 at band 6, RR09 Rovere Nordico with
+  LX19 Nero, one black metal through recess, plinth, wall edging and glass frames,
+  Dekton Marmorio at 650 with no edge profile - plus the four printed routes out of
+  band 6, the contract having no finish key at all, and the morning claim about zero
+  GOL lines corrected from the estimate teardown).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,

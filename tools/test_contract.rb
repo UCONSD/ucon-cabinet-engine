@@ -9308,5 +9308,85 @@ check('THE DIALOG ASKS BOTH QUESTIONS, AND SETS THE RADIO FROM THE ANSWER') do
     st['door_version_chosen'] == '75'
 end
 
+# ---------------------------------------------------------------------------
+# TOP DEPTHS - Volume 3 printed p.39-40, found 2026-08-29 because Andriy asked
+# what overhang Cesar actually recommends. The answer was a printed table, and
+# it contradicted a note this registry had been carrying since 2026-08-28.
+# ---------------------------------------------------------------------------
+
+TOPS_SECTION = JSON.parse(
+  File.read(File.expand_path('../registry/cesar/tops_ceramic_linear_elements.json', __dir__))
+)
+TOP_RULE = TOPS_SECTION['top_depth_rule']
+
+check('THE EIGHT DEPTH BANDS ARE THE PRINTED STANDARD TOP DEPTHS') do
+  # This is the check that turns an observation into a citation. The price page
+  # (p.110) and the planning page (p.39) are the same list seen twice, and until
+  # today only one of them had been read.
+  bands = TOPS_SECTION['data']['unit_types']['ceramic_top']['depth_bands_mm'].map(&:to_i).sort
+  printed = (TOP_RULE['printed_single'] + TOP_RULE['printed_back_to_back'])
+            .map { |r| r['standard_mm'].to_i }.sort
+  raise "bands #{bands.inspect} vs printed standard depths #{printed.inspect}" unless bands == printed
+end
+
+check('THE OVERHANG IS PER EXPOSED SIDE, AND THE ARITHMETIC HOLDS ON ALL EIGHT ROWS') do
+  # Against a wall one side is exposed; back to back, two. That is the whole
+  # rule, and every printed number obeys it - which is why it can be trusted on
+  # a configuration the book does not print.
+  o = TOP_RULE['over_carcass_mm_per_exposed_side']
+  TOP_RULE['printed_single'].each do |r|
+    %w[standard flush_with_door diamond_palmier_edge].each do |k|
+      key = { 'standard' => 'standard_mm', 'flush_with_door' => 'flush_mm',
+              'diamond_palmier_edge' => 'diamond_palmier_mm' }[k]
+      want = r['carcass_mm'] + o[k]
+      raise "#{k} on carcass #{r['carcass_mm']}: printed #{r[key]}, rule gives #{want}" unless r[key] == want
+    end
+  end
+  TOP_RULE['printed_back_to_back'].each do |r|
+    %w[standard flush_with_door diamond_palmier_edge].each do |k|
+      key = { 'standard' => 'standard_mm', 'flush_with_door' => 'flush_mm',
+              'diamond_palmier_edge' => 'diamond_palmier_mm' }[k]
+      want = r['carcass_mm'] + 2 * o[k]
+      raise "#{k} back to back on #{r['carcass_mm']}: printed #{r[key]}, rule gives #{want}" unless r[key] == want
+    end
+  end
+end
+
+check('OUR OWN RUN: 620 CARCASS GIVES 650 STANDARD AND 645 FLUSH') do
+  # The two numbers this kitchen is actually choosing between, pinned to print
+  # rather than to arithmetic done in a chat. The finished front is 644,5, so
+  # the standard top overhangs the DOOR by 5,5 and the flush one by nothing.
+  row = TOP_RULE['printed_single'].find { |r| r['carcass_mm'] == 620 }
+  raise 'the 62 carcass row is missing' unless row
+  raise row.inspect unless row['standard_mm'] == 650 && row['flush_mm'] == 645
+  front = 620 + 22 + 2.5
+  raise 'the front face moved' unless front == 644.5
+  raise 'the standard top no longer overhangs the door by 5,5' unless
+    (row['standard_mm'] - front).round(1) == 5.5
+  raise 'the flush top is not flush' unless (row['flush_mm'] - front).round(1) == 0.5
+end
+
+check('THE DIAMOND/PALMIER DEPTHS ARE NOT BANDS, AND THAT IS THE OPEN QUESTION') do
+  # Recorded, deliberately not implemented. Printed p.40 prices a 65,7 top at the
+  # 65 band, while TopStamp.verify refuses any piece deeper than its band -
+  # correctly, on what it knows. Acting on it needs the EDGE PROFILE, an order
+  # axis this registry does not hold. The check exists so the day the axis
+  # arrives, this is not rediscovered.
+  bands = TOPS_SECTION['data']['unit_types']['ceramic_top']['depth_bands_mm'].map(&:to_i)
+  dp = (TOP_RULE['printed_single'] + TOP_RULE['printed_back_to_back']).map { |r| r['diamond_palmier_mm'].to_i }
+  raise "a diamond/palmier depth became a band: #{(dp & bands).inspect}" unless (dp & bands).empty?
+  raise 'the exception is no longer recorded' unless
+    TOP_RULE['a_printed_exception_to_the_closed_list'].to_s.include?('657')
+end
+
+check('THE CORRECTED depth_note DOES NOT CLAIM THE RULE IS UNPRINTED') do
+  # Learned rule 9: the wrong sentence stays, quoted, so the mistake keeps teaching. What
+  # must not survive is the CLAIM - that the +30 is an observation of ours.
+  note = TOPS_SECTION['depth_note'].to_s
+  raise 'the correction is missing' unless note.include?('IT IS A PRINTED RULE')
+  raise 'the source is not cited' unless note.include?('p.39')
+  raise 'the superseded claim was erased instead of quoted' unless note.include?('OBSERVATION')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
