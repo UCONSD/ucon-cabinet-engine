@@ -142,6 +142,12 @@ date order; a finding is never edited to hide what it corrected.
   predicate split into two, a contract key written and taken back, and the
   mounting block guarded so the mirror-image bug did not ship with the fix).
 
+  **`findings-2026-08-29-the-first-stone.md`** (the first three countertops, and the
+  day Elda Q28 got a price: the bounding-rectangle order costs nothing on a straight
+  run - measured, twice, to three decimals - and 4,195 m2, 58%% of the sheet, on an L;
+  plus the band with nothing between 650 and 700, and the covering pass that read
+  four covered units as 53%% because an instance box carries the drawer symbols).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,

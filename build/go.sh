@@ -40,6 +40,7 @@ git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
         src/ucon_appliances src/ucon_appliances.rb claude docs \
         tools/test_contract.rb tools/test_appliances.rb tools/test_appliance_seam.rb \
         tools/probe_inbox_hold_71.rb tools/probe_inbox_hold_82.rb \
+        tools/probe_top_measure.rb \
         .gitignore build/go.sh
 
 echo
