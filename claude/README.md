@@ -129,6 +129,12 @@ date order; a finding is never edited to hide what it corrected.
   LIST rather than a range, so 660 is refused instead of rounded to 650; and the
   seven suite checks that failed the moment it loaded, all seven correctly).
 
+  **`findings-2026-08-29-layout-prep.md`** (the drawing side asked its first
+  question: eight scenes over a model whose 56 of 59 bodies were on Layer0, all
+  eight cameras a perspective and seven of them the SAME perspective, zero
+  section planes - and the symbols themselves drawn correctly all along and
+  simply switched off; plus core/66_retag.rb and why the generator does not tag).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,

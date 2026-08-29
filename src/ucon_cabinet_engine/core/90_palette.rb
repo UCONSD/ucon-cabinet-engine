@@ -48,6 +48,17 @@ module UCON
         # number nobody chose is a wrong elevation that looks like a right one.
         @dialog.add_action_callback('worktop') { |_| stamp_tops_from_dialog }
         @dialog.add_action_callback('sink') { |_| mark_sink_from_dialog }
+        # THE TAGS. A model whose bodies are all on Layer0 has exactly one
+        # drawing in it - 2026-08-29, 56 of 59. The pass is re-runnable and
+        # refuses more than it does; core/66_retag.rb carries the reasons.
+        @dialog.add_action_callback('retag') do |_|
+          begin
+            result = Retag.run
+            UI.messagebox("UCON - Retag model\n\n" + Retag.report(result))
+          rescue StandardError => e
+            UI.messagebox("Retag failed and nothing was changed.\n\n#{e.class}: #{e.message}")
+          end
+        end
         @dialog.add_action_callback('reserve_run_gap') do |_|
           begin
             models = ApplianceCheck.run_gap_models
@@ -1215,6 +1226,7 @@ module UCON
             <button onclick="sketchup.reserve_wall()">Reserve wall volume (hood)…</button>
             <button onclick="sketchup.worktop()">Stamp article on drawn top…</button>
             <button onclick="sketchup.sink()">Sink over selected unit…</button>
+            <button onclick="sketchup.retag()">Retag model for LayOut…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             #{DevBridge.available? ? '<button onclick="sketchup.reload_bridge()">Reload probe bridge (dev)</button>' : ''}
             <div class="grp">Opening symbols</div>

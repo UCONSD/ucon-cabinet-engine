@@ -35,6 +35,12 @@ require_relative '../src/ucon_cabinet_engine/core/62_top_stamp'
 # 64_sink_mark is pure except for the drawing, which lives in the palette. The
 # sizes and the points are read out of the section file, so this loads JSON.
 require_relative '../src/ucon_cabinet_engine/core/64_sink_mark'
+# 66_retag is PURE apart from run(): the tag map and the pass are three string
+# questions per body, so every refusal it makes is checkable with no model open.
+# It is required AFTER 60_generator on purpose - its map takes two tag names
+# from the generator rather than retyping them, and a load order that hid that
+# would hide the whole point of taking them.
+require_relative '../src/ucon_cabinet_engine/core/66_retag'
 # 70_symbols touches the SketchUp API only when drawing; the geometry rules
 # themselves are pure and are checked here.
 require_relative '../src/ucon_cabinet_engine/core/70_symbols' rescue nil
@@ -9109,6 +9115,89 @@ check('THE COMMIT SCRIPT IS IN THE REPOSITORY, and stages itself') do
   raise 'the script must derive its own location, not hold a machine path' unless
     src.include?('cd "$(dirname "$0")/.."')
   raise 'a machine path is baked into the script' if src =~ %r{/(Users|home)/}
+end
+
+# ---------------------------------------------------------------------------
+# RETAG - core/66_retag.rb. Added 2026-08-29, after the model was found holding
+# eight scenes and fifty-six untagged bodies: every scene saved a tag state that
+# did not exist, so there was one drawing of everything and no way to make a
+# second.
+# ---------------------------------------------------------------------------
+
+Retag = UCON::CabinetEngine::Retag
+
+check('EVERY object_class in the contract has a tag - the ratchet') do
+  # This is the check that makes refusal 3 real. Widening the enum is a revision
+  # (contract 0), and a new class with no tag here would otherwise land silently
+  # on Layer0 - which is exactly the state this file was written to end.
+  missing = Contract::ENUMS['object_class'].reject { |oc| Retag::TAGS.key?(oc) }
+  raise "no tag for #{missing.inspect} - add them to Retag::TAGS" unless missing.empty?
+
+  extra = Retag::TAGS.keys - Contract::ENUMS['object_class']
+  raise "Retag::TAGS names classes the contract does not have: #{extra.inspect}" unless extra.empty?
+end
+
+check("every tag follows the model's own naming convention") do
+  bad = Retag::TAGS.values.reject { |t| t.start_with?('UCON — ') }
+  raise "these would not sort with the others: #{bad.inspect}" unless bad.empty?
+end
+
+check("the two generator-owned tags are the GENERATOR'S constants, not copies") do
+  # A retyped tag name is two tags that look identical in a menu and behave
+  # differently - the wall_hung bug of 2026-08-22 in different clothes.
+  gen = UCON::CabinetEngine::Generator
+  raise 'appliance is not the generator placeholder tag' unless
+    Retag::TAGS['appliance'] == gen::PLACEHOLDER_TAG
+  raise 'void is not the generator reserved tag' unless
+    Retag::TAGS['void'] == gen::RESERVED_TAG
+end
+
+check('a body already carrying a UCON tag is LEFT ALONE') do
+  # Refusal 2, and it is about ownership rather than tidiness. Placeholder (not
+  # ours) says a machine is not ours to sell - Drawing_Spec, surfaces mean
+  # ownership. Re-tagging it by class would delete that statement and put a
+  # client fridge on a presentation sheet as if we had quoted it.
+  r = Retag.plan([{ name: 'CL4850SD', object_class: 'appliance',
+                    tag: 'UCON — Placeholder (not ours)' }])
+  raise 'it was moved' unless r[:moves].empty?
+  raise 'it was not reported as kept' unless r[:kept].size == 1
+end
+
+check('a body with no object_class is not touched at all') do
+  # Refusal 1. Andriy's walls, floor and imported furniture carry no CabinetEngine
+  # dictionary, and the engine tags what the engine made.
+  r = Retag.plan([{ name: 'south wall', object_class: nil, tag: 'Layer0' }])
+  raise 'it was tagged' unless r[:moves].empty?
+  raise 'it was not reported as foreign' unless r[:foreign] == ['south wall']
+end
+
+check('an unknown object_class is REFUSED and named, and the batch survives it') do
+  # Refusal 3, and the second half matters as much as the first: a refusal that
+  # takes the rest of the pass down with it would be a reason not to run the
+  # pass at all.
+  r = Retag.plan([{ name: 'thing',  object_class: 'sarcophagus', tag: 'Layer0' },
+                  { name: 'B80601', object_class: 'cabinet',     tag: 'Layer0' }])
+  raise 'the unknown class was guessed at' unless r[:moves].size == 1
+  raise 'the good row was lost' unless r[:moves].first[:to] == Retag::TAGS['cabinet']
+  raise 'the refusal did not name the class' unless
+    r[:refused].size == 1 && r[:refused].first[:object_class] == 'sarcophagus'
+end
+
+check('no tag is created for a class nothing in the model uses') do
+  # A switch that turns nothing on and off is clutter on a sheet, and the ten
+  # classes are not all present in any one kitchen.
+  r = Retag.plan([{ name: 'B80601', object_class: 'cabinet', tag: 'Layer0' }])
+  raise Retag.tags_needed(r).inspect unless Retag.tags_needed(r) == [Retag::TAGS['cabinet']]
+end
+
+check('the palette can actually reach the pass') do
+  # A SOURCE check, for the same reason the picker grid has one: the button is
+  # HTML, nothing headless can press it, and a callback whose name does not
+  # match its button is a dead button that looks alive.
+  html = Palette.html
+  raise 'no Retag button on the palette' unless html.include?('sketchup.retag()')
+  psrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'the button has no callback' unless psrc.include?("add_action_callback('retag')")
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
