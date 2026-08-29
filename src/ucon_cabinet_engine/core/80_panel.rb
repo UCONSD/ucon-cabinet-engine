@@ -54,6 +54,40 @@ module UCON
         !unit['opening'].nil?
       end
 
+      # HAVING A FRONT AND OPENING ARE TWO DIFFERENT FACTS, and conflating them
+      # cost a silent no-op - 2026-08-29, the account is in attributes_patch.
+      #
+      # A filler HAS a front (fillers_h78.json states `kind: single` on purpose)
+      # and does NOT open: it has no `opening`. A shelf and a panel state
+      # `kind: none` and have neither. So the door VERSION - a fact about the
+      # front's height - belongs to the first group, and the handle, the hinge
+      # and the opening method belong to the second.
+      #
+      # Both are asked of the front layout rather than of the class, for the
+      # reason opens? already gives: that is where the answer is stated, and it
+      # was stated for a different purpose, which is what makes it trustworthy.
+      def front?(unit)
+        return false if unit.nil?
+
+        kind = (unit['front_layout'] || {})['kind'].to_s
+        !kind.empty? && kind != 'none'
+      end
+
+      # WHICH DOOR VERSION THIS OBJECT IS IN, read off the model rather than
+      # stored beside it. The family declares both heights and the object
+      # records the one it got, so the two together are the answer and there is
+      # nothing to keep in step.
+      #
+      # Defaults to '78' when the family declares no versions, which is the only
+      # honest answer: a family with one door height has not made a choice.
+      def door_version_of(unit, attrs)
+        versions = unit && unit['door_versions']
+        return '78' unless versions && versions['gola_mm']
+
+        fh = (attrs || {})['front_height_mm']
+        fh && fh.to_f.round(1) == versions['gola_mm'].to_f.round(1) ? '75' : '78'
+      end
+
       # THE LED RULE OF A SECTION, and the length it computes for THIS object.
       # printed p.224: the Sky-B fits on these shelves, the light is the shelf
       # minus 3 mm, and it stops at 3 metres. The rule is data on the section;
@@ -100,17 +134,29 @@ module UCON
       end
 
       def attributes_patch(unit, payload)
-        # AN OBJECT THAT DOES NOT OPEN TAKES NONE OF WHAT FOLLOWS. Everything
-        # below is about a front - the door version, the opening method, the
-        # handle, the hinge - and a shelf has no front to ask about. It returns
-        # early with the one choice it DOES have.
-        unless opens?(unit)
-          return led_patch(unit, payload)
-        end
+        # AN OBJECT WITH NO FRONT TAKES NONE OF WHAT FOLLOWS. A shelf and a
+        # panel state `front_layout kind: none`; everything below is about a
+        # front, so they return early with the one choice they DO have.
+        #
+        # THIS LINE SAID `opens?` UNTIL 2026-08-29 AND THAT WAS A SILENT NO-OP.
+        # A filler has a front and does not open, so it fell through this return
+        # and NOTHING it was asked ever reached the model: pick "75 - gola" on
+        # B70151, press Apply, no error, no change - and the radio still reads
+        # 75 afterwards, because the radio is HTML and nobody had told it
+        # otherwise. It was found in the MODEL and not in the dialog: the whole
+        # base run stood at front 750 while both H.78 fillers stood at 780, a
+        # 30 mm step in an elevation, which is exactly what fillers_h78.json
+        # warned about in writing - a filler's front line must meet its
+        # neighbours' or the drawing breaks.
+        #
+        # The 0.95.0 change that introduced it was RIGHT about what it aimed at
+        # - a shelf must not be offered a handle - and swept the door version
+        # along with the handle because one predicate stood for two facts. The
+        # predicate is now two predicates.
+        return led_patch(unit, payload) unless front?(unit)
 
+        # ---- THE DOOR VERSION: a fact about the FRONT ---------------------
         gola = payload['door_version'] == '75'
-        method = gola ? 'gola' : payload['opening_method']
-        raise ArgumentError, 'Door 78 cannot use gola profile logic' if method == 'gola' && !gola
         # The door-version axis is FAMILY-SCOPED - the manifest says "each
         # base-unit page shows door heights 78 and 75". A family that declares
         # no versions has no choice to make, and a wall unit 360 tall cannot be
@@ -121,61 +167,109 @@ module UCON
                 "#{unit['code']} (#{unit['family']}, H #{unit['height_mm']}) has no gola door " \
                 'version: its family does not declare one.'
         end
-        raise ArgumentError, 'opening_method is required' if method.nil? || method.empty?
 
         h = unit['height_mm']
+        # WHERE THE CHOICE IS KEPT, AND WHY IT IS NOT A NEW CONTRACT KEY.
+        #
+        # A `door_version` key was written here first and taken back the same
+        # hour, 2026-08-29 (learned rule 9 - the attempt is recorded, not erased). It
+        # failed five contract checks correctly: §1.2 says a key outside the list
+        # is a violation, so storing it is a contract REVISION, and a revision
+        # is a poor price for a fact that is already in the model.
+        #
+        # `front_height_mm` and the family's declared `gola_mm` determine the
+        # version exactly, so door_version_of derives it in ONE pure place -
+        # which is precisely the shape `wall_hung_chosen` already has forty
+        # lines below: the checkbox is computed from `mounting` plus what the
+        # catalog allows, and is not stored twice.
+        #
+        # The real bug was never the missing key. It was that the ONE thing that
+        # could stand for the choice - opening_method == 'gola' - is a fact only
+        # something that OPENS ever has.
         patch = {
-          'opening_method'  => method,
           'front_height_mm' => gola ? h - 30 : h
         }
 
-        case method
-        when 'gola'
+        # ---- THE GRIP RECESS: also a fact about the FRONT -----------------
+        # A cabinet front in the 75 version orders its own GOL profile, and so
+        # does a FILLER - Andriy, 2026-08-29: the run's recess stops at the
+        # filler and its own length of profile is nobody else's order line.
+        #
+        # An APPLIANCE panel is still the exception: the profile above it
+        # belongs to the run, the source never gives the panel a line of its
+        # own, and whether one is nevertheless ordered is Elda Q6. So there the
+        # profile is optional rather than invented or demanded.
+        if gola
           system = payload['gola_system'].to_s
-          # A cabinet front in the 75 version orders its own GOL profile.
-          # An APPLIANCE panel is not a cabinet front: the profile above it
-          # belongs to the run, and the source never gives the panel a profile
-          # line of its own. Whether one is nevertheless ordered is Elda Q6, so
-          # the profile is optional here rather than invented or demanded.
           appliance = unit['object_class'] == 'appliance_front'
           if system.empty?
             raise ArgumentError, 'Gola (door 75) requires a grip-recess SYSTEM — its profiles are separate order lines' unless appliance
           elsif Generator.gola_profile_refs(unit, system).empty?
             raise ArgumentError, "No grip-recess profile is registered for system #{system.inspect}"
           end
-        when 'handle'
-          if payload['hardware_mode'] == 'client'
+        end
+
+        # ---- AND ONLY NOW, WHAT NEEDS AN OPENING --------------------------
+        # A filler takes none of this: no method, no handle, no hinge. Its
+        # mounting is likewise left as the generator built it - a dialog that
+        # never asked about mounting must not re-decide it, and a wall filler
+        # put on the floor by a default would be this bug's mirror image.
+        opens = opens?(unit)
+        if opens
+          method = gola ? 'gola' : payload['opening_method']
+          raise ArgumentError, 'Door 78 cannot use gola profile logic' if method == 'gola' && !gola
+          raise ArgumentError, 'opening_method is required' if method.nil? || method.empty?
+
+          patch['opening_method'] = method
+
+          case method
+          when 'gola'
+            nil # already validated above, with the rest of what belongs to the front
+          when 'handle'
+            if payload['hardware_mode'] == 'client'
+              patch['hardware_ref']    = ''
+              patch['hardware_source'] = 'client'
+            else
+              ref = payload['hardware_ref'].to_s
+              raise ArgumentError, 'Factory handle requires an M-code (or switch to client-provided)' if ref.empty?
+              patch['hardware_ref']    = ref
+              patch['hardware_source'] = 'factory'
+            end
+          when 'push_to_open'
             patch['hardware_ref']    = ''
-            patch['hardware_source'] = 'client'
-          else
-            ref = payload['hardware_ref'].to_s
-            raise ArgumentError, 'Factory handle requires an M-code (or switch to client-provided)' if ref.empty?
-            patch['hardware_ref']    = ref
             patch['hardware_source'] = 'factory'
+          else
+            raise ArgumentError, "Unknown opening_method #{method.inspect}"
           end
-        when 'push_to_open'
-          patch['hardware_ref']    = ''
-          patch['hardware_source'] = 'factory'
-        else
-          raise ArgumentError, "Unknown opening_method #{method.inspect}"
         end
 
         # MOUNTING IS A CHOICE NOW (printed p.548), and the patch must be able
         # to take it back as well as make it - the contract reconciles, so a
         # unit returned to the floor gets mount_bottom_mm DELETED rather than
         # left behind at its old hanging height.
-        hang = payload['wall_hung'] ? true : false
-        if hang && !Generator.wall_hung_available?(unit)
-          raise ArgumentError,
-                "#{unit['code']} cannot be ordered wall-hung: " \
-                "#{Generator.hangs_by_nature?(unit) ? 'it already hangs' : 'the catalog does not offer it for this type'}."
+        #
+        # GUARDED BY `opens` SINCE 2026-08-29, and the guard is a REFUSAL TO
+        # WIDEN rather than a rule. Fillers reached this method for the first
+        # time that day; the mounting checkbox is hidden for them, so an
+        # unguarded pass would read a `false` nobody set and write `mounting:
+        # floor` onto a wall filler - this bug's mirror image, a control that
+        # acts where it was never shown. What the generator built stands until
+        # somebody is actually asked.
+        hang = false
+        if opens
+          hang = payload['wall_hung'] ? true : false
+          if hang && !Generator.wall_hung_available?(unit)
+            raise ArgumentError,
+                  "#{unit['code']} cannot be ordered wall-hung: " \
+                  "#{Generator.hangs_by_nature?(unit) ? 'it already hangs' : 'the catalog does not offer it for this type'}."
+          end
+          # Two ways to be hanging and they must not be confused: a wall unit
+          # hangs whatever the checkbox says, a base unit only if it was ticked.
+          hung = hang || Generator.hangs_by_nature?(unit)
+          patch['mounting'] = hung ? 'wall_hung' : 'floor'
+          patch['mount_bottom_mm'] =
+            hung ? Generator.mount_bottom_mm(unit.merge('mounting' => 'wall_hung')) : nil
         end
-        # Two ways to be hanging and they must not be confused: a wall unit
-        # hangs whatever the checkbox says, a base unit only if it was ticked.
-        hung = hang || Generator.hangs_by_nature?(unit)
-        patch['mounting'] = hung ? 'wall_hung' : 'floor'
-        patch['mount_bottom_mm'] =
-          hung ? Generator.mount_bottom_mm(unit.merge('mounting' => 'wall_hung')) : nil
 
         # COMPANIONS ARE RE-RESOLVED ON EVERY APPLY, gola profiles included.
         # They are IMPLIED lines and an implied line is recomputed, never
@@ -183,8 +277,12 @@ module UCON
         # profiles away again when a front stops being gola. Leaving them
         # behind would order a grip recess for a door that now opens with a
         # handle, and until 0.44.0 the contract could not even erase it.
+        # ...AND THEY ARE RESOLVED FROM THE CHOICE, NOT FROM THE METHOD.
+        # `method` exists only for something that opens; `gola` is true for any
+        # front in the 75 version, which is what puts the filler's own length of
+        # profile on the order at last.
         lines = Generator.companion_refs_for(
-          unit, method == 'gola' ? payload['gola_system'].to_s : nil
+          unit, gola ? payload['gola_system'].to_s : nil
         ) || []
         # ...AND THE CHOSEN ONE IS ADDED BACK, not preserved. That looks like a
         # violation of "a chosen line is never recomputed" and is not: the
@@ -338,6 +436,14 @@ module UCON
         # never fires - which is the right answer, not a failure.
         state['core_version'] = core_version
         state['opens'] = opens?(unit)
+        # TWO FACTS, NOT ONE - 2026-08-29. `front` is what earns the door-version
+        # fieldset; `opens` is what earns the handle and the hinge. The HTML used
+        # to show the fieldset on anything whose FAMILY declared versions, so a
+        # filler was offered a control whose Apply path could not reach it.
+        state['front'] = front?(unit)
+        # AND THE RADIO IS SET FROM THIS, not inferred in JavaScript from the
+        # opening method - which a filler does not have.
+        state['door_version_chosen'] = door_version_of(unit, attrs)
         state['led'] = led_offer(unit, attrs)
         state['led_chosen'] =
           Array((attrs || {})['variants']).any? { |v| v['key'] == LED_VARIANT_KEY }
@@ -548,7 +654,11 @@ module UCON
           make_instance_unique!(inst)
           defn = inst.definition
           Contract.write!(defn, attrs.merge(patch))
-          gola = patch['opening_method'] == 'gola'
+          # ASKED OF THE FRONT, NOT OF THE OPENING - 2026-08-29. This read
+          # `patch['opening_method'] == 'gola'`, which is a fact only something
+          # that OPENS ever has, so a filler could never have had its front
+          # rebuilt shorter even once the patch reached it.
+          gola = door_version_of(chosen, patch) == '75'
           step = 'rebuilding the fronts'
           rebuild_fronts(model, defn, chosen, gola)
           step = 'rebuilding the plinth'
@@ -822,7 +932,11 @@ module UCON
               // control - and the labels are written from the declared heights,
               // so nothing in this dialog hard-codes 78 or 75.
               var dv = st.door_versions;
-              document.getElementById('dvFs').style.display = dv ? '' : 'none';
+              // TWO CONDITIONS, NOT ONE - 2026-08-29. A family declaring door
+              // versions is not enough: the object must have a FRONT for the
+              // choice to reach anything. A filler passed the first test and
+              // failed the second, so it was shown a control that did nothing.
+              document.getElementById('dvFs').style.display = (dv && st.front) ? '' : 'none';
               if(dv){
                 document.getElementById('dvFull').textContent =
                   (dv.full_mm/10) + ' — full front';
@@ -838,10 +952,14 @@ module UCON
               document.getElementById('desc').textContent=(st.desc||'')+' · '+st.attrs.code_status+' / '+st.attrs.status;
               opt(document.getElementById('gol'),st.gola_profiles,st.gola_system);
               opt(document.getElementById('handle'),st.handles,st.attrs.hardware_ref);
+              // THE VERSION COMES FROM selection_state, which derives it from
+              // the front height and the family's declared gola height. Reading
+              // it off the opening method here was the JavaScript half of the
+              // 2026-08-29 bug: a filler has a front and NO opening method, so
+              // this radio could only ever have been wrong about one.
+              document.querySelector('input[name=dv][value="'+(st.door_version_chosen||'78')+'"]').checked=true;
               var m=st.attrs.opening_method||'handle';
-              if(m==='gola'){document.querySelector('input[name=dv][value="75"]').checked=true;}
-              else{document.querySelector('input[name=dv][value="78"]').checked=true;
-                   document.getElementById('om').value=m;}
+              if(m!=='gola'){document.getElementById('om').value=m;}
               if(st.attrs.hardware_source==='client')document.getElementById('hmode').value='client';
               if(st.attrs.hinge_side)document.getElementById('hinge').value=st.attrs.hinge_side;
               rules();

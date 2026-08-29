@@ -135,6 +135,13 @@ date order; a finding is never edited to hide what it corrected.
   section planes - and the symbols themselves drawn correctly all along and
   simply switched off; plus core/66_retag.rb and why the generator does not tag).
 
+  **`findings-2026-08-29-the-filler-has-a-front.md`** (the Door height control on
+  B70151 was shown and could not act: attributes_patch returned early on anything
+  that does not OPEN, and a filler has a front and does not open - found in the
+  model, where the base run stood at front 750 and both H.78 fillers at 780; one
+  predicate split into two, a contract key written and taken back, and the
+  mounting block guarded so the mirror-image bug did not ship with the fix).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,

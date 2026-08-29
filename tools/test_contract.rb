@@ -9200,5 +9200,113 @@ check('the palette can actually reach the pass') do
   raise 'the button has no callback' unless psrc.include?("add_action_callback('retag')")
 end
 
+# ---------------------------------------------------------------------------
+# THE FILLER'S DOOR VERSION - 2026-08-29. A control that was shown and could not
+# act: `attributes_patch` returned early on anything that does not OPEN, and a
+# filler has a front and does not open. Picking "75 - gola" on B70151 changed
+# nothing, silently, and the model showed the cost - the base run at front 750
+# with both H.78 fillers standing at 780.
+# ---------------------------------------------------------------------------
+
+Panel = UCON::CabinetEngine::Panel unless defined?(Panel)
+
+FILLER_B78  = Registry.lookup('B70151')   # filler, family H.78, declares gola
+FILLER_TOP  = Registry.lookup('BE0151')   # filler, Top elements H.60, declares none
+SHELF_LINE  = Registry.lookup('MNS040038')
+
+check('HAVING A FRONT AND OPENING ARE TWO DIFFERENT QUESTIONS') do
+  raise 'a filler has a front' unless Panel.front?(FILLER_B78)
+  raise 'a filler does not open' if Panel.opens?(FILLER_B78)
+  raise 'a shelf has no front' if Panel.front?(SHELF_LINE)
+  raise 'a cabinet has both' unless Panel.front?(Registry.lookup('B80601')) && Panel.opens?(Registry.lookup('B80601'))
+end
+
+check('THE FILLER TAKES THE DOOR VERSION AND ITS FRONT ACTUALLY MOVES') do
+  # The whole bug in one assertion. Before 2026-08-29 this returned a patch with
+  # no front_height_mm at all, because the method had already returned.
+  p75 = Panel.attributes_patch(FILLER_B78,
+                               'door_version' => '75', 'gola_system' => 'L-shaped')
+  raise p75.inspect unless p75['front_height_mm'] == 750
+  p78 = Panel.attributes_patch(FILLER_B78, 'door_version' => '78')
+  raise p78.inspect unless p78['front_height_mm'] == 780
+end
+
+check('...AND IT IS GIVEN NO OPENING METHOD, BECAUSE IT DOES NOT OPEN') do
+  # `gola` is not an opening method for a thing with no opening. The front is
+  # short; nothing about it opens; and nothing may pretend otherwise.
+  p75 = Panel.attributes_patch(FILLER_B78,
+                               'door_version' => '75', 'gola_system' => 'L-shaped')
+  raise "opening_method leaked: #{p75['opening_method'].inspect}" if p75.key?('opening_method')
+  raise 'a handle reached a filler' if p75.key?('hardware_ref')
+end
+
+check('A FILLER IN THE 75 VERSION ORDERS ITS OWN LENGTH OF PROFILE') do
+  # Andriy, 2026-08-29. The run's grip recess stops at the filler, so the piece
+  # over it is nobody else's order line. This is what the companion resolution
+  # being keyed on the door VERSION rather than the opening METHOD buys.
+  p75 = Panel.attributes_patch(FILLER_B78,
+                               'door_version' => '75', 'gola_system' => 'L-shaped')
+  codes = Array(p75['companion_refs']).map { |l| l['code'] }
+  raise "no grip recess on the order: #{p75['companion_refs'].inspect}" unless
+    codes.any? { |c| c.to_s.start_with?('GOL') }
+
+  p78 = Panel.attributes_patch(FILLER_B78, 'door_version' => '78')
+  back = Array(p78['companion_refs']).map { |l| l['code'] }
+  raise "the profile stayed behind at 78: #{back.inspect}" if back.any? { |c| c.to_s.start_with?('GOL') }
+end
+
+check('THE VERSION IS STILL FAMILY-SCOPED, AND A FILLER IS NOT AN EXCEPTION') do
+  # Andriy, 2026-08-29: "для филлера она нужна именно для base cabinets". It
+  # already was - and what makes it base is the FAMILY declaring door_versions,
+  # not the class. BE0151 is a filler too, of a family that declares none.
+  begin
+    Panel.attributes_patch(FILLER_TOP, 'door_version' => '75')
+  rescue ArgumentError => e
+    raise "refused for the wrong reason: #{e.message}" unless e.message.include?('gola door')
+    next
+  end
+  raise 'a Top elements H.60 filler was given a 75 door'
+end
+
+check('A DIALOG THAT NEVER ASKED ABOUT MOUNTING MUST NOT DECIDE IT') do
+  # The mirror image of this bug, refused rather than shipped: the mounting
+  # checkbox is hidden for a filler, so an unguarded pass would read a `false`
+  # nobody set and put a wall filler on the floor.
+  p75 = Panel.attributes_patch(FILLER_B78,
+                               'door_version' => '75', 'gola_system' => 'L-shaped')
+  raise "mounting was re-decided: #{p75['mounting'].inspect}" if p75.key?('mounting')
+end
+
+check('THE VERSION IS DERIVED FROM THE FRONT, NOT STORED BESIDE IT') do
+  # A `door_version` contract key was written and taken back the same hour: §1.2
+  # made it a contract revision, and the fact is already in the model. This is
+  # the shape wall_hung_chosen has had all along.
+  raise 'a 750 front is the 75 version' unless
+    Panel.door_version_of(FILLER_B78, 'front_height_mm' => 750) == '75'
+  raise 'a 780 front is the 78 version' unless
+    Panel.door_version_of(FILLER_B78, 'front_height_mm' => 780) == '78'
+  raise 'a family with one door height has made no choice' unless
+    Panel.door_version_of(FILLER_TOP, 'front_height_mm' => 570) == '78'
+end
+
+check('THE DIALOG ASKS BOTH QUESTIONS, AND SETS THE RADIO FROM THE ANSWER') do
+  # SOURCE checks: the fieldset and the radio are HTML and nothing headless can
+  # press them, so what is pinned is that the JavaScript reads the two facts the
+  # pure half now computes instead of inferring one from the opening method.
+  html = Panel.html
+  raise 'the fieldset is still shown on anything with a family door version' unless
+    html.include?("(dv && st.front) ? '' : 'none'")
+  raise 'the radio is still inferred from the opening method' unless
+    html.include?('st.door_version_chosen')
+  raise "opening_method is still read for the radio" if
+    html.include?("if(m==='gola'){document.querySelector")
+
+  st = Panel.selection_state(FILLER_B78, 'front_height_mm' => 750)
+  raise 'selection_state does not say whether there is a front' unless st['front'] == true
+  raise 'selection_state does not say it cannot open' unless st['opens'] == false
+  raise "the chosen version is wrong: #{st['door_version_chosen'].inspect}" unless
+    st['door_version_chosen'] == '75'
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
