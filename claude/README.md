@@ -129,6 +129,11 @@ date order; a finding is never edited to hide what it corrected.
   LIST rather than a range, so 660 is refused instead of rounded to 650; and the
   seven suite checks that failed the moment it loaded, all seven correctly).
 
+**Handoffs:** `handoff-2026-08-28-appliances.md`,
+**`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
+after this date: the engine stopped DRAWING worktops and started STAMPING them,
+what that keeps, what it costs, and the covering report it owes).
+
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
 `fillers-recon-2026-08-23.md`, `usa-elements-recon-2026-08-20.md`,
