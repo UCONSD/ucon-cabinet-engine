@@ -110,10 +110,19 @@ Andriy may work at home this weekend. The laptop is **SketchUp 2025, system Ruby
 Plugins folder, and installation is **two symlinks** — the folder
 `src/ucon_cabinet_engine` and the registrar `src/ucon_cabinet_engine.rb`.
 
-`build/` is git-ignored, so **`build/go.sh` does not exist on the laptop** and has
-to be written fresh there. It derives its own location (`cd "$(dirname "$0")/.."`),
-so it works wherever the repository sits — but the command handed to Andriy must
-carry the repository's path on **that** machine, not the office one.
+**`build/go.sh` IS in the repository as of 2026-08-28** and travels with a pull.
+It was not, until the laptop was opened: `.gitignore` said `build/` while the
+reason printed above that line was only ever about `.rbz` archives — a rule wider
+than its own stated reason, which is the shape this project catches everywhere
+else and had missed in its own ignore file. It is now `build/*` with
+`!build/go.sh`, the script stages itself and `.gitignore`, and a suite check
+keeps it that way. The archives, the throwaway probe scripts and
+`build/commit-msg.txt` stay out — that last one holds the NEXT message and would
+sit one commit stale in history forever.
+
+The script derives its own location (`cd "$(dirname "$0")/.."`), so it runs
+wherever the repository sits — but the command handed to Andriy must carry the
+repository's path on **that** machine, not the office one.
 
 `sources/**/*.pdf` is git-ignored (~438 MB), so a fresh clone has **no catalog**.
 Everything already extracted is in `registry/`; anything that needs a page read

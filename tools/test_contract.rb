@@ -9081,5 +9081,35 @@ check('A SINK IS A LINE ABOVE THE STONE, NOT A HOLE IN IT') do
     m.include?("su.line_styles['Dash']")
 end
 
+puts "\nthe one command, and whether it travels"
+
+check('THE COMMIT SCRIPT IS IN THE REPOSITORY, and stages itself') do
+  # 2026-08-28, found by opening the laptop. `sh build/go.sh` is the one command
+  # Andriy types, on every machine, every step - and it was not in git at all.
+  # Not by decision: .gitignore said `build/` while the reason printed directly
+  # above that line was only ever about .rbz ARCHIVES. A rule wider than its own
+  # stated reason, which is the exact shape this project catches everywhere else
+  # and had missed in its own ignore file.
+  root = File.expand_path('..', __dir__)
+  ign  = File.read(File.join(root, '.gitignore'))
+  raise 'the whole build/ is ignored again - the script cannot travel' if
+    ign =~ /^build\/$/
+  raise 'build/go.sh is not excepted from the ignore' unless ign.include?('!build/go.sh')
+  raise 'the archives must still be kept out' unless ign.include?('build/*')
+
+  # AND A TRACKED FILE THAT NOTHING STAGES IS STILL NOT COMMITTED. The staging
+  # list is by NAME on purpose - it committed a held-back probe once by taking a
+  # whole directory - so anything new has to be added to it deliberately.
+  go = File.join(root, 'build', 'go.sh')
+  next unless File.exist?(go)   # a fresh clone has it; a machine mid-setup may not
+
+  src = File.read(go)
+  raise 'the script does not stage itself' unless src.include?('build/go.sh')
+  raise 'the script cannot commit a change to .gitignore' unless src.include?('.gitignore')
+  raise 'the script must derive its own location, not hold a machine path' unless
+    src.include?('cd "$(dirname "$0")/.."')
+  raise 'a machine path is baked into the script' if src =~ %r{/(Users|home)/}
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
