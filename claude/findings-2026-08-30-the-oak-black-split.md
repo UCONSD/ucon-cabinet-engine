@@ -147,3 +147,183 @@ subject, in the same commit's work. The model, the held probe, the registry and
 the suite all agreed with each other and only the prose disagreed. **Four
 artefacts against one sentence, and the sentence was the one a next session would
 have read first.**
+
+---
+
+## 6. Later the same day — the split moved, and two catalog questions were answered
+
+### The upper tier is oak, all of it
+
+Andriy, after looking at the painted model: **the whole upper tier is oak.**
+Black survives only on the base runs and on the CUSTOM boxes over the range,
+which is where the hood goes. That moves nine objects from the table in section
+1: `PF0151`, both `BE0151`, the five `SD0631` at 2440 (103, 703, 1303, 1903,
+2513 — the first two share one definition) and `SD0930`.
+
+**The model already holds the new scheme**, painted by hand before it was
+written down. Probe 110 reads it back: those nine carry `RR09` on their faces.
+Three objects also picked up an oak material on the INSTANCE while their faces
+stayed black — `AU110D`, `B80501` and the lower `MNS040038` — which is the
+invisible-paint case in reverse and needs clearing when the plan is rewritten.
+
+### Painting inside the group is the right gesture, and the corner proved the probe wrong
+
+Andriy painted by hand to test it, and the test found a real defect. Every
+material in this model sits at **depth 2** — on the faces inside a group, not on
+the group. `UCON_Front_White` is now on zero faces.
+
+**`AU110D` is the case worth keeping.** 20 faces with no material, 6 black. The
+six are the door. The **8×8 fixed corner front panel** — which the code's own
+description names — is among the twenty, because run 107 matched sub-groups whose
+name contains FRONT, DOOR or DRAWER, found the door, and reported the object as
+painted. **A per-object "something was painted" is not a check.** The 518 faces
+still carrying no material at all are the carcasses, which nothing has ever
+painted, and they are most of what reads as white in the viewport.
+
+### Panels: a black panel is orderable, and it is a different family
+
+printed p.217, Volume 3 — **lacquered** panels, a separate chapter from the
+veneered ones on p.218/220. Group **C — Structured lacquers** lists **Nero**, so
+a black side panel lands inside the `LX19 Nero` decision rather than adding a
+third finish.
+
+| | code | points/m² | the oak equivalent |
+|---|---|---:|---|
+| 1,8 lacquered ONE side | `DZCO00` | **250** | `DZ731Q` 343 |
+| 1,8 lacquered two sides | `DZCP00` | 362 | — |
+| 2,2 lacquered two sides | `DZCP22` | **339** | `DV731Q` 549 |
+| 1,2 lacquered two sides | `DZCP12` | 345 | — |
+
+Three things this page settles:
+
+- **Black is cheaper than oak here**, and not marginally: 250 against 343 on the
+  one-sided, 339 against 549 on the two-sided 2,2.
+- **A lacquered panel has no grain**, so it has no grain-direction article. The
+  veneered ones do, and that is why the east run's end had to be `DV061Q` —
+  vertical grain caps at 1200 and that end is 2440. **That trap does not exist on
+  a lacquer panel.**
+- **The two-sided 2,2 (339) is cheaper than the two-sided 1,8 (362).** Printed,
+  and counter-intuitive enough to be worth writing down before someone "corrects"
+  it.
+
+**And the custom boxes over the range have no side panels at all.** Nothing of
+`object_class: panel` exists between x 1903 and 3123. This is not a repaint, it
+is two new order lines.
+
+### The glass cabinets: decided, and it dodges a second oak
+
+printed p.314 — `TF0641`, 60 wide, d.35, **2 glass shelves**, and *"cannot be
+reduced in width, height or depth"*. Three independent axes: the door (the closed
+15-row list on printed p.65), the shelves (Bronze +15, Fumè +15), and the
+interior, which is the CARCASS block and may be specified per element.
+
+The interior was the problem. The carcass block offers only one wood —
+**`Rovere Bruno`** — which is not `RR09 Rovere Nordico`. Dressing the inside of
+the vitrines in oak would have introduced a SECOND oak, one shade off the fronts,
+which reads as a mistake rather than a choice.
+
+**Andriy, 2026-08-30: `Black frame with black silk-screen printing / transparent
+glass WITH OAK FABRIC`,** printed p.65, **+95 per 60 cm door, +285 for the
+three.** The black frame decision of 2026-08-29 survives untouched, oak enters
+the upper tier, and the interior stops being a question because the fabric closes
+it. `Grigio Fumo` stays the carcass everywhere.
+
+### A false alarm, recorded so it is not raised again
+
+`TF0641` is drawn 375 deep against a catalog `d.35`. Reported as a possible
+error; **it is not one.** Andriy: the catalog depth is always the CARCASS, and
+the drawn body is the carcass plus the front. The engine already knows it —
+`Standards::FRONT_T_MM = 22` plus `FRONT_GAP_MM = 3` — so 350 + 25 = 375 exactly
+as 620 + 25 = 645 on every base unit in this kitchen. Both constants carry
+provenance: the thickness `:elda_confirmed`, the gap `:derived_from_elda_dimensions`.
+
+**The lesson is small and cheap: a catalog dimension and a drawn dimension are
+different measurements, and the difference is a constant this repository already
+holds.** Before calling a drawn number wrong, subtract the ones the engine adds.
+
+---
+
+## 7. And then the whole drawing got its finishes, because only fronts had ever had one
+
+Run 112, armed, verified by run 113 asking the model afterwards. **836 of the
+model's 848 faces now carry a finish. The other 12 are the two appliance
+openings, and a niche is drawn and never ordered — domain rule 8.**
+
+### What was actually wrong: the engine only ever painted fronts
+
+Sixteen sub-group names exist inside UCON objects. Six of them carried no
+material at all, and **five of those six had a finish decided on 2026-08-29 that
+had simply never been drawn**:
+
+| body | count | faces | was | is |
+|---|---:|---:|---|---|
+| `CARCASS` | 52 | 312 | nothing | **Grigio Fumo** |
+| `PLINTH` | 20 | 120 | nothing | **Aluminium Black** (H.10) |
+| `FRONT (frame: DECLARED)` | 3 | 30 | nothing | **Aluminium Black** |
+| `FRONT_GLASS` | 3 | 18 | nothing | **Oak fabric** |
+| `FILLER_8X8` | 1 | 8 | nothing | the corner's own finish, **black** |
+| `PANEL` | 3 | 18 | instance only | **oak** |
+| `APPLIANCE_OPENING_600` | 2 | 12 | nothing | **nothing, correctly** |
+
+So "the model looks unpainted" was never a bug in the split. **Fifty-two white
+carcasses and twenty white plinths were what Andriy was looking at**, and the
+finishes for both had been chosen a day earlier.
+
+The rules are keyed on the sub-group NAME, not on a list of objects, so a unit
+built tomorrow gets its carcass and plinth painted without anybody editing a
+plan. Only the front finish is per-object, because only the front finish is a
+choice.
+
+### The corner, and why the old report was green
+
+`AU110D`'s fixed 8×8 corner panel is called `FILLER_8X8`. Run 107 matched
+sub-groups whose name contains FRONT, DOOR or DRAWER, found the door, painted it,
+and reported the object done. **A per-object "something was painted" is not a
+check.** The check now asserts that no FRONT-family body — `FILLER_8X8` and
+`PANEL` included — belongs to an object without a finish, and refuses before
+painting anything.
+
+### The one that would have shipped, caught by adding up
+
+The first rehearsal printed `CARCASS -> Grigio Fumo, 312 faces` and looked right.
+312 is 52 objects, and only six objects in this model have no `CARCASS`. So the
+veneer panels have one too: **the generator names every solid body `CARCASS`,
+and for `DV731Q`, `DZ731Q`, `DV061Q` and the two `MNS040038` shelves that group
+IS the visible object** — both island ends, the island's entire back, the tall
+run's end. A blanket carcass rule turns the oak half of the split grey and
+reports a clean 312 while doing it.
+
+`object_class` is what separates them: a panel and a shelf have no carcass, so
+their `CARCASS` group takes the object's own finish. The exception is pinned by a
+check, because removing it is silent.
+
+**Three times in one session a count looked correct and hid a defect** — "an
+object was painted", "the group carries the material", "312 faces". Each was
+caught by a different means and none by the count itself. The verification is now
+`tools/probe_verify_finishes.rb`: fifteen named assertions about named bodies at
+named positions, and not one total.
+
+### Decided in passing, and still assumed
+
+- **The two `MNS040038` shelves are painted oak, and nobody has decided that.**
+  They are Linear Elements sold per linear metre, no block on printed p.65 covers
+  them, and oak matches the tier they hang in — Andriy painted the lower one that
+  way by hand while testing. **One line in the plan to change.**
+- The vitrine glass is **opaque** in the drawing, on Andriy's instruction: a
+  see-through pane would show the inside, and the inside is the thing the Oak
+  fabric exists to close.
+- `Aluminium Black` is deliberately a different value from `LX19 Nero`. One is
+  anodised metal and the other a lacquered front, and on an elevation they should
+  be tellable apart.
+
+### Still owed, unchanged by any of this
+
+The paint does not survive a rebuild — the generator writes `UCON_Front_White`
+at build time. Everything above is now riding on that, not just the split, which
+strengthens the case for a finish key in the contract rather than weakening it.
+
+**And the black side panels for the custom boxes are not drawn.** Nothing of
+`object_class: panel` exists between x 1903 and 3123. Two new order lines,
+`DZCO00` (250/m², one side) or `DZCP22` (339/m², two sides) in structured
+lacquer Nero — not the DZ7/DV7 veneer chapter, which holds no lacquer at all.
+Next job.

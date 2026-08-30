@@ -1,3 +1,9 @@
+# SUPERSEDED BY 112, 2026-08-30. Kept because it is the script the AU110D
+# corner-panel defect was found in, and learned rule 9 says a mistake is
+# dated and added rather than erased. DO NOT RUN IT: it paints the split as
+# it stood before the upper tier went oak, and it paints fronts only.
+# The live one is tools/probe_inbox_hold_112.rb.
+#
 # ARMED. Run 107 - paint the oak/black split so it reads on an elevation.
 #
 # HELD, not in the inbox. It CHANGES THE MODEL: run

@@ -9389,64 +9389,90 @@ check('THE CORRECTED depth_note DOES NOT CLAIM THE RULE IS UNPRINTED') do
 end
 
 check('THE OAK/BLACK SPLIT IS COMPLETE, AND ITS PANELS ARE STILL OAK') do
-  # Decided by Andriy 2026-08-30. The split has nowhere to live in the data - the
-  # contract has 31 keys and not one is a finish - and nowhere on the order form,
-  # which asks only for the FAMILY and never the colour (printed p.65). It lives
-  # in the DRAWING, which means it lives in one held script. So the script is
-  # what gets checked.
+  # Decided 2026-08-30 and REVISED the same evening once Andriy looked at the
+  # painted model: the upper tier is ALL oak, and black survives only on the
+  # base runs and the two custom boxes over the range, where the hood goes.
   #
-  # This does not pin taste. It pins the two properties the decision rests on:
-  # that every front is accounted for, and that the panels it calls oak are in a
-  # group that still means oak.
-  src = File.read(File.expand_path('../tools/probe_inbox_hold_107.rb', __dir__))
+  # The split has nowhere to live in the data - the contract has 31 keys and not
+  # one is a finish - and nowhere on the order form, which asks for the FAMILY
+  # and never the colour (printed p.65). It lives in the DRAWING, which means it
+  # lives in one held script, so the script is what gets checked.
+  src = File.read(File.expand_path('../tools/probe_inbox_hold_112.rb', __dir__))
 
   raise 'the oak finish is no longer RR09 Rovere Nordico' unless
     src.include?("oak   = 'RR09 Rovere Nordico'")
   raise 'the black finish is no longer LX19 Nero' unless
     src.include?("black = 'LX19 Nero'")
 
-  fronts = src[/fronts = \[.*?^  \]$/m] or raise 'probe 107 has no fronts plan'
-  bodies = src[/bodies = \[.*?^  \]$/m] or raise 'probe 107 has no bodies plan'
+  plan = src[/plan = \[.*?^  \]$/m] or raise 'probe 112 has no plan'
+  o = plan.scan(', oak]').size
+  b = plan.scan(', black]').size
+  raise "expected 41 oak lines, got #{o}"   unless o == 41
+  raise "expected 12 black lines, got #{b}" unless b == 12
 
-  # 43 objects in this model carry a front. Every one is assigned, and the count
-  # per finish is the decision itself: if a door moves from one side to the other
-  # these numbers change and this check is where that gets noticed.
-  o = fronts.scan(', oak]').size
-  b = fronts.scan(', black]').size
-  g = fronts.scan(', glass]').size
-  raise "the fronts must total 43, got #{o + b + g}" unless o + b + g == 43
-  raise "expected 19 oak fronts, got #{o}"   unless o == 19
-  raise "expected 21 black fronts, got #{b}" unless b == 21
-  raise "expected the 3 TF0641 left alone, got #{g}" unless g == 3
+  # THE ONE THAT NEARLY WENT WRONG. The generator names every solid body CARCASS,
+  # so DV731Q, DZ731Q, DV061Q and the two MNS040038 shelves carry a group by that
+  # name which IS the visible object - both island ends, the island's whole back,
+  # and the tall run's end. A blanket "CARCASS -> Grigio Fumo" rule turns the oak
+  # half of the split grey and reports 312 faces painted while doing it. The
+  # exception is load-bearing and silent when removed, which is exactly what a
+  # check is for.
+  raise 'the panel/shelf CARCASS exception is gone - the island would go grey' unless
+    src.include?("body_is_the_object = (nm == 'CARCASS' && %w[panel shelf].include?(o[:oc]))")
 
-  raise 'a body may not be black - the veneer panels have no lacquer group' if
-    bodies.include?(', black]')
-  raise "expected 11 bodies painted, got #{bodies.scan(', oak]').size}" unless
-    bodies.scan(', oak]').size == 11
+  # Four finishes were decided on 2026-08-29 and drawn for the first time on
+  # 2026-08-30. If a rule is dropped, its bodies go back to no material at all
+  # and an elevation quietly shows white.
+  {
+    "'CARCASS'                 => mat_fumo"   => 'the carcass is Grigio Fumo',
+    "'PLINTH'                  => mat_alu"    => 'the plinth is Aluminium Black H.10',
+    "'FRONT (frame: DECLARED)' => mat_alu"    => 'the vitrine frame is Aluminium Black',
+    "'FRONT_GLASS'             => mat_fabric" => 'the vitrine glass carries the Oak fabric'
+  }.each { |frag, why| raise "a decided finish stopped being drawn: #{why}" unless src.include?(frag) }
 
-  # The same property the armed-probe check pins, asked of THIS script: a letter
-  # that stops meaning oak must fail here rather than in an order.
+  # FILLER_8X8 is here because it was MISSED. AU110D's fixed corner panel is not
+  # called FRONT, so run 107 skipped it and still reported the object painted.
+  # Andriy found it by looking. PANEL is the Sub-Zero overlays.
+  %w[FILLER_8X8 PANEL FRONT_1_OF_2 FRONT_2_OF_2].each do |nm|
+    raise "#{nm} is no longer painted, and nothing else will paint it" unless
+      src.include?(nm)
+  end
+  raise 'the appliance opening must stay unpainted - a niche is never ordered' unless
+    src.include?('APPLIANCE_OPENING_600')
+
+  # And the property the whole oak half rests on: the panels must still be in a
+  # group that means oak. Same claim as the armed-probe check, asked of 112.
   file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
   d = JSON.parse(File.read(file))
   all = {}
   d['data']['unit_types'].each_value { |t| t['codes'].each { |c| all[c['code']] = c } }
   %w[DZ731Q DV731Q DV061Q].each do |code|
-    raise "#{code} is no longer named by the paint plan" unless bodies.include?(code)
+    raise "#{code} is no longer named by the paint plan" unless plan.include?(code)
     c = all[code] or raise "#{code} is not held"
     raise "#{code} is not in the oak group" unless c['finish_family'] == 'First wood veneers'
-    raise "#{code} offers a finish that is not oak" unless
-      c['finishes'].all? { |f| f.start_with?('Rovere') }
-    raise "#{code} no longer offers Rovere Nordico" unless
-      c['finishes'].include?('Rovere Nordico')
+    raise "#{code} no longer offers Rovere Nordico" unless c['finishes'].include?('Rovere Nordico')
   end
 
-  # The materials are named for the FINISH, not for the kind of body. Every other
-  # UCON_* material says what a thing IS; these two say what was ordered, and a
-  # rename back to the old shape would quietly lose that.
-  raise 'the oak material is not named for its finish' unless
-    src.include?('UCON_Finish_RR09_Rovere_Nordico')
-  raise 'the black material is not named for its finish' unless
-    src.include?('UCON_Finish_LX19_Nero')
+  # The superseded script must say so, or somebody runs the old split.
+  old = File.read(File.expand_path('../tools/probe_inbox_hold_107.rb', __dir__))
+  raise 'probe 107 no longer declares itself superseded' unless old.include?('SUPERSEDED BY 112')
+end
+
+check('A BLACK PANEL IS ORDERABLE, AND IT IS NOT THE OAK PANEL CHAPTER') do
+  # printed p.217, Volume 3. The custom boxes over the range get black side
+  # panels, and those are NOT the DZ7/DV7 veneer codes - group A there is seven
+  # Rovere and holds no lacquer at all. A black panel is a LACQUERED panel,
+  # group C, structured, which is the family LX19 Nero belongs to. Recorded as a
+  # check so the two chapters are never conflated when the panels are ordered.
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  all = {}
+  d['data']['unit_types'].each_value { |t| t['codes'].each { |c| all[c['code']] = c } }
+  %w[DZ731Q DV731Q DV061Q].each do |code|
+    c = all[code] or raise "#{code} is not held"
+    raise "#{code} must not offer a lacquer" if
+      c['finishes'].any? { |f| f.to_s.downcase.include?('nero') && !f.to_s.start_with?('Rovere') }
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
