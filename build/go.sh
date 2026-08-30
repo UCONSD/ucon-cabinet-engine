@@ -46,6 +46,15 @@ git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
         .gitignore build/go.sh
 
 echo
+# AND READ WHAT IS ABOUT TO GO. `git add -A <dir>` is scoped to directories, not
+# to file names, so anything untracked inside them is swept up in silence. On
+# 2026-08-30 commit 18ee014 carried docs/spec-template.md, placed by a different
+# session, and its message says nothing about it. The file belonged here; the
+# silence did not.
+echo "  staged, BY NAME - a stowaway lands in this list:"
+git diff --cached --name-only | sed 's/^/    /'
+
+echo
 echo "===== 3. commit ====="
 git commit -F build/commit-msg.txt
 

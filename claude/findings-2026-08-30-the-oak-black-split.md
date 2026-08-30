@@ -327,3 +327,90 @@ strengthens the case for a finish key in the contract rather than weakening it.
 `DZCO00` (250/m², one side) or `DZCP22` (339/m², two sides) in structured
 lacquer Nero — not the DZ7/DV7 veneer chapter, which holds no lacquer at all.
 Next job.
+
+---
+
+## 8. The black sides of the hood block: a surcharge, not a panel, and the catalog says it in Andriy's words
+
+Asked for "black side panels for the customs", the obvious answer was the
+Linear Elements chapter — an applied panel, `DZCO00` at 250/m². **That was the
+wrong chapter**, and Andriy said so before it was ordered: *"это не просто
+панель, это боковина, которая заменена. Вместо каркаса идёт лакированный
+материал."*
+
+**printed p.553, Volume 2 — "Surcharge for finishing side panels, 1.8 cm thick |
+REPLACING STANDARD SIDE PANEL."** Read off a 160-dpi render, not off
+`pdftotext`, and the numbers agree between the two.
+
+Two mechanisms exist and they are not interchangeable:
+
+| | applied panel | finishing side panel |
+|---|---|---|
+| where | Volume 3, Linear Elements, printed p.217–220 | Volume 2, printed p.553 |
+| what it does | added ON TOP of the carcass side | **replaces** the carcass side |
+| priced | per m², minimum 0.5 m² | **surcharge by height × depth × band** |
+| dimension | adds 18 mm to the outside | **changes nothing** |
+
+For a cabinet side that is merely visible, the surcharge is the right mechanism.
+The applied panel is for a return that is not a cabinet's side — which is exactly
+what the island's ends and back are, and why `DV731Q` / `DZ731Q` were correct
+there.
+
+### The page confirms the instinct, and removes a choice
+
+> *2 visible sides* — Melamine, Technomat, Fenix NTA, Fenix NTM, Unicolor.
+> *1 visible side and reverse side in carcass colour* — Silk-effect, Gloss,
+> **Structured lacquer**, Metallic-effect, and all four veneer categories.
+
+`LX19 Nero` is a structured lacquer, so it falls in the second line and **cannot
+be two-sided at all**: the reverse comes in the carcass colour, Grigio Fumo.
+There was never a decision to make. Andriy's *"нет смысла делать в другой
+цвет"* is what the catalog already enforces.
+
+### And it saves the hood match, which the applied panel would have broken
+
+The black block over the range is x 1903…3123 — **1220 wide, and `PW482418` is
+1219**, 48 inches. A replacing side is 18 mm where 18 mm already was, so the
+block stays 1220. An applied `DZCO00` on each cheek would have made it 1256 and
+quietly lost the match.
+
+### Where it does not reach, and the decision taken
+
+Depths run D.35 / D.62 / D.67 / D.72 / D.77. **At every depth from 62 up the
+heights jump 60 → 78; H.72 exists only at D.35.** The two custom boxes are
+610 × 720 at a 620 carcass — `UCON_SD0631_REDRAWN_3` and `_4` — so **D.62 H.72
+is not a row in this table.** The rest of the kitchen fits: an ordinary `SD0631`
+is D.62 H.60, band 6, **87** each.
+
+**Andriy, 2026-08-30: the cabinet is custom, Elda decides.** Not forced into the
+grid, not re-dimensioned to reach H.78 (113 at band 6), not guessed. *"У неё есть
+Metron и она делает новые модификации. Не будем изобретать."* **It goes into the
+material specification as a NOTE**, with the geometry stated and the mechanism
+named, and she prices the modification.
+
+That is the right call for a reason worth writing down: **the unit is already
+outside the catalog, so its side is outside the catalog by the same amount.**
+Solving the side inside the grid while the box it belongs to sits outside it
+would have produced a confident number for the wrong object.
+
+### Consequences, one for the order and one for the drawing
+
+**Nothing new is built.** A replacing side changes no geometry, so there are no
+new objects and no new `object_class: panel` bodies. The earlier note in section
+7 — "two new order lines between x 1903 and 3123" — is **superseded**: it is one
+note to Elda, not two panels.
+
+**But two faces are now the wrong colour.** The outer cheeks of the block — the
+left face at x 1903 and the right face at x 3123 — carry a finishing side in
+`LX19 Nero`, while run 112 paints the whole `CARCASS` group Grigio Fumo. The
+block projects 265 mm past both neighbours (`TF0641` at 375 deep, the shelves at
+380), which is the entire reason the sides are finished at all, so those two
+faces are seen. **Owed: paint them black, per face rather than per group.**
+
+### Owed, and argued rather than just listed
+
+**This table is not in the registry, and it should be.** Five depths × fourteen
+heights × eleven bands, and an exposed carcass side anywhere in this kitchen now
+has a printed price that nothing in the engine can look up. Learned rule 14 — a
+rule written in prose is a rule no code can read — and this one has just been
+written in prose. Andriy's call when.

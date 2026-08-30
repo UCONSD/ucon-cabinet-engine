@@ -1,36 +1,36 @@
 <!--
-ИСТОЧНИК ИСТИНЫ: проект «UCON Business OS» → templates/coding-session-spec-template.md
-Этот файл — КОПИЯ. Правки вносить только в источнике, потом обновлять копии в:
+SOURCE OF TRUTH: project "UCON Business OS" → templates/coding-session-spec-template.md
+This file is a COPY. Edit the source only, then refresh the copies in:
   ucon-field-app/docs/spec-template.md
   ucon-cabinet-engine/docs/spec-template.md
   ucon-kitchen/docs/spec-template.md
-Версия: 2026-08-30
+Version: 2026-08-30
 -->
 
-# [ID] Название истории
+# [ID] Story title
 
 <!--
-ЛИМИТ РАЗМЕРА: заполненная спека — ~1500 токенов (≈3 страницы).
-Это не рекомендация, а механизм отсечения. Не влезло — значит в спеке
-либо больше одной истории, либо решения, которые должна принять кодящая
-сессия. Дробить или убирать, но не расширять лимит.
+SIZE LIMIT: a filled-in spec is ~1500 tokens (≈3 pages).
+This is not a guideline, it is the filter. If it does not fit, the spec holds
+either more than one story, or decisions the coding session should make itself.
+Split it or cut it — do not raise the limit.
 
-Спека говорит, В КАКИХ файлах менять и ЧТО должно получиться.
-Не говорит, КАК писать код.
+A spec says WHICH files change and what the result must be.
+It does not say HOW to write the code.
 -->
 
-**Статус:** черновик | готова к сессии | исполнена | архив
-**Эпик:**
-**Дата:**
+**Status:** draft | ready for session | executed | archived
+**Epic:**
+**Date:**
 
 ---
 
 ## 1. Intent
 
 <!--
-~300 токенов (полстраницы). Что нужно и зачем — своими словами,
-без решения внутри.
-Не влезает в полстраницы — это больше одной истории. Дробить.
+~300 tokens (half a page). What is needed and why, in plain words,
+with no solution inside.
+Does not fit in half a page — it is more than one story. Split it.
 -->
 
 
@@ -40,14 +40,13 @@
 ## 2. Input/Output matrix
 
 <!--
-Главная секция. Всё, что можно выразить как «диапазон входа → ожидаемый
-выход», выражаем здесь: строки мапятся напрямую в код и в тесты.
-Одна строка = один тест-кейс.
-Включать края: пусто, ноль, максимум, некорректный тип, дубль.
-Чем больше поведения ушло в таблицу, тем меньше остаётся домыслов агенту.
+The main section. Anything expressible as "input range → expected output" goes
+here: rows map straight into code and into tests. One row = one test case.
+Include the edges: empty, zero, maximum, wrong type, duplicate.
+The more behaviour moves into the table, the less the agent has to invent.
 -->
 
-| # | Вход (диапазон/условие) | Ожидаемый выход |
+| # | Input (range/condition) | Expected output |
 |---|---|---|
 | 1 |  |  |
 | 2 |  |  |
@@ -58,10 +57,10 @@
 ## 3. Acceptance criteria
 
 <!--
-ТОЛЬКО то, что в матрицу не легло: поведение во времени, побочные эффекты,
-состояние в базе после операции, что видит пользователь.
-Если критерий можно переписать строкой матрицы — переписать и убрать отсюда.
-Формулировка — наблюдаемое поведение, проверяемое без спора.
+ONLY what did not fit the matrix: behaviour over time, side effects, state in
+the database after the operation, what the user sees.
+If a criterion can be rewritten as a matrix row, rewrite it and delete it here.
+Phrase each one as observable behaviour, checkable without argument.
 -->
 
 - AC-1 —
@@ -72,56 +71,56 @@
 ## 4. NOT-list
 
 <!--
-ОБЯЗАТЕЛЬНАЯ СЕКЦИЯ. Пустой NOT-list = спека не готова.
-Что агент захочет сделать «заодно», но делать НЕ надо: рефакторинг соседнего
-кода, переименования, «улучшение» стилей, лишние абстракции, новые
-зависимости, миграции схемы, обработка случаев за пределами Intent.
-Пиши конкретно: «не трогать X», а не «не делать лишнего».
+MANDATORY SECTION. An empty NOT-list means the spec is not ready.
+What the agent will want to do "while it is in there" but must not: refactoring
+neighbouring code, renames, "improving" styles, extra abstractions, new
+dependencies, schema migrations, handling cases outside the Intent.
+Be concrete: "do not touch X", not "do not do anything unnecessary".
 -->
 
-- НЕ
-- НЕ
-- НЕ
+- DO NOT
+- DO NOT
+- DO NOT
 
 ---
 
 ## 5. Non-functional
 
 <!--
-По умолчанию ПУСТО.
-Заполняется, только если я реально собираюсь заниматься этим в ЭТОЙ истории:
-производительность, лимиты нагрузки, безопасность, миграция данных.
-Написанное здесь «на всякий случай» агент попытается реализовать —
-и сожжёт сессию.
+EMPTY by default.
+Fill this in only if I am actually going to work on it in THIS story:
+performance, load limits, security, data migration.
+Anything written here "just in case" the agent will try to implement —
+and burn the session on it.
 -->
 
-_нет_
+_none_
 
 ---
 
-## 6. Файлы к прочтению
+## 6. Files to read first
 
 <!--
-Конкретные пути и куски, которые агент читает ДО начала кодинга,
-чтобы не жечь контекст на поиск.
-Указывать файл + что именно в нём смотреть (функция, диапазон строк, секция).
-«Прочитай весь src/» — не допускается: это отказ от планирования.
+Concrete paths and fragments the agent reads BEFORE coding, so it does not burn
+context on search.
+Give the file plus what to look at in it (function, line range, section).
+"Read all of src/" is not allowed: it is a refusal to plan.
 -->
 
-| Путь | Что смотреть | Зачем |
+| Path | What to look at | Why |
 |---|---|---|
 |  |  |  |
 
 ---
 
-## Проверка перед стартом сессии
+## Pre-session check
 
-<!-- Не прошло — сессию не открывать. -->
+<!-- Any line failed — do not open the session. -->
 
-- [ ] Intent влезает в полстраницы.
-- [ ] Всё выразимое таблицей — в таблице, а не в AC.
-- [ ] NOT-list непустой.
-- [ ] Non-functional пуст или я правда делаю это сейчас.
-- [ ] Файлы к прочтению — конкретные пути с указанием кусков.
-- [ ] Спека нигде не говорит, как писать код.
-- [ ] Общий размер ≈1500 токенов.
+- [ ] Intent fits in half a page.
+- [ ] Everything expressible as a table is in the table, not in the AC.
+- [ ] NOT-list is not empty.
+- [ ] Non-functional is empty, or I really am doing it in this story.
+- [ ] Files to read first are concrete paths with the fragments named.
+- [ ] The spec nowhere says how to write the code.
+- [ ] Total size ≈1500 tokens.
