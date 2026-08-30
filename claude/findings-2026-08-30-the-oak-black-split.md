@@ -409,6 +409,8 @@ faces are seen. **Owed: paint them black, per face rather than per group.**
 
 ### Owed, and argued rather than just listed
 
+**CORRECTION 2026-08-30, later: the contract-key argument above and in section 7 was withdrawn.** Read against §4.2 rule 6, a finish is the rule's OWN EXAMPLE of what lives in `variants` and does not become a key, and §0 forbids adjusting the rule for convenience. `variants` already has the right shape and needs no revision. The full account, including why the observation that prompted it still stands, is `docs/Finish_In_The_Model_v0.1.md`.
+
 **This table is not in the registry, and it should be.** Five depths × fourteen
 heights × eleven bands, and an exposed carcass side anywhere in this kitchen now
 has a printed price that nothing in the engine can look up. Learned rule 14 — a
