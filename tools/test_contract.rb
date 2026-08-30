@@ -9388,5 +9388,66 @@ check('THE CORRECTED depth_note DOES NOT CLAIM THE RULE IS UNPRINTED') do
   raise 'the superseded claim was erased instead of quoted' unless note.include?('OBSERVATION')
 end
 
+check('THE OAK/BLACK SPLIT IS COMPLETE, AND ITS PANELS ARE STILL OAK') do
+  # Decided by Andriy 2026-08-30. The split has nowhere to live in the data - the
+  # contract has 31 keys and not one is a finish - and nowhere on the order form,
+  # which asks only for the FAMILY and never the colour (printed p.65). It lives
+  # in the DRAWING, which means it lives in one held script. So the script is
+  # what gets checked.
+  #
+  # This does not pin taste. It pins the two properties the decision rests on:
+  # that every front is accounted for, and that the panels it calls oak are in a
+  # group that still means oak.
+  src = File.read(File.expand_path('../tools/probe_inbox_hold_107.rb', __dir__))
+
+  raise 'the oak finish is no longer RR09 Rovere Nordico' unless
+    src.include?("oak   = 'RR09 Rovere Nordico'")
+  raise 'the black finish is no longer LX19 Nero' unless
+    src.include?("black = 'LX19 Nero'")
+
+  fronts = src[/fronts = \[.*?^  \]$/m] or raise 'probe 107 has no fronts plan'
+  bodies = src[/bodies = \[.*?^  \]$/m] or raise 'probe 107 has no bodies plan'
+
+  # 43 objects in this model carry a front. Every one is assigned, and the count
+  # per finish is the decision itself: if a door moves from one side to the other
+  # these numbers change and this check is where that gets noticed.
+  o = fronts.scan(', oak]').size
+  b = fronts.scan(', black]').size
+  g = fronts.scan(', glass]').size
+  raise "the fronts must total 43, got #{o + b + g}" unless o + b + g == 43
+  raise "expected 19 oak fronts, got #{o}"   unless o == 19
+  raise "expected 21 black fronts, got #{b}" unless b == 21
+  raise "expected the 3 TF0641 left alone, got #{g}" unless g == 3
+
+  raise 'a body may not be black - the veneer panels have no lacquer group' if
+    bodies.include?(', black]')
+  raise "expected 11 bodies painted, got #{bodies.scan(', oak]').size}" unless
+    bodies.scan(', oak]').size == 11
+
+  # The same property the armed-probe check pins, asked of THIS script: a letter
+  # that stops meaning oak must fail here rather than in an order.
+  file = File.expand_path('../registry/cesar/panels_linear_elements.json', __dir__)
+  d = JSON.parse(File.read(file))
+  all = {}
+  d['data']['unit_types'].each_value { |t| t['codes'].each { |c| all[c['code']] = c } }
+  %w[DZ731Q DV731Q DV061Q].each do |code|
+    raise "#{code} is no longer named by the paint plan" unless bodies.include?(code)
+    c = all[code] or raise "#{code} is not held"
+    raise "#{code} is not in the oak group" unless c['finish_family'] == 'First wood veneers'
+    raise "#{code} offers a finish that is not oak" unless
+      c['finishes'].all? { |f| f.start_with?('Rovere') }
+    raise "#{code} no longer offers Rovere Nordico" unless
+      c['finishes'].include?('Rovere Nordico')
+  end
+
+  # The materials are named for the FINISH, not for the kind of body. Every other
+  # UCON_* material says what a thing IS; these two say what was ordered, and a
+  # rename back to the old shape would quietly lose that.
+  raise 'the oak material is not named for its finish' unless
+    src.include?('UCON_Finish_RR09_Rovere_Nordico')
+  raise 'the black material is not named for its finish' unless
+    src.include?('UCON_Finish_LX19_Nero')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

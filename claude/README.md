@@ -155,6 +155,16 @@ date order; a finding is never edited to hide what it corrected.
   band 6, the contract having no finish key at all, and the morning claim about zero
   GOL lines corrected from the estimate teardown).
 
+  **`findings-2026-08-30-the-oak-black-split.md`** (the last of the thirteen finish
+  questions, and the catalog had already answered half of it: six panels are price
+  group A, First wood veneers, which printed p.218 and p.220 print as exactly seven
+  Rovere with no lacquer in it at all - so both island ends, the island's whole back
+  and the tall run's end were oak before the question was asked, and the split was
+  only ever which of those two masses also gets oak fronts; the answer is both,
+  43 fronts assigned with none left over, and the three shared definitions all want
+  one finish each so it can be painted; plus the order form carrying the finish
+  FAMILY and never the colour, which is what makes the drawing the only record).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,

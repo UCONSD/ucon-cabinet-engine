@@ -92,6 +92,50 @@ the finish name is an order field that changes no article — which is precisely
 why it is a check and not a comment. The finish itself is still to be chosen and
 does not block the rebuild.
 
+### CORRECTION, 2026-08-30 — the Prime choice above did not survive the day
+
+**Section 4 is wrong as a statement of where this project stands, and it is the
+kind of wrong that costs an order.** It says Andriy chose **B — Prime** and that
+the island is therefore limited to nine finishes. Rovere Nordico is not among
+those nine. On 2026-08-29 the kitchen's oak front was decided as **RR09 Rovere
+Nordico, First category**, so a reader who trusted section 4 would conclude that
+the island's ends and back can never match the fronts, and would go looking for
+a way out of a problem that does not exist.
+
+**It does not exist because the Prime choice was already reverted, on the same
+day, by the commit that closed this work.** `e6f2c3d` — *"panels: a price group
+is not a finish - it is a species list, and the kitchen is oak"*. Four artefacts
+agree and none of them says Prime:
+
+| | says |
+|---|---|
+| the model, probe run 105, 2026-08-30 | `DZ731Q` ×4, `DV731Q` ×2, `DV061Q` ×2 — **all group A** |
+| `tools/probe_inbox_hold_71.rb` | `DZ731Q` / `DV731Q` — **group A** |
+| `registry/cesar/panels_linear_elements.json` | A = First wood veneers, B = Prime; both held |
+| `tools/test_contract.rb:8394` | **requires** group A, and refuses anything whose family is not `First wood veneers` |
+
+The check's own comment is the clearest statement of the decision that section 4
+misreports: *"every code these armed scripts name must be a wood the kitchen can
+be, and a letter that stops meaning oak must fail here rather than in an order."*
+
+**And group A is the right group, verified off the page rather than off this
+document.** printed p.218 (1,8, one side, melamine reverse) and printed p.220
+(2,2, two sides) both print group A as exactly seven Rovere — Sbiancato,
+**Nordico**, Mediterraneo, Fossile, Dark, Corvino, Cortado — and no lacquer at
+all. So the island's ends and back, and the east run's end, can be RR09 and are
+cheaper for it: 343 against 358 per m² on the backs, 549 against 579 on the ends.
+
+**What this document got right and should be read for** is section 3: the same
+letter means two different things on one page, and `finish_family` therefore
+belongs per code and never per group. That is why the check above can be written
+at all. The error is only in section 4's account of which letter was chosen.
+
+**The lesson, and it is not the one this file already carries.** Section 4 claims
+*"The probe is corrected, and a check refuses it if the group-A codes ever come
+back"*. The check that exists does the exact opposite — it refuses group B. **A
+document that describes a guard is not the guard, and the two drifted apart
+inside a single day.** Read the check, not the note that says a check exists.
+
 ## 5. What is now true, and what is owed
 
 - The registry says what every price group is, per code.
