@@ -165,6 +165,14 @@ date order; a finding is never edited to hide what it corrected.
   one finish each so it can be painted; plus the order form carrying the finish
   FAMILY and never the colour, which is what makes the drawing the only record).
 
+  **`findings-2026-08-30-the-stone-stamped.md`** (six pieces of stone carry an
+  article at last, and the sink mark came with them because it refuses over an
+  unstamped top; the cut of the west run was chosen at option A because it was
+  already drawn and the three schemes are one per cent apart; the island pays
+  band 700 knowingly; and FOUR PIECES CARRY A VISIBLE SIDE EDGE THE RULE SAYS
+  THEY SHOULD NOT - parked rather than fixed, because the stamp asks one edge
+  count of a whole selection while an edge belongs to one end of one piece).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,
