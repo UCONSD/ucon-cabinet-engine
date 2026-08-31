@@ -173,6 +173,17 @@ date order; a finding is never edited to hide what it corrected.
   THEY SHOULD NOT - parked rather than fixed, because the stamp asks one edge
   count of a whole selection while an edge belongs to one end of one piece).
 
+  **`findings-2026-08-31-the-plinth-nobody-owned.md`** (whether the worktop is
+  ordered on this project AT ALL is undecided, which two documents said
+  otherwise until this date; the edge procedure designed and agreed but not
+  built, and the live defect it uncovered - the stone stamp rebuilds `variants`
+  from scratch and would delete the sink bowl on a second stamp, where the sink
+  itself merges; the fridge plinth that was never missing, only unpainted and
+  untagged, because a body with NO CONTRACT is invisible to every pass that
+  walks the model; and the eight scenes that remembered a tag created after they
+  were saved - learned rule 19 wearing different clothes, and a candidate rule
+  21 that has not been added).
+
 **Handoffs:** `handoff-2026-08-28-appliances.md`,
 **`handoff-2026-08-28-worktops.md`** (the evening one, and the one to read first
 after this date: the engine stopped DRAWING worktops and started STAMPING them,
