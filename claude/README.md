@@ -189,6 +189,15 @@ date order; a finding is never edited to hide what it corrected.
 after this date: the engine stopped DRAWING worktops and started STAMPING them,
 what that keeps, what it costs, and the covering report it owes).
 
+  **`order-form-maxima22-recon-2026-08-31.md`** (the Maxima 2.2 order form read
+  field by field off the RENDER - printed p.65-66, and the text layer says 64
+  because that is the previous page's footer; it cannot be filled
+  programmatically, it is one of the four documents Cesar says a new order is,
+  and every field is marked engine-knows / engine-could-know / ask-a-person. It
+  confirms Elda Q11 from a second direction and raises four questions nobody
+  knew they had, the sharpest being that one Depth field cannot hold three
+  worktop depths).
+
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
 `fillers-recon-2026-08-23.md`, `usa-elements-recon-2026-08-20.md`,
