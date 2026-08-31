@@ -41,6 +41,12 @@ require_relative '../src/ucon_cabinet_engine/core/64_sink_mark'
 # from the generator rather than retyping them, and a load order that hid that
 # would hide the whole point of taking them.
 require_relative '../src/ucon_cabinet_engine/core/66_retag'
+# 68_report is loaded straight after 66_retag and for the same reason 66 sits
+# after 60: it borrows the generator's two tag constants and Retag's two readers
+# rather than keeping copies, and a load order that hid that dependency would let
+# a copy creep back in. Its rules are pure; only its survey and its window have
+# ever heard of a model, and neither is reached from here.
+require_relative '../src/ucon_cabinet_engine/core/68_report'
 # 70_symbols touches the SketchUp API only when drawing; the geometry rules
 # themselves are pure and are checked here.
 require_relative '../src/ucon_cabinet_engine/core/70_symbols' rescue nil
@@ -1885,6 +1891,33 @@ check('three tags, and the third is not a flat convention') do
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
   raise 'show_mode must switch all three' unless
     src.include?('door.visible  = %i[door all].include?(mode)')
+end
+
+# 2026-08-31, and it is the same shape as the light was the day before. Andriy
+# pressed Off and the sink mark stayed on the drawing. show_mode owned four tags
+# - the three opening conventions and the light - and the sink's lives in
+# core/64_sink_mark.rb, so no button switched it at all.
+#
+# WHY THAT IS WORSE THAN IT LOOKS. A mark no button owns has to be hidden by
+# hand, and the eight scenes were only just taught this tag; the next scene
+# somebody re-saves with the mark showing puts the drift straight back. The
+# scenes are a snapshot, the button is the rule, and the rule has to exist first.
+#
+# AND IT FOLLOWS THE PLAN TAG, NOT THE FRONT ONE. The mark is a dashed rectangle
+# lying flat on the stone - a plan convention. In an elevation it is that
+# rectangle seen edge-on, which is a line that says nothing.
+check('the sink mark is the fifth tag, and the same button owns it') do
+  raise 'MARK_TAG missing' unless defined?(UCON::CabinetEngine::SinkMark::MARK_TAG)
+  tags = [UCON::CabinetEngine::Symbols::TAG_FRONT,
+          UCON::CabinetEngine::Symbols::TAG_PLAN,
+          UCON::CabinetEngine::Symbols::TAG_DOOR,
+          UCON::CabinetEngine::Symbols::TAG_LED,
+          UCON::CabinetEngine::SinkMark::MARK_TAG]
+  raise tags.inspect unless tags.uniq.length == 5
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'show_mode does not know the sink tag' unless src.include?('SinkMark::MARK_TAG')
+  raise 'the sink mark must follow the plan tag' unless
+    src.include?('sink.visible  = plan.visible')
 end
 
 check('the width index is a lookup: no code decodes arithmetically') do
@@ -9213,6 +9246,118 @@ check('the palette can actually reach the pass') do
   raise 'no Retag button on the palette' unless html.include?('sketchup.retag()')
   psrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
   raise 'the button has no callback' unless psrc.include?("add_action_callback('retag')")
+end
+
+# ---------------------------------------------------------------------------
+# BODIES NO RULE OWNS - 2026-08-31, and a plinth asked for it. The fridge plinth
+# read as missing for a day and was not missing: hand-drawn, so no contract, so
+# invisible to Retag and to the painting pass alike. Retag asks what of OURS is
+# untagged. This asks the other half - what is here at all that no rule owns -
+# and the two halves together are the only way the model can be audited.
+#
+# The rules are pure and take plain hashes, so every one of them is decided here
+# rather than in front of a model.
+Report = UCON::CabinetEngine::Report unless defined?(Report)
+
+def node(name, oc = '', tag = '', faces = 1, children = [])
+  { id: name, name: name, object_class: oc, tag: tag, faces: faces,
+    w_mm: 600, h_mm: 780, d_mm: 620, x_mm: 0, y_mm: 0, z_mm: 0, children: children }
+end
+
+check('ours is owned, and a body with no class is not') do
+  tree = [node('B80601', 'cabinet'), node('something Andriy drew')]
+  names = Report.orphans(tree).map { |n| n[:name] }
+  raise names.inspect unless names == ['something Andriy drew']
+end
+
+check('DECLARED IS THE BUCKET THAT KEEPS THE LIST READABLE') do
+  # The client's Wolf range is hand-drawn, permanent, and not a defect. A report
+  # that lists it every run is a report nobody opens on the fourth run.
+  gen  = UCON::CabinetEngine::Generator
+  tree = [node('48 WOLF', '', gen::PLACEHOLDER_TAG),
+          node('run gap', '', gen::RESERVED_TAG),
+          node('a loose box')]
+  names = Report.orphans(tree).map { |n| n[:name] }
+  raise names.inspect unless names == ['a loose box']
+  c = Report.counts(tree)
+  raise c.inspect unless c[:declared] == 2 && c[:orphans] == 1
+end
+
+check('ONE HAND-BUILT ASSEMBLY IS ONE ROW, not twenty') do
+  # The outermost unowned body is the thing somebody has to decide about. Its
+  # parts are not separate decisions and listing them buries the list.
+  inner = [node('side'), node('back'), node('shelf')]
+  tree  = [node('hand-built dresser', '', '', 0, inner)]
+  found = Report.orphans(tree)
+  raise found.map { |n| n[:name] }.inspect unless found.map { |n| n[:name] } == ['hand-built dresser']
+end
+
+check('A WRAPPER ROUND ONE OF OURS IS A FOLDER, and is descended into') do
+  # Somebody tidying puts a real unit inside a plain group. Reporting the group
+  # would hide the unit, and reporting nothing would hide what is loose beside it.
+  tree = [node('tidy group', '', '', 0, [node('B80601', 'cabinet'), node('a loose panel')])]
+  names = Report.orphans(tree).map { |n| n[:name] }
+  raise names.inspect unless names == ['a loose panel']
+end
+
+check('an empty container is counted and not listed') do
+  tree = [node('empty group', '', '', 0, []), node('real box')]
+  raise Report.orphans(tree).length.inspect unless Report.orphans(tree).length == 1
+  c = Report.counts(tree)
+  raise c.inspect unless c[:empty] == 1 && c[:orphans] == 1
+end
+
+check('SENTINEL: A TAG IS NOT OWNERSHIP, and the fridge plinth is why') do
+  # 2026-08-31: that plinth was painted and moved onto UCON - Cabinets BY HAND,
+  # which fixed how it looked and made no rule responsible for it. If this report
+  # ever goes quiet when a body gets a tag, it goes quiet exactly when somebody
+  # papers over the thing it exists to find. Whoever makes that change fails here
+  # and reads this.
+  tagged = node('Plinth (REPRESENTATION)', '', UCON::CabinetEngine::Retag::TAGS['cabinet'])
+  raise 'a tag was allowed to stand in for a contract' unless
+    Report.orphans([tagged]).length == 1
+end
+
+check('the report offers itself on the palette, and the callback matches') do
+  html = Palette.html
+  raise 'no report button' unless html.include?('sketchup.orphans()')
+  psrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'the button has no callback' unless psrc.include?("add_action_callback('orphans')")
+end
+
+check('the page says what it counted, and every row can be clicked') do
+  tree  = [node('B80601', 'cabinet'), node('a loose box')]
+  items = Report.orphans(tree)
+  page  = Report.html(items, Report.counts(tree))
+  raise 'the row is not clickable' unless page.include?("sketchup.orphan_pick('a loose box')")
+  raise 'the size is what makes a row recognisable' unless page.include?('600 × 780 × 620')
+  raise 'the tally is missing' unless page.include?('Unowned<b>1</b>')
+  # A model with nothing loose must SAY so rather than showing an empty table.
+  clean = Report.html([], Report.counts([node('B80601', 'cabinet')]))
+  raise 'a clean model gets no sentence' unless clean.include?('Nothing in this model is unowned')
+end
+
+check('THE RULES NEVER TOUCH SKETCHUP, so they are decided here and not in a model') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/68_report.rb', __dir__))
+  pure = src[/---- THE PURE RULES(.*?)---- THE PAGE/m, 1].to_s
+  raise 'the pure half went missing' if pure.empty?
+  offenders = pure.gsub(/^\s*#.*$/, '').scan(/\b(?:Sketchup|Geom|UI)\b/).uniq
+  raise offenders.inspect unless offenders.empty?
+end
+
+# THE PAGE IS PURE TOO, AND A TEXT SCAN CANNOT PROVE IT - 2026-08-31, found by
+# this check failing on the word "UI". The CSS font stack in Report.html names
+# 'Segoe UI', and /\bUI\b/ cannot tell a typeface from a framework. Widening the
+# scan to the page would have meant either renaming a font to please a regex or
+# teaching the regex about strings.
+#
+# So the page is proved the way it should have been in the first place: the
+# check above renders it, headless, with no SketchUp loaded at all. A thing that
+# RUNS without a model needs no scan to say it could.
+check('and the page is proved by rendering it, not by scanning it') do
+  page = Report.html([], Report.counts([]))
+  raise 'the page did not render headless' unless page.include?('Bodies no rule owns')
+  raise 'a scan would have to be told about fonts' unless page.include?('Segoe UI')
 end
 
 # ---------------------------------------------------------------------------

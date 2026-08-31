@@ -78,16 +78,39 @@ module UCON
 
       # Palette-driven visibility: plan views want only the plan tag,
       # elevations only the front tag. mode: :plan | :front | :off | :all
+      #
+      # AND THE SINK MARK IS SWITCHED HERE TOO, 2026-08-31, THOUGH IT IS DRAWN
+      # IN ANOTHER FILE. Andriy pressed Off and the mark stayed on the drawing.
+      # It was not a bug in the mark: this method knew four tags and the sink's
+      # is declared in core/64_sink_mark.rb, so nothing switched it at all.
+      #
+      # A MARK NO BUTTON OWNS IS HIDDEN BY HAND, AND THAT IS THE REAL COST. The
+      # eight scenes had just been taught this tag one by one; the next scene
+      # re-saved with the mark showing would have put the drift straight back.
+      # A scene is a snapshot of tag visibility and this method is the rule, so
+      # the rule has to exist before the snapshots are worth anything.
+      #
+      # IT FOLLOWS THE PLAN TAG, NOT THE FRONT ONE, and that is a drawing
+      # judgement rather than a convenience: the mark is a dashed rectangle
+      # lying flat on the stone, which is what a plan says. In an elevation it
+      # is that same rectangle seen edge-on - a line that states nothing and
+      # sits across the front of a cabinet.
+      #
+      # NAMED ACROSS THE FILE BOUNDARY ON PURPOSE. The alternative was a fifth
+      # constant here, duplicating the name the mark is actually written with,
+      # and two spellings of one tag is how a tag stops being one tag.
       def show_mode(model, mode)
         front = tag(model, TAG_FRONT)
         plan  = tag(model, TAG_PLAN)
         door  = tag(model, TAG_DOOR)
         # SOLID, and switched by the elevation button all the same.
         led   = tag(model, TAG_LED, dashed: false)
+        sink  = tag(model, SinkMark::MARK_TAG)
         front.visible = %i[front all].include?(mode)
         plan.visible  = %i[plan all].include?(mode)
         door.visible  = %i[door all].include?(mode)
         led.visible   = front.visible
+        sink.visible  = plan.visible
         model.active_view.invalidate
         mode
       end

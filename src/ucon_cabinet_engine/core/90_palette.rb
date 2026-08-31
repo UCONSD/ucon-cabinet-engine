@@ -59,6 +59,18 @@ module UCON
             UI.messagebox("Retag failed and nothing was changed.\n\n#{e.class}: #{e.message}")
           end
         end
+        # THE OTHER HALF OF THE RETAG QUESTION, 2026-08-31. Retag asks "what of
+        # OURS is untagged"; this asks "what is here at all that no rule owns",
+        # which is the question that would have found the fridge plinth in one
+        # click instead of a day. Read-only: it opens a window and selects what
+        # you click, and writes nothing anywhere.
+        @dialog.add_action_callback('orphans') do |_|
+          begin
+            Report.show
+          rescue StandardError => e
+            UI.messagebox("The report could not be built.\n\n#{e.class}: #{e.message}")
+          end
+        end
         @dialog.add_action_callback('reserve_run_gap') do |_|
           begin
             models = ApplianceCheck.run_gap_models
@@ -1227,6 +1239,7 @@ module UCON
             <button onclick="sketchup.worktop()">Stamp article on drawn top…</button>
             <button onclick="sketchup.sink()">Sink over selected unit…</button>
             <button onclick="sketchup.retag()">Retag model for LayOut…</button>
+            <button onclick="sketchup.orphans()">Bodies no rule owns…</button>
             <button onclick="sketchup.reload()">Reload core</button>
             #{DevBridge.available? ? '<button onclick="sketchup.reload_bridge()">Reload probe bridge (dev)</button>' : ''}
             <div class="grp">Opening symbols</div>

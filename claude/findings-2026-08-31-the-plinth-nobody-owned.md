@@ -167,3 +167,110 @@ record.
 The finishes note to Elda went out the same day, as a reference and not as
 questions, per the handoff's rule that Elda questions wait for the drawing. It
 names the worktop as NOT confirmed, which §0 above is the reason for.
+
+---
+
+# Later the same day — the report exists, and the order form was found
+
+## 7. A CORRECTION TO §2, AND IT IS MINE
+
+§2 above and the commit message of `4cdbf04` say the fridge plinth is "drawn as
+a top-level group with no contract attributes". Literally true, and it reads as
+though THE ENGINE draws it. It does not. `Plinth (REPRESENTATION)` appears
+nowhere in `src/` — the string does not exist in the engine at all. The object
+is a ComponentInstance on `Layer0`, sitting among `48 WOLF` and `Group#1…#7`,
+which is to say it was made by hand, with wording copied from the generator's
+own note text.
+
+So there is no draw-time fix, because there is no draw time. **And the cause is
+one size larger than §2 says: not "the representation plinth is outside the
+passes" but "anything drawn by hand is outside every rule the engine has."**
+Retag will not move it, the painting pass will not paint it, and a contrast pass
+would not reach it either.
+
+Dated and added (learned rule 9). §2 stands as the record of what was believed
+when it was written.
+
+## 8. THE REPORT, AND ITS FIRST RUN
+
+`core/68_report.rb`, and a button on the palette. Three buckets — ours, declared
+not ours, unowned — the outermost unowned body as one row, wrappers descended
+into, empty containers counted and not listed. The rules are pure and decided in
+the suite; only the survey and the window have heard of a model.
+
+First run on 545 Avenida Primavera: **unowned 4, ours 68, declared not ours 0,
+empty groups 1.**
+
+| | size | tag | faces |
+|---|---|---|---|
+| `48 WOLF` | 1219,2 × 928,4 × 742,6 | Layer0 | 0 |
+| `Plinth (REPRESENTATION)` | 18 × 100 × 1220 | UCON — Cabinets | 0 |
+| `Group#1` | 6503,8 × 3048 × 5981,1 | Layer0 | 41 |
+| `Group#5` | 6503,8 × 0 × 5981,1 | Layer0 | 1 |
+
+**The plinth is still on the list, and that is the sentinel working.** It was
+tagged and painted by hand this morning, which fixed how it looks and made no
+rule responsible for it. A report that went quiet at that point would go quiet
+exactly when the problem was papered over.
+
+**DECLARED IS EMPTY, and that is the finding.** Two of the four — the client's
+range and the room — plainly belong in it. Nothing in this model has ever been
+declared not-ours by a person: the only bodies on the placeholder and reserved
+tags are the engine's own, and those carry a class, so they count as ours. The
+bucket that keeps the list short has never been used, and until the second
+action exists it cannot be. That is what to build next, before the stamp.
+
+**AND A SECOND READER DISAGREED WITH THE RULES, twelve hours after the lesson.**
+Probe 54's own dump asked `declared?` before `owned?`, and so printed the
+appliance niche and the run gap as declared, while `counts` — asking `owned?`
+first, as the rules do — counted them as ours. The shipped rules were right and
+the throwaway reader was wrong. Nothing was broken, and it is written down
+because it is the same shape as the definition-versus-instance lesson of
+2026-08-30: **a second reader that re-implements a precedence instead of asking
+for it is wrong on the day the precedence matters.**
+
+## 9. THE ORDER FORM EXISTS, AND THE ENGINE ALREADY MAKES HALF THE ORDER
+
+Asked for, researched, NOT BUILT.
+
+**`Maxima 2.2 order form`, printed p.64-65 / PDF 67-68 of
+`CESAR - 1 Project Guidelines.pdf`.** There is one per collection — Intarsio,
+Unit and N_Elle have their own — so the form is COLLECTION-SCOPED and a single
+generic form would be a rule generalising past its evidence (learned rule 4).
+
+**It cannot be filled programmatically.** The file declares an AcroForm and
+holds **zero fields and zero widget annotations across all 300 pages**: the
+checkboxes are drawn artwork. So the engine mirrors the form, field for field;
+it does not fill Cesar's file.
+
+**And the reason this is not a convenience.** The book's own order flowchart
+says a new order is FOUR documents: *order form, list of elements, dimensional
+drawing, technical data sheets of appliances.* The engine already produces the
+second (the CSV export) and the third (LayOut). The order form is the missing
+quarter, and Cesar is the one who defines the set. Beside it: confirmation takes
+5-10 days *"based on completeness and clarity of order information"*, and a
+modification after confirmation costs 150 euro / 300 points.
+
+**What would fill itself today**, from the decisions of 2026-08-29 and 08-30:
+carcass Grigio Fumo (the form prints exactly three, and it is one of them);
+Legrabox Cenere; L-shaped grip recess in Aluminium Black with no grip edging on
+the door; wall unit edging Black; plinth Aluminium H.10; the door as First wood
+veneer AND structured lacquer at once; the framed glass door with oak fabric,
+which the form prints as its own line; every appliance in the CUSTOMER'S column.
+The modularity lists — base 39/48/58,5/78/84, tall 138/198/210/222/234, wall
+36/48/60/72/84/96/120 and their depths — are the same numbers the engine already
+validates against.
+
+**One line answers §0 whether we like it or not.** Under WORKTOP: *"this field
+must be filled in even if the top is not provided by Cesar."* Thickness and
+depth are owed to the order whether or not the stone is bought from them.
+
+**And one sentence repeats six times:** *"if the kitchen has various finishes
+they must be specified for each single element in the list or on the drawing."*
+A mixed-finish kitchen is handled by the element list and the drawing — the two
+documents the engine already makes — and not by the form. Which is also the
+shape of the unsent Elda question about the mixed arrangement.
+
+Next step is a MAP, not a panel: every field of the form marked as one of three
+— the engine knows it, the engine could know it, ask a person. The panel waits
+on Elda's reply and on the worktop decision.
