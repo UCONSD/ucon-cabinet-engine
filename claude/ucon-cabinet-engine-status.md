@@ -461,6 +461,26 @@ check fails for a reason its own title does not mention, the title is the bug.**
 check can only fail on what it looks at** — the rack check went green while the
 note beside it was false, because it read a proxy instead of the recorded fact.)*
 
+**19. A PASS OVER THE MODEL IS NOT A RULE ABOUT THE MODEL. WHATEVER IS BUILT
+AFTERWARDS IS UNTAGGED.** `Retag` ran on 2026-08-30 and moved 57 bodies onto
+five tags; the verification an hour later found THREE on `Layer0` again -
+`DZ731Q`, `MNS022038` and a rebuilt `PF0151`, all made after the pass. Nothing
+was wrong with the pass: `core/66_retag.rb` is a command precisely so that the
+decision does not land in twenty call sites, and the price of that choice is
+this. **Re-run Retag as the LAST act before any sheet, and after any build. A
+green tag census is a fact about a moment, not about the model.**
+
+**20. A DETECTOR THAT WATCHES THE MODEL CANNOT TELL YOUR WRITE FROM A PERSON'S
+EDIT IN THE SAME WINDOW.** The probe bridge's structural fingerprint reported
+*"THIS RUN APPLIED, THE ROLLBACK DID NOT HOLD"* for run 115 on 2026-08-30 - a
+script with no write in it at all - because Andriy was building in the model
+during the two seconds between the two snapshots. It had never fired on an
+unarmed run before, and its message names a cause (*the script committed an
+operation of its own*) that was not the cause. **The fingerprint is still worth
+having; what it proves is that SOMETHING changed, never WHO changed it. Before
+believing it, run a second read-only probe: a real escape repeats, a shared
+model does not.**
+
 ## Environment
 - Laptop (home): SketchUp **2025**, system Ruby **2.6.10**. Office Mac:
   SketchUp **2026**. Each SketchUp version has its own Plugins folder.

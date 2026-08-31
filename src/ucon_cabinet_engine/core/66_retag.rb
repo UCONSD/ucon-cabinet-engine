@@ -20,6 +20,22 @@
 # panel). Here it is one pass over the model, re-runnable, and it says exactly
 # what it did.
 #
+# ---- AND THE PRICE OF BEING A COMMAND, 2026-08-30 --------------------------
+#
+# ADDED, NOT EDITED: everything above is still true and the design is unchanged.
+# The pass ran for the first time on 2026-08-30 and moved 57 bodies onto five
+# tags. Within the hour three more bodies were on Layer0 again - a DZ731Q side
+# panel, an MNS022038 shelf and a rebuilt PF0151, every one of them built AFTER
+# the pass. That is not a defect in the pass; it is the other face of the very
+# choice this header argues for. Tagging at build time would have kept them
+# tagged and put the decision in twenty call sites.
+#
+# So the operating rule, which is learned rule 19: RE-RUN THIS AS THE LAST ACT
+# BEFORE ANY SHEET, AND AFTER ANY BUILD. It is idempotent by construction - a
+# second run over a fully tagged model reports 0 moves and 60 kept - so there is
+# no cost to running it once more and a whole missing body to running it once
+# too few. The palette button is the whole gesture.
+#
 # ---- THE THREE REFUSALS, WHICH ARE THE WHOLE DESIGN ------------------------
 #
 # They are numbered as REFUSALS, not as rules: `rule N` is a citation into

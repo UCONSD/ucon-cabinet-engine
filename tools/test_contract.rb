@@ -7344,13 +7344,28 @@ check('and the index names every list that is cited') do
   ['domain rule', 'learned rule', '§4.2 rule'].each do |scheme|
     raise "claude/rules.md does not explain #{scheme}" unless rules.include?(scheme)
   end
-  # the two lists it reproduces must still be the length it claims
+  # THE TWO LISTS IT REPRODUCES MUST STILL BE THE LENGTH IT CLAIMS, and until
+  # 2026-08-30 the length was TYPED HERE. Adding learned rules 19 and 20 failed
+  # this check on the literal 18 - correctly, it is a ratchet - but the fix was
+  # to edit a third place, which is how three places drift. The claim now comes
+  # OUT OF rules.md, which is the document making it. Learned rule 14: a rule
+  # written in prose is a rule no code can read, so the number is read.
+  claimed = lambda do |heading|
+    rules[/#{Regexp.escape(heading)}\*, 1-(\d+)\./, 1].to_i
+  end
+  want_domain = claimed.call('*Non-negotiable domain rules')
+  want_learned = claimed.call('*RULES LEARNED THE HARD WAY')
+  raise 'rules.md no longer states its two ranges as 1-N' if
+    want_domain.zero? || want_learned.zero?
+
   claude = File.read(File.expand_path('../CLAUDE.md', __dir__))
   domain = claude[/^## Non-negotiable domain rules$(.+?)^## /m, 1].to_s.scan(/^\d+\. \*\*/).length
-  raise "CLAUDE.md holds #{domain} domain rules; rules.md lists 9" unless domain == 9
+  raise "CLAUDE.md holds #{domain} domain rules; rules.md claims #{want_domain}" unless
+    domain == want_domain
   status = File.read(File.expand_path('../claude/ucon-cabinet-engine-status.md', __dir__))
   learned = status[/^## RULES LEARNED THE HARD WAY.*?$(.+?)^## /m, 1].to_s.scan(/^\*\*\d{1,2}\. /).length
-  raise "the status document holds #{learned} learned rules; rules.md lists 18" unless learned == 18
+  raise "the status document holds #{learned} learned rules; rules.md claims #{want_learned}" unless
+    learned == want_learned
 end
 
 puts "\npanels priced by the square metre - Linear Elements printed p.214-220"

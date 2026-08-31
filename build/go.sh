@@ -43,9 +43,22 @@ git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
         tools/probe_inbox_hold_107.rb tools/probe_inbox_hold_112.rb \
         tools/probe_verify_finishes.rb \
         tools/probe_top_measure.rb \
+        tools/probe_bridge.rb \
         .gitignore build/go.sh
 
 echo
+# tools/probe_bridge.rb JOINED THE LIST, 2026-08-30, and it had been TRACKED and
+# unstageable since the list was written: a dated correction to its header - what
+# its applied-detector can and cannot prove - would have sat in the working tree
+# forever, because the one command Andriy runs never staged it. Same shape as
+# go.sh itself, which was not in the repository at all until 2026-08-28.
+#
+# tools/ is still staged BY NAME and not as a directory, on purpose: eight more
+# tracked probes live there (build_panel_kit, corner_probe, kitchen_probe,
+# side_probe, ucon_probe, void_probe, wall_probe, build_rbz) and an edit to any
+# of them is invisible to this script too. That is a KNOWN gap, stated rather
+# than half-fixed - `git add -A tools` would close it and open the stowaway hole
+# the paragraph below exists to watch for.
 # AND READ WHAT IS ABOUT TO GO. `git add -A <dir>` is scoped to directories, not
 # to file names, so anything untracked inside them is swept up in silence. On
 # 2026-08-30 commit 18ee014 carried docs/spec-template.md, placed by a different

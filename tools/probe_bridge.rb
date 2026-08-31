@@ -54,6 +54,23 @@
 # one that only prints, and a probe that builds an article is not reversible at
 # all - not in the part that builds, and not in anything it does afterwards.
 #
+# WHAT THE FINGERPRINT DOES NOT PROVE, 2026-08-30. Dated and added; the
+# paragraphs above stand. Run 115 tripped the warning - positions 382874 ->
+# 382653 - and that script contained no write of any kind. Twenty-odd unarmed
+# runs before it had never tripped it. The cause was Andriy building in the
+# model during the two seconds between the two snapshots: the next run showed
+# the definition count had gone 309 -> 313 with no probe touching it.
+#
+# The detector is still worth having. But the warning's own text names ONE
+# cause - "the script committed an operation of its own" - and that is a guess,
+# not a reading. The fingerprint proves that SOMETHING changed between two
+# instants; it cannot say who. A model open in front of a person is a shared
+# model, and this bridge is not the only writer in it.
+#
+# HOW TO TELL THE TWO APART, and it costs one drop: run a second read-only
+# probe. An escaped inner commit repeats - the same script writes again. A
+# person's edit does not. Learned rule 20.
+#
 # ARMED MODE is the deliberate exception: UCON::ProbeBridge.arm! makes the next
 # ONE run commit instead of abort, and disarms itself immediately afterwards.
 # It is for a script that is meant to build something. It is never sticky.

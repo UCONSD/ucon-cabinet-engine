@@ -15,7 +15,7 @@ honest.
 | write | means |
 |---|---|
 | `domain rule 4` | CLAUDE.md → *Non-negotiable domain rules*, 1-9. What the CATALOG and the OBJECT require. |
-| `learned rule 4` | `claude/ucon-cabinet-engine-status.md` → *RULES LEARNED THE HARD WAY*, 1-18. What went WRONG once and must not again. |
+| `learned rule 4` | `claude/ucon-cabinet-engine-status.md` → *RULES LEARNED THE HARD WAY*, 1-20. What went WRONG once and must not again. |
 | `§4.2 rule 4` | `docs/UCON_Object_Contract_v2.md` → the numbered rules inside a section. Already unambiguous; leave these alone. |
 | `Contract v2 §1.1` | a section reference, not a rule number. |
 
@@ -66,6 +66,8 @@ behind it and most have several; the status document carries them.
 | 16 | A command that did not run leaves no trace, and that is the danger. |
 | 17 | Format a listing as a listing. A fenced code block reads as "run this". |
 | 18 | A suite can assert an invariant sideways, and you find out when it stops being vacuous. |
+| 19 | A pass over the model is not a rule about it — whatever is built afterwards is untagged. **Re-run Retag before any sheet.** |
+| 20 | A detector that watches the model cannot tell your write from a person's edit in the same window. |
 
 ---
 
