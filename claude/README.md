@@ -198,6 +198,36 @@ what that keeps, what it costs, and the covering report it owes).
   knew they had, the sharpest being that one Depth field cannot hold three
   worktop depths).
 
+  **`decisions-2026-08-31-elevation-naming.md`** (the compass loses because
+  nobody in the room carries one: a bearing is a fact about the BUILDING and a
+  letter is a fact about the DRAWING SET, and there is nothing in the model to
+  rename anyway - `Group#1` is one shell of 41 faces, and the name has always
+  lived on the section plane and the scene. Three layers: the LETTER, clockwise
+  A B C D, which never changes; the DESCRIPTION, generated from the landmarks
+  standing on that elevation, left to right, and deliberately kept OUT of the
+  name because LayOut references a scene by name and a name that moved with the
+  range would break sheets already laid out; and the COMPASS demoted to one
+  project fact that a site plan reads and nothing else. Nothing is renamed - the
+  mapping table for west run, south base run and east wall floor to 3040 cannot
+  be filled until section planes exist, and there are none. One thing is left
+  open and marked as such: which wall is A, because clockwise fixes the order
+  and not the start).
+
+  **`spec-2026-08-31-declaring-a-body.md`** (the second action on the orphan
+  report, specified before any of it is built - and specifying it changed the
+  stakes, because a declaration carries through to LayOut as BY OTHERS, which is
+  a statement about SCOPE on a sheet a GC reads rather than housekeeping on a
+  list nobody opens. Two buttons, show and assign, and one window asking what is
+  not ready to print in three sections, because unowned, unnamed and undecided
+  are three different defects. Five reasons whose WORDS are still open, and a
+  second axis - `installed_by`, us / others / undecided, written from day one and
+  printing nothing yet, because adding the field later means migrating
+  attributes across bodies in a live model. UNDECIDED IS NOT BY OTHERS, learned
+  rule 7 verbatim. The declaration is a fact on the BODY and not a tag: a tag
+  move changes which sheet a body prints on and eight scenes hold saved opinions
+  about those tags, and the tag branch has never once fired - measured on probe
+  54, so removing it changes the list by zero rows).
+
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
 `fillers-recon-2026-08-23.md`, `usa-elements-recon-2026-08-20.md`,
