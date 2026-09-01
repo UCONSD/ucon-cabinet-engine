@@ -219,10 +219,15 @@ what that keeps, what it costs, and the covering report it owes).
   a statement about SCOPE on a sheet a GC reads rather than housekeeping on a
   list nobody opens. Two buttons, show and assign, and one window asking what is
   not ready to print in three sections, because unowned, unnamed and undecided
-  are three different defects. Five reasons whose WORDS are still open, and a
-  second axis - `installed_by`, us / others / undecided, written from day one and
-  printing nothing yet, because adding the field later means migrating
-  attributes across bodies in a live model. UNDECIDED IS NOT BY OTHERS, learned
+  are three different defects. Five reasons, and a second axis - `installed_by`,
+  ucon / not_ucon / undecided, written from day one, because adding the field
+  later means migrating attributes across bodies in a live model. THE WORDS WERE
+  SETTLED THE SAME DAY against real drawing sets, in sections 3a and 3b: the
+  party is the OWNER and never the client, BY OWNER alone is as ambiguous as BY
+  OTHERS, and we name no company at all - a contract document describes scope
+  relative to THIS CONTRACT, which is why N.I.C. exists and why unmarked work
+  needs no note. Plus the legend, whose one load-bearing sentence is that
+  unmarked work is ours - safe only because an undecided body blocks the sheet. UNDECIDED IS NOT BY OTHERS, learned
   rule 7 verbatim. The declaration is a fact on the BODY and not a tag: a tag
   move changes which sheet a body prints on and eight scenes hold saved opinions
   about those tags, and the tag branch has never once fired - measured on probe

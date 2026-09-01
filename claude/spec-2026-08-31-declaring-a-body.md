@@ -85,14 +85,15 @@ other form.
 
 ## 3. The five reasons
 
-Closed list. **The words are OPEN and will be revisited** — Andriy, 2026-08-31,
-and he is right that they matter more than the structure, because a GC reads
-them. The structure below does not depend on which words win.
+Closed list. The words were left OPEN when this was first written — Andriy,
+2026-08-31, and he was right that they matter more than the structure, because a
+GC reads them. **SETTLED THE SAME DAY; see section 3a.** The slugs below are what
+lands on a body and never changes; what PRINTS is a separate lookup.
 
 | reason | means | prints on a sheet |
 |---|---|---|
 | `owner_furnished` | the client's own item | yes |
-| `by_others` | supplied AND installed by somebody else | yes |
+| `by_others` | supplied by somebody else — INSTALL IS NOT PART OF THIS | yes |
 | `existing` | existing, remains | yes |
 | `building` | shell, floor, walls, openings | **no** — architecture is not scope |
 | `drawing_aid` | setting-out, section aids | **never**, and hidden on every sheet |
@@ -107,15 +108,145 @@ record of an outside action is only true if something checks it.
 and who INSTALLS — and for appliances that difference is the thing that gets
 argued about. Andriy, 2026-08-31: the axis exists from day one.
 
-**Field: `installed_by`. Values: `us`, `others`, `undecided`. Default
+**Field: `installed_by`. Values: `ucon`, `not_ucon`, `undecided`. Default
 `undecided`.**
 
-The field is written from the first day and **prints nothing yet.** Adding it
-later would mean migrating attributes across bodies in a live model; adding it
-now costs nothing. What learned rule 6 forbids is INVENTING VALUES on one case,
-so the value list stays at three until a sheet asks for a fourth. When it does
-start printing, that is a second scope statement and gets accepted as
-deliberately as the first.
+**The two values are not symmetrical, on purpose.** We know reliably whether WE
+install something. Who installs it instead of us is usually something nobody told
+us, and learned rule 8 forbids writing down a fact no source gave us. So there is
+no `owner` value and no `others` value: `not_ucon` is true whoever it turns out
+to be, and `OFOI` — Owner Furnished / Owner Installed — is a claim this engine
+must never make on its own.
+
+Adding the field later would have meant migrating attributes across bodies in a
+live model; adding it now costs nothing. What learned rule 6 forbids is
+INVENTING VALUES on one case, not declaring a field.
+
+---
+
+## 3a. The words, settled 2026-08-31, and checked against real drawings
+
+Checked against documents rather than remembered. A city permit set's
+ABBREVIATIONS block lists `N.I.C. - NOT IN CONTRACT`, `E.T.R. - EXISTING TO
+REMAIN`, `EXIST - EXISTING`, `V.I.F. - VERIFY IN FIELD`, `T.B.D. - TO BE
+DETERMINED`; a public construction programme's acronym schedule gives
+`OFCI - Owner Furnished / Contractor Installed`, `OFOI - Owner Furnished / Owner
+Installed`, `CFCI - Contractor Furnished / Contractor Installed`. BY OTHERS and
+BY OWNER appear in neither abbreviation list, which is itself the answer: they
+are plain notes, not abbreviations.
+
+### Three findings that changed the wording
+
+**THE PARTY IS THE OWNER, NEVER THE CLIENT.** Every standard acronym is built on
+Owner and none on Client. Client is a word for correspondence; Owner is the word
+for contract documents.
+
+**"BY OWNER" ALONE IS AS AMBIGUOUS AS "BY OTHERS".** It does not say whether the
+owner only bought the thing or also sets it. On this kitchen every appliance is
+the owner's and who sets them is live and costs money, so BY OWNER is the note
+that starts the argument rather than the one that ends it. The trade closed that
+seam long ago with the furnish / install split: FURNISH is to supply and deliver,
+INSTALL is to set in place, PROVIDE is both.
+
+**AND WE DO NOT NAME OURSELVES AT ALL.** The draft of this document said
+`INSTALLED BY UCON`. Andriy, 2026-08-31: the installer may end up being somebody
+else, so a company name on a drawing goes stale. He is right, and the fix is
+not a better name for us - it is that a contract document describes SCOPE
+RELATIVE TO THIS CONTRACT and not people. The proof is the existence of N.I.C.:
+a note meaning *not in contract* is only needed because IN CONTRACT is the
+default that goes unwritten. `OFCI` is also refused for a second reason - on a
+sheet read by a GC, "Contractor Installed" reads as the GC, and to them we are a
+subcontractor.
+
+When a sheet ever must point at somebody else's scope it names a TRADE and never
+a company - BY G.C., BY ELECTRICAL CONTRACTOR, BY STONE FABRICATOR. In our own
+set that is never needed for our own work. *(That last paragraph is reasoned from
+the convention rather than quoted from a source; the abbreviations above are
+quoted.)*
+
+### What prints
+
+| reason + install | prints on the sheet |
+|---|---|
+| `owner_furnished` + `ucon` | **OWNER FURNISHED** |
+| `owner_furnished` + `not_ucon` | **OWNER FURNISHED — INSTALLATION N.I.C.** |
+| `by_others` + `ucon` | **FURNISHED BY OTHERS** |
+| `by_others` + `not_ucon` | **BY OTHERS** |
+| `existing` | **EXISTING TO REMAIN** |
+| `building` | nothing |
+| `drawing_aid` | nothing, and hidden on every sheet |
+| anything `undecided` | nothing, **and it blocks the sheet** |
+
+All caps, as the rest of a construction drawing. `installed_by: ucon` is
+recorded on the body and does NOT print, because the default sentence in the
+legend already says it.
+
+**The slug is not the printed word, and they must never be the same string.**
+The slug lands on a body and is stable; the phrase lives in one lookup. The
+wording changed three times while this section was being written and not one
+body would have had to be touched. Same argument as `Retag::TAGS` taking the
+generator's constants rather than retyping them.
+
+---
+
+## 3b. The legend, and it is not optional
+
+Andriy, 2026-08-31: the decoding has to come out somewhere in LayOut. It does,
+and one line of it is load-bearing.
+
+### The sentence the whole scheme rests on
+
+> **Unless noted otherwise, all work shown is furnished and installed under this
+> contract.**
+
+Without it, *unmarked means ours* is an assumption we hold privately. With it, it
+is a statement the sheet makes. It is the most consequential line on the drawing
+and it is one sentence.
+
+And it is only SAFE because of section 4: nothing undecided reaches a sheet. The
+default rule and the sheet block are one rule seen from two sides, and neither
+may be built without the other.
+
+### The two blocks
+
+**SCOPE** — the notes actually used on that sheet, spelled out:
+
+- Unless noted otherwise, all work shown is furnished and installed under this
+  contract.
+- OWNER FURNISHED — supplied by the owner; installed under this contract.
+- OWNER FURNISHED — INSTALLATION N.I.C. — supplied by the owner; installation is
+  not in this contract.
+- FURNISHED BY OTHERS — supplied by another party; installed under this contract.
+- BY OTHERS — supplied and installed by another party; not in this contract.
+- EXISTING TO REMAIN — in place before this work; not altered under this
+  contract.
+
+**ABBREVIATIONS** — this system contributes exactly ONE: `N.I.C. — NOT IN
+CONTRACT`. V.I.F., T.B.D. and the rest come from other parts of the sheet, and we
+do not print an abbreviation nothing on the sheet uses. Learned rule 8.
+
+### It is DERIVED, like the elevation description
+
+The legend lists the notations that actually occur on that sheet, and no others.
+A legend that names BY OTHERS when nothing on the sheet is by others sends a
+reader hunting; a note with no legend line is worse. This is the same failure as
+an index nobody maintains, and this repository met that one on 2026-08-31 when
+two new notes were not added to `claude/README.md` and the suite caught it.
+
+**Honest about the mechanism, exactly as with the notes:** SketchUp cannot write
+into a LayOut document. What the engine can do is EMIT the legend text - from the
+same lookup that prints the notes, so the sheet and the by-others schedule cannot
+disagree - and a person places it once. A placed block can then go stale, so the
+emitted legend carries a generation stamp, and the pre-flight window reports the
+lines the sheet needs so a person can compare. Learned rule 13: a record of an
+outside action is only true if something checks it.
+
+### Where it goes
+
+**On every sheet, not once per set.** A GC often holds one sheet, and a scope
+statement that lives only on the cover is a scope statement that particular
+reader never saw. Repeating it costs nothing. Andriy's call if he wants it
+otherwise.
 
 ---
 
@@ -129,6 +260,18 @@ we have handed a competitor, in writing, work we have not decided about.
 decision prints NOTHING and sits in the second or first section until somebody
 decides. There is no default reason, there is no fallback reason, and the
 writer refuses rather than choosing.
+
+**AND THE MIRROR OF IT, which is the reason this section is load-bearing rather
+than tidy.** Section 3b's legend says that unmarked work is ours. So a body that
+prints nothing does not merely stay silent - on a sheet it reads as OURS. The
+undecided worktop printing nothing would therefore claim scope we have not
+decided, which is the same error as BY OTHERS by default, inverted.
+
+There is exactly one resolution and it is not a wording: **an undecided body
+blocks the sheet.** It is not printed either way, it does not leave quietly, it
+sits in the window's first section, and no sheet is issued while that section has
+rows. That is what turns the window from a report into a PRE-FLIGHT, and it is
+what makes the legend's default sentence safe to print.
 
 ---
 
@@ -239,6 +382,14 @@ Learned rule 12: a guard proves itself against the defect it exists for.
    here and its author reads this paragraph.
 5. The existing sentinel — a tag never stands in for a contract — is untouched
    and still passes.
+5a. The printed-word lookup is TOTAL: every reason paired with every
+   `installed_by` value resolves to exactly one phrase or to an explicit
+   nothing, and no pair falls through to a default. A fall-through here is a
+   scope statement nobody wrote.
+5b. The emitted legend names every notation the sheet uses and no notation it
+   does not — checked against the same tree the notes come from, so the two
+   cannot disagree.
+5c. A model holding one `undecided` body reports the sheet as BLOCKED.
 6. Nothing writes a tag on a declaration, and no scene changes: after the
    button runs, the eight scenes are byte-identical.
 
