@@ -233,6 +233,19 @@ what that keeps, what it costs, and the covering report it owes).
   about those tags, and the tag branch has never once fired - measured on probe
   54, so removing it changes the list by zero rows).
 
+  **`findings-2026-09-01-a-dialog-outlives-a-reload.md`** (the declare button was
+  pressed for the first time and nothing happened, and nothing failed either -
+  `Report.show` reused a window that had been open since the previous day, so the
+  page was redrawn with a button calling into a dialog that had never heard of
+  the callback, and JavaScript calling into nothing is silent. THE FACT WAS
+  ALREADY RECORDED four days earlier in the lit-shelves note - a dialog bakes its
+  HTML and its callbacks at open - and still cost an hour, because it was written
+  as a description of one incident rather than as something a check could hold.
+  The window is now dropped at LOAD time and the callbacks are registered every
+  time; a memo that survives the thing it memoises is not a cache. And the second
+  fix matters more: a press that changes something now says so on the page.
+  Candidate learned rule named and not added).
+
 **Chapter recon — read before extracting:**
 `wall-units-recon-2026-08-18.md`, `tall-units-recon-2026-08-22.md`,
 `fillers-recon-2026-08-23.md`, `usa-elements-recon-2026-08-20.md`,

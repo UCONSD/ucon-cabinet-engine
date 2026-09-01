@@ -61,6 +61,33 @@ module UCON
     module Report
       module_function
 
+      # ---- A DIALOG OUTLIVES A CORE RELOAD, AND THAT COST AN HOUR ----------
+      #
+      # 2026-09-01, first press of the new Apply button: nothing happened, and
+      # nothing said so. The window had been open since the day before, this
+      # module still held it in @window, and `show` reused it - so the page was
+      # redrawn with a button calling `orphan_assign`, INTO A DIALOG THAT HAD
+      # NEVER HEARD OF IT. The JavaScript called into nothing and JavaScript
+      # calling into nothing is silent.
+      #
+      # THE REPOSITORY ALREADY KNEW THIS: claude/findings-2026-08-27-lit-shelves.md
+      # - an HtmlDialog bakes its HTML AND ITS CALLBACKS at open; reloading the
+      # core replaces the Ruby and the open window keeps what it opened with.
+      # That note was about HTML. The callbacks are the same fact and cost the
+      # same hour, four days later.
+      #
+      # So the window is DROPPED AT LOAD TIME. These two lines run every time
+      # this file is loaded - which is exactly what "Reload core" does - and the
+      # next `show` therefore builds a new dialog whose callbacks match the Ruby
+      # that just arrived. A memo that survives the thing it memoises is not a
+      # cache, it is a lie with a fast path.
+      begin
+        @window.close if defined?(@window) && @window
+      rescue StandardError
+        nil
+      end
+      @window = nil
+
       # THE TAGS ARE NO LONGER A DECLARATION, 2026-09-01. Dated and added; the
       # header above stands. Until this date `declared?` meant `sits on
       # Placeholder or Reserved`, and that was the same category error this file
@@ -141,6 +168,37 @@ module UCON
         out
       end
 
+      # THE OTHER TWO SECTIONS. They walk the same tree the list does and by the
+      # same rules, so three sections and five numbers can never disagree about
+      # one model - the argument `counts` already makes for itself.
+      def debts(nodes)
+        out = []
+        Array(nodes).each do |n|
+          next if owned?(n) || declared?(n)
+
+          if debt?(n)
+            out << n
+          elsif owns_anything?(n[:children])
+            out.concat(debts(n[:children]))
+          end
+        end
+        out
+      end
+
+      def declared_rows(nodes)
+        out = []
+        Array(nodes).each do |n|
+          next if owned?(n) || debt?(n)
+
+          if declared?(n)
+            out << n
+          else
+            out.concat(declared_rows(n[:children]))
+          end
+        end
+        out
+      end
+
       # Everything a person wants to see above the list, and every number in it
       # is derived from the same tree the list is, so the two cannot disagree.
       def counts(nodes)
@@ -204,10 +262,12 @@ module UCON
         ' <span class="flag">on a declaring tag, not declared</span>'
       end
 
-      def html(items, c)
+      def html(items, c, debt_items = [], declared_items = [], said = nil)
         rows = Array(items).map do |n|
           <<~ROW
             <tr onclick="sketchup.orphan_pick('#{esc(n[:id])}')">
+              <td class="ck"><input type="checkbox" class="pick" value="#{esc(n[:id])}"
+                  onclick="event.stopPropagation();count()"></td>
               <td class="nm">#{esc(n[:name])}</td>
               <td class="sz">#{esc(size_text(n))}</td>
               <td class="wh">#{esc(where_text(n))}</td>
@@ -228,8 +288,10 @@ module UCON
         <<~HTML
           <!DOCTYPE html><html><head><meta charset="utf-8"><style>
           body{font:12px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-               margin:0;padding:12px;color:#1c1c1e;background:#fff}
+               margin:0;padding:12px 12px 96px;color:#1c1c1e;background:#fff}
           h1{font-size:14px;margin:0 0 2px}
+          h2{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#8a8a8f;
+             margin:18px 0 6px;font-weight:600}
           .sub{color:#6b6b70;margin:0 0 12px}
           .sums{display:flex;gap:14px;margin:0 0 12px;flex-wrap:wrap}
           .sums div{font-size:11px;color:#6b6b70}
@@ -243,24 +305,38 @@ module UCON
           .nm{font-weight:500}
           .sz,.wh{font-variant-numeric:tabular-nums;white-space:nowrap}
           .wh,.tg,.fc{color:#6b6b70}
+          .ck{width:20px}
           .ok{color:#2b6a3f;background:#f0f7f2;padding:10px;border-radius:5px}
+          .said{color:#2b6a3f;background:#f0f7f2;padding:8px 10px;border-radius:5px;margin:0 0 12px}
+          .flag{color:#a8321a;font-size:10px;white-space:nowrap}
           .note{margin-top:14px;color:#6b6b70;font-size:11px;border-top:1px solid #e4e4e7;
                 padding-top:10px}
-          .flag{color:#a8321a;font-size:10px;white-space:nowrap}
+          #assign{position:fixed;left:0;right:0;bottom:0;background:#fafafa;
+                  border-top:1px solid #e4e4e7;padding:8px 12px;display:flex;
+                  gap:8px;align-items:center;flex-wrap:wrap}
+          #assign select{font:12px inherit;max-width:280px}
+          #prints{font-size:11px;color:#6b6b70;flex:1 1 100%}
+          #prints b{color:#1c1c1e}
+          button{font:12px inherit;padding:3px 10px}
           </style></head><body>
           <h1>Bodies no rule owns</h1>
-          <p class="sub">Click a row to select it in the model. This report writes nothing.</p>
+          <p class="sub">Click a row to select it in the model. Tick rows and give them a
+          scope below.</p>
           <div class="sums">
             <div class="warn">Unowned<b>#{c[:orphans].to_i}</b></div>
             <div>Ours, no contract<b>#{c[:debt].to_i}</b></div>
             <div>Ours<b>#{c[:ours].to_i}</b></div>
             <div>Declared not ours<b>#{c[:declared].to_i}</b></div>
             <div>Empty groups<b>#{c[:empty].to_i}</b></div>
+            <div class="warn">Blocking a sheet<b>#{c[:blocked].to_i}</b></div>
           </div>
           #{empty_line}
+          #{said.to_s.empty? ? '' : "<p class=\"said\">#{esc(said)}</p>"}
           <table><thead><tr>
-            <th>Body</th><th>W × H × D</th><th>Where</th><th>Tag</th><th>Faces</th>
+            <th></th><th>Body</th><th>W × H × D</th><th>Where</th><th>Tag</th><th>Faces</th>
           </tr></thead><tbody>#{rows}</tbody></table>
+          #{section('Ours, no contract yet — only a stamp clears these', debt_items)}
+          #{section('Declared not ours', declared_items)}
           <p class="note">A body is UNOWNED when it carries no object_class. A tag is not
           ownership: a hand-drawn body put on a UCON tag still appears here, because the tag
           decides which sheet it prints on and no rule has become responsible for it.
@@ -269,9 +345,100 @@ module UCON
           #{esc(declared_tags.join(' or '))} does NOT declare it and never did; those tags
           decide a sheet, and a row sitting on one says so.
           OURS, NO CONTRACT is ours and hand-drawn: it leaves this list and only a stamp can
-          lower that number.</p>
+          lower that number. Nothing whose scope is undecided may go on a sheet.</p>
+          <div id="assign">
+            <select id="reason" onchange="refresh()">#{options}</select>
+            <select id="inst" onchange="refresh()">#{installer_options}</select>
+            <button onclick="apply()">Apply to <span id="n">0</span> ticked</button>
+            <button onclick="clr()">Clear scope</button>
+            <span id="prints"></span>
+          </div>
+          <script>
+          var CH = #{JSON.generate(Declare.choices)};
+          function ticked(){
+            var out=[], b=document.querySelectorAll('.pick');
+            for(var i=0;i<b.length;i++){ if(b[i].checked) out.push(b[i].value); }
+            return out;
+          }
+          function count(){ document.getElementById('n').textContent = ticked().length; }
+          function cur(){
+            var r=document.getElementById('reason').value;
+            for(var i=0;i<CH.length;i++){ if(CH[i].reason===r) return CH[i]; }
+            return null;
+          }
+          function refresh(){
+            var c=cur(), ins=document.getElementById('inst');
+            ins.disabled = !c.asks;
+            var key = c.asks ? ins.value : 'undecided';
+            var p = c.prints[key];
+            document.getElementById('prints').innerHTML =
+              p ? ('On a sheet this prints <b>'+p+'</b>')
+                : (c.asks && key==='undecided'
+                    ? 'Nothing prints, and it BLOCKS the sheet until you answer who installs it.'
+                    : 'Nothing prints. That is correct for this one.');
+            count();
+          }
+          function apply(){
+            var ids=ticked();
+            if(!ids.length){ return; }
+            var c=cur(), ins=document.getElementById('inst');
+            sketchup.orphan_assign(JSON.stringify({
+              ids: ids, reason: c.reason,
+              installed_by: c.asks ? ins.value : 'undecided'
+            }));
+          }
+          function clr(){
+            var ids=ticked();
+            if(!ids.length){ return; }
+            sketchup.orphan_assign(JSON.stringify({ ids: ids, reason: '' }));
+          }
+          refresh();
+          </script>
           </body></html>
         HTML
+      end
+
+      # The control's words are Declare's, not this file's - one table feeds the
+      # chooser, the sheet and the legend, so a phrase cannot be revised in one
+      # place and stay old in another.
+      def options
+        Declare::ALL_REASONS.map do |r|
+          "<option value=\"#{esc(r)}\">#{esc(Declare::LABELS.fetch(r))}</option>"
+        end.join
+      end
+
+      def installer_options
+        Declare::INSTALLERS.map do |i|
+          "<option value=\"#{esc(i)}\">#{esc(Declare::INSTALLER_LABELS.fetch(i))}</option>"
+        end.join
+      end
+
+      # A section that is empty prints NOTHING - not an empty table and not a
+      # heading over nothing. A window that shows three headings when it has one
+      # thing to say teaches people to skim it.
+      def section(title, list)
+        rows = Array(list)
+        return '' if rows.empty?
+
+        body = rows.map do |n|
+          <<~ROW
+            <tr onclick="sketchup.orphan_pick('#{esc(n[:id])}')">
+              <td class="nm">#{esc(n[:name])}</td>
+              <td class="sz">#{esc(size_text(n))}</td>
+              <td class="tg">#{esc(scope_text(n))}</td>
+            </tr>
+          ROW
+        end.join
+
+        "<h2>#{esc(title)}</h2><table><tbody>#{body}</tbody></table>"
+      end
+
+      def scope_text(node)
+        r = node[:declared].to_s
+        return '' if r.empty?
+
+        printed = Declare.note(r, node[:installed_by])
+        printed ? "#{Declare::LABELS.fetch(r, r)} → #{printed}" : Declare::LABELS.fetch(r, r)
       end
 
       # ---- THE MODEL SIDE, and the only part that knows what SketchUp is ---
@@ -340,6 +507,7 @@ module UCON
         nodes = survey(model)
         items = orphans(nodes)
         c     = counts(nodes)
+        page  = html(items, c, debts(nodes), declared_rows(nodes), @said)
 
         @window ||= UI::HtmlDialog.new(
           dialog_title: 'UCON — bodies no rule owns',
@@ -349,13 +517,61 @@ module UCON
           min_width: 420, min_height: 240,
           resizable: true
         )
-        @window.set_html(html(items, c))
-        unless @wired
+        @window.set_html(page)
+        # REGISTERED EVERY TIME, NOT ONCE. The `unless @wired` that used to stand
+        # here is the other half of the bug above: after a reload the flag said
+        # yes and the dialog said who.
+        begin
           @window.add_action_callback('orphan_pick') { |_, id| pick(model, id) }
-          @wired = true
+          # THE ONLY THING IN THIS FILE THAT WRITES, and it delegates: the rules,
+          # the refusals and the four keys are Declare's. The window's job is to
+          # collect a choice and hand it over, then re-read the model and redraw
+          # itself from what it finds - never from what it thinks it just did.
+          # Learned rule 15: a successful write is not a correct write.
+          @window.add_action_callback('orphan_assign') { |_, payload| assign(model, payload) }
         end
         @window.show
         c
+      end
+
+      # Reads the choice, hands it to Declare, then SURVEYS AGAIN and redraws.
+      # An empty reason means clear - a wrong declaration has to be removable or
+      # the first slip is permanent and people stop pressing the button.
+      def assign(model, payload)
+        data = JSON.parse(payload.to_s)
+        ids  = Array(data['ids']).map(&:to_s)
+        ents = ids.map { |i| index[i] }.compact.select(&:valid?)
+        return 0 if ents.empty?
+
+        reason = data['reason'].to_s
+        if reason.empty?
+          model.start_operation('UCON — clear scope', true)
+          begin
+            ents.each { |e| Declare.clear!(e) }
+            model.commit_operation
+          rescue StandardError
+            model.abort_operation
+            raise
+          end
+        else
+          Declare.apply!(model, ents,
+                         reason: reason,
+                         installed_by: data['installed_by'].to_s)
+        end
+
+        @said = if reason.empty?
+                  "Scope cleared on #{ents.length} #{ents.length == 1 ? 'body' : 'bodies'}."
+                else
+                  printed = Declare.note(reason, data['installed_by'].to_s)
+                  "#{ents.length} #{ents.length == 1 ? 'body' : 'bodies'} declared " \
+                  "#{Declare::LABELS.fetch(reason, reason)} — " \
+                  "#{printed ? "prints #{printed}" : 'prints nothing'}. Ctrl-Z undoes it."
+                end
+        show(model)
+        ents.length
+      rescue StandardError => e
+        UI.messagebox("Nothing was changed.\n\n#{e.message}")
+        0
       end
 
       # SELECTS, AND THAT IS ALL. Zooming would move a camera somebody set for a

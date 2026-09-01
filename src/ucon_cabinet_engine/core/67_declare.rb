@@ -222,6 +222,41 @@ module UCON
         ABBREVIATIONS
       end
 
+      # ---- WHAT A PERSON SEES IN THE WINDOW -------------------------------
+      #
+      # NOT the printed note. These are the words on the control that makes the
+      # decision; NOTES is what a GC reads afterwards. Keeping them apart is the
+      # same separation as the slug and the phrase, one layer up: the person
+      # choosing needs to recognise the case, the drawing needs to state scope.
+      LABELS = {
+        'owner_furnished' => "Owner's own — they bought it",
+        'by_others'       => 'Somebody else supplies it',
+        'existing'        => 'Existing, stays',
+        'building'        => 'The building — shell, floor, walls, openings',
+        'drawing_aid'     => 'Drawing aid — never printed',
+        DEBT              => 'OURS, no contract yet — a debt, not a declaration'
+      }.freeze
+
+      INSTALLER_LABELS = {
+        'ucon'      => 'we install it',
+        'not_ucon'  => 'we do not install it',
+        UNDECIDED   => 'not decided yet — this blocks the sheet'
+      }.freeze
+
+      # The window shows what WILL PRINT at the moment of choosing, so a scope
+      # statement is never made blind. Emitted as data rather than rebuilt in
+      # JavaScript, so one table feeds the control, the sheet and the legend.
+      def choices
+        ALL_REASONS.map do |r|
+          {
+            'reason'  => r,
+            'label'   => LABELS.fetch(r),
+            'asks'    => install_asked?(r),
+            'prints'  => INSTALLERS.each_with_object({}) { |i, h| h[i] = note(r, i) }
+          }
+        end
+      end
+
       # ---- THE REFUSALS ---------------------------------------------------
 
       # OURS IS NOT DECLARABLE. A body carrying a class is owned by a rule, and
@@ -270,6 +305,70 @@ module UCON
         v.nil? ? '' : v.to_s
       rescue StandardError
         ''
+      end
+
+      # WRITTEN ON THE INSTANCE, NEVER ON THE DEFINITION, and that is not a
+      # detail. 2026-08-28, `a copy is not a copy`: a hand-copied shelf shared
+      # its definition, so taking the light off one took it off the other. Two
+      # instances of one imported appliance are two bodies in a room and may
+      # honestly have two different scopes. Reading still looks at the definition
+      # afterwards, so a declaration made on a definition elsewhere is still
+      # seen; nothing here ever puts one there.
+      def write!(entity, reason:, installed_by: UNDECIDED, by: nil, at: nil)
+        a = validate!(reason: reason, installed_by: installed_by,
+                      object_class: Retag.object_class_of(entity))
+        entity.set_attribute(DICTIONARY, REASON_KEY,  a[REASON_KEY])
+        entity.set_attribute(DICTIONARY, INSTALL_KEY, a[INSTALL_KEY])
+        entity.set_attribute(DICTIONARY, AT_KEY,      at || Time.now.strftime('%Y-%m-%d'))
+        entity.set_attribute(DICTIONARY, BY_KEY,      by || who)
+        a
+      end
+
+      # A wrong declaration must be removable, or the first slip is permanent and
+      # people stop using the button rather than risk it.
+      def clear!(entity)
+        [REASON_KEY, INSTALL_KEY, AT_KEY, BY_KEY].each do |k|
+          entity.delete_attribute(DICTIONARY, k)
+        end
+        true
+      end
+
+      # AN ACCOUNT, NOT A SIGNATURE, and it is written as what it is. SketchUp
+      # knows no person; this is the OS account, which on these two machines does
+      # happen to say which one - demchenkoandrew is the laptop, andriydemko the
+      # office Mac. Useful, and not authorship.
+      def who
+        (ENV['USER'] || ENV['USERNAME'] || 'unknown account').to_s
+      end
+
+      # ONE ORDINARY UNDOABLE OPERATION, and no arm. An arm is for a probe that
+      # BUILDS; this writes four strings and Ctrl-Z takes them back.
+      #
+      # Called from a probe it would escape the bridge's rollback, because an
+      # inner commit closes the outer one - tools/probe_bridge.rb says so in its
+      # own header. That is a reason to call it from the palette and not from a
+      # probe, stated here rather than discovered.
+      def apply!(model, entities, reason:, installed_by: UNDECIDED)
+        list = Array(entities).select { |e| e.respond_to?(:set_attribute) && e.valid? }
+        return 0 if list.empty?
+
+        # Validated BEFORE anything is written: a refusal halfway through would
+        # leave some bodies declared and some not, and the person would have no
+        # way to tell which.
+        list.each do |e|
+          validate!(reason: reason, installed_by: installed_by,
+                    object_class: Retag.object_class_of(e))
+        end
+
+        model.start_operation('UCON — declare scope', true)
+        begin
+          list.each { |e| write!(e, reason: reason, installed_by: installed_by) }
+          model.commit_operation
+        rescue StandardError
+          model.abort_operation
+          raise
+        end
+        list.length
       end
 
       def installed_by_of(entity)

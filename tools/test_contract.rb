@@ -9471,6 +9471,92 @@ check('OURS IS NOT DECLARABLE, and the refusal names the class') do
   raise parked.inspect unless parked['installed_by'] == 'undecided'
 end
 
+check('THE CHOOSER SPEAKS DECLARE\'S WORDS, and never its own copies') do
+  # A phrase revised in the lookup and left old on the control is the wall_hung
+  # bug of 2026-08-22 wearing a dropdown. The window builds its options FROM the
+  # table, so there is nothing to keep in step.
+  d = UCON::CabinetEngine::Declare
+  d::ALL_REASONS.each { |r| raise "no label for #{r}" unless d::LABELS.key?(r) }
+  d::INSTALLERS.each  { |i| raise "no label for #{i}" unless d::INSTALLER_LABELS.key?(i) }
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/68_report.rb', __dir__))
+  raise 'the window retyped a printed phrase' if src.include?('OWNER FURNISHED')
+end
+
+check('THE WINDOW SHOWS WHAT WILL PRINT BEFORE ANYTHING IS WRITTEN') do
+  # A scope statement made blind is the thing this whole tool exists to stop.
+  # `choices` carries, per reason, what each installer answer would print - so
+  # one table feeds the control, the sheet and the legend and they cannot drift.
+  d = UCON::CabinetEngine::Declare
+  ch = d.choices
+  raise ch.length.inspect unless ch.length == d::ALL_REASONS.length
+  ch.each do |row|
+    d::INSTALLERS.each do |i|
+      raise "#{row['reason']} + #{i} disagrees with note()" unless
+        row['prints'][i] == d.note(row['reason'], i)
+    end
+    raise "#{row['reason']} has no label" if row['label'].to_s.empty?
+  end
+  of = ch.find { |r| r['reason'] == 'owner_furnished' }
+  raise 'the install question is not asked where it must be' unless of['asks']
+  ex = ch.find { |r| r['reason'] == 'existing' }
+  raise 'the install question is asked where nobody put it' if ex['asks']
+end
+
+check('AN EMPTY SECTION PRINTS NOTHING, not a heading over nothing') do
+  # A window showing three headings when it has one thing to say teaches people
+  # to skim it, and a skimmed report is the report nobody opens on the fourth run.
+  tree = [node('a loose box')]
+  page = Report.html(Report.orphans(tree), Report.counts(tree),
+                     Report.debts(tree), Report.declared_rows(tree))
+  raise 'an empty section printed a heading' if page.include?('Declared not ours</h2>')
+  d = UCON::CabinetEngine::Declare
+  full = [node('a loose box'),
+          node('Plinth (REPRESENTATION)', '', '', 1, [], d::DEBT),
+          node('48 WOLF', '', '', 1, [], 'owner_furnished', 'not_ucon')]
+  page2 = Report.html(Report.orphans(full), Report.counts(full),
+                      Report.debts(full), Report.declared_rows(full))
+  raise 'the debt section is missing' unless page2.include?('only a stamp clears these')
+  raise 'the declared section is missing' unless page2.include?('Declared not ours</h2>')
+  raise 'the row does not say what it will print' unless
+    page2.include?('OWNER FURNISHED — INSTALLATION N.I.C.')
+end
+
+check('THE REPORT NEVER WRITES - every write in this feature is Declare\'s') do
+  # Same division as Retag: one place does a thing. A second writer is a second
+  # set of refusals, and the day they disagree is the day a cabinet gets declared.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/68_report.rb', __dir__))
+  code = src.gsub(/^\s*#.*$/, '')
+  raise 'the report writes attributes of its own' if code.include?('set_attribute')
+  raise 'the report deletes attributes of its own' if code.include?('delete_attribute')
+  raise 'the assign callback is gone' unless src.include?("add_action_callback('orphan_assign')")
+end
+
+check('DECLARE\'S RULES NEVER TOUCH SKETCHUP EITHER') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/67_declare.rb', __dir__))
+  pure = src[/module Declare(.*?)---- THE MODEL SIDE/m, 1].to_s
+  raise 'the pure half went missing' if pure.empty?
+  offenders = pure.gsub(/^\s*#.*$/, '').scan(/\b(?:Sketchup|Geom|UI|ENV)\b/).uniq
+  raise offenders.inspect unless offenders.empty?
+end
+
+check('A DIALOG DOES NOT OUTLIVE A CORE RELOAD, and the callbacks are not memoised') do
+  # 2026-09-01, and it cost an hour of a live session. The window had been open
+  # since the day before; `show` reused it and redrew a page whose button called
+  # `orphan_assign` INTO A DIALOG THAT HAD NEVER HEARD OF IT. JavaScript calling
+  # into nothing is silent, so the press did nothing and said nothing.
+  #
+  # The repository already knew the fact - claude/findings-2026-08-27-lit-shelves.md
+  # says an HtmlDialog bakes its HTML AND ITS CALLBACKS at open. That note was
+  # about HTML. This is the same fact wearing the callback's clothes, and this
+  # check is here so it is not learned a third time.
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/68_report.rb', __dir__))
+  code = src.gsub(/^\s*#.*$/, '')
+  raise 'the callbacks are gated behind a memo again' if code =~ /unless\s+@wired/
+  raise 'the window is not dropped at load time' unless code =~ /@window\s*=\s*nil/
+  raise 'a write that says nothing is a write nobody trusts' unless
+    src.include?('class="said"') || src.include?("class=\\\"said\\\"")
+end
+
 check('the report offers itself on the palette, and the callback matches') do
   html = Palette.html
   raise 'no report button' unless html.include?('sketchup.orphans()')
