@@ -61,11 +61,30 @@ module UCON
     module Report
       module_function
 
-      # Taken from the generator's own constants. Retyping either string here
-      # would make a rename split into two tags that look identical in a menu —
-      # the same trap Retag::TAGS names.
+      # THE TAGS ARE NO LONGER A DECLARATION, 2026-09-01. Dated and added; the
+      # header above stands. Until this date `declared?` meant `sits on
+      # Placeholder or Reserved`, and that was the same category error this file
+      # exists to name, from the other side: a tag decides which SHEET a body
+      # prints on, and eight scenes already hold saved opinions about these two.
+      # Declaring by tag would have cost a sheet every time.
+      #
+      # THE BRANCH HAD NEVER ONCE FIRED. Declared read 0 on every run: the only
+      # bodies on those tags are the engine's own, they carry a class, and
+      # `owned?` is asked first. Learned rule 18 - an invariant asserted sideways,
+      # found out the day it stops being vacuous. Probe 54 measured it: two
+      # bodies, both ours. Removing it changed the list by zero rows.
+      #
+      # The tags themselves are untouched and the generator still assigns them.
+      # They keep one job here, and it is honest: a body sitting on one of them
+      # with no recorded reason is FLAGGED, so that somebody who put it there by
+      # hand expecting silence is told why it is still listed, on the row, rather
+      # than discovering it as a bug.
       def declared_tags
         [Generator::PLACEHOLDER_TAG, Generator::RESERVED_TAG]
+      end
+
+      def on_a_declaring_tag?(node)
+        declared_tags.include?(node[:tag].to_s)
       end
 
       # ---- THE PURE RULES -------------------------------------------------
@@ -74,8 +93,22 @@ module UCON
         !node[:object_class].to_s.empty?
       end
 
+      # Not ours, and SAID SO on the body itself - core/67_declare.rb.
       def declared?(node)
-        declared_tags.include?(node[:tag].to_s)
+        Declare.declared_reason?(node[:declared])
+      end
+
+      # Ours, hand-drawn, no contract. It leaves the list and lands in a count
+      # that only a stamp can reduce.
+      def debt?(node)
+        node[:declared].to_s == Declare::DEBT
+      end
+
+      # What a person must still answer before a sheet can be issued.
+      def blocks_sheet?(node)
+        return true unless owned?(node) || declared?(node) || debt?(node)
+
+        declared?(node) && Declare.blocks_sheet?(node[:declared], node[:installed_by])
       end
 
       # Ours, anywhere at or below this node. Answers "is this a wrapper round
@@ -97,7 +130,7 @@ module UCON
       def orphans(nodes)
         out = []
         Array(nodes).each do |n|
-          next if owned?(n) || declared?(n)
+          next if owned?(n) || declared?(n) || debt?(n)
 
           if owns_anything?(n[:children])
             out.concat(orphans(n[:children]))
@@ -111,13 +144,19 @@ module UCON
       # Everything a person wants to see above the list, and every number in it
       # is derived from the same tree the list is, so the two cannot disagree.
       def counts(nodes)
-        c = { ours: 0, declared: 0, orphans: 0, empty: 0 }
+        c = { ours: 0, declared: 0, debt: 0, orphans: 0, empty: 0, blocked: 0,
+              by_reason: {} }
         walk = lambda do |list|
           Array(list).each do |n|
+            c[:blocked] += 1 if blocks_sheet?(n) && (declared?(n) || solid?(n))
             if owned?(n)
               c[:ours] += 1
             elsif declared?(n)
               c[:declared] += 1
+              r = n[:declared].to_s
+              c[:by_reason][r] = c[:by_reason].fetch(r, 0) + 1
+            elsif debt?(n)
+              c[:debt] += 1
             elsif owns_anything?(n[:children])
               walk.call(n[:children])
             elsif solid?(n)
@@ -155,6 +194,16 @@ module UCON
         "x #{mm(n[:x_mm])}  y #{mm(n[:y_mm])}  z #{mm(n[:z_mm])}"
       end
 
+      # A body somebody put on a declaring-looking tag by hand is STILL listed,
+      # and this is where that is explained - on the row, where it is felt.
+      # Otherwise the change of 2026-09-01 reads as a bug the first time it is
+      # met, and a person meeting it would reasonably conclude the tag is broken.
+      def tag_flag(node)
+        return '' unless on_a_declaring_tag?(node)
+
+        ' <span class="flag">on a declaring tag, not declared</span>'
+      end
+
       def html(items, c)
         rows = Array(items).map do |n|
           <<~ROW
@@ -162,7 +211,7 @@ module UCON
               <td class="nm">#{esc(n[:name])}</td>
               <td class="sz">#{esc(size_text(n))}</td>
               <td class="wh">#{esc(where_text(n))}</td>
-              <td class="tg">#{esc(n[:tag].to_s.empty? ? 'Layer0' : n[:tag])}</td>
+              <td class="tg">#{esc(n[:tag].to_s.empty? ? 'Layer0' : n[:tag])}#{tag_flag(n)}</td>
               <td class="fc">#{n[:faces].to_i}</td>
             </tr>
           ROW
@@ -197,11 +246,13 @@ module UCON
           .ok{color:#2b6a3f;background:#f0f7f2;padding:10px;border-radius:5px}
           .note{margin-top:14px;color:#6b6b70;font-size:11px;border-top:1px solid #e4e4e7;
                 padding-top:10px}
+          .flag{color:#a8321a;font-size:10px;white-space:nowrap}
           </style></head><body>
           <h1>Bodies no rule owns</h1>
           <p class="sub">Click a row to select it in the model. This report writes nothing.</p>
           <div class="sums">
             <div class="warn">Unowned<b>#{c[:orphans].to_i}</b></div>
+            <div>Ours, no contract<b>#{c[:debt].to_i}</b></div>
             <div>Ours<b>#{c[:ours].to_i}</b></div>
             <div>Declared not ours<b>#{c[:declared].to_i}</b></div>
             <div>Empty groups<b>#{c[:empty].to_i}</b></div>
@@ -213,8 +264,12 @@ module UCON
           <p class="note">A body is UNOWNED when it carries no object_class. A tag is not
           ownership: a hand-drawn body put on a UCON tag still appears here, because the tag
           decides which sheet it prints on and no rule has become responsible for it.
-          DECLARED means it sits on #{esc(declared_tags.join(' or '))} — said to be somebody
-          else's on purpose, and never reported as a defect.</p>
+          DECLARED means a scope reason is recorded ON THE BODY — said to be somebody else's
+          on purpose, and never reported as a defect. Putting a body on
+          #{esc(declared_tags.join(' or '))} does NOT declare it and never did; those tags
+          decide a sheet, and a row sitting on one says so.
+          OURS, NO CONTRACT is ours and hand-drawn: it leaves this list and only a stamp can
+          lower that number.</p>
           </body></html>
         HTML
       end
@@ -260,6 +315,8 @@ module UCON
             name:         Retag.display_name(e),
             object_class: oc.to_s,
             tag:          (e.layer ? e.layer.name : ''),
+            declared:     Declare.reason_of(e),
+            installed_by: Declare.installed_by_of(e),
             faces:        own.grep(Sketchup::Face).length,
             w_mm:         b.width.to_mm,
             h_mm:         b.depth.to_mm,

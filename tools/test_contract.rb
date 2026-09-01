@@ -46,6 +46,10 @@ require_relative '../src/ucon_cabinet_engine/core/66_retag'
 # rather than keeping copies, and a load order that hid that dependency would let
 # a copy creep back in. Its rules are pure; only its survey and its window have
 # ever heard of a model, and neither is reached from here.
+# 67_declare is the WRITING half of the report and is loaded before it, because
+# 68_report now asks it what a body's scope is instead of reading a tag. It is
+# pure apart from its two entity readers, which are never reached from here.
+require_relative '../src/ucon_cabinet_engine/core/67_declare'
 require_relative '../src/ucon_cabinet_engine/core/68_report'
 # 70_symbols touches the SketchUp API only when drawing; the geometry rules
 # themselves are pure and are checked here.
@@ -9259,8 +9263,10 @@ end
 # rather than in front of a model.
 Report = UCON::CabinetEngine::Report unless defined?(Report)
 
-def node(name, oc = '', tag = '', faces = 1, children = [])
+def node(name, oc = '', tag = '', faces = 1, children = [], declared = '',
+         installed_by = 'undecided')
   { id: name, name: name, object_class: oc, tag: tag, faces: faces,
+    declared: declared, installed_by: installed_by,
     w_mm: 600, h_mm: 780, d_mm: 620, x_mm: 0, y_mm: 0, z_mm: 0, children: children }
 end
 
@@ -9273,14 +9279,73 @@ end
 check('DECLARED IS THE BUCKET THAT KEEPS THE LIST READABLE') do
   # The client's Wolf range is hand-drawn, permanent, and not a defect. A report
   # that lists it every run is a report nobody opens on the fourth run.
-  gen  = UCON::CabinetEngine::Generator
-  tree = [node('48 WOLF', '', gen::PLACEHOLDER_TAG),
-          node('run gap', '', gen::RESERVED_TAG),
+  # REWRITTEN 2026-09-01: the reason is recorded ON THE BODY. Until that date
+  # this check proved the bucket through two TAGS, and the check below is what
+  # replaced that half of it.
+  tree = [node('48 WOLF', '', '', 1, [], 'owner_furnished', 'not_ucon'),
+          node('the room', '', '', 41, [], 'building'),
           node('a loose box')]
   names = Report.orphans(tree).map { |n| n[:name] }
   raise names.inspect unless names == ['a loose box']
   c = Report.counts(tree)
   raise c.inspect unless c[:declared] == 2 && c[:orphans] == 1
+  raise c[:by_reason].inspect unless c[:by_reason] == { 'owner_furnished' => 1, 'building' => 1 }
+end
+
+check('A TAG NO LONGER DECLARES ANYTHING, and the row says so') do
+  # 2026-09-01. The tags stay, the generator still assigns them, and Retag still
+  # refuses to move a body that carries one. What they stopped being is a
+  # DECLARATION - that was the same category error this report exists to name,
+  # only from the other side, and it cost a sheet every time because a tag
+  # decides which sheet a body prints on.
+  gen  = UCON::CabinetEngine::Generator
+  tree = [node('48 WOLF', '', gen::PLACEHOLDER_TAG),
+          node('run gap', '', gen::RESERVED_TAG)]
+  raise 'a tag still declared something' unless Report.counts(tree)[:declared].zero?
+  raise 'a tagged body vanished from the list' unless Report.orphans(tree).length == 2
+  page = Report.html(Report.orphans(tree), Report.counts(tree))
+  raise 'the row does not explain itself' unless page.include?('not declared')
+end
+
+check('THE DECLARATION IS NOT IN THE CONTRACT DICTIONARY, and it cannot be') do
+  # Object Contract v2 SS1.2 rejects any key outside the closed KEYS list, and
+  # ALWAYS_REQUIRED demands object_class on anything written into that
+  # dictionary. A declared body has NO object_class - that is the definition of
+  # the thing. So a declaration there would either violate the contract or force
+  # somebody to invent a class for a client's refrigerator. Same argument
+  # core/08_project.rb makes for UCON_PROJECT: a different dictionary on a
+  # different kind of fact.
+  d = UCON::CabinetEngine::Declare
+  k = UCON::CabinetEngine::Contract
+  raise 'the scope dictionary is the contract dictionary' if d::DICTIONARY == k::DICTIONARY
+  leaked = [d::REASON_KEY, d::INSTALL_KEY] & k::KEYS
+  raise "scope keys leaked into the contract: #{leaked.inspect}" unless leaked.empty?
+  raise 'object_class stopped being required' unless k::ALWAYS_REQUIRED.include?('object_class')
+end
+
+check('A DECLARED CONTAINER TAKES ITS WHOLE SUBTREE WITH IT') do
+  # The lever that keeps the list short WITHOUT anybody maintaining it: one group
+  # of client appliances declared once, and every machine dropped into it
+  # afterwards is born declared. Clicking bodies one at a time is O(n) forever.
+  inner = [node('48 WOLF'), node('a hood somebody drew'), node('a fridge box')]
+  tree  = [node('client appliances', '', '', 0, inner, 'owner_furnished', 'not_ucon')]
+  raise Report.orphans(tree).map { |n| n[:name] }.inspect unless Report.orphans(tree).empty?
+  raise Report.counts(tree).inspect unless Report.counts(tree)[:declared] == 1
+end
+
+check('LEARNED RULE 12: the plinth stays visible when the Wolf is declared') do
+  # THE DEFECT THIS WHOLE TOOL EXISTS FOR, run against the guard. The fridge
+  # plinth is OURS - we sell it, it is in the order - and it is hand-drawn, so no
+  # rule owns it. If a declare button can ever make it disappear, the button has
+  # become a way of shortening a list at the expense of honest debts, which is
+  # the papering-over the report was written to find. Whoever changes this reads
+  # this paragraph.
+  tree = [node('48 WOLF', '', '', 1, [], 'owner_furnished', 'not_ucon'),
+          node('Plinth (REPRESENTATION)', '', '', 1, [], UCON::CabinetEngine::Declare::DEBT)]
+  c = Report.counts(tree)
+  raise c.inspect unless c[:declared] == 1 && c[:debt] == 1 && c[:orphans].zero?
+  raise 'the debt vanished from the page' unless
+    Report.html(Report.orphans(tree), c).include?('Ours, no contract')
 end
 
 check('ONE HAND-BUILT ASSEMBLY IS ONE ROW, not twenty') do
@@ -9316,6 +9381,94 @@ check('SENTINEL: A TAG IS NOT OWNERSHIP, and the fridge plinth is why') do
   tagged = node('Plinth (REPRESENTATION)', '', UCON::CabinetEngine::Retag::TAGS['cabinet'])
   raise 'a tag was allowed to stand in for a contract' unless
     Report.orphans([tagged]).length == 1
+end
+
+# ---------------------------------------------------------------------------
+# THE WORDS THAT GO ON A SHEET - core/67_declare.rb, settled 2026-08-31 against
+# real drawing sets and built the day after. These are pure string questions and
+# every one of them is decided here rather than in front of a GC.
+
+check('THE PRINTED LOOKUP IS TOTAL, and nothing falls through to a default') do
+  # A pair that resolved to a default would be a scope statement nobody wrote, on
+  # a drawing somebody signs. Every reason crossed with every installer must
+  # either produce a phrase or produce nothing ON PURPOSE.
+  d = UCON::CabinetEngine::Declare
+  d::ALL_REASONS.each do |r|
+    d::INSTALLERS.each do |i|
+      begin
+        d.note(r, i)
+      rescue ArgumentError => e
+        raise "#{r} + #{i} fell through: #{e.message}"
+      end
+    end
+  end
+  raise 'an unknown reason was accepted' unless
+    begin; d.note('by_client', 'ucon'); false; rescue ArgumentError; true; end
+  raise 'an unknown installer was accepted' unless
+    begin; d.note('by_others', 'by_owner'); false; rescue ArgumentError; true; end
+end
+
+check('NO PRINTED PHRASE NAMES A COMPANY, and none says OFCI') do
+  # 2026-08-31, Andriy: the installer may end up being somebody else, so a
+  # company name on a drawing goes stale. The fix was not a better name for us -
+  # a contract document states scope RELATIVE TO THIS CONTRACT. And OFCI is
+  # refused separately: on a sheet a GC reads, "Contractor Installed" reads as
+  # the GC, and to them we are a subcontractor.
+  d = UCON::CabinetEngine::Declare
+  phrases = d::NOTES.values + d::UNCONDITIONAL.values.compact + [d::DEFAULT_SENTENCE] +
+            d::GLOSS.values
+  bad = phrases.select { |t| t =~ /UCON|OFCI|OFOI|CLIENT/i }
+  raise "a phrase names a company or claims an installer: #{bad.inspect}" if bad.any?
+end
+
+check('UNDECIDED PRINTS NOTHING AND BLOCKS A SHEET - and an unasked question does not') do
+  # Learned rule 7 with a mirror on it. An undecided body printing nothing would
+  # read as OURS under the legend's default sentence, and claim work nobody
+  # decided. But nobody installs an existing wall: on those reasons the installer
+  # was never asked, and an unasked question must not stop a drawing.
+  d = UCON::CabinetEngine::Declare
+  raise 'undecided printed something' unless d.note('owner_furnished', 'undecided').nil?
+  raise 'undecided did not block' unless d.blocks_sheet?('owner_furnished', 'undecided')
+  raise 'an answered body blocked' if d.blocks_sheet?('owner_furnished', 'ucon')
+  raise 'an unasked question blocked' if d.blocks_sheet?('existing', 'undecided')
+  raise 'the building blocked a sheet' if d.blocks_sheet?('building', 'undecided')
+  raise 'nothing at all did not block' unless d.blocks_sheet?('', 'undecided')
+end
+
+check('THE LEGEND NAMES WHAT THE SHEET USES, AND NOTHING ELSE') do
+  # A legend naming BY OTHERS where nothing is by others sends a reader hunting;
+  # a note with no legend line is worse. Same failure as an index nobody
+  # maintains - met in this repository on 2026-08-31, when two notes were missing
+  # from claude/README.md and this suite caught it.
+  d = UCON::CabinetEngine::Declare
+  lines = d.legend([%w[owner_furnished ucon], %w[existing undecided], %w[building undecided]])
+  raise lines.inspect unless lines.first == d::DEFAULT_SENTENCE
+  raise 'OWNER FURNISHED is missing' unless lines.any? { |l| l.start_with?('OWNER FURNISHED —') }
+  raise 'EXISTING TO REMAIN is missing' unless lines.any? { |l| l.start_with?('EXISTING TO REMAIN') }
+  raise 'BY OTHERS was named and is not used' if lines.any? { |l| l.start_with?('BY OTHERS') }
+  raise 'the building printed a legend line' if lines.any? { |l| l =~ /building/i }
+  raise 'N.I.C. was listed and is not used' unless
+    d.abbreviations([%w[owner_furnished ucon]]).empty?
+  raise 'N.I.C. is used and was not listed' unless
+    d.abbreviations([%w[owner_furnished not_ucon]]).key?('N.I.C.')
+end
+
+check('OURS IS NOT DECLARABLE, and the refusal names the class') do
+  # Otherwise somebody retires one of our own cabinets from the report in a
+  # month. A refusal that does not say what it saw is a refusal people work
+  # around, so the message carries the class.
+  d = UCON::CabinetEngine::Declare
+  begin
+    d.validate!(reason: 'by_others', object_class: 'cabinet')
+    raise 'a cabinet was declared not ours'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('cabinet')
+  end
+  ok = d.validate!(reason: 'owner_furnished', installed_by: 'not_ucon')
+  raise ok.inspect unless ok == { 'reason' => 'owner_furnished', 'installed_by' => 'not_ucon' }
+  # an answer to a question nobody put is not stored
+  parked = d.validate!(reason: 'existing', installed_by: 'ucon')
+  raise parked.inspect unless parked['installed_by'] == 'undecided'
 end
 
 check('the report offers itself on the palette, and the callback matches') do

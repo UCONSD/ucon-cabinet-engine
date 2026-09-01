@@ -282,6 +282,20 @@ same way `Retag.object_class_of` reads: **instance first, then definition.** Any
 other reading and ownership and declaration disagree on the first copy —
 learned rule 11, the dictionary is the object.
 
+> **CORRECTED 2026-09-01, DATED AND ADDED (learned rule 9). The sentence above is
+> wrong about the DICTIONARY and right about everything else.** It cannot be the
+> `CabinetEngine` dictionary, and the contract says so twice: §1.2 rejects any key
+> outside the closed `KEYS` list, and `ALWAYS_REQUIRED` demands `object_class` on
+> anything written there. **A declared body has no `object_class` — that is the
+> entire definition of the thing being declared.** So a declaration in that
+> dictionary would either violate the contract or force somebody to invent a
+> class for a client's refrigerator. It lives in **`UCON_SCOPE`**, on the body,
+> keys `reason` and `installed_by`, read instance-then-definition exactly as
+> described. This is the same argument `core/08_project.rb` makes for
+> `UCON_PROJECT`: a different dictionary on a different kind of fact — the
+> contract describes the objects WE make, and a declaration describes one we do
+> not. A suite check pins it so the two can never merge.
+
 **Why not a tag, given the current code declares by tag:**
 
 1. Moving a body onto `UCON — Placeholder (not ours)` changes which SHEET it
