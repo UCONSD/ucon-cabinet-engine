@@ -271,7 +271,9 @@ its `data/rules.json`:
 `finishes-and-price-bands-2026-08-22.md`, `contract-v16-companions-2026-08-22.md`,
 `picker-ui-backlog-2026-08-20.md`, `price-trust-2026-08-25.md` (what a fetched
 number is worth), `plan-2026-08-25-b6-run-gap.md` (the alternatives that were
-rejected before the run gap was built).
+rejected before the run gap was built),
+`three-level-validation-2026-09-02.md` (NKBA / factory / installer, what can and
+cannot be auto-filled, and the band-6 result that closed the p.13 question).
 
 **For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
 themselves live in `docs/Elda_Open_Questions_v0.1.md`.
