@@ -273,7 +273,11 @@ its `data/rules.json`:
 number is worth), `plan-2026-08-25-b6-run-gap.md` (the alternatives that were
 rejected before the run gap was built),
 `three-level-validation-2026-09-02.md` (NKBA / factory / installer, what can and
-cannot be auto-filled, and the band-6 result that closed the p.13 question).
+cannot be auto-filled, and the band-6 result that closed the p.13 question),
+`spec-2026-09-02-model-vs-order-reconciliation.md` (how the model is brought into
+agreement with order 30833 — the geometric join, the SD-to-PD mapping, and all 69
+rows as the fixture; also the proof that neither her DXF nor her SKP carries a
+single article code).
 
 **For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
 themselves live in `docs/Elda_Open_Questions_v0.1.md`.
