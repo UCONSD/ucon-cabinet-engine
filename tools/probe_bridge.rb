@@ -71,6 +71,33 @@
 # probe. An escaped inner commit repeats - the same script writes again. A
 # person's edit does not. Learned rule 20.
 #
+# THE OPERATION WAS BEING OPENED ON THE WRONG MODEL, 2026-09-02, and this is
+# the fix, dated and added rather than folded into the paragraphs above. run_one
+# did `model = Sketchup.active_model`, and on this Mac active_model answered with
+# a document whose WINDOW WAS CLOSED - a Sub-Zero trade CAD out of ~/Downloads -
+# for twenty minutes while 545 stood in front. So start_operation,
+# abort_operation and the structural fingerprint were all about a file nobody
+# had asked about. For a reading probe that cost nothing. For a writing one it
+# was the entire safety net, and the fingerprint would have reported "rolled
+# back" while watching the wrong document.
+# Account: claude/findings-2026-09-02-active-model-is-not-the-front-window.md.
+#
+# THE MODEL IS NOW RESOLVED ONCE, IN run_one, BEFORE THE OPERATION OPENS, and
+# handed to the probe as UCON::ProbeBridge.model - so the script, the operation
+# and the fingerprint all name the same document. It is resolved the way the
+# probes already resolve it: ObjectSpace.each_object(Sketchup::Model), matched on
+# the title, and REFUSED unless exactly one model answers. A refusal runs
+# nothing, opens no operation and writes the candidates it found into the outbox.
+#
+# WHICH model: a probe says so itself with a line in its own first 4 KB,
+#
+#   # UCON-MODEL: 30833
+#
+# and a probe that says nothing gets DEFAULT_TARGET, which is 545. This matters
+# because two probes of 2026-09-02 want two different documents - 147 reads 545
+# and 148 reads Elda's estimate model - and a bridge with one hard-wired name
+# would put the operation back on the wrong one for the second of them.
+#
 # ARMED MODE is the deliberate exception: UCON::ProbeBridge.arm! makes the next
 # ONE run commit instead of abort, and disarms itself immediately afterwards.
 # It is for a script that is meant to build something. It is never sticky.
@@ -79,6 +106,9 @@
 module UCON
   module ProbeBridge
     POLL_S = 2
+    # The model a probe gets when it names none. A probe names one with a
+    # "# UCON-MODEL: <fragment>" line in its own first 4 KB.
+    DEFAULT_TARGET = '545_Avenida'
     DIR    = File.join(File.dirname(__FILE__), 'probe_inbox')
     DONE   = File.join(DIR, 'done')
     OUT    = File.join(File.dirname(__FILE__), 'probe_outbox.txt')
@@ -89,6 +119,21 @@ module UCON
 
     class << self
       attr_reader :timer, :runs
+
+      # THE MODEL OF THE RUN IN PROGRESS. A probe reads this instead of asking
+      # Sketchup.active_model, and then the script, the operation and the
+      # fingerprint are provably about one document. nil outside a run.
+      attr_reader :model
+
+      def target
+        @target ||= DEFAULT_TARGET
+      end
+
+      def target=(fragment)
+        @target = fragment.to_s
+        puts "UCON probe bridge: default model is now '#{@target}'"
+        @target
+      end
 
       def start
         stop
@@ -128,6 +173,50 @@ module UCON
         Dir.mkdir(path) unless File.directory?(path)
       end
 
+      # WHICH MODEL THIS PROBE ASKED FOR. Read out of the file's own text before
+      # anything is loaded, because the operation has to be open on the right
+      # model before the script runs, and only the script knows which it wants.
+      def target_for(path)
+        head = File.open(path, 'r') { |f| f.read(4096) }.to_s
+        want = head[/^[[:blank:]]*#[[:blank:]]*UCON-MODEL[[:blank:]]*:[[:blank:]]*(\S.*?)[[:blank:]]*$/, 1]
+        want.nil? || want.empty? ? target : want
+      end
+
+      # The probes' own resolver, moved here so there is one of it. Title match,
+      # case-insensitive, and the CALLER decides what a count other than one
+      # means - this returns the list rather than picking.
+      def resolve(fragment)
+        rx = Regexp.new(Regexp.escape(fragment.to_s), Regexp::IGNORECASE)
+        found = []
+        ObjectSpace.each_object(Sketchup::Model) do |mm|
+          found << mm if mm.title.to_s =~ rx
+        end
+        found
+      end
+
+      # NOTHING RAN. No operation was opened, so there is nothing to roll back;
+      # the file still moves to done/ so the bridge does not retry it forever.
+      def refuse(path, name, want, found)
+        lines = ["UCON probe bridge - run #{@runs}",
+                 "file    : #{name}",
+                 "at      : #{Time.now.strftime('%Y-%m-%d %H:%M:%S')}",
+                 "REFUSED - #{found.length} model(s) answer to '#{want}', and it must be exactly 1.",
+                 '  Nothing was loaded, no operation was opened, nothing was written.',
+                 '  Open the document you meant (File > Open, as its own document),',
+                 '  or name another with a "# UCON-MODEL: <fragment>" line in the probe.',
+                 '-' * 72]
+        found.each { |mm| lines << "  candidate: #{mm.title}   #{mm.path}" }
+        lines << "  active_model would have said: #{begin
+                                                      Sketchup.active_model.title
+                                                    rescue StandardError
+                                                      '(none)'
+                                                    end}"
+        write_out(lines)
+        File.rename(path, File.join(DONE, "#{@runs}_REFUSED_#{name}"))
+        Sketchup.status_text = "UCON probe bridge: run #{@runs} REFUSED - #{name}"
+        puts "UCON probe bridge: REFUSED #{name} -> #{OUT}"
+      end
+
       def tick
         return unless @timer
 
@@ -143,10 +232,21 @@ module UCON
 
       def run_one(path)
         @runs = @runs.to_i + 1
-        model  = Sketchup.active_model
         name   = File.basename(path)
         armed  = @armed
         @armed = false
+
+        # RESOLVED ONCE, HERE, BEFORE THE OPERATION OPENS - see the header.
+        # Everything below uses this one object: the operation, the fingerprint,
+        # the header line, and the probe itself through .model.
+        want  = target_for(path)
+        found = resolve(want)
+        if found.length != 1
+          refuse(path, name, want, found)
+          return
+        end
+        model  = found.first
+        @model = model
         # A STRUCTURAL FINGERPRINT, not model.modified?. See the header: the flag
         # is already true in any model somebody has been working in, so it could
         # not tell an aborted run from an applied one.
@@ -157,7 +257,16 @@ module UCON
                   "file    : #{name}",
                   "at      : #{Time.now.strftime('%Y-%m-%d %H:%M:%S')}",
                   "mode    : #{armed ? 'ARMED - this run COMMITS' : 'rolled back (abort_operation)'}",
-                  "model   : #{File.basename(model.path.to_s.empty? ? '(unsaved)' : model.path)}",
+                  "model   : #{model.title}   (asked for '#{want}', 1 match)",
+                  "on disk : #{File.basename(model.path.to_s.empty? ? '(unsaved)' : model.path)}",
+                  # PRINTED, AND DELIBERATELY NOT USED. When these two disagree
+                  # the 2026-09-02 finding is happening again, and the run is
+                  # still correct - which is the whole point of printing it.
+                  "active  : #{begin
+                                 Sketchup.active_model.title
+                               rescue StandardError
+                                 '(none)'
+                               end}   - NOT USED",
                   # THE CODE IN MEMORY, NOT THE CODE ON DISK, and the difference
                   # has already cost one wrong conclusion: an export rule was
                   # fixed in the file, the probe ran against the version
@@ -187,6 +296,7 @@ module UCON
           else
             model.abort_operation
           end
+          @model = nil
         end
 
         body.unshift(buf.string) unless buf.string.empty?

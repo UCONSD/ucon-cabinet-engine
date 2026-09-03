@@ -70,6 +70,72 @@ can go.**
 
 ---
 
+## As of 2026-09-03 — a DATED ADDITION, and it is two rows above that are behind
+
+**Learned rule 9: nothing above this line is edited.** Both rows named here are
+still true as far as they go; what follows is what happened after they were
+written, and the reader of either row should read this one as well.
+
+### **The Avenida Primavera model** — the row above is behind by two readings
+
+**IT IS SAVED, and the 2026-09-02 handoff's warning that it was not is stale.**
+Read off the model itself on 2026-09-02 evening:
+`545_Avenida_Primavera_Kitchen_Preliminary_Model_v0.1_1`, `modified? = false`,
+on disk **2026-09-02 16:37:25**, 26 643 507 bytes, 77 top-level entities, 318
+definitions, 8 scenes, 15 tags, and **two bodies carrying `UCON_SCOPE`** —
+Group#1 and Group#5, both declared `building` on 2026-09-01. The 09-01 work did
+not live in an open window; it is on disk.
+
+**AND ITS SIXTY ORDERABLE BODIES HAVE BEEN READ AND JOINED AGAINST ESTIMATE
+2026/30833** — `claude/recon-2026-09-02-model-vs-30833.md`, 69 rows, one verdict
+each: **27 MATCH · 11 MODEL WRONG (12 of our bodies) · 3 HERS WRONG · 14 OPEN ·
+14 NO BODY.** The register of what we keep and what stays open is
+`claude/divergence-register-2026-09-02.md`. **NOTHING HAS BEEN APPLIED TO THE
+MODEL**; the apply list is that table's §6 and it is owed. Two of our bodies are
+paid for by no row of hers (the vitrine end panel and the range reservation), and
+one row of hers — 28, `FRN007170747` — has nothing on our side at all.
+
+**The row above says the seven CUSTOM boxes became `SD0631` ×6 and `SD0930` ×1,
+and the estimate says most of those codes are wrong.** Ten of our upper boxes
+carry a code the factory did not use: one `SD0930` is her `PD0999`, four
+`SD0631` are `PD0799`, three more are `PD0699`, and **two `SD0631` are one
+`PE1299`** — a body count change, not a rename. The measured dimensions stay
+ours; the codes are hers. Nothing of this is in the model yet.
+
+### **The probe bridge** — the row above describes a rollback that was being taken on the wrong document
+
+**`Sketchup.active_model` IS NOT THE WINDOW IN FRONT.** Found 2026-09-02:
+`ObjectSpace.each_object(Sketchup::Model)` returned **six live models** in one
+Ruby, four of them documents whose windows are shut, and `active_model` answered
+with one of those four — a Sub-Zero trade CAD out of `~/Downloads` — for twenty
+minutes while 545 stood in front with the checkmark beside it in the Window menu.
+Account: `claude/findings-2026-09-02-active-model-is-not-the-front-window.md`.
+
+So `run_one` was opening `start_operation` and closing `abort_operation` on a
+file nobody had asked about, and **the structural fingerprint the row above
+describes was watching that same wrong file.** For a reading probe it cost
+nothing and nothing was lost. For a writing probe it was the entire safety net,
+and the run would have reported itself rolled back.
+
+**FIXED 2026-09-03.** `run_one` resolves the model ONCE, before the operation
+opens, out of `ObjectSpace` by title, and **REFUSES unless exactly one model
+answers** — a refusal loads nothing, opens no operation and writes the candidates
+it found into the outbox. The resolved model is handed to the probe as
+`UCON::ProbeBridge.model`, so the script, the operation and the fingerprint are
+provably one document. A probe names the document it wants with a
+`# UCON-MODEL: <fragment>` line in its own first 4 KB and gets `DEFAULT_TARGET`
+— `545_Avenida` — if it names none; two probes of 2026-09-02 want two different
+documents, so one hard-wired name would have put the operation back on the wrong
+one for the second of them. **The header of every run now prints the resolved
+title AND what `active_model` would have said, marked NOT USED**, so the next
+occurrence of this is visible on the face of the outbox rather than found again.
+
+**What the fix does NOT change:** an inner `commit_operation` still closes the
+outer one, and `Generator.build` still has one. The rollback is still a mechanism
+with one documented hole; it is now at least a mechanism aimed at the right file.
+
+---
+
 ## The extraction, group by group
 
 Plan: `claude/extraction-plan-2026-08-23.md` §5 — **but read the manifest

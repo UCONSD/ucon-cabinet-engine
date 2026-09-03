@@ -71,6 +71,48 @@ the operation, the fingerprint and the script all name the same one. Until that
 is done, **nothing may be applied through the bridge**:
 `claude/recon-2026-09-02-model-vs-30833.md` §0 and §6 both stop on it.
 
+## DONE 2026-09-03 — the owed half, dated and added
+
+`run_one` no longer asks `Sketchup.active_model`. It resolves the model **once,
+before the operation opens**, out of `ObjectSpace` by title, and **refuses unless
+exactly one model answers**: a refusal loads nothing, opens no operation, writes
+the candidates it found into the outbox and moves the file to
+`done/<n>_REFUSED_<name>.rb`. The resolved model is handed to the probe as
+`UCON::ProbeBridge.model`, so the script, the operation and the fingerprint are
+one object rather than three answers to one question.
+
+**Which document, and why it is not one hard-wired name.** A probe says what it
+wants with a line in its own first 4 KB —
+
+    # UCON-MODEL: 30833
+
+— and a probe that says nothing gets `DEFAULT_TARGET`, `545_Avenida`. The two
+probes this finding was written about want two DIFFERENT documents: 147 reads
+545 and 148 reads Elda's estimate model. A bridge that resolved 545 for both
+would have re-created this bug for the second one, in the same shape, with the
+fix in place.
+
+**And the header of every run now prints both** — the resolved title, and what
+`active_model` would have said, marked `NOT USED`. When those two lines disagree
+the reader is looking at this finding happening again, and at a run that is
+nevertheless correct.
+
+**PROVEN AGAINST THE DEFECT BEFORE BEING TRUSTED (learned rule 12).** Headless,
+with three stub models and `active_model` deliberately pointed at the closed
+`T42IT100NP_TradeCAD`: an undirected probe resolved 545, a probe carrying
+`# UCON-MODEL: 30833` resolved nothing and refused, a probe naming `Elliana`
+resolved one, and the same probe against a second model whose title also
+contains `Elli` refused with two candidates. The in-SketchUp proof is the
+outbox header of the next run: `model` says 545 or 30833 while `active` says
+whatever `active_model` is holding that day.
+
+**Still true and NOT fixed by this**, because it is a different hole: an inner
+`commit_operation` closes the outer one, and `Generator.build` has one. The
+rollback remains a mechanism with one documented exception. It is now a mechanism
+aimed at the right file.
+
+---
+
 ## The rule this is an instance of
 
 Learned rule 13 — *a record of an outside action is only true if something checks
