@@ -277,7 +277,18 @@ cannot be auto-filled, and the band-6 result that closed the p.13 question),
 `spec-2026-09-02-model-vs-order-reconciliation.md` (how the model is brought into
 agreement with order 30833 — the geometric join, the SD-to-PD mapping, and all 69
 rows as the fixture; also the proof that neither her DXF nor her SKP carries a
-single article code).
+single article code),
+`recon-2026-09-02-model-vs-30833.md` (**the filled table** — 69 rows, one verdict
+each, the apply list, and why the 1 mm triple join had to become a face join),
+`divergence-register-2026-09-02.md` (what we keep, what she got wrong, and what
+nobody has decided — so the next comparison can tell a decision from a defect).
+
+**And one finding that is about the TOOLING rather than the kitchen:**
+`findings-2026-09-02-active-model-is-not-the-front-window.md` — `Sketchup.active_model`
+answered with a document whose window was closed for twenty minutes while another
+was in front, and `tools/probe_bridge.rb` opens its rollback on whatever that
+call returns. **It blocks the apply step**; the probes are fixed and the bridge is
+not.
 
 **For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
 themselves live in `docs/Elda_Open_Questions_v0.1.md`.

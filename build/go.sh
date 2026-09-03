@@ -43,6 +43,7 @@ git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
         tools/probe_inbox_hold_107.rb tools/probe_inbox_hold_112.rb \
         tools/probe_verify_finishes.rb \
         tools/probe_top_measure.rb \
+        tools/probe_recon_elements.rb \
         tools/probe_bridge.rb \
         .gitignore build/go.sh
 
