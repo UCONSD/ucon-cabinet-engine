@@ -188,6 +188,53 @@ processes and nothing in the tooling can.
 
 ---
 
+## As of 2026-09-03, evening — the order sheet says what the factory must answer
+
+**Andriy named the session's goal in one sentence:** bring the model into
+agreement with what Elda sent, so that **our output table reads like hers**. The
+deliverable is therefore `Export.rows` and the CSV behind the *Export order*
+button — everything else this week has been in service of it.
+
+**`85_export.rb` gains one column, `flag`, and a sort.** Suites now **607 / 84 /
+46**; the five new checks are all on this.
+
+- **`NO ARTICLE`** — the body carries no code at all. **These sort to the top of
+  the sheet**, because the CSV GOES TO ELDA and she starts there: the first block
+  is not decoration, it is the list of questions the factory is being asked.
+- **`A DISEGNO`** — the body carries a code that is in no registry row we hold.
+  A made-to-drawing position the factory has already named (`PE1299`, the
+  `PD0x99` family of estimate 2026/30833). Nobody has to assign it again, and
+  nobody may take it for a catalog article. Her wording on purpose.
+- **A catalog article carries no flag**, and the empty cell is the common case.
+
+**A WORD AND NOT A COLOUR, and that was Andriy's call (option B):** a CSV has no
+colour, the sheet is an INTERMEDIATE — pasted into a SketchUp schedule that
+becomes a PDF or goes straight to a printer — and whoever opens it can
+conditional-format a word into any colour they like. Stating the fact and
+leaving the paint to the page also means the flag survives the paste.
+
+**The sort is over BLOCKS, never over lines.** A row is a tree; its hand,
+variants, hardware and companions carry no Riga number and mean nothing apart
+from the numbered row above them. Within one rank the caller's order is
+unchanged — that order is the walk of the model — and `row` is numbered AFTER
+sorting, so it counts the sheet the reader sees, which is what her row number
+means too.
+
+**The flag is asked of the REGISTRY, never of the object.** Whether a code is a
+catalog article is a catalog fact; `Registry.lookup` raises on a code it does not
+hold and that raise is the answer. Same discipline as `ordered_width_note`.
+
+**Reservations are untouched.** They are printed beside the order and never in
+it (`appliance-rules-decided.md` §12) and they carry no code by design, so
+flagging them would invite exactly the reading that block exists to prevent.
+
+**AND THE FIRST BLOCK IS THE SESSION'S OWN PROGRESS BAR.** Four bodies carry no
+code today — the three Sub-Zero overlay panels and `UCON-BESP-001`. Every code
+taken back off her order moves a row out of `NO ARTICLE`. When that block is
+empty, the model and the order agree.
+
+---
+
 ## The extraction, group by group
 
 Plan: `claude/extraction-plan-2026-08-23.md` §5 — **but read the manifest

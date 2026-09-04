@@ -4542,6 +4542,108 @@ check('the FILTER lives in the pure module, so no caller can lose it') do
     rows.select { |r| r['row'] }.map { |r| r['row'] } == [1, 2]
 end
 
+check('THE FLAG NAMES WHAT ELDA MUST STILL ANSWER, AND THOSE ROWS SORT FIRST') do
+  # Andriy, 2026-09-03: the schedule goes TO Elda, she assigns the codes our
+  # catalog cannot give us, and she starts at the top. So the first block of the
+  # sheet is not decoration - it is the list of questions, and it has to be a
+  # block rather than rows scattered down the page.
+  no_code = {
+    'schema_version' => '2', 'object_class' => 'panel', 'manufacturer' => 'UCON',
+    'geometry_kind' => 'linear', 'width_mm' => 730, 'depth_mm' => 22, 'height_mm' => 1810,
+    'unit_type' => 'Refrigerator overlay panel', 'code' => nil,
+    'code_status' => 'PRELIMINARY', 'status' => 'PLANNING', 'source_ref' => 'measured'
+  }
+  Contract.validate!(no_code.dup)
+
+  rows = Export.rows([export_attrs('B80601'), no_code])
+  units = rows.select { |r| r['level'].zero? }
+  raise units.map { |r| r['flag'] }.inspect unless
+    units.map { |r| r['flag'] } == [Export::FLAG_NO_ARTICLE, nil]
+  raise 'the flagged row must be first on the sheet' unless units.first['row'] == 1
+  raise 'a catalog article carries no flag' unless units.last['flag'].nil?
+  raise 'and the words in the description are not replaced by the flag' unless
+    units.first['description'].to_s.include?('NO ARTICLE')
+end
+
+check('A CODE THE CATALOG DOES NOT PRINT IS FLAGGED, AND IT IS NOT THE SAME FLAG') do
+  # claude/decisions-2026-09-03-factory-assigned-codes.md. `PE1299` came off
+  # estimate 2026/30833 and is in no registry row and in none of the four Cesar
+  # volumes - it is a made-to-drawing position the FACTORY has already named. So
+  # nobody has to assign it again, and a reader must not take it for a catalog
+  # article either. Two different facts, two different words.
+  a_disegno = {
+    'schema_version' => '2', 'object_class' => 'cabinet', 'manufacturer' => 'cesar',
+    'geometry_kind' => 'linear', 'width_mm' => 1220, 'depth_mm' => 620, 'height_mm' => 720,
+    'unit_type' => 'Wall unit H.72, made to drawing', 'code' => 'PE1299',
+    'code_status' => 'PRELIMINARY', 'status' => 'PLANNING',
+    'source_ref' => 'Metron estimate 2026/30833 row 8'
+  }
+  Contract.validate!(a_disegno.dup)
+  raise 'PE1299 must not be in the registry - this check assumes it is not' unless
+    Export.send(:catalog_article?, 'PE1299') == false
+
+  units = Export.rows([export_attrs('B80601'), a_disegno])
+               .select { |r| r['level'].zero? }
+  raise units.map { |r| r['flag'] }.inspect unless
+    units.map { |r| r['flag'] } == [Export::FLAG_A_DISEGNO, nil]
+  raise 'and it keeps OUR measured width, not the slot width' unless
+    units.first['l_mm'] == 1220
+end
+
+check('THE THREE RANKS ORDER THE SHEET, AND THE FLAG IS ASKED OF THE REGISTRY') do
+  no_code = { 'schema_version' => '2', 'object_class' => 'panel', 'manufacturer' => 'UCON',
+              'geometry_kind' => 'linear', 'width_mm' => 483, 'depth_mm' => 22,
+              'height_mm' => 1810, 'unit_type' => 'Freezer overlay panel', 'code' => nil,
+              'code_status' => 'PRELIMINARY', 'status' => 'PLANNING', 'source_ref' => 'measured' }
+  custom  = { 'schema_version' => '2', 'object_class' => 'cabinet', 'manufacturer' => 'cesar',
+              'geometry_kind' => 'linear', 'width_mm' => 1220, 'depth_mm' => 620,
+              'height_mm' => 720, 'unit_type' => 'made to drawing', 'code' => 'PE1299',
+              'code_status' => 'PRELIMINARY', 'status' => 'PLANNING',
+              'source_ref' => 'estimate 2026/30833 row 8' }
+
+  # Handed to the exporter in the WRONG order on purpose.
+  units = Export.rows([export_attrs('B80601'), custom, no_code])
+               .select { |r| r['level'].zero? }
+  raise units.map { |r| [r['row'], r['flag']] }.inspect unless
+    units.map { |r| r['flag'] } == [Export::FLAG_NO_ARTICLE, Export::FLAG_A_DISEGNO, nil]
+  raise 'numbering must count the SHEET, not the walk of the model' unless
+    units.map { |r| r['row'] } == [1, 2, 3]
+
+  # AND THE OBJECT DOES NOT GET A VOTE. A body may say anything about itself;
+  # whether its code is a catalog article is a catalog fact. Same discipline as
+  # ordered_width_note and front_layout_for.
+  liar = custom.merge('unit_type' => 'Top element with door - 1 rh or lh door - 1 shelf')
+  raise 'a body cannot talk itself into being a catalog article' unless
+    Export.rows([liar]).first['flag'] == Export::FLAG_A_DISEGNO
+end
+
+check('THE TREE MOVES AS ONE - a sort must never scatter a unit variants') do
+  # The children carry no Riga number and mean nothing apart from the numbered
+  # row above them. Sorting LINES instead of BLOCKS would put a hand line under
+  # a stranger, and the sheet would still look plausible.
+  no_code = { 'schema_version' => '2', 'object_class' => 'panel', 'manufacturer' => 'UCON',
+              'geometry_kind' => 'linear', 'width_mm' => 730, 'depth_mm' => 22,
+              'height_mm' => 1810, 'unit_type' => 'overlay panel', 'code' => nil,
+              'code_status' => 'PRELIMINARY', 'status' => 'PLANNING', 'source_ref' => 'measured' }
+  handed = export_attrs('CR0631', 'hinge_side' => 'rh')
+  rows   = Export.rows([handed, no_code])
+
+  raise 'the flagged row must open the sheet' unless rows.first['flag'] == Export::FLAG_NO_ARTICLE
+  hand_at = rows.index { |r| r['description'].to_s.start_with?('OPENING DIRECTION') }
+  raise 'the hand line must exist' if hand_at.nil?
+  owner = rows[0...hand_at].reverse.find { |r| r['level'].zero? }
+  raise 'a child must still sit under ITS OWN unit row' unless owner['code'] == 'CR0631'
+  raise 'a child carries no Riga number' unless rows[hand_at]['row'].nil?
+end
+
+check('WITHIN ONE RANK THE ORDER IS THE CALLER ORDER, UNCHANGED') do
+  # The walk of the model carries a meaning of its own - it is the order the
+  # kitchen stands in - and only the three ranks are allowed to move a row.
+  many = %w[B80601 V80730 CR0631].map { |c| export_attrs(c) }
+  codes = Export.rows(many).select { |r| r['level'].zero? }.map { |r| r['code'] }
+  raise codes.inspect unless codes == %w[B80601 V80730 CR0631]
+end
+
 check('86_export_run is GLUE - it holds no rules') do
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/86_export_run.rb', __dir__))
   code = src.gsub(/^\s*#.*$/, '')

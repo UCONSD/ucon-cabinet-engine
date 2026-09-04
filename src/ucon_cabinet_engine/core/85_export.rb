@@ -41,8 +41,42 @@ module UCON
     module Export
       module_function
 
-      COLUMNS = %w[row level code description corner l_mm h_mm p_mm
+      # `flag` added 2026-09-03. It sits beside the code because it is a
+      # statement ABOUT the code, and it is the column the reader sorts and
+      # colours on. See FLAGS below for why it is a word and not a colour.
+      COLUMNS = %w[row level code flag description corner l_mm h_mm p_mm
                    um qty status code_status note].freeze
+
+      # WHAT THE FLAG IS FOR, AND WHY IT IS A WORD.
+      #
+      # Andriy, 2026-09-03: the order schedule is the deliverable this project
+      # is for, and it has TWO readers. It goes to ELDA, who assigns the codes
+      # our catalog cannot give us and who starts with the flagged rows; and it
+      # is pasted into a SketchUp schedule that becomes a PDF or goes straight
+      # to a printer. Neither reader wants a colour from us: a CSV has none, and
+      # whoever opens it can conditional-format a word into any colour they
+      # like. So the export states the FACT and leaves the paint to the page.
+      #
+      # TWO facts, not one, because they are two different questions:
+      #
+      #   NO ARTICLE - this body carries no code at all. It reaches the order as
+      #     'CUSTOM SIZE - NO ARTICLE, to be quoted' and it is precisely what
+      #     Elda is being asked to answer. THESE SORT FIRST.
+      #   A DISEGNO  - this body carries a code, and that code is in no registry
+      #     row we hold. It is a made-to-drawing position the factory has
+      #     already named - `PE1299` and the `PD0x99` family of estimate
+      #     2026/30833 - so nobody needs to assign it again, but it is not a
+      #     catalog article and a reader must not take it for one. Her own
+      #     wording, deliberately: the goal is a table that reads like hers.
+      #
+      # A catalog article carries no flag, and an empty cell is the common case.
+      #
+      # AND THE FIRST BLOCK IS THIS SESSION'S OWN PROGRESS BAR. Every code we
+      # take back off her order moves a row out of NO ARTICLE. When the block is
+      # empty the model and the order agree.
+      FLAG_NO_ARTICLE = 'NO ARTICLE'
+      FLAG_A_DISEGNO  = 'A DISEGNO'
+      FLAG_RANK = { FLAG_NO_ARTICLE => 0, FLAG_A_DISEGNO => 1 }.freeze
 
       # A cabinet, a front, a top, a plinth: one piece. Estimate UM table.
       UNIT_UM = 'PZ'
@@ -90,20 +124,60 @@ module UCON
         !a['manufacturer'].to_s.empty?
       end
 
+      # A ROW IS A TREE AND THE TREE MOVES AS ONE. The children - the hand, the
+      # variants, the hardware, the companions - carry no Riga number and mean
+      # nothing apart from the numbered row above them, so the sort is over
+      # BLOCKS and never over lines. Sorting lines would scatter a unit's
+      # variants across the sheet, which is the one way this could go wrong.
+      #
+      # STABLE WITHIN A RANK, on purpose and by index rather than by trusting
+      # sort_by: inside one rank the order stays exactly the order the caller
+      # handed us, because that order is the walk of the model and carries a
+      # meaning of its own. Only the three ranks move.
+      #
+      # NUMBERED AFTER SORTING, so `row` counts the sheet the reader sees. Her
+      # row number is the composition position, and ours has to mean the same
+      # thing for the two tables to sit side by side.
       def rows(objects)
-        number = 0
-        Array(objects).select { |o| orderable?(o) }.each_with_object([]) do |attrs, out|
+        blocks = Array(objects).select { |o| orderable?(o) }.map do |attrs|
           a = attrs || {}
+          kids = []
+          hand_row(a).tap { |r| kids << r if r }
+          variant_rows(a['variants'], 1).each { |r| kids << r }
+          hardware_row(a).tap { |r| kids << r if r }
+          Array(a['companion_refs']).each do |line|
+            kids << companion_row(line)
+            variant_rows(line['variants'], 2).each { |r| kids << r }
+          end
+          [a, kids]
+        end
+
+        ordered = blocks.each_with_index.sort_by { |(a, _k), i| [flag_rank(a), i] }
+                        .map { |pair, _i| pair }
+
+        number = 0
+        ordered.each_with_object([]) do |(a, kids), out|
           number += 1
           out << unit_row(number, a)
-          hand_row(a).tap { |r| out << r if r }
-          variant_rows(a['variants'], 1).each { |r| out << r }
-          hardware_row(a).tap { |r| out << r if r }
-          Array(a['companion_refs']).each do |line|
-            out << companion_row(line)
-            variant_rows(line['variants'], 2).each { |r| out << r }
-          end
+          kids.each { |r| out << r }
         end
+      end
+
+      # THE FLAG IS ASKED OF THE REGISTRY, NEVER OF THE OBJECT, and that is the
+      # same discipline ordered_width_note and front_layout_for already follow:
+      # whether a code is a catalog article is a CATALOG fact, and a body that
+      # believed otherwise about itself would be believed. Registry.lookup
+      # raises on a code it does not hold, and that raise IS the answer.
+      def flag_for(attrs)
+        code = (attrs || {})['code'].to_s
+        return FLAG_NO_ARTICLE if code.empty?
+        return nil if catalog_article?(code)
+
+        FLAG_A_DISEGNO
+      end
+
+      def flag_rank(attrs)
+        FLAG_RANK.fetch(flag_for(attrs), 2)
       end
 
       # ---- reservations ------------------------------------------------------
@@ -189,6 +263,7 @@ module UCON
         blank.merge(
           'row' => number, 'level' => 0,
           'code' => a['code'],
+          'flag' => flag_for(a),
           'description' => order_description(a),
           # A corner unit is dimensioned by its footprint instead of a width.
           # What the factory actually prints in the L column for one of these
@@ -221,6 +296,12 @@ module UCON
 
         'width is an ORDER choice, not a catalog size: this article is made ' \
         "from #{range[0]} to #{range[1]} mm (printed p.434)"
+      end
+
+      def catalog_article?(code)
+        !Registry.lookup(code).nil?
+      rescue ArgumentError
+        false
       end
 
       def width_range_for(attrs)
