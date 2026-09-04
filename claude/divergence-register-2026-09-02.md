@@ -88,3 +88,69 @@ therefore not a divergence we are entitled to record.
 into component rows is its business. It becomes ours only where it changes what
 our model must contain — which is `recon-2026-09-02-model-vs-30833.md` §6.3, and
 that is stopped for an estimate rather than improvised.
+
+---
+
+# DATED ADDITION — 2026-09-03: section C has its explanation, and it is printed
+
+**Nothing above this line is edited (learned rule 9).** Section C was headed *one
+shape, four appearances, not yet one explanation*. There is now one, it came off
+the printed book and out of her own 3D file, and it is not a rounding error.
+
+## The cause: 1200 is the metric slot, 1219,2 is the appliance
+
+**48 inches = 1219,2 mm.** Our range reservation is recorded as `1220.0 mm
+(DF48650C/S/P, 0.8 breathing space)` — 1219,2 plus eight tenths of breathing
+space. The number is the APPLIANCE, not a preference.
+
+**The catalog prices 121,9 cm for BASE units only**, in the USA Elements
+chapter — `B82250`, `B92250`, `BL2250`, `BM2250`, width field 22. **No wall unit
+and no top element is printed at 121,9 anywhere in the four volumes**, and the
+wall chapters print no inch widths at all. The widest metric wall slot is
+**W.120 = 1200**, which is **19,2 mm short of the appliance**. `SE1200` — top
+element H.72, W.1200, d.620, which the registry already holds — is 1200 too, so
+there is no printed article for a 1220 wall or top box at any height.
+
+**So her 1200 is not a measurement. It is the label of the slot the code sits
+in**, and the position is marked `ELEMENTO A DISEGNO` precisely because the
+metric grid has nothing to offer an American appliance.
+
+| where | ours | hers | now explained as |
+|---|---|---|---|
+| row 8 `PE1299`, over the range | **1220** | 1200 paper, **1200 in her 3D** | the W.120 slot standing in for 48 in. **We are right on the dimension** |
+| row 43 `PB1299`, over the fridge | **1220** × 313 | 1200 paper, **1218,5 in her 3D** | the same, and her own model drew the 48 in. `CL4850` is a 48-inch fridge. **Untouched by instruction; the observation is recorded and nothing is acted on** |
+| row 3 `B70151`, the closing filler | **124** | 104 | NOT closed by this. H1 stands as written |
+| her own two fillers, rows 3 and 4 | — | 104 and 104 | NOT closed by this. H1 stands as written |
+
+**Two of the four are one cause; two are not.** Recording the scope, learned
+rule 4: this explains the two 1200s and says nothing about the fillers.
+
+**And it reverses one reading made earlier the same day.** The session first
+wrote that on row 8 she is right and we are 20 mm over. She is right about the
+CODE and about the slot; she is not right about the width, because 1200 does not
+cover 1219,2. Dated and added rather than erased.
+
+## D7 — her `L` column on a made-to-drawing position, and it is D1's shape again
+
+| id | what | ours | hers | why | date / by |
+|---|---|---|---|---|---|
+| **D7** | The `L` column of an `ELEMENTO A DISEGNO` position | the piece's own measured length | the **width of the catalog slot** the custom code sits in | Two correct answers to two different questions, exactly as D1. D1 found her `P` column carries the depth of the RUN where ours carries the piece's thickness; this is the same reflex on `L`, one column over. Her printed 1200 on rows 8 and 43 is the W.120 slot, not either object | 2026-09-03, this session |
+
+**SCOPE, and it is narrow (learned rule 4): indicated on rows 8 and 43, not
+established generally.** Two instances, both of them 48-inch appliances, both of
+them wall-tier boxes. It is not yet known whether her `L` behaves this way on
+any other custom position, and the next diff should test it rather than assume
+it. **What it changes today:** a join on `L` for a row marked `ELEMENTO A
+DISEGNO` may match a slot rather than a solid, so such a row is joined on
+POSITION and on her 3D, and her printed `L` is read as a label until proved
+otherwise.
+
+## And the rule this produced
+
+`claude/decisions-2026-09-03-factory-assigned-codes.md` — when the catalog does
+not print an element we draw it our way, send it to Elda, and take the code back
+off her order, **after comparing her geometry with ours**. Her code, our
+dimension. Row 8 is the worked instance and shows why the comparison is the part
+that cannot be skipped: taking `PE1299` without reading her 1200 would have
+ordered a cabinet 19,2 mm short of the range beneath it.
+

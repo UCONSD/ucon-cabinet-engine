@@ -71,7 +71,12 @@ the operation, the fingerprint and the script all name the same one. Until that
 is done, **nothing may be applied through the bridge**:
 `claude/recon-2026-09-02-model-vs-30833.md` §0 and §6 both stop on it.
 
-## DONE 2026-09-03 — the owed half, dated and added
+## DONE 2026-09-02, night — the owed half, dated and added
+
+*(Headed 2026-09-03 when written, which is the UTC day; this repository dates
+by the local one. Corrected here rather than erased, learned rule 9. Commit
+`10d2ca1` carries the wrong date in its own pushed message and is not
+amended.)*
 
 `run_one` no longer asks `Sketchup.active_model`. It resolves the model **once,
 before the operation opens**, out of `ObjectSpace` by title, and **refuses unless

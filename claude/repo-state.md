@@ -70,7 +70,17 @@ can go.**
 
 ---
 
-## As of 2026-09-03 — a DATED ADDITION, and it is two rows above that are behind
+## As of 2026-09-02, night — a DATED ADDITION, and it is two rows above that are behind
+
+**THE DATE ON THIS SECTION WAS WRONG WHEN IT WAS WRITTEN, and this line is the
+correction rather than a silent edit (learned rule 9).** It was headed
+*2026-09-03*, which is the UTC day. This repository dates by the LOCAL calendar
+day — the 2026-09-02 evening session called itself that while its commit
+`7eefe4a` is stamped `2026-09-03 00:10 +0000` — so a section headed 09-03 puts a
+session on the calendar that never happened. The header now reads 09-02, night.
+**The commit message of `10d2ca1` still says 2026-09-03 in its own text**, is
+pushed, and is not amended: a pushed message is part of the record and this line
+is where the record is corrected.
 
 **Learned rule 9: nothing above this line is edited.** Both rows named here are
 still true as far as they go; what follows is what happened after they were
@@ -117,7 +127,7 @@ describes was watching that same wrong file.** For a reading probe it cost
 nothing and nothing was lost. For a writing probe it was the entire safety net,
 and the run would have reported itself rolled back.
 
-**FIXED 2026-09-03.** `run_one` resolves the model ONCE, before the operation
+**FIXED 2026-09-02, night.** `run_one` resolves the model ONCE, before the operation
 opens, out of `ObjectSpace` by title, and **REFUSES unless exactly one model
 answers** — a refusal loads nothing, opens no operation and writes the candidates
 it found into the outbox. The resolved model is handed to the probe as
@@ -133,6 +143,48 @@ occurrence of this is visible on the face of the outbox rather than found again.
 **What the fix does NOT change:** an inner `commit_operation` still closes the
 outer one, and `Generator.build` still has one. The rollback is still a mechanism
 with one documented hole; it is now at least a mechanism aimed at the right file.
+
+---
+
+## As of 2026-09-03 — two tooling traps, found while reading Elda's SKP
+
+Both cost a wrong reading before they were caught, both are cheap to avoid, and
+neither is about cabinets. Added dated (learned rule 9); nothing above is edited.
+
+### `BoundingBox` NAMES ITS AXES width = X, **height = Y**, **depth = Z**
+
+Not the width, depth and height a person reading a cabinet means. `probe 148`,
+and `149` inherited from it, printed `bb.depth` under the heading `d_mm` and
+`bb.height` under `h_mm`, so **every row had its depth and its height swapped**:
+Elda's `PD0999` read as *600 deep, 645 high* where the solid is 600 high and 645
+deep. The extents, the counts and the positions were all correct; two columns
+were not, and nothing looked wrong.
+
+**Take spans from `bb.min` and `bb.max` by hand** — `tools/probe_recon_elements.rb`
+always did, which is why our side of the diff never carried this. Re-run as probe
+152, columns renamed `x_span_mm / y_span_mm / z_span_mm` so the reader cannot be
+misled by a heading again. **A filter on SORTED dimensions is immune**, which is
+what saved the two questions the probe existed for.
+
+### TWO SketchUp PROCESSES, TWO BRIDGES, ONE `probe_inbox`
+
+Fourteen probe runs in a row answered out of the wrong Ruby. Both processes were
+25.0.659; both had loaded `tools/probe_bridge.rb`; both polled the same folder;
+whichever grabbed the file first answered, renamed it into `done/` and looked
+completely normal doing it. The stale one held yesterday's bridge, so the fix
+committed in `10d2ca1` kept reporting as absent while sitting on disk — and the
+Ruby Console that reported `load` succeeding was the OTHER process.
+
+**What settled it, and it is the cheap diagnostic:** print `Process.pid` from
+inside a probe and compare it with `Process.pid` typed into the console. They
+differed — 1396 against 23013 — and everything else followed.
+
+**AND IT IS A HAZARD FOR THE APPLY STEP, not a nuisance.** 545 was open in BOTH
+processes. The new bridge refuses unless exactly one model answers to the name,
+but it counts models inside ITS OWN Ruby, and each process held exactly one 545.
+Both would answer truthfully and one of them would be the wrong document.
+**Close the extra SketchUp before any armed run.** The refusal cannot see across
+processes and nothing in the tooling can.
 
 ---
 

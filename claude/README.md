@@ -281,14 +281,25 @@ single article code),
 `recon-2026-09-02-model-vs-30833.md` (**the filled table** — 69 rows, one verdict
 each, the apply list, and why the 1 mm triple join had to become a face join),
 `divergence-register-2026-09-02.md` (what we keep, what she got wrong, and what
-nobody has decided — so the next comparison can tell a decision from a defect).
+nobody has decided — so the next comparison can tell a decision from a defect;
+**carries a dated addition of 2026-09-03** giving section C its explanation —
+1200 is the metric W.120 slot and 1219,2 is a 48-inch appliance — and opening
+D7, her `L` column on a made-to-drawing position),
+`decisions-2026-09-03-factory-assigned-codes.md` (**the round trip for an element
+the catalog does not print**: we draw it our way, Elda answers with a real order,
+we compare her geometry with ours and only then assign her code to our object.
+Her code, our dimension — and why that breaks neither domain rule 5 nor
+Contract v2 §4.2 rule 2).
 
 **And one finding that is about the TOOLING rather than the kitchen:**
 `findings-2026-09-02-active-model-is-not-the-front-window.md` — `Sketchup.active_model`
 answered with a document whose window was closed for twenty minutes while another
 was in front, and `tools/probe_bridge.rb` opens its rollback on whatever that
 call returns. **It blocks the apply step**; the probes are fixed and the bridge is
-not.
+not. **THE LAST SENTENCE IS OUT OF DATE AS OF 2026-09-03 and is corrected here
+rather than erased (learned rule 9): the bridge is fixed too.** `run_one` now
+resolves the model once, before the operation opens, and refuses unless exactly
+one answers; the note carries the account under *DONE 2026-09-02, night*.
 
 **For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
 themselves live in `docs/Elda_Open_Questions_v0.1.md`.
