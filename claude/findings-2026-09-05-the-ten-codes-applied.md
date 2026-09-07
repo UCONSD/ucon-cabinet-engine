@@ -179,3 +179,24 @@ in `tools/probe_inbox/`.
 does not survive a closed window and never described the file to begin with. The
 size in bytes did, two days and one application restart later. **A test is worth
 having when it can still be run by somebody who was not there.**
+
+## ADDED 2026-09-07, EVENING — the addition above is half wrong, and the half matters
+
+**"The apply is not on disk" was right. "The ten codes are not in the model" was
+wrong.** SketchUp had not been closed: probe 153 answered from `Process.pid` 623,
+the process that ran the apply, and the document still held all ten codes with
+the progress bar at `NO ARTICLE 2 / A DISEGNO 10`. The re-run was ordered on the
+strength of the wrong half and would have been refused by 157's own guard.
+
+**The state is now saved**, to a new file rather than to the Connect cache that
+another application had rewritten:
+`~/Documents/545_Avenida_Primavera_RESCUE_2026-09-07.skp`, 26 676 235 bytes,
+15:41:39. Probe 160 afterwards: fifteen checks, all pass. The account is in
+`claude/repo-state.md` under *As of 2026-09-07, evening*.
+
+**This note's own instrument is still the right one and was still read wrong.**
+The size answered truthfully about the file; the file was not the question. Two
+readings in three days have now failed the same way — `modified?` about a
+document, `size` about a file — and both times the number was correct and the
+subject was not.
+

@@ -339,6 +339,79 @@ the same either way — *a record of an outside action is only true if something
 checks it* — and both instances were caught by looking at the outside thing
 itself, a Sent folder and a size in bytes.
 
+---
+
+## As of 2026-09-07, evening — THE TEN CODES WERE IN THE MODEL ALL ALONG, AND ARE NOW ON A DISK NOBODY SYNCS
+
+**The section immediately above says they are not in the model. That is wrong,
+and this is the correction.** Nothing above is edited (learned rule 9). Both
+sections are true about what they actually looked at, and the difference between
+them is the whole lesson.
+
+**What the size proved and what it did not.** 26 643 507 bytes was a correct
+reading of the FILE and was read as a statement about the DOCUMENT. Those are
+two objects. SketchUp had never been closed: probe 153 answered from
+**`Process.pid` 623**, the same process that ran the apply on 2026-09-05, and the
+document in that window still held all ten codes, unsaved, for two days. The
+progress bar read `NO ARTICLE 2 / A DISEGNO 10` before anything was re-applied.
+**The apply was never lost; it was never written down.**
+
+**AND THE RE-RUN WAS ORDERED AND WOULD HAVE BEEN REFUSED.** 153 was dropped
+first only because it is read-only, and it reported *0 BODIES MATCH THIS KEY* for
+all ten targets - it looks for the OLD codes, and they were gone. 157's own guard
+would have stopped the apply for the same reason. **The safe order saved this,
+not the reasoning that preceded it.**
+
+### The rescue, and the dialog that made it necessary
+
+⌘S raised *"This document's file has been changed by another application since
+you opened or saved it. The changes made by the other application will be lost if
+you save."* The document's path was the Trimble Connect working cache -
+`~/Library/Application Support/SketchUp 2025/SketchUp/.tc/<guid>/cache/…` - so
+something outside SketchUp had rewritten the file underneath the window.
+
+**Answered `Don't Save`, then `Save As`.** Two days of work and an unknown
+outside change cannot both be preserved by pressing Save, and a copy costs
+nothing. The model is now
+**`/Users/demchenkoandrew/Documents/545_Avenida_Primavera_RESCUE_2026-09-07.skp`,
+26 676 235 bytes, 2026-09-07 15:41:39** - 32 728 bytes more than the 2026-09-02
+save, read off the file itself and not off SketchUp.
+
+**Probe 160 after the save: all fifteen checks pass.** The ten codes with their
+provenance, `rows 11 and 13` on the shared definition, and the five east-wall
+`SD0631` unmoved. 77 entities, 318 definitions, sheet 130 rows.
+
+### What this costs, and it is not nothing
+
+**The open document no longer points at Trimble Connect.** `Save As` moved it,
+which is what made it safe, and the consequence is that the working file and the
+Connect copy have diverged. **Nothing is published to Connect until its version
+history is read** - whoever or whatever rewrote that cache file is unidentified,
+and the candidate (Connect's own sync) is a guess. The cache folder cannot be
+granted to a Cowork session - it is inside `~/Library` - so this one is checked
+in the Connect web interface by hand.
+
+**The working file also left the place the project keeps its model**, and that is
+now a decision rather than an accident: a live model that lives in a sync cache
+can be rewritten under an open window by software, which is exactly what
+happened. Andriy's to settle.
+
+### One number named and not explained
+
+Probe 161 counts **seven** `SD0631` in the model; probe 160 checks five by name
+and they are the five that must not move. Two bodies carry that code outside both
+sets. Not a defect and not a discrepancy in the apply - an unexplained census,
+written down so it is not discovered twice.
+
+### A learned-rule candidate, proposed and NOT added
+
+*A file's size answers about the file. A document open in a window is a different
+object, and no reading of the first is a statement about the second.* It has two
+instances already - `model.modified?` read from inside a probe (2026-09-05), and
+this one - and they point the same way: **the instrument was fine and the subject
+was wrong.** Held back under learned rule 4 until the third instance says what the
+scope really is.
+
 ## The extraction, group by group
 
 Plan: `claude/extraction-plan-2026-08-23.md` §5 — **but read the manifest
