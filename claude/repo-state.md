@@ -235,6 +235,68 @@ empty, the model and the order agree.
 
 ---
 
+## As of 2026-09-05 — TEN CODES ARE IN THE MODEL, and the counter moved
+
+**The first writes into 545 since the reconciliation was drawn up.** Account:
+`claude/findings-2026-09-05-the-ten-codes-applied.md`. Nothing above this line
+is edited (learned rule 9); the rows it overtakes are named below.
+
+**THE PROGRESS BAR: `NO ARTICLE` 4 -> 2, `A DISEGNO` 0 -> 10**, sheet length
+unchanged at 130 rows. Ten bodies took the codes off estimate 2026/30833 —
+`SD0930` -> `PD0999`, four `SD0631` -> `PD0799`, three -> `PD0699`, and the two
+Sub-Zero overlay panels -> `FRN019770747` / `FRN019770597`, which carried no
+article at all until today. **Our measured dimensions are unchanged in every
+one of the ten**, and the registry received nothing.
+
+**THE TWO THAT REMAIN IN `NO ARTICLE` ARE BOTH ON THE DO-NOT-TOUCH LIST** —
+`UCON-BESP-001` (her row 43 `PB1299`, untouched by instruction) and the grille
+overlay panel (her row 69, one of the nine panel rows). **So the block cannot
+be emptied by a probe; it is now waiting on two decisions.**
+
+**The row above titled *The Avenida Primavera model* said FOUR objects on the
+east wall carry no article.** Two of them now do. The row is overtaken to that
+extent and is otherwise still true.
+
+### Three things measured on the way, and one of them corrects a cell above
+
+**THE PLUGINS ENTRY IS A SYMLINK.** The *Extensions* cell says the engine is
+NOT copied into Plugins and explains it by a one-line dev loader that requires
+the repository. Measured from inside SketchUp: `SHELL_ROOT` is
+`~/Library/Application Support/SketchUp 2025/SketchUp/Plugins/ucon_cabinet_engine`
+and `File.realpath` resolves it to `~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine`.
+The CONCLUSION of that cell holds — there is no copy to go stale — but the
+mechanism is a symlink. Four core files were MD5'd on both sides and are
+identical byte for byte, which is how the session knew the code in memory was
+the repository's.
+
+**`Reload core` WAS OWED AND ITS ABSENCE WAS VISIBLE.** Before it,
+`Export::FLAG_NO_ARTICLE` raised `NameError`: the flag column of `30b8b7b` was
+on disk and not in memory, so there was no progress bar to read.
+`UCON::CabinetEngine.load_core` in the Ruby Console is the console-side
+equivalent of the palette button and reloads without rebuilding anything.
+
+**A FACT THAT BELONGS TO ONE BODY MUST NOT BE WRITTEN THROUGH A DEFINITION THAT
+SERVES TWO.** `Contract.write!` writes the dictionary onto the
+ComponentDefinition. Two of our `PD0699` bodies — x 103 and x 703, her rows 11
+and 13 — are two instances of ONE definition, so the apply wrote that dictionary
+twice and the second `source_ref` stood alone. The code was right either way and
+every code check passed; the provenance named one row where the object covers
+two. Corrected in an armed run of its own to `rows 11 and 13`, dated and
+appended. **Making the instances unique would fix it properly and would change
+the definition count — a structural edit, NOT done, Andriy's to decide.**
+Proposed as a learned-rule candidate and deliberately not added: one instance is
+not a generalisation (learned rule 4).
+
+### The state of the model, read off it
+
+`545_Avenida_Primavera_Kitchen_Preliminary_Model_v0.1_1`, **77 top-level
+entities and 318 definitions before and after** — nothing was created, moved or
+erased. 60 orderable/reserved bodies, as probe 147 read on 2026-09-02;
+`tools/recon_ours.csv` was regenerated after the apply and now carries the new
+codes. One SketchUp, proved by `Process.pid` = **623** on both sides.
+
+---
+
 ## The extraction, group by group
 
 Plan: `claude/extraction-plan-2026-08-23.md` §5 — **but read the manifest

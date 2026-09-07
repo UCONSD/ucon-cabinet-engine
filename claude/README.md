@@ -301,6 +301,23 @@ rather than erased (learned rule 9): the bridge is fixed too.** `run_one` now
 resolves the model once, before the operation opens, and refuses unless exactly
 one answers; the note carries the account under *DONE 2026-09-02, night*.
 
+**THE APPLY, 2026-09-05:** `findings-2026-09-05-the-ten-codes-applied.md` —
+ten bodies take their codes off estimate 2026/30833 and the `NO ARTICLE` block
+goes 4 -> 2. Carries the check that made it safe (which definition each target
+sits on, and how many instances that definition has) and the defect that check
+did not prevent: **a shared definition cannot carry a per-instance fact**, so one
+`source_ref` named row 13 for a pair covering rows 11 and 13. Corrected, dated,
+and the structural fix left to Andriy.
+
+**And a second tooling one, about the one command:**
+`findings-2026-09-05-a-push-that-asks.md` — `build/go.sh` stopped dead at its
+push step twice on 2026-09-03 with no output and no exit code, because `git` was
+prompting for a username behind `cl`'s transcript. **Step 4 reads the refs back
+and would have caught a push that failed — it never got there**, because a
+command that is still ASKING has not finished, and `set -e` acts only on one
+that has. Carries the proposed `GIT_TERMINAL_PROMPT=0`, **not applied**: it is
+the one command Andriy runs on both machines and the change is his to approve.
+
 **For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
 themselves live in `docs/Elda_Open_Questions_v0.1.md`.
 

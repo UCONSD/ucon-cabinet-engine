@@ -154,3 +154,54 @@ dimension. Row 8 is the worked instance and shows why the comparison is the part
 that cannot be skipped: taking `PE1299` without reading her 1200 would have
 ordered a cabinet 19,2 mm short of the range beneath it.
 
+
+---
+
+# DATED ADDITION — 2026-09-05: the ten codes are applied, and two new entries
+
+**Nothing above this line is edited (learned rule 9).** The register was written
+while the model still carried the codes the estimate contradicts. Ten of them
+are now hers; what follows is what that changed here and what it opened.
+
+## What is now true of entries already written
+
+**O5 (rows 31, 32) — the code is applied, and the size stayed ours.** The entry
+already said it would be. It is: `FRN019770747` on the refrigerator panel and
+`FRN019770597` on the freezer panel, both `PRELIMINARY`, both carrying
+`Metron estimate 2026/30833 row N (code); Sub-Zero Design Guide rev 4/2026,
+p.19 (panel size)` as `source_ref`. **Her printed pieces are 734 x 1807 and
+480 x 1807; ours stay 730 x 1810 and 483 x 1810.** The 3-4 mm remains Elda Q6
+and remains unsent. **The entry stays OPEN**, because what it asks about is the
+size and the size is still undecided between us.
+
+**And row 32's geometry comparison is now on record, which it was not.** O5 was
+written with row 31's figures only — *her printed size is 734 x 1807* — and the
+factory-codes rule of 2026-09-03 makes the comparison the part that cannot be
+skipped. Row 32 reads 480 against our 483: the same shape and the same
+magnitude as row 31, which is why the pair is one entry and not two.
+
+## D8 — an `FRN` code's own width is not the piece, and not her printed L either
+
+| id | what | ours | hers | why | date / by |
+|---|---|---|---|---|---|
+| **D8** | The width embedded in an `FRN` front code | the panel we make: 730, 483 | the code says 747 and 597; her PRINTED L says 734 and 480 | **Three numbers, and the code matches neither of the other two.** So on this family the code names a BLANK — a stock front size the piece is cut from — and the printed L names the piece. That is D7's shape (a code naming a slot rather than a solid) on a different family, reached from a different direction: D7 was found on `ELEMENTO A DISEGNO` wall boxes, this is on catalogued front articles | 2026-09-05, this session |
+
+**SCOPE, and it is narrow (learned rule 4): rows 31 and 32, both Sub-Zero
+overlay fronts, both `FRN0197705xx`/`FRN0197707xx`.** Row 28's `FRN007170747`
+shows the same arithmetic — code 747 against a printed L of 607 — but row 28 has
+no body our side and is not evidence of anything until it is found, so it is
+noted and not counted. **What it changes today:** an `FRN` code must not be read
+as a dimension, and a join that matched an `FRN` on its embedded width would
+match a blank rather than a panel.
+
+## O9 — the variants on the re-coded boxes are now statements about yesterday
+
+| id | rows | what | who decides |
+|---|---|---|---|
+| **O9** | 5, 7, 9, 44, 45 | Four bodies still carry `WIDTH INCREASE=REQUESTED, from 600 mm - NOT PRINTED` and one carries `WIDTH REDUCTION=Yes, from 900 mm`. **Both texts are about the article that is no longer on the body.** The factory has since drawn and priced these positions as `ELEMENTO A DISEGNO`, so "requested, not printed" describes a question that has been answered, and "reduced from 900" describes a catalog width `PD0999` never had | **Andriy.** The 2026-09-05 apply changed the CODE only, by instruction; the variants were left exactly as they were and nothing was improvised |
+
+**Why this is not a defect to be quietly fixed:** a variant is an ORDER AXIS
+(domain rule 6) and deleting one changes what the factory is asked for. The
+honest reading is that these five variants have done their job — they are why
+the widths are what they are — and that whether they stay, change wording, or
+go is a decision about what the order says, not a tidy-up.
