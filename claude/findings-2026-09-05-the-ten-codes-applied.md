@@ -163,3 +163,19 @@ the session ends by asking for the save rather than by claiming it.
 its axes, and two SketchUps on one inbox: a reading that looks answered and is
 about something else. The bridge already prints `active_model` beside the
 resolved title for the same reason; `modified?` now needs the same treatment.)*
+
+---
+
+## ADDED 2026-09-07 — the save was not made, and this note asked the right question
+
+The paragraph above ends by asking for the ⌘S rather than claiming it. **The
+answer is no.** `Window -> Model Info -> File`, 2026-09-07, model open from
+Trimble Connect: **26 643 507 bytes**, unchanged. The apply is not on disk and
+the ten codes are not in the model; the re-run is owed and the probes are held
+in `tools/probe_inbox/`.
+
+**The note's own instrument is what settled it.** Had this file recorded
+`modified?` as the evidence, there would be nothing to check today — the flag
+does not survive a closed window and never described the file to begin with. The
+size in bytes did, two days and one application restart later. **A test is worth
+having when it can still be run by somebody who was not there.**

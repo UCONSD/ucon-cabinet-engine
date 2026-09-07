@@ -297,6 +297,48 @@ codes. One SketchUp, proved by `Process.pid` = **623** on both sides.
 
 ---
 
+## As of 2026-09-07 — THE APPLY WAS NEVER SAVED, and the section above is overtaken by one fact
+
+**The heading two sections up says TEN CODES ARE IN THE MODEL. On the file, they
+are not.** Nothing above this line is edited (learned rule 9); this is what the
+disk says two days later.
+
+**26 643 507 bytes.** Read off `Window -> Model Info -> File` on 2026-09-07 with
+the model open from Trimble Connect: the same size this document records for the
+**2026-09-02** save, and the same number the 2026-09-05 session named as the one
+thing to check before believing anything. SketchUp was closed between the two
+readings and the file was re-opened from Connect, so the window in which the ten
+codes lived is gone. **The apply happened in memory, was verified in memory, and
+never reached the disk.**
+
+**Nothing else in the 2026-09-05 account is affected**, and that is worth saying
+plainly rather than blanket-doubting the session. What it PROVED still stands:
+one SketchUp (`Process.pid` 623 on both sides), the bridge's refusal working on
+its first real occasion, the Plugins entry being a symlink, `Reload core` being
+owed, and the shared-definition defect with its correction. Those were readings
+and mechanisms, not writes. **What it CLAIMED about the model is what did not
+survive**, and only because a save was asked for and not made.
+
+**What is owed, and it re-runs unchanged.** `157_apply_ten_codes.rb` and
+`159_fix_shared_definition_provenance.rb` are held in `tools/probe_inbox/` as
+`.hold`; 153 (the pre-apply read and definition map), 158 and 160 (the two
+verifications) are in `done/` and copy back out. 157 re-reads the definition map
+itself and REFUSES the whole run if it has changed, so the pre-apply state is
+proved by the probe rather than assumed. **The order of the evening is
+153 -> arm -> 157 -> 158 -> arm -> 159 -> 160 -> ⌘S -> 161**, and the ⌘S is the
+step that failed last time.
+
+**And the counter has not moved after all.** `NO ARTICLE` is **4**, not 2;
+`A DISEGNO` is **0**, not 10. The progress bar in the section above describes a
+sheet that existed for about forty minutes on 2026-09-05.
+
+**Learned rule 13, and this is its second instance.** The first was the Gmail
+draft that two documents called UNSENT for a day after it had gone out. This one
+is its mirror image: a document called a write LANDED that had not. The rule is
+the same either way — *a record of an outside action is only true if something
+checks it* — and both instances were caught by looking at the outside thing
+itself, a Sent folder and a size in bytes.
+
 ## The extraction, group by group
 
 Plan: `claude/extraction-plan-2026-08-23.md` §5 — **but read the manifest
