@@ -42,6 +42,7 @@ document.** Cite PRINTED pages, and name the file.
 
 | | file | pages | what it is |
 |---|---|---:|---|
+| 0 | `PIANCA - 0 Technical Book Armadi-Cabine 2023 (LR).pdf` | 134 | **The technical book.** Wardrobes and walk-in closets: plan symbols, per-program dimension tables, internal accessories, special modules. **Spreads, not single pages — see the offset section** |
 | 1 | `PIANCA - 1 Night Systems 2023 (+10%).pdf` | 375 | **WARDROBES AND WALK-IN CLOSETS.** Price list 03.09.2023. The one that matters |
 | 2 | `PIANCA - 2 Night Collection 2023 (+10%).pdf` | 178 | Beds, wall panels, casegoods, desks |
 | 3 | `PIANCA - 3 Day Systems 2023 (+10%).pdf` | 403 | Unless, Spazioteca, Spazio, People — living-room systems |
@@ -117,14 +118,38 @@ enters the registry**: Contract v2 §1.2 forbids a price, a surcharge or a
 coefficient on an object, and the surcharges are `variants` and
 `companion_refs`, which is the shape they already have for Cesar.
 
-## What is NOT on this shelf
+## The technical book — ARRIVED 2026-09-07, and it checks out
 
-**The technical book.** `2023_TECHNICAL-BOOK_Armadi-Cabine-Pianca-LR.pdf` — the
-source of the 2026-08-18 recon, the plan symbols and the per-program dimension
-tables — is not in the dealer package and not on this machine. Troels named
-`pianca.com/en/catalogues/` as the catalogue source. **Until it is here, every
-geometric fact in `Pianca_Recon_v0.1.md` rests on a document nobody can re-open**,
-and `-LR` means the copy that was read was low resolution.
+It was missing from the dealer package and was downloaded separately the same
+evening from the catalogue source Troels named. It is the file the 2026-08-18
+recon was written from, and every identifying fact that recon states about it is
+true of this copy: **Adobe InDesign 18.3 (Windows), created 2023-06-07, 134
+pages, real text layer.**
+
+**Its page formula is verified afresh, on four pages rather than the recon's
+two.** `printed_left = 2 × PDF − 4`: PDF 60 carries printed 116/117, PDF 96
+carries 188/189, PDF 116 carries 228/229, PDF 130 carries 256/257. The first
+attempt at this check reported PDF 116 as a miss and the reason was the checking
+regex, which matched no three-digit number above 199 — **a failing check is a
+claim about the checker until you have looked at the checker.**
+
+`-LR` in the filename is the factory's own mark for low resolution. It reads
+fine and it is not a measuring instrument: for geometry taken off a drawing
+rather than off a table, get the HR original.
+
+## What is still NOT on this shelf
+
+**No document we know the name of.** Troels said installation guides ship with
+the product, so there is no planning manual to chase: the price lists and the
+technical book together are the documentary base for wardrobes.
+
+**What is missing is not a document but a person.** Cesar has Elda, and domain
+rule 2 — everything is PRELIMINARY until the factory confirms in writing — needs
+somebody at Pianca who can do the confirming. Today there is a sales director in
+the USA and three names in Italy read off a 2023 thread where UCON was the
+installer and not the customer. **Until that counterpart exists, no Pianca fact
+in this repository can pass CONTROL**, and a registry built from these pages
+would be a shelf of PRELIMINARY rows with nobody to ask.
 
 ## Why the codes are not the deliverable, and this changes the work
 
