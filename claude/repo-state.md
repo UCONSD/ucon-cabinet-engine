@@ -377,6 +377,15 @@ nothing. The model is now
 26 676 235 bytes, 2026-09-07 15:41:39** - 32 728 bytes more than the 2026-09-02
 save, read off the file itself and not off SketchUp.
 
+**RENAMED THE SAME EVENING, 16:00:41.** The rescue name was the name of an
+accident. `Save As` again, in Documents, back to the name Connect, LayOut and
+every note in this repository already use:
+**`/Users/demchenkoandrew/Documents/545_Avenida_Primavera_Kitchen_Preliminary_Model_v0.1_1.skp`,
+26 677 447 bytes**. Probe 161 confirms the document now points at it and carries
+the ten codes unchanged; the RESCUE file is kept in
+`Documents/_archive_545_2026-09-07/` with the five stale August copies that were
+sitting beside the live model. **That is the path to use from here.**
+
 **Probe 160 after the save: all fifteen checks pass.** The ten codes with their
 provenance, `rows 11 and 13` on the shared definition, and the five east-wall
 `SD0631` unmoved. 77 entities, 318 definitions, sheet 130 rows.

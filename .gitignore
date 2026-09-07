@@ -13,6 +13,12 @@
 sources/**/*.pdf
 sources/**/*.xlsx
 sources/**/*.xls
+# Added 2026-09-07 with the Pianca shelf: the dealer package carries a .doc,
+# and the rule above lists formats rather than the folder - so a factory
+# document in any other format walks straight into a commit. The shelf is
+# defined by WHERE it is, not by what it is saved as.
+sources/**/*.doc
+sources/**/*.docx
 
 # --- SketchUp scratch ---
 *.skb

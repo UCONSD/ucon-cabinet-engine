@@ -240,3 +240,40 @@ doing before the contract question is answered.
   rather than read, get the HR original.
 - Heights 238,5 / 257,7 / 289,7 do not form an obvious module (deltas 19,2 and
   32,0). Do not derive; look them up.
+
+---
+
+## ADDED 2026-09-07 — the load-bearing fact is overturned, and by which document
+
+Nothing above is edited (learned rule 9). **"There are no article codes" was a
+true statement about the technical book and a false one about Pianca.** The
+codes are in the price list, which was not on the shelf on 2026-08-18. Fourteen
+dealer files are now in `sources/factory/pianca/`; `PIANCA - 1 Night Systems
+2023` — *Wardrobes and walk-in closets, price list 03.09.2023, 375 pages* —
+carries 553 distinct codes, and its chapters map page for page onto the
+technical section read above.
+
+**What this cancels.** The Contract v2.0 → v3 proposal in *Open, not yet
+decided* — `identity = { manufacturer, program, opening, L, H, D }` — existed
+because Pianca appeared to key on nothing. It keys on a code, so the contract is
+untouched. `dimension_mode: catalog | made_to_measure` survives on its own
+merits: the price list has a *Made to measure solutions* chapter at printed 245.
+
+**What still stands, unchanged:** the spread page numbering of THIS book
+(`printed_left = 2 × PDF − 4`, and the price lists are +2 instead), walk-in
+closets as a component system to be excluded, the sliding / flush-sliding /
+push-up symbol question, cardine at 180°, and the depth continuum 42,3-59.
+
+**And one correction that is not about Pianca.** This document names the
+registry loader as a hard blocker — *"a second manifest with its own grammar and
+hardware would silently overwrite"*. That was fixed on 2026-08-22: the loader
+takes a manufacturer argument, `registry/<manufacturer>/` is namespaced, the
+cache is per manufacturer and a family-key disagreement now raises by name. The
+blocker that replaced it is duller and wider — **every caller defaults to
+`'cesar'`**: seven call sites in `90_palette.rb`, a hard-coded path in
+`80_panel.rb:121`, three literal `'manufacturer' => 'cesar'` writes in the
+generator, the b80601 delegate and the top stamp, no manufacturer level in the
+picker at all, and an exporter that filters by manufacturer without grouping by
+it.
+
+Full account: `docs/Pianca_Volumes_Index.md`.
