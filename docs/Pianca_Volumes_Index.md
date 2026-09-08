@@ -164,3 +164,174 @@ exporter's product is a sheet, and the codes in this price list are what we
 already built against Elda's 30833. That moves registry extraction out of the
 first rank of Pianca work and puts the drawing and the structured element name
 (`docs/Naming_Convention_Spec_v0.1.md`) in front of it.
+
+---
+
+# ADDED 2026-09-08 — what Pianca's software is, and what a real UCON job looks like
+
+Two findings of different kinds. The first is research and rests on public
+sources; the second is measured off a drawing and is the one that changes the
+work.
+
+## The software is ADA, by Arcadia S.r.l.
+
+Not 3CAD, not Metron — those belong to other factories. Two independent
+sources, neither of them a vendor's word alone:
+
+- **Pianca's own job advertisement** for the Ufficio Tecnico, *Sviluppo
+  programma grafico*: *"sviluppo programma grafico **ADA** per manutenzione del
+  catalogo, inserimento in ambiente 3D dei prodotti"*, with SQL and Access in the
+  requirements. **They maintain the ADA catalogue in house.**
+- **Arcadia's announcement of 2024-06-12**: Pianca chose **ADA BE** for the
+  configurator on pianca.com, described as *"the natural continuation of the
+  long-standing close collaboration with Pianca"* — the web configurator is a
+  layer on a system that was already there.
+
+The ADA platform, from Arcadia's own product pages:
+
+| module | for | what it does |
+|---|---|---|
+| **ADA Catalog** | technical office | *"the electronic version of the technical price list"* — graphics and characteristics of every article, in ADA database tables |
+| **ADA Robot** | manufacturer | the factory's 3D software, a superset of Designer; loads orders (wardrobes named explicitly) into production and *"generates processes that allow you to create production prints and technical documentation"* |
+| **ADA GeDI** | across | Catalogues (import), **Orders (transfer to the management system)**, Production (printouts of graphics and data) |
+| **ADA IDP** | production | splits an order into component operations — base units, side panels, shelves, tops — and generates CAM files |
+| **ADA PostProcessor** | production | CAM into the language of a specific machine |
+| **DraftUP / DraftUP CAM** | production | Arcadia's own 2D CAD and CNC management, DXF import |
+| **ADA Designer** | **dealer** | 3D planning, quotation preparation, cloud catalogues updated in real time, photorealistic plan printing |
+| **ADA BE** | end user | browser edition — the configurator on pianca.com |
+
+**Three consequences.** The software Troels offers *"when you become a large
+dealer"* has a name — **ADA Designer** — and can be asked for by it. Their
+catalogue exists as DATA, so *"can you export the catalogue with codes"* is a
+question with an addressee, the same question that was put to Elda about Metron.
+And their designers work in **AutoCAD 2D and SketchUp** (their interior-designer
+advert), while ADA imports DWG/DXF and exports to 3ds Max and SketchUp — our
+sheet reaches them in their own idiom.
+
+**NOT ESTABLISHED, and the line matters**: which producer modules Pianca
+licenses. ADA BE is stated outright and ADA Catalog comes from their own advert;
+Robot, GeDI, IDP and PostProcessor are inference from the module descriptions.
+**"The printed assembly instructions come from ADA Robot" is a hypothesis**,
+consistent with that module's stated job and not proven. Three ways to settle
+it, cheapest first: the footer of a printed instruction sheet from a delivered
+box; the PDF metadata of a drawing that came from the factory itself; or one
+line to Troels asking which system prepares the drawings and quotations he
+returns.
+
+## What a real UCON Pianca job looks like — measured, not assumed
+
+`sources/factory/pianca/_specimens/SPECIMEN 2024-12 La Canada closets (DNA
+sheets).pdf` — eleven sheets, DNA Design Group, December 2024, the closets of
+the La Canada project. **It carries no factory stamp**: it is a PowerPoint
+compiled by the designer (`Author: millene shipley`,
+`Creator: Microsoft PowerPoint`), so it proves nothing about software. What it
+does carry is dimensions.
+
+- **The thickness pair is 30 and 22.** Every sheet dimensions `30` at the ends of
+  a run and `22` between elements — for example `30 | 819 | 22 | 819 | 30 =
+  1720`. The price list says it in words: *"3 cm Th sides (standard)"*. So 30 is
+  the standard Pianca side and 22 the intermediate panel.
+  **`core/10_standards.rb` holds `PANEL_T_MM = 18`, which is Cesar's.** This is
+  seam 1 of `docs/Multi_Manufacturer_Strategy_v0.1.md` — *standards move from
+  code into data* — no longer an argument but a measurement.
+- **The widths are not catalogue widths.** 819, 822, 923, 478, 504, 670, 759,
+  1150, 678, 998, 2364: none belongs to the 47,8 / 57,8 / 67,8 / 97,8 / 117,8 /
+  137,8 series. **The job is made to measure.**
+- **The heights are mixed.** The hall closet is **2897**, exactly the catalogue
+  H 289,7; 2845, 2885, 2410 and 1950 are not. Standard and made-to-measure sit
+  in one project.
+- **The depths include 590**, the catalogue's D 59 and the top of the 42,3-59
+  range, with 627 and 324 elsewhere.
+- **Three views per element** — plan, textured elevation, line-only elevation —
+  which is the engine's own north star for Cesar.
+
+**This is what reconciles the two halves of the day.** The price list has 553
+codes and they matter for checking what the factory quotes back; but the work
+UCON actually sells lives largely in *Made to measure solutions* (printed 245),
+where identity is a dimension and not a code. **A thin tracer that can only
+place catalogue widths would not draw a single one of these eight closets.**
+
+It is also a ready acceptance test: reproduce one of these closets — 30 at the
+ends, 22 between, the dimension chain in millimetres — and compare with the DNA
+sheet.
+
+---
+
+# ADDED 2026-09-08 — a dealer's own sheet set, and the metric catalogue read off an imperial drawing
+
+`sources/factory/pianca/_specimens/SPECIMEN 2026-03 Loevner master closet (ECDS
+sheets).pdf` — eight A3 sheets, **European Cabinets & Design Studios**, 864 San
+Antonio Rd, Palo Alto; drawn by Lena Pekker; issued 2026-03-26, signed by the
+client through Docusign on 2026-04-07. Title block fields: CLIENT · PROJECT ·
+**MANUFACTURER: PIANCA** · DRAWN BY · ISSUE. Programme **MILANO**, glass doors.
+It reached UCON inside the client's installation package, not from the factory.
+
+**Made in `LayOut in SketchUp Pro 2025`** — read off the PDF metadata. That is
+the whole point of the specimen: **an active Pianca dealer produces the signed,
+final drawing set in SketchUp and LayOut, not in the factory's own software.**
+ADA is not a precondition for selling Pianca; it is a convenience the factory
+offers. The engine's north star — wireframe sheets out of LayOut — is already
+the market's standard deliverable for this manufacturer.
+
+## The sheet set, as a pattern worth copying
+
+Three shaded render sheets (doors closed, doors open, interior) carrying a spec
+block in words — *MODEL: MILANO · GLASS DOOR: reflective bronze in canna de
+fucile frame · INTERIOR FINISH: Lavagna matte · DRAWERS: Lavagna matte glass ·
+shoe pullout, trouser pullout · LED: horizontal top shelf* — then **A.01** plan,
+**A.02** door elevation, **A.03** interior elevation with every rail, drawer and
+pullout dimensioned, **A.04** and **A.05** shaded elevations.
+
+**The identity on the sheet is not a code.** It is a programme name plus
+finishes and options in words, exactly as this repository concluded on 2026-09-07
+from the dealer process: the factory takes the drawing and returns the
+quotation. Trade coordination lives on the sheet too — a blue note giving the
+2-gang 110 V box position (*13" from the left finished wall, 17" AFF*), LED LV
+runs and sensors marked in red.
+
+**The part vocabulary is ours already**: END SIDE PANEL, SIDE END PANEL,
+PARTITION PANEL, FILLER, DOUBLE FILLER, GLASS DWR, TROUSER PULLOUT, SHOE
+PULLOUT, LED LV, SENSOR — `panel`, `filler`, `accessory` and a variant with a
+label, with no contract key missing.
+
+## THE MEASUREMENT: the metric catalogue is under the inches
+
+The sheet is dimensioned in **inches and sixteenths**, because the client and the
+installer read inches. Converted, the catalogue is intact underneath:
+
+| on the sheet | mm | what it is |
+|---|---:|---|
+| `22-3/4"` opening | 577,9 | catalogue **L 57,8** |
+| `46-3/8"` opening | 1177,9 | catalogue **L 117,8** |
+| `54-1/4"` opening | 1377,9 | catalogue **L 137,8** |
+| `93-7/8"` height | 2384,4 | catalogue **H 238,5** |
+| `23-1/4"` depth | 590,5 | catalogue **D 59**, the top of the 42,3-59 range |
+| `96"` | 2438,4 | the finished ceiling — module plus a top filler |
+
+**And the door is not the opening.** Three doors, three openings, one difference:
+
+```
+47-1/16" − 46-3/8"  = 17,5 mm
+23-7/16" − 22-3/4"  = 17,5 mm
+54-15/16" − 54-1/4" = 17,5 mm
+```
+
+**The door leaf is the opening plus 17,5 mm, every time** — it laps the partition
+by about 8,7 mm a side. Three independent instances on one sheet; the scope is
+this programme and this door type (Milano, hinged glass), and it is not to be
+generalised further until a second programme says the same (learned rule 4).
+
+**This refines the 2026-08-18 recon, which recorded the technical book's width
+series as DOOR widths.** On this sheet the catalogue series is the OPENING and
+the door is wider. One of the two readings is wrong, or the two documents
+measure different things — and that is now a question with an owner, not a
+guess: it is the first thing to put to the factory's technical counterpart when
+one exists.
+
+## What it means for the first Pianca task
+
+Yesterday's specimen (La Canada, DNA) was made to measure end to end. This one is
+built from catalogue modules under a 96" ceiling. **Both are real, and a tracer
+that can only do one of them is half a tool.** The engine needs the catalogue
+width series AND a free dimension from the start — which is `width_range_mm`
+plus a depth range, not a new contract.
