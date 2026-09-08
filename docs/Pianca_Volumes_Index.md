@@ -167,7 +167,7 @@ first rank of Pianca work and puts the drawing and the structured element name
 
 ---
 
-# ADDED 2026-09-08 — what Pianca's software is, and what a real UCON job looks like
+# ADDED 2026-09-07, evening — what Pianca's software is, and what a real UCON job looks like
 
 Two findings of different kinds. The first is research and rests on public
 sources; the second is measured off a drawing and is the one that changes the
@@ -257,7 +257,7 @@ sheet.
 
 ---
 
-# ADDED 2026-09-08 — a dealer's own sheet set, and the metric catalogue read off an imperial drawing
+# ADDED 2026-09-07, evening — a dealer's own sheet set, and the metric catalogue read off an imperial drawing
 
 `sources/factory/pianca/_specimens/SPECIMEN 2026-03 Loevner master closet (ECDS
 sheets).pdf` — eight A3 sheets, **European Cabinets & Design Studios**, 864 San
@@ -335,3 +335,11 @@ built from catalogue modules under a 96" ceiling. **Both are real, and a tracer
 that can only do one of them is half a tool.** The engine needs the catalogue
 width series AND a free dimension from the start — which is `width_range_mm`
 plus a depth range, not a new contract.
+
+> **Both sections above are dated 2026-09-07 and were first written with
+> tomorrow's date on them.** The session ran past midnight UTC while the
+> working day in San Diego was still the 7th, and the headings took the
+> container's clock rather than the repository's. Corrected the same
+> evening, before anyone read them; recorded here because a section dated a
+> day ahead of the commit that carries it reads, later, as work from a
+> different session. **Dates in this repository are the local working day.**
