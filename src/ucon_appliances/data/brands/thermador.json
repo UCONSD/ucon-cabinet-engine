@@ -97,7 +97,20 @@
     ],
     "recirculation": "UCVRECIRC (induction cooktops only)",
     "note": "the downdraft has no blower of its own; the blower is a separate model",
-    "source": "thermador-design-guide-vol10.1.pdf p.114"
+    "source": "thermador-design-guide-vol10.1.pdf p.114",
+    "pairs_with": {
+     "only_types": [
+      "cooktop_induction",
+      "cooktop_gas"
+     ],
+     "never_types": [
+      "range",
+      "rangetop"
+     ],
+     "rule": "a downdraft rises out of the worktop behind a cooktop; it is never paired with a range or a professional rangetop",
+     "source": "thermador-design-guide-vol10.1.pdf p.126 (non-professional gas or induction cooktops only), p.108 (Masterpiece ventilation fits 30 in Pro Harmony ranges and Professional rangetops WITH THE EXCEPTION OF DOWNDRAFT)",
+     "decided": "2026-09-24, Andriy, confirmed against the guide"
+    }
    },
    "ada_variant": null,
    "notes": [

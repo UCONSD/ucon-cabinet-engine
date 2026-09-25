@@ -37,7 +37,7 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.6.0'
+    VERSION = '0.6.1'
 
     module_function
 
@@ -346,6 +346,37 @@ module UCON
       !a.nil? && a['install_class'] == 'countertop_cutout'
     end
 
+    # --------------------------------------------------------- pairing
+    #
+    # A DOWNDRAFT GOES WITH A COOKTOP, NEVER WITH A RANGE (Andriy, 2026-09-24,
+    # confirmed on Thermador Vol. 10.1 p.126 and p.108). It rises out of the
+    # worktop behind the cooktop, and a range has no worktop behind its burners.
+    # The rule lives on the model's own record (`companions.pairs_with`), so a
+    # second manufacturer's downdraft carries its own printed rule and this code
+    # does not change.
+    #
+    # Pure: it is handed the models of one kitchen - a set, a register, a list
+    # typed by hand - and answers in words. It never stops anything; a finding
+    # is for the person specifying, as with every other check in this file.
+    def pairing_problems(models)
+      recs = models.map { |m| find(m) }.compact
+      types = recs.map { |a| a['type'] }
+      recs.each_with_object([]) do |a, problems|
+        rule = a['companions'] && a['companions']['pairs_with']
+        next unless rule
+
+        bad = recs.select { |o| (rule['never_types'] || []).include?(o['type']) }
+        bad.each do |o|
+          problems << "#{a['model']} is a downdraft and #{o['model']} is a #{o['type']} - " \
+                      "#{rule['rule']} (#{rule['source']})"
+        end
+        if (types & (rule['only_types'] || [])).empty?
+          problems << "#{a['model']} has no cooktop to stand behind - it pairs only with " \
+                      "#{rule['only_types'].join(' or ')} (#{rule['source']})"
+        end
+      end
+    end
+
     # The height rule, on its own so both of its branches can be checked:
     # THE HEIGHT COMES FROM THE APPLIANCE WHERE IT PUBLISHES ONE, and from the
     # section top only where it does not (Reserved_Void_Spec v0.1 §3, corrected
@@ -540,6 +571,7 @@ module UCON
         hw = find(hood['model'])&.fetch('nominal_w_in', nil)
         problems << "hood #{hw}in is narrower than cooking #{cw}in" if cw && hw && hw < cw
       end
+      problems.concat(pairing_problems(s['items'].map { |i| i['model'] }))
       s['items'].each do |i|
         problems << "#{i['model']} is not in the catalogue" unless find(i['model'])
         problems << "#{i['model']} has no price" if price(i['model']).nil?

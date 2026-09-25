@@ -816,6 +816,40 @@ check('the combination oven offers standard and flush, and defaults to standard'
     A.default_installation('MEDMC301WS') == 'standard'
 end
 
+# ------------------------------------- a downdraft pairs with a cooktop
+#
+# Andriy, 2026-09-24: a downdraft always goes with a cooktop and never with a
+# range. Confirmed on Thermador Vol. 10.1 p.126 and p.108.
+
+check('the downdraft carries its pairing rule, with the printed pages') do
+  r = A.find('UCVM36XS')['companions']['pairs_with']
+  r['never_types'].sort == %w[range rangetop] && r['only_types'].include?('cooktop_induction') &&
+    r['source'].include?('p.126') && r['source'].include?('p.108')
+end
+
+check('downdraft with its cooktop: no finding') do
+  A.pairing_problems(%w[CIT36YWBB UCVM36XS VTI1FZ]).empty?
+end
+
+check('downdraft with a range: a finding that names both models and the pages') do
+  p = A.pairing_problems(%w[UCVM36XS DF36650/S/P])
+  p.any? { |x| x.include?('UCVM36XS') && x.include?('DF36650/S/P') && x.include?('p.126') }
+end
+
+check('downdraft with no cooktop at all: a finding') do
+  A.pairing_problems(%w[UCVM36XS T36IT100NP]).any? { |x| x.include?('no cooktop') }
+end
+
+check('a kitchen with no downdraft is never touched by the pairing rule') do
+  A.pairing_problems(%w[DF36650/S/P PW362418 CL3650UID/S/T/R]).empty?
+end
+
+check('the set check runs the pairing rule, and no shipped set breaks it') do
+  lib = File.read(File.expand_path('../src/ucon_appliances/lib/appliances.rb', __dir__))
+  lib.include?("problems.concat(pairing_problems(") &&
+    A.sets['sets'].all? { |s| A.set_problems(s['key']).none? { |x| x.include?('downdraft') } }
+end
+
 check('after the broken copies, the shipped data is back and clean') do
   A.data_dir.nil? == false && A.data_dir == A::DATA_DIR &&
     A.load_problems.empty? && A.all.size >= 30

@@ -59,6 +59,7 @@ module UCON
           'default' => A.default_installation(a['model']),
           'openings' => a['installations'], 'services' => a['services'],
           'ada' => a['ada_variant'], 'notes' => a['notes'],
+          'pairs' => a['companions'] && a['companions']['pairs_with'],
           'msrp' => A.price(a['model']), 'setback' => A.setback_for(a['model']) }
       end
       JSON.generate('sets' => sets, 'list' => list, 'brands' => A.brand_menu,
@@ -190,6 +191,8 @@ module UCON
             ${v&&v.err?`<div class="warn"><b>The run is shorter than the opening.</b> ${-v.h} mm missing.</div>`
               :(v?`<div class="void"><b>Void above: ${v.h} mm.</b> Offer ${v.fill.map(f=>f.replace(/_/g,' ')).join(' or ')},
                  ${P.rules.void.material} material.${r.setback?` Set back ${r.setback} from the cabinet front.`:''}</div>`:'')}
+            ${r.pairs?`<div class="void"><b>Pairs only with a cooktop.</b> ${esc(r.pairs.rule)}.
+              Never with: ${r.pairs.never_types.map(esc).join(', ')}.</div>`:''}
             <div class="sec"><h3>Services</h3>${utils}</div>
             ${r.notes&&r.notes.length?`<div class="sec"><h3>Notes</h3>${r.notes.map(n=>`<div class="note">&bull; ${esc(n)}</div>`).join('')}</div>`:''}
             <div class="src">${inst?esc(inst.replace(/_/g,' ')):'no opening'}<br>${o?esc(o.source):''}</div>
