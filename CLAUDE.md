@@ -19,7 +19,20 @@ Linking only the folder leaves the extension invisible with no error.
 P="$HOME/Library/Application Support/SketchUp <VERSION>/SketchUp/Plugins"
 ln -s ~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine    "$P/ucon_cabinet_engine"
 ln -s ~/dev/ucon-cabinet-engine/src/ucon_cabinet_engine.rb "$P/ucon_cabinet_engine.rb"
+ln -s ~/dev/ucon-cabinet-engine/src/ucon_appliances          "$P/ucon_appliances"
+ln -s ~/dev/ucon-cabinet-engine/src/ucon_appliances.rb       "$P/ucon_appliances.rb"
 ```
+
+**The appliance extension is linked the same way — and until 2026-09-24 it was
+not.** On the laptop it sat in Plugins as a COPY installed from an old .rbz, so
+SketchUp kept running appliances 0.3.0 while the repository was at 0.4.0, and
+nothing said so except the version in Extension Manager. Found by
+`~/dev/_claude/plugins-check.sh` (prints LINK or COPY for every `ucon*` entry
+in every Plugins folder) and fixed by `~/dev/_claude/appliances-link.sh`
+(moves the copy aside, never deletes, refuses while SketchUp runs). **The office
+Mac has not been checked.** After any appliance change, the check is the
+version in Extension Manager, not the panel: the panel shows the engine's
+version only.
 
 `<VERSION>` is per machine, and they differ: the laptop runs SketchUp 2025,
 the office Mac runs 2026 (each version has its own Plugins folder, so linking

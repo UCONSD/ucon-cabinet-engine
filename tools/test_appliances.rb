@@ -739,6 +739,27 @@ check('one model number in two families is a problem, and the first one is kept'
   end
 end
 
+check('the brand buttons carry label, model count and whether sets exist, in button order') do
+  m = A.brand_menu
+  m.map { |b| b['label'] } == %w[Thermador Sub-Zero Gaggenau Miele] &&
+    m.find { |b| b['key'] == 'sub_zero_group' }['count'] == A.for_brand('sub_zero_group').size &&
+    m.select { |b| b['sets'] }.map { |b| b['key'] } == ['sub_zero_group']
+end
+
+check('the panel opens on the remembered brand, and on the first full brand when there is none') do
+  A.opening_brand('thermador') == 'thermador' &&
+    A.opening_brand(nil) == 'sub_zero_group' &&
+    A.opening_brand('a brand that was removed') == 'sub_zero_group'
+end
+
+check('the panel filters its list by brand and remembers the choice - it does not lock the kitchen') do
+  panel = File.read(File.expand_path('../src/ucon_appliances/ui_panel.rb', __dir__))
+  placing = panel[/def show.*?@dlg\.show/m].to_s
+  panel.include?('A.brand_menu') && panel.include?("r.brand_key===B") &&
+    panel.include?("add_action_callback('brand')") &&
+    placing.scan(/place\(m, installation/).size == 1 && !placing[/place\(m[^\n]*brand/]
+end
+
 check('after the broken copies, the shipped data is back and clean') do
   A.data_dir.nil? == false && A.data_dir == A::DATA_DIR &&
     A.load_problems.empty? && A.all.size >= 30

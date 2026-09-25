@@ -37,7 +37,7 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.4.0'
+    VERSION = '0.5.0'
 
     module_function
 
@@ -170,6 +170,26 @@ module UCON
 
     def all
       brand_keys.flat_map { |k| for_brand(k) }
+    end
+
+    # What the panel's brand buttons show, in button order: the label, how many
+    # models the family holds today, and whether it has preset sets. The panel
+    # draws exactly this and decides nothing of its own.
+    def brand_menu
+      brands.map do |b|
+        { 'key' => b['key'], 'label' => b['label'], 'sub_brands' => b['sub_brands'],
+          'count' => for_brand(b['key']).size, 'sets' => !b['sets'].nil? }
+      end
+    end
+
+    # The brand the panel opens on: the one remembered from last time if it
+    # still exists, otherwise the first brand that holds any model, otherwise
+    # the first button. A remembered key that no longer exists is not an error.
+    def opening_brand(remembered = nil)
+      return remembered.to_s if brand(remembered)
+
+      first_full = brands.find { |b| !for_brand(b['key']).empty? }
+      (first_full || brands.first)['key']
     end
 
     def index

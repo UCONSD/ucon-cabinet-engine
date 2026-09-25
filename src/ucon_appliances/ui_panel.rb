@@ -35,7 +35,7 @@ module UCON
               'Press Reload core on the cabinet palette.' }
     end
 
-    def payload
+    def payload(brand = nil)
       sets = A.sets['sets'].map do |s|
         t = A.set_total(s['key'])
         s.merge('total_usd' => t['total_usd'], 'rebate_usd' => t['rebate_usd'],
@@ -53,6 +53,7 @@ module UCON
       list = A.all.map do |a|
         { 'model' => a['model'], 'brand' => a['brand'], 'series' => a['series'],
           'name' => a['product_name'], 'type' => a['type'],
+          'brand_key' => a['brand_key'],
           'install_class' => a['install_class'], 'finish' => a['finish'],
           'installations' => A.installations_for(a['model']),
           'default' => A.default_installation(a['model']),
@@ -60,11 +61,24 @@ module UCON
           'ada' => a['ada_variant'], 'notes' => a['notes'],
           'msrp' => A.price(a['model']), 'setback' => A.setback_for(a['model']) }
       end
-      JSON.generate('sets' => sets, 'list' => list,
+      JSON.generate('sets' => sets, 'list' => list, 'brands' => A.brand_menu,
+                    'problems' => A.load_problems, 'brand' => A.opening_brand(brand),
                     'rules' => A.rules, 'snapshot' => A.prices['snapshot'])
     end
 
-    def html
+    # The brand is a FILTER on the list, never a lock on the kitchen (decided
+    # 2026-09-24). The last choice is remembered between sessions.
+    PREF = 'ucon_appliances'
+
+    def remembered_brand
+      defined?(Sketchup) ? Sketchup.read_default(PREF, 'brand', nil) : nil
+    end
+
+    def remember_brand(key)
+      Sketchup.write_default(PREF, 'brand', key.to_s) if defined?(Sketchup) && A.brand(key)
+    end
+
+    def html(brand = remembered_brand)
       <<~HTML
         <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
         #{UCON::Appliances::PanelKit::CSS}
@@ -76,15 +90,29 @@ module UCON
             <select id="front"><option value="handle">handle</option><option value="gola">gola / grip recess</option></select></div>
           <div><label>Run top, mm from floor</label><input id="top" type="number" value="2200" step="10"></div>
         </div>
-        <div class="tabs"><div id="tS" class="on" onclick="tab('s')">Sets</div><div id="tL" onclick="tab('l')">All appliances</div></div>
+        <div class="tabs" id="brands"></div>
+        <div id="probs"></div>
+        <div class="tabs" id="tabs"><div id="tS" class="on" onclick="tab('s')">Sets</div><div id="tL" onclick="tab('l')">Appliances</div></div>
         <div id="s"></div><div id="l" style="display:none"><ul id="items"></ul>
           <footer id="foot"></footer></div><div id="d"></div>
         <script>
-        const P = #{payload};
+        const P = #{payload(brand)};
         const COL={power:'#e8b21e',gas:'#ce5c30',water:'#3a84c8',drain:'#6e7a8a',duct:'#8a68be'};
         const esc=s=>(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
         const usd=n=>n?'$'+Math.round(n).toLocaleString('en-US'):'—';
-        const bc=b=>b==='Wolf'?'wolf':(b==='Cove'?'cove':'sz');
+        const bc=b=>b==='Wolf'?'wolf':(b==='Cove'?'cove':(b==='Sub-Zero'?'sz':''));
+        let B=P.brand;
+        const cur=()=>P.brands.find(x=>x.key===B);
+        function renderBrands(){
+          document.getElementById('brands').innerHTML=P.brands.map(b=>
+            `<div class="${b.key===B?'on':''}" onclick="pickBrand('${b.key}')">${esc(b.label)}${b.count?'':' &middot; 0'}</div>`).join('');
+          const hasSets=cur().sets;
+          document.getElementById('tS').style.display=hasSets?'':'none';
+          document.getElementById('tL').textContent=cur().label+' appliances';}
+        function pickBrand(k){B=k;try{sketchup.brand(k);}catch(e){}
+          renderBrands();renderList();tab(cur().sets?'s':'l');}
+        function renderProblems(){document.getElementById('probs').innerHTML=P.problems.length?
+          `<div class="warn"><b>Catalogue problem.</b> ${P.problems.map(esc).join('<br>')}</div>`:'';}
         const front=()=>document.getElementById('front').value;
         const top_=()=>parseInt(document.getElementById('top').value||'2200',10);
         function tab(t){document.getElementById('d').style.display='none';
@@ -130,12 +158,17 @@ module UCON
             <div class="acts"><button class="pri" onclick="sketchup.placeset('${p.key}|'+front()+'|'+top_())">Place all housings</button>
             <button onclick="sketchup.clear()">Clear drawn geometry</button></div>`;
           window.scrollTo(0,0);}
-        function renderList(){document.getElementById('items').innerHTML=P.list.map(r=>`
+        function renderList(){const rows=P.list.filter(r=>r.brand_key===B);
+          if(!rows.length){document.getElementById('items').innerHTML=
+            `<li class="item"><span><span class="mdl">${esc(cur().label)} catalogue is empty</span>
+             <div class="sub">It grows from real projects, one model at a time, each value read from the manufacturer's own document.</div></span></li>`;
+            document.getElementById('foot').textContent='';return;}
+          document.getElementById('items').innerHTML=rows.map(r=>`
           <li class="item" onclick="openItem('${r.model}')"><span class="chip ${bc(r.brand)}">${esc(r.brand)}</span>
           <span><span class="mdl">${esc(r.model)}</span>
           <div class="sub">${esc(r.name||r.type)}</div>
           <div class="sub">${r.installations.length?r.installations.join(' / '):'no opening'}</div></span></li>`).join('');
-          document.getElementById('foot').textContent='A value appears here only if it is printed in the manufacturer design guide.';}
+          document.getElementById('foot').textContent="A value appears here only if it is printed in the manufacturer's own document.";}
         function openItem(m){const r=P.list.find(x=>x.model===m);const inst=r.default||r.installations[0];
           const o=inst?r.openings[inst]:null;const v=o?voidFor(o.h):null;
           const cell=(x,l)=>`<div><div class="n ${x?'':'na'}">${x||'—'}</div><div class="l">${l}</div></div>`;
@@ -148,7 +181,7 @@ module UCON
           const g=front()==='gola'&&r.install_class==='undercounter';
           document.getElementById('s').style.display='none';document.getElementById('l').style.display='none';
           const d=document.getElementById('d');d.style.display='block';
-          d.innerHTML=`<div class="back" onclick="tab('l')">&lsaquo; all appliances</div>
+          d.innerHTML=`<div class="back" onclick="tab('l')">&lsaquo; ${esc(cur().label)} appliances</div>
             <div class="hd"><h2>${esc(r.model)}</h2><p>${esc(r.brand)} &middot; ${esc(r.name||r.type)}</p>
             <div class="big">${cell(o&&o.w,'width')}${cell(o&&o.h,'height')}${cell(o&&o.d,'depth')}</div></div>
             ${g&&!r.ada?`<div class="warn"><b>Cannot sit under a grip recess.</b> No ADA version of ${esc(r.model)} exists.
@@ -165,8 +198,8 @@ module UCON
                  onclick="sketchup.place('${r.model}|'+'${i}'+'|'+front()+'|'+top_())">Place ${i.replace(/_/g,' ')}</button>`).join('')}
               <button class="wide" onclick="sketchup.clear()">Clear drawn geometry</button></div>`;
           window.scrollTo(0,0);}
-        document.getElementById('front').addEventListener('change',()=>{tab('s');renderSets();});
-        renderSets();renderList();
+        document.getElementById('front').addEventListener('change',()=>{tab(cur().sets?'s':'l');renderSets();});
+        renderProblems();renderBrands();renderSets();renderList();tab(cur().sets?'s':'l');
         </script></body></html>
       HTML
     end
@@ -190,6 +223,7 @@ module UCON
         nil
       end
       @dlg.add_action_callback('clear') { |_c| clear; nil }
+      @dlg.add_action_callback('brand') { |_c, key| remember_brand(key); nil }
       @dlg.show
     end
 

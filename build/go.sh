@@ -29,6 +29,10 @@ ruby tools/test_appliance_seam.rb > /dev/null
 
 echo
 echo "===== 2. stage, BY NAME ====="
+# CLAUDE.md JOINED THE LIST 2026-09-24. It is the onboarding file every session
+# reads first, and this script had never staged it: its last commit (a171615,
+# 2026-08-30) was made by hand. The appliance-link note written that day would
+# have sat uncommitted with nothing saying so.
 # AND THIS SCRIPT STAGES ITSELF, 2026-08-28. It was not in the repository at
 # all - .gitignore said `build/` while its own stated reason was only ever about
 # .rbz archives, a rule wider than the reason above it. It surfaced the first
@@ -45,7 +49,7 @@ git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
         tools/probe_top_measure.rb \
         tools/probe_recon_elements.rb \
         tools/probe_bridge.rb \
-        .gitignore build/go.sh
+        .gitignore build/go.sh CLAUDE.md
 
 echo
 # tools/probe_bridge.rb JOINED THE LIST, 2026-08-30, and it had been TRACKED and
