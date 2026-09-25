@@ -37,7 +37,7 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.5.0'
+    VERSION = '0.6.0'
 
     module_function
 
@@ -326,8 +326,24 @@ module UCON
     def height_missing?(model, installation = nil)
       o = opening(model, installation)
       return false unless o
+      return false if countertop?(model)
 
       o['h'].nil? && !run_gap?(model, installation)
+    end
+
+    # ------------------------------------------------- the worktop cutout
+    #
+    # THE FOURTH SHAPE, 2026-09-24, and it arrived with Thermador. A cooktop and
+    # a downdraft are not openings in a run: they are cut into the WORKTOP, so
+    # their datum is the worktop surface, not the floor. They publish a width, a
+    # front-to-back depth and how far they reach BELOW the worktop
+    # (`below_top`), and no height from the floor - by construction, not by
+    # omission. So they are neither a run gap (a depth is printed) nor a hole
+    # (nothing is missing), and the floor-based housing builder must never see
+    # one. Drawing the cutout is the engine's, in the worktop it owns.
+    def countertop?(model)
+      a = find(model)
+      !a.nil? && a['install_class'] == 'countertop_cutout'
     end
 
     # The height rule, on its own so both of its branches can be checked:

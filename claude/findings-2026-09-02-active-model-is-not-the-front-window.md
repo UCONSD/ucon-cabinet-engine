@@ -3,6 +3,13 @@
 2026-09-02, laptop, found in the first ten minutes of the reconciliation session
 while answering a completely different question.
 
+> **CORRECTION ADDED 2026-09-24.** Below, `T42IT100NP_TradeCAD` is called "a
+> Sub-Zero trade CAD". It is a **Thermador** model — the 42 in Freedom French
+> door bottom freezer, printed in the Thermador Design and Planning Guide
+> Vol. 10.1 on p.151. The finding itself is untouched: which brand the stray
+> document belonged to changes nothing about `active_model`. Left as written
+> below, per the rule that a mistake is corrected beside itself, not erased.
+
 ---
 
 ## What happened

@@ -5,7 +5,346 @@
  "generated": "2026-09-24",
  "units": "mm, measured from the finished floor",
  "rule": "a value appears here only if it is printed in the manufacturer's own document (design guide, planning guide or specification sheet), with that document named on the value",
- "note": "Thermador: empty on purpose. The catalogue grows only as real projects need a model (decisions-2026-09-24-appliance-brands.md). No prices here - prices are checked when a proposal is made.",
- "sources": [],
- "appliances": []
+ "note": "Thermador: the first eight models, for 7612 Hillside Dr (decisions-2026-09-24-appliance-brands.md, thermador-recon-2026-09-24.md). Every value is read from the Design and Planning Guide Vol. 10.1 and names its PRINTED page. No prices here - prices are checked when a proposal is made.",
+ "sources": [
+  {
+   "brand": "Thermador",
+   "file": "thermador-design-guide-vol10.1.pdf",
+   "revision": "Volume 10.1 (file created 2026-07-22)",
+   "pages": 128,
+   "page_rule": "spreads: printed_left = 2 x PDF - 4, from PDF 4"
+  }
+ ],
+ "appliances": [
+  {
+   "model": "CIT36YWBB",
+   "brand": "Thermador",
+   "series": "Freedom Induction",
+   "type": "cooktop_induction",
+   "install_class": "countertop_cutout",
+   "finish": "black_glass",
+   "nominal_w_in": 36,
+   "product_name": "36\" Freedom Induction Cooktop, frameless, black glass",
+   "installations": {
+    "standard": {
+     "w": 883,
+     "h": null,
+     "d": 505,
+     "below_top": 105,
+     "source": "thermador-design-guide-vol10.1.pdf p.100"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "240/208 V, 3-wire, 60 Hz; 30 A circuit breaker",
+     "note": "junction box within 3 ft (~900 mm) of the cooktop connection, accessible for service",
+     "source": "thermador-design-guide-vol10.1.pdf p.98"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "cutout 34 3/4-34 7/8 in (883-886) x 19 7/8-20 in (505-508); installed depth 4 1/8 in (105) below the worktop surface, including the 1 in (26) air gap the guide requires (p.100)",
+    "appliance 37 x 21 1/4 in (940 x 540) (p.100)",
+    "min 2 in (51) from the cutout to a side wall; 2 1/2 in (64) setback from the front edge; 1 in (25) flat area (p.100)",
+    "WITH A DOWNDRAFT BEHIND IT the cutout is the combined one on p.133, not this one - see UCVM36XS",
+    "may sit above a Thermador oven if the cabinet-floor-to-countertop minimum is kept (p.98-101)",
+    "listed as ADA compliant by Thermador when installed to ADA requirements (thermador.com ADA page, 2026-09-24)"
+   ]
+  },
+  {
+   "model": "UCVM36XS",
+   "brand": "Thermador",
+   "series": "Masterpiece",
+   "type": "downdraft",
+   "install_class": "countertop_cutout",
+   "finish": "stainless",
+   "nominal_w_in": 37,
+   "product_name": "36\" Masterpiece Downdraft Ventilation (37 in overall), blower sold separately",
+   "installations": {
+    "standard": {
+     "w": 840,
+     "h": null,
+     "d": 646,
+     "below_top": 746,
+     "source": "thermador-design-guide-vol10.1.pdf p.133"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "120 V, 60 Hz; load with inline VTI1FZ 2.95 A / 354 W, with VTI2FZ 5.49 A / 659 W",
+     "note": "for front-downward ducting the electrical panel must be remotely mounted; 5 ft extension EXTNCE5 available",
+     "source": "thermador-design-guide-vol10.1.pdf p.126"
+    },
+    {
+     "service": "duct",
+     "datum_x": "none",
+     "spec": "6 in round with VTI1FZ (600 CFM) or 10 in with VTI2FZ (1000 CFM); discharge left / right / rear / front",
+     "note": "transition CVTSIDE6 or CVTFRONT6 for VTI1FZ",
+     "source": "thermador-design-guide-vol10.1.pdf p.114"
+    }
+   ],
+   "companions": {
+    "blower_required": true,
+    "blowers": [
+     "VTR2FZ",
+     "VTI1FZ",
+     "VTI2FZ",
+     "VTD600P"
+    ],
+    "recirculation": "UCVRECIRC (induction cooktops only)",
+    "note": "the downdraft has no blower of its own; the blower is a separate model",
+    "source": "thermador-design-guide-vol10.1.pdf p.114"
+   },
+   "ada_variant": null,
+   "notes": [
+    "COMBINED CUTOUT WITH A 36 in INDUCTION COOKTOP (p.133): downdraft slot width 33 1/16 in (840) for a 36 in (914) unit; overall front-to-back 25 7/16-25 9/16 in (646-649); cooktop part 19 7/8-20 in (505-508); 11/16 in (17) between them; min 1/2 in (13) and 2 1/4 in (57) as drawn",
+    "flat countertop behind the downdraft min 2 3/4 in (70); cooktop to rear wall of the cabinet min 2 3/4 in (70); rear of the downdraft to the rear of the cabinet min 5/8 in (16) (p.133)",
+    "body 33 1/4 in (845) wide below the worktop, 2 3/4 in (70) deep; overall height 44 3/8 in (1127), of which 29 3/8 in (746) below the worktop and 15 in (381) rises above it (p.132)",
+    "WHAT IT DOES TO THE CABINET: the body hangs 746 below the worktop surface, i.e. nearly the full base height, at the rear of the cooktop base - that base cannot be an ordinary drawer unit",
+    "for non-professional gas or induction cooktops only; hood width should equal the cooktop width (p.108, p.126)",
+    "side and rear exhaust need at least 18 in of clearance for blower and transition; some applications need deeper cabinets (p.129-130)"
+   ]
+  },
+  {
+   "model": "VTI1FZ",
+   "brand": "Thermador",
+   "series": "Ventilation",
+   "type": "blower_inline",
+   "install_class": "remote_blower",
+   "finish": "none",
+   "nominal_w_in": null,
+   "product_name": "Inline blower, 600 CFM, 6 in duct",
+   "installations": {},
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "120 V, 60 Hz; with UCVM36XS 2.95 A / 354 W",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.126"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "mounted between the kitchen and the external wall, in the duct run (p.115) - for 7612 Hillside Dr in the crawl space",
+    "dimensions are a drawing on p.115; not transcribed until a drawing needs them",
+    "not a cabinet appliance: it reserves nothing in the cabinetry"
+   ]
+  },
+  {
+   "model": "MEDMC301WS",
+   "brand": "Thermador",
+   "series": "Masterpiece",
+   "type": "oven_combination_speed",
+   "install_class": "cabinet_slot",
+   "finish": "stainless",
+   "nominal_w_in": 30,
+   "product_name": "30\" Masterpiece Double Combination Wall Oven with Speed Oven",
+   "installations": {
+    "standard": {
+     "w": 724,
+     "h": 1232,
+     "d": 597,
+     "source": "thermador-design-guide-vol10.1.pdf p.73"
+    },
+    "flush": {
+     "w": 762,
+     "h": 1248,
+     "d": 622,
+     "source": "thermador-design-guide-vol10.1.pdf p.73"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "electrical rating not transcribed yet",
+     "note": "junction box may be above, beneath, right or left of the unit within reach of the power cord (p.73)",
+     "source": "thermador-design-guide-vol10.1.pdf p.73"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "standard cutout 48 1/2 x 28 1/2 x 23 1/2 in min (HxWxD); flush 49 1/8 x 30 x 24 1/2 in with 3/4 in (19) reveal cleats (p.61, p.73)",
+    "appliance 49 x 29 3/4 x 24 1/2 in overall (p.61)",
+    "bottom of the cutout 4 3/4-18 in (121-457) above the cabinet floor as drawn (p.73)",
+    "upper cavity is a 1.6 cu ft speed oven with microwave, 1000 W; lower a 4.5 cu ft oven (p.61)",
+    "Masterpiece handle protrudes 2 3/8 in (61) from the door (p.73)"
+   ]
+  },
+  {
+   "model": "T36IT100NP",
+   "brand": "Thermador",
+   "series": "Freedom",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 36,
+   "product_name": "36\" Freedom Built-In French Door Bottom Freezer, custom panel",
+   "installations": {
+    "standard": {
+     "w": 914,
+     "h": 2134,
+     "d": 635,
+     "source": "thermador-design-guide-vol10.1.pdf p.171"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "socket inside area A",
+     "note": "area B at the rear, floor to 7 1/4 in (185), is for the water and electric lines (p.171)",
+     "source": "thermador-design-guide-vol10.1.pdf p.171"
+    },
+    {
+     "service": "water",
+     "datum_x": "none",
+     "spec": "cold water for the ice maker and internal dispenser",
+     "note": "routed in area B (p.171)",
+     "source": "thermador-design-guide-vol10.1.pdf p.171"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "cutout 84 x 36 x 25 in (2134 x 914 x 635) (p.150, p.171); appliance 83 9/16-85 1/2 x 35 1/4 x 24 in (p.150)",
+    "furniture return at least 4 in (100) (p.171)",
+    "door panels 17 13/16 x 49 7/16 in (452 x 1255) each, max 141 lb (64 kg) per panel; drawer panels 35 3/4 x 10 1/2 in (908 x 266), max 121 lb (55 kg), and 35 3/4 x 19 3/4 in (908 x 502), max 66 lb (30 kg); panel stack 79 7/8 in (2029) (p.171)",
+    "side tipping radius needs a ceiling of at least 90 3/4 in (2305) to stand it up (p.168)"
+   ]
+  },
+  {
+   "model": "T24IW905SP",
+   "brand": "Thermador",
+   "series": "Freedom",
+   "type": "wine_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "product_name": "24\" Freedom Wine Preservation Column, custom panel",
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 2134,
+     "d": 635,
+     "source": "thermador-design-guide-vol10.1.pdf p.158"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "120 V, 60 Hz, 15 A; separate 3-wire receptacle",
+     "note": "outlet near the appliance and freely accessible after installation (p.190)",
+     "source": "thermador-design-guide-vol10.1.pdf p.190"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "cutout 84 x 24 x 25 in (p.158); columns take 84-85 3/16 in (2134-2164) high (p.190); appliance 83 3/4 x 23 3/4 x 24 in (p.158)",
+    "no water connection for a wine column (p.191: water only where an ice maker or dispenser exists)",
+    "92 bottles, 3 temperature zones (p.158)"
+   ]
+  },
+  {
+   "model": "DWHD660EPR",
+   "brand": "Thermador",
+   "series": "Sapphire",
+   "type": "dishwasher",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "product_name": "24\" Sapphire Dishwasher, custom panel, push to open",
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 860,
+     "d": 610,
+     "source": "thermador-design-guide-vol10.1.pdf p.220"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "120 V, 60 Hz, 12 A",
+     "note": "openings for water, drain and electrical within the 7 x 2 1/2 in area shown, as close to the sink as possible (p.222)",
+     "source": "thermador-design-guide-vol10.1.pdf p.222"
+    },
+    {
+     "service": "water",
+     "datum_x": "none",
+     "spec": "hot water supply 15-145 psi, heater at about 120 F",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.222"
+    },
+    {
+     "service": "drain",
+     "datum_x": "none",
+     "spec": "drain hose up to 150 in including the air-gap run; part of it raised at least 33 in above the floor",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.222"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "NO ADA VERSION: every Thermador dishwasher is 33 7/8 in (860) and Thermador's ADA list names no dishwasher (p.220; thermador.com ADA page, 2026-09-24). Under gola this model is refused and the remedies are offered - for 7612 Hillside Dr the remedy chosen is GOL080",
+    "cutout 33 7/8 in min x 24 in min x 24 in (p.220); custom panel 23 1/16 x 27 1/2-30 1/8 in, 5/8-7/8 in thick, 11-18 lb recommended (p.223)",
+    "push to open: custom-panel model only (p.218-220) - the reason this is Sapphire and not Emerald DWHD640EPR"
+   ]
+  },
+  {
+   "model": "TCM24PS",
+   "brand": "Thermador",
+   "series": "Built-In Coffee",
+   "type": "coffee",
+   "install_class": "cabinet_slot",
+   "finish": "stainless",
+   "nominal_w_in": 24,
+   "product_name": "24\" Built-In Coffee Machine, plumbed",
+   "installations": {
+    "standard": {
+     "w": 560,
+     "h": 450,
+     "d": 597,
+     "source": "thermador-design-guide-vol10.1.pdf p.227"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "120 V, 60 Hz, 15 A; 39 in cord with NEMA 5-15R plug",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.226"
+    },
+    {
+     "service": "water",
+     "datum_x": "none",
+     "spec": "cold-water connection (plumbed model)",
+     "note": "water outlet, cold-water connection and electric terminal box sit in a band at the rear of the niche floor (p.227)",
+     "source": "thermador-design-guide-vol10.1.pdf p.227"
+    },
+    {
+     "service": "drain",
+     "datum_x": "none",
+     "spec": "drain hose with continuous fall, more than 6 in height difference; no loops or sagging",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.227"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "cutout 22 5/16 +5/16 in (560 +8) wide x 17 3/4 +1/8 in (450 +2) high x min 23 1/2 in (597) deep including the transformer (p.227)",
+    "recommended installation height 37 1/2-57 in (950-1450) from the floor to the lower edge of the machine (p.226-227)",
+    "ventilation: rear panel removed or cut 19 11/16 x 15 3/4 in (500 x 400), and 1 3/8 in (35) gap to the wall (p.226)",
+    "in a 30 in column it needs the trim kit TCMTK30RS (p.224)",
+    "TCM24PS is the plumbed model; TCM24TS has a refillable reservoir (p.224)"
+   ]
+  }
+ ]
 }

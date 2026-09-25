@@ -325,6 +325,12 @@ themselves live in `docs/Elda_Open_Questions_v0.1.md`.
 four brands at the door (Thermador, Sub-Zero group, Gaggenau, Miele), the
 choice is a filter not a lock, one data file per brand; the plan, code untouched.
 
+**Thermador recon, 2026-09-24:** `thermador-recon-2026-09-24.md` — the
+Design and Planning Guide Vol. 10.1 (spreads, printed_left = 2 x PDF - 4,
+measured), the seven 7612 appliances found in it, and three findings: Emerald
+exists panel-ready but without push-to-open, the downdraft blowers of 10.1,
+and CIT36XWBB is not in the guide.
+
 **Real projects — one card per job, the kitchen that drives the engine:**
 - `project-7612-hillside-dr-2026-09-24.md` — 7612 Hillside Dr, Cesar kitchen,
   opened 2026-09-24: files, naming, what is not known yet. (545 Avenida

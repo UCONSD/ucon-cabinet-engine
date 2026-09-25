@@ -70,8 +70,11 @@ check('every opening height is measured from the floor, so none is under 100') d
   end
 end
 
-check('an undercounter opening is 876 or 826 and nothing else') do
-  A.all.select { |a| a['install_class'] == 'undercounter' }.all? do |a|
+# SCOPED TO THE SUB-ZERO GROUP 2026-09-24. 876 and 826 are what Sub-Zero and
+# Cove print; Thermador prints 860 for every dishwasher it makes. A number that
+# was true of one catalogue had been written as if it were true of all of them.
+check('a Sub-Zero-group undercounter opening is 876 or 826 and nothing else') do
+  A.for_brand('sub_zero_group').select { |a| a['install_class'] == 'undercounter' }.all? do |a|
     a['installations'].values.all? { |i| [876, 826].include?(i['h']) }
   end
 end
@@ -668,7 +671,7 @@ check('every appliance is a brand of its own family') do
 end
 
 check('an empty brand is a normal state: no rows, no problem') do
-  %w[thermador gaggenau miele].all? { |k| A.for_brand(k) == [] } && A.load_problems.empty?
+  %w[gaggenau miele].all? { |k| A.for_brand(k) == [] } && A.load_problems.empty?
 end
 
 check('an unknown brand key gives an empty list, not an error') do
@@ -747,9 +750,10 @@ check('the brand buttons carry label, model count and whether sets exist, in but
 end
 
 check('the panel opens on the remembered brand, and on the first full brand when there is none') do
-  A.opening_brand('thermador') == 'thermador' &&
-    A.opening_brand(nil) == 'sub_zero_group' &&
-    A.opening_brand('a brand that was removed') == 'sub_zero_group'
+  first_full = A.brands.find { |b| !A.for_brand(b['key']).empty? }['key']
+  A.opening_brand('miele') == 'miele' &&
+    A.opening_brand(nil) == first_full &&
+    A.opening_brand('a brand that was removed') == first_full
 end
 
 check('the panel filters its list by brand and remembers the choice - it does not lock the kitchen') do
@@ -758,6 +762,58 @@ check('the panel filters its list by brand and remembers the choice - it does no
   panel.include?('A.brand_menu') && panel.include?("r.brand_key===B") &&
     panel.include?("add_action_callback('brand')") &&
     placing.scan(/place\(m, installation/).size == 1 && !placing[/place\(m[^\n]*brand/]
+end
+
+# ---------------------------------------------- Thermador, 2026-09-24
+#
+# The first eight models, for 7612 Hillside Dr. Every value from the Design and
+# Planning Guide Vol. 10.1, printed pages (claude/thermador-recon-2026-09-24.md).
+
+TH_7612 = %w[CIT36YWBB UCVM36XS VTI1FZ MEDMC301WS T36IT100NP T24IW905SP DWHD660EPR TCM24PS].freeze
+
+check('the eight 7612 models are in the Thermador catalogue and nowhere else') do
+  A.for_brand('thermador').map { |a| a['model'] }.sort == TH_7612.sort &&
+    TH_7612.all? { |m| A.brand_key_of(m) == 'thermador' }
+end
+
+check('every Thermador value names Vol. 10.1 and a printed page') do
+  A.for_brand('thermador').all? do |a|
+    a['installations'].values.all? { |i| i['source'].start_with?('thermador-design-guide-vol10.1.pdf p.') } &&
+      a['services'].all? { |sv| sv['source'].start_with?('thermador-design-guide-vol10.1.pdf p.') }
+  end
+end
+
+check('no Thermador model carries a price - prices come at proposal time') do
+  TH_7612.all? { |m| A.price(m).nil? }
+end
+
+check('a worktop cutout is its own shape: not a run gap, not a hole, datum the worktop') do
+  %w[CIT36YWBB UCVM36XS].all? do |m|
+    o = A.opening(m)
+    A.countertop?(m) && !A.run_gap?(m) && !A.height_missing?(m) &&
+      o['h'].nil? && o['w'] && o['d'] && o['below_top']
+  end && !A.countertop?('DWHD660EPR')
+end
+
+check('the downdraft hangs 746 below the worktop and names the blowers it needs') do
+  d = A.find('UCVM36XS')
+  A.opening('UCVM36XS')['below_top'] == 746 && d['companions']['blower_required'] == true &&
+    d['companions']['blowers'].include?('VTI1FZ') && A.find('VTI1FZ')['installations'].empty?
+end
+
+check('the Thermador dishwasher is 860 and has no ADA version, so gola refuses it with GOL080 on offer') do
+  r = A.for_front_system('DWHD660EPR', 'gola')
+  A.opening_h('DWHD660EPR') == 860 && A.find('DWHD660EPR')['ada_variant'].nil? &&
+    !r['ok'] && r['remedies'].any? { |x| x['code'] == 'GOL080' }
+end
+
+check('the Thermador columns are 84 in high, 2134, and fit H210 on a 100 plinth') do
+  %w[T36IT100NP T24IW905SP].all? { |m| A.opening_h(m) == 2134 && A.fits?(2200, m) }
+end
+
+check('the combination oven offers standard and flush, and defaults to standard') do
+  A.installations_for('MEDMC301WS') == %w[standard flush] &&
+    A.default_installation('MEDMC301WS') == 'standard'
 end
 
 check('after the broken copies, the shipped data is back and clean') do

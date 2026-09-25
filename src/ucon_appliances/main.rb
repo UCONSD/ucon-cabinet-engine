@@ -152,6 +152,18 @@ module UCON
         return nil
       end
 
+      # A WORKTOP CUTOUT IS NOT A HOUSING either (2026-09-24). Its datum is the
+      # worktop surface; the engine owns the worktop, so the engine cuts it.
+      if A.countertop?(model_no)
+        UI.messagebox(["#{model_no} is cut into the WORKTOP, not housed in the run.",
+                       "Cutout #{open['w']} wide x #{open['d']} front to back, reaching " \
+                       "#{open['below_top']} mm below the worktop surface.",
+                       '',
+                       'Nothing is drawn here: the worktop belongs to the cabinet engine.',
+                       "Source: #{open['source']}"].join("\n"))
+        return nil
+      end
+
       # AND THE OTHER MISSING HEIGHT, which is a hole and not a concept. This
       # one used to reach the builder and come out as a box zero high.
       if A.height_missing?(model_no, inst)
