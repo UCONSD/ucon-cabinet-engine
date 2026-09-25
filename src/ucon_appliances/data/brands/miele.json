@@ -1,0 +1,11 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_openings",
+ "brand_key": "miele",
+ "generated": "2026-09-24",
+ "units": "mm, measured from the finished floor",
+ "rule": "a value appears here only if it is printed in the manufacturer's own document (design guide, planning guide or specification sheet), with that document named on the value",
+ "note": "Miele: empty on purpose. The catalogue grows only as real projects need a model (decisions-2026-09-24-appliance-brands.md). No prices here - prices are checked when a proposal is made.",
+ "sources": [],
+ "appliances": []
+}

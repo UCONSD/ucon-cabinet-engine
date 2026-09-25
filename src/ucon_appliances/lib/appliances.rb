@@ -2,7 +2,7 @@
 #
 # UCON — appliance openings. The pure layer.
 #
-# No SketchUp, no network, no state beyond a memoised read of four JSON files,
+# No SketchUp, no network, no state beyond a memoised read of its JSON files,
 # so the whole rule set runs headlessly:  ruby test_appliances.rb
 #
 # WHY THIS IS NOT PART OF THE CABINET ENGINE'S CONTRACT
@@ -15,11 +15,19 @@
 # tells the engine whether a Cesar unit's declared appliance_niche agrees with
 # the machine somebody specified. It validates; it never builds.
 #
-# The four files have deliberately different lifecycles:
-#   appliances.json  geometry and services, versioned by design-guide revision
+# The files have deliberately different lifecycles:
+#   brands.json      which brands exist, in button order; decided 2026-09-24
+#   brands/<key>.json  ONE CATALOGUE PER BRAND FAMILY - geometry and services,
+#                    versioned by the manufacturer document it was read from.
+#                    Until 2026-09-24 this was a single appliances.json; it
+#                    moved, byte for byte, to brands/sub_zero_group.json.
 #   rules.json       UCON's decisions, versioned by the day they were decided
-#   prices.json      a dated MSRP snapshot, the only file that goes stale fast
-#   sets.json        which models make up a preset; totals are never stored
+#   prices.json      a dated MSRP snapshot, the only file that goes stale fast.
+#                    SUB-ZERO GROUP ONLY. Other brands carry no prices on
+#                    purpose: prices are checked when a proposal is made
+#                    (Andriy, 2026-09-24). A model without a price is complete.
+#   sets.json        which models make up a preset; totals are never stored.
+#                    Sub-Zero group only, for the same reason.
 
 require 'json'
 
@@ -29,20 +37,33 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.3.0'
+    VERSION = '0.4.0'
 
     module_function
 
     DATA_DIR = File.expand_path('../data', __dir__)
 
+    # The suite points this at a copy of the data to prove what a broken or
+    # missing brand file does. Nothing else sets it.
+    def data_dir
+      @data_dir || DATA_DIR
+    end
+
+    def data_dir=(dir)
+      @data_dir = dir
+      reset!
+    end
+
     def load_file(name)
       @files ||= {}
-      @files[name] ||= JSON.parse(File.read(File.join(DATA_DIR, "#{name}.json")))
+      @files[name] ||= JSON.parse(File.read(File.join(data_dir, "#{name}.json")))
     end
 
     def reset!
       @files = nil
       @index = nil
+      @catalogs = nil
+      @load_problems = nil
     end
 
     # Classic defs, not endless ones: the headless suite is run on the Ruby
@@ -60,8 +81,95 @@ module UCON
       load_file('sets')
     end
 
+    # ------------------------------------------------------------ brands
+    #
+    # Four brands at the door, decided 2026-09-24: the brand is a FILTER on the
+    # list, never a lock on the kitchen. One catalogue file per brand family.
+    #
+    # ONE BAD FILE MUST NOT TAKE THE OTHERS DOWN. A brand whose file is missing,
+    # unreadable or holds a model that belongs to another family is reported in
+    # load_problems and contributes nothing; every other brand loads. This is the
+    # lesson that made the registry loader a blocker before a second cabinet
+    # manufacturer, applied here before a second appliance family arrives.
+
+    def brands
+      load_file('brands')['brands']
+    end
+
+    def brand(key)
+      brands.find { |b| b['key'] == key.to_s }
+    end
+
+    def brand_keys
+      brands.map { |b| b['key'] }
+    end
+
+    # The rows of one brand family, in file order. [] for an empty brand, an
+    # unknown key, or a brand whose file failed - the reason is in load_problems.
+    def for_brand(key)
+      catalogs[key.to_s] || []
+    end
+
+    # The family a model belongs to, or nil.
+    def brand_key_of(model)
+      a = find(model)
+      a && a['brand_key']
+    end
+
+    def load_problems
+      catalogs
+      @load_problems
+    end
+
+    def catalogs
+      return @catalogs if @catalogs
+
+      @load_problems = []
+      seen = {}
+      @catalogs = {}
+      brands.each do |b|
+        rows = read_catalog(b)
+        kept = []
+        rows.each do |a|
+          model = a['model'].to_s
+          if seen[model]
+            @load_problems << "#{b['key']}: #{model} is already in #{seen[model]} - the first one is kept"
+            next
+          end
+          seen[model] = b['key']
+          kept << a.merge('brand_key' => b['key'])
+        end
+        @catalogs[b['key']] = kept
+      end
+      @catalogs
+    end
+
+    def read_catalog(b)
+      path = File.join(data_dir, b['catalog'].to_s)
+      unless File.file?(path)
+        @load_problems << "#{b['key']}: catalogue file #{b['catalog']} is missing"
+        return []
+      end
+      doc = JSON.parse(File.read(path))
+      rows = doc.is_a?(Hash) ? doc['appliances'] : nil
+      unless rows.is_a?(Array)
+        @load_problems << "#{b['key']}: #{b['catalog']} has no appliances list"
+        return []
+      end
+      foreign = rows.reject { |a| (b['sub_brands'] || []).include?(a['brand']) }
+      unless foreign.empty?
+        names = foreign.map { |a| "#{a['model']} (#{a['brand']})" }.join(', ')
+        @load_problems << "#{b['key']}: #{names} not a brand of this family - file skipped"
+        return []
+      end
+      rows
+    rescue JSON::ParserError, SystemCallError => e
+      @load_problems << "#{b['key']}: #{b['catalog']} cannot be read - #{e.class}"
+      []
+    end
+
     def all
-      load_file('appliances')['appliances']
+      brand_keys.flat_map { |k| for_brand(k) }
     end
 
     def index
@@ -397,7 +505,7 @@ module UCON
         problems << "hood #{hw}in is narrower than cooking #{cw}in" if cw && hw && hw < cw
       end
       s['items'].each do |i|
-        problems << "#{i['model']} is not in appliances.json" unless find(i['model'])
+        problems << "#{i['model']} is not in the catalogue" unless find(i['model'])
         problems << "#{i['model']} has no price" if price(i['model']).nil?
       end
       problems

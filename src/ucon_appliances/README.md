@@ -49,11 +49,26 @@ keys, and `LIST OF APPLIANCES` and its CSV export work unchanged.
   appliance carcass, because the hinge draws the panel inward as the door opens.
 
 Everything above lives in `data/rules.json` and is applied by `lib/appliances.rb`,
-which has no SketchUp in it and is covered by 45 headless checks:
+which has no SketchUp in it and is covered by headless checks:
 
     ruby test_appliances.rb
 
+## Brands and where the data lives
+
+Four brands, in button order: **Thermador, Sub-Zero, Gaggenau, Miele**
+(`data/brands.json`, decided 2026-09-24). Sub-Zero is the group: Sub-Zero for
+refrigeration, Wolf for cooking and ventilation, Cove for dishwashers. The
+brand is a filter on the list, not a lock on the kitchen — brands mix.
+
+One catalogue file per brand family, `data/brands/<key>.json`. Gaggenau, Miele
+and (until 7612 Hillside Dr) Thermador are empty on purpose: a catalogue grows
+only when a real project needs a model. A brand file that is missing or broken
+is reported and loads nothing; the other brands load regardless.
+
 ## Prices
+
+Sub-Zero group only. Other brands carry no prices: prices are open and change,
+codes matter more, and prices are checked when a proposal is made.
 
 `data/prices.json` is a dated snapshot of US list MSRP. Appliances are **not
 supplied by UCON** — the figure is a budget allowance and the dealer quotes.
@@ -63,4 +78,6 @@ brochure rather than from the full terms.
 ## Not covered yet
 
 Door swing projection. PRO Series has no default installation until that is
-decided. Manufacturers other than Sub-Zero, Wolf and Cove.
+decided. The brand filter in the panel (step 4 of
+`claude/decisions-2026-09-24-appliance-brands.md`). Any model outside the
+Sub-Zero group.

@@ -612,6 +612,138 @@ check('the package states its own version, in exactly one place') do
     lib.scan(/VERSION = '/).size == 1
 end
 
+# ------------------------------------------------------ brands, 2026-09-24
+#
+# Four brands at the door, one catalogue file per brand family, the choice a
+# filter and not a lock (claude/decisions-2026-09-24-appliance-brands.md).
+
+require 'tmpdir'
+require 'fileutils'
+
+# The thirty models as they stood in data/appliances.json before the move,
+# digested value for value. The move was byte for byte; this proves the LOADER
+# still hands back exactly those values. A Sub-Zero model added later does not
+# touch it - only these thirty are digested.
+MOVED_30 = %w[
+  CL3650UFD/O CL3650UID/S/T/R CL4250SD/S/T CL4850SD/O CL4850SD/S/T CSO3050TE/S/T
+  DEC2450R/L DEC2450W/L DEC3050FI/R DEC3050R/L DEC3050W/L DEC3650FI/R DEC3650R/L
+  DEU1550I/L DEU1550W/L DEU2450R/ADA/L DEU2450R/L DEU2450W/ADA/L DEU2450W/L
+  DF36650/S/P DF48650C/S/P DF60650DG/S/P DW2451 DW2451/ADA EC3050TE/S
+  MDD3050TE/S/T PW362418 PW482418 PW602418 WWD3050O
+].freeze
+MOVED_30_SHA = '896a9f4447c4ec7228754dcce350d90c6eb263632720e38af01dac683af0c0da'
+
+check('the thirty moved models come back from the loader value for value') do
+  rows = A.for_brand('sub_zero_group').select { |a| MOVED_30.include?(a['model']) }
+  bare = rows.map { |a| a.reject { |k, _| k == 'brand_key' } }.sort_by { |a| a['model'] }
+  rows.size == 30 && Digest::SHA256.hexdigest(JSON.generate(bare)) == MOVED_30_SHA
+end
+
+check('four brands, in the order of the buttons: Thermador, Sub-Zero, Gaggenau, Miele') do
+  A.brands.map { |b| b['label'] } == %w[Thermador Sub-Zero Gaggenau Miele]
+end
+
+check('the Sub-Zero button is the group: Sub-Zero, Wolf and Cove') do
+  A.brand('sub_zero_group')['sub_brands'] == %w[Sub-Zero Wolf Cove]
+end
+
+check('every brand names a catalogue file that is there') do
+  A.brands.all? { |b| File.file?(File.join(A.data_dir, b['catalog'])) }
+end
+
+check('the shipped data loads with no problem reported') do
+  A.load_problems.empty?
+end
+
+check('the old single file is gone, so nothing can read a stale copy') do
+  !File.exist?(File.join(A::DATA_DIR, 'appliances.json'))
+end
+
+check('every appliance carries the key of the family it was loaded from') do
+  A.brand_keys.all? { |k| A.for_brand(k).all? { |a| a['brand_key'] == k } }
+end
+
+check('every appliance is a brand of its own family') do
+  A.brands.all? { |b| A.for_brand(b['key']).all? { |a| b['sub_brands'].include?(a['brand']) } }
+end
+
+check('an empty brand is a normal state: no rows, no problem') do
+  %w[thermador gaggenau miele].all? { |k| A.for_brand(k) == [] } && A.load_problems.empty?
+end
+
+check('an unknown brand key gives an empty list, not an error') do
+  A.for_brand('nobody') == []
+end
+
+check('brand_key_of names the family of a model') do
+  A.brand_key_of('DW2451') == 'sub_zero_group' && A.brand_key_of('NOPE').nil?
+end
+
+check('no brand but the Sub-Zero group carries prices or sets - prices come at proposal time') do
+  A.brands.reject { |b| b['key'] == 'sub_zero_group' }.none? { |b| b['prices'] || b['sets'] } &&
+    Dir.glob(File.join(A::DATA_DIR, 'brands', '*.json')).none? do |f|
+      JSON.parse(File.read(f))['appliances'].any? { |a| a.key?('msrp_usd') || a.key?('price') }
+    end
+end
+
+# The failure cases run against a COPY of the data with one file broken. The
+# copy is thrown away; the shipped data is never touched.
+def with_copy
+  Dir.mktmpdir do |dir|
+    FileUtils.cp_r(File.join(A::DATA_DIR, '.'), dir)
+    A.data_dir = dir
+    yield dir
+  end
+ensure
+  A.data_dir = nil
+end
+
+def write_catalog(dir, key, rows)
+  File.write(File.join(dir, 'brands', "#{key}.json"), JSON.generate('appliances' => rows))
+  A.reset! # the rows written were read from this same copy, so its cache is stale
+end
+
+check('a brand file that is not JSON is reported and the other brands still load') do
+  with_copy do |dir|
+    File.write(File.join(dir, 'brands', 'miele.json'), '{ not json')
+    A.load_problems.size == 1 && A.load_problems.first.start_with?('miele:') &&
+      A.for_brand('sub_zero_group').size == 30
+  end
+end
+
+check('a missing brand file is reported and the other brands still load') do
+  with_copy do |dir|
+    File.delete(File.join(dir, 'brands', 'gaggenau.json'))
+    A.load_problems.any? { |p| p.start_with?('gaggenau:') && p.include?('missing') } &&
+      A.for_brand('sub_zero_group').size == 30
+  end
+end
+
+check('a model under the wrong family skips that file, and says which model') do
+  with_copy do |dir|
+    stray = A.for_brand('sub_zero_group').first.reject { |k, _| k == 'brand_key' }
+    write_catalog(dir, 'thermador', [stray.merge('model' => 'X-STRAY')])
+    A.for_brand('thermador') == [] &&
+      A.load_problems.any? { |p| p.start_with?('thermador:') && p.include?('X-STRAY') } &&
+      A.for_brand('sub_zero_group').size == 30
+  end
+end
+
+check('one model number in two families is a problem, and the first one is kept') do
+  with_copy do |dir|
+    twin = A.for_brand('sub_zero_group').first.reject { |k, _| k == 'brand_key' }
+    write_catalog(dir, 'miele', [twin.merge('brand' => 'Miele')])
+    A.load_problems.any? { |p| p.start_with?('miele:') && p.include?(twin['model']) } &&
+      A.brand_key_of(twin['model']) == 'sub_zero_group' &&
+      A.for_brand('miele') == []
+  end
+end
+
+check('after the broken copies, the shipped data is back and clean') do
+  A.data_dir.nil? == false && A.data_dir == A::DATA_DIR &&
+    A.load_problems.empty? && A.all.size >= 30
+end
+
 puts "#{$checks} checks, #{$fails.size} failures"
 unless $fails.empty?
   puts

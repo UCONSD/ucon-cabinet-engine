@@ -321,6 +321,10 @@ the one command Andriy runs on both machines and the change is his to approve.
 **For Elda:** `elda-mini-order-2026-08-20.md` — and the numbered questions
 themselves live in `docs/Elda_Open_Questions_v0.1.md`.
 
+**Appliance brands, 2026-09-24:** `decisions-2026-09-24-appliance-brands.md` —
+four brands at the door (Thermador, Sub-Zero group, Gaggenau, Miele), the
+choice is a filter not a lock, one data file per brand; the plan, code untouched.
+
 **Real projects — one card per job, the kitchen that drives the engine:**
 - `project-7612-hillside-dr-2026-09-24.md` — 7612 Hillside Dr, Cesar kitchen,
   opened 2026-09-24: files, naming, what is not known yet. (545 Avenida

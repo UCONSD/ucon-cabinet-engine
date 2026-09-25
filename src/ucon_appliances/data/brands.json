@@ -1,0 +1,50 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_brands",
+ "decided": "2026-09-24",
+ "decided_by": "Andriy",
+ "note": "The order here is the order of the buttons. A brand is a FILTER on the list, not a lock on the kitchen: brands mix in one kitchen. A catalogue file is one per brand family and grows only from real projects. prices and sets are optional and today exist only for the Sub-Zero group (claude/decisions-2026-09-24-appliance-brands.md).",
+ "brands": [
+  {
+   "key": "thermador",
+   "label": "Thermador",
+   "sub_brands": [
+    "Thermador"
+   ],
+   "catalog": "brands/thermador.json"
+  },
+  {
+   "key": "sub_zero_group",
+   "label": "Sub-Zero",
+   "sub_brands": [
+    "Sub-Zero",
+    "Wolf",
+    "Cove"
+   ],
+   "sub_brand_roles": {
+    "Sub-Zero": "refrigeration",
+    "Wolf": "cooking and ventilation",
+    "Cove": "dishwashers"
+   },
+   "catalog": "brands/sub_zero_group.json",
+   "prices": "prices.json",
+   "sets": "sets.json"
+  },
+  {
+   "key": "gaggenau",
+   "label": "Gaggenau",
+   "sub_brands": [
+    "Gaggenau"
+   ],
+   "catalog": "brands/gaggenau.json"
+  },
+  {
+   "key": "miele",
+   "label": "Miele",
+   "sub_brands": [
+    "Miele"
+   ],
+   "catalog": "brands/miele.json"
+  }
+ ]
+}
