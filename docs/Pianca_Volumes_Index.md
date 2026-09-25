@@ -343,3 +343,120 @@ plus a depth range, not a new contract.
 > evening, before anyone read them; recorded here because a section dated a
 > day ahead of the commit that carries it reads, later, as work from a
 > different session. **Dates in this repository are the local working day.**
+
+---
+
+# ADDED 2026-09-07, night — THE FACTORY'S OWN PACK, and the hypothesis becomes a fact
+
+Eleven photographs of the paperwork that came in the boxes of the Loevner master
+closet, in `sources/factory/pianca/_specimens/loevner-factory-pack/`. **This is
+the first material in this repository produced BY PIANCA rather than about it.**
+
+## ADA is proven, on Pianca's own paper
+
+Two footers, printed on the factory's drawings:
+
+```
+PIANCA Graphic Color Elevation ADA  © Copyright 2021 - Arcadia S.r.l.
+PIANCA Manual Graphic Color 3D ADA  © Copyright 2021 - Arcadia S.r.l.
+```
+
+**The section above records "the printed assembly instructions come from ADA
+Robot" as a HYPOTHESIS. It is now a measured fact** that the factory's technical
+documents are ADA output, and the sheet names the module in its own footer -
+*Graphic Color Elevation* and *Manual Graphic Color 3D*. The remaining
+inference, which module of the producer suite emits which sheet, no longer
+matters: the pack is ADA's.
+
+## What the factory actually sends, sheet by sheet
+
+Order **603/603653**, dated **13/04/2026**, from PIANCA spa (Via dei Cappellari
+20, Gaiarine TV) to **EUROPEAN CABINETS BY DESIGN**, Palo Alto — the same dealer
+whose LayOut sheets are the other specimen, so **the two documents describe one
+job from both ends.**
+
+| sheet | what it carries |
+|---|---|
+| Graphic Color Elevation | shaded elevation of each composition, plus a plan, with the dimension chain in mm |
+| Manual Graphic Color 3D | a 3D view of the composition |
+| elevation view (line) | the same elevation as line work, with LED and sensor symbols |
+| FINISHES | every surface named: Side, Internals, Shelf, Drawer, Door WARDROBE, Frame, Framed Front, Fitting, Hanging Rod, Spacers, drawer front |
+| LISTA FERRAMENTA | the hardware list, by article code and quantity |
+| COLLO FERRAMENTA label | the package label |
+
+**Identity of a composition is W/H/D plus finishes, and there is no article code
+for it.** Each drawing carries a `TECHNICAL SPECS` line and nothing else:
+
+```
+WIDTH:4498  HEIGHT:2385  DEPTH:616     the long run
+WIDTH:1538  HEIGHT:2385  DEPTH:616     the return
+WIDTH:100   HEIGHT:2385  DEPTH:25      a filler
+WIDTH:160   HEIGHT:2385  DEPTH:25      a filler
+```
+
+`CLIENT CODE` is **999999** on the drawings and **515320** on the finishes sheet;
+`REFERENCE` is the project name, `FREDERICK LOEVNE`. **So the factory identifies
+a composition exactly as this repository concluded it must: by dimensions and
+finishes, with the article codes living underneath.**
+
+## The two documents check each other, to the millimetre
+
+The dealer's imperial sheet and the factory's metric one describe the same
+closet, and every dimension agrees:
+
+| ECDS, inches | = mm | PIANCA, mm |
+|---|---:|---|
+| `173-1/2"` | 4406,9 | **4407** on the plan |
+| `166-7/8"` | 4238,6 | the module chain, below |
+| `61-1/2"` | 1562,1 | **1562** |
+| `54-1/4"` | 1377,9 | **1378** |
+| `93-7/8"` | 2384,4 | **2385**, the TECHNICAL SPECS height |
+| `23-1/4"` | 590,5 | **590**, the inner depth |
+
+And the factory prints the module chain in full:
+
+```
+30 + 578 + 22 + 1178 + 22 + 1178 + 22 + 1178 + 30 = 4238
+```
+
+**30 at the ends, 22 between, and the catalogue widths 57,8 and 117,8 as the
+modules** — measured on the manufacturer's own drawing, which settles the
+question the previous section left open about what the width series names.
+
+**Depth comes as a pair: 616 outside, 590 inside**, printed one above the other.
+The dealer's `24-5/8"` is 625,5, which is **9,5 mm more than the factory's 616**
+and is not explained. Named, not guessed.
+
+## A SECOND code grammar — hardware
+
+`LISTA FERRAMENTA`, order 603/603653, `PROGRAMMA N. 4842`, delivery in **59
+packages**. The codes are nothing like `BA715`:
+
+| code | qty | what |
+|---|---:|---|
+| `Z2209010000` | 76 | beech dowel D.8 x 39,5, tolerance +0/−0,1 |
+| `Z2204010279` | 40 | M4x10 ANKOR bush |
+| `ZFR62010` | 24 | shelf support for 30 mm panel, burnished zamak |
+| `ZLE63075` | 9 | 4-way LED box, Sipario/Anteprima |
+| `ZLE63074` | 10 | 2000 mm LED extension lead |
+| `ZLE63052` | 2 | 110 V 96 W driver, US plug |
+| `ZFP10128` | 2 | rear shelf support plate, Sipario |
+| `Z2204010217` / `Z2204010237` | 1 + 1 | hex keys, one for the levelling foot |
+
+Two shapes: `Z` plus ten digits, and `Z` plus two letters plus five. **Neither is
+the price list's grammar**, so Pianca has at least two code systems — articles
+and hardware — and only the first is in the book we hold. The hardware list is
+also where the LED count lives: nine boxes and ten leads for one closet.
+
+## What this changes for the engine
+
+**Nothing in the contract, and that is the finding.** A composition identified by
+W/H/D and finishes fits `geometry_kind: linear` with dimensions and `variants`;
+the hardware list is `companion_refs` with quantities; the finishes sheet is a
+finish per surface, which is M1.8's shape. **The factory's own document set maps
+onto Contract v2 without a new key.**
+
+**And the acceptance test for the first Pianca tracer is now exact.** Draw the
+4498 composition — 30, 578, 22, 1178, 22, 1178, 22, 1178, 30, at H 2385 and
+D 616/590 — and put beside it the factory's elevation. If the chain matches, the
+tracer is right; if it does not, it is wrong in a way a person can see.
