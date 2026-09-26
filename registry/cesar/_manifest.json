@@ -471,8 +471,51 @@
     "family": "H.84",
     "section": "Base units H. 84",
     "printed_pages": "49-52",
-    "status": "not_extracted",
-    "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78"
+    "status": "partial",
+    "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78 | 2026-09-26: the depth-digit grammar IS verified from its own pages - BK = d.35, BL = d.62, BM = d.67 - and six positions extracted, 61 codes, for 7612 Hillside Dr (the straight modules of the Tangram island and the cooktop base).",
+    "extracted_on": "2026-09-26",
+    "pages": [
+     {
+      "printed": 49,
+      "status": "partial",
+      "extracted_on": "2026-09-26",
+      "types": [
+       "Base unit with pull-out door (d.62 only - BK0100 at d.35 prints no hung glyph and waits for a per-depth reading)",
+       "Base unit with laundry basket",
+       "Base unit with door (2 shelves)",
+       "Base unit with doors (2 shelves)"
+      ],
+      "note": "All four positions; 25 of 26 codes."
+     },
+     {
+      "printed": 50,
+      "status": "not_extracted",
+      "types": [
+       "Base unit with door for interior drawer and jumbo drawer kit",
+       "Base unit with jumbo drawer for P-One pull-out waste unit",
+       "Base unit with pull-out XL waste unit"
+      ]
+     },
+     {
+      "printed": 51,
+      "status": "extracted",
+      "extracted_on": "2026-09-26",
+      "types": [
+       "Base unit with drawers and jumbo drawer (18 / 18 / 48)",
+       "Base unit with jumbo drawers (36 / 48)"
+      ],
+      "note": "Both positions, 36 codes."
+     },
+     {
+      "printed": 52,
+      "status": "not_extracted",
+      "types": [
+       "Base unit for built-in oven H. 60",
+       "Base unit for built-in oven H. 60, Maxima 2.2 with framed door",
+       "Corner base unit (Elda Q7b)"
+      ]
+     }
+    ]
    },
    {
     "class": "base",

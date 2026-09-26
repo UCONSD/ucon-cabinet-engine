@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 946 codes (268 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 125 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1007 codes (329 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 125 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-26, later: +61, Maxima H.84 - printed p.49 (but for BK0100) and
+  # p.51, for the straight modules of the 7612 Tangram island (base_h84.json).
   # 2026-09-26: +7, Tangram - six base modules of printed p.58-60 and the H.138
   # sideboard of p.61. Held for lookup; five of the six bases and the sideboard
   # are curved and not buildable (tangram_h84.json).
@@ -276,7 +278,7 @@ check('registry loads and holds 946 codes (268 base + 44 sink + 9 appliance + 29
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 946
+  raise "got #{n}" unless n == 1007
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -469,9 +471,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 946 rows, each with code/dims/description/source') do
+check('registry catalog: 1007 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 946
+  raise cat.length.to_s unless cat.length == 1007
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -570,6 +572,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Base units H. 58.5',
                                              'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
+                                             'Base units H. 84',
                                              'Ceramic tops - Linear Elements',
                                              'Closing strips and fillers for Maxima and Intarsio',
                                              'Dish-drainer units H. 36',
@@ -1245,7 +1248,8 @@ check('the hob pictogram is recorded where it was read - and the sweep is DONE')
       ty['hob_provisions_depths_mm'].all? { |d| d >= 620 }
     # And only ever in the base chapter, on a page we have actually opened.
     raise "#{key}: recorded without its page" unless
-      ty['source_ref'].to_s.match?(/printed p\.(3[2456789]|4[02])\b/)
+      # 2026-09-26: + printed p.49 and p.51, H.84, read on 110-dpi renders.
+      ty['source_ref'].to_s.match?(/printed p\.(3[2456789]|4[02]|49|51)\b/)
   end
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'nothing may read the hob mark yet' if
@@ -1643,7 +1647,11 @@ end
 check('p.44 is not a gap; p.45, p.46 and the H.84 sections are') do
   raise 'p.44 is extracted and must not be a gap' if gap_page('p.44')
   %w[p.45 p.46].each { |p| raise "#{p} missing" unless gap_page(p) }
-  raise 'H.84 section missing' unless Registry.gaps.any? { |g| g['printed'] == 'p.49-52' }
+  # 2026-09-26: H.84 is now HELD (p.49, p.51), so its gap is no longer the
+  # whole section: p.50 and p.52 surface as type-level rows inside it.
+  raise 'H.84 p.50 gap missing' unless gap_page('p.50')
+  raise 'H.84 p.52 gap missing' unless gap_page('p.52')
+  raise 'H.84 still offered as a whole-section gap' if Registry.gaps.any? { |g| g['printed'] == 'p.49-52' }
 end
 check('a section appears once; a held section reports its pages as type rows') do
   sections = Registry.gaps.select { |g| g['level'] == 'section' }.map { |g| g['section'] }
@@ -5034,14 +5042,16 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # BEFORE the catalog's list and is not part of it, and jumbo/allowed are back
   # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
-    refused == { 'appliance units' => 17, 'pull-out units' => 12,
-                 'units with jumbo drawers' => 155,
+    refused == { 'appliance units' => 17, 'pull-out units' => 15,
+                 'units with jumbo drawers' => 191,
                  'units with interior drawers' => 24,
                  'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 535
+                 'curved units, whose width is an arc' => 6 } && allowed == 557
+  # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
+  # the laundry basket and the door units (22) allowed.
 end
 
 check('an ordered filler satisfies the contract') do
@@ -10020,8 +10030,37 @@ check('Tangram: the map holds both sections as partial, apart from Maxima H.84')
   secs = Registry.map_sections.select { |s| s['collection'] == 'Tangram' }
   raise secs.inspect unless secs.map { |s| s['section'] } == ['Tangram base units H. 84', 'Tangram sideboard H. 138'] &&
                             secs.all? { |s| s['status'] == 'partial' }
+  # Maxima H.84 was not_extracted when Tangram arrived and is partial since the
+  # same day; what this pins is that the two stay SEPARATE sections.
   max84 = Registry.map_sections.find { |s| s['section'] == 'Base units H. 84' }
-  raise 'Maxima H.84 must still read not_extracted' unless max84['status'] == 'not_extracted'
+  raise 'Maxima H.84 must be its own section' unless max84 && max84['family'] == 'H.84'
+end
+
+puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
+check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
+  cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }
+  raise cat.length.to_s unless cat.length == 61
+  bad = cat.reject { |c| { 'BK' => 350, 'BL' => 620, 'BM' => 670 }[c['code'][0, 2]] == Registry.lookup(c['code'])['depth_mm'] }
+  raise bad.map { |c| c['code'] }.inspect unless bad.empty?
+end
+check('H.84: 840 on a 60 plinth, and the island cooktop base is buildable') do
+  u = Registry.lookup('BL1200')
+  raise u.inspect unless u['height_mm'] == 840 && u['width_mm'] == 1200 && u['depth_mm'] == 620
+  raise 'plinth' unless Generator.plinth_h_mm(u) == 60
+  raise 'not buildable' unless u['buildable'] == true
+end
+check('H.84: the drawer stacks sum to the family height, and differ from H.78') do
+  a = Registry.lookup('BL0953')['front_layout']['heights_mm_top_to_bottom']
+  b = Registry.lookup('BL0967')['front_layout']['heights_mm_top_to_bottom']
+  raise [a, b].inspect unless a == [180, 180, 480] && b == [360, 480] && a.sum == 840 && b.sum == 840
+end
+check('H.84: BK0100 is not held, because its row prints no hung glyph') do
+  begin
+    Registry.lookup('BK0100')
+    raise 'BK0100 must not be held'
+  rescue RuntimeError, ArgumentError, KeyError => e
+    raise e if e.message == 'BK0100 must not be held'
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
