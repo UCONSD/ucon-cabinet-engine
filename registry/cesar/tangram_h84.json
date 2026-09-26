@@ -1,0 +1,220 @@
+{
+  "section": "Tangram base units H. 84",
+  "class": "base",
+  "family": "Tangram H.84",
+  "source_pages": "printed p.58-60 / PDF 60-62, read from 100-dpi renders 2026-09-26",
+  "family_naming_note": "Namespaced 'Tangram H.84', not 'H.84': Maxima's H.84 (printed p.49-56) is not extracted, and a shared family name would merge family keys across two collections. Tangram's straight runs ARE Maxima modules (brochure: 'modules M represent the Maxima modularity') - those come from base_h84 when it is read, not from here.",
+  "extraction_note": "All six base positions on printed p.58-60 and all six codes. Prices are NOT held here: Tangram prints its own four finish columns (silk-effect, structured, metallic-effect anodyc, oak/walnut) and a second door, 'Groove', at higher points - see claude/tangram-recon-2026-09-26.md.",
+  "data": {
+    "height_mm": 840,
+    "plinth_h_mm": 60,
+    "plinth_note": "H.84 on 6. The plinth tracks the HEIGHT FAMILY (base_h78.json plinth_note: Project Guidelines printed p.90 prints 6 for H.84), and the brochure kitchen planning 2026 (PDF 5) dimensions Tangram 84 over 6. Tangram's plinth is its OWN article per module - ZOCCT0A..E, 'plinth + joint + blink for all the finishes' - because it follows the curve.",
+    "depths_mm": [
+      130,
+      350,
+      400,
+      620
+    ],
+    "collections": [
+      "Tangram"
+    ],
+    "source_ref": "printed p.58-60 / PDF 60-62",
+    "page_observations": [
+      "printed p.58 heads the page 'Base units H. 84' and draws six units; only the spice-rack is straight",
+      "every curved unit is doors and shelves: no drawers, no sink base, no cooktop base in Tangram - a cooktop in a Tangram island stands on a straight Maxima module"
+    ],
+    "unit_types": {
+      "tangram_module_a": {
+        "description": "Tangram Module A - quarter-round, 1 rh/lh door, 2 shelves",
+        "opening": "hinged",
+        "handed": true,
+        "interior_confirmed": [
+          "1 rh/lh door",
+          "2 shelves"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.59-60 (code, contents) / PDF 60-62",
+        "shape": "curved",
+        "footprint_printed_cm": [
+          35,
+          35
+        ],
+        "codes": [
+          {
+            "code": "BK030A",
+            "width_mm": 350,
+            "depth_mm": 350
+          }
+        ],
+        "plinth_code": "ZOCCT0A",
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": false,
+        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "notes": "Footprint 35 x 35 on printed p.58. THE CODE READS 030 AND THE PAGE DIMENSIONS 35 - explicit rows are the authority, as the manifest warns for B80400.",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      },
+      "tangram_module_b": {
+        "description": "Tangram Module B - 1 rh/lh door, 2 shelves",
+        "opening": "hinged",
+        "handed": true,
+        "interior_confirmed": [
+          "1 rh/lh door",
+          "2 shelves"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.59-60 (code, contents) / PDF 60-62",
+        "shape": "curved",
+        "footprint_printed_cm": [
+          60,
+          40
+        ],
+        "codes": [
+          {
+            "code": "BK060B",
+            "width_mm": 600,
+            "depth_mm": 400
+          }
+        ],
+        "plinth_code": "ZOCCT0B",
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": false,
+        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "notes": "Printed p.58 dimensions the top edges 60 and 40 and a third value, 13, at the foot of one end - read as the depth the curve comes down to at that end; the page does not say so in words. Which edge is width and which is depth is NOT stated for a curved unit: width_mm/depth_mm carry the two numbers in printed order.",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      },
+      "tangram_module_c": {
+        "description": "Tangram Module C - 2 doors, 2 shelves",
+        "opening": "hinged",
+        "handed": false,
+        "interior_confirmed": [
+          "2 doors",
+          "2 shelves"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.59-60 (code, contents) / PDF 60-62",
+        "shape": "curved",
+        "footprint_printed_cm": [
+          62,
+          62
+        ],
+        "codes": [
+          {
+            "code": "BL060C",
+            "width_mm": 620,
+            "depth_mm": 620
+          }
+        ],
+        "plinth_code": "ZOCCT0C",
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": false,
+        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "notes": "Footprint 62 x 62. Two C modules make the half-round end of a 124-deep island (brochure kitchen planning 2026, PDF 5).",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      },
+      "tangram_module_d": {
+        "description": "Tangram Module D - 1 rh/lh door, 2 shelves",
+        "opening": "hinged",
+        "handed": true,
+        "interior_confirmed": [
+          "1 rh/lh door",
+          "2 shelves"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.59-60 (code, contents) / PDF 60-62",
+        "shape": "curved",
+        "footprint_printed_cm": [
+          62,
+          35
+        ],
+        "codes": [
+          {
+            "code": "BK060D",
+            "width_mm": 620,
+            "depth_mm": 350
+          }
+        ],
+        "plinth_code": "ZOCCT0D",
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": false,
+        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "notes": "Footprint 62 x 35 on printed p.58, two numbers in printed order.",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      },
+      "tangram_module_e": {
+        "description": "Tangram Module E - 1 rh/lh door, 2 shelves",
+        "opening": "hinged",
+        "handed": true,
+        "interior_confirmed": [
+          "1 rh/lh door",
+          "2 shelves"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.59-60 (code, contents) / PDF 60-62",
+        "shape": "curved",
+        "footprint_printed_cm": [
+          60,
+          40
+        ],
+        "codes": [
+          {
+            "code": "BL060E",
+            "width_mm": 600,
+            "depth_mm": 400
+          }
+        ],
+        "plinth_code": "ZOCCT0E",
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": false,
+        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "notes": "Printed p.58 dimensions the top 60 and 40, and prints 57 at the foot - its meaning is not stated. BL like C, with ONE door: the letter does not count doors.",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      },
+      "tangram_spice_rack": {
+        "description": "Tangram spice-rack unit - 1 rh/lh door, 2 shelves with an aluminium anti-tip crossbar",
+        "opening": "hinged",
+        "handed": true,
+        "interior_confirmed": [
+          "1 rh/lh door",
+          "2 shelves with an aluminium anti-tip crossbar"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.59-60 (code, contents) / PDF 60-62",
+        "shape": "straight",
+        "footprint_printed_cm": [
+          60,
+          13
+        ],
+        "codes": [
+          {
+            "code": "BK060P",
+            "width_mm": 600,
+            "depth_mm": 130
+          }
+        ],
+        "plinth_code": null,
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": true,
+        "notes": "Footprint 60 x 13. NO PLINTH CODE IS PRINTED for this unit on printed p.60 - every other Tangram base prints one. Recorded as absent, not as zero. Straight, so it is buildable as a box - the only Tangram base that is.",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      }
+    }
+  }
+}

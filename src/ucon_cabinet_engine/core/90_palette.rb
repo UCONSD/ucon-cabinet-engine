@@ -551,6 +551,16 @@ module UCON
         'filler_front'            => 'Filler, front only',
         'filler_base_unit'        => 'Base unit filler',
         'filler_wall_unit'        => 'Wall unit filler',
+        # TANGRAM, 2026-09-26: the page names each unit by its module letter, so
+        # the label is the printed name. Five of the seven are curved and not
+        # buildable; the picker says so on the card.
+        'tangram_module_a'        => 'Tangram Module A (curved)',
+        'tangram_module_b'        => 'Tangram Module B (curved)',
+        'tangram_module_c'        => 'Tangram Module C (curved)',
+        'tangram_module_d'        => 'Tangram Module D (curved)',
+        'tangram_module_e'        => 'Tangram Module E (curved)',
+        'tangram_spice_rack'      => 'Tangram spice-rack unit',
+        'tangram_module_a_h138'   => 'Tangram Module A H. 138 (curved)',
         'base_door'               => 'Door units',
         'base_doors'              => 'Two-door units',
         'base_drawers_jumbo'      => 'Drawer units (2 + jumbo)',

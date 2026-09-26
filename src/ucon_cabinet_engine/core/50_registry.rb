@@ -267,6 +267,11 @@ module UCON
             'front_layout'       => unit_type['front_layout'],
             'object_class'       => unit_type['object_class'] || 'cabinet',
             'geometry_kind'      => unit_type['geometry_kind'] || 'linear',
+            # THE PLAN SHAPE, 2026-09-26, for Tangram. Not geometry_kind: that
+            # key is a closed Contract vocabulary (linear / corner / non_dim)
+            # and a curved unit is not yet a thing the Contract can draw. This
+            # says what the page draws, so a cut can be refused on it.
+            'shape'              => unit_type['shape'],
             'buildable'          => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
             # THE GUARD Generator.wall_hung_available? READS. It was written on
@@ -434,6 +439,10 @@ module UCON
 
       def width_modification_refusal(unit)
         return 'end panels, whose width is a thickness' if width_is_a_thickness?(unit)
+        # A CURVE IS NOT SHORTENED, 2026-09-26. A Tangram module's width is the
+        # chord of an arc the book does not print; cutting it is not a width
+        # reduction, it is a different curve. Refused before the prose list.
+        return 'curved units, whose width is an arc' if unit['shape'] == 'curved'
 
         WIDTH_MOD_FORBIDDEN.each { |why, test| return why if test.call(unit) }
         nil

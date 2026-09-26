@@ -1,0 +1,54 @@
+{
+  "section": "Tangram sideboard H. 138",
+  "class": "tall",
+  "family": "Tangram H.138",
+  "source_pages": "printed p.61 / PDF 63, read from a 100-dpi render 2026-09-26",
+  "family_naming_note": "Namespaced for the same reason as Tangram H.84.",
+  "extraction_note": "The one position on printed p.61. Its plinth code is ZOCCT0D - the SAME code as module D's, not an A code: printed as such, recorded as such, and a question for Elda.",
+  "data": {
+    "height_mm": 1380,
+    "plinth_h_mm": 60,
+    "plinth_note": "Not printed on p.61. Taken from the Tangram base family on the ground that the sideboard stands in the same run on the same curved plinth article; FLAGGED as inference, not a printed fact.",
+    "depths_mm": [
+      350
+    ],
+    "collections": [
+      "Tangram"
+    ],
+    "source_ref": "printed p.61 / PDF 63",
+    "unit_types": {
+      "tangram_module_a_h138": {
+        "description": "Tangram module A H. 138 - quarter-round, 1 rh/lh door, 3 shelves",
+        "opening": "hinged",
+        "handed": true,
+        "interior_confirmed": [
+          "1 rh/lh door",
+          "3 shelves"
+        ],
+        "source_ref": "printed p.58 (drawing) and p.61 (code, contents) / PDF 60, 63",
+        "shape": "curved",
+        "footprint_printed_cm": [
+          35,
+          35
+        ],
+        "codes": [
+          {
+            "code": "C1030A",
+            "width_mm": 350,
+            "depth_mm": 350
+          }
+        ],
+        "plinth_code": "ZOCCT0D",
+        "fronts": [
+          "Tangram door",
+          "Tangram Groove door"
+        ],
+        "buildable": false,
+        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "notes": "Footprint 35 x 35 (printed p.58, the same drawing as module A). 3 glass shelves are an option priced separately.",
+        "wall_hung": false,
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+      }
+    }
+  }
+}

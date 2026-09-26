@@ -489,6 +489,26 @@
     "status": "not_extracted"
    },
    {
+    "class": "base",
+    "collection": "Tangram",
+    "family": "Tangram H.84",
+    "section": "Tangram base units H. 84",
+    "printed_pages": "58-60",
+    "status": "partial",
+    "extracted_on": "2026-09-26",
+    "note": "All six codes held for LOOKUP; five of six not buildable because the book prints the footprint and not the curve (domain rule 1). The curve geometry is owed by Cesar. Tangram's straight runs are Maxima modules and come from 'Base units H. 84' when it is read. Opened for 7612 Hillside Dr, whose island is Tangram H.84 on 6 (decided 2026-09-25)."
+   },
+   {
+    "class": "tall",
+    "collection": "Tangram",
+    "family": "Tangram H.138",
+    "section": "Tangram sideboard H. 138",
+    "printed_pages": "61",
+    "status": "partial",
+    "extracted_on": "2026-09-26",
+    "note": "One code, C1030A, held for lookup and not buildable, for the same reason as the base modules. Its printed plinth code is ZOCCT0D, module D's - a question for Elda."
+   },
+   {
     "class": "tall",
     "family": "H.138",
     "section": "Tall units H. 138",

@@ -331,6 +331,11 @@ measured), the seven 7612 appliances found in it, and three findings: Emerald
 exists panel-ready but without push-to-open, the downdraft blowers of 10.1,
 and CIT36XWBB is not in the guide.
 
+**Tangram, 2026-09-26:** `tangram-recon-2026-09-26.md` — printed p.57-62
+read from renders; seven codes into the registry for lookup, six of them curved
+and not buildable because the book prints the footprint and not the curve; the
+questions for Elda.
+
 **Real projects — one card per job, the kitchen that drives the engine:**
 - `project-7612-hillside-dr-2026-09-24.md` — 7612 Hillside Dr, Cesar kitchen,
   opened 2026-09-24: files, naming, what is not known yet. (545 Avenida

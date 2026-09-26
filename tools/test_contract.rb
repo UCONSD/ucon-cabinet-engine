@@ -268,12 +268,15 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 939 codes (262 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 124 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 946 codes (268 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 125 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-26: +7, Tangram - six base modules of printed p.58-60 and the H.138
+  # sideboard of p.61. Held for lookup; five of the six bases and the sideboard
+  # are curved and not buildable (tangram_h84.json).
   # 2026-08-27: +44, and they are the first codes here out of a book that is not
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 939
+  raise "got #{n}" unless n == 946
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -466,9 +469,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 939 rows, each with code/dims/description/source') do
+check('registry catalog: 946 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 939
+  raise cat.length.to_s unless cat.length == 946
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -592,6 +595,8 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Tall units H. 222 | for base unit H. 78',
                                              'Tall units H. 234',
                                              'Tall units H. 234 | for base unit H. 78',
+                                             'Tangram base units H. 84',
+                                             'Tangram sideboard H. 138',
                                              'Thin | Horizontal Thin H. 39, for base units H. 78',
                                              'USA elements | for tall units H. 210',
                                              'Wall units H. 120',
@@ -1296,7 +1301,7 @@ check('AFTER THE SWEEP, AN ABSENT HUNG READING IS A BUG') do
     man.dig('page_symbols', 'sweep_done', 'wall_chapter').to_s.include?('no pictogram column')
 end
 
-check('96 codes refuse the hung version, and every move of that number is dated') do
+check('103 codes refuse the hung version, and every move of that number is dated') do
   # A sweep that changed an availability would be a correction, and a
   # correction gets a dated note of its own (learned rule 9). The printed p.19 sweep
   # changed none, and that is worth pinning: if a later edit quietly flips a
@@ -1338,9 +1343,13 @@ check('96 codes refuse the hung version, and every move of that number is dated'
   # the catalog's own words rather than by an absent glyph: printed p.458 opens
   # with 'Can only be fitted below a top.' An element that must have a run under
   # it and a top over it is not a thing that hangs. base 4, tall 88, open_unit 4.
-  raise refused.length.to_s unless refused.length == 96
+  #
+  # 2026-09-26: 96 -> 103, Tangram. All seven codes of printed p.58-61 state
+  # false - no hung glyph on any position, and a curved unit stands on its own
+  # curved plinth article. base 4 -> 10, tall 88 -> 89.
+  raise refused.length.to_s unless refused.length == 103
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 4, 'tall' => 88, 'open_unit' => 4 }
+  raise by_class.inspect unless by_class == { 'base' => 10, 'tall' => 89, 'open_unit' => 4 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5029,7 +5038,10 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'units with jumbo drawers' => 155,
                  'units with interior drawers' => 24,
                  'end panels, whose width is a thickness' => 124,
-                 'tall or wall units with framed glass doors' => 3 } && allowed == 534
+                 'tall or wall units with framed glass doors' => 3,
+                 # 2026-09-26: a new bucket, Tangram's five curved bases and its
+                 # curved sideboard; the straight spice rack joins the allowed.
+                 'curved units, whose width is an arc' => 6 } && allowed == 535
 end
 
 check('an ordered filler satisfies the contract') do
@@ -9974,6 +9986,42 @@ check('A BLACK PANEL IS ORDERABLE, AND IT IS NOT THE OAK PANEL CHAPTER') do
     raise "#{code} must not offer a lacquer" if
       c['finishes'].any? { |f| f.to_s.downcase.include?('nero') && !f.to_s.start_with?('Rovere') }
   end
+end
+
+puts "\nTangram (printed p.58-61), opened 2026-09-26 for 7612 Hillside Dr"
+check('Tangram: six base codes at H.84 on 6, and the sideboard at H.138') do
+  bases = %w[BK030A BK060B BL060C BK060D BL060E BK060P].map { |c| Registry.lookup(c) }
+  raise bases.map { |u| u['height_mm'] }.inspect unless bases.all? { |u| u['height_mm'] == 840 }
+  side = Registry.lookup('C1030A')
+  raise side.inspect unless side['height_mm'] == 1380 && side['width_mm'] == 350
+end
+check('Tangram: the printed footprints, in printed order') do
+  want = { 'BK030A' => [350, 350], 'BK060B' => [600, 400], 'BL060C' => [620, 620],
+           'BK060D' => [620, 350], 'BL060E' => [600, 400], 'BK060P' => [600, 130] }
+  want.each do |c, (w, d)|
+    u = Registry.lookup(c)
+    raise "#{c}: #{u['width_mm']} x #{u['depth_mm']}" unless u['width_mm'] == w && u['depth_mm'] == d
+  end
+end
+check('Tangram: a curve is held for lookup and never built as a box (domain rule 1)') do
+  curved = %w[BK030A BK060B BL060C BK060D BL060E C1030A].map { |c| Registry.lookup(c) }
+  raise 'a curved unit is buildable' unless curved.all? { |u| u['buildable'] == false && u['shape'] == 'curved' }
+  raise 'the reason must say where the curve comes from' unless
+    curved.all? { |u| u['not_buildable_reason'].to_s.include?('Cesar') }
+  rack = Registry.lookup('BK060P')
+  raise rack.inspect unless rack['buildable'] == true && rack['shape'] == 'straight'
+end
+check('Tangram: a curve is refused a width cut, the straight spice rack is not') do
+  raise 'curve cut' unless Registry.width_modification_refusal(Registry.lookup('BL060C')) ==
+                           'curved units, whose width is an arc'
+  raise 'rack refused' unless Registry.width_modification_refusal(Registry.lookup('BK060P')).nil?
+end
+check('Tangram: the map holds both sections as partial, apart from Maxima H.84') do
+  secs = Registry.map_sections.select { |s| s['collection'] == 'Tangram' }
+  raise secs.inspect unless secs.map { |s| s['section'] } == ['Tangram base units H. 84', 'Tangram sideboard H. 138'] &&
+                            secs.all? { |s| s['status'] == 'partial' }
+  max84 = Registry.map_sections.find { |s| s['section'] == 'Base units H. 84' }
+  raise 'Maxima H.84 must still read not_extracted' unless max84['status'] == 'not_extracted'
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
