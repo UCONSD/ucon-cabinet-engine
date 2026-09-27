@@ -481,7 +481,9 @@ module UCON
       hide_vertical_edges(plinth)
       m_front = material(model, 'UCON_Front_White', [245, 245, 245])
       # F is fixed: the whole element in the front finish, and nothing opens
-      l_grip = grip == 'l_grip'
+      # the L grip edging is the H.84 system's; the H.138 sideboard's is
+      # another (PG p.115: carcass 135, door 134) and is not drawn here
+      l_grip = grip == 'l_grip' && h == 840
       car_h = l_grip ? h - L_GRIP_CARCASS_CUT_MM : h
       prism(grp.entities, 'CARCASS', parts[:carcass], pl, car_h,
             material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))

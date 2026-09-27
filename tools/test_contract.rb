@@ -10231,6 +10231,24 @@ check('Tangram L grip edging: carcass 81, door 84, panel 6 - 93 to the worktop')
   raise 'heights' unless pl + (h - tp::L_GRIP_CARCASS_CUT_MM) + tp::L_GRIP_PANEL_MM == 930 && pl + h == 900
 end
 
+check('picker: Tangram is placed from the picker by the Tangram tool, F included') do
+  # 2026-09-27, Andriy: the same logic as every other unit in the picker.
+  pal = UCON::CabinetEngine::Palette
+  raise 'tool not on disk' unless UCON::CabinetEngine::TangramTool.available?
+  cat = pal.picker_catalog
+  tg = cat.select { |c| c['family'].to_s.start_with?('Tangram') }
+  raise "rows #{tg.size}" unless tg.size == 8 && tg.all? { |c| c['tangram_place'] }
+  f = tg.find { |c| c['code'] == 'F' }
+  raise f.inspect unless f && f['fixed'] && f['description'].include?('NO CODE')
+  raise 'F leaked into the registry' if Registry.catalog.any? { |c| c['code'] == 'F' }
+  others = cat.reject { |c| c['family'].to_s.start_with?('Tangram') }
+  raise 'a non-Tangram row is marked' if others.any? { |c| c['tangram_place'] }
+  html = pal.picker_html(cat, Registry.gaps)
+  %w[sketchup.tangram( tgHand tgHinge tgGrip !d.tangram_place].each { |k| raise "html: #{k}" unless html.include?(k) }
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'the engine must not require the tool' if src =~ /^\s*require[^\n]*tangram_place/
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }

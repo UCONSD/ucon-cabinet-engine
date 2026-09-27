@@ -230,7 +230,7 @@ module UCON
           style: UI::HtmlDialog::STYLE_UTILITY, width: 360, height: 470,
           resizable: true
         )
-        @picker.set_html(picker_html(Registry.catalog, Registry.gaps, @picker_inches))
+        @picker.set_html(picker_html(picker_catalog, Registry.gaps, @picker_inches))
         # The switch survives a reopen. Nothing about it reaches the model or
         # an order - it is a way of READING sizes, not a property of them.
         @picker.add_action_callback('units') do |_, on|
@@ -256,7 +256,36 @@ module UCON
             UI.messagebox("Build failed:\n\n#{e.message}")
           end
         end
+        # TANGRAM, 2026-09-27: the picker places a Tangram module through the
+        # SAME tool the menu uses - tools/tangram_place.rb - with the choices
+        # its dialog asks for. The engine's builder makes boxes and is never
+        # asked to draw a curve.
+        @picker.add_action_callback('tangram') do |_, code, hand, hinge, grip|
+          begin
+            TangramTool.place(code, hand.to_s == 'mirrored',
+                              hinge.to_s == 'rh' ? 'rh' : 'lh',
+                              grip.to_s == 'none' ? 'none' : 'l_grip')
+          rescue StandardError => e
+            UI.messagebox("Tangram place failed:\n\n#{e.message}")
+          end
+        end
         @picker.show
+      end
+
+      # What the picker is fed. The registry's rows, and - when the Tangram
+      # tool is on disk - every Tangram row marked to be placed by it, plus F,
+      # which the book does not print and the registry therefore does not hold
+      # (domain rule 1). Without the tool the picker is what it always was.
+      def picker_catalog
+        cat = Registry.catalog
+        return cat unless TangramTool.available?
+
+        TangramTool.ensure_loaded
+        cat.map { |c| c['family'].to_s.start_with?('Tangram') ? c.merge('tangram_place' => true) : c } +
+          [TangramTool.f_row].compact
+      rescue StandardError => e
+        warn "UCON picker: Tangram rows left out - #{e.class}: #{e.message}"
+        Registry.catalog
       end
 
       # ---- THE SINK MARK, 2026-08-28 ---------------------------------------
@@ -561,6 +590,7 @@ module UCON
         'tangram_module_e'        => 'Tangram Module E (curved)',
         'tangram_spice_rack'      => 'Tangram spice-rack unit',
         'tangram_module_a_h138'   => 'Tangram Module A H. 138 (curved)',
+        'tangram_fixed_f'         => 'Tangram F - fixed end (no code)',
         'base_door'               => 'Door units',
         'base_doors'              => 'Two-door units',
         'base_drawers_jumbo'      => 'Drawer units (2 + jumbo)',
@@ -780,7 +810,10 @@ module UCON
                     // A type whose geometry is not implemented is listed but
                     // never clickable: the codes must be findable, and a build
                     // that cannot be honest must not be offered.
-                    if(d.buildable === false){
+                    // A TANGRAM TYPE IS PLACED, NOT BUILT: the engine makes
+                    // boxes, the Tangram tool draws the curve. So it is a
+                    // button like any other when the tool is on disk.
+                    if(d.buildable === false && !d.tangram_place){
                       var g = document.createElement('div'); g.className='ghost';
                       g.innerHTML = row((TYP[t]||t) + ' <small>· ' + n + ' codes</small>', 'not buildable') +
                         '<small>' + esc(d.description) + '</small>' +
@@ -799,7 +832,10 @@ module UCON
                     }
                     var b = document.createElement('button'); b.className='item';
                     b.innerHTML = (TYP[t]||t) + ' <small>· ' + n + ' codes</small><br><small>' +
-                                  d.description + '</small>';
+                                  d.description + '</small>' +
+                                  (d.tangram_place ? '<br><small>' + (d.fixed
+                                    ? 'Fixed \u2014 no door; no code in the book, brochure only'
+                                    : 'Curved \u2014 placed by the Tangram tool') + '</small>' : '');
                     b.onclick = function(){ setLevel(st.cls, st.sec, t); };
                     el.appendChild(b);
                   });
@@ -1175,6 +1211,21 @@ module UCON
                 // list. So the card says where it IS built and the button goes
                 // away, and the refusal behind it stays as the backstop for
                 // anything that reaches build another way.
+                if(c.tangram_place){
+                  var hingeRow = !c.fixed && c.type_key !== 'tangram_module_c';
+                  var sel = function(id, opts){
+                    return '<select id="' + id + '" style="margin-left:4px">' + opts.map(function(o){
+                      return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('') + '</select>'; };
+                  el.innerHTML += '<div style="margin-top:6px">' +
+                    'Hand ' + sel('tgHand', [['as_drawn','as drawn'],['mirrored','mirrored']]) +
+                    (hingeRow ? '<br>Hinge ' + sel('tgHinge', [['lh','left'],['rh','right']]) : '') +
+                    (c.height_mm === 840 ? '<br>Grip ' + sel('tgGrip',
+                      [['l_grip','L grip edging (93)'],['none','none (90)']]) : '') +
+                    '</div><i>' + (c.fixed ? 'A fixed element: no door. ' : '') +
+                    (c.type_key === 'tangram_module_c' ? 'Two doors, left and right. ' : '') +
+                    'Drawn by the Tangram tool from the brochure plan \u2014 PRELIMINARY, ' +
+                    'the curve is confirmed by Cesar.</i>';
+                }
                 var top = c['class'] === 'worktop';
                 if(top){
                   el.innerHTML += '<br><i>A top is not built from a list: it is as ' +
@@ -1197,7 +1248,7 @@ module UCON
                   var size = c.buildable === false && c.corner_geometry
                     ? c.corner_geometry + ' mm · d.' + (c.depth_mm/10)
                     : c.width_mm + '×' + c.height_mm + '×' + c.depth_mm;
-                  if(c.buildable === false){
+                  if(c.buildable === false && !c.tangram_place){
                     var g = document.createElement('div'); g.className='ghost';
                     g.innerHTML = row(esc(c.code) + ' <small>— ' + esc(size) + '</small>', 'not buildable') +
                                   '<small>' + esc(c.description) + '</small>';
@@ -1217,6 +1268,11 @@ module UCON
               function doBuild(){
                 if(!st.code) return;
                 var c = CAT.find(function(x){ return x.code===st.code; });
+                if(c && c.tangram_place){
+                  var v = function(id, dflt){ var e = document.getElementById(id); return e ? e.value : dflt; };
+                  sketchup.tangram(st.code, v('tgHand','as_drawn'), v('tgHinge','lh'), v('tgGrip','none'));
+                  return;
+                }
                 sketchup.build(st.code,
                   (c && c.width_range_mm)  ? String(parseInt(st.w, 10)) : '',
                   (c && c.height_range_mm) ? String(parseInt(st.h, 10)) : '');
@@ -1274,6 +1330,52 @@ module UCON
             </script>
           </body></html>
         HTML
+      end
+    end
+
+    # ---- the Tangram placer, as an OPTIONAL door ---------------------------
+    # The same shape as DevBridge: tools/tangram_place.rb is a dev tool that
+    # never ships in an .rbz, so nothing here requires it. Asked at call time;
+    # absent, the picker simply shows Tangram as it did before.
+    module TangramTool
+      module_function
+
+      def path
+        File.expand_path(File.join('..', '..', '..', 'tools', 'tangram_place.rb'), __dir__)
+      end
+
+      def available?
+        File.file?(path)
+      end
+
+      def ensure_loaded
+        load path unless defined?(::UCON::TangramPlace)
+        true
+      end
+
+      def place(code, mirrored, hinge, grip)
+        raise ArgumentError, "The Tangram tool is not on disk:\n#{path}" unless available?
+
+        # LOADED FRESH ON EVERY PLACE: the file on disk is the truth, and a copy
+        # loaded before an edit would place yesterday's module. `load`, not
+        # `require`, so it is read again; its menu item is guarded and is not
+        # added twice.
+        load path
+        ::UCON::TangramPlace.place(code, mirrored, hinge, grip)
+      end
+
+      # F as a picker row. NO CODE: 'F' is the brochure's letter, not an
+      # article, and the row says so everywhere it is shown.
+      def f_row
+        return nil unless defined?(::UCON::TangramPlace)
+
+        f = ::UCON::TangramPlace.catalogue['F'] or return nil
+        { 'code' => 'F', 'family' => 'Tangram H.84', 'type_key' => 'tangram_fixed_f',
+          'section' => 'Tangram base units H. 84', 'class' => 'base',
+          'description' => 'Tangram F - fixed rounded end, NO CODE in the book (brochure only)',
+          'source_ref' => "#{f['geometry']['source']} - no code, no price",
+          'width_mm' => 300, 'depth_mm' => 620, 'height_mm' => f['height'],
+          'buildable' => false, 'shape' => 'curved', 'tangram_place' => true, 'fixed' => true }
       end
     end
   end
