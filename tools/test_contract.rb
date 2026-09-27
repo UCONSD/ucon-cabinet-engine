@@ -10310,9 +10310,39 @@ check('picker: Tangram is placed from the picker by the Tangram tool, F included
   others = cat.reject { |c| c['family'].to_s.start_with?('Tangram') }
   raise 'a non-Tangram row is marked' if others.any? { |c| c['tangram_place'] }
   html = pal.picker_html(cat, pal.picker_gaps)
-  %w[sketchup.tangram( tgHand tgHinge tgGrip !d.tangram_place].each { |k| raise "html: #{k}" unless html.include?(k) }
+  %w[sketchup.tangram( !d.tangram_place].each { |k| raise "html: #{k}" unless html.include?(k) }
+  # 2026-09-27: the picker places the article only - the choices are the panel's
+  %w[tgHand tgHinge tgGrip].each { |k| raise "the picker still asks #{k}" if html.include?(k) }
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
   raise 'the engine must not require the tool' if src =~ /^\s*require[^\n]*tangram_place/
+end
+
+check('Tangram in the panel: what it is asked, and what a choice draws and writes') do
+  tp = UCON::TangramPlace
+  pan = UCON::CabinetEngine::Panel
+  sv = Contract::SCHEMA_VERSION
+  a = tp.contract_attrs('BK060B', tp.catalogue['BK060B'], 'rh', 'l_grip', sv)
+  st = pan.tangram_state(a, { 'grip' => 'l_grip' })['tangram']
+  raise st.inspect unless st['code'] == 'BK060B' && st['doors'] == 1 && st['hinge_side'] == 'rh' &&
+                          st['opening'] == 'l_grip' && st['l_grip_available']
+  f = pan.tangram_state(tp.contract_attrs(nil, tp.catalogue['F'], 'lh', 'none', sv), { 'hand' => 'mirrored' })['tangram']
+  raise f.inspect unless f['fixed'] && f['code'] == 'F' && f['doors'].zero? && f['hand'] == 'mirrored'
+  c = pan.tangram_state(tp.contract_attrs('BL060C', tp.catalogue['BL060C'], 'lh', 'none', sv), {})['tangram']
+  raise c.inspect unless c['doors'] == 2 && c['opening'] == 'push_to_open'
+  # a one-door module: the hinge side decides the mirror, a hand sent with it is ignored
+  ch = tp.choice(tp.catalogue['BK030A'], 'hinge_side' => 'rh', 'hand' => 'as_drawn', 'opening' => 'handle',
+                                          'hardware_mode' => 'factory', 'hardware_ref' => 'M00001')
+  raise ch.inspect unless ch[:mirrored] && ch[:grip] == 'none' && ch[:opening] == 'handle'
+  w = tp.contract_attrs('BK030A', tp.catalogue['BK030A'], ch[:hinge], ch[:grip], sv, ch[:opening], ch[:hardware_ref], ch[:hardware_source])
+  Contract.validate!(w.dup)
+  raise w.inspect unless w['opening_method'] == 'handle' && w['hardware_ref'] == 'M00001' && w['hardware_source'] == 'factory'
+  # the sideboard has no L grip edging of this system: asked for one, it gets push-pull
+  sb = tp.choice(tp.catalogue['C1030A'], 'hinge_side' => 'lh', 'opening' => 'l_grip')
+  raise sb.inspect unless sb[:grip] == 'none' && sb[:opening] == 'push_to_open'
+  # C and F take the hand they are given
+  raise 'C hand' unless tp.choice(tp.catalogue['BL060C'], 'hand' => 'mirrored', 'opening' => 'l_grip')[:mirrored]
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  %w[apply_tangram tgForm tgHinge tgHand tgOpen].each { |k| raise "panel: #{k}" unless src.include?(k) }
 end
 
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"

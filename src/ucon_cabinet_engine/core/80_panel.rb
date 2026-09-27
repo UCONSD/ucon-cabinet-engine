@@ -380,6 +380,7 @@ module UCON
         @dialog.set_html(html)
         @dialog.add_action_callback('ready')  { |_| push_selection }
         @dialog.add_action_callback('apply')  { |_, json| apply(JSON.parse(json)) }
+        @dialog.add_action_callback('apply_tangram') { |_, json| apply_tangram(JSON.parse(json)) }
         @dialog.show
         install_observer
         nil
@@ -397,7 +398,9 @@ module UCON
 
       def selected_unit_instance
         Sketchup.active_model.selection.grep(Sketchup::ComponentInstance).find do |i|
-          i.definition.get_attribute(Contract::DICTIONARY, 'code')
+          # a Tangram F carries no code (none is printed) and is still a unit
+          i.definition.get_attribute(Contract::DICTIONARY, 'code') ||
+            i.definition.get_attribute(Contract::DICTIONARY, 'geometry_kind') == 'curved'
         end
       end
 
@@ -478,6 +481,12 @@ module UCON
         return unless @dialog&.visible?
         inst  = selected_unit_instance
         attrs = inst && Contract.read(inst.definition)
+        if attrs && attrs['geometry_kind'].to_s == 'curved'
+          tg = (inst.definition.attribute_dictionary('UCON_TANGRAM') || {}).to_h
+          state = tangram_state(attrs, tg)
+          state['core_version'] = core_version
+          return @dialog.execute_script("render(#{state.to_json})")
+        end
         unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
         @dialog.execute_script("render(#{selection_state(unit, attrs).to_json})")
       end
@@ -607,19 +616,69 @@ module UCON
         true
       end
 
+      # ---- TANGRAM, 2026-09-27 --------------------------------------------
+      # The picker places the article; the per-order choices live HERE, like
+      # every other unit's (domain rule 6). What the dialog is handed for a
+      # curved object - PURE. The choices, from the books:
+      #   hinge side on a one-door module, which IS its hand (one code for
+      #   both, hinged where the brochure draws the hinge - PDF p.6);
+      #   a hand of its own only for C (two doors) and F (no door);
+      #   opening: the Tangram L grip edging (H.84 only, PG printed p.114),
+      #   push-to-open or a handle (PG printed p.106); F opens nothing, but
+      #   its carcass follows the island's grip edging, so it is asked that.
+      def tangram_state(attrs, tg)
+        fixed = attrs['code'].to_s.empty?
+        doors = attrs['opening'].to_s == 'doors' ? 2 : (fixed ? 0 : 1)
+        hw = Registry.data['hardware'] || {}
+        grip = tg['grip'].to_s == 'l_grip' || attrs['opening_method'].to_s == 'gola'
+        { 'tangram' => {
+            'code' => fixed ? 'F' : attrs['code'], 'fixed' => fixed, 'doors' => doors,
+            'hinge_side' => attrs['hinge_side'], 'hand' => tg['hand'].to_s == 'mirrored' ? 'mirrored' : 'as_drawn',
+            'opening' => grip ? 'l_grip' : (attrs['opening_method'].to_s == 'handle' ? 'handle' : 'push_to_open'),
+            'l_grip_available' => attrs['height_mm'].to_i == 840,
+            'hardware_ref' => attrs['hardware_ref'], 'hardware_source' => attrs['hardware_source'],
+            'dims' => "#{attrs['width_mm']}×#{attrs['height_mm']}×#{attrs['depth_mm']}",
+            'desc' => attrs['unit_type'], 'status' => "#{attrs['code_status']} / #{attrs['status']}" },
+          'handles' => hw['handles'] || [] }
+      end
+
+      def apply_tangram(payload)
+        inst = selected_unit_instance
+        return UI.messagebox('Select a UCON unit first.') unless inst
+        attrs = Contract.read(inst.definition)
+        return UI.messagebox('This is not a Tangram module.') unless attrs['geometry_kind'].to_s == 'curved'
+        unless TangramTool.available?
+          return UI.messagebox("The Tangram tool is not on disk:\n#{TangramTool.path}")
+        end
+
+        model = Sketchup.active_model
+        model.start_operation('UCON: apply Tangram properties', true)
+        begin
+          make_instance_unique!(inst)
+          load TangramTool.path
+          code = attrs['code'].to_s.empty? ? 'F' : attrs['code']
+          ::UCON::TangramPlace.redraw(inst.definition, code, payload, Contract)
+          model.commit_operation
+        rescue StandardError => e
+          model.abort_operation
+          UI.messagebox("Tangram: nothing was changed.\n\n#{e.class}: #{e.message}")
+        end
+        push_selection
+      end
+
       def apply(payload)
         inst = selected_unit_instance
         return UI.messagebox('Select a UCON unit first.') unless inst
 
         model = Sketchup.active_model
         attrs = Contract.read(inst.definition)
-        # A CURVED OBJECT IS NOT REBUILT HERE YET (2026-09-27). Everything below
+        # A CURVED OBJECT IS NEVER REBUILT HERE (2026-09-27). Everything below
         # redraws through the box builder, and a Tangram module drawn as a box
-        # is the wrong shape that looks settled. Its own section of this panel
-        # is the next step; until then nothing is changed.
+        # is the wrong shape that looks settled. It has its own form and its
+        # own apply_tangram; this is the backstop if anything else calls here.
         if attrs['geometry_kind'].to_s == 'curved'
-          return UI.messagebox("Tangram #{attrs['code']}: its options arrive in this panel in the " \
-                               "next step.\n\nNothing was changed.")
+          return UI.messagebox("Tangram #{attrs['code']}: use the Tangram form of this panel." \
+                               "\n\nNothing was changed.")
         end
         unit  = Registry.lookup(attrs['code'])
         patch = attributes_patch(unit, payload)
@@ -823,6 +882,37 @@ module UCON
             </fieldset>
             <button onclick="apply()">Apply</button>
           </div>
+          <div id="tgForm" style="display:none">
+            <h3 id="tgCode"></h3><div class="muted" id="tgDesc"></div>
+            <fieldset id="tgHingeFs"><legend>Hand (sx / dx)</legend>
+              <select id="tgHinge">
+                <option value="lh">Left-hand module \u2014 hinges left</option>
+                <option value="rh">Right-hand module \u2014 mirrored, hinges right</option>
+              </select>
+              <div class="muted" style="margin:3px 0 0">The hinge never moves on the module: it stays where the
+                brochure draws it (on B the shallow end \u2014 the acute end cannot take one). Right-hand is the
+                whole module mirrored, the hinge with it. One code for both.</div>
+            </fieldset>
+            <fieldset id="tgHandFs"><legend>Hand</legend>
+              <select id="tgHand">
+                <option value="as_drawn">As drawn</option>
+                <option value="mirrored">Mirrored</option>
+              </select>
+            </fieldset>
+            <fieldset id="tgOpenFs"><legend id="tgOpenLeg">Opening</legend>
+              <select id="tgOpen" onchange="tgRules()"></select>
+              <div id="tgGripNote" class="muted" style="margin:3px 0 0">Carcass 81, door 84, a 6 cm MDF panel over it (GOLATNG, per m² for the whole arrangement): 93 to the worktop.</div>
+              <div id="tgHandleBlock">
+                <select id="tgHmode" onchange="tgRules()">
+                  <option value="factory">Handle from catalog</option>
+                  <option value="client">Client-supplied</option>
+                </select>
+                <select id="tgHandle"></select>
+              </div>
+            </fieldset>
+            <div class="muted">Drawn from the brochure plan — PRELIMINARY until Cesar confirms the curve.</div>
+            <button onclick="applyTangram()">Apply</button>
+          </div>
           <script>
             // STATE is the last thing render() was given. It exists because
             // apply() needs the object's CURRENT attributes to build a patch on
@@ -900,6 +990,11 @@ module UCON
                   'markup and its callbacks at open, so Apply here is still the '+
                   'old one. Close this panel and open it again.';
               }
+              var tg=st.tangram||null;
+              document.getElementById('tgForm').style.display=tg?'':'none';
+              if(tg){ document.getElementById('empty').style.display='none';
+                      document.getElementById('form').style.display='none';
+                      renderTangram(st); return; }
               var has=st.attrs&&st.attrs.code;
               document.getElementById('empty').style.display=has?'none':'';
               document.getElementById('form').style.display=has?'':'none';
@@ -986,6 +1081,43 @@ module UCON
                      hinge_side:HANDED?document.getElementById('hinge').value:'',
                      wall_hung:document.getElementById('wallHung').checked};
               sketchup.apply(JSON.stringify(p));
+            }
+            // ---- Tangram: its own form, the same choices the book prints ----
+            function renderTangram(st){
+              var t=st.tangram;
+              document.getElementById('tgCode').textContent=
+                (t.fixed?'F \u2014 no code in the book':t.code)+'  ('+t.dims+')';
+              document.getElementById('tgDesc').textContent=(t.desc||'')+' \u00b7 '+t.status;
+              var one=(!t.fixed && t.doors===1);
+              document.getElementById('tgHingeFs').style.display=one?'':'none';
+              document.getElementById('tgHandFs').style.display=one?'none':'';
+              if(t.hinge_side)document.getElementById('tgHinge').value=t.hinge_side;
+              document.getElementById('tgHand').value=t.hand||'as_drawn';
+              var os=[]; if(t.l_grip_available)os.push({value:'l_grip',name:'Tangram L grip edging (93)'});
+              if(!t.fixed){os.push({value:'push_to_open',name:'Push-to-open'});os.push({value:'handle',name:'Handle'});}
+              else os.push({value:'push_to_open',name:'No grip edging (90)'});
+              opt(document.getElementById('tgOpen'),os,t.opening==='push_to_open'||t.opening==='handle'
+                    ?(t.fixed?'push_to_open':t.opening):t.opening);
+              document.getElementById('tgOpenLeg').textContent=t.fixed?'Grip edging (the island\u2019s)':'Opening';
+              opt(document.getElementById('tgHandle'),st.handles||[],t.hardware_ref);
+              if(t.hardware_source==='client')document.getElementById('tgHmode').value='client';
+              tgRules();
+            }
+            function tgRules(){
+              var o=document.getElementById('tgOpen').value;
+              document.getElementById('tgGripNote').style.display=o==='l_grip'?'':'none';
+              document.getElementById('tgHandleBlock').style.display=o==='handle'?'':'none';
+              document.getElementById('tgHandle').style.display=
+                document.getElementById('tgHmode').value==='factory'?'':'none';
+            }
+            function applyTangram(){
+              var hm=document.getElementById('tgHmode').value;
+              sketchup.apply_tangram(JSON.stringify({
+                hinge_side:document.getElementById('tgHinge').value,
+                hand:document.getElementById('tgHand').value,
+                opening:document.getElementById('tgOpen').value,
+                hardware_mode:hm,
+                hardware_ref:hm==='factory'?document.getElementById('tgHandle').value:''}));
             }
             window.onload=function(){sketchup.ready();};
           </script></body></html>

@@ -420,7 +420,7 @@ module UCON
     # other unit. Pure: it returns the hash and writes nothing. The curve
     # itself is not in it: the plan is the registry's plan_geometry, looked up
     # by code - the object carries its envelope, as domain rule 4 asks.
-    def contract_attrs(code, rec, hinge, grip, schema)
+    def contract_attrs(code, rec, hinge, grip, schema, opening = nil, hardware_ref = nil, hardware_source = nil)
       l_grip = grip == 'l_grip' && rec['height'].to_i == 840
       a = {
         'schema_version' => schema, 'object_class' => 'cabinet', 'manufacturer' => 'cesar',
@@ -438,11 +438,51 @@ module UCON
         a['opening'] = rec['doors'] == 2 ? 'doors' : 'door'
         # the Tangram L grip edging keeps the door at 84 and drops the carcass
         # to 81 (PG printed p.114) - v2.5 records that 'gola' means this here
-        a['opening_method'] = l_grip ? 'gola' : 'push_to_open'
+        # a handle or push-pull, chosen in the panel, when there is no L grip
+        a['opening_method'] = l_grip ? 'gola' : (opening == 'handle' ? 'handle' : 'push_to_open')
+        if a['opening_method'] == 'handle'
+          a['hardware_source'] = hardware_source == 'client' ? 'client' : 'factory'
+          a['hardware_ref'] = hardware_ref if a['hardware_source'] == 'factory' && !hardware_ref.to_s.empty?
+        end
         a['front_height_mm'] = rec['height'].to_i
         a['hinge_side'] = hinge if rec['doors'] == 1
       end
       a
+    end
+
+    # THE PANEL'S CHOICE, turned into what to draw and what to write. PURE -
+    # the panel hands the payload over and gets back the arguments for
+    # draw_into and contract_attrs, so the rule is headless-testable.
+    #   payload: 'hinge_side' lh|rh (one door), 'hand' as_drawn|mirrored (C, F),
+    #            'opening' l_grip|push_to_open|handle, 'hardware_mode' factory|client,
+    #            'hardware_ref'
+    def choice(rec, payload)
+      one_door = !rec['fixed'] && rec['doors'] == 1
+      hinge = payload['hinge_side'].to_s == 'rh' ? 'rh' : 'lh'
+      mirrored = one_door ? mirror_for(rec['outline'], hinge) : payload['hand'].to_s == 'mirrored'
+      opening = payload['opening'].to_s
+      opening = 'push_to_open' if opening == 'l_grip' && rec['height'].to_i != 840
+      grip = opening == 'l_grip' ? 'l_grip' : 'none'
+      { hinge: hinge, mirrored: mirrored, grip: grip,
+        opening: rec['fixed'] ? nil : opening,
+        hardware_ref: payload['hardware_ref'].to_s, hardware_source: payload['hardware_mode'].to_s }
+    end
+
+    # Redraw a placed module in place after a change: the same definition,
+    # emptied and drawn again, and its Contract rewritten through the engine's
+    # validator. Called by the panel inside ITS operation.
+    def redraw(defn, code, payload, contract)
+      rec = catalogue[code] or raise ArgumentError, "#{code}: no Tangram plan"
+      c = choice(rec, payload)
+      defn.entities.clear!
+      draw_into(defn.entities, rec, c[:mirrored], c[:hinge], c[:grip])
+      contract.write!(defn, contract_attrs(rec['fixed'] ? nil : code, rec, c[:hinge], c[:grip],
+                                           contract::SCHEMA_VERSION, c[:opening],
+                                           c[:hardware_ref], c[:hardware_source]))
+      { 'hand' => c[:mirrored] ? 'mirrored' : 'as drawn', 'grip' => c[:grip],
+        'hinge' => !rec['fixed'] && rec['doors'] == 1 ? c[:hinge] : '' }
+        .each { |k, v| defn.set_attribute(DICT, k, v) }
+      c
     end
 
     # ---- SketchUp ----------------------------------------------------------

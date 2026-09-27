@@ -1242,21 +1242,14 @@ module UCON
                 // away, and the refusal behind it stays as the backstop for
                 // anything that reaches build another way.
                 if(c.tangram_place){
-                  var hingeRow = !c.fixed && c.type_key !== 'tangram_module_c';
-                  var sel = function(id, opts){
-                    return '<select id="' + id + '" style="margin-left:4px">' + opts.map(function(o){
-                      return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('') + '</select>'; };
-                  // ONE AXIS, NOT TWO (2026-09-27): on a one-door module the hinge
-                  // side IS the hand - choosing it mirrors the module. Only C (a
-                  // pair) and F (no door) are asked for a hand of their own.
-                  el.innerHTML += '<div style="margin-top:6px">' +
-                    (hingeRow ? 'Hinge ' + sel('tgHinge', [['lh','left'],['rh','right']]) +
-                                ' <small>(mirrors the module)</small>'
-                              : 'Hand ' + sel('tgHand', [['as_drawn','as drawn'],['mirrored','mirrored']])) +
-                    (c.height_mm === 840 ? '<br>Grip ' + sel('tgGrip',
-                      [['l_grip','L grip edging (93)'],['none','none (90)']]) : '') +
-                    '</div><i>' + (c.fixed ? 'A fixed element: no door. ' : '') +
+                  // THE PICKER PLACES THE ARTICLE AND NOTHING ELSE (2026-09-27,
+                  // domain rule 6): hinge side, hand and opening are chosen in
+                  // the Unit Properties panel, as for every other unit. It is
+                  // placed hinged left, as drawn, on the L grip edging where the
+                  // family has one - the 7612 island's choice - and changed there.
+                  el.innerHTML += '<i>' + (c.fixed ? 'A fixed element: no door. ' : '') +
                     (c.type_key === 'tangram_module_c' ? 'Two doors, left and right. ' : '') +
+                    'Hinge side, hand and opening: in the Unit Properties panel. ' +
                     'Drawn by the Tangram tool from the brochure plan \u2014 PRELIMINARY, ' +
                     'the curve is confirmed by Cesar.</i>';
                 }
@@ -1303,8 +1296,7 @@ module UCON
                 if(!st.code) return;
                 var c = CAT.find(function(x){ return x.code===st.code; });
                 if(c && c.tangram_place){
-                  var v = function(id, dflt){ var e = document.getElementById(id); return e ? e.value : dflt; };
-                  sketchup.tangram(st.code, v('tgHand','as_drawn'), v('tgHinge','lh'), v('tgGrip','none'));
+                  sketchup.tangram(st.code, 'as_drawn', 'lh', c.height_mm === 840 ? 'l_grip' : 'none');
                   return;
                 }
                 sketchup.build(st.code,
