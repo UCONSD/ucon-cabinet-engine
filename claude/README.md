@@ -336,6 +336,10 @@ read from renders; seven codes into the registry for lookup, six of them curved
 and not buildable because the book prints the footprint and not the curve; the
 questions for Elda.
 
+**Tangram depths, 2026-09-27:** `tangram-recon-2026-09-27-depths.md` — the
+Maxima modules beside Tangram come at 35 / 57 / 62 / 67 by the Project Guidelines
+examples; D.57 is not a catalog base depth and reads as a D.62 reduced (989350).
+
 **Real projects — one card per job, the kitchen that drives the engine:**
 - `project-7612-hillside-dr-2026-09-24.md` — 7612 Hillside Dr, Cesar kitchen,
   opened 2026-09-24: files, naming, what is not known yet. (545 Avenida
