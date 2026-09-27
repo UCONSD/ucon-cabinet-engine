@@ -46,6 +46,11 @@ existed.
 | Q27 | what a JOINT in a ceramic top costs, and what it is called on an order | **open** 2026-08-28 · this kitchen has one: a 3552 mm run against a 3140 mm sheet |
 | Q28 | is a shaped top ordered by its BOUNDING RECTANGLE — the sheet it is cut from | **open** 2026-08-28 · **every top in this kitchen is priced on this assumption** |
 | Q29 | how a Tangram door meets its neighbour at B's and E's 40 end, and what Maxima D.57 is | **open** 2026-09-27 · 7612 island; the drawing shows a 4-5 mm step we cannot resolve from the books |
+| Q30 | the true curves of Tangram A–E and F: a Cesar SKP / DWG, or the radii | **open** 2026-09-27 · every Tangram plan in the model is measured off a brochure drawing (±1 cm) |
+| Q31 | module F: its code, its price, its heights, and whether its front is a fixed panel | **open** 2026-09-27 · F is in no book; the model draws it from the brochure alone |
+| Q32 | the Tangram L grip edging: how GOLATNG's m² is measured on an island, its profile, and the H.138 sideboard's own version | **open** 2026-09-27 · 7612 island is on it (93 to the worktop) |
+| Q33 | the sideboard C1030A prints plinth ZOCCT0D (module D's), not ZOCCT0A | **open** 2026-09-27 · one order line; looks like a misprint |
+| Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1292,3 +1297,59 @@ our drawing gives 0 mm (E–E) and 1.1 mm (B–E).
 
 The `mates` lists in `plan_geometry` → `ends` and, for part 3, one more depth in the Maxima
 H.84 section. The geometry itself is PRELIMINARY until Cesar confirms the curves anyway.
+
+---
+
+## Q30 — the true curves of Tangram A–E and F
+
+**Status:** open · added 2026-09-27 · **every Tangram plan in the model is a measurement off a drawing**
+
+The Kitchen System prints each module's footprint (printed p.58) and no curve. The curves in
+`registry/cesar/tangram_h84.json` → `plan_geometry` are constructions fitted to the brochure's
+vector plan (folder-kitchen-planning-2026 PDF p.6): A R350, C R620, B a line into a concave R620,
+D a convex R770, E a convex R1200, F a rounded corner R200 — each within about 1 cm of the drawing
+(`claude/tangram-recon-2026-09-26.md`). **Does Cesar have an SKP or DWG of the modules, or the
+radii?** Andriy's plan: compare ours against the SketchUp export that comes with her order.
+
+## Q31 — module F
+
+**Status:** open · added 2026-09-27 · **F is in none of the four books**
+
+The brochure (PDF p.5–6) draws F at the ends of base, wall and tall runs: 30 wide, a rounded
+corner, depth 62 at the base, 35 on wall runs, 35–67 on tall ones. The Kitchen System, Linear
+Elements, Home Elements and Project Guidelines print no F (their whole text searched 2026-09-27).
+1. **Its code and its price** — base, wall, tall.
+2. **Its heights** — does the base F come at 84 (on 6) and on the L grip edging (81 + 6)?
+3. **Its front** — the drawing shows a fixed panel in two pieces, jointed where the side meets the
+   curve. Is it fixed, not a door, and is that where the joint is?
+
+## Q32 — the Tangram L grip edging
+
+**Status:** open · added 2026-09-27 · **the 7612 island is on it**
+
+Project Guidelines printed p.112–115: carcass 81, door 84, a 6 cm MDF panel `GOLATNG` priced per m²,
+in two or more pieces over 318 cm, the whole arrangement on it.
+1. **How is the m² measured** on a curved island — the panel's plan area, its bounding rectangle,
+   or the worktop's?
+2. **Its profile** — the book gives the height (6) and not the channel; the model draws the panel's
+   face in the carcass plane.
+3. **The H.138 sideboard's version** (p.115: carcass 135, door 134) — is that the same panel?
+
+## Q33 — plinth ZOCCT0D on the sideboard C1030A
+
+**Status:** open · added 2026-09-27 · **one order line**
+
+Kitchen System printed p.61 prints plinth **ZOCCT0D** — module D's — under the sideboard module A
+H.138, whose plan is module A's. Misprint for ZOCCT0A, or a plinth the sideboard shares with D?
+
+## Q34 — the cooktop and downdraft in a Tangram island
+
+**Status:** open · added 2026-09-27 · **the 7612 island's one appliance position**
+
+Project Guidelines printed p.109: no hob, sink or appliance on a curved module. 7612 puts a
+Thermador CIT36YWBB with a UCVM36XS downdraft on a straight Maxima H.84 (BL0900 / BL1200) between
+curved modules, on the L grip edging — so the carcass is 81 and the downdraft drops 746 mm below
+the worktop.
+1. **Is a straight Maxima H.84 at 81 the right carrier**, and does the L grip panel take the cutout?
+2. **The Tangram top with that cutout** — is it the 1500-point drawing (Linear Elements printed p.43)?
+
