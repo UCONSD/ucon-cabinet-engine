@@ -613,6 +613,14 @@ module UCON
 
         model = Sketchup.active_model
         attrs = Contract.read(inst.definition)
+        # A CURVED OBJECT IS NOT REBUILT HERE YET (2026-09-27). Everything below
+        # redraws through the box builder, and a Tangram module drawn as a box
+        # is the wrong shape that looks settled. Its own section of this panel
+        # is the next step; until then nothing is changed.
+        if attrs['geometry_kind'].to_s == 'curved'
+          return UI.messagebox("Tangram #{attrs['code']}: its options arrive in this panel in the " \
+                               "next step.\n\nNothing was changed.")
+        end
         unit  = Registry.lookup(attrs['code'])
         patch = attributes_patch(unit, payload)
         # `defn` is deliberately NOT read yet - make_unique below replaces it.

@@ -1,7 +1,7 @@
 # UCON Object Contract — v2
 
 **Org:** UCONSD · **Document role:** Load-bearing data foundation for the Cabinet Engine
-**Version:** v2 (revision v2.4) · **Date:** 2026-08-28 · **Status:** Locked (change only via versioned migration)
+**Version:** v2 (revision v2.5) · **Date:** 2026-09-27 · **Status:** Locked (change only via versioned migration)
 **Supersedes:** `docs/UCON_Object_Contract_v1.md` (revision v1.5), which is kept as the
 historical record and must not be edited.
 
@@ -56,10 +56,10 @@ article code once survived on an object that said the client supplies the hardwa
 | `family` | string | no | e.g. `H.78`, `Wall H.36`, `Tall H.210` | Manufacturer family (for cabinets, the height family) |
 | `unit_category` | string | no | free text from source | Source category |
 | `unit_type` | string | no | free text from source | Source sub-type |
-| `geometry_kind` | string | yes | `linear` · `corner` · `non_dim` | How the object is dimensioned |
-| `height_mm` | number | cond. | integer mm | Required when `geometry_kind = linear`/`corner` |
-| `depth_mm` | number | cond. | integer mm | Required when `geometry_kind = linear`/`corner` |
-| `width_mm` | number | cond. | integer mm | The chosen width (required for `linear`) |
+| `geometry_kind` | string | yes | `linear` · `corner` · `non_dim` · **`curved`** | How the object is dimensioned. **`curved` (v2.5)**: a Tangram module — its plan is a curve, held by the registry as `plan_geometry` and looked up by `code`; the object carries the envelope |
+| `height_mm` | number | cond. | integer mm | Required when `geometry_kind = linear`/`corner`/`curved` |
+| `depth_mm` | number | cond. | integer mm | Required when `geometry_kind = linear`/`corner`/`curved` (for `curved`: the deepest point of the printed footprint) |
+| `width_mm` | number | cond. | integer mm | The chosen width (required for `linear` and `curved`; for `curved`: along the straight back) |
 | `corner_geometry` | string | cond. | e.g. `1000x400`, `750x750` | Required when `geometry_kind = corner` |
 | `mounting` | string | no | `floor` · `wall_hung` | How the object meets the room — see §1.3 |
 | `mount_bottom_mm` | number | cond. | integer mm above finished floor | Required when `mounting = wall_hung`; forbidden otherwise |
@@ -213,6 +213,13 @@ opened; that axis lives in `opening_method`.
 - `front_height_mm` is **derived**.
 - The opening hardware is **always a separate line item**.
 - Switching between `gola` and `handle` is a change of `opening_method`, not of `code`.
+- **Tangram (v2.5).** On a `curved` object of collection `Tangram`, `gola` means the Tangram
+  **L-shaped grip edging** (Project Guidelines printed p.112, 114): the door stays at the family
+  height (84) and the CARCASS drops by 30 (to 81) under a 6 cm MDF panel, `GOLATNG`, priced per
+  m² for the whole arrangement — not a `GOL` profile. `front_height_mm` is therefore the family
+  height. For a one-door Tangram module `hinge_side` is also the module's HAND: the book prints one
+  code for both hands and hinges the door on the straight side, so choosing the side mirrors the
+  module (`claude/tangram-recon-2026-09-26.md`).
 
 ### 4.2 Companion lines and variants (rewritten in v2)
 
@@ -346,6 +353,16 @@ its v1 attributes on disk and reads correctly forever.
 
 ## 8. Change log
 
+- **v2.5 (2026-09-27)** — Additive, non-breaking. `geometry_kind` gains **`curved`**.
+  Driven by Tangram for 7612 Hillside Dr: Andriy decided that a Tangram module is a unit like
+  any other — the panel must see it and the order must list it — and a curved module is none of
+  the three existing kinds: not `linear` (its plan is not a rectangle), not `corner` (no node,
+  no execution letter), not `non_dim`. It is dimensioned by the printed footprint — width along
+  the straight back, depth at the deepest point — exactly as `linear` is, and the curve itself
+  stays OUT of the object: it is the registry's `plan_geometry`, looked up by `code`, measured
+  from the brochure's vector plan and PRELIMINARY until Cesar confirms it. §4.1 gains a note on
+  what `gola` and `hinge_side` mean on a Tangram object. Widening an enum invalidates no
+  existing object, so §0 makes it a revision.
 - **v2.4 (2026-08-28)** — Additive, non-breaking. `void_role` gains
   **`wall_reservation`**. Driven by the Wolf hood: `PW482418` publishes NO
   opening — `installations` is empty for every hood in the appliance data, and

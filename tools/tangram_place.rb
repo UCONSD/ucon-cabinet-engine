@@ -62,7 +62,12 @@ module UCON
             doors = (t['interior_confirmed'] || []).any? { |l| l =~ /\A2 doors/ } ? 2 : 1
             h[c['code']] = { 'label' => t['description'].split(' - ').first,
                              'height' => fam['height_mm'], 'plinth' => fam['plinth_h_mm'],
-                             'outline' => g['outline_mm'], 'geometry' => g, 'doors' => doors }
+                             'outline' => g['outline_mm'], 'geometry' => g, 'doors' => doors,
+                             'family' => doc['family'], 'description' => t['description'],
+                             'width' => c['width_mm'], 'depth' => c['depth_mm'],
+                             'plinth_code' => t['plinth_code'],
+                             'source_ref' => "CESAR - 2 Kitchen System.pdf #{t['source_ref']}; " \
+                                             "plan: #{g['source']}" }
           end
         end
       end.merge('F' => fixed_f)
@@ -113,7 +118,10 @@ module UCON
       outline = f_arc(F_R) + [[F_W, 0.0], [F_W, F_D], [0.0, F_D]]
       { 'label' => 'Tangram F - fixed rounded end (NO CODE in the book)',
         'height' => 840, 'plinth' => 60, 'doors' => 0, 'fixed' => true,
-        'outline' => outline,
+        'outline' => outline, 'family' => 'Tangram H.84',
+        'description' => 'Tangram F - fixed rounded end. NO CODE in the Kitchen System: brochure only',
+        'width' => F_W, 'depth' => F_D - front_gap - front_t,
+        'source_ref' => 'folder-kitchen-planning-2026 PDF p.6 (vector plan) - no code, no price',
         'geometry' => { 'trust' => 'ILLUSTRATION - measured from the brochure plan, no printed dimension, no code',
                         'source' => 'folder-kitchen-planning-2026 PDF p.6 (vector plan)' } }
     end
@@ -379,6 +387,69 @@ module UCON
       end
     end
 
+    # ---- the hand IS the hinge side (2026-09-27) ---------------------------
+    # Read from the books (claude/tangram-recon-2026-09-26.md): '1 rh/lh door',
+    # one code for both hands, and every drawing hinges the door on the
+    # module's STRAIGHT side, the free edge at the thin end of the curve - on
+    # A and D the thin end runs out to nothing, so there is nowhere else a
+    # hinge could go. So for a one-door module the hand and the hinge side are
+    # ONE per-order axis (domain rule 6): choosing 'rh' mirrors the module so
+    # its deep end, and its hinges, are on the right. On B and E both ends are
+    # straight; the deeper end is an ASSUMPTION there - a question for Elda.
+    #
+    # The hand the module has AS DRAWN in the registry, or nil when its ends
+    # are equally deep (P) and a hinge fits either end without mirroring.
+    def hand_as_drawn(outline)
+      parts = plan_parts(outline, false)
+      chain = parts[:chain]
+      a = chain.first
+      b = chain.last
+      return nil if (a[1] - b[1]).abs < 1
+
+      n = mid_normal(chain, parts[:ccw])
+      left = [n[1], -n[0]]
+      l = ->(p) { p[0] * left[0] + p[1] * left[1] }
+      deep = a[1] > b[1] ? a : b
+      other = deep.equal?(a) ? b : a
+      l.(deep) > l.(other) ? 'lh' : 'rh'
+    end
+
+    # Does this hinge side need the module mirrored?
+    def mirror_for(outline, hinge)
+      as_drawn = hand_as_drawn(outline)
+      !as_drawn.nil? && as_drawn != hinge
+    end
+
+    # WHAT THE OBJECT SAYS ABOUT ITSELF - the Contract (v2.5, geometry_kind
+    # 'curved'), so the panel and the order see a Tangram module like any
+    # other unit. Pure: it returns the hash and writes nothing. The curve
+    # itself is not in it: the plan is the registry's plan_geometry, looked up
+    # by code - the object carries its envelope, as domain rule 4 asks.
+    def contract_attrs(code, rec, hinge, grip, schema)
+      l_grip = grip == 'l_grip' && rec['height'].to_i == 840
+      a = {
+        'schema_version' => schema, 'object_class' => 'cabinet', 'manufacturer' => 'cesar',
+        'collection' => 'Tangram', 'family' => rec['family'],
+        'unit_type' => rec['description'], 'geometry_kind' => 'curved',
+        'width_mm' => rec['width'].to_i, 'depth_mm' => rec['depth'].to_i,
+        'height_mm' => rec['height'].to_i, 'mounting' => 'floor',
+        'code_status' => 'PRELIMINARY', 'status' => 'SOURCE',
+        'source_ref' => rec['source_ref'],
+        'notes' => "PRELIMINARY - #{rec['geometry']['trust']}. Drawn by tools/tangram_place.rb; " \
+                   'the curve is confirmed by Cesar.'
+      }
+      a['code'] = code unless rec['fixed']
+      unless rec['fixed']
+        a['opening'] = rec['doors'] == 2 ? 'doors' : 'door'
+        # the Tangram L grip edging keeps the door at 84 and drops the carcass
+        # to 81 (PG printed p.114) - v2.5 records that 'gola' means this here
+        a['opening_method'] = l_grip ? 'gola' : 'push_to_open'
+        a['front_height_mm'] = rec['height'].to_i
+        a['hinge_side'] = hinge if rec['doors'] == 1
+      end
+      a
+    end
+
     # ---- SketchUp ----------------------------------------------------------
     SMOOTH_DEG = 30
 
@@ -469,63 +540,73 @@ module UCON
     def place(code, mirrored, hinge = 'lh', grip = 'l_grip')
       rec = catalogue[code] or return UI.messagebox("#{code} has no plan in the registry.")
       model = Sketchup.active_model
-      parts = rec['fixed'] ? fixed_parts(rec, mirrored) : plan_parts(rec['outline'], mirrored)
-      pl = rec['plinth'].to_f
-      h  = rec['height'].to_f
+      # one door: the hinge side IS the hand - it decides the mirror
+      mirrored = mirror_for(rec['outline'], hinge) if !rec['fixed'] && rec['doors'] == 1
       model.start_operation("Tangram #{code}", true)
-      grp = model.active_entities.add_group
-      grp.name = "#{code} #{rec['label']}#{mirrored ? ' (mirrored)' : ''} - PRELIMINARY"
-      grp.layer = model.layers[TAG] || model.layers.add(TAG)
-      plinth = prism(grp.entities, 'PLINTH', parts[:plinth], 0, pl,
-                     material(model, 'UCON_Plinth_White', [245, 245, 245]))
-      hide_vertical_edges(plinth)
-      m_front = material(model, 'UCON_Front_White', [245, 245, 245])
-      # F is fixed: the whole element in the front finish, and nothing opens
-      # the L grip edging is the H.84 system's; the H.138 sideboard's is
-      # another (PG p.115: carcass 135, door 134) and is not drawn here
-      l_grip = grip == 'l_grip' && h == 840
-      car_h = l_grip ? h - L_GRIP_CARCASS_CUT_MM : h
-      prism(grp.entities, 'CARCASS', parts[:carcass], pl, car_h,
-            material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
-      if l_grip
-        # the panel over the carcass; the door (84) covers its lower 3 cm
-        prism(grp.entities, 'GRIP_PANEL (GOLATNG)', parts[:carcass], pl + car_h, L_GRIP_PANEL_MM, m_front)
+      defn = model.definitions.add("Tangram #{code}")
+      draw_into(defn.entities, rec, mirrored, hinge, grip)
+      # THE CONTRACT, through the engine's own validator, when the engine is
+      # loaded - which it always is in SketchUp. Written on the DEFINITION, as
+      # Contract v2 §2 asks, so a copy made by hand carries it.
+      contract = defined?(::UCON::CabinetEngine::Contract) ? ::UCON::CabinetEngine::Contract : nil
+      if contract
+        contract.write!(defn, contract_attrs(code, rec, hinge, grip, contract::SCHEMA_VERSION))
+      else
+        warn 'Tangram: the engine is not loaded - placed without a Contract'
       end
-      # F: its facade in two pieces - the joint between them is the seam
-      (parts[:fronts] || []).each_with_index do |pts, i|
-        prism(grp.entities, i.zero? ? 'FACADE_SIDE (fixed)' : 'FACADE_CURVED (fixed)', pts, pl, h, m_front)
-      end
-      leaves = rec['fixed'] ? [] : door_leaves(parts, rec['doors'], hinge)
-      leaves.each_with_index do |lf, i|
-        prism(grp.entities, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, h, m_front)
-      end
-      draw_symbols(grp.entities, leaves, pl, h)
-      { 'code' => code, 'label' => rec['label'], 'hand' => mirrored ? 'mirrored' : 'as drawn',
-        'height_mm' => h, 'plinth_h_mm' => pl,
-        'grip' => l_grip ? 'Tangram L grip edging: carcass 81, door 84, GOLATNG panel 6 - 93 to the worktop' : 'none (push-pull or handle): 90 to the worktop',
-        'doors' => rec['doors'], 'hinge' => rec['fixed'] ? 'fixed' : leaves.map { |lf| lf[:hinge] }.join('+'),
-        'front_mm' => rec['fixed'] ? "#{front_t} at #{front_gap} off the carcass, FIXED, two pieces with a joint at the curve (solid, not a door - to confirm with Elda)" : "#{front_t} at #{front_gap} off the carcass",
-        'plinth_board_mm' => "#{plinth_t} at #{setback} behind the carcass front",
-        'trust' => rec['geometry']['trust'], 'source' => rec['geometry']['source'],
-        'status' => rec['fixed'] ?
-          'PRELIMINARY - NO CODE in the Kitchen System; shape from the brochure plan; fixed (Andriy 2026-09-27); height assumed 840 on 60; code and height to Elda' :
-          'PRELIMINARY - curve measured from the brochure, factory confirmation owed' }
-        .each { |k, v| grp.set_attribute(DICT, k, v) }
+      l_grip = grip == 'l_grip' && rec['height'].to_i == 840
+      { 'code' => code, 'hand' => mirrored ? 'mirrored' : 'as drawn',
+        'grip' => l_grip ? 'l_grip' : 'none', 'hinge' => rec['doors'] == 1 && !rec['fixed'] ? hinge : '',
+        'trust' => rec['geometry']['trust'], 'source' => rec['geometry']['source'] }
+        .each { |k, v| defn.set_attribute(DICT, k, v) }
+      inst = model.active_entities.add_instance(defn, Geom::Transformation.new)
+      inst.layer = model.layers[TAG] || model.layers.add(TAG)
       model.commit_operation
       model.selection.clear
-      model.selection.add(grp)
-      puts "Tangram: placed #{code} (#{rec['label']}), #{h.round} on #{pl.round}#{mirrored ? ', mirrored' : ''}."
-      grp
+      model.selection.add(inst)
+      puts "Tangram: placed #{code} (#{rec['label']}), #{rec['height']} on #{rec['plinth']}#{mirrored ? ', mirrored' : ''}."
+      inst
     rescue StandardError => e
       model&.abort_operation
       UI.messagebox("Tangram place failed: #{e.class}: #{e.message}")
       nil
     end
 
+    # Everything the module is made of, drawn into ents. Used by place, and
+    # by the panel when it redraws a module after a change.
+    def draw_into(ents, rec, mirrored, hinge, grip)
+      model = ents.model
+      parts = rec['fixed'] ? fixed_parts(rec, mirrored) : plan_parts(rec['outline'], mirrored)
+      pl = rec['plinth'].to_f
+      h  = rec['height'].to_f
+      plinth = prism(ents, 'PLINTH', parts[:plinth], 0, pl,
+                     material(model, 'UCON_Plinth_White', [245, 245, 245]))
+      hide_vertical_edges(plinth)
+      m_front = material(model, 'UCON_Front_White', [245, 245, 245])
+      # the L grip edging is the H.84 system's; the H.138 sideboard's is
+      # another (PG p.115: carcass 135, door 134) and is not drawn here
+      l_grip = grip == 'l_grip' && h == 840
+      car_h = l_grip ? h - L_GRIP_CARCASS_CUT_MM : h
+      prism(ents, 'CARCASS', parts[:carcass], pl, car_h,
+            material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      # the panel over the carcass; the door (84) covers its lower 3 cm
+      prism(ents, 'GRIP_PANEL (GOLATNG)', parts[:carcass], pl + car_h, L_GRIP_PANEL_MM, m_front) if l_grip
+      # F: its facade in two pieces - the joint between them is the seam
+      (parts[:fronts] || []).each_with_index do |pts, i|
+        prism(ents, i.zero? ? 'FACADE_SIDE (fixed)' : 'FACADE_CURVED (fixed)', pts, pl, h, m_front)
+      end
+      leaves = rec['fixed'] ? [] : door_leaves(parts, rec['doors'], hinge)
+      leaves.each_with_index do |lf, i|
+        prism(ents, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, h, m_front)
+      end
+      draw_symbols(ents, leaves, pl, h)
+      leaves
+    end
+
     def ask
       codes = catalogue.keys
       labels = codes.map { |c| "#{c}  #{catalogue[c]['label']}" }
-      res = UI.inputbox(['Module', 'Hand', 'Hinge (1-door modules)', 'Grip'],
+      res = UI.inputbox(['Module', 'Hand (C and F)', 'Hinge (one-door modules: mirrors the module)', 'Grip'],
                         [labels.first, 'as drawn', 'left', 'L grip edging (93)'],
                         [labels.join('|'), 'as drawn|mirrored', 'left|right', 'L grip edging (93)|none (90)'],
                         'UCON Tangram - place module')

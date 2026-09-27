@@ -8302,7 +8302,8 @@ check('CONTRACT v2.4 - a void may be a wall reservation, and the datum is why') 
 
   doc = File.read(File.expand_path('../docs/UCON_Object_Contract_v2.md', __dir__))
   raise 'the change log must carry v2.4' unless doc.include?('**v2.4 (2026-08-28)**')
-  raise 'the header must name the current revision' unless doc.include?('revision v2.4')
+  # the header names the CURRENT revision, which moved on in v2.5 (2026-09-27)
+  raise 'the header must name the current revision' unless doc =~ /revision v2\.[4-9]/
   # v2.2 had to record that `void` was in the code and not in the table; v2.4
   # records the same for `void_role` itself, and the row is now there.
   raise 'void_role must now be IN the table' unless doc.include?('| `void_role` |')
@@ -10073,7 +10074,60 @@ check('Tangram: a plan does NOT make a curve buildable by the box builder') do
   curved = TANGRAM_PLAN.keys - ['BK060P']
   raise 'box builder would draw a curve' unless curved.all? { |c| Registry.lookup(c)['buildable'] == false }
   tool = File.read(File.expand_path('../tools/tangram_place.rb', __dir__))
-  raise 'the tool must not write the Contract' if tool.include?('Contract.write') || tool.include?('CabinetEngine')
+  # REVERSED 2026-09-27, by Andriy's decision: a Tangram module now carries a
+  # Contract (v2.5, geometry_kind 'curved') so the panel and the order see it.
+  # What stays forbidden is the box builder drawing a curve.
+  raise 'the tool must not call the box builder' if tool.include?('Generator.build')
+  raise 'the tool must write through the validator' unless tool.include?('contract.write!(defn')
+end
+
+check('CONTRACT v2.5 - a curved object: the envelope in the object, the curve in the registry') do
+  base = { 'schema_version' => Contract::SCHEMA_VERSION, 'object_class' => 'cabinet',
+           'manufacturer' => 'cesar', 'geometry_kind' => 'curved', 'code_status' => 'PRELIMINARY',
+           'status' => 'SOURCE', 'source_ref' => 'x p.58' }
+  Contract.validate!(base.merge('width_mm' => 620, 'depth_mm' => 620, 'height_mm' => 840))
+  begin
+    Contract.validate!(base.merge('width_mm' => 620, 'height_mm' => 840))
+    raise 'a curved object without its depth was accepted'
+  rescue ArgumentError => e
+    raise e unless e.message.include?('depth_mm')
+  end
+  doc = File.read(File.expand_path('../docs/UCON_Object_Contract_v2.md', __dir__))
+  raise 'change log' unless doc.include?('**v2.5 (2026-09-27)**') && doc.include?('revision v2.5')
+  raise 'the Tangram gola note' unless doc.include?('L-shaped grip edging') && doc.include?('GOLATNG')
+end
+
+check('Tangram: the tool writes a valid Contract, and the hinge side is the hand') do
+  load File.expand_path('../tools/tangram_place.rb', __dir__)
+  tp = UCON::TangramPlace
+  tp.catalogue.each do |code, rec|
+    %w[lh rh].each do |hg|
+      a = tp.contract_attrs(code, rec, hg, 'l_grip', Contract::SCHEMA_VERSION)
+      Contract.validate!(a.dup)
+      raise "#{code}: kind" unless a['geometry_kind'] == 'curved' && a['collection'] == 'Tangram'
+      if rec['fixed']
+        raise 'F must carry no code, no opening' if a.key?('code') || a.key?('opening')
+      elsif rec['doors'] == 2
+        raise 'C carries no hinge side' if a.key?('hinge_side')
+      else
+        raise "#{code}: hinge" unless a['hinge_side'] == hg
+      end
+      raise "#{code}: gola on 84 only" unless a['opening_method'].nil? || a['opening_method'] == (rec['height'] == 840 ? 'gola' : 'push_to_open')
+    end
+  end
+  # the deep end carries the hinge: A as drawn hinges on its left (the 350 side)
+  raise 'A as drawn' unless tp.hand_as_drawn(tp.catalogue['BK030A']['outline']) == 'lh'
+  raise 'P has no hand' unless tp.hand_as_drawn(tp.catalogue['BK060P']['outline']).nil?
+  %w[BK030A BK060B BK060D BL060E C1030A].each do |c|
+    o = tp.catalogue[c]['outline']
+    %w[lh rh].each do |hg|
+      parts = tp.plan_parts(o, tp.mirror_for(o, hg))
+      lf = tp.door_leaves(parts, 1, hg).first
+      ch = parts[:chain]
+      deep = [ch.first, ch.last].max_by(&:last)
+      raise "#{c} #{hg}: hinge not at the deep end" unless Math.hypot(lf[:pivot][0] - deep[0], lf[:pivot][1] - deep[1]) < 60
+    end
+  end
 end
 check('Tangram: the picker card for a curve is one line, pointing at the placer') do
   row = Registry.catalog.find { |c| c['code'] == 'BL060C' }

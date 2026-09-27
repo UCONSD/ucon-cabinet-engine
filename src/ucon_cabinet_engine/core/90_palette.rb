@@ -1246,9 +1246,13 @@ module UCON
                   var sel = function(id, opts){
                     return '<select id="' + id + '" style="margin-left:4px">' + opts.map(function(o){
                       return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('') + '</select>'; };
+                  // ONE AXIS, NOT TWO (2026-09-27): on a one-door module the hinge
+                  // side IS the hand - choosing it mirrors the module. Only C (a
+                  // pair) and F (no door) are asked for a hand of their own.
                   el.innerHTML += '<div style="margin-top:6px">' +
-                    'Hand ' + sel('tgHand', [['as_drawn','as drawn'],['mirrored','mirrored']]) +
-                    (hingeRow ? '<br>Hinge ' + sel('tgHinge', [['lh','left'],['rh','right']]) : '') +
+                    (hingeRow ? 'Hinge ' + sel('tgHinge', [['lh','left'],['rh','right']]) +
+                                ' <small>(mirrors the module)</small>'
+                              : 'Hand ' + sel('tgHand', [['as_drawn','as drawn'],['mirrored','mirrored']])) +
                     (c.height_mm === 840 ? '<br>Grip ' + sel('tgGrip',
                       [['l_grip','L grip edging (93)'],['none','none (90)']]) : '') +
                     '</div><i>' + (c.fixed ? 'A fixed element: no door. ' : '') +

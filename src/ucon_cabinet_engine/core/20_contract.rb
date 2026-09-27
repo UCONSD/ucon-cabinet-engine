@@ -51,7 +51,9 @@ module UCON
         # chose the new word over reusing either, 2026-08-27, and §0 makes
         # widening an enum a revision rather than a major version.
         'object_class'    => %w[cabinet worktop shelf panel filler accessory appliance appliance_front corner_unit void],
-        'geometry_kind'   => %w[linear corner non_dim],
+        # 'curved' since v2.5 (2026-09-27): a Tangram module, whose plan is a
+        # curve the registry holds as plan_geometry - see the change log.
+        'geometry_kind'   => %w[linear corner non_dim curved],
         'mounting'        => %w[floor wall_hung],
         'code_status'     => %w[PRELIMINARY CONFIRMED],
         'status'          => %w[SOURCE CONTROL PLANNING CONFIRMED],
@@ -169,6 +171,10 @@ module UCON
           require_keys!(a, %w[height_mm depth_mm width_mm], 'geometry_kind = linear')
         when 'corner'
           require_keys!(a, %w[height_mm depth_mm corner_geometry], 'geometry_kind = corner')
+        when 'curved'
+          # the printed footprint: width along the straight back, depth at the
+          # deepest point, height - the envelope, like linear (domain rule 4)
+          require_keys!(a, %w[height_mm depth_mm width_mm], 'geometry_kind = curved')
         end
 
         # §1.3 (v1.5) — how the object meets the room. A floor object's height
