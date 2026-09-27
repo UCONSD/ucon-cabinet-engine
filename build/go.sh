@@ -50,6 +50,7 @@ git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
         tools/probe_recon_elements.rb \
         tools/probe_bridge.rb \
         tools/module_grid.rb \
+        tools/tangram_place.rb \
         .gitignore build/go.sh CLAUDE.md
 
 echo

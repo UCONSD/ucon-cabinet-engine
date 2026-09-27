@@ -10036,6 +10036,43 @@ check('Tangram: the map holds both sections as partial, apart from Maxima H.84')
   raise 'Maxima H.84 must be its own section' unless max84 && max84['family'] == 'H.84'
 end
 
+puts "\nTangram plan geometry, measured from the brochure vector plan 2026-09-26"
+# width, depth at the left end, depth at the right end - a quarter circle comes
+# down to nothing at one end.
+TANGRAM_PLAN = { 'BK030A' => [350, 0, 350], 'BK060B' => [600, 400, 130], 'BL060C' => [620, 0, 620],
+                 'BK060D' => [620, 0, 350], 'BL060E' => [600, 400, 570], 'BK060P' => [600, 130, 130],
+                 'C1030A' => [350, 0, 350] }.freeze
+check('Tangram: every module carries a plan, and says how far to trust it') do
+  TANGRAM_PLAN.each_key do |c|
+    g = Registry.lookup(c)['plan_geometry']
+    raise "#{c}: no plan" unless g && g['outline_mm'].is_a?(Array) && g['outline_mm'].size >= 4
+    raise "#{c}: trust not stated" unless g['trust'].to_s.include?('ILLUSTRATION')
+    raise "#{c}: source" unless g['source'].to_s.include?('folder-kitchen-planning-2026')
+  end
+end
+check('Tangram: the plan keeps the PRINTED width and end depths') do
+  TANGRAM_PLAN.each do |c, (w, left, right)|
+    pts = Registry.lookup(c)['plan_geometry']['outline_mm']
+    wx = pts.map(&:first).max
+    raise "#{c}: width #{wx} vs printed #{w}" unless wx == w
+    l = pts.select { |x, _| x.zero? }.map(&:last).max
+    r = pts.select { |x, _| x == w }.map(&:last).max
+    raise "#{c}: ends #{l}/#{r} vs #{left}/#{right}" unless (l - left).abs <= 1 && (r - right).abs <= 1
+  end
+end
+check('Tangram: B nests against C - the same radius, concave against convex') do
+  b = Registry.lookup('BK060B')['plan_geometry']
+  c = Registry.lookup('BL060C')['plan_geometry']
+  raise 'radius' unless b['params']['radius_mm'] == c['params']['radius_mm'] &&
+                        b['kind'] == 'line_then_concave_arc' && c['kind'] == 'quarter_circle'
+end
+check('Tangram: a plan does NOT make a curve buildable by the box builder') do
+  curved = TANGRAM_PLAN.keys - ['BK060P']
+  raise 'box builder would draw a curve' unless curved.all? { |c| Registry.lookup(c)['buildable'] == false }
+  tool = File.read(File.expand_path('../tools/tangram_place.rb', __dir__))
+  raise 'the tool must not write the Contract' if tool.include?('Contract.write') || tool.include?('CabinetEngine')
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }

@@ -44,10 +44,134 @@
           "Tangram Groove door"
         ],
         "buildable": false,
-        "not_buildable_reason": "CURVED. The book prints the footprint - two edge dimensions on the printed p.58 drawing - and the curve itself not at all: no radius, no arc, no profile. A box drawn at the footprint would be a wrong shape that looks settled (domain rule 1). The geometry comes from Cesar - a factory SKP or Elda - and until it does the code is held for LOOKUP and reconciliation, not for building.",
+        "not_buildable_reason": "CURVED, and THE ENGINE DOES NOT DRAW CURVES YET: its builder makes boxes, and a box at this footprint would be a wrong shape that looks settled. The plan now exists - plan_geometry, measured from the brochure vector plan (trust stated there) - and tools/tangram_place.rb draws it as a planning volume. Factory confirmation of the curve (a Cesar SKP or Elda) is still owed before an order.",
         "notes": "Footprint 35 x 35 (printed p.58, the same drawing as module A). 3 glass shelves are an option priced separately.",
         "wall_hung": false,
-        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page."
+        "wall_hung_note": "SWEPT 2026-09-26 on the renders of printed p.58-61: no 'Hung version' glyph beside any Tangram position. A curved unit stands on its own curved plinth article (ZOCCT0x), so false is also the only reading that fits the page.",
+        "plan_geometry": {
+          "kind": "quarter_circle",
+          "params": {
+            "radius_mm": 350,
+            "centre": "back-right corner",
+            "radius_measured_cm": [
+              35.3,
+              35.5
+            ],
+            "note": "the same plan as module A (printed p.58 draws the same unit at H.138)"
+          },
+          "outline_mm": [
+            [
+              350,
+              0
+            ],
+            [
+              350,
+              350
+            ],
+            [
+              327,
+              349
+            ],
+            [
+              304,
+              347
+            ],
+            [
+              282,
+              343
+            ],
+            [
+              259,
+              338
+            ],
+            [
+              237,
+              331
+            ],
+            [
+              216,
+              323
+            ],
+            [
+              195,
+              314
+            ],
+            [
+              175,
+              303
+            ],
+            [
+              156,
+              291
+            ],
+            [
+              137,
+              278
+            ],
+            [
+              119,
+              263
+            ],
+            [
+              103,
+              247
+            ],
+            [
+              87,
+              231
+            ],
+            [
+              72,
+              213
+            ],
+            [
+              59,
+              194
+            ],
+            [
+              47,
+              175
+            ],
+            [
+              36,
+              155
+            ],
+            [
+              27,
+              134
+            ],
+            [
+              19,
+              113
+            ],
+            [
+              12,
+              91
+            ],
+            [
+              7,
+              68
+            ],
+            [
+              3,
+              46
+            ],
+            [
+              1,
+              23
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "frame": "x along the straight back from the left end as the brochure draws it, y from the back toward the front; mirror for the other hand (all modules are rh/lh, brochure PDF p.6)",
+          "trust": "MEASURED FROM AN ILLUSTRATION - not a printed dimension. About +/-10 mm; enough for a preliminary presentation model, not for an order or a worktop template.",
+          "hausdorff_to_brochure_outline_mm": 6,
+          "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
+          "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
+          "measured_on": "2026-09-26"
+        }
       }
     }
   }

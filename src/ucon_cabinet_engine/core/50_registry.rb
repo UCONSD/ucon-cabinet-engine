@@ -272,6 +272,7 @@ module UCON
             # and a curved unit is not yet a thing the Contract can draw. This
             # says what the page draws, so a cut can be refused on it.
             'shape'              => unit_type['shape'],
+            'plan_geometry'      => unit_type['plan_geometry'],
             'buildable'          => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
             # THE GUARD Generator.wall_hung_available? READS. It was written on
