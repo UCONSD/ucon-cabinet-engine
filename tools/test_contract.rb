@@ -10222,6 +10222,15 @@ check('Tangram F: fixed, no code, kept out of the registry, drawn with a plinth 
   end
 end
 
+check('Tangram L grip edging: carcass 81, door 84, panel 6 - 93 to the worktop') do
+  # Project Guidelines printed p.114; chosen for the 7612 island 2026-09-27.
+  tp = UCON::TangramPlace
+  raise 'cut' unless tp::L_GRIP_CARCASS_CUT_MM == 30.0 && tp::L_GRIP_PANEL_MM == 60.0
+  h = tp.catalogue['BL060C']['height']
+  pl = tp.catalogue['BL060C']['plinth']
+  raise 'heights' unless pl + (h - tp::L_GRIP_CARCASS_CUT_MM) + tp::L_GRIP_PANEL_MM == 930 && pl + h == 900
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }

@@ -153,6 +153,17 @@ module UCON
     PLINTH_T_MM       = 18.0 # PLINTH_T_MM
     PLINTH_SETBACK_MM = 45.0 # PLINTH_SETBACK_MM, behind the carcass front
 
+    # THE TANGRAM GRIP EDGING (Project Guidelines printed p.112, 114-115):
+    # not an aluminium profile but a 6 cm MDF panel (GOLATNG, per m2) between
+    # the carcass and the worktop. The carcass drops from 84 to 81, the door
+    # stays 84: 6 + 81 + 6 = 93 to the worktop, and the channel is the 3 cm
+    # between the door's top and the worktop, its back the panel's face.
+    # Chosen for the 7612 island by Andriy, 2026-09-27 (variant A).
+    # THE PANEL'S PROFILE IS NOT PRINTED - drawn here with its face in the
+    # carcass plane, a planning volume. The real shape is Cesar's.
+    L_GRIP_CARCASS_CUT_MM = 30.0 # 84 -> 81
+    L_GRIP_PANEL_MM       = 60.0
+
     def front_t;   FRONT_T_MM;        end
     def front_gap; FRONT_GAP_MM;      end
     def plinth_t;  PLINTH_T_MM;       end
@@ -455,7 +466,7 @@ module UCON
       end
     end
 
-    def place(code, mirrored, hinge = 'lh')
+    def place(code, mirrored, hinge = 'lh', grip = 'l_grip')
       rec = catalogue[code] or return UI.messagebox("#{code} has no plan in the registry.")
       model = Sketchup.active_model
       parts = rec['fixed'] ? fixed_parts(rec, mirrored) : plan_parts(rec['outline'], mirrored)
@@ -470,8 +481,14 @@ module UCON
       hide_vertical_edges(plinth)
       m_front = material(model, 'UCON_Front_White', [245, 245, 245])
       # F is fixed: the whole element in the front finish, and nothing opens
-      prism(grp.entities, 'CARCASS', parts[:carcass], pl, h,
+      l_grip = grip == 'l_grip'
+      car_h = l_grip ? h - L_GRIP_CARCASS_CUT_MM : h
+      prism(grp.entities, 'CARCASS', parts[:carcass], pl, car_h,
             material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      if l_grip
+        # the panel over the carcass; the door (84) covers its lower 3 cm
+        prism(grp.entities, 'GRIP_PANEL (GOLATNG)', parts[:carcass], pl + car_h, L_GRIP_PANEL_MM, m_front)
+      end
       # F: its facade in two pieces - the joint between them is the seam
       (parts[:fronts] || []).each_with_index do |pts, i|
         prism(grp.entities, i.zero? ? 'FACADE_SIDE (fixed)' : 'FACADE_CURVED (fixed)', pts, pl, h, m_front)
@@ -483,6 +500,7 @@ module UCON
       draw_symbols(grp.entities, leaves, pl, h)
       { 'code' => code, 'label' => rec['label'], 'hand' => mirrored ? 'mirrored' : 'as drawn',
         'height_mm' => h, 'plinth_h_mm' => pl,
+        'grip' => l_grip ? 'Tangram L grip edging: carcass 81, door 84, GOLATNG panel 6 - 93 to the worktop' : 'none (push-pull or handle): 90 to the worktop',
         'doors' => rec['doors'], 'hinge' => rec['fixed'] ? 'fixed' : leaves.map { |lf| lf[:hinge] }.join('+'),
         'front_mm' => rec['fixed'] ? "#{front_t} at #{front_gap} off the carcass, FIXED, two pieces with a joint at the curve (solid, not a door - to confirm with Elda)" : "#{front_t} at #{front_gap} off the carcass",
         'plinth_board_mm' => "#{plinth_t} at #{setback} behind the carcass front",
@@ -505,11 +523,14 @@ module UCON
     def ask
       codes = catalogue.keys
       labels = codes.map { |c| "#{c}  #{catalogue[c]['label']}" }
-      res = UI.inputbox(['Module', 'Hand', 'Hinge (1-door modules)'], [labels.first, 'as drawn', 'left'],
-                        [labels.join('|'), 'as drawn|mirrored', 'left|right'], 'UCON Tangram - place module')
+      res = UI.inputbox(['Module', 'Hand', 'Hinge (1-door modules)', 'Grip'],
+                        [labels.first, 'as drawn', 'left', 'L grip edging (93)'],
+                        [labels.join('|'), 'as drawn|mirrored', 'left|right', 'L grip edging (93)|none (90)'],
+                        'UCON Tangram - place module')
       return unless res
 
-      place(codes[labels.index(res[0])], res[1] == 'mirrored', res[2] == 'right' ? 'rh' : 'lh')
+      place(codes[labels.index(res[0])], res[1] == 'mirrored', res[2] == 'right' ? 'rh' : 'lh',
+            res[3].start_with?('L') ? 'l_grip' : 'none')
     end
 
     if defined?(Sketchup) && !defined?(@loaded)
