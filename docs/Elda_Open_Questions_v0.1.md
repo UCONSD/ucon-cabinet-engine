@@ -45,6 +45,7 @@ existed.
 | Q26 | does "horizontal / vertical grain" describe the SHEET or the INSTALLED panel | **open** 2026-08-28 · **decides whether a 2440-tall veneer end panel can be ordered at all** |
 | Q27 | what a JOINT in a ceramic top costs, and what it is called on an order | **open** 2026-08-28 · this kitchen has one: a 3552 mm run against a 3140 mm sheet |
 | Q28 | is a shaped top ordered by its BOUNDING RECTANGLE — the sheet it is cut from | **open** 2026-08-28 · **every top in this kitchen is priced on this assumption** |
+| Q29 | how a Tangram door meets its neighbour at B's and E's 40 end, and what Maxima D.57 is | **open** 2026-09-27 · 7612 island; the drawing shows a 4-5 mm step we cannot resolve from the books |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1260,3 +1261,34 @@ measured, so a different rule is a different arithmetic over the same recorded
 facts — which is the whole reason the assumption is kept in one file
 (`core/62_top_stamp.rb`) and repeated on every object rather than being spread
 through the engine.
+
+---
+
+## Q29 — how does a Tangram door meet its neighbour at the 40 end of B and E?
+
+**Status:** open · added 2026-09-27 · **7612 island: a 4–5 mm door step the books cannot resolve**
+
+**Raised 2026-09-27, for the 7612 Hillside Dr island (Tangram on its L grip edging).**
+
+Measured on our reconstruction of the brochure's plan (folder-kitchen-planning-2026 PDF p.6,
+`registry/cesar/tangram_h84.json` → `plan_geometry` → `ends`): at every Tangram end where the
+depth matches a Maxima depth (35, 62 — and 57, see part 3) the front is parallel to the back and
+the doors meet flush. At the **40 end of B and of E** the front meets the side at about 30°, so
+with the carcasses aligned front to front the door's outer corner stands **4.8 mm (B) / 3.7 mm (E)**
+proud of a straight door. No Maxima depth is 40, and the printed examples put these ends against
+**each other** (brochure p.5: E sx | E dx | B; Project Guidelines printed p.117: C, E, B) — where
+our drawing gives 0 mm (E–E) and 1.1 mm (B–E).
+
+### The question, in three parts
+
+1. **Is a 40 end ever placed against anything but another Tangram 40 end?** If so, how is the door
+   finished there — cut square, an end strip, a filler?
+2. **B–E meet 1.1 mm apart on our drawing.** Is that joint designed to be exact (and our curves are
+   off by that much), or is there a detail at the ridge?
+3. **Maxima 2.2 base units D. 57** (Project Guidelines printed p.116, beside E's 57 end): is D.57 a
+   catalog depth we have not extracted, or a Maxima D.62 reduced in depth (code 989350)?
+
+### What moves if she answers otherwise
+
+The `mates` lists in `plan_geometry` → `ends` and, for part 3, one more depth in the Maxima
+H.84 section. The geometry itself is PRELIMINARY until Cesar confirms the curves anyway.

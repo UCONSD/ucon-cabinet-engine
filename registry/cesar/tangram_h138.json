@@ -170,7 +170,30 @@
           "hausdorff_to_brochure_outline_mm": 6,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 0,
+              "front_slope_deg": 87.5,
+              "door_corner_depth_mm": 0.0,
+              "mates": [
+                "back: against the wall, or back to back with another A H.138"
+              ],
+              "mates_source": "PG printed p.117 sideboard"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 350,
+              "front_slope_deg": 2.5,
+              "door_corner_depth_mm": 375.0,
+              "mates": [
+                "Maxima H.138 d.35"
+              ],
+              "mates_source": "PG printed p.117: A H.138 + 3x Maxima H.138 D.35 + A"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       }
     }

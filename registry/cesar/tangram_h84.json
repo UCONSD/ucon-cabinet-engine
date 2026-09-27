@@ -176,7 +176,30 @@
           "hausdorff_to_brochure_outline_mm": 6,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 0,
+              "front_slope_deg": 87.5,
+              "door_corner_depth_mm": 0.0,
+              "mates": [
+                "back: against the wall, or back to back with another A - the round end of an island"
+              ],
+              "mates_source": "brochure PDF p.5-6: islands closed by two A back to back"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 350,
+              "front_slope_deg": 2.5,
+              "door_corner_depth_mm": 375.0,
+              "mates": [
+                "Maxima d.35"
+              ],
+              "mates_source": "PG printed p.117: sideboard A H.138 + Maxima H.138 D.35 + A"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       },
       "tangram_module_b": {
@@ -341,7 +364,31 @@
           "hausdorff_to_brochure_outline_mm": 22,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 400,
+              "front_slope_deg": 32.9,
+              "door_corner_depth_mm": 429.8,
+              "mates": [
+                "E, its 400 end, mirrored - the ends meet in a ridge"
+              ],
+              "mates_source": "brochure PDF p.5 (E dx | B) and PG printed p.117 (C, E, B): no Maxima depth is 40"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 130,
+              "front_slope_deg": 0.0,
+              "door_corner_depth_mm": 155.0,
+              "mates": [
+                "P (spice rack)",
+                "B, mirrored"
+              ],
+              "mates_source": "brochure PDF p.5 (B | P) and PG printed p.117 (B + spice rack)"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       },
       "tangram_module_c": {
@@ -496,7 +543,30 @@
           "hausdorff_to_brochure_outline_mm": 25,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 0,
+              "front_slope_deg": 88.6,
+              "door_corner_depth_mm": 0.0,
+              "mates": [
+                "back: against the wall, or back to back with another C"
+              ],
+              "mates_source": "brochure PDF p.5 (C | M | C, 124 deep)"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 620,
+              "front_slope_deg": 1.4,
+              "door_corner_depth_mm": 645.0,
+              "mates": [
+                "Maxima d.62"
+              ],
+              "mates_source": "PG printed p.116: wall arrangement C + 3x Maxima D.62 + C"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       },
       "tangram_module_d": {
@@ -658,7 +728,31 @@
           "hausdorff_to_brochure_outline_mm": 16,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 0,
+              "front_slope_deg": 56.8,
+              "door_corner_depth_mm": 0.0,
+              "mates": [
+                "back: against the wall, or back to back"
+              ],
+              "mates_source": "brochure PDF p.5"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 350,
+              "front_slope_deg": 3.7,
+              "door_corner_depth_mm": 375.1,
+              "mates": [
+                "Maxima d.35",
+                "A, its 350 end"
+              ],
+              "mates_source": "by depth: 35 at the end, front parallel to the back - no printed example names D beside M"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       },
       "tangram_module_e": {
@@ -819,7 +913,31 @@
           "hausdorff_to_brochure_outline_mm": 32,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 400,
+              "front_slope_deg": 29.5,
+              "door_corner_depth_mm": 428.7,
+              "mates": [
+                "E, its 400 end, mirrored",
+                "B, its 400 end"
+              ],
+              "mates_source": "brochure PDF p.5 (E sx | E dx | B) and PG printed p.117 (C, E, B): no Maxima depth is 40"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 570,
+              "front_slope_deg": 2.2,
+              "door_corner_depth_mm": 595.0,
+              "mates": [
+                "Maxima d.57"
+              ],
+              "mates_source": "PG printed p.116: island A, D, E + 6x Maxima 2.2 D.57 - a depth this registry does not hold (Elda Q29)"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       },
       "tangram_spice_rack": {
@@ -878,7 +996,32 @@
           "hausdorff_to_brochure_outline_mm": 0,
           "source": "sources/factory/folder-kitchen-planning-2026_iten-_1.pdf PDF p.6 (Tangram modularity, plan view) - VECTOR paths, not a picture",
           "method": "Printed dimensions (printed p.58) fix the widths and end depths; the curve radius is MEASURED from the brochure's vector plan on PDF p.6 by fitting circles to its Bezier curves, at a scale confirmed on every module with a printed size (0,855 pt per cm, within ~1 %). The resulting carcass outline was checked against the brochure outline: they differ by the 22 mm front plus drawing artifacts (Hausdorff distance given per module). The outline is the CARCASS; the 22 mm front stands outside it.",
-          "measured_on": "2026-09-26"
+          "measured_on": "2026-09-26",
+          "ends": [
+            {
+              "at": "x_0",
+              "depth_mm": 130,
+              "front_slope_deg": 0.0,
+              "door_corner_depth_mm": 155.0,
+              "mates": [
+                "B, its 130 end",
+                "P"
+              ],
+              "mates_source": "PG printed p.117: B + 2x spice rack"
+            },
+            {
+              "at": "x_w",
+              "depth_mm": 130,
+              "front_slope_deg": 0.0,
+              "door_corner_depth_mm": 155.0,
+              "mates": [
+                "B, its 130 end",
+                "P"
+              ],
+              "mates_source": "PG printed p.117: B + 2x spice rack"
+            }
+          ],
+          "ends_note": "THE JOINTS, 2026-09-27. At each end of the plan: its depth, the angle the front meets the side at, and where the door's outer corner lands (carcass 3 + 22 door). A joint is clean when both sides put that corner in the same place - within 2 mm - which carcasses aligned front to front give wherever the depths match and the fronts are parallel to the back. The two 40 ends (B and E) meet the side at ~30 degrees: their door corner stands ~4-5 mm proud of a straight door, and no Maxima depth is 40 - they are made to meet EACH OTHER, which the brochure and PG examples show. Depth, slope and corner are computed from the plan above; 'mates' is what the printed examples put there, cited per end."
         }
       }
     }

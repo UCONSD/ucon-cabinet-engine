@@ -387,6 +387,31 @@ module UCON
       end
     end
 
+    # ---- the joints (2026-09-27) --------------------------------------------
+    # plan_geometry -> ends holds, per end: depth, the angle the front meets
+    # the side at, and where the door's outer corner lands. A joint is clean
+    # when both sides put that corner in the same place and the carcasses
+    # meet at the same depth - carcasses aligned front to front, the rule for
+    # every unit. A straight neighbour (a Maxima unit) is depth d, slope 0,
+    # corner d + 25. Pure; nothing here looks at a model.
+    JOINT_TOL_MM = 2.0
+
+    def straight_end(depth_mm)
+      { 'depth_mm' => depth_mm.to_f, 'front_slope_deg' => 0.0,
+        'door_corner_depth_mm' => depth_mm.to_f + front_gap + front_t }
+    end
+
+    def joint_verdict(a, b)
+      dd = (a['depth_mm'].to_f - b['depth_mm'].to_f).abs
+      dc = (a['door_corner_depth_mm'].to_f - b['door_corner_depth_mm'].to_f)
+      clean = dd <= JOINT_TOL_MM && dc.abs <= JOINT_TOL_MM
+      { clean: clean, carcass_step_mm: dd.round(1), door_step_mm: dc.round(1),
+        text: clean ? 'clean joint' :
+          (dd > JOINT_TOL_MM ? "the carcasses meet at different depths (#{dd.round} mm)" :
+             "the door stands #{dc.abs.round(1)} mm #{dc.positive? ? 'proud of' : 'behind'} its neighbour's - " \
+             'not a catalog joint, ask Elda (Q29)') }
+    end
+
     # ---- the hand IS the hinge side (2026-09-27) ---------------------------
     # '1 rh/lh door', one code for both hands (Kitchen System printed
     # p.58-60), so for a one-door module the hand and the hinge side are ONE

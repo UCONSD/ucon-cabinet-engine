@@ -10345,6 +10345,37 @@ check('Tangram in the panel: what it is asked, and what a choice draws and write
   %w[apply_tangram tgForm tgHinge tgHand tgOpen].each { |k| raise "panel: #{k}" unless src.include?(k) }
 end
 
+check('Tangram joints: every end states its depth, slope and door corner - and which joints are clean') do
+  # 2026-09-27, Andriy: B beside a Maxima unit, carcasses aligned, and the doors
+  # did not meet. The ends are data now, and the numbers are the plan's own.
+  load File.expand_path('../tools/tangram_place.rb', __dir__)
+  tp = UCON::TangramPlace
+  ends = {}
+  TANGRAM_PLAN.each_key do |c|
+    g = Registry.lookup(c)['plan_geometry']
+    e = g['ends']
+    raise "#{c}: ends" unless e.is_a?(Array) && e.size == 2 && e.all? { |x| x['mates'].is_a?(Array) && !x['mates_source'].to_s.empty? }
+    # recomputed from the plan - the stored numbers may not drift from the curve
+    pp = tp.plan_parts(g['outline_mm'], false)
+    n = pp[:front].size / 2
+    outer = pp[:front][n..].reverse
+    got = [outer.first[1], outer.last[1]].map { |v| v.round(1) }.sort
+    want = e.map { |x| x['door_corner_depth_mm'] }.sort
+    raise "#{c}: corners #{got} vs #{want}" unless got.zip(want).all? { |a, b| (a - b).abs < 0.2 }
+    ends[c] = e.to_h { |x| [x['at'], x] }
+  end
+  v = ->(a, b) { tp.joint_verdict(a, b) }
+  raise 'A 35 + Maxima d.35' unless v.(ends['BK030A']['x_w'], tp.straight_end(350))[:clean]
+  raise 'C 62 + Maxima d.62' unless v.(ends['BL060C']['x_w'], tp.straight_end(620))[:clean]
+  raise 'E 57 + Maxima d.57' unless v.(ends['BL060E']['x_w'], tp.straight_end(570))[:clean]
+  raise 'B 13 + P' unless v.(ends['BK060B']['x_w'], ends['BK060P']['x_0'])[:clean]
+  raise 'E 40 + E 40' unless v.(ends['BL060E']['x_0'], ends['BL060E']['x_0'])[:clean]
+  raise 'B 40 + E 40' unless v.(ends['BK060B']['x_0'], ends['BL060E']['x_0'])[:clean]
+  bad = v.(ends['BK060B']['x_0'], tp.straight_end(400))
+  raise bad.inspect if bad[:clean] || (bad[:door_step_mm] - 4.8).abs > 0.2 || !bad[:text].include?('Q29')
+  raise 'different depths are not clean' if v.(ends['BK060B']['x_0'], tp.straight_end(620))[:clean]
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }
