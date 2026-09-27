@@ -27,10 +27,17 @@ module UCON
       # keeps its direction); the visual joint comes from the reveal, so no
       # gap. Nothing selected -> origin.
       def placement_transform(model, new_unit = nil)
+        @last_joint = nil
         sel = selected_unit(model)
         return Geom::Transformation.new unless sel
 
         sel_attrs = Contract.read(sel.definition)
+        # A CURVED UNIT ON EITHER SIDE OF THE QUESTION takes the curved path:
+        # the same side rule, laid out in views (Placement.seat_beside).
+        curved_new = new_unit && new_unit['placement_desc']
+        if sel_attrs['geometry_kind'].to_s == 'curved' || curved_new
+          return curved_placement(model, sel, sel_attrs, new_unit)
+        end
         span = span_for_attrs(sel_attrs)
         # Nothing we can measure: land at the origin, where it is obvious the
         # run was not continued. The old code read the missing width as 0.0 and
@@ -169,8 +176,128 @@ module UCON
 
       def selected_unit(model)
         model.selection.grep(Sketchup::ComponentInstance).find do |i|
-          i.definition.get_attribute(Contract::DICTIONARY, 'code')
+          # a Tangram F has no code (none is printed) and is a unit all the same
+          i.definition.get_attribute(Contract::DICTIONARY, 'code') ||
+            i.definition.get_attribute(Contract::DICTIONARY, 'geometry_kind') == 'curved'
         end
+      end
+
+      # ---- a curved unit beside the run (2026-09-27) ----------------------
+      # The rule is Andriy's and unchanged - right, or left when the right is
+      # taken - and every number is decided in Placement (seat_beside, the
+      # views, joint_verdict), where the headless suite can reach it. What is
+      # here is only the reading of the model and the Geom arithmetic.
+      attr_reader :last_joint
+
+      # How placement sees an instance: box, curved or fixed, its width, its
+      # two ends. nil for what it cannot measure (a corner stays on its path).
+      def placement_desc_of(inst)
+        a = Contract.read(inst.definition)
+        return nil unless a['width_mm']
+
+        if a['geometry_kind'].to_s == 'curved'
+          mirrored = inst.definition.get_attribute('UCON_TANGRAM', 'hand').to_s == 'mirrored'
+          if a['code'].to_s.empty?
+            return { kind: :fixed, width: a['width_mm'].to_f,
+                     ends: Placement.fixed_ends(a['depth_mm'].to_f, mirrored) }
+          end
+          plan = (Registry.lookup(a['code'])['plan_geometry'] || {})['ends']
+          return nil unless plan
+
+          { kind: :curved, width: a['width_mm'].to_f, ends: Placement.curved_ends(plan, mirrored) }
+        else
+          return nil if a['geometry_kind'].to_s == 'corner'
+
+          { kind: :box, width: a['width_mm'].to_f, ends: Placement.box_ends(a['depth_mm'].to_f) }
+        end
+      rescue StandardError
+        nil
+      end
+
+      def geom_motion(m)
+        Geom::Transformation.translation(Geom::Vector3d.new(m[1].mm, m[2].mm, 0)) *
+          Geom::Transformation.rotation(Geom::Point3d.new(0, 0, 0), Geom::Vector3d.new(0, 0, 1), m[0].degrees)
+      end
+
+      # The box frame of an instance at one of its ends, in world coordinates.
+      def view_transform(inst, desc, side)
+        inst.transformation * geom_motion(Placement.view(desc, side))
+      end
+
+      # Which side is free, measured in views: the selected unit's view at
+      # that end, against each neighbour's view at the end that would touch.
+      def curved_side(model, sel, desc)
+        attached = { right: false, left: false }
+        mine = Contract.read(sel.definition)
+        %i[right left].each do |side|
+          vs = view_transform(sel, desc, side)
+          xv = Geom::Vector3d.new(1, 0, 0).transform(vs); xv.normalize!
+          yv = Geom::Vector3d.new(0, 1, 0).transform(vs); yv.normalize!
+          model.entities.grep(Sketchup::ComponentInstance).each do |other|
+            next if other == sel
+
+            od = placement_desc_of(other) or next
+            a  = Contract.read(other.definition)
+            vo = view_transform(other, od, side == :right ? :left : :right)
+            oy = Geom::Vector3d.new(0, 1, 0).transform(vo); oy.normalize!
+            offset = (vo.origin - vs.origin).dot(yv).to_mm
+            next unless Placement.same_row?(mine['mounting'], a['mounting'], oy.dot(yv), offset)
+
+            lo, hi = [0.0, od[:width]].map do |x|
+              (Geom::Point3d.new(x.mm, 0, 0).transform(vo) - vs.origin).dot(xv).to_mm
+            end.minmax
+            w = desc[:width]
+            hit = side == :right ? (hi > w && (lo - w).abs <= Placement::SNAP_MM) : (lo < 0 && hi.abs <= Placement::SNAP_MM)
+            attached[side] ||= hit
+          end
+        end
+        return :left if attached[:right] && !attached[:left]
+
+        :right
+      end
+
+      def curved_placement(model, sel, sel_attrs, new_unit)
+        sdesc = placement_desc_of(sel)
+        unless sdesc
+          raise ArgumentError, "#{sel_attrs['code'] || 'this unit'} cannot be measured for a curved " \
+                               'neighbour - select a straight or a Tangram unit.'
+        end
+        if new_unit && (Registry.sheet_panel?(new_unit) || new_unit['object_class'].to_s == 'shelf' ||
+                        new_unit['stands_on_top_mm'])
+          raise ArgumentError, 'A panel, a shelf or a top element is placed off a STRAIGHT unit; ' \
+                               'select one beside the Tangram.'
+        end
+        ndesc = (new_unit && new_unit['placement_desc']) ||
+                { kind: :box, width: (new_unit && new_unit['width_mm']).to_f,
+                  ends: Placement.box_ends((new_unit && new_unit['depth_mm']).to_f) }
+        side = curved_side(model, sel, sdesc)
+        seat = Placement.seat_beside(sdesc, ndesc, side)
+        @last_joint = Placement.joint_verdict(*seat[:ends])
+        unless @last_joint[:clean]
+          # WOULD THE OTHER HAND JOIN? A Tangram module is one code for both
+          # hands, so the most useful thing a warning can say is often that.
+          if %i[curved fixed].include?(ndesc[:kind])
+            other = ndesc.merge(ends: { left: ndesc[:ends][:right], right: ndesc[:ends][:left] })
+            if Placement.joint_verdict(*Placement.seat_beside(sdesc, other, side)[:ends])[:clean]
+              @last_joint = @last_joint.merge(text: "#{@last_joint[:text]}; the other hand joins clean - " \
+                                                    'switch Hand in the Unit Properties panel')
+            end
+          end
+          warn_joint(@last_joint)
+        end
+        shifted = sel.transformation * geom_motion(seat[:motion])
+        o = shifted.origin
+        Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * shifted
+      end
+
+      # A WARNING, NOT A REFUSAL - Andriy, 2026-09-27. The unit is built; the
+      # message comes after, off the timer, so it never blocks the operation.
+      def warn_joint(verdict)
+        msg = "Placed, with a warning: #{verdict[:text]}."
+        puts "UCON: #{msg}"
+        UI.start_timer(0, false) { UI.messagebox(msg) } if defined?(UI) && UI.respond_to?(:start_timer)
+      rescue StandardError
+        nil
       end
 
       # What a unit occupies along its own x, as [lo, hi]. ONE implementation:

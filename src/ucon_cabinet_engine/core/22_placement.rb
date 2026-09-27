@@ -421,6 +421,126 @@ module UCON
         end
       end
 
+      # ---- CURVED UNITS BESIDE THE RUN (2026-09-27) -------------------------
+      #
+      # THE SAME RULE, NOT A SECOND ONE. Andriy: select a unit, the next one is
+      # built on its right; if the right is taken, on its left. A Tangram module
+      # follows it both ways - built beside a selected unit, and a unit built
+      # beside a selected Tangram - and a Tangram beside a Tangram.
+      #
+      # WHAT MAKES IT A QUESTION AT ALL is the frame. Every box unit is drawn
+      # front-left at its origin, x to its right, y to its back, front at y = 0.
+      # A Tangram module is drawn in the registry's plan frame: y = 0 is its
+      # BACK and its front is at +y, so its x runs to ITS LEFT - the plan turned
+      # through 180 degrees. And its front is not one plane: at each end it is
+      # at that end's depth (plan_geometry -> ends).
+      #
+      # So each curved unit is given a VIEW of itself per end - the box frame it
+      # would have if its front at that end were y = 0 - and the run is laid out
+      # in views exactly as it always was. One composition does all of it:
+      #
+      #   new = selected * view(selected, joint end) * shift * view(new, its joint end)^-1
+      #
+      # with shift the box rule's own offset (right: the selected span's high
+      # end; left: its low end less the new width). For a box, view is the
+      # identity and the line is the old one.
+      #
+      # A 2-D rigid motion here is [angle_deg, tx, ty] - only 0 and 180 occur -
+      # applied as p' = R(angle) p + t.
+
+      def motion(angle, tx, ty)
+        [angle.to_f % 360, tx.to_f, ty.to_f]
+      end
+
+      def compose(a, b)
+        ang, tx, ty = a
+        r = ang * Math::PI / 180
+        bx = b[1] * Math.cos(r) - b[2] * Math.sin(r)
+        by = b[1] * Math.sin(r) + b[2] * Math.cos(r)
+        motion(ang + b[0], tx + bx, ty + by)
+      end
+
+      def apply_motion(m, x, y)
+        r = m[0] * Math::PI / 180
+        [x * Math.cos(r) - y * Math.sin(r) + m[1], x * Math.sin(r) + y * Math.cos(r) + m[2]]
+      end
+
+      # A unit, as placement sees it:
+      #   { kind: :box | :curved | :fixed, width:, ends: { left: e, right: e } }
+      # e = { 'depth_mm', 'front_slope_deg', 'door_corner_depth_mm', 'rounded' }.
+      # A box's two ends are straight at its depth. A curved unit's ends are the
+      # registry's, placed by the hand it was drawn in: as drawn, its RIGHT end
+      # (as seen from the front) is the plan's x = 0 end, and a mirrored module
+      # swaps them. F is drawn front at y = 0 like a box, 25 in front of its
+      # carcass, with the rounded, exposed end on its left as drawn.
+      def box_ends(depth_mm, front_mm = 25.0)
+        e = { 'depth_mm' => depth_mm.to_f, 'front_slope_deg' => 0.0,
+              'door_corner_depth_mm' => depth_mm.to_f + front_mm }
+        { left: e, right: e }
+      end
+
+      def curved_ends(plan_ends, mirrored)
+        by = plan_ends.to_h { |e| [e['at'], e] }
+        mirrored ? { right: by['x_w'], left: by['x_0'] } : { right: by['x_0'], left: by['x_w'] }
+      end
+
+      def fixed_ends(carcass_depth_mm, mirrored, front_mm = 25.0)
+        straight = box_ends(carcass_depth_mm, front_mm)[:left]
+        rounded  = straight.merge('rounded' => true)
+        mirrored ? { left: straight, right: rounded } : { left: rounded, right: straight }
+      end
+
+      # The view of a unit at one end: box coordinates -> the unit's own.
+      def view(unit, side)
+        case unit[:kind]
+        when :curved
+          # plan x = width - box x, plan y = end depth - box y
+          motion(180, unit[:width], unit[:ends][side]['depth_mm'])
+        when :fixed
+          motion(0, 0, 25.0) # its carcass front is 25 behind the drawing's y = 0
+        else
+          motion(0, 0, 0)
+        end
+      end
+
+      def inverse(m)
+        ang, tx, ty = m
+        inv = motion(-ang, 0, 0)
+        x, y = apply_motion(inv, -tx, -ty)
+        motion(-ang, x, y)
+      end
+
+      # Where the new unit goes, in the SELECTED unit's own frame, and which
+      # two ends meet. side is the box rule's answer (:right, :left).
+      def seat_beside(selected, new_unit, side)
+        mine = side == :left ? :left : :right
+        theirs = mine == :right ? :left : :right
+        span_hi = selected[:width].to_f
+        shift = mine == :right ? span_hi : -new_unit[:width].to_f
+        m = compose(compose(view(selected, mine), motion(0, shift, 0)), inverse(view(new_unit, theirs)))
+        { motion: m, ends: [selected[:ends][mine], new_unit[:ends][theirs]] }
+      end
+
+      # Is a joint between two ends a clean one? Both carcasses at one depth
+      # and both door corners in one place, within tolerance - carcasses aligned
+      # front to front, the rule for every unit. A rounded end joins nothing.
+      JOINT_TOL_MM = 2.0
+
+      def joint_verdict(a, b, tol = JOINT_TOL_MM)
+        if a['rounded'] || b['rounded']
+          return { clean: false, carcass_step_mm: nil, door_step_mm: nil,
+                   text: "F's rounded end is the exposed end - nothing joins it; build on its other side" }
+        end
+        dd = (a['depth_mm'].to_f - b['depth_mm'].to_f).abs
+        dc = a['door_corner_depth_mm'].to_f - b['door_corner_depth_mm'].to_f
+        clean = dd <= tol && dc.abs <= tol
+        { clean: clean, carcass_step_mm: dd.round(1), door_step_mm: dc.round(1),
+          text: if clean then 'clean joint'
+                elsif dd > tol then "the carcasses meet at different depths (#{dd.round} mm) - not a catalog joint"
+                else "a door stands #{dc.abs.round(1)} mm proud of its neighbour's - not a catalog joint, ask Elda (Q29)"
+                end }
+      end
+
     end
   end
 end

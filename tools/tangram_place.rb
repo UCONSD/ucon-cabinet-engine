@@ -402,6 +402,11 @@ module UCON
     end
 
     def joint_verdict(a, b)
+      # ONE RULE: the engine's, when it is loaded (always, in SketchUp and in
+      # the suite). This copy answers only for the tool run on its own.
+      if defined?(::UCON::CabinetEngine::Placement) && ::UCON::CabinetEngine::Placement.respond_to?(:joint_verdict)
+        return ::UCON::CabinetEngine::Placement.joint_verdict(a, b, JOINT_TOL_MM)
+      end
       dd = (a['depth_mm'].to_f - b['depth_mm'].to_f).abs
       dc = (a['door_corner_depth_mm'].to_f - b['door_corner_depth_mm'].to_f)
       clean = dd <= JOINT_TOL_MM && dc.abs <= JOINT_TOL_MM
@@ -619,7 +624,22 @@ module UCON
         'grip' => l_grip ? 'l_grip' : 'none', 'hinge' => rec['doors'] == 1 && !rec['fixed'] ? hinge : '',
         'trust' => rec['geometry']['trust'], 'source' => rec['geometry']['source'] }
         .each { |k, v| defn.set_attribute(DICT, k, v) }
-      inst = model.active_entities.add_instance(defn, Geom::Transformation.new)
+      # BESIDE THE SELECTED UNIT, by the engine's rule (Andriy, 2026-08-24):
+      # right, or left when the right is taken. At the origin when nothing is
+      # selected, or the engine is not loaded.
+      gen = defined?(::UCON::CabinetEngine::Generator) ? ::UCON::CabinetEngine::Generator : nil
+      pl  = defined?(::UCON::CabinetEngine::Placement) ? ::UCON::CabinetEngine::Placement : nil
+      where = Geom::Transformation.new
+      if gen && pl
+        desc =
+          if rec['fixed']
+            { kind: :fixed, width: rec['width'].to_f, ends: pl.fixed_ends(rec['depth'].to_f, mirrored) }
+          else
+            { kind: :curved, width: rec['width'].to_f, ends: pl.curved_ends(rec['geometry']['ends'], mirrored) }
+          end
+        where = gen.placement_transform(model, { 'width_mm' => rec['width'], 'placement_desc' => desc })
+      end
+      inst = model.active_entities.add_instance(defn, where)
       inst.layer = model.layers[TAG] || model.layers.add(TAG)
       model.commit_operation
       model.selection.clear

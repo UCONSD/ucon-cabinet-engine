@@ -10376,6 +10376,53 @@ check('Tangram joints: every end states its depth, slope and door corner - and w
   raise 'different depths are not clean' if v.(ends['BK060B']['x_0'], tp.straight_end(620))[:clean]
 end
 
+check('placement: a Tangram beside the run - right, else left - seated at the joint, front to front') do
+  # Andriy's rule (2026-08-24) for every unit, applied to curved ones 2026-09-27.
+  pl = UCON::CabinetEngine::Placement
+  load File.expand_path('../tools/tangram_place.rb', __dir__)
+  tp = UCON::TangramPlace
+  cur = lambda do |code, mir = false|
+    r = tp.catalogue[code]
+    { kind: :curved, width: r['width'].to_f, ends: pl.curved_ends(r['geometry']['ends'], mir) }
+  end
+  box = ->(w, d) { { kind: :box, width: w.to_f, ends: pl.box_ends(d) } }
+  near = ->(p, q) { (p[0] - q[0]).abs < 0.01 && (p[1] - q[1]).abs < 0.01 }
+  # a box stays the old rule: identity views, shift by the span
+  s = pl.seat_beside(box.(600, 620), box.(450, 620), :right)
+  raise s.inspect unless s[:motion] == [0.0, 600.0, 0.0]
+  s = pl.seat_beside(box.(600, 620), box.(450, 620), :left)
+  raise s.inspect unless s[:motion] == [0.0, -450.0, 0.0]
+  # A to the right of a d.35 box: its 35 end (plan x = w) lands on the box's right end, front at 0
+  s = pl.seat_beside(box.(600, 350), cur.('BK030A'), :right)
+  raise 'A right' unless near.(pl.apply_motion(s[:motion], 350, 350), [600, 0]) && pl.joint_verdict(*s[:ends])[:clean]
+  # A to the LEFT as drawn meets with its 0 end - a warning; mirrored it is clean
+  s = pl.seat_beside(box.(600, 350), cur.('BK030A'), :left)
+  raise 'A left as drawn must warn' if pl.joint_verdict(*s[:ends])[:clean]
+  s = pl.seat_beside(box.(600, 350), cur.('BK030A', true), :left)
+  raise 'A left mirrored' unless pl.joint_verdict(*s[:ends])[:clean] && near.(pl.apply_motion(s[:motion], 0, 350), [0, 0]) # mirrored: the 35 end is at plan x = 0
+  # a box to the right of B: at B's right end (plan x = 0, 40 deep), its front on B's front there
+  s = pl.seat_beside(cur.('BK060B'), box.(600, 620), :right)
+  raise s.inspect unless near.(pl.apply_motion(s[:motion], 0, 0), [0, 400]) && s[:motion][0] == 180.0
+  raise 'B 40 + a straight door must warn' if pl.joint_verdict(*s[:ends])[:clean]
+  # Tangram beside Tangram: a mirrored B to the right of E - the 40 ends meet
+  s = pl.seat_beside(cur.('BL060E'), cur.('BK060B', true), :right)
+  raise s.inspect unless near.(pl.apply_motion(s[:motion], 600, 400), [0, 400]) && pl.joint_verdict(*s[:ends])[:clean]
+  # E's 57 end against a d.57 box on its left
+  s = pl.seat_beside(cur.('BL060E'), box.(600, 570), :left)
+  raise 'E 57' unless pl.joint_verdict(*s[:ends])[:clean]
+  # F: its rounded end joins nothing; its straight end joins a d.62 run
+  f = ->(mir) { { kind: :fixed, width: 300.0, ends: pl.fixed_ends(620, mir) } }
+  s = pl.seat_beside(box.(600, 620), f.(false), :right)
+  raise 'F right of a box, as drawn, puts its rounded end on the joint' if pl.joint_verdict(*s[:ends])[:clean]
+  s = pl.seat_beside(box.(600, 620), f.(true), :right)
+  raise 'F mirrored' unless pl.joint_verdict(*s[:ends])[:clean]
+  raise 'F carcass front at 25' unless near.(pl.apply_motion(s[:motion], 0, 25), [600, 0])
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  %w[curved_placement placement_desc_of curved_side warn_joint].each { |k| raise k unless src.include?("def #{k}") }
+  tool = File.read(File.expand_path('../tools/tangram_place.rb', __dir__))
+  raise 'the tool must seat through the engine' unless tool.include?('gen.placement_transform(model')
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }
