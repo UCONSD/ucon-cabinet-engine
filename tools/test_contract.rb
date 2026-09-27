@@ -10183,7 +10183,9 @@ check('Tangram F: fixed, no code, kept out of the registry, drawn with a plinth 
   raise 'trust' unless f['geometry']['trust'].include?('ILLUSTRATION')
   xs = f['outline'].map(&:first)
   ys = f['outline'].map(&:last)
-  raise 'size' unless xs.max == 300 && ys.max == 640 && xs.min.zero? && ys.min.zero?
+  raise 'size' unless xs.max == 300 && ys.max == 645 && xs.min.zero? && ys.min.zero?
+  # 620 carcass + 3 + 22: F's face in the plane of the d.62 Maxima doors
+  raise 'F depth' unless tp.fixed_parts(f, false)[:carcass].map(&:last).minmax == [25.0, 645.0]
   [false, true].each do |mir|
     pp = tp.fixed_parts(f, mir)
     odd_in = lambda do |q, poly|

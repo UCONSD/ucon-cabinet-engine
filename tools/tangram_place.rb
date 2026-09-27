@@ -76,22 +76,28 @@ module UCON
     # code would be an invented catalog fact (domain rule 1).
     #
     # AS THE BROCHURE DRAWS IT (Andriy, 2026-09-27, on the p.6 crop), in its
-    # own frame - y = 0 is the rounded, exposed face, y = 640 the far end:
+    # own frame - y = 0 is the rounded face, the FRONT (flush with the M
+    # doors), and y = F_D the back:
     #   FACADE  - 22 mm, 3 mm off the carcass like every front, in TWO pieces
     #             with a joint where the straight side meets the curve: a
     #             straight panel up the side x = 0, and a curved panel round
     #             the R200 corner and along y = 0 to the far side;
-    #   CARCASS - behind it, the corner concentric at R175, with a back panel
-    #             at y 555 and its 18 mm side (x 282..300) running on past the
-    #             back to 640, as the facade's side does;
+    #   CARCASS - behind it, 620 deep like a d.62 Maxima, the corner
+    #             concentric at R175, a back panel 85 short of F_D and its
+    #             18 mm side (x 282..300) running on to F_D, as the facade's
+    #             side does;
     #   PLINTH  - 45 behind the carcass front, round the corner.
     # A SOLID panel and not a door as far as the drawing shows - to confirm
-    # with Elda. Overall 300 x 640; the pieces together lie within 7.2 mm of
+    # with Elda. Overall 300 x 645; at 640 the pieces lay within 7.2 mm of
     # the brochure outline (Hausdorff, measured 2026-09-27).
     # Height: the H.84 family's 840 on 60, ASSUMED - the brochure also shows F
     # at the ends of wall runs (d.35) and tall runs (d.35-67).
-    F_W, F_D, F_R = 300.0, 640.0, 200.0
-    F_BACK_Y  = 555.0 # the carcass back
+    # F_D IS 645, NOT THE 640 MEASURED OFF THE DRAWING. Placed in
+    # Tangram_test.skp beside a Maxima BL0601 (2026-09-27), backs aligned, F's
+    # face stood 5 mm behind the Maxima door plane: the brochure's 641 is a
+    # drawing, and F stands in a d.62 run - 620 carcass + 3 gap + 22 front.
+    F_W, F_D, F_R = 300.0, 645.0, 200.0
+    F_BACK_Y  = F_D - 85.0 # the carcass back; the sides run on 85 past it
     F_SIDE_T  = 18.0  # the carcass side that runs on to F_D
 
     # quarter arc about the corner centre (F_R, F_R), from the side (x = c)
