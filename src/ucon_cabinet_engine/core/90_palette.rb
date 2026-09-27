@@ -230,7 +230,7 @@ module UCON
           style: UI::HtmlDialog::STYLE_UTILITY, width: 360, height: 470,
           resizable: true
         )
-        @picker.set_html(picker_html(picker_catalog, Registry.gaps, @picker_inches))
+        @picker.set_html(picker_html(picker_catalog, picker_gaps, @picker_inches))
         # The switch survives a reopen. Nothing about it reaches the model or
         # an order - it is a way of READING sizes, not a property of them.
         @picker.add_action_callback('units') do |_, on|
@@ -277,7 +277,7 @@ module UCON
       # which the book does not print and the registry therefore does not hold
       # (domain rule 1). Without the tool the picker is what it always was.
       def picker_catalog
-        cat = Registry.catalog
+        cat = in_chapters(Registry.catalog)
         return cat unless TangramTool.available?
 
         TangramTool.ensure_loaded
@@ -285,7 +285,35 @@ module UCON
           [TangramTool.f_row].compact
       rescue StandardError => e
         warn "UCON picker: Tangram rows left out - #{e.class}: #{e.message}"
-        Registry.catalog
+        in_chapters(Registry.catalog)
+      end
+
+      def picker_gaps
+        in_chapters(Registry.gaps)
+      end
+
+      # A COLLECTION THE BOOK PRINTS AS ITS OWN CHAPTER IS ITS OWN HEADING, the
+      # rule fillers and end panels already follow (see CLASS_LABELS). Andriy,
+      # 2026-09-27: Tangram is a chapter of its own - Kitchen System printed
+      # p.57-63, Project Guidelines printed p.105-123 - and was sitting inside
+      # Base units and Tall units. Read from catalog_map -> collection, so the
+      # book's structure decides and not a list of family names.
+      #
+      # DISPLAY ONLY, like every label here: the registry keeps 'base' and
+      # 'tall', which are true element classes (the sideboard IS a tall unit),
+      # and this regroups the picker's rows and nothing else.
+      CHAPTER_COLLECTIONS = { 'Tangram' => 'tangram' }.freeze
+
+      def in_chapters(rows)
+        by_section = {}
+        Registry.map_sections.each do |sec|
+          key = CHAPTER_COLLECTIONS[sec['collection'].to_s]
+          by_section[sec['section']] = key if key
+        end
+        rows.map do |r|
+          key = by_section[r['section']]
+          key ? r.merge('class' => key, 'element_class' => r['class']) : r
+        end
       end
 
       # ---- THE SINK MARK, 2026-08-28 ---------------------------------------
@@ -561,7 +589,9 @@ module UCON
         # and not a shelf: a top is priced by the LINEAR METRE across a depth
         # band and a finish group, which is a different order line from anything
         # above it.
-        'worktop' => 'Worktops'
+        'worktop' => 'Worktops',
+        # 2026-09-27: a COLLECTION with a chapter of its own - see in_chapters.
+        'tangram' => 'Tangram'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The
@@ -1371,7 +1401,7 @@ module UCON
 
         f = ::UCON::TangramPlace.catalogue['F'] or return nil
         { 'code' => 'F', 'family' => 'Tangram H.84', 'type_key' => 'tangram_fixed_f',
-          'section' => 'Tangram base units H. 84', 'class' => 'base',
+          'section' => 'Tangram base units H. 84', 'class' => 'tangram', 'element_class' => 'base',
           'description' => 'Tangram F - fixed rounded end, NO CODE in the book (brochure only)',
           'source_ref' => "#{f['geometry']['source']} - no code, no price",
           'width_mm' => 300, 'depth_mm' => 620, 'height_mm' => f['height'],

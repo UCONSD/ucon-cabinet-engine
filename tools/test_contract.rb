@@ -7415,7 +7415,10 @@ check('every class the catalog holds has a picker label') do
   # looks at, and it was looking at half.
   held    = Registry.catalog.map { |c| c['class'] }.uniq.compact
   mapped  = Registry.map_sections.map { |x| x['class'] }.uniq.compact
-  classes = (held + mapped).uniq
+  # 2026-09-27: and the chapters the picker regroups a collection into
+  # (Palette.in_chapters) - a heading the picker draws needs a label too.
+  chapters = Palette::CHAPTER_COLLECTIONS.values
+  classes = (held + mapped + chapters).uniq
   missing = classes.reject { |c| Palette::CLASS_LABELS.key?(c) }
   raise "no label for #{missing.inspect}" unless missing.empty?
   raise "a label exists for a class nothing holds: " \
@@ -10238,12 +10241,18 @@ check('picker: Tangram is placed from the picker by the Tangram tool, F included
   cat = pal.picker_catalog
   tg = cat.select { |c| c['family'].to_s.start_with?('Tangram') }
   raise "rows #{tg.size}" unless tg.size == 8 && tg.all? { |c| c['tangram_place'] }
+  # its own chapter, as the book prints it; the element class survives beside it
+  raise 'Tangram is not its own chapter' unless tg.all? { |c| c['class'] == 'tangram' }
+  raise 'element class lost' unless tg.map { |c| c['element_class'] }.uniq.sort == %w[base tall]
+  raise 'registry class changed' unless Registry.catalog.select { |c| c['family'].to_s.start_with?('Tangram') }.map { |c| c['class'] }.uniq.sort == %w[base tall]
+  raise 'Tangram gap rows still under base/tall' if pal.picker_gaps.any? { |g| g['section'].to_s.start_with?('Tangram') && g['class'] != 'tangram' }
+  raise 'no chapter label' unless pal::CLASS_LABELS['tangram'] == 'Tangram'
   f = tg.find { |c| c['code'] == 'F' }
   raise f.inspect unless f && f['fixed'] && f['description'].include?('NO CODE')
   raise 'F leaked into the registry' if Registry.catalog.any? { |c| c['code'] == 'F' }
   others = cat.reject { |c| c['family'].to_s.start_with?('Tangram') }
   raise 'a non-Tangram row is marked' if others.any? { |c| c['tangram_place'] }
-  html = pal.picker_html(cat, Registry.gaps)
+  html = pal.picker_html(cat, pal.picker_gaps)
   %w[sketchup.tangram( tgHand tgHinge tgGrip !d.tangram_place].each { |k| raise "html: #{k}" unless html.include?(k) }
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
   raise 'the engine must not require the tool' if src =~ /^\s*require[^\n]*tangram_place/
