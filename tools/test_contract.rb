@@ -10072,6 +10072,65 @@ check('Tangram: a plan does NOT make a curve buildable by the box builder') do
   tool = File.read(File.expand_path('../tools/tangram_place.rb', __dir__))
   raise 'the tool must not write the Contract' if tool.include?('Contract.write') || tool.include?('CabinetEngine')
 end
+check('Tangram: the picker card for a curve is one line, pointing at the placer') do
+  row = Registry.catalog.find { |c| c['code'] == 'BL060C' }
+  raise row.inspect unless row['shape'] == 'curved' && row['buildable'] == false
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'card text' unless src.include?("d.shape === 'curved'") && src.include?('Tangram: place module')
+end
+check('Tangram: the placer draws the engine\'s front and plinth, off the curve') do
+  # 2026-09-27, Andriy after the first placement: the same colours as every
+  # other unit, the plinth not flush, the door 22 at 3 off the carcass.
+  load File.expand_path('../tools/tangram_place.rb', __dir__)
+  tp = UCON::TangramPlace
+  s = Standards
+  pin = [tp::FRONT_T_MM, tp::FRONT_GAP_MM, tp::PLINTH_T_MM, tp::PLINTH_SETBACK_MM]
+  raise pin.inspect unless pin == [s::FRONT_T_MM, s::FRONT_GAP_MM, s::PLINTH_T_MM, s::PLINTH_SETBACK_MM].map(&:to_f)
+  dist = lambda do |p, poly|
+    poly.each_with_index.map do |a, i|
+      b = poly[(i + 1) % poly.size]
+      dx = b[0] - a[0]
+      dy = b[1] - a[1]
+      l2 = dx * dx + dy * dy
+      t = l2.zero? ? 0 : (((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l2).clamp(0.0, 1.0)
+      Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy)
+    end.min
+  end
+  TANGRAM_PLAN.each_key do |c|
+    [false, true].each do |mir|
+      pp = tp.plan_parts(Registry.lookup(c)['plan_geometry']['outline_mm'], mir)
+      # the ends run on to the carcass's side plane, so they are checked by
+      # the footprint below, not by their distance to the curve
+      n = pp[:front].size / 2
+      inner = pp[:front][1...n - 1].map { |p| dist.(p, pp[:carcass]) }
+      outer = pp[:front][n + 1...-1].map { |p| dist.(p, pp[:carcass]) }
+      raise "#{c}: door gap #{inner.minmax}" unless inner.all? { |d| (d - 3).abs < 0.2 }
+      raise "#{c}: door face #{outer.minmax}" unless outer.all? { |d| (d - 25).abs < 0.2 }
+      # measured from the curved front itself - the board's ends sit on the
+      # carcass sides, so a distance to the whole outline would read 0 there
+      chain = tp.front_chain(pp[:carcass])
+      line = lambda do |p|
+        chain.each_cons(2).map { |a, b| dist.(p, [a, b]) }.min
+      end
+      m = pp[:plinth].size / 2
+      face = pp[:plinth][1...m - 1].map(&line)
+      rear = pp[:plinth][m + 1...-1].map(&line)
+      # and the board stays inside the carcass footprint, ends included
+      inside = lambda do |q, poly|
+        odd = false
+        poly.each_with_index do |(xi, yi), i|
+          xj, yj = poly[i - 1]
+          odd = !odd if (yi > q[1]) != (yj > q[1]) && q[0] < (xj - xi) * (q[1] - yi) / (yj - yi) + xi
+        end
+        odd || dist.(q, poly) < 0.5
+      end
+      out = pp[:plinth].reject { |q| inside.(q, pp[:carcass]) }
+      raise "#{c}: plinth outside the carcass #{out.first(2).inspect}" unless out.empty?
+      raise "#{c}: plinth face #{face.minmax}" unless face.all? { |d| (d - 45).abs < 3 }
+      raise "#{c}: plinth rear #{rear.minmax}" unless rear.all? { |d| (d - 63).abs < 3 }
+    end
+  end
+end
 
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do

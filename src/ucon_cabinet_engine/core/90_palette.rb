@@ -784,7 +784,11 @@ module UCON
                       var g = document.createElement('div'); g.className='ghost';
                       g.innerHTML = row((TYP[t]||t) + ' <small>· ' + n + ' codes</small>', 'not buildable') +
                         '<small>' + esc(d.description) + '</small>' +
-                        (d.not_buildable_reason ? '<br><small>' + esc(d.not_buildable_reason) + '</small>' : '') +
+                        // A curve is not a box: one line pointing at the tool
+                        // that draws it, not the registry's full reason.
+                        (d.shape === 'curved'
+                          ? '<br><small>Curved — place with Extensions › UCON › Tangram: place module</small>'
+                          : (d.not_buildable_reason ? '<br><small>' + esc(d.not_buildable_reason) + '</small>' : '')) +
                         '<div class="page">' + CAT.filter(function(c){
                           return c.section===st.sec && c.type_key===t; })
                           .map(function(c){ return '<small>' + esc(c.code) +

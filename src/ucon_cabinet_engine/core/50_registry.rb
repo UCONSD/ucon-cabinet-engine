@@ -858,6 +858,7 @@ module UCON
             'geometry_kind' => unit_type['geometry_kind'] || 'linear',
             'buildable' => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
+            'shape' => unit_type['shape'],
             'corner_geometry' => row['corner_geometry'],
             'execution' => row['execution'],
             'door_width_mm' => row['door_width_mm'],
