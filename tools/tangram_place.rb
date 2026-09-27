@@ -31,8 +31,9 @@
 # Hinge asked for - left or right as seen standing in front of the door.
 #
 # F, THE FIXED END, is in the list too, and it is not a registry unit: the
-# book prints no F. Drawn from the brochure plan, whole in the front finish,
-# on a plinth that follows its rounded face - no door, nothing opens.
+# book prints no F. Drawn from the brochure plan: carcass, a fixed 22 mm
+# facade 3 mm off it in two pieces with the joint at the curve, and a plinth
+# round the corner - no door, nothing opens.
 
 require 'json'
 
@@ -74,48 +75,61 @@ module UCON
     # lives here and not in registry/cesar, where a unit without a printed
     # code would be an invented catalog fact (domain rule 1).
     #
-    # Construction in the brochure's own frame, as drawn: 300 x 640, one
-    # corner rounded R200 at (0, 0); the two sides run on 85 mm past a 250 mm
-    # recess at the far end (y 555..640). Hausdorff 4.4 mm to the brochure
-    # outline, measured 2026-09-27. The outline is the WHOLE element - its
-    # panels included - and it is drawn in the front finish.
-    # Height: the H.84 family's 840 on 60, ASSUMED for the island - the
-    # brochure table lists F with the wall and tall rows.
-    # The exposed face is the rounded one: the side x = 0 up to the recess,
-    # the arc, and the face y = 0. The plinth follows that face.
-    F_W, F_D, F_R, F_SIDE, F_RECESS_Y = 300.0, 640.0, 200.0, 25.0, 555.0
+    # AS THE BROCHURE DRAWS IT (Andriy, 2026-09-27, on the p.6 crop), in its
+    # own frame - y = 0 is the rounded, exposed face, y = 640 the far end:
+    #   FACADE  - 22 mm, 3 mm off the carcass like every front, in TWO pieces
+    #             with a joint where the straight side meets the curve: a
+    #             straight panel up the side x = 0, and a curved panel round
+    #             the R200 corner and along y = 0 to the far side;
+    #   CARCASS - behind it, the corner concentric at R175, with a back panel
+    #             at y 555 and its 18 mm side (x 282..300) running on past the
+    #             back to 640, as the facade's side does;
+    #   PLINTH  - 45 behind the carcass front, round the corner.
+    # A SOLID panel and not a door as far as the drawing shows - to confirm
+    # with Elda. Overall 300 x 640; the pieces together lie within 7.2 mm of
+    # the brochure outline (Hausdorff, measured 2026-09-27).
+    # Height: the H.84 family's 840 on 60, ASSUMED - the brochure also shows F
+    # at the ends of wall runs (d.35) and tall runs (d.35-67).
+    F_W, F_D, F_R = 300.0, 640.0, 200.0
+    F_BACK_Y  = 555.0 # the carcass back
+    F_SIDE_T  = 18.0  # the carcass side that runs on to F_D
 
-    def f_arc(seg = 24)
-      (1...seg).map do |i|
+    # quarter arc about the corner centre (F_R, F_R), from the side (x = c)
+    # to the face (y = c); ends included
+    def f_arc(r, seg = 24)
+      (0..seg).map do |i|
         a = Math::PI + i * (Math::PI / 2) / seg
-        [F_R + F_R * Math.cos(a), F_R + F_R * Math.sin(a)]
+        [F_R + r * Math.cos(a), F_R + r * Math.sin(a)]
       end
     end
 
     def fixed_f
-      outline = [[0.0, F_D], [0.0, F_R]] + f_arc + [[F_R, 0.0], [F_W, 0.0], [F_W, F_D],
-                                                   [F_W - F_SIDE, F_D], [F_W - F_SIDE, F_RECESS_Y],
-                                                   [F_SIDE, F_RECESS_Y], [F_SIDE, F_D]]
-      exposed = [[0.0, F_RECESS_Y], [0.0, F_R]] + f_arc + [[F_R, 0.0], [F_W, 0.0]]
+      outline = f_arc(F_R) + [[F_W, 0.0], [F_W, F_D], [0.0, F_D]]
       { 'label' => 'Tangram F - fixed rounded end (NO CODE in the book)',
         'height' => 840, 'plinth' => 60, 'doors' => 0, 'fixed' => true,
-        'outline' => outline, 'exposed' => exposed,
+        'outline' => outline,
         'geometry' => { 'trust' => 'ILLUSTRATION - measured from the brochure plan, no printed dimension, no code',
                         'source' => 'folder-kitchen-planning-2026 PDF p.6 (vector plan)' } }
     end
 
-    # F's parts: the whole element, and the plinth board 45 behind its
-    # exposed face. No door, no symbols.
-    def fixed_parts(rec, mirrored)
-      pts = clean(rec['outline'])
-      ex = rec['exposed'].map { |x, y| [x.to_f, y.to_f] }
+    # carcass, the two facade pieces and the plinth, in mm
+    def fixed_parts(_rec, mirrored)
+      t = front_t
+      c = front_gap + front_t # carcass face, 25 in from the facade face
+      r_in = F_R - t
+      r_c  = F_R - c
+      side_panel = [[0.0, F_R], [t, F_R], [t, F_D], [0.0, F_D]]
+      curved = f_arc(F_R) + [[F_W, 0.0], [F_W, t]] + f_arc(r_in).reverse
+      carcass_face = [[c, F_BACK_Y]] + f_arc(r_c) + [[F_W, c]]
+      carcass = carcass_face + [[F_W, F_D], [F_W - F_SIDE_T, F_D], [F_W - F_SIDE_T, F_BACK_Y]]
+      polys = { carcass: carcass, fronts: [side_panel, curved], face: carcass_face }
       if mirrored
-        w = pts.map(&:first).max
-        pts = pts.map { |x, y| [w - x, y] }.reverse
-        ex = ex.map { |x, y| [w - x, y] }.reverse
+        flip = ->(pl) { pl.map { |x, y| [F_W - x, y] }.reverse }
+        polys = { carcass: flip.(carcass), fronts: [flip.(side_panel), flip.(curved)], face: flip.(carcass_face) }
       end
-      ccw = signed_area(pts) > 0
-      { carcass: pts, plinth: band(ex, -setback, -(setback + plinth_t), ccw) }
+      polys[:carcass] = clean(polys[:carcass])
+      ccw = signed_area(polys[:carcass]) > 0
+      polys.merge(plinth: band(polys[:face], -setback, -(setback + plinth_t), ccw))
     end
 
     def reload!
@@ -450,8 +464,12 @@ module UCON
       hide_vertical_edges(plinth)
       m_front = material(model, 'UCON_Front_White', [245, 245, 245])
       # F is fixed: the whole element in the front finish, and nothing opens
-      prism(grp.entities, rec['fixed'] ? 'FIXED' : 'CARCASS', parts[:carcass], pl, h,
-            rec['fixed'] ? m_front : material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      prism(grp.entities, 'CARCASS', parts[:carcass], pl, h,
+            material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      # F: its facade in two pieces - the joint between them is the seam
+      (parts[:fronts] || []).each_with_index do |pts, i|
+        prism(grp.entities, i.zero? ? 'FACADE_SIDE (fixed)' : 'FACADE_CURVED (fixed)', pts, pl, h, m_front)
+      end
       leaves = rec['fixed'] ? [] : door_leaves(parts, rec['doors'], hinge)
       leaves.each_with_index do |lf, i|
         prism(grp.entities, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, h, m_front)
@@ -460,7 +478,7 @@ module UCON
       { 'code' => code, 'label' => rec['label'], 'hand' => mirrored ? 'mirrored' : 'as drawn',
         'height_mm' => h, 'plinth_h_mm' => pl,
         'doors' => rec['doors'], 'hinge' => rec['fixed'] ? 'fixed' : leaves.map { |lf| lf[:hinge] }.join('+'),
-        'front_mm' => rec['fixed'] ? 'none - fixed element' : "#{front_t} at #{front_gap} off the carcass",
+        'front_mm' => rec['fixed'] ? "#{front_t} at #{front_gap} off the carcass, FIXED, two pieces with a joint at the curve (solid, not a door - to confirm with Elda)" : "#{front_t} at #{front_gap} off the carcass",
         'plinth_board_mm' => "#{plinth_t} at #{setback} behind the carcass front",
         'trust' => rec['geometry']['trust'], 'source' => rec['geometry']['source'],
         'status' => rec['fixed'] ?

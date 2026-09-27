@@ -10183,7 +10183,7 @@ check('Tangram F: fixed, no code, kept out of the registry, drawn with a plinth 
   raise 'trust' unless f['geometry']['trust'].include?('ILLUSTRATION')
   xs = f['outline'].map(&:first)
   ys = f['outline'].map(&:last)
-  raise 'size' unless xs.max == 300 && ys.max == 640
+  raise 'size' unless xs.max == 300 && ys.max == 640 && xs.min.zero? && ys.min.zero?
   [false, true].each do |mir|
     pp = tp.fixed_parts(f, mir)
     odd_in = lambda do |q, poly|
@@ -10206,6 +10206,17 @@ check('Tangram F: fixed, no code, kept out of the registry, drawn with a plinth 
     end
     out = pp[:plinth].reject { |q| odd_in.(q, pp[:carcass]) || on_edge.(q, pp[:carcass]) }
     raise "plinth outside F #{out.first(2).inspect}" unless out.empty?
+    # 2026-09-27, Andriy: the facade drawn apart from the carcass - 22 at 3 -
+    # in two pieces with the joint where the side meets the curve
+    raise 'two facade pieces' unless pp[:fronts].size == 2
+    side, curved = pp[:fronts]
+    sx = side.map(&:first)
+    raise "side panel #{sx.minmax}" unless (sx.max - sx.min - 22).abs < 0.01
+    joint_y = side.map(&:last).min
+    raise 'joint not at the curve' unless (joint_y - 200).abs < 0.01 && curved.map(&:last).max.round(3) == 200.0
+    cx = pp[:carcass].map(&:first)
+    gap = mir ? (sx.min - cx.max).abs : (cx.min - sx.max)
+    raise "carcass gap #{gap}" unless (gap - 3).abs < 0.01
   end
 end
 
