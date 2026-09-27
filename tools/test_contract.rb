@@ -10132,6 +10132,42 @@ check('Tangram: the placer draws the engine\'s front and plinth, off the curve')
   end
 end
 
+check('Tangram: the doors open by the engine\'s rule - V on the face, leaf out at 85, C a pair') do
+  # 2026-09-27, Andriy: dashed opening lines "the same way as for the other
+  # elements". The tool copies the symbol constants, so they are pinned here.
+  tp = UCON::TangramPlace
+  sy = UCON::CabinetEngine::Symbols
+  pin = [tp::TAG_FRONT, tp::TAG_PLAN, tp::TAG_DOOR, tp::DOOR_OPEN_DEG, tp::PLAN_Z_MM]
+  raise pin.inspect unless pin == [sy::TAG_FRONT, sy::TAG_PLAN, sy::TAG_DOOR,
+                                   sy::DOOR_OPEN_ANGLE_DEG.to_f, sy::PLAN_Z_MM.to_f]
+  inside = lambda do |q, poly|
+    odd = false
+    poly.each_with_index do |(xi, yi), i|
+      xj, yj = poly[i - 1]
+      odd = !odd if (yi > q[1]) != (yj > q[1]) && q[0] < (xj - xi) * (q[1] - yi) / (yj - yi) + xi
+    end
+    odd
+  end
+  TANGRAM_PLAN.each_key do |c|
+    rec = tp.catalogue[c]
+    [false, true].each do |mir|
+      %w[lh rh].each do |hg|
+        pp = tp.plan_parts(rec['outline'], mir)
+        lv = tp.door_leaves(pp, rec['doors'], hg)
+        want = c == 'BL060C' ? %w[lh rh] : [hg]
+        raise "#{c}: hinges #{lv.map { |l| l[:hinge] }}" unless lv.map { |l| l[:hinge] } == want
+        lv.each do |l|
+          raise "#{c}: angle" unless ((l[:angle].abs * 180 / Math::PI) - 85).abs < 1e-6
+          bad = l[:open_band].count { |q| inside.(q, pp[:carcass]) }
+          raise "#{c} #{mir} #{hg}: open leaf inside the carcass (#{bad})" unless bad.zero?
+          raise "#{c}: V does not start at the hinge" unless Math.hypot(l[:proud][0][0] - l[:pivot][0], l[:proud][0][1] - l[:pivot][1]) < 5
+          raise "#{c}: V" unless l[:proud_s].first.zero? && (l[:proud_s].last - 1).abs < 1e-9
+        end
+      end
+    end
+  end
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }

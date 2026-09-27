@@ -22,6 +22,13 @@
 # behind it following the curve, the engine's materials, black edges, and
 # the arc's facet edges softened so the curve reads as a surface.
 # Door height = carcass height (840); gola is not cut here.
+#
+# THE OPENING is drawn by the engine's rule, on the engine's three dashed
+# tags, so the palette's plan / front / door / off buttons switch it with
+# every other unit: a V on the door face, the leaf swung out 85 degrees with
+# the arc of its free edge in plan, and the open leaf in space. C has two
+# doors (the registry says so) and opens as a pair; the others take the
+# Hinge asked for - left or right as seen standing in front of the door.
 
 require 'json'
 
@@ -46,9 +53,11 @@ module UCON
         fam['unit_types'].each_value do |t|
           g = t['plan_geometry'] or next
           t['codes'].each do |c|
+            # the door count is the registry's ('2 doors' on C), not guessed
+            doors = (t['interior_confirmed'] || []).any? { |l| l =~ /\A2 doors/ } ? 2 : 1
             h[c['code']] = { 'label' => t['description'].split(' - ').first,
                              'height' => fam['height_mm'], 'plinth' => fam['plinth_h_mm'],
-                             'outline' => g['outline_mm'], 'geometry' => g }
+                             'outline' => g['outline_mm'], 'geometry' => g, 'doors' => doors }
           end
         end
       end
@@ -152,7 +161,10 @@ module UCON
     # plinth never pokes out behind the back.
     def trim_ends(o, sides, ccw)
       o = o.dup
-      [[sides[0], false], [sides[1], true]].each do |(a, b), tail|
+      [[sides[0], false], [sides[1], true]].each do |side_ab, tail|
+        next unless side_ab # a split between two leaves is cut square
+
+        a, b = side_ab
         o.reverse! if tail
         side = ->(p) { ((b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) * (ccw ? 1 : -1) }
         o.shift while o.size > 2 && side.(o[0]) < 0 && side.(o[1]) < 0
@@ -188,9 +200,97 @@ module UCON
       ccw = signed_area(pts) > 0
       chain = front_chain(pts)
       sides = @sides
-      { carcass: pts,
+      { carcass: pts, chain: chain, ccw: ccw, sides: sides,
         front: band(chain, front_gap, front_gap + front_t, ccw, sides),
         plinth: band(chain, -setback, -(setback + plinth_t), ccw, sides) }
+    end
+
+    # ---- the doors and how they open -------------------------------------
+    # The engine's opening convention, bent onto the curve (core/70_symbols):
+    #   front tag - a V on the door face, 1 mm proud: base at the hinge edge,
+    #               apex at mid-height of the opening edge;
+    #   plan tag  - the leaf swung out DOOR_OPEN_DEG about its hinge, plus the
+    #               swing arc of its free edge, 1 mm off the floor;
+    #   door tag  - the open leaf in space, as a wireframe.
+    # A curved door turns on hinges like a flat one; the leaf keeps its curve.
+    DOOR_OPEN_DEG = 85.0  # Symbols::DOOR_OPEN_ANGLE_DEG
+    PLAN_Z_MM     = 1.0   # Symbols::PLAN_Z_MM
+    TAG_FRONT = 'UCON — Opening (front)' # Symbols::TAG_FRONT
+    TAG_PLAN  = 'UCON — Opening (plan)'  # Symbols::TAG_PLAN
+    TAG_DOOR  = 'UCON — Opening (door)'  # Symbols::TAG_DOOR
+
+    def arc_lengths(pl)
+      pl.each_cons(2).each_with_object([0.0]) { |(a, b), acc| acc << acc.last + Math.hypot(b[0] - a[0], b[1] - a[1]) }
+    end
+
+    # Split a chain at half its length (C's two doors), the cut point shared.
+    def split_half(chain)
+      acc = arc_lengths(chain)
+      half = acc.last / 2.0
+      i = acc.index { |l| l >= half }
+      a = chain[i - 1]
+      b = chain[i]
+      t = (half - acc[i - 1]) / (acc[i] - acc[i - 1])
+      m = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
+      return [chain[0..i], chain[i..]] if t > 0.999 # the half falls on a vertex
+      return [chain[0...i], chain[i - 1..]] if t < 0.001
+
+      [chain[0...i] + [m], [m] + chain[i..]]
+    end
+
+    # the outward normal where the curve is half-way along
+    def mid_normal(chain, ccw)
+      acc = arc_lengths(chain)
+      i = acc.index { |l| l >= acc.last / 2.0 }
+      a = chain[i - 1]
+      b = chain[i]
+      l = Math.hypot(b[0] - a[0], b[1] - a[1])
+      ccw ? [(b[1] - a[1]) / l, -(b[0] - a[0]) / l] : [-(b[1] - a[1]) / l, (b[0] - a[0]) / l]
+    end
+
+    def rotate(p, c, ang)
+      dx = p[0] - c[0]
+      dy = p[1] - c[1]
+      [c[0] + dx * Math.cos(ang) - dy * Math.sin(ang), c[1] + dx * Math.sin(ang) + dy * Math.cos(ang)]
+    end
+
+    # One entry per leaf, in mm, drawing nothing. hinge: 'lh' | 'rh' as seen
+    # standing in front of the door (ignored for a pair: left leaf lh, right rh).
+    def door_leaves(parts, doors, hinge)
+      chain = parts[:chain]
+      ccw = parts[:ccw]
+      sides = parts[:sides]
+      subs = doors == 2 ? split_half(chain) : [chain]
+      leaf_sides = doors == 2 ? [[sides[0], nil], [nil, sides[1]]] : [sides]
+      # the viewer's left, facing the door from outside at mid-curve
+      n = mid_normal(chain, ccw)
+      left = [n[1], -n[0]]
+      lval = ->(p) { p[0] * left[0] + p[1] * left[1] }
+
+      subs.each_with_index.map do |sub, i|
+        sd = leaf_sides[i]
+        inner = offset(sub, front_gap, ccw, sd)
+        outer = offset(sub, front_gap + front_t, ccw, sd)
+        proud = offset(sub, front_gap + front_t + 1, ccw, sd)
+        first_is_left = lval.(sub.first) > lval.(sub.last)
+        h = doors == 2 ? (i.zero? == first_is_left ? 'lh' : 'rh') : hinge
+        # hinge end first
+        at_first = (h == 'lh') == first_is_left
+        inner, outer, proud = [inner, outer, proud].map { |pl| at_first ? pl : pl.reverse }
+        piv = outer.first
+        free = outer.last
+        v = [free[0] - piv[0], free[1] - piv[1]]
+        # the free edge starts OUT, along the leaf's own outward normal: a
+        # small turn +a moves it along (-vy, vx)
+        ln = mid_normal(sub, ccw)
+        ang = ((-v[1] * ln[0] + v[0] * ln[1]) > 0 ? 1 : -1) * DOOR_OPEN_DEG * Math::PI / 180
+        band_pts = inner + outer.reverse
+        acc = arc_lengths(proud)
+        { hinge: h, band: band_pts, pivot: piv, free: free, angle: ang,
+          open_band: band_pts.map { |p| rotate(p, piv, ang) },
+          radius: Math.hypot(v[0], v[1]),
+          proud: proud, proud_s: acc.map { |l| l / acc.last } }
+      end
     end
 
     # ---- SketchUp ----------------------------------------------------------
@@ -217,6 +317,62 @@ module UCON
       g
     end
 
+    def symbol_tag(model, name)
+      layer = model.layers[name] || model.layers.add(name)
+      if layer.respond_to?(:line_style=) && model.respond_to?(:line_styles)
+        want = model.line_styles['Dash']
+        layer.line_style = want if want && layer.line_style != want
+      end
+      layer
+    end
+
+    def pt(x, y, z)
+      Geom::Point3d.new(mm(x), mm(y), mm(z))
+    end
+
+    def symbol_group(ents, name, layer, mat)
+      g = ents.add_group
+      g.name = name
+      yield g.entities
+      g.entities.grep(Sketchup::Face).each(&:erase!)
+      g.layer = layer
+      g.entities.grep(Sketchup::Edge).each { |e| e.layer = layer; e.material = mat }
+      g
+    end
+
+    def draw_symbols(ents, leaves, z0, h)
+      model = ents.model
+      mat = material(model, 'UCON_Symbol_Gray', [128, 128, 128])
+      model.rendering_options['EdgeColorMode'] = 0 rescue nil
+      t_front = symbol_tag(model, TAG_FRONT)
+      t_plan  = symbol_tag(model, TAG_PLAN)
+      t_door  = symbol_tag(model, TAG_DOOR)
+      leaves.each_with_index do |lf, i|
+        n = i + 1
+        # V on the curved face - curves, so the dash runs on across the bend
+        symbol_group(ents, "SYM_FRONT_#{n}", t_front, mat) do |e|
+          e.add_curve(lf[:proud].zip(lf[:proud_s]).map { |(x, y), f| pt(x, y, z0 + f * h / 2.0) })
+          e.add_curve(lf[:proud].zip(lf[:proud_s]).map { |(x, y), f| pt(x, y, z0 + h - f * h / 2.0) })
+        end
+        # plan: the open leaf and the swing arc of its free edge
+        symbol_group(ents, "SYM_PLAN_#{n}", t_plan, mat) do |e|
+          ring = lf[:open_band] + [lf[:open_band].first]
+          e.add_curve(ring.map { |x, y| pt(x, y, PLAN_Z_MM) })
+          c = pt(lf[:pivot][0], lf[:pivot][1], PLAN_Z_MM)
+          xa = Geom::Vector3d.new(lf[:free][0] - lf[:pivot][0], lf[:free][1] - lf[:pivot][1], 0)
+          a0, a1 = [0.0, lf[:angle]].minmax
+          e.add_arc(c, xa, Geom::Vector3d.new(0, 0, 1), mm(lf[:radius]), a0, a1, 12)
+        end
+        # the open leaf in space
+        symbol_group(ents, "SYM_DOOR_#{n}", t_door, mat) do |e|
+          ob = lf[:open_band]
+          [z0, z0 + h].each { |z| e.add_curve((ob + [ob.first]).map { |x, y| pt(x, y, z) }) }
+          m = ob.size / 2
+          [0, m - 1, m, ob.size - 1].each { |k| e.add_line(pt(ob[k][0], ob[k][1], z0), pt(ob[k][0], ob[k][1], z0 + h)) }
+        end
+      end
+    end
+
     def hide_vertical_edges(g)
       g.entities.grep(Sketchup::Edge).each do |e|
         v = e.end.position - e.start.position
@@ -224,7 +380,7 @@ module UCON
       end
     end
 
-    def place(code, mirrored)
+    def place(code, mirrored, hinge = 'lh')
       rec = catalogue[code] or return UI.messagebox("#{code} has no plan in the registry.")
       model = Sketchup.active_model
       parts = plan_parts(rec['outline'], mirrored)
@@ -239,10 +395,15 @@ module UCON
       hide_vertical_edges(plinth)
       prism(grp.entities, 'CARCASS', parts[:carcass], pl, h,
             material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
-      prism(grp.entities, 'FRONT', parts[:front], pl, h,
-            material(model, 'UCON_Front_White', [245, 245, 245]))
+      leaves = door_leaves(parts, rec['doors'], hinge)
+      m_front = material(model, 'UCON_Front_White', [245, 245, 245])
+      leaves.each_with_index do |lf, i|
+        prism(grp.entities, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, h, m_front)
+      end
+      draw_symbols(grp.entities, leaves, pl, h)
       { 'code' => code, 'label' => rec['label'], 'hand' => mirrored ? 'mirrored' : 'as drawn',
         'height_mm' => h, 'plinth_h_mm' => pl,
+        'doors' => rec['doors'], 'hinge' => leaves.map { |lf| lf[:hinge] }.join('+'),
         'front_mm' => "#{front_t} at #{front_gap} off the carcass",
         'plinth_board_mm' => "#{plinth_t} at #{setback} behind the carcass front",
         'trust' => rec['geometry']['trust'], 'source' => rec['geometry']['source'],
@@ -262,11 +423,11 @@ module UCON
     def ask
       codes = catalogue.keys
       labels = codes.map { |c| "#{c}  #{catalogue[c]['label']}" }
-      res = UI.inputbox(['Module', 'Hand'], [labels.first, 'as drawn'],
-                        [labels.join('|'), 'as drawn|mirrored'], 'UCON Tangram - place module')
+      res = UI.inputbox(['Module', 'Hand', 'Hinge (1-door modules)'], [labels.first, 'as drawn', 'left'],
+                        [labels.join('|'), 'as drawn|mirrored', 'left|right'], 'UCON Tangram - place module')
       return unless res
 
-      place(codes[labels.index(res[0])], res[1] == 'mirrored')
+      place(codes[labels.index(res[0])], res[1] == 'mirrored', res[2] == 'right' ? 'rh' : 'lh')
     end
 
     if defined?(Sketchup) && !defined?(@loaded)
