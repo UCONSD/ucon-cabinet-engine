@@ -216,8 +216,10 @@ opened; that axis lives in `opening_method`.
 - **Tangram (v2.5).** On a `curved` object of collection `Tangram`, `gola` means the Tangram
   **L-shaped grip edging** (Project Guidelines printed p.112, 114): the door stays at the family
   height (84) and the CARCASS drops by 30 (to 81) under a 6 cm MDF panel, `GOLATNG`, priced per
-  m² for the whole arrangement — not a `GOL` profile. `front_height_mm` is therefore the family
-  height. For a one-door Tangram module `hinge_side` is also the module's HAND: the book prints one
+  m² for the whole arrangement — not a `GOL` profile. **Drawn** (2026-09-27, Andriy) like every
+  `gola` object: the front drops 30 mm and the carcass keeps the family height, so
+  `front_height_mm` = family − 30, as in the table above. The book's construction (carcass 81 +
+  panel, 93 to the worktop) is what is ordered; the drawing follows one rule for every unit. For a one-door Tangram module `hinge_side` is also the module's HAND: the book prints one
   code for both hands and hinges the door on the straight side, so choosing the side mirrors the
   module (`claude/tangram-recon-2026-09-26.md`).
 

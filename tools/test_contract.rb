@@ -10282,13 +10282,22 @@ check('Tangram F: fixed, no code, kept out of the registry, drawn with a plinth 
   end
 end
 
-check('Tangram L grip edging: carcass 81, door 84, panel 6 - 93 to the worktop') do
-  # Project Guidelines printed p.114; chosen for the 7612 island 2026-09-27.
+check('Tangram L grip edging: drawn like every gola unit - door 81, carcass 84') do
+  # The book builds carcass 81 + a 6 cm MDF panel, 93 (Project Guidelines
+  # printed p.112, 114). The DRAWING follows one rule for every unit (Andriy,
+  # 2026-09-27): the door drops 30, the carcass keeps the family height.
+  load File.expand_path('../tools/tangram_place.rb', __dir__)
   tp = UCON::TangramPlace
-  raise 'cut' unless tp::L_GRIP_CARCASS_CUT_MM == 30.0 && tp::L_GRIP_PANEL_MM == 60.0
-  h = tp.catalogue['BL060C']['height']
-  pl = tp.catalogue['BL060C']['plinth']
-  raise 'heights' unless pl + (h - tp::L_GRIP_CARCASS_CUT_MM) + tp::L_GRIP_PANEL_MM == 930 && pl + h == 900
+  raise 'cut' unless tp::L_GRIP_DOOR_CUT_MM == 30.0 && !tp.const_defined?(:L_GRIP_PANEL_MM)
+  a = tp.contract_attrs('BL060C', tp.catalogue['BL060C'], 'lh', 'l_grip', Contract::SCHEMA_VERSION)
+  raise a.inspect unless a['opening_method'] == 'gola' && a['front_height_mm'] == 810 && a['height_mm'] == 840
+  b = tp.contract_attrs('BL060C', tp.catalogue['BL060C'], 'lh', 'none', Contract::SCHEMA_VERSION)
+  raise b.inspect unless b['front_height_mm'] == 840
+  # the sideboard has no L grip of this system: its front stays whole
+  sb = tp.contract_attrs('C1030A', tp.catalogue['C1030A'], 'lh', 'l_grip', Contract::SCHEMA_VERSION)
+  raise sb.inspect unless sb['front_height_mm'] == 1380 && sb['opening_method'] == 'push_to_open'
+  tool = File.read(File.expand_path('../tools/tangram_place.rb', __dir__))
+  raise 'no grip panel is drawn any more' if tool.include?("prism(ents, 'GRIP_PANEL")
 end
 
 check('picker: Tangram is placed from the picker by the Tangram tool, F included') do

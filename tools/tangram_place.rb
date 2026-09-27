@@ -161,16 +161,20 @@ module UCON
     PLINTH_T_MM       = 18.0 # PLINTH_T_MM
     PLINTH_SETBACK_MM = 45.0 # PLINTH_SETBACK_MM, behind the carcass front
 
-    # THE TANGRAM GRIP EDGING (Project Guidelines printed p.112, 114-115):
-    # not an aluminium profile but a 6 cm MDF panel (GOLATNG, per m2) between
-    # the carcass and the worktop. The carcass drops from 84 to 81, the door
-    # stays 84: 6 + 81 + 6 = 93 to the worktop, and the channel is the 3 cm
-    # between the door's top and the worktop, its back the panel's face.
-    # Chosen for the 7612 island by Andriy, 2026-09-27 (variant A).
-    # THE PANEL'S PROFILE IS NOT PRINTED - drawn here with its face in the
-    # carcass plane, a planning volume. The real shape is Cesar's.
-    L_GRIP_CARCASS_CUT_MM = 30.0 # 84 -> 81
-    L_GRIP_PANEL_MM       = 60.0
+    # THE TANGRAM GRIP EDGING, AND HOW IT IS DRAWN.
+    #
+    # WHAT THE BOOK BUILDS (Project Guidelines printed p.112, 114-115): not an
+    # aluminium profile - Cesar makes none that bends - but a 6 cm MDF panel,
+    # GOLATNG, per m2, between the carcass and the worktop. Carcass 81, door
+    # 84, 6 + 81 + 6 = 93 to the worktop. That is what is ORDERED.
+    #
+    # WHAT THE DRAWING SHOWS (Andriy, 2026-09-27): the same as every other gola
+    # unit, because the sheets are CAD drawings and one rule reads cleaner
+    # than two - the DOOR drops 3 cm, 84 -> 81, the carcass stays 84, and no
+    # panel is drawn: 6 + 84 = 90. A drawing convention, not a catalog fact:
+    # the book's 93 stays recorded (claude/tangram-recon-2026-09-26.md, Elda
+    # Q32), and the order still says gola - the Tangram L grip edging.
+    L_GRIP_DOOR_CUT_MM = 30.0 # the door: 84 -> 81 on the drawing
 
     def front_t;   FRONT_T_MM;        end
     def front_gap; FRONT_GAP_MM;      end
@@ -474,7 +478,7 @@ module UCON
           a['hardware_source'] = hardware_source == 'client' ? 'client' : 'factory'
           a['hardware_ref'] = hardware_ref if a['hardware_source'] == 'factory' && !hardware_ref.to_s.empty?
         end
-        a['front_height_mm'] = rec['height'].to_i
+        a['front_height_mm'] = rec['height'].to_i - (l_grip ? L_GRIP_DOOR_CUT_MM.to_i : 0)
         a['hinge_side'] = hinge if rec['doors'] == 1
       end
       a
@@ -666,20 +670,20 @@ module UCON
       # the L grip edging is the H.84 system's; the H.138 sideboard's is
       # another (PG p.115: carcass 135, door 134) and is not drawn here
       l_grip = grip == 'l_grip' && h == 840
-      car_h = l_grip ? h - L_GRIP_CARCASS_CUT_MM : h
-      prism(ents, 'CARCASS', parts[:carcass], pl, car_h,
+      # the drawing rule: the carcass keeps the family height, the fronts drop
+      front_h = l_grip ? h - L_GRIP_DOOR_CUT_MM : h
+      prism(ents, 'CARCASS', parts[:carcass], pl, h,
             material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
-      # the panel over the carcass; the door (84) covers its lower 3 cm
-      prism(ents, 'GRIP_PANEL (GOLATNG)', parts[:carcass], pl + car_h, L_GRIP_PANEL_MM, m_front) if l_grip
-      # F: its facade in two pieces - the joint between them is the seam
+      # F: its facade in two pieces - the joint between them is the seam; it
+      # drops with the doors, so the front line of the run stays one line
       (parts[:fronts] || []).each_with_index do |pts, i|
-        prism(ents, i.zero? ? 'FACADE_SIDE (fixed)' : 'FACADE_CURVED (fixed)', pts, pl, h, m_front)
+        prism(ents, i.zero? ? 'FACADE_SIDE (fixed)' : 'FACADE_CURVED (fixed)', pts, pl, front_h, m_front)
       end
       leaves = rec['fixed'] ? [] : door_leaves(parts, rec['doors'], hinge)
       leaves.each_with_index do |lf, i|
-        prism(ents, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, h, m_front)
+        prism(ents, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, front_h, m_front)
       end
-      draw_symbols(ents, leaves, pl, h)
+      draw_symbols(ents, leaves, pl, front_h)
       leaves
     end
 
@@ -687,8 +691,8 @@ module UCON
       codes = catalogue.keys
       labels = codes.map { |c| "#{c}  #{catalogue[c]['label']}" }
       res = UI.inputbox(['Module', 'Hand (C and F)', 'Hinge (one-door modules: mirrors the module)', 'Grip'],
-                        [labels.first, 'as drawn', 'left', 'L grip edging (93)'],
-                        [labels.join('|'), 'as drawn|mirrored', 'left|right', 'L grip edging (93)|none (90)'],
+                        [labels.first, 'as drawn', 'left', 'L grip edging (door 81)'],
+                        [labels.join('|'), 'as drawn|mirrored', 'left|right', 'L grip edging (door 81)|none (door 84)'],
                         'UCON Tangram - place module')
       return unless res
 

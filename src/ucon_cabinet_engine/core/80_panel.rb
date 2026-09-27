@@ -901,7 +901,7 @@ module UCON
             </fieldset>
             <fieldset id="tgOpenFs"><legend id="tgOpenLeg">Opening</legend>
               <select id="tgOpen" onchange="tgRules()"></select>
-              <div id="tgGripNote" class="muted" style="margin:3px 0 0">Carcass 81, door 84, a 6 cm MDF panel over it (GOLATNG, per m² for the whole arrangement): 93 to the worktop.</div>
+              <div id="tgGripNote" class="muted" style="margin:3px 0 0">Drawn like every gola unit: the door drops 3 cm (84 → 81), the carcass stays 84. Ordered as the Tangram L grip edging — a 6 cm MDF panel, GOLATNG, per m²; by the book that stands 93 to the worktop.</div>
               <div id="tgHandleBlock">
                 <select id="tgHmode" onchange="tgRules()">
                   <option value="factory">Handle from catalog</option>
@@ -1093,9 +1093,9 @@ module UCON
               document.getElementById('tgHandFs').style.display=one?'none':'';
               if(t.hinge_side)document.getElementById('tgHinge').value=t.hinge_side;
               document.getElementById('tgHand').value=t.hand||'as_drawn';
-              var os=[]; if(t.l_grip_available)os.push({value:'l_grip',name:'Tangram L grip edging (93)'});
+              var os=[]; if(t.l_grip_available)os.push({value:'l_grip',name:'Tangram L grip edging (gola)'});
               if(!t.fixed){os.push({value:'push_to_open',name:'Push-to-open'});os.push({value:'handle',name:'Handle'});}
-              else os.push({value:'push_to_open',name:'No grip edging (90)'});
+              else os.push({value:'push_to_open',name:'No grip edging'});
               opt(document.getElementById('tgOpen'),os,t.opening==='push_to_open'||t.opening==='handle'
                     ?(t.fixed?'push_to_open':t.opening):t.opening);
               document.getElementById('tgOpenLeg').textContent=t.fixed?'Grip edging (the island\u2019s)':'Opening';
