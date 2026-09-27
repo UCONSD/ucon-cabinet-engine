@@ -10115,19 +10115,22 @@ check('Tangram: the tool writes a valid Contract, and the hinge side is the hand
       raise "#{code}: gola on 84 only" unless a['opening_method'].nil? || a['opening_method'] == (rec['height'] == 840 ? 'gola' : 'push_to_open')
     end
   end
-  # the deep end carries the hinge: A as drawn hinges on its left (the 350 side)
-  raise 'A as drawn' unless tp.hand_as_drawn(tp.catalogue['BK030A']['outline']) == 'lh'
-  raise 'P has no hand' unless tp.hand_as_drawn(tp.catalogue['BK060P']['outline']).nil?
-  %w[BK030A BK060B BK060D BL060E C1030A].each do |c|
+  # THE HINGE WHERE THE BROCHURE DRAWS IT (PDF p.6): at the x = w end of the
+  # plan as drawn, on all five one-door modules and P - on B that is the
+  # SHALLOW end. As drawn that is 'lh'; 'rh' mirrors it to x = 0.
+  %w[BK030A BK060B BK060D BL060E BK060P C1030A].each do |c|
     o = tp.catalogue[c]['outline']
-    %w[lh rh].each do |hg|
+    w = o.map(&:first).max
+    raise "#{c} as drawn" unless tp.hand_as_drawn(o) == 'lh' && !tp.mirror_for(o, 'lh') && tp.mirror_for(o, 'rh')
+    { 'lh' => w, 'rh' => 0 }.each do |hg, end_x|
       parts = tp.plan_parts(o, tp.mirror_for(o, hg))
       lf = tp.door_leaves(parts, 1, hg).first
-      ch = parts[:chain]
-      deep = [ch.first, ch.last].max_by(&:last)
-      raise "#{c} #{hg}: hinge not at the deep end" unless Math.hypot(lf[:pivot][0] - deep[0], lf[:pivot][1] - deep[1]) < 60
+      raise "#{c} #{hg}: hinge at x=#{lf[:pivot][0].round}, drawn at #{end_x}" unless (lf[:pivot][0] - end_x).abs < 30
     end
   end
+  b = tp.catalogue['BK060B']['outline']
+  lf = tp.door_leaves(tp.plan_parts(b, false), 1, 'lh').first
+  raise 'B hinges at its SHALLOW end (130), as drawn' unless lf[:pivot][1] < 200
 end
 check('Tangram: the picker card for a curve is one line, pointing at the placer') do
   row = Registry.catalog.find { |c| c['code'] == 'BL060C' }

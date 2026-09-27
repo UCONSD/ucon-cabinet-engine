@@ -388,30 +388,25 @@ module UCON
     end
 
     # ---- the hand IS the hinge side (2026-09-27) ---------------------------
-    # Read from the books (claude/tangram-recon-2026-09-26.md): '1 rh/lh door',
-    # one code for both hands, and every drawing hinges the door on the
-    # module's STRAIGHT side, the free edge at the thin end of the curve - on
-    # A and D the thin end runs out to nothing, so there is nowhere else a
-    # hinge could go. So for a one-door module the hand and the hinge side are
-    # ONE per-order axis (domain rule 6): choosing 'rh' mirrors the module so
-    # its deep end, and its hinges, are on the right. On B and E both ends are
-    # straight; the deeper end is an ASSUMPTION there - a question for Elda.
+    # '1 rh/lh door', one code for both hands (Kitchen System printed
+    # p.58-60), so for a one-door module the hand and the hinge side are ONE
+    # per-order axis (domain rule 6): choosing the side mirrors the module.
     #
-    # The hand the module has AS DRAWN in the registry, or nil when its ends
-    # are equally deep (P) and a hinge fits either end without mirroring.
+    # WHERE THE HINGE IS, READ OFF THE DRAWING, NOT REASONED FROM THE DEPTH.
+    # The brochure's plan (folder-kitchen-planning-2026 PDF p.6) draws a hinge
+    # mark on every one-door module, and on all five - A, B, D, E and P - it
+    # sits at the RIGHT-HAND end of the plan as drawn, the end at x = w in the
+    # registry's frame. Andriy pointed at it on A (2026-09-27). On B that is
+    # the SHALLOW end (13), which the first version of this rule - "the deeper
+    # end" - got wrong. With the front at the top of the plan, the right-hand
+    # end is the LEFT of a person standing in front: every module as drawn is
+    # 'lh', and 'rh' is its mirror. C has two doors, hinged at both ends and
+    # meeting at the middle of the curve, as the same page draws them.
+    #
+    # The hand the module has AS DRAWN (always 'lh' - see above), or nil for a
+    # module with no single door to hinge.
     def hand_as_drawn(outline)
-      parts = plan_parts(outline, false)
-      chain = parts[:chain]
-      a = chain.first
-      b = chain.last
-      return nil if (a[1] - b[1]).abs < 1
-
-      n = mid_normal(chain, parts[:ccw])
-      left = [n[1], -n[0]]
-      l = ->(p) { p[0] * left[0] + p[1] * left[1] }
-      deep = a[1] > b[1] ? a : b
-      other = deep.equal?(a) ? b : a
-      l.(deep) > l.(other) ? 'lh' : 'rh'
+      outline && 'lh'
     end
 
     # Does this hinge side need the module mirrored?
