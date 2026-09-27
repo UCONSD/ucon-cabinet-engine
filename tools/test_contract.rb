@@ -10168,6 +10168,47 @@ check('Tangram: the doors open by the engine\'s rule - V on the face, leaf out a
   end
 end
 
+check('Tangram F: fixed, no code, kept out of the registry, drawn with a plinth and no door') do
+  # 2026-09-27, Andriy: "элемент F неподвижный элемент". The Kitchen System
+  # prints no F, so it must not appear as a registry unit (domain rule 1).
+  tp = UCON::TangramPlace
+  begin
+    Registry.lookup('F')
+    raise 'F must not be a registry code'
+  rescue RuntimeError, ArgumentError, KeyError => e
+    raise e if e.message == 'F must not be a registry code'
+  end
+  f = tp.catalogue['F']
+  raise f.inspect unless f && f['fixed'] && f['doors'].zero? && f['label'].include?('NO CODE')
+  raise 'trust' unless f['geometry']['trust'].include?('ILLUSTRATION')
+  xs = f['outline'].map(&:first)
+  ys = f['outline'].map(&:last)
+  raise 'size' unless xs.max == 300 && ys.max == 640
+  [false, true].each do |mir|
+    pp = tp.fixed_parts(f, mir)
+    odd_in = lambda do |q, poly|
+      odd = false
+      poly.each_with_index do |(xi, yi), i|
+        xj, yj = poly[i - 1]
+        odd = !odd if (yi > q[1]) != (yj > q[1]) && q[0] < (xj - xi) * (q[1] - yi) / (yj - yi) + xi
+      end
+      odd
+    end
+    on_edge = lambda do |q, poly|
+      poly.each_with_index.any? do |a, i|
+        b = poly[(i + 1) % poly.size]
+        dx = b[0] - a[0]
+        dy = b[1] - a[1]
+        l2 = dx * dx + dy * dy
+        t = l2.zero? ? 0 : (((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / l2).clamp(0.0, 1.0)
+        Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy) < 0.5
+      end
+    end
+    out = pp[:plinth].reject { |q| odd_in.(q, pp[:carcass]) || on_edge.(q, pp[:carcass]) }
+    raise "plinth outside F #{out.first(2).inspect}" unless out.empty?
+  end
+end
+
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }

@@ -29,6 +29,10 @@
 # the arc of its free edge in plan, and the open leaf in space. C has two
 # doors (the registry says so) and opens as a pair; the others take the
 # Hinge asked for - left or right as seen standing in front of the door.
+#
+# F, THE FIXED END, is in the list too, and it is not a registry unit: the
+# book prints no F. Drawn from the brochure plan, whole in the front finish,
+# on a plinth that follows its rounded face - no door, nothing opens.
 
 require 'json'
 
@@ -60,7 +64,58 @@ module UCON
                              'outline' => g['outline_mm'], 'geometry' => g, 'doors' => doors }
           end
         end
+      end.merge('F' => fixed_f)
+    end
+
+    # ---- F: the fixed end - NOT a registry unit ---------------------------
+    # The Kitchen System prints no F: no code, no price (whole text searched
+    # 2026-09-27). It exists only on the brochure's vector plan (PDF p.6), and
+    # Andriy (2026-09-27): F is a FIXED element - no door, nothing opens. So it
+    # lives here and not in registry/cesar, where a unit without a printed
+    # code would be an invented catalog fact (domain rule 1).
+    #
+    # Construction in the brochure's own frame, as drawn: 300 x 640, one
+    # corner rounded R200 at (0, 0); the two sides run on 85 mm past a 250 mm
+    # recess at the far end (y 555..640). Hausdorff 4.4 mm to the brochure
+    # outline, measured 2026-09-27. The outline is the WHOLE element - its
+    # panels included - and it is drawn in the front finish.
+    # Height: the H.84 family's 840 on 60, ASSUMED for the island - the
+    # brochure table lists F with the wall and tall rows.
+    # The exposed face is the rounded one: the side x = 0 up to the recess,
+    # the arc, and the face y = 0. The plinth follows that face.
+    F_W, F_D, F_R, F_SIDE, F_RECESS_Y = 300.0, 640.0, 200.0, 25.0, 555.0
+
+    def f_arc(seg = 24)
+      (1...seg).map do |i|
+        a = Math::PI + i * (Math::PI / 2) / seg
+        [F_R + F_R * Math.cos(a), F_R + F_R * Math.sin(a)]
       end
+    end
+
+    def fixed_f
+      outline = [[0.0, F_D], [0.0, F_R]] + f_arc + [[F_R, 0.0], [F_W, 0.0], [F_W, F_D],
+                                                   [F_W - F_SIDE, F_D], [F_W - F_SIDE, F_RECESS_Y],
+                                                   [F_SIDE, F_RECESS_Y], [F_SIDE, F_D]]
+      exposed = [[0.0, F_RECESS_Y], [0.0, F_R]] + f_arc + [[F_R, 0.0], [F_W, 0.0]]
+      { 'label' => 'Tangram F - fixed rounded end (NO CODE in the book)',
+        'height' => 840, 'plinth' => 60, 'doors' => 0, 'fixed' => true,
+        'outline' => outline, 'exposed' => exposed,
+        'geometry' => { 'trust' => 'ILLUSTRATION - measured from the brochure plan, no printed dimension, no code',
+                        'source' => 'folder-kitchen-planning-2026 PDF p.6 (vector plan)' } }
+    end
+
+    # F's parts: the whole element, and the plinth board 45 behind its
+    # exposed face. No door, no symbols.
+    def fixed_parts(rec, mirrored)
+      pts = clean(rec['outline'])
+      ex = rec['exposed'].map { |x, y| [x.to_f, y.to_f] }
+      if mirrored
+        w = pts.map(&:first).max
+        pts = pts.map { |x, y| [w - x, y] }.reverse
+        ex = ex.map { |x, y| [w - x, y] }.reverse
+      end
+      ccw = signed_area(pts) > 0
+      { carcass: pts, plinth: band(ex, -setback, -(setback + plinth_t), ccw) }
     end
 
     def reload!
@@ -383,7 +438,7 @@ module UCON
     def place(code, mirrored, hinge = 'lh')
       rec = catalogue[code] or return UI.messagebox("#{code} has no plan in the registry.")
       model = Sketchup.active_model
-      parts = plan_parts(rec['outline'], mirrored)
+      parts = rec['fixed'] ? fixed_parts(rec, mirrored) : plan_parts(rec['outline'], mirrored)
       pl = rec['plinth'].to_f
       h  = rec['height'].to_f
       model.start_operation("Tangram #{code}", true)
@@ -393,21 +448,24 @@ module UCON
       plinth = prism(grp.entities, 'PLINTH', parts[:plinth], 0, pl,
                      material(model, 'UCON_Plinth_White', [245, 245, 245]))
       hide_vertical_edges(plinth)
-      prism(grp.entities, 'CARCASS', parts[:carcass], pl, h,
-            material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
-      leaves = door_leaves(parts, rec['doors'], hinge)
       m_front = material(model, 'UCON_Front_White', [245, 245, 245])
+      # F is fixed: the whole element in the front finish, and nothing opens
+      prism(grp.entities, rec['fixed'] ? 'FIXED' : 'CARCASS', parts[:carcass], pl, h,
+            rec['fixed'] ? m_front : material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      leaves = rec['fixed'] ? [] : door_leaves(parts, rec['doors'], hinge)
       leaves.each_with_index do |lf, i|
         prism(grp.entities, leaves.size > 1 ? "FRONT_#{i + 1}_OF_#{leaves.size}" : 'FRONT', lf[:band], pl, h, m_front)
       end
       draw_symbols(grp.entities, leaves, pl, h)
       { 'code' => code, 'label' => rec['label'], 'hand' => mirrored ? 'mirrored' : 'as drawn',
         'height_mm' => h, 'plinth_h_mm' => pl,
-        'doors' => rec['doors'], 'hinge' => leaves.map { |lf| lf[:hinge] }.join('+'),
-        'front_mm' => "#{front_t} at #{front_gap} off the carcass",
+        'doors' => rec['doors'], 'hinge' => rec['fixed'] ? 'fixed' : leaves.map { |lf| lf[:hinge] }.join('+'),
+        'front_mm' => rec['fixed'] ? 'none - fixed element' : "#{front_t} at #{front_gap} off the carcass",
         'plinth_board_mm' => "#{plinth_t} at #{setback} behind the carcass front",
         'trust' => rec['geometry']['trust'], 'source' => rec['geometry']['source'],
-        'status' => 'PRELIMINARY - curve measured from the brochure, factory confirmation owed' }
+        'status' => rec['fixed'] ?
+          'PRELIMINARY - NO CODE in the Kitchen System; shape from the brochure plan; fixed (Andriy 2026-09-27); height assumed 840 on 60; code and height to Elda' :
+          'PRELIMINARY - curve measured from the brochure, factory confirmation owed' }
         .each { |k, v| grp.set_attribute(DICT, k, v) }
       model.commit_operation
       model.selection.clear
