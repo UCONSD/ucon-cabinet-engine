@@ -862,7 +862,14 @@ module UCON
             'corner_geometry' => row['corner_geometry'],
             'execution' => row['execution'],
             'door_width_mm' => row['door_width_mm'],
-            'carcass_length_mm' => row['carcass_length_mm'] }
+            'carcass_length_mm' => row['carcass_length_mm'],
+            # WHAT TELLS TWO SAME-SIZE CODES APART, 2026-09-28. BL0300 and
+            # BL0400 are both W300 d.62; the page says only 'BL0400 with bread
+            # bag on the right', inside the type's shared description, and
+            # Andriy could not see the difference in the picker card. A row
+            # that differs from its siblings by content carries it here, and
+            # the card prints it in bold. Picker only: never enters a Contract.
+            'variant_note' => row['variant_note'] }
         end
       end
 
