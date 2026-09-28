@@ -10378,6 +10378,10 @@ check('gola joint reads as one line, like the plinth - box units and Tangram') d
   raise 'no gola_joint!' unless gen.include?('def gola_joint!(definition, unit, gola)')
   raise 'gola_joint! must split at the gola door top' unless gen.include?("(base_z_mm(unit) + versions['gola_mm'].to_f).mm")
   raise 'gola_joint! must follow the choice both ways' unless gen.include?('upper.each { |e| e.hidden = gola }')
+  # 1.8.3 hid nothing on a box unit: the pieces were compared as Lengths,
+  # which SketchUp compares within 0.001". Plain floats, pinned.
+  body = gen[gen.index('def gola_joint!')...gen.index('# THE ONE WRITER OF A PLINTH.')]
+  raise 'gola_joint! compares Lengths again' unless body.include?('e.end.position.z.to_f].min > zs.to_f - tol.to_f')
   pan = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
   raise 'the panel does not call gola_joint!' unless pan.include?('Generator.gola_joint!(defn, unit, gola)')
   load File.expand_path('../tools/tangram_place.rb', __dir__)

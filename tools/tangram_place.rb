@@ -563,13 +563,13 @@ module UCON
         end
       end
       on.call.each do |e|
-        lo, hi = [e.start.position.z, e.end.position.z].minmax
-        next unless lo < zs - 0.01 && hi > zs + 0.01
+        lo, hi = [e.start.position.z.to_f, e.end.position.z.to_f].minmax
+        next unless lo < zs.to_f - 0.01 && hi > zs.to_f + 0.01
 
         a = e.start.position
         e.split(Geom::Point3d.new(a.x, a.y, zs))
       end
-      up = on.call.select { |e| [e.start.position.z, e.end.position.z].min > zs - 0.01 }
+      up = on.call.select { |e| [e.start.position.z.to_f, e.end.position.z.to_f].min > zs.to_f - 0.01 }
       up.each { |e| e.hidden = true }
       up.size
     end

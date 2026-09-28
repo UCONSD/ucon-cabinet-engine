@@ -2483,13 +2483,18 @@ module UCON
           es.select { |e| (e.start.position.y - y_front).abs < tol }
         end
         vertical.call.each do |e|
-          lo, hi = [e.start.position.z, e.end.position.z].minmax
-          next unless lo < zs - tol && hi > zs + tol
+          lo, hi = [e.start.position.z.to_f, e.end.position.z.to_f].minmax
+          next unless lo < zs.to_f - tol.to_f && hi > zs.to_f + tol.to_f
 
           a = e.start.position
           e.split(Geom::Point3d.new(a.x, a.y, zs))
         end
-        upper = vertical.call.select { |e| [e.start.position.z, e.end.position.z].min > zs - tol }
+        # In plain floats: a Length compares within SketchUp's own tolerance
+        # (0.001"), so `870 mm > 870 mm - 0.01 mm` is FALSE as Lengths - 1.8.3
+        # hid nothing on a box unit because of exactly that.
+        upper = vertical.call.select do |e|
+          [e.start.position.z.to_f, e.end.position.z.to_f].min > zs.to_f - tol.to_f
+        end
         upper.each { |e| e.hidden = gola }
         gola ? upper.size : 0
       end
