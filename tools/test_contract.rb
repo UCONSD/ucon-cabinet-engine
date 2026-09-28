@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1207 codes (386 base + 74 sink + 17 appliance + 291 wall + 3 glass wall + 14 USA tall + 217 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1202 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 14 USA tall + 217 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, final: -5 - Andriy keeps only the two dishwasher-door series of
+  # printed p.55; VL0630 / VL0730, VL0601 / VN0601 and VL0650 removed.
   # 2026-09-28, last: +5 - Horizontal Thin H.36 for base units H.84 (printed
   # p.460, 4, the stub of its H.78 twin) and the wall filler PG0151 (p.434).
   # 2026-09-28, later still: +98, tall units for base unit H.84 - printed
@@ -288,7 +290,7 @@ check('registry loads and holds 1207 codes (386 base + 74 sink + 17 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1207
+  raise "got #{n}" unless n == 1202
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -481,9 +483,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1207 rows, each with code/dims/description/source') do
+check('registry catalog: 1202 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1207
+  raise cat.length.to_s unless cat.length == 1202
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -5095,14 +5097,14 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # BEFORE the catalog's list and is not part of it, and jumbo/allowed are back
   # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
-    refused == { 'appliance units' => 25, 'pull-out units' => 15,
+    refused == { 'appliance units' => 22, 'pull-out units' => 15,
                  'units with jumbo drawers' => 274,
                  'units with interior drawers' => 28,
                  'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 659
+                 'curved units, whose width is an arc' => 6 } && allowed == 657
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -5113,6 +5115,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # 2026-09-28, later still: +98 tall for base H.84 - jumbo +58, allowed +40.
   # 2026-09-28, last: +4 Horizontal Thin H.36 and PG0151 - allowed +4 (the
   # filler is width-ranged and never asked).
+  # 2026-09-28, final: -5 appliance_h84 rows (Andriy) - appliance -3, allowed -2.
 end
 
 check('an ordered filler satisfies the contract') do
@@ -5303,11 +5306,12 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  # 2026-09-28: 21 -> 23, the H.84 dishwasher doors of printed p.55. One of them
-  # is the first 'available_only' - the Shaker door is printed FOR one finish.
-  raise blocks.length.to_s unless blocks.length == 23
+  # 2026-09-28: 21 -> 22, the H.84 Shaker dishwasher door of printed p.55 - a
+  # prohibition like every other. (Briefly 23, with an 'available_only' that
+  # was a misread glyph, and the platform door since removed.)
+  raise blocks.length.to_s unless blocks.length == 22
   blocks.each do |b|
-    raise b.inspect unless %w[not_available available_only].include?(b['kind'])
+    raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
     raise 'must say it is not enforced' unless b['note'].to_s.include?('NOT ENFORCED')
   end

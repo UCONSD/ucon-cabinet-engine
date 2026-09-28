@@ -555,9 +555,9 @@
     "family": "H.84",
     "section": "Base units H. 84 | for household appliances",
     "printed_pages": "55-56",
-    "status": "extracted",
+    "status": "partial",
     "extracted_on": "2026-09-28",
-    "note": "Both pages whole, 8 codes in 5 types; only the plain dishwasher door is buildable. The induction-hob protection 996466-996462 and the filler profile 995945 / 995946 are accessories, recorded in appliance_h84.json and not held as rows."
+    "note": "2026-09-28: only the two dishwasher-door series of p.55 are held (VL0640 / VL0740, VL8659) - Andriy's decision. Excluded by decision: the platform door VL0630 / VL0730, the fridge housing VL0601 / VN0601 (p.55) and the washing-machine door VL0650 (p.56). The induction-hob protection 996466-996462 and the filler profile 995945 / 995946 are accessories, recorded in appliance_h84.json and not held as rows."
    },
    {
     "class": "base",

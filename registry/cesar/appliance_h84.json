@@ -2,8 +2,8 @@
   "section": "Base units H. 84 | for household appliances",
   "class": "base",
   "family": "H.84",
-  "source_pages": "printed p.55-56 / PDF 57-58 (taken whole)",
-  "extraction_note": "2026-09-28, the 7612 perimeter moves to H.84 (Andriy) and the dishwasher door goes with it. Both pages taken whole: 8 codes in 5 types. Only the plain dishwasher door (VL0640 / VL0740) is buildable; the platform door, the Shaker door, the fridge housing and the washing-machine door are held for lookup with their reasons. NOT CODES HERE, BUT ON THE PAGE: 'Protection under induction hob (custom sizing not available)' 996466 (60), 996467 (75), 996469 (90), 996460 (105), 996462 (120), priced in points - an accessory ordered with a hob, not with a cabinet, so it is not a companion of any base (a companion is added to every order of that base). For 7612, BM0967 under the CIT36YWBB takes 996469 as a manual order line. And the filler profile 995945 / 995946, carried as a companion of the dishwasher doors.",
+  "source_pages": "printed p.55-56 / PDF 57-58 (subset: the two dishwasher-door series of p.55)",
+  "extraction_note": "2026-09-28, the 7612 perimeter moves to H.84 (Andriy). HELD: the two dishwasher-door series of printed p.55 and nothing else on p.55-56, by Andriy's decision the same day - the plain tall door VL0640 / VL0740 (buildable; filler profile and GBBF01 as companions) and the two-front door VL8659 (held, not buildable - see its reason). REMOVED the same day, by decision and not by oversight: the platform door VL0630 / VL0730, the fridge housing VL0601 / VN0601 and the washing-machine door VL0650. NOT CODES HERE, BUT ON THE PAGE: 'Protection under induction hob (custom sizing not available)' 996466 (60), 996467 (75), 996469 (90), 996460 (105), 996462 (120), priced in points - an accessory ordered with a hob, not a companion of any base. For 7612, BM0967 under the CIT36YWBB takes 996469 as a manual order line. A US 24 in dishwasher takes a panel of 699-765 mm (Thermador DWHD660EPR, Vol. 10.1 p.223): both series here are taller (840 / 810, and 330 + 450) - recorded, the choice is Andriy's.",
   "representation_notes": [
     "THE PLINTH UNDER A DISHWASHER PANEL IS DRAWN, AND THE ONE ORDERED IS A DIFFERENT ARTICLE. UCON decision, Andriy, 2026-08-24, off the Avenida Primavera kitchen. Until today this registry said a dishwasher panel gets no plinth, and about the JOINERY that was correct: the plinth in front of the machine is cut away or the door cannot fall. About the DRAWING it was wrong - the plinth line then breaks on the LayOut elevation exactly where a machine stands, and the sheet reads as a hole. So the panel now carries a plinth box and its phantom housing starts on top of it, the same treatment the US fridge housing already had. BOTH ARE REPRESENTATION. What the warehouse must be asked for is a plinth WITH A CUTOUT. Andriy: designers routinely order plain linear plinth instead and the cutout gets improvised on site at installation - which is the reason to hold the two facts apart in writing rather than let a drawing imply an order. The order side is deliberately deferred and not written yet.",
     "AND THE 'cutout for plinth 40' PRINTED ON printed p.47 AND p.48 IS STILL UNREAD. It now has a plausible home - 40 mm taken out of the plinth in front of the machine - but plausible is not printed, and domain rule 1 says the source wins. Left open on purpose (Andriy, 2026-08-24: not urgent). Nothing in the geometry depends on it: the drawn plinth is full height, and the cutout, whatever it turns out to be, belongs to the order line."
@@ -66,69 +66,6 @@
         ],
         "notes": "TWIN OF appliance_h78 / appliance_dishwasher_door: same position, same wording, same shape on the H.84 page; keys carried from it, codes, elevation and glyphs re-read on the H.84 page itself. Printed 'Tall door for dishwasher' at H.84 - one door, profile with infill front on request, without fixing holes. W60 and W75 only (no 45 at H.84). Elevation 84 / 81. The 75 cm version: 'a stainless steel cabinet is installed adjacent to the 60 cm wide appliance. An automatic opening and closing mechanism is installed on the right-hand side panel.' No hung glyph and no margin surcharges beside this position."
       },
-      "appliance_dishwasher_door_platform": {
-        "description": "Door for dishwasher with platform fixed front - 1 door, 1 fixed front with 45 degree top edge, profile with infill front on request, without fixing holes",
-        "object_class": "appliance_front",
-        "opening": "bottom-hung",
-        "handed": false,
-        "plinth_continues": true,
-        "appliance_niche": {
-          "bottom": "plinth_top",
-          "bottom_is_representation": true,
-          "trust": "indicative",
-          "note": "DRAWN, NOT MEASURED - see representation_notes at the head of this file. No top_mm: the housing ends where the panel ends and the generator already knows that number."
-        },
-        "interior_confirmed": [
-          "1 fixed front with 45 degree top edge"
-        ],
-        "source_ref": "printed p.55 / PDF 57",
-        "codes": [
-          {
-            "code": "VL0630",
-            "width_mm": 600,
-            "depth_mm": 22
-          },
-          {
-            "code": "VL0730",
-            "width_mm": 750,
-            "depth_mm": 22
-          }
-        ],
-        "buildable": false,
-        "not_buildable_reason": "HELD FOR LOOKUP. Elevation printed p.55: door 78 over a fixed front 5,5 (handle), 75 over 5,5 (gola). 780 + 55 = 835 and 750 + 30 + 55 = 835, five short of the family 840 - the gap is not printed. The machine stands on a platform behind the fixed front, which is what lifts its door; no front_layout kind yet says 'fixed front below a bottom-hung door'.",
-        "finish_restrictions": {
-          "kind": "not_available",
-          "source_ref": "printed p.55 / PDF 57, read off the render",
-          "for_all_widths": [
-            "Maxima 2.2 with framed door"
-          ],
-          "note": "RECORDED, NOT ENFORCED."
-        },
-        "companions": [
-          {
-            "role": "filler_profile",
-            "by": "width",
-            "map": {
-              "600": "995946",
-              "750": "995946"
-            },
-            "drawn": false,
-            "source_ref": "printed p.56 / PDF 58",
-            "note": "Filler profile between the dishwasher and the top: 995945 (45) and 995946 (60) printed on p.56. H.84 has no 45 cm dishwasher door, so only 995946 is used; the 75 cm door takes it because the machine behind it is 60 wide."
-          },
-          {
-            "role": "door_bearing_cabinet",
-            "code": "GBBF01",
-            "applies_to_widths_mm": [
-              750
-            ],
-            "drawn": false,
-            "source_ref": "printed p.55 / PDF 57",
-            "note": "Stainless steel cabinet W150 with the door-bearing mechanism, for the 75 cm version only (60 + 15). No depth printed and its side is Elda Q5 - order line, not geometry, as at H.78."
-          }
-        ],
-        "notes": "WHY IT MATTERS FOR 7612: Thermador DWHD660EPR wants a toe kick of 92-190 mm (Vol. 10.1 p.223) and the H.84 plinth is 60. With this door the panel's bottom stands on the 55 fixed front, above the plinth - a reading of the drawing, not a printed statement; to be confirmed by Elda before it is relied on."
-      },
       "appliance_dishwasher_door_aluminium_profile": {
         "description": "Door for integrated dish-washer - 2 fronts - 1 aluminum profile for straight groove use - black rear support frame for fronts - without fixing holes",
         "object_class": "appliance_front",
@@ -168,12 +105,12 @@
           }
         ],
         "finish_restrictions": {
-          "kind": "available_only",
+          "kind": "not_available",
           "source_ref": "printed p.55 / PDF 57, read off the render",
           "for_all_widths": [
             "Maxima 2.2 with Shaker door"
           ],
-          "note": "RECORDED, NOT ENFORCED. H.78's page prints a prohibition of Shaker; H.84's prints this execution FOR Shaker - read the page, not the twin."
+          "note": "RECORDED, NOT ENFORCED. The no-entry glyph beside 'Maxima 2.2 with Shaker door' is a PROHIBITION, as at H.78 (printed p.48) and as the same glyph beside the oven base on printed p.52. CORRECTED 2026-09-28 the same day: first recorded as 'available_only', a misreading of the glyph - Andriy's screenshot of p.55."
         },
         "front_layout": {
           "kind": "horizontal",
@@ -190,51 +127,7 @@
           ],
           "gola_note": "Elevation printed p.55: 33 / 45 with the aluminium profile in the joint."
         },
-        "notes": "TWIN OF appliance_h78 / appliance_dishwasher_door_aluminium_profile: same position, same wording, same shape on the H.84 page; keys carried from it, codes, elevation and glyphs re-read on the H.84 page itself. Printed for Maxima 2.2 with Shaker door only (the glyph beside the position): 1 front, 1 front, 1 aluminum profile for straight groove use, black rear support frame, without fixing holes. W60 only."
-      },
-      "appliance_fridge_housing": {
-        "description": "Floor-standing housing for fridge or freezer with sliding/fixed hinges - 1 rh or lh door, 1 side panel, profile with infill front on request, without fixing holes on fridge with fixed hinges",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": [
-          "1 side panel"
-        ],
-        "source_ref": "printed p.55 / PDF 57",
-        "codes": [
-          {
-            "code": "VL0601",
-            "width_mm": 600,
-            "depth_mm": 620
-          },
-          {
-            "code": "VN0601",
-            "width_mm": 600,
-            "depth_mm": 670
-          }
-        ],
-        "buildable": false,
-        "not_buildable_reason": "HELD FOR LOOKUP. A housing for an undercounter fridge: the carcass is the appliance's and the page dimensions neither the niche nor the side panel. The H.78 twin was EXCLUDED by decision on 2026-08-17; held here because Andriy asked for H.84 whole (2026-09-28), not drawn.",
-        "notes": "Elevation 84 / 81. VN = d.67 at this position - a letter pair of its own (VL / VN), read off the page.",
-        "wall_hung": true,
-        "wall_hung_note": "The margin prints 'Surch. for wall-hung version on page 548'; no depth-band glyph column on this position. Recorded as the margin says."
-      },
-      "appliance_washing_machine_door": {
-        "description": "Door for fully-integrated washing machine - 1 rh or lh door, profile with infill front on request, without holes for hinges",
-        "object_class": "appliance_front",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": [],
-        "source_ref": "printed p.56 / PDF 58",
-        "codes": [
-          {
-            "code": "VL0650",
-            "width_mm": 600,
-            "depth_mm": 22
-          }
-        ],
-        "buildable": false,
-        "not_buildable_reason": "HELD FOR LOOKUP. A panel on a machine's own door, side-hinged by the machine; no front_layout kind for a side-hung appliance panel yet. The H.78 twin was excluded by decision (2026-08-17).",
-        "notes": "Elevation 84 / 81."
+        "notes": "TWIN OF appliance_h78 / appliance_dishwasher_door_aluminium_profile: same position, same wording, same shape on the H.84 page; keys carried from it, codes, elevation and glyphs re-read on the H.84 page itself. NOT available for Maxima 2.2 with Shaker door (the no-entry glyph beside the position): 1 front, 1 front, 1 aluminum profile for straight groove use, black rear support frame, without fixing holes. W60 only."
       }
     }
   }
