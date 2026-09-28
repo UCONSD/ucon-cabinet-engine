@@ -50,7 +50,7 @@ existed.
 | Q31 | module F: its code, its price, its heights, and whether its front is a fixed panel | **open** 2026-09-27 · F is in no book; the model draws it from the brochure alone |
 | Q32 | the Tangram L grip edging: how GOLATNG's m² is measured on an island, its profile, and the H.138 sideboard's own version | **open** 2026-09-27 · 7612 island is on it (93 to the worktop) |
 | Q33 | the sideboard C1030A prints plinth ZOCCT0D (module D's), not ZOCCT0A | **open** 2026-09-27 · one order line; looks like a misprint |
-| Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position |
+| Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position; 2026-09-28: + the BM0967 drawer base under the downdraft |
 | Q35 | BL0400 / B80400 print W 30, the same as BL0300 / B80300 - a misprint for 40? | **open** 2026-09-28 · Andriy reads it as a misprint; the registry holds 300 as printed |
 
 Three more were **answered without ever being numbered** — see that section below.
@@ -1353,6 +1353,19 @@ curved modules, on the L grip edging — so the carcass is 81 and the downdraft 
 the worktop.
 1. **Is a straight Maxima H.84 at 81 the right carrier**, and does the L grip panel take the cutout?
 2. **The Tangram top with that cutout** — is it the 1500-point drawing (Linear Elements printed p.43)?
+3. **Added 2026-09-28 — the base under it is now BM0967** (900 × 840 × 670, two jumbo drawers; the hob
+   flame is printed on d.67, printed p.51). The downdraft body is 70 deep, hangs 746 below the worktop
+   and needs 16 to the cabinet's rear wall (Thermador Vol. 10.1 p.132-133), so the drawers run only in
+   front of it:
+   a. **How long are BM0967's drawer boxes?** By our estimate about 540 is the most that clears the body
+      (≈640 inside − 16 − 70); a 550 or 600 box does not.
+   b. **Does the carcass back need a cutout** for the body? From the worktop's front edge to the cabinet's
+      rear wall Thermador needs ≥ 726 (64 setback + 646 combined cutout + 16); d.67 gives 670 + door +
+      worktop overhang, so unless those two together are ≥ 56 the body meets the back.
+   c. **The 6 in (152) duct** to the inline VTI1FZ in the crawl space cannot pass behind the drawers
+      (86 left there) or through the floor under them: it has to go down behind the carcass back, in
+      the island's void. Is that how Cesar builds it, and what does the order need for it?
+   Likely answered by Elda's Metron calculation of the island; if it is, close this with a link to it.
 
 ## Q35 — BL0400 / B80400: width 30 or 40?
 
