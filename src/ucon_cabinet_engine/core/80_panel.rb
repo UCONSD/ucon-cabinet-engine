@@ -791,6 +791,9 @@ module UCON
                          z0, front_h, front_mat)
         end
 
+        # and the carcass joint in that zone is hidden, like the plinth's
+        Generator.gola_joint!(defn, unit, gola)
+
         # Gola (door 75): the 30 mm zone above the shortened door stays EMPTY
         # by decision (2026-08-16) - drawing the profile body read as noise.
         # The true cross-section stays recorded in the registry

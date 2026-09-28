@@ -2457,6 +2457,43 @@ module UCON
         unit['geometry_kind'] == 'corner' ? corner_parts(unit)[:carcass] : drawn_width_mm(unit)
       end
 
+      # THE GOLA JOINT READS AS ONE LINE, like the plinth (2026-09-27, Andriy).
+      # With the door dropped 30 mm, the carcass front shows in the grip zone,
+      # and where two carcasses meet their front corner edges drew a tick at
+      # every joint. The front vertical edges are split at the top of the gola
+      # door and the upper piece is hidden while the door is gola - shown again
+      # when it goes back to full front. Below the split the door covers them,
+      # so nothing else changes. Idempotent: an edge already split is not split
+      # again. Returns how many pieces it hid.
+      def gola_joint!(definition, unit, gola)
+        versions = (unit || {})['door_versions']
+        return 0 unless versions && versions['gola_mm']
+
+        body = definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
+        return 0 unless body
+
+        tol = 0.01.mm
+        zs  = (base_z_mm(unit) + versions['gola_mm'].to_f).mm
+        vertical = lambda do
+          es = body.entities.grep(Sketchup::Edge).select do |e|
+            v = e.end.position - e.start.position
+            v.x.abs < tol && v.y.abs < tol && v.z.abs > tol
+          end
+          y_front = es.map { |e| e.start.position.y }.min
+          es.select { |e| (e.start.position.y - y_front).abs < tol }
+        end
+        vertical.call.each do |e|
+          lo, hi = [e.start.position.z, e.end.position.z].minmax
+          next unless lo < zs - tol && hi > zs + tol
+
+          a = e.start.position
+          e.split(Geom::Point3d.new(a.x, a.y, zs))
+        end
+        upper = vertical.call.select { |e| [e.start.position.z, e.end.position.z].min > zs - tol }
+        upper.each { |e| e.hidden = gola }
+        gola ? upper.size : 0
+      end
+
       # THE ONE WRITER OF A PLINTH. It was written out three times in this file
       # and the panel could not draw one at all, which stopped mattering the
       # moment mounting became a choice: switching a unit to wall-hung has to

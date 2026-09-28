@@ -10370,6 +10370,33 @@ check('Tangram panel: the same form as a box unit - door height, opening, hinge 
   raise 'golaNote is still hard-coded' unless src.include?("'Door ' + (dv.gola_mm/10) + ' opens by gola only.")
 end
 
+check('gola joint reads as one line, like the plinth - box units and Tangram') do
+  # 2026-09-27, Andriy: the joints in the gola zone must be invisible, as on
+  # the plinth. Box: the panel hides the carcass front corners above the gola
+  # door, and shows them again for a full front. Tangram: the same at both ends.
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'no gola_joint!' unless gen.include?('def gola_joint!(definition, unit, gola)')
+  raise 'gola_joint! must split at the gola door top' unless gen.include?("(base_z_mm(unit) + versions['gola_mm'].to_f).mm")
+  raise 'gola_joint! must follow the choice both ways' unless gen.include?('upper.each { |e| e.hidden = gola }')
+  pan = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'the panel does not call gola_joint!' unless pan.include?('Generator.gola_joint!(defn, unit, gola)')
+  load File.expand_path('../tools/tangram_place.rb', __dir__)
+  tp = UCON::TangramPlace
+  tool = File.read(File.expand_path('../tools/tangram_place.rb', __dir__))
+  raise 'Tangram does not hide its grip joint' unless tool.include?('hide_grip_joint(carcass, front_corners(parts), pl + front_h) if l_grip')
+  %w[BK060B BL060C BK030A].each do |code|
+    rec = tp.catalogue[code]
+    [false, true].each do |mir|
+      parts = tp.plan_parts(rec['outline'], mir)
+      c = tp.front_corners(parts)
+      raise "#{code} corners #{c}" unless c.size == 2
+      c.each { |x, y| raise "#{code} corner #{[x, y]} not on the carcass" unless parts[:carcass].any? { |p| (p[0] - x).abs < 0.5 && (p[1] - y).abs < 0.5 } }
+    end
+  end
+  f = tp.fixed_parts(nil, false)
+  raise 'F corners' unless tp.front_corners(f).size == 2
+end
+
 check('Tangram joints: every end states its depth, slope and door corner - and which joints are clean') do
   # 2026-09-27, Andriy: B beside a Maxima unit, carcasses aligned, and the doors
   # did not meet. The ends are data now, and the numbers are the plan's own.

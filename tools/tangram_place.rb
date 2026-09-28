@@ -543,6 +543,37 @@ module UCON
       g
     end
 
+    # The carcass front corners at the two ends of a module, in plan (mm).
+    def front_corners(parts)
+      line = parts[:chain] || parts[:face]
+      line && line.size > 1 ? [line.first, line.last] : []
+    end
+
+    # Split the vertical edges standing on these corners at z (mm) and hide the
+    # piece above - the same rule as Generator.gola_joint! for a box unit.
+    def hide_grip_joint(group, corners, z)
+      tol = 0.5
+      zs = mm(z)
+      on = lambda do
+        group.entities.grep(Sketchup::Edge).select do |e|
+          a = e.start.position
+          v = e.end.position - a
+          v.x.abs < 0.01 && v.y.abs < 0.01 && v.z.abs > 0.01 &&
+            corners.any? { |x, y| (a.x.to_mm - x).abs < tol && (a.y.to_mm - y).abs < tol }
+        end
+      end
+      on.call.each do |e|
+        lo, hi = [e.start.position.z, e.end.position.z].minmax
+        next unless lo < zs - 0.01 && hi > zs + 0.01
+
+        a = e.start.position
+        e.split(Geom::Point3d.new(a.x, a.y, zs))
+      end
+      up = on.call.select { |e| [e.start.position.z, e.end.position.z].min > zs - 0.01 }
+      up.each { |e| e.hidden = true }
+      up.size
+    end
+
     def symbol_tag(model, name)
       layer = model.layers[name] || model.layers.add(name)
       if layer.respond_to?(:line_style=) && model.respond_to?(:line_styles)
@@ -672,8 +703,11 @@ module UCON
       l_grip = grip == 'l_grip' && h == 840
       # the drawing rule: the carcass keeps the family height, the fronts drop
       front_h = l_grip ? h - L_GRIP_DOOR_CUT_MM : h
-      prism(ents, 'CARCASS', parts[:carcass], pl, h,
-            material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      carcass = prism(ents, 'CARCASS', parts[:carcass], pl, h,
+                      material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216]))
+      # the joint in the grip zone reads as one line, like the plinth's: the
+      # carcass front corners at both ends are hidden above the dropped door
+      hide_grip_joint(carcass, front_corners(parts), pl + front_h) if l_grip
       # F: its facade in two pieces - the joint between them is the seam; it
       # drops with the doors, so the front line of the run stays one line
       (parts[:fronts] || []).each_with_index do |pts, i|
