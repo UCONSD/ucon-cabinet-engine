@@ -884,24 +884,24 @@ module UCON
           </div>
           <div id="tgForm" style="display:none">
             <h3 id="tgCode"></h3><div class="muted" id="tgDesc"></div>
-            <fieldset id="tgHingeFs"><legend>Hand (sx / dx)</legend>
-              <select id="tgHinge">
-                <option value="lh">Left-hand module \u2014 hinges left</option>
-                <option value="rh">Right-hand module \u2014 mirrored, hinges right</option>
-              </select>
-              <div class="muted" style="margin:3px 0 0">The hinge never moves on the module: it stays where the
-                brochure draws it (on B the shallow end \u2014 the acute end cannot take one). Right-hand is the
-                whole module mirrored, the hinge with it. One code for both.</div>
+            <!-- THE SAME FORM AS A BOX UNIT, 2026-09-27 (Andriy): door height,
+                 opening, hinge side - in that order, with the same labels. The
+                 gola is drawn the same way too: door -30, carcass stays 84. -->
+            <fieldset id="tgDvFs"><legend>Door height</legend>
+              <label><input type="radio" name="tgDv" value="full" checked onchange="tgRules()">
+                <span>84 — full front</span></label>
+              <label><input type="radio" name="tgDv" value="gola" onchange="tgRules()">
+                <span>81 — gola (−30 mm)</span></label>
             </fieldset>
-            <fieldset id="tgHandFs"><legend>Hand</legend>
-              <select id="tgHand">
-                <option value="as_drawn">As drawn</option>
-                <option value="mirrored">Mirrored</option>
+            <fieldset id="tgOpenFs"><legend>Opening</legend>
+              <select id="tgOpen" onchange="tgRules()">
+                <option value="handle">Handle</option>
+                <option value="push_to_open">Push-to-open</option>
               </select>
-            </fieldset>
-            <fieldset id="tgOpenFs"><legend id="tgOpenLeg">Opening</legend>
-              <select id="tgOpen" onchange="tgRules()"></select>
-              <div id="tgGripNote" class="muted" style="margin:3px 0 0">Drawn like every gola unit: the door drops 3 cm (84 → 81), the carcass stays 84. Ordered as the Tangram L grip edging — a 6 cm MDF panel, GOLATNG, per m²; by the book that stands 93 to the worktop.</div>
+              <div id="tgGolaNote" class="flag" style="display:none">Door 81 opens by gola only. On Tangram the gola is the L grip edging — a 6 cm MDF panel, ordered per m² for the whole composition (by the book 93 to the worktop):</div>
+              <select id="tgGol" style="display:none">
+                <option value="GOLATNG">Tangram L grip edging (GOLATNG)</option>
+              </select>
               <div id="tgHandleBlock">
                 <select id="tgHmode" onchange="tgRules()">
                   <option value="factory">Handle from catalog</option>
@@ -909,6 +909,19 @@ module UCON
                 </select>
                 <select id="tgHandle"></select>
               </div>
+            </fieldset>
+            <fieldset id="tgHingeFs"><legend>Hinge side</legend>
+              <select id="tgHinge">
+                <option value="lh">Left (hinges left)</option>
+                <option value="rh">Right (hinges right)</option>
+              </select>
+              <div class="muted" style="margin:3px 0 0">On Tangram the hinge side is the module’s hand: Right is the whole module mirrored. One code for both.</div>
+            </fieldset>
+            <fieldset id="tgHandFs"><legend>Hand</legend>
+              <select id="tgHand">
+                <option value="as_drawn">Left (as drawn)</option>
+                <option value="mirrored">Right (mirrored)</option>
+              </select>
             </fieldset>
             <div class="muted">Drawn from the brochure plan — PRELIMINARY until Cesar confirms the curve.</div>
             <button onclick="applyTangram()">Apply</button>
@@ -1045,6 +1058,8 @@ module UCON
                   (dv.full_mm/10) + ' — full front';
                 document.getElementById('dvGola').textContent =
                   (dv.gola_mm/10) + ' — gola (−' + (dv.full_mm - dv.gola_mm) + ' mm)';
+                document.getElementById('golaNote').textContent =
+                  'Door ' + (dv.gola_mm/10) + ' opens by gola only. Its grip-recess profiles are separate order lines — a drawer stack needs two:';
               } else {
                 document.querySelector('input[name=dv][value="78"]').checked = true;
               }
@@ -1093,31 +1108,41 @@ module UCON
               document.getElementById('tgHandFs').style.display=one?'none':'';
               if(t.hinge_side)document.getElementById('tgHinge').value=t.hinge_side;
               document.getElementById('tgHand').value=t.hand||'as_drawn';
-              var os=[]; if(t.l_grip_available)os.push({value:'l_grip',name:'Tangram L grip edging (gola)'});
-              if(!t.fixed){os.push({value:'push_to_open',name:'Push-to-open'});os.push({value:'handle',name:'Handle'});}
-              else os.push({value:'push_to_open',name:'No grip edging'});
-              opt(document.getElementById('tgOpen'),os,t.opening==='push_to_open'||t.opening==='handle'
-                    ?(t.fixed?'push_to_open':t.opening):t.opening);
-              document.getElementById('tgOpenLeg').textContent=t.fixed?'Grip edging (the island\u2019s)':'Opening';
+              // Door height only where the book offers the L grip (H.84); the
+              // sideboard H.138 has no control, as a family with no gola height.
+              document.getElementById('tgDvFs').style.display=t.l_grip_available?'':'none';
+              document.querySelector('input[name=tgDv][value="'+(t.opening==='l_grip'?'gola':'full')+'"]').checked=true;
+              // F has nothing to open: its facade follows the door height only.
+              document.getElementById('tgOpenFs').style.display=t.fixed?'none':'';
+              if(t.opening==='handle'||t.opening==='push_to_open')document.getElementById('tgOpen').value=t.opening;
               opt(document.getElementById('tgHandle'),st.handles||[],t.hardware_ref);
               if(t.hardware_source==='client')document.getElementById('tgHmode').value='client';
               tgRules();
             }
+            function tgGola(){
+              return document.getElementById('tgDvFs').style.display!=='none' &&
+                document.querySelector('input[name=tgDv]:checked').value==='gola';
+            }
             function tgRules(){
-              var o=document.getElementById('tgOpen').value;
-              document.getElementById('tgGripNote').style.display=o==='l_grip'?'':'none';
-              document.getElementById('tgHandleBlock').style.display=o==='handle'?'':'none';
+              var g=tgGola();
+              document.getElementById('tgOpen').style.display=g?'none':'';
+              document.getElementById('tgGolaNote').style.display=g?'':'none';
+              document.getElementById('tgGol').style.display=g?'':'none';
+              document.getElementById('tgHandleBlock').style.display=
+                (!g && document.getElementById('tgOpen').value==='handle')?'':'none';
               document.getElementById('tgHandle').style.display=
                 document.getElementById('tgHmode').value==='factory'?'':'none';
             }
             function applyTangram(){
-              var hm=document.getElementById('tgHmode').value;
+              var hm=document.getElementById('tgHmode').value, g=tgGola();
+              var fixed=STATE&&STATE.tangram&&STATE.tangram.fixed;
+              var o=g?'l_grip':(fixed?'push_to_open':document.getElementById('tgOpen').value);
               sketchup.apply_tangram(JSON.stringify({
                 hinge_side:document.getElementById('tgHinge').value,
                 hand:document.getElementById('tgHand').value,
-                opening:document.getElementById('tgOpen').value,
+                opening:o,
                 hardware_mode:hm,
-                hardware_ref:hm==='factory'?document.getElementById('tgHandle').value:''}));
+                hardware_ref:(o==='handle'&&hm==='factory')?document.getElementById('tgHandle').value:''}));
             }
             window.onload=function(){sketchup.ready();};
           </script></body></html>

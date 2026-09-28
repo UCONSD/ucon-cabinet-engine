@@ -10354,6 +10354,22 @@ check('Tangram in the panel: what it is asked, and what a choice draws and write
   %w[apply_tangram tgForm tgHinge tgHand tgOpen].each { |k| raise "panel: #{k}" unless src.include?(k) }
 end
 
+check('Tangram panel: the same form as a box unit - door height, opening, hinge side') do
+  # 2026-09-27, Andriy: "do it all uniformly, as we did for the base cabinets".
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  f = src[src.index('<div id="tgForm"')...src.index('<script>')]
+  order = ['id="tgDvFs"', 'id="tgOpenFs"', 'id="tgHingeFs"'].map { |k| f.index(k) or raise "missing #{k}" }
+  raise "order #{order}" unless order == order.sort
+  ['<legend>Door height</legend>', '84 — full front', '81 — gola', '<legend>Hinge side</legend>',
+   'Left (hinges left)', 'Right (hinges right)', 'Handle from catalog'].each { |k| raise "form: #{k}" unless f.include?(k) }
+  raise 'the L grip is still an Opening option' if f.include?('value="l_grip"')
+  raise 'old hand label' if f.include?('Hand (sx / dx)')
+  # the gola door is chosen by door height, and Apply turns it into the L grip
+  raise 'apply: l_grip' unless src.include?("var o=g?'l_grip'")
+  # the box form's gola note takes its height from the family, not a written 75
+  raise 'golaNote is still hard-coded' unless src.include?("'Door ' + (dv.gola_mm/10) + ' opens by gola only.")
+end
+
 check('Tangram joints: every end states its depth, slope and door corner - and which joints are clean') do
   # 2026-09-27, Andriy: B beside a Maxima unit, carcasses aligned, and the doors
   # did not meet. The ends are data now, and the numbers are the plan's own.
