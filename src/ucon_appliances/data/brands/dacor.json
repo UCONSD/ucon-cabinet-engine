@@ -1,0 +1,57 @@
+{
+ "schema_version": "1",
+ "kind": "appliance_openings",
+ "brand_key": "dacor",
+ "generated": "2026-09-28",
+ "units": "mm, measured from the finished floor",
+ "rule": "a value appears here only if it is printed in the manufacturer's own document (design guide, planning guide or specification sheet), with that document named on the value",
+ "note": "Dacor: one model, for 7612 Hillside Dr (Andriy, 2026-09-28). Chosen because the H.84 dishwasher door (Cesar VL0640 / VL0740, printed p.55) runs down to the 60 plinth line and needs a machine whose door hinge slides the panel up on opening; Thermador DWHD660EPR has a fixed hinge and does not fit the 843 niche under a continuous gola profile either. Values read from the Dacor spec sheet, fetched 2026-09-28 (not a local file: sources[0].url). Inches are the sheet's; mm are converted and rounded, and say so.",
+ "sources": [
+  {
+   "brand": "Dacor",
+   "file": "Dacor-24-Dishwasher-DDW24G9000APDA-SpecSheet.pdf",
+   "url": "https://image-us.samsung.com/SamsungUS/dacor/professionals/upcoming-products/ddw24g9000apda/download/Dacor-24-Dishwasher-DDW24G9000APDA-SpecSheet.pdf",
+   "revision": null,
+   "pages": 1,
+   "fetched": "2026-09-28"
+  }
+ ],
+ "appliances": [
+  {
+   "model": "DDW24G9000AP",
+   "brand": "Dacor",
+   "series": "Contemporary",
+   "type": "dishwasher",
+   "install_class": "undercounter",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "product_name": "24\" Panel Ready Dishwasher, Kitchen Fit Sliding Door hinge",
+   "installations": {
+    "standard": {
+     "w": 600,
+     "h": 819,
+     "d": 575,
+     "source": "Dacor-24-Dishwasher-DDW24G9000APDA-SpecSheet.pdf p.1 - cutout 23 5/8-23 7/8 x 32 1/4-35 1/4 x 22 5/8 in (600-606 x 819-895 x 575 mm, converted); the MINIMUM of each range is held"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "120 V, 60 Hz, 15 A",
+     "note": "",
+     "source": "Dacor-24-Dishwasher-DDW24G9000APDA-SpecSheet.pdf p.1"
+    }
+   ],
+   "ada_variant": null,
+   "ada_height": true,
+   "sliding_door_hinge": true,
+   "notes": [
+    "product 23 3/8 x 32 1/8-35 1/4 x 21 3/4 in (594 x 816-895 x 552 mm, converted); cutout height 32 1/4-35 1/4 in (819-895) (Dacor-24-Dishwasher-DDW24G9000APDA-SpecSheet.pdf)",
+    "ada_height TRUE HERE MEANS 'FITS UNDER A CONTINUOUS GOLA PROFILE', NOT AN ADA LISTING: the H.84 niche under the L profile is 843 (carcass top 900 minus the 5,7 cm profile, Cesar printed p.615) and this cutout starts at 819. Dacor's ADA status was not checked - the key is the engine's name for the height question the gola rule asks",
+    "Kitchen Fit Sliding Door hinge: the panel slides up as the door opens, so a panel may run down to the plinth line (Dacor product page and press release, 2026-09-28). The reason it pairs with Cesar's H.84 tall dishwasher door",
+    "panel weight 10-26.5 lb (Dacor-24-Dishwasher-DDW24G9000APDA-SpecSheet.pdf); panel height and thickness limits not printed on the sheet - read the installation manual before ordering the panel"
+   ]
+  }
+ ]
+}

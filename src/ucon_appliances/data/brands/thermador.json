@@ -307,7 +307,8 @@
    "notes": [
     "NO ADA VERSION: every Thermador dishwasher is 33 7/8 in (860) and Thermador's ADA list names no dishwasher (p.220; thermador.com ADA page, 2026-09-24). Under gola this model is refused and the remedies are offered - for 7612 Hillside Dr the remedy chosen is GOL080",
     "cutout 33 7/8 in min x 24 in min x 24 in (p.220); custom panel 23 1/16 x 27 1/2-30 1/8 in, 5/8-7/8 in thick, 11-18 lb recommended (p.223)",
-    "push to open: custom-panel model only (p.218-220) - the reason this is Sapphire and not Emerald DWHD640EPR"
+    "push to open: custom-panel model only (p.218-220) - the reason this is Sapphire and not Emerald DWHD640EPR",
+    "2026-09-28: NOT the 7612 dishwasher any more (Andriy). At 860-890 high it does not fit the 843 niche under a continuous gola profile in an H.84 run, and its fixed hinge cannot carry Cesar's H.84 tall door; the kitchen takes Dacor DDW24G9000AP (brands/dacor.json)."
    ]
   },
   {

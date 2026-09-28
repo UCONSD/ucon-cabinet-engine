@@ -1248,6 +1248,7 @@ module UCON
                             esc(inchLabel(c.depth_mm, c.nominal_d_in)) + '</span>' : '');
                 el.innerHTML = '<b>' + c.code + '</b> · ' + c.family + '<br>' + c.description +
                   (c.variant_note ? '<br><b>' + esc(c.variant_note) + '</b>' : '') +
+                  (c.picker_warning ? '<br><b style="color:#c62828">' + esc(c.picker_warning) + '</b>' : '') +
                   '<br>' + dims + '<br>' +
                   '<span class="src">' + c.source_ref + ' · PRELIMINARY</span>';
                 el.style.display='block';

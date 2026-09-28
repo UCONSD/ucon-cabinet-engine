@@ -642,8 +642,10 @@ check('the thirty moved models come back from the loader value for value') do
   rows.size == 30 && Digest::SHA256.hexdigest(JSON.generate(bare)) == MOVED_30_SHA
 end
 
-check('four brands, in the order of the buttons: Thermador, Sub-Zero, Gaggenau, Miele') do
-  A.brands.map { |b| b['label'] } == %w[Thermador Sub-Zero Gaggenau Miele]
+# 2026-09-28: + Dacor, fifth, for the 7612 dishwasher (a sliding-door hinge
+# under Cesar's H.84 tall dishwasher door).
+check('five brands, in the order of the buttons: Thermador, Sub-Zero, Gaggenau, Miele, Dacor') do
+  A.brands.map { |b| b['label'] } == %w[Thermador Sub-Zero Gaggenau Miele Dacor]
 end
 
 check('the Sub-Zero button is the group: Sub-Zero, Wolf and Cove') do
@@ -744,7 +746,7 @@ end
 
 check('the brand buttons carry label, model count and whether sets exist, in button order') do
   m = A.brand_menu
-  m.map { |b| b['label'] } == %w[Thermador Sub-Zero Gaggenau Miele] &&
+  m.map { |b| b['label'] } == %w[Thermador Sub-Zero Gaggenau Miele Dacor] &&
     m.find { |b| b['key'] == 'sub_zero_group' }['count'] == A.for_brand('sub_zero_group').size &&
     m.select { |b| b['sets'] }.map { |b| b['key'] } == ['sub_zero_group']
 end
@@ -853,6 +855,18 @@ end
 check('after the broken copies, the shipped data is back and clean') do
   A.data_dir.nil? == false && A.data_dir == A::DATA_DIR &&
     A.load_problems.empty? && A.all.size >= 30
+end
+
+# ------------------------------------------------------ Dacor, 2026-09-28
+check('the 7612 dishwasher is Dacor DDW24G9000AP, with a sliding-door hinge') do
+  a = A.find('DDW24G9000AP')
+  a && a['brand_key'] == 'dacor' && a['sliding_door_hinge'] == true &&
+    a['installations']['standard']['h'] == 819
+end
+
+check('it passes under gola as it is - no substitution, no end cap asked for') do
+  r = A.for_front_system('DDW24G9000AP', 'gola')
+  r['ok'] && r['model'] == 'DDW24G9000AP' && !r['substituted']
 end
 
 puts "#{$checks} checks, #{$fails.size} failures"

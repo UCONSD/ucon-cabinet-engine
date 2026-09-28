@@ -10562,6 +10562,21 @@ check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.6
   bad = cat.reject { |c| { 'BK' => 350, 'BL' => 620, 'BM' => 670, 'AQ' => 620, 'AS' => 670 }[c['code'][0, 2]] == Registry.lookup(c['code'])['depth_mm'] }
   raise bad.map { |c| c['code'] }.inspect unless bad.empty?
 end
+check('THE H.84 DISHWASHER DOORS WARN IN RED: a sliding-hinge machine, and which one') do
+  # Andriy, 2026-09-28: the tall door runs to the 60 plinth line and hits it on
+  # a fixed hinge. The picker says so before anybody builds it.
+  rows = Registry.catalog.select { |c| %w[VL0640 VL0740 VL8659].include?(c['code']) }
+  raise rows.map { |r| r['code'] }.inspect unless rows.size == 3
+  rows.each do |r|
+    w = r['picker_warning'].to_s
+    raise "#{r['code']}: #{w.inspect}" unless w.include?('SLIDING-DOOR HINGE') && w.include?('DDW24G9000AP')
+  end
+  raise 'no other row may carry a picker warning yet' unless
+    Registry.catalog.count { |c| c['picker_warning'] } == 3
+  pal = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'the card must print it in red' unless pal.include?("c.picker_warning ? '<br><b style=\"color:#c62828\">'")
+end
+
 check('THE US FRIDGE PANEL TAKES ITS PLINTH FROM THE RUN, and nothing else does') do
   # 2026-09-28, Andriy, 7612: CR9400-CR9901 are one set of articles for every
   # run, so the plinth under them is read off the selected neighbour at build

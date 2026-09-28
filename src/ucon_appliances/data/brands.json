@@ -3,7 +3,7 @@
  "kind": "appliance_brands",
  "decided": "2026-09-24",
  "decided_by": "Andriy",
- "note": "The order here is the order of the buttons. A brand is a FILTER on the list, not a lock on the kitchen: brands mix in one kitchen. A catalogue file is one per brand family and grows only from real projects. prices and sets are optional and today exist only for the Sub-Zero group (claude/decisions-2026-09-24-appliance-brands.md).",
+ "note": "The order here is the order of the buttons. A brand is a FILTER on the list, not a lock on the kitchen: brands mix in one kitchen. A catalogue file is one per brand family and grows only from real projects. prices and sets are optional and today exist only for the Sub-Zero group (claude/decisions-2026-09-24-appliance-brands.md). Dacor added 2026-09-28 for the 7612 dishwasher (sliding-door hinge under the H.84 tall door).",
  "brands": [
   {
    "key": "thermador",
@@ -45,6 +45,14 @@
     "Miele"
    ],
    "catalog": "brands/miele.json"
+  },
+  {
+   "key": "dacor",
+   "label": "Dacor",
+   "sub_brands": [
+    "Dacor"
+   ],
+   "catalog": "brands/dacor.json"
   }
  ]
 }

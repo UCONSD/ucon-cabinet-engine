@@ -872,7 +872,11 @@ module UCON
             # Andriy could not see the difference in the picker card. A row
             # that differs from its siblings by content carries it here, and
             # the card prints it in bold. Picker only: never enters a Contract.
-            'variant_note' => row['variant_note'] }
+            'variant_note' => row['variant_note'],
+            # A WARNING THE PERSON MUST SEE BEFORE BUILDING, 2026-09-28 - the
+            # H.84 dishwasher doors need a sliding-hinge machine (Andriy). Printed
+            # in red on the picker card. Type-level; picker only, like variant_note.
+            'picker_warning' => unit_type['picker_warning'] }
         end
       end
 
