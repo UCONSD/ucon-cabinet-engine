@@ -666,6 +666,19 @@ module UCON
           unit = unit.merge(ground)
         end
 
+        # ---- A PANEL WHOSE PLINTH IS THE RUN'S (2026-09-28) -----------------
+        # Andriy, 7612 Hillside Dr: the perimeter moved to H.84 on a 60 plinth,
+        # and the US fridge panels of printed p.418 (CR9400-CR9901) are ONE set
+        # of articles for every run - no H.84 copy exists, and a code lives in
+        # one record. Their family draws a 100 plinth because it was born beside
+        # H.78. So a family that says plinth_from_run takes the plinth off the
+        # SELECTED neighbour, through its code, exactly as an end panel takes its
+        # ground. Nothing selected: the family's own number, as before.
+        if unit['plinth_from_run']
+          ground = run_plinth_ground(model)
+          unit = unit.merge(ground) if ground
+        end
+
         unless unit.fetch('buildable', true)
           raise ArgumentError,
                 "#{code} is in the registry but cannot be built yet.\n\n" \
@@ -1546,6 +1559,33 @@ module UCON
         return nil if code.empty?
 
         { 'mounting' => 'floor', 'plinth_h_mm' => 0, 'ground_from_code' => code }
+      rescue StandardError
+        nil
+      end
+
+      # The plinth of the selected FLOOR unit, from its code. nil when nothing
+      # is selected, when it hangs, or when its family states no plinth - the
+      # caller then keeps its own family's number.
+      def run_plinth_note(unit)
+        return '' unless unit['plinth_from_code']
+
+        " PLINTH TAKEN FROM THE RUN: #{unit['plinth_h_mm'].to_i} mm, off " \
+        "#{unit['plinth_from_code']} beside it - the catalog prints no plinth for this panel " \
+        'and its family was drawn for an H.78 run.'
+      end
+
+      def run_plinth_ground(model)
+        sel = selected_unit(model)
+        return nil unless sel
+
+        attrs = Contract.read(sel.definition) || {}
+        code  = attrs['code'].to_s
+        return nil if code.empty?
+
+        n = Registry.lookup(code)
+        return nil if wall_hung?(n) || n['plinth_h_mm'].nil?
+
+        { 'plinth_h_mm' => n['plinth_h_mm'], 'plinth_from_code' => code }
       rescue StandardError
         nil
       end
@@ -2892,7 +2932,7 @@ module UCON
         "Generated from registry/cesar.json (#{unit['registry_status']}). " \
         "#{interior_note}#{handed_note} Front drawn flush: the faces meet, and no reveal is " \
         'drawn or stored.' \
-        "#{scribe_note}#{glass_note}#{cutout_note}#{panel_note}"
+        "#{scribe_note}#{glass_note}#{cutout_note}#{panel_note}#{run_plinth_note(unit)}"
       end
     end
   end

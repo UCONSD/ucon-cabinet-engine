@@ -10558,6 +10558,24 @@ check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.6
   bad = cat.reject { |c| { 'BK' => 350, 'BL' => 620, 'BM' => 670, 'AQ' => 620, 'AS' => 670 }[c['code'][0, 2]] == Registry.lookup(c['code'])['depth_mm'] }
   raise bad.map { |c| c['code'] }.inspect unless bad.empty?
 end
+check('THE US FRIDGE PANEL TAKES ITS PLINTH FROM THE RUN, and nothing else does') do
+  # 2026-09-28, Andriy, 7612: CR9400-CR9901 are one set of articles for every
+  # run, so the plinth under them is read off the selected neighbour at build
+  # time instead of a second record per run.
+  %w[CR9400 CR9600 CR9900 CR9601].each do |c|
+    raise "#{c} must follow the run" unless Registry.lookup(c)['plinth_from_run'] == true
+  end
+  %w[BL0601 B80601 CR0651 VL0640 V80630].each do |c|
+    raise "#{c} must keep its own plinth" if Registry.lookup(c)['plinth_from_run']
+  end
+  u = Registry.lookup('CR9900').merge('plinth_h_mm' => 60, 'plinth_from_code' => 'CR0651')
+  raise 'the drawn plinth must be the run one' unless Generator.plinth_h_mm(u) == 60
+  raise 'the note must say whose plinth it is' unless
+    Generator.run_plinth_note(u).include?('CR0651') && Generator.run_plinth_note(u).include?('60 mm')
+  raise 'no neighbour, no note' unless Generator.run_plinth_note(Registry.lookup('CR9900')) == ''
+  raise 'nothing selected keeps the family 100' unless Generator.plinth_h_mm(Registry.lookup('CR9900')) == 100
+end
+
 check('H.84: 840 on a 60 plinth, and the island cooktop base is buildable') do
   u = Registry.lookup('BL1200')
   raise u.inspect unless u['height_mm'] == 840 && u['width_mm'] == 1200 && u['depth_mm'] == 620

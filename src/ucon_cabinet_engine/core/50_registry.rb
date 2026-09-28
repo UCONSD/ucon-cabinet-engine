@@ -199,6 +199,9 @@ module UCON
             # floor, and a panel gets one only where the drawing would
             # otherwise show a break. Absent means no.
             'plinth_continues'   => scoped.call('plinth_continues') ? true : false,
+            # 2026-09-28: the plinth is the RUN's, read off the selected
+            # neighbour at build time (Generator.run_plinth_ground). Absent = no.
+            'plinth_from_run'    => scoped.call('plinth_from_run') ? true : false,
             # Where the client's machine really begins and ends, when the
             # family knows. Absent means the old rule: floor to the top of the
             # panel, which is right for a dishwasher and wrong for a housing.
