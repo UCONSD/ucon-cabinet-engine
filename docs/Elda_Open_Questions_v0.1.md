@@ -52,6 +52,7 @@ existed.
 | Q33 | the sideboard C1030A prints plinth ZOCCT0D (module D's), not ZOCCT0A | **open** 2026-09-27 · one order line; looks like a misprint |
 | Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position; 2026-09-28: + the BM0967 drawer base under the downdraft |
 | Q35 | BL0400 / B80400 print W 30, the same as BL0300 / B80300 - a misprint for 40? | **open** 2026-09-28 · Andriy reads it as a misprint; the registry holds 300 as printed |
+| Q36 | Hide & Seek as a PASSAGE door into the 7612 pantry: a door that opens INWARD, the hallway module without its back, push-open / spring-shut, a top element on it | **open** 2026-09-28 · **the main question is the inward-opening door**; decides whether the pantry entrance is Cesar at all |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1382,3 +1383,27 @@ as a misprint.
 
 Until answered the registry holds **300, as printed**, and the picker card names the bread bag in
 bold (core 1.8.5).
+
+## Q36 — Hide & Seek as a passage door into a pantry (7612)
+
+**Status:** open · added 2026-09-28 · **the pantry entrance of 7612**
+
+7612 has a walk-in pantry behind the perimeter wall. Andriy wants its door **between two tall
+units H.222** (for base H.84, 60 plinth), flush with the fronts: **pushed by hand, it opens
+INWARD into the pantry; pulled, a spring brings it back flush.** Cesar's Hide & Seek (Kitchen
+System printed p.195-203, H.222 codes on p.202: A1 CHHS21-27, A2 CHHS31-37, hallway CHHS01/05 and
+CHHS11/15, door CHHS50 W.75) is the nearest thing in the books - but as printed it is a walk-in
+cupboard: the door is hung on module A, opens by a handle, and the hallway module I closes with a
+floor-standing back panel.
+1. **THE MAIN QUESTION: can the Hide & Seek door (or any Cesar door in door finish) be supplied to
+   open INWARD** - into a room behind the run - flush with the tall fronts when closed?
+2. **Can the hallway module I be supplied without its back panel**, so that it frames a doorway
+   through the wall instead of closing a cupboard? What is the clear passage width and height?
+3. **Push-open and a spring / self-closing hinge instead of the handle** the page prints - is that
+   available, and with which hardware?
+4. **Can a top element H.72 (SE) stand on Hide & Seek H.222 modules**, so that the run finishes at
+   3000 like the tall units beside it? Not drawn on p.196-199.
+5. If none of this is possible: **is there any other Cesar solution for a passage door in a run of
+   tall units?** Revego (printed p.176-193) was looked at and does not fit - its door swings OUT
+   and retracts into the carcass side, and the recess is a cupboard, not a passage.
+
