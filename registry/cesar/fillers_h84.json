@@ -1,0 +1,56 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "H.84",
+  "source_pages": "printed p.434 / PDF 436 (the two H.84 rows of the first and second positions)",
+  "family_note": "NO FAMILY-LEVEL KEYS, as fillers_h78.json: height, mounting and plinth come from base_h84.json.",
+  "extraction_note": "2026-09-28. NOT held from the same page: AL0150, the 60-160 degree base corner panel H.84 (and its H.78 twin A80150, also not held) - new geometry, an angle this registry cannot draw; PG0151, the wall filler H.84 - family Wall H.84 is held and it could join, taken in the tall/wall pass.",
+  "data": {
+    "unit_types": {
+      "filler_front": {
+        "description": "Filler in door finishes from 2,3 to 15 cm - front in door finishes",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front covering the whole face; a filler does not open. It shortens to 810 with the run when the door version is gola - 810 is base_h84.json door_versions.gola_mm, this family's own number."
+        },
+        "codes": [
+          {
+            "code": "BK0151",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 22
+          }
+        ],
+        "notes": "TWIN OF fillers_h78 / filler_front: same position, same wording, same shape on the H.84 page; keys carried from it, codes, elevation and glyphs re-read on the H.84 page itself. The H.84 row of the first position. BK = H.84, the same family letter the H.84 units' d.35 rows use. Depth 22 on the same reading as B70151 - see fillers_h78.json."
+      },
+      "filler_base_unit": {
+        "description": "Base unit filler in door finishes from 2,3 to 15 cm - front in door finishes - sides, bottom and top panel in melamine",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front on a melamine box; it does not open. Shortens to 810 with the run in the gola version - base_h84.json door_versions.gola_mm, this family's own number."
+        },
+        "codes": [
+          {
+            "code": "BK0150",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 350
+          }
+        ],
+        "notes": "TWIN OF fillers_h78 / filler_base_unit: same position, same wording, same shape on the H.84 page; keys carried from it, codes, elevation and glyphs re-read on the H.84 page itself. The H.84 row of the second position ('Base unit filler ... sides, bottom and top panel in melamine'), printed in the d.35 band as every row of it is."
+      }
+    }
+  }
+}

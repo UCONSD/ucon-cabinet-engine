@@ -1,0 +1,209 @@
+{
+  "section": "USA elements | for base units H. 84",
+  "class": "base",
+  "collection": "USA elements",
+  "family": "H.84",
+  "source_pages": "printed p.415 / PDF 417 (taken whole)",
+  "family_naming_note": "JOINS family H.84 rather than a namespaced 'USA H.84': unlike USA Tall H.210, these ARE H.84 base units - 840 on the 60 plinth, the BL / BM depth letters of base_h84.json. The section keeps the catalog's wording.",
+  "extraction_note": "2026-09-28, whole page: 18 codes, 4 types. Only the countertop-hob base is buildable (its stack derived, see notes); the two oven bases and the fridge doors are custom-sized and held for lookup. printed p.414, its H.78 twin, is still not extracted.",
+  "data": {
+    "unit_types": {
+      "usa_base_countertop_hob": {
+        "description": "Base unit for countertop hob - 1 custom-sized jumbo drawer, 1 jumbo drawer",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 custom-sized jumbo drawer",
+          "1 jumbo drawer"
+        ],
+        "source_ref": "printed p.415 / PDF 417",
+        "codes": [
+          {
+            "code": "BL7650",
+            "width_mm": 762,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL9150",
+            "width_mm": 914,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL2150",
+            "width_mm": 1067,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL2250",
+            "width_mm": 1219,
+            "depth_mm": 620
+          },
+          {
+            "code": "BM7650",
+            "width_mm": 762,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM9150",
+            "width_mm": 914,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM2150",
+            "width_mm": 1067,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM2250",
+            "width_mm": 1219,
+            "depth_mm": 670
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            360,
+            480
+          ],
+          "note": "Elevation printed p.415: lower jumbo 48 (handle) / 45 (gola), upper 'custom-sized'. Stack DERIVED from base_jumbo_drawers H.84 (36 / 48, gola 33 / 45) - see notes.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 330
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ],
+          "gola_note": "33 + 45 = 78 of fronts; the two 30 mm zones are carried from H.78 as for the drawer stack - an inference, not printed."
+        },
+        "notes": "THE US-WIDTH BASE FOR A COOKTOP: 30, 36, 42 and 48 in, the same inch column as printed p.418 (nominal_widths_in). For 7612, BL9150 / BM9150 (914) is the width of the CIT36YWBB itself. The elevation prints only the LOWER drawer, 48 / 45; the upper is 'custom-sized'. The front stack here is that of base_jumbo_drawers at H.84 (360 / 480, gola 330 / 450), which is the default the sum rule leaves - a DERIVATION, trust indicative; a custom upper front is an order axis this file does not hold. Servo Drive p.567; LEGRABOX margin prices (215 / 65 / 280) named, not coded.",
+        "wall_hung": false,
+        "wall_hung_note": "Hob flame beside d.62 and d.67. NO hung glyph and NO wall-hung margin line on printed p.415 - swept on the 150-dpi render 2026-09-28.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
+      },
+      "usa_base_oven_drawer": {
+        "description": "Base unit for built-in oven - 1 custom-sized fixed front, 1 oven niche, 1 custom-sized jumbo drawer, 1 adjustable divider",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 custom-sized fixed front",
+          "1 oven niche",
+          "1 custom-sized jumbo drawer",
+          "1 adjustable divider"
+        ],
+        "source_ref": "printed p.415 / PDF 417",
+        "codes": [
+          {
+            "code": "BL6199",
+            "width_mm": 610,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL7699",
+            "width_mm": 762,
+            "depth_mm": 620
+          },
+          {
+            "code": "BM6199",
+            "width_mm": 610,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM7699",
+            "width_mm": 762,
+            "depth_mm": 670
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. Every front is custom-sized: the elevation prints only 'max' limits (drawer 48 max / 45 max) and no niche height.",
+        "notes": "24 and 30 in. Servo Drive p.567; LEGRABOX margin prices (108 / 32 / 140) named, not coded.",
+        "wall_hung": false,
+        "wall_hung_note": "Hob flame beside d.62 and d.67. NO hung glyph and NO wall-hung margin line on printed p.415 - swept on the 150-dpi render 2026-09-28.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
+      },
+      "usa_base_oven_open": {
+        "description": "Base unit for built-in oven - 1 custom-sized fixed front, 1 oven niche, 1 cm thick metal bottom panel",
+        "opening": "none",
+        "handed": false,
+        "interior_confirmed": [
+          "1 custom-sized fixed front",
+          "1 oven niche",
+          "1 cm thick metal bottom panel"
+        ],
+        "source_ref": "printed p.415 / PDF 417",
+        "codes": [
+          {
+            "code": "BL6197",
+            "width_mm": 610,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL7697",
+            "width_mm": 762,
+            "depth_mm": 620
+          },
+          {
+            "code": "BM6197",
+            "width_mm": 610,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM7697",
+            "width_mm": 762,
+            "depth_mm": 670
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. A custom-sized fixed front over an open oven niche; the elevation prints no number.",
+        "notes": "24 and 30 in.",
+        "wall_hung": false,
+        "wall_hung_note": "Hob flame beside d.62 and d.67. NO hung glyph and NO wall-hung margin line on printed p.415 - swept on the 150-dpi render 2026-09-28.",
+        "hob_provisions_depths_mm": [
+          620,
+          670
+        ]
+      },
+      "usa_fridge_doors_base": {
+        "description": "Doors for USA fridge for base unit H. 84 - 2 custom-sized fronts",
+        "object_class": "appliance_front",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.415 / PDF 417",
+        "codes": [
+          {
+            "code": "BL7657",
+            "width_mm": 762,
+            "depth_mm": 22
+          },
+          {
+            "code": "BL9657",
+            "width_mm": 914,
+            "depth_mm": 22
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. Two custom-sized fronts for an undercounter US refrigerator drawer unit - the elevation prints only '39 max' over '48 max'.",
+        "notes": "30 and 36 in. No depth band printed; 22 is the front thickness, as for every appliance front here."
+      }
+    }
+  }
+}

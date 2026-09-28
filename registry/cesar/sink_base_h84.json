@@ -2,8 +2,8 @@
   "section": "Sink base units H. 84",
   "class": "base",
   "family": "H.84",
-  "source_pages": "printed p.53-54 / PDF 55-56 (subset extracted: the three straight sink bases)",
-  "extraction_note": "Opened on demand for 7612 Hillside Dr, 2026-09-28: the sink side of the Tangram island. Extracted: sink base with door (p.53), with doors and with jumbo drawers (p.54). NOT extracted: the two corner sink bases on p.54 (AQ/AS096-126, AL1171/AL1181) - corner units need M2.2 placement, as at H.78. Prices not held here. Family keys (plinth, door versions, depths) are declared once, in base_h84.json; this file declares only the height, so the last-file-wins merge cannot take them away.",
+  "source_pages": "printed p.53-54 / PDF 55-56 (subset: the 155-degree corner sink AL1171 / AL1181 not held)",
+  "extraction_note": "Opened on demand for 7612 Hillside Dr, 2026-09-28: the sink side of the Tangram island. Extracted: sink base with door (p.53), with doors and with jumbo drawers (p.54). NOT extracted: the two corner sink bases on p.54 (AQ/AS096-126, AL1171/AL1181) - corner units need M2.2 placement, as at H.78. Prices not held here. Family keys (plinth, door versions, depths) are declared once, in base_h84.json; this file declares only the height, so the last-file-wins merge cannot take them away. | 2026-09-28: the corner sink base (p.54, 12 codes) added as a twin of the corner base. NOT held: AL1171 / AL1181, the two-door 155-degree corner sink - an L-shaped carcass (110x110 / 115x115) no front_layout kind can draw; and its margin prints the wall-hung line while no glyph stands beside it, the same contradiction the Magicorner records.",
   "page_observations": [
     "NO HOB GLYPH on p.53 or p.54 at either depth - the third sink section to say so (H.58.5, H.78, H.84).",
     "EVERY STRAIGHT POSITION CARRIES THE HUNG GLYPH at d.62 and d.67, plus the margin surcharge.",
@@ -184,6 +184,124 @@
         },
         "wall_hung": true,
         "wall_hung_note": "SWEPT 2026-09-28 on the 150-dpi render of printed p.53 / p.54: the 'Hung version' glyph (legend printed p.19) is printed beside d.62 and d.67, and the margin carries 'Surch. for wall-hung version on page 548'. No hob flame on either band."
+      },
+      "sink_base_corner": {
+        "description": "Corner sink base unit - 1 rh or lh door, 8x8 fixed corner front panel, 1 aluminium tray",
+        "geometry_kind": "corner",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 aluminium tray",
+          "8x8 fixed corner front panel"
+        ],
+        "source_ref": "printed p.54 / PDF 56",
+        "codes": [
+          {
+            "code": "AQ096S",
+            "execution": "left",
+            "corner_geometry": "1000x700",
+            "depth_mm": 620,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AQ096D",
+            "execution": "right",
+            "corner_geometry": "1000x700",
+            "depth_mm": 620,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AQ116S",
+            "execution": "left",
+            "corner_geometry": "1150x700",
+            "depth_mm": 620,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AQ116D",
+            "execution": "right",
+            "corner_geometry": "1150x700",
+            "depth_mm": 620,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AQ126S",
+            "execution": "left",
+            "corner_geometry": "1300x700",
+            "depth_mm": 620,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          },
+          {
+            "code": "AQ126D",
+            "execution": "right",
+            "corner_geometry": "1300x700",
+            "depth_mm": 620,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          },
+          {
+            "code": "AS096S",
+            "execution": "left",
+            "corner_geometry": "1050x750",
+            "depth_mm": 670,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AS096D",
+            "execution": "right",
+            "corner_geometry": "1050x750",
+            "depth_mm": 670,
+            "door_width_mm": 300,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AS116S",
+            "execution": "left",
+            "corner_geometry": "1200x750",
+            "depth_mm": 670,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AS116D",
+            "execution": "right",
+            "corner_geometry": "1200x750",
+            "depth_mm": 670,
+            "door_width_mm": 450,
+            "carcass_length_mm": 900
+          },
+          {
+            "code": "AS126S",
+            "execution": "left",
+            "corner_geometry": "1350x750",
+            "depth_mm": 670,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          },
+          {
+            "code": "AS126D",
+            "execution": "right",
+            "corner_geometry": "1350x750",
+            "depth_mm": 670,
+            "door_width_mm": 600,
+            "carcass_length_mm": 1200
+          }
+        ],
+        "front_layout": {
+          "kind": "corner_door",
+          "door_width_from_row": true,
+          "filler_mm": 80,
+          "note": "CORRECTED 2026-08-24 (learned rule 9): THE L IS 77 x 80, NOT 80 x 80. The printed 8x8 is a nominal; the leg running along the WIDTH is drawn at FILLER_MM minus FRONT_GAP_MM because it meets the neighbouring run's FRONT, which stands one gap proud of that run's carcass. A full 80 overshoots it - measured in a real kitchen, Avenida Primavera, 2026-08-24. The RETURN leg meets nothing and keeps its 80. A UCON decision, its scope recorded (learned rule 4). THE ORIGINAL NOTE FOLLOWS, and its 8x8 is still what the catalog prints. One door of 300/450/600 at the execution's end, then the 8x8 corner filler: ONE solid L, both legs 80 long and 22 thick, its front leg on the door plane and its return projecting forward so the perpendicular run meets it. The rest of the carcass front is blind. Door and filler share the front height, so door version 75 shortens both."
+        },
+        "wall_hung": true,
+        "notes": "TWIN OF base_h78 / base_corner: same position, same wording, same shape on the H.84 page; keys carried from it, codes, elevation and glyphs re-read on the H.84 page itself. The corner base of printed p.52 with an aluminium tray instead of shelves: the same W rules printed verbatim (100/105 - 30 cm door - 90 carcass; 115/120 - 45 - 90; 130/135 - 60 - 120), d.62 and d.67 only. Rows: AQ096/116/126 100x70, 115x70, 130x70; AS096/116/126 105x75, 120x75, 135x75, each D/S.",
+        "wall_hung_note": "SWEPT 2026-09-28 on the 150-dpi render of printed p.54: the 'Hung version' glyph (legend printed p.19) stands beside every depth band this position prints, and the margin carries 'Surch. for wall-hung version on page 548'. No hob flame."
       }
     }
   }

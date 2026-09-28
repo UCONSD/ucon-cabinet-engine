@@ -268,7 +268,13 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1025 codes (329 base + 62 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 125 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1202 codes (386 base + 74 sink + 17 appliance + 291 wall + 3 glass wall + 14 USA tall + 217 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, later still: +98, tall units for base unit H.84 - printed
+  # p.126-131, 146-150, 165-169 (92, the straight positions) and the USA columns
+  # of printed p.422 and p.427 (6). Three namespaced families on a 60 plinth.
+  # 2026-09-28, later: +79, the 7612 perimeter moves to H.84 - printed p.50, p.52,
+  # the corner sink of p.54, p.55-56 (appliance_h84), p.415 (usa_base_h84: 18,
+  # counted with base) and the two H.84 fillers of p.434.
   # 2026-09-28: +18, sink bases H.84 - printed p.53-54, the straight three, for
   # the sink side of the 7612 island (sink_base_h84.json).
   # 2026-09-26, later: +61, Maxima H.84 - printed p.49 (but for BK0100) and
@@ -280,7 +286,7 @@ check('registry loads and holds 1025 codes (329 base + 62 sink + 9 appliance + 2
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1025
+  raise "got #{n}" unless n == 1202
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -473,9 +479,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1025 rows, each with code/dims/description/source') do
+check('registry catalog: 1202 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1025
+  raise cat.length.to_s unless cat.length == 1202
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -575,6 +581,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Base units H. 84',
+                                             'Base units H. 84 | for household appliances',
                                              'Ceramic tops - Linear Elements',
                                              'Closing strips and fillers for Maxima and Intarsio',
                                              'Dish-drainer units H. 36',
@@ -597,14 +604,20 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Tall units H. 198',
                                              'Tall units H. 210',
                                              'Tall units H. 210 | for base unit H. 78',
+                                             'Tall units H. 210 | for base unit H. 84',
                                              'Tall units H. 222',
                                              'Tall units H. 222 | for base unit H. 78',
+                                             'Tall units H. 222 | for base unit H. 84',
                                              'Tall units H. 234',
                                              'Tall units H. 234 | for base unit H. 78',
+                                             'Tall units H. 234 | for base unit H. 84',
                                              'Tangram base units H. 84',
                                              'Tangram sideboard H. 138',
                                              'Thin | Horizontal Thin H. 39, for base units H. 78',
+                                             'USA elements | for base units H. 84',
                                              'USA elements | for tall units H. 210',
+                                             'USA elements | for tall units H. 210 for base unit H. 84',
+                                             'USA elements | for tall units H. 222 for base unit H. 84',
                                              'Wall units H. 120',
                                              'Wall units H. 36',
                                              'Wall units H. 48',
@@ -738,10 +751,17 @@ end
 
 puts "\ncorner base units (printed p.42) - data now, geometry at M2.2"
 check('nine sizes x two executions = eighteen corner articles') do
-  rows = Registry.catalog.select { |c| c['type_key'] == 'base_corner' }
+  # 2026-09-28: H.84 prints the same corner (printed p.52), so the count is per
+  # family - eighteen in each, nine per execution.
+  all_rows = Registry.catalog.select { |c| c['type_key'] == 'base_corner' }
+  raise all_rows.length.to_s unless all_rows.length == 36
+  rows = all_rows.select { |c| c['family'] == 'H.78' }
   raise rows.length.to_s unless rows.length == 18
   by_exec = rows.group_by { |r| r['execution'] }.transform_values(&:length)
   raise by_exec.inspect unless by_exec == { 'left' => 9, 'right' => 9 }
+  h84 = all_rows.select { |c| c['family'] == 'H.84' }
+  raise h84.group_by { |r| r['execution'] }.transform_values(&:length).inspect unless
+    h84.group_by { |r| r['execution'] }.transform_values(&:length) == { 'left' => 9, 'right' => 9 }
   # The template must never survive into the data: an order line carries a
   # letter, not "D/S".
   raise 'a D/S template reached the catalog' if rows.any? { |r| r['code'].include?('/') }
@@ -1252,7 +1272,8 @@ check('the hob pictogram is recorded where it was read - and the sweep is DONE')
     # And only ever in the base chapter, on a page we have actually opened.
     raise "#{key}: recorded without its page" unless
       # 2026-09-26: + printed p.49 and p.51, H.84, read on 110-dpi renders.
-      ty['source_ref'].to_s.match?(/printed p\.(3[2456789]|4[02]|49|51)\b/)
+      # 2026-09-28: + printed p.50, p.52 and p.415, H.84, read on 150-dpi renders.
+      ty['source_ref'].to_s.match?(/printed p\.(3[2456789]|4[02]|49|5[012]|415)\b/)
   end
   ruby = Dir[File.expand_path('../src/ucon_cabinet_engine/core/*.rb', __dir__)]
   raise 'nothing may read the hob mark yet' if
@@ -1354,15 +1375,26 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # 2026-09-26: 96 -> 103, Tangram. All seven codes of printed p.58-61 state
   # false - no hung glyph on any position, and a curved unit stands on its own
   # curved plinth article. base 4 -> 10, tall 88 -> 89.
-  raise refused.length.to_s unless refused.length == 103
+  #
+  # 2026-09-28: 103 -> 119, USA elements for base units H.84 (printed p.415).
+  # Its sixteen cabinet codes print the hob flame and NO hung glyph and no
+  # margin line; the two fridge-door codes are fronts and state nothing.
+  # Nothing already held changed. base 10 -> 26.
+  #
+  # 2026-09-28, later: 119 -> 211, tall for base unit H.84. Every position but
+  # the first on printed p.126 prints no wall-hung margin line - the same
+  # pattern as H.78's printed p.116 - and H.222 / H.234 print it on none.
+  # 98 codes, 6 hung. tall 89 -> 181.
+  raise refused.length.to_s unless refused.length == 211
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 10, 'tall' => 89, 'open_unit' => 4 }
+  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 181, 'open_unit' => 4 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
 check('both waste types are in: P-One 2 codes, XL 3 codes') do
   by_type = Registry.catalog.group_by { |c| c['type_key'] }.transform_values(&:length)
-  raise by_type.inspect unless by_type['base_waste_pone'] == 2 && by_type['base_waste_xl'] == 3
+  # 2026-09-28: H.84 prints both too (printed p.50) - 2 + 3 more, same type keys.
+  raise by_type.inspect unless by_type['base_waste_pone'] == 4 && by_type['base_waste_xl'] == 6
 end
 check('EVERY waste code yields contract-valid attributes') do
   %w[B80565 B80665 B80366 B80566 B80666].each do |code|
@@ -1652,8 +1684,9 @@ check('p.44 is not a gap; p.45, p.46 and the H.84 sections are') do
   %w[p.45 p.46].each { |p| raise "#{p} missing" unless gap_page(p) }
   # 2026-09-26: H.84 is now HELD (p.49, p.51), so its gap is no longer the
   # whole section: p.50 and p.52 surface as type-level rows inside it.
-  raise 'H.84 p.50 gap missing' unless gap_page('p.50')
-  raise 'H.84 p.52 gap missing' unless gap_page('p.52')
+  # 2026-09-28: p.50 and p.52 are extracted too, so neither may be a gap now.
+  raise 'H.84 p.50 is extracted and must not be a gap' if gap_page('p.50')
+  raise 'H.84 p.52 is extracted and must not be a gap' if gap_page('p.52')
   raise 'H.84 still offered as a whole-section gap' if Registry.gaps.any? { |g| g['printed'] == 'p.49-52' }
 end
 check('a section appears once; a held section reports its pages as type rows') do
@@ -2696,7 +2729,8 @@ check('the sibling article is looked up, never spelled') do
   # Every corner article must have one: a U-shaped kitchen needs both letters of
   # a size, so a size with only one execution would be a hole in the catalog.
   corners = Registry.catalog.select { |c| c['corner_geometry'] }
-  raise corners.length.to_s unless corners.length == 18
+  # 2026-09-28: 18 -> 48 - the H.84 corner base (18) and corner sink (12).
+  raise corners.length.to_s unless corners.length == 48
   corners.each do |c|
     twin = Registry.sibling_execution_code(c['code'])
     raise "#{c['code']} has no sibling" unless twin
@@ -3172,11 +3206,13 @@ check('the six nominal widths are catalog data, with the page that prints them')
   raise 'the rule must travel with the data' unless nw['note'].include?('NEVER COMPUTE')
 end
 
-check('the USA chapter is in the map: 16 sections, one of them extracted') do
+check('the USA chapter is in the map: 16 sections, four of them extracted') do
   usa = Registry.map_sections.select { |x| x['collection'] == 'USA elements' }
   raise usa.length.to_s unless usa.length == 16
   done = usa.select { |x| x['status'] == 'extracted' }.map { |x| x['printed_pages'] }
-  raise done.inspect unless done == ['418']
+  # 2026-09-28: + printed p.415.
+  # 2026-09-28, later: + printed p.422 and p.427.
+  raise done.inspect unless done.sort == ['415', '418', '422', '427']
   # It is a COLLECTION, not a class: the printed general index lists it beside
   # Maxima e Intarsio. Its sections keep their real class so the picker files
   # them where a person would look.
@@ -3205,6 +3241,9 @@ check('the USA width field is recorded as UNDECODABLE, with the evidence') do
   # What the check is actually for survives: nothing may enter the catalog from
   # a USA page we have not extracted.
   usa = Registry.catalog.select { |r| r['section'].to_s.start_with?('USA elements') }
+  # 2026-09-28: printed p.415 is extracted (usa_base_h84.json), so its BL / BM
+  # rows are allowed; nothing from an unextracted USA page still may enter.
+  usa = usa.reject { |r| r['section'] == 'USA elements | for base units H. 84' }
   bad = usa.map { |r| r['code'] }.select { |c| c.start_with?('BL', 'BM', 'C8', 'Y4', 'Y7') }
   raise bad.inspect unless bad.empty?
 end
@@ -3571,7 +3610,14 @@ end
 check('CR spans three printed sections and no code collides') do
   cr = Registry.catalog.select { |c| c['code'].start_with?('CR') }
   metric = cr.select { |c| c['section'] == 'Tall units H. 210' }.map { |c| c['code'] }
-  usa    = cr.select { |c| c['section'] != 'Tall units H. 210' }.map { |c| c['code'] }
+  # 2026-09-28: the section 'for base unit H. 84' (printed p.126-131) prints CR
+  # too - with the metric width indices 05/06/07/09, and no code shared with
+  # printed p.111. It is compared to BOTH sides below instead of joining one.
+  b84    = cr.select { |c| c['section'] == 'Tall units H. 210 | for base unit H. 84' }.map { |c| c['code'] }
+  raise 'the H.84 section must hold CR codes' if b84.empty?
+  usa    = cr.select { |c| c['section'] != 'Tall units H. 210' && c['section'] != 'Tall units H. 210 | for base unit H. 84' }.map { |c| c['code'] }
+  raise (b84 & metric).inspect unless (b84 & metric).empty?
+  raise (b84 & usa).inspect unless (b84 & usa).empty?
   raise 'both sides must be populated' if metric.empty? || usa.empty?
   raise (metric & usa).inspect unless (metric & usa).empty?
   # Metric width indices are 03/05/06/07/09/12; the USA ones are 94/96/97/99.
@@ -5045,18 +5091,22 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # BEFORE the catalog's list and is not part of it, and jumbo/allowed are back
   # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
-    refused == { 'appliance units' => 17, 'pull-out units' => 15,
-                 'units with jumbo drawers' => 199,
-                 'units with interior drawers' => 24,
+    refused == { 'appliance units' => 25, 'pull-out units' => 15,
+                 'units with jumbo drawers' => 274,
+                 'units with interior drawers' => 28,
                  'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 567
+                 'curved units, whose width is an arc' => 6 } && allowed == 655
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
   # the 10 door and doors sinks allowed.
+  # 2026-09-28, later: +79 for the H.84 perimeter - appliance 8 (all of
+  # appliance_h84), jumbo +17 (P-One, XL, the USA hob and oven bases, the oven
+  # bases of p.52), interior drawers +4 (the kit doors), allowed +48.
+  # 2026-09-28, later still: +98 tall for base H.84 - jumbo +58, allowed +40.
 end
 
 check('an ordered filler satisfies the contract') do
@@ -5170,11 +5220,13 @@ check('the three rows that are NOT held name the reason, one each') do
   %w[BE0151 BK0151 CH9151].each do |code|
     raise "#{code} is unexplained" unless note.include?(code)
   end
-  raise 'the held count must be named too' unless note.include?('TEN ARE NOW HELD')
+  # 2026-09-28: BK0151 held with its family, H.84 - ten became eleven.
+  raise 'the held count must be named too' unless note.include?('ELEVEN ARE NOW HELD')
   held = Registry.catalog.map { |c| c['code'] }
-  %w[BK0151 CH9151].each do |code|
+  %w[CH9151].each do |code|
     raise "#{code} is in the registry but the map still calls it unheld" if held.include?(code)
   end
+  raise 'BK0151 is held now (2026-09-28)' unless held.include?('BK0151')
   raise 'BE0151 is held now and the map must not still be waiting for it' unless
     held.include?('BE0151')
 end
@@ -5245,9 +5297,11 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
     JSON.parse(File.read(file))['data']['unit_types'].each_value
         .map { |t| t['finish_restrictions'] }.compact
   }
-  raise blocks.length.to_s unless blocks.length == 21
+  # 2026-09-28: 21 -> 23, the H.84 dishwasher doors of printed p.55. One of them
+  # is the first 'available_only' - the Shaker door is printed FOR one finish.
+  raise blocks.length.to_s unless blocks.length == 23
   blocks.each do |b|
-    raise b.inspect unless b['kind'] == 'not_available'
+    raise b.inspect unless %w[not_available available_only].include?(b['kind'])
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
     raise 'must say it is not enforced' unless b['note'].to_s.include?('NOT ENFORCED')
   end
@@ -6864,7 +6918,9 @@ check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
   # reads as an open shelf. The division is derived, not printed, and its
   # provenance is in the section file's split_note. Nothing vanished quietly:
   # this line went red first, which is exactly the job.
-  raise "expected 6 remainder codes, got #{found}" unless found == 6
+  # 6 -> 12 on 2026-09-28: tall for base H.84 - the microwave columns CR3652,
+  # CK3659, CX3659, the H.46 oven CR2610 and the USA columns CR7744, CK7744.
+  raise "expected 12 remainder codes, got #{found}" unless found == 12
   # AND THE TWO HEIGHTS ARE 120 APART, EVERYWHERE. The oven-and-microwave column
   # leaves 1710 at H.210 and 1830 at H.222; 1515 becomes 1635. That is the whole
   # difference between the families, and a transcription slip breaks it here.
@@ -10487,8 +10543,10 @@ end
 puts "\nMaxima H.84 (printed p.49, p.51), opened 2026-09-26 for the 7612 island"
 check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.67') do
   cat = Registry.catalog.select { |c| c['section'] == 'Base units H. 84' }
-  raise cat.length.to_s unless cat.length == 61
-  bad = cat.reject { |c| { 'BK' => 350, 'BL' => 620, 'BM' => 670 }[c['code'][0, 2]] == Registry.lookup(c['code'])['depth_mm'] }
+  # 2026-09-28: 61 -> 100 (printed p.50 and p.52). The corner base prints its
+  # own d.62 / d.67 letters, AQ and AS, as the H.78 corner does (AU / AW).
+  raise cat.length.to_s unless cat.length == 100
+  bad = cat.reject { |c| { 'BK' => 350, 'BL' => 620, 'BM' => 670, 'AQ' => 620, 'AS' => 670 }[c['code'][0, 2]] == Registry.lookup(c['code'])['depth_mm'] }
   raise bad.map { |c| c['code'] }.inspect unless bad.empty?
 end
 check('H.84: 840 on a 60 plinth, and the island cooktop base is buildable') do

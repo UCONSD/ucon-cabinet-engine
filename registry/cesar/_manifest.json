@@ -77,7 +77,7 @@
        {
         "title": "Filler in door finishes from 2,3 to 15 cm",
         "status": "partial",
-        "note": "12 codes, H.39 to H.278. TEN ARE NOW HELD AND BUILDABLE. Nine extracted 2026-08-24: B00151 (H.39), BC0151 (H.48), BJ0151 (H.58,5), B70151 (H.78), C10151 (H.138), CE0151 (H.198), CQ0151 (H.210), CG0151 (H.222), C00151 (H.234) - one per family this registry already holds, and every printed H matches its family's height_mm exactly. BE0151 (H.60) JOINED THEM 2026-08-25, and the reason it was blocked is worth keeping: it was recorded as naming a family the map does not contain, because THE CATALOG'S BASE CHAPTER HAS NO H.60 SECTION IN ITS PRINTED INDEX. That was true and it was the wrong chapter - the TOP-ELEMENT chapter has an H.60 section, printed p.172, and once that family was held the filler had one. A row can be blocked by the family you happen to look for it in. (BI0150 at H.72 in the second position is still blocked the same way, and note that the FIRST position prints no 72 at all.) TWO ARE STILL NOT HELD: BK0151 at H.84 - the family is mapped, printed p.49-56, and not extracted; CH9151 at H.278 - no family anywhere in anything read so far, and the only code on the page whose suffix is neither 0150 nor 0151. THE DEPTH THAT UNBLOCKED THE NINE: 22 mm, decided 2026-08-24 from the page's own art - see depth_note on any of the nine rows. SUPERSEDED, kept per learned rule 9: \"12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families.\""
+        "note": "12 codes, H.39 to H.278. ELEVEN ARE NOW HELD AND BUILDABLE. BK0151 (H.84) JOINED THEM 2026-09-28 with its family (base_h84.json), and BK0150 from the second position with it. Nine extracted 2026-08-24: B00151 (H.39), BC0151 (H.48), BJ0151 (H.58,5), B70151 (H.78), C10151 (H.138), CE0151 (H.198), CQ0151 (H.210), CG0151 (H.222), C00151 (H.234) - one per family this registry already holds, and every printed H matches its family's height_mm exactly. BE0151 (H.60) JOINED THEM 2026-08-25, and the reason it was blocked is worth keeping: it was recorded as naming a family the map does not contain, because THE CATALOG'S BASE CHAPTER HAS NO H.60 SECTION IN ITS PRINTED INDEX. That was true and it was the wrong chapter - the TOP-ELEMENT chapter has an H.60 section, printed p.172, and once that family was held the filler had one. A row can be blocked by the family you happen to look for it in. (BI0150 at H.72 in the second position is still blocked the same way, and note that the FIRST position prints no 72 at all.) ONE IS STILL NOT HELD: CH9151 at H.278 - no family anywhere in anything read so far, and the only code on the page whose suffix is neither 0150 nor 0151. THE DEPTH THAT UNBLOCKED THE NINE: 22 mm, decided 2026-08-24 from the page's own art - see depth_note on any of the nine rows. SUPERSEDED, kept per learned rule 9: \"12 codes, H.39 to H.278. B70151 (H.78) and CQ0151 (H.210) held and NOT buildable - the page prints no depth for a front-only strip. The other ten wait on their families.\""
        },
        {
         "title": "Base unit filler in door finishes from 2,3 to 15 cm",
@@ -472,7 +472,7 @@
     "section": "Base units H. 84",
     "printed_pages": "49-52",
     "status": "partial",
-    "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78 | 2026-09-26: the depth-digit grammar IS verified from its own pages - BK = d.35, BL = d.62, BM = d.67 - and six positions extracted, 61 codes, for 7612 Hillside Dr (the straight modules of the Tangram island and the cooktop base).",
+    "note": "H.84 is a separate family: its depth-digit grammar must be verified from its own pages, never carried over from H.78 | 2026-09-26: the depth-digit grammar IS verified from its own pages - BK = d.35, BL = d.62, BM = d.67 - and six positions extracted, 61 codes, for 7612 Hillside Dr (the straight modules of the Tangram island and the cooktop base). | 2026-09-28: the 7612 perimeter moves to H.84 (Andriy) - printed p.50 and p.52 taken whole (39 codes). Only BK0100 on p.49 remains.",
     "extracted_on": "2026-09-26",
     "pages": [
      {
@@ -489,12 +489,14 @@
      },
      {
       "printed": 50,
-      "status": "not_extracted",
+      "status": "extracted",
       "types": [
        "Base unit with door for interior drawer and jumbo drawer kit",
        "Base unit with jumbo drawer for P-One pull-out waste unit",
        "Base unit with pull-out XL waste unit"
-      ]
+      ],
+      "extracted_on": "2026-09-28",
+      "note": "All three positions, 9 codes."
      },
      {
       "printed": 51,
@@ -508,12 +510,14 @@
      },
      {
       "printed": 52,
-      "status": "not_extracted",
+      "status": "extracted",
       "types": [
        "Base unit for built-in oven H. 60",
        "Base unit for built-in oven H. 60, Maxima 2.2 with framed door",
        "Corner base unit (Elda Q7b)"
-      ]
+      ],
+      "extracted_on": "2026-09-28",
+      "note": "All three positions: the two oven bases H.60 held for lookup (12 codes, not buildable - see their reasons), the corner base buildable as its H.78 twin (18 codes)."
      }
     ]
    },
@@ -539,9 +543,10 @@
       "extracted_on": "2026-09-28",
       "types": [
        "Sink base unit with doors",
-       "Sink base unit w/jumbo drawers"
+       "Sink base unit w/jumbo drawers",
+       "Corner sink base unit (12 codes, 2026-09-28)"
       ],
-      "note": "Not extracted: Corner sink base unit (AQ096-126 / AS096-126) and Corner sink base unit with 155 degree hinges (AL1171 / AL1181) - corner units need M2.2 placement."
+      "note": "2026-09-28: the corner sink base AQ/AS096-126 extracted as a twin of the corner base. Not held: the 155 degree corner sink AL1171 / AL1181 - an L-shaped carcass no front_layout kind draws."
      }
     ]
    },
@@ -550,7 +555,9 @@
     "family": "H.84",
     "section": "Base units H. 84 | for household appliances",
     "printed_pages": "55-56",
-    "status": "not_extracted"
+    "status": "extracted",
+    "extracted_on": "2026-09-28",
+    "note": "Both pages whole, 8 codes in 5 types; only the plain dishwasher door is buildable. The induction-hob protection 996466-996462 and the filler profile 995945 / 995946 are accessories, recorded in appliance_h84.json and not held as rows."
    },
    {
     "class": "base",
@@ -854,8 +861,49 @@
     "family": "H.210",
     "section": "Tall units H. 210 | for base unit H. 84",
     "printed_pages": "126-131",
-    "status": "not_extracted",
-    "note": "SHARES ITS LETTERS WITH printed p.111-115: CQ = d.35 and CR = d.62 here too. The four-digit tail is what separates them - p.111-115 uses width indices 03/05/06/07/09/12 and this section uses 05/06/07/09/15/16/19/26/27/29/36 - so no code collides, but a loader that keys on the prefix would merge two sections that the book keeps apart. See the registry-loader hardening item on the status doc."
+    "status": "partial",
+    "note": "SHARES ITS LETTERS WITH printed p.111-115: CQ = d.35 and CR = d.62 here too. The four-digit tail is what separates them - p.111-115 uses width indices 03/05/06/07/09/12 and this section uses 05/06/07/09/15/16/19/26/27/29/36 - so no code collides, but a loader that keys on the prefix would merge two sections that the book keeps apart. See the registry-loader hardening item on the status doc. | 2026-09-28: EXTRACTED for the 7612 perimeter on H.84 - every straight position (tall_h210_base84.json), family 'Tall H.210 | for base unit H.84' on a 60 plinth. The corner positions are not held.",
+    "extracted_on": "2026-09-28",
+    "pages": [
+     {
+      "printed": 126,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 127,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 128,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "straight positions held"
+      ],
+      "note": "Corner tall unit (carcass W.90 / W.120, D/S, with a 70/75/85 panel) NOT held - no front_layout kind draws a tall corner."
+     },
+     {
+      "printed": 129,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 130,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "straight positions held"
+      ],
+      "note": "Corner tall unit for oven (D/S, oven niche W.60 / W.75) NOT held - same reason."
+     },
+     {
+      "printed": 131,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     }
+    ]
    },
    {
     "class": "tall",
@@ -893,8 +941,44 @@
     "family": "H.222",
     "section": "Tall units H. 222 | for base unit H. 84",
     "printed_pages": "146-150",
-    "status": "not_extracted",
-    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CI = d.35 and CK = d.62. Note CK, not CJ - the letters are a lookup and nothing skips predictably."
+    "status": "partial",
+    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CI = d.35 and CK = d.62. Note CK, not CJ - the letters are a lookup and nothing skips predictably. | 2026-09-28: EXTRACTED for the 7612 perimeter on H.84 - every straight position (tall_h222_base84.json), family 'Tall H.222 | for base unit H.84' on a 60 plinth. The corner positions are not held.",
+    "extracted_on": "2026-09-28",
+    "pages": [
+     {
+      "printed": 146,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 147,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 148,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "straight positions held"
+      ],
+      "note": "Corner tall unit (carcass W.90 / W.120, D/S, with a 70/75/85 panel) NOT held - no front_layout kind draws a tall corner."
+     },
+     {
+      "printed": 149,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 150,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "straight positions held"
+      ],
+      "note": "Corner tall unit for oven (D/S, oven niche W.60 / W.75) NOT held - same reason."
+     }
+    ]
    },
    {
     "class": "tall",
@@ -932,8 +1016,44 @@
     "family": "H.234",
     "section": "Tall units H. 234 | for base unit H. 84",
     "printed_pages": "165-169",
-    "status": "not_extracted",
-    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CW = d.35 and CX = d.62."
+    "status": "partial",
+    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here CW = d.35 and CX = d.62. | 2026-09-28: EXTRACTED for the 7612 perimeter on H.84 - every straight position (tall_h234_base84.json), family 'Tall H.234 | for base unit H.84' on a 60 plinth. The corner positions are not held.",
+    "extracted_on": "2026-09-28",
+    "pages": [
+     {
+      "printed": 165,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 166,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 167,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "straight positions held"
+      ],
+      "note": "Corner tall unit (carcass W.90 / W.120, D/S, with a 70/75/85 panel) NOT held - no front_layout kind draws a tall corner."
+     },
+     {
+      "printed": 168,
+      "status": "extracted",
+      "extracted_on": "2026-09-28"
+     },
+     {
+      "printed": 169,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "straight positions held"
+      ],
+      "note": "Corner tall unit for oven (D/S, oven niche W.60 / W.75) NOT held - same reason."
+     }
+    ]
    },
    {
     "class": "tall",
@@ -1602,8 +1722,9 @@
     "family": "H.84",
     "section": "USA elements | for base units H. 84",
     "printed_pages": "415",
-    "status": "not_extracted",
-    "note": "Structurally the twin of p.414 with NEW family letters: BL at d.62 and BM at d.67 (BL7699, BL7657, BL9657, BL6197, BL7697, BM6197, BM7697, BL7650, BL9150, BL2150, BL2250, BM7650, BM9150). Same width set 61 / 76.2 / 91.4 / 106.7 / 121.9. The letters are read, the page is not extracted."
+    "status": "extracted",
+    "note": "Structurally the twin of p.414 with NEW family letters: BL at d.62 and BM at d.67 (BL7699, BL7657, BL9657, BL6197, BL7697, BM6197, BM7697, BL7650, BL9150, BL2150, BL2250, BM7650, BM9150). Same width set 61 / 76.2 / 91.4 / 106.7 / 121.9. The letters are read, the page is not extracted. | 2026-09-28: EXTRACTED, whole page, 18 codes (usa_base_h84.json). The countertop-hob base is buildable; the rest are custom-sized and held for lookup.",
+    "extracted_on": "2026-09-28"
    },
    {
     "class": "base",
@@ -1673,7 +1794,9 @@
     "family": "H.210",
     "section": "USA elements | for tall units H. 210 for base unit H. 84",
     "printed_pages": "422",
-    "status": "not_extracted"
+    "status": "extracted",
+    "extracted_on": "2026-09-28",
+    "note": "2026-09-28: whole page, 3 codes (usa_tall_h210_base84.json), joined to family 'Tall H.210 | for base unit H.84'."
    },
    {
     "class": "tall",
@@ -1689,7 +1812,9 @@
     "family": "H.222",
     "section": "USA elements | for tall units H. 222 for base unit H. 84",
     "printed_pages": "427",
-    "status": "not_extracted"
+    "status": "extracted",
+    "extracted_on": "2026-09-28",
+    "note": "2026-09-28: whole page, 3 codes (usa_tall_h222_base84.json), joined to family 'Tall H.222 | for base unit H.84'."
    },
    {
     "class": "tall",

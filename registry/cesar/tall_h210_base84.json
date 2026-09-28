@@ -1,0 +1,908 @@
+{
+  "section": "Tall units H. 210 | for base unit H. 84",
+  "class": "tall",
+  "family": "Tall H.210 | for base unit H.84",
+  "source_pages": "printed p.126-131 / PDF 128-133 (the straight positions; the corner tall units are not held)",
+  "family_naming_note": "A FAMILY OF ITS OWN, NAMESPACED, and the reason is the plinth. The catalog prints these units with the SAME letters as the plain H.210 chapter and a lower front of 84 / 81, so that the recess lands at the worktop of a base H.84 run - which stands on a 60 plinth, where family 'Tall H.210' stands on 100. A tall unit that joined that family would put its lower front 40 above the base run beside it. So this file declares its own height and plinth, and the section keeps the catalog's words.",
+  "door_versions_note": "No data.door_versions, as tall_h210_base78.json and for the same reason: the split is recorded per type in gola_stack_top_to_bottom, which is exact and cannot leak.",
+  "extraction_note": "2026-09-28, for the 7612 perimeter on H.84 (Andriy): every straight position of the section read from pdftotext and the elevations checked on a 110-dpi render of the first page - 32 codes in 14 types. EVERY STACK SUMS TO 2100 in both executions, fronts, 30 mm zones and the 600 oven opening together - the invariant tall_h210_base78.json measured, holding here too. NOT HELD: the corner tall units and the corner tall units for oven (D/S, carcass W.90 / W.120 with a 70/75/85 panel) - no front_layout kind draws a tall corner yet.",
+  "data": {
+    "height_mm": 2100,
+    "plinth_h_mm": 60,
+    "plinth_note": "60, as base_h84.json: the lower front is 84 / 81 and must meet the H.84 run's worktop.",
+    "depths_mm": [
+      350,
+      620
+    ],
+    "unit_types": {
+      "tall_door_over_door": {
+        "description": "Tall unit with doors - 1 rh or lh door - 1 rh or lh door - 5 shelves - 1 divider",
+        "interior_confirmed": [
+          "5 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.126 / PDF 128",
+        "codes": [
+          {
+            "code": "CQ0551",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "CQ0651",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "CQ0751",
+            "width_mm": 750,
+            "depth_mm": 350
+          },
+          {
+            "code": "CR0551",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR0651",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR0751",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1260,
+            840
+          ],
+          "note": "Elevation: 126 / 84 handle, 126 / 81 gola. The recess sits BETWEEN the fronts, at the worktop of the H.84 run beside it.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 810
+            }
+          ]
+        },
+        "wall_hung": true,
+        "wall_hung_note": "Printed positively on printed p.126: 'Surch. for wall-hung version on page 548' in the margin and the depth-band glyph beside both bands, as the same position at H.78 (printed p.116). Checked on the 110-dpi render 2026-09-28.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_doors_over_doors": {
+        "description": "Tall unit with doors - 2 doors - 2 doors - 5 shelves - 1 divider",
+        "interior_confirmed": [
+          "5 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.126 / PDF 128",
+        "codes": [
+          {
+            "code": "CQ0950",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "CR0950",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1260,
+            840
+          ],
+          "note": "Elevation: 126 / 84 handle, 126 / 81 gola. The recess sits BETWEEN the fronts, at the worktop of the H.84 run beside it.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 810
+            }
+          ]
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.126 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "opening": "doors",
+        "handed": false,
+        "notes": "Two doors over two doors at W.90. ONE PRINTED DESCRIPTION, TWO ARTICLES: 'Tall unit with doors' heads the position above too."
+      },
+      "tall_door_jumbo_drawers": {
+        "description": "Tall unit with jumbo drawers - 1 rh or lh door - 1 jumbo drawer - 1 jumbo drawer - 3 shelves - 1 divider",
+        "interior_confirmed": [
+          "3 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.126 / PDF 128",
+        "codes": [
+          {
+            "code": "CQ1560",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "CQ1660",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "CR1560",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR1660",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1260,
+            360,
+            480
+          ],
+          "note": "Elevation: 126 / 36 / 48 handle, 126 / 33 / 45 gola - the jumbo split of the H.84 base (36 / 48), not H.78's 39 / 39.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 330
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ]
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.126 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_doors_jumbo_drawers": {
+        "description": "Tall unit with jumbo drawers - 2 doors - 1 jumbo drawer - 1 jumbo drawer - 3 shelves - 1 divider",
+        "interior_confirmed": [
+          "3 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.127 / PDF 129",
+        "codes": [
+          {
+            "code": "CQ1960",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "CR1960",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1320,
+            390,
+            390
+          ],
+          "note": "Elevation printed p.127: 132 / 39 / 39 handle, 132 / 36 / 36 gola - NOT the 36 / 48 of the one-door position on p.126, and its upper door is 132, not 126. Read the position, not the section.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1320
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ]
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.127 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "handed": false,
+        "notes": "W.90 only. Servo Drive p.567.",
+        "opening": "doors"
+      },
+      "tall_door_drawers_jumbo": {
+        "description": "Tall unit with drawers and jumbo drawer - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 3 shelves - 1 divider",
+        "interior_confirmed": [
+          "3 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.127 / PDF 129",
+        "codes": [
+          {
+            "code": "CQ1553",
+            "width_mm": 450,
+            "depth_mm": 350
+          },
+          {
+            "code": "CQ1653",
+            "width_mm": 600,
+            "depth_mm": 350
+          },
+          {
+            "code": "CR1553",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR1653",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1260,
+            180,
+            180,
+            480
+          ],
+          "note": "Elevation: 126 / 18 / 18 / 48 handle, 126 / 16,5 / 16,5 / 45 gola - the drawer stack of the H.84 base (printed p.51) under a 126 door. The zone split is carried from base_drawers_jumbo H.84, an inference there as here.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ]
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.127 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_doors_drawers_jumbo": {
+        "description": "Tall unit with drawers and jumbo drawer - 2 doors - 2 drawers - 1 jumbo drawer - 3 shelves - 1 divider",
+        "interior_confirmed": [
+          "3 shelves",
+          "1 divider"
+        ],
+        "source_ref": "printed p.127 / PDF 129",
+        "codes": [
+          {
+            "code": "CQ1953",
+            "width_mm": 900,
+            "depth_mm": 350
+          },
+          {
+            "code": "CR1953",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            1260,
+            180,
+            180,
+            480
+          ],
+          "note": "Elevation: 126 / 18 / 18 / 48 handle, 126 / 16,5 / 16,5 / 45 gola - the drawer stack of the H.84 base (printed p.51) under a 126 door. The zone split is carried from base_drawers_jumbo H.84, an inference there as here.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ]
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.127 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "handed": false,
+        "notes": "W.90 only.",
+        "opening": "doors"
+      },
+      "tall_oven_h60_doors": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 rh or lh door - 3 shelves - 2 dividers",
+        "interior_confirmed": [
+          "3 shelves",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.128 / PDF 130",
+        "codes": [
+          {
+            "code": "CR2601",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR2701",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 66 over the oven, 84 / 81 below. 660 + 600 + 840 = 2100; the 600 is the section's measured oven opening, not printed.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 840
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 810
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.128 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_oven_h60_doors_pairs": {
+        "description": "Tall unit for oven H. 60 - 2 doors - 2 doors - 3 shelves - 2 dividers",
+        "interior_confirmed": [
+          "3 shelves",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.129 / PDF 131",
+        "codes": [
+          {
+            "code": "CR2900",
+            "width_mm": 900,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 66 over the oven, 84 / 81 below. 660 + 600 + 840 = 2100; the 600 is the section's measured oven opening, not printed.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 840
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 810
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.129 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "handed": false,
+        "notes": "W.90, two doors above the oven and two below.",
+        "opening": "doors"
+      },
+      "tall_oven_h60_two_drawers_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 1 shelf - 2 dividers",
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.129 / PDF 131",
+        "codes": [
+          {
+            "code": "CR2653",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR2753",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 66 over the oven; 18 / 18 / 48 handle, 16,5 / 16,5 / 45 gola below. Sums to 2100 both ways.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 180
+            },
+            {
+              "kind": "front",
+              "h_mm": 180
+            },
+            {
+              "kind": "front",
+              "h_mm": 480
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.129 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_oven_h60_two_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 jumbo drawer - 1 jumbo drawer - 1 shelf - 2 dividers",
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.130 / PDF 132",
+        "codes": [
+          {
+            "code": "CR2657",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR2757",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 66 over the oven; 36 / 48 handle, 33 / 45 gola below.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            },
+            {
+              "kind": "front",
+              "h_mm": 480
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 660
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 330
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.130 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_oven_microwave_jumbo": {
+        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - 2 dividers",
+        "interior_confirmed": [
+          "1 shelf",
+          "1 adjustable divider with stainless steel protection",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.130 / PDF 132",
+        "codes": [
+          {
+            "code": "CR3652",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 48 handle, 45 gola - one front; the rest is custom-sized and holds the oven and the microwave.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1620,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 480
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1620,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h60_plus_microwave",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom - the remainder is not a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.130 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "W.60, d.62 only. Suffix 3652 here where H.78 prints 3640 / 3659 - read, not decoded.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_fridge": {
+        "description": "Tall unit for fridge (for sliding or fixed hinges) - 1 rh or lh door - 1 rh or lh door - no holes in the door for fridge with fixed hinges - 1 divider",
+        "interior_confirmed": [
+          "1 divider"
+        ],
+        "source_ref": "printed p.131 / PDF 133",
+        "codes": [
+          {
+            "code": "CR4601",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "CR4702",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 126 / 84 handle, 126 / 81 gola - the door-over-door stack; the fridge stands behind two ordinary doors.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "front",
+              "h_mm": 840
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 1260
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 810
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.131 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Flex p.567; horizontal grip recess for fridge p.622; margin 'Servo Drive mechanisms upper and lower 1.107, power adapter 224' - named, not coded. THE 75 IS CR4702, NOT 4701 - read off printed p.131; H.222 and H.234 print 4701.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_oven_h46_custom_door": {
+        "description": "Tall unit for oven H. 46 - 1 rh or lh custom-sized door - 1 drawer - 1 rh or lh door - 3 shelves - 2 dividers",
+        "interior_confirmed": [
+          "3 shelves",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.129 / PDF 131",
+        "codes": [
+          {
+            "code": "CR2610",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.129: 18 / 84 handle, 16,5 / 81 gola; the top front is custom-sized and unnumbered.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1080,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h46",
+              "fronts_within": 1
+            },
+            {
+              "kind": "front",
+              "h_mm": 180
+            },
+            {
+              "kind": "front",
+              "h_mm": 840
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "remainder",
+              "h_mm": 1080,
+              "holds": [
+                "custom_sized_front",
+                "appliance_opening"
+              ],
+              "appliance_class": "oven_h46",
+              "fronts_within": 1
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "front",
+              "h_mm": 810
+            }
+          ],
+          "gola_note": "AS PRINTED, AND IT DOES NOT SUM: 1080 + 30 + 165 + 810 = 2085, fifteen short of 2100. The page prints 16,5 and 81 and no second zone; where the 15 goes is not printed - the reason this unit is not buildable."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.129 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. The handle stack sums (1080 + 180 + 840 = 2100) but the gola one does not: 1080 + 30 + 165 + 30 + 810 = 2115, and the page prints no zone to take the 15. The H.78 twin sums both ways; this one does not, so it is not drawn.",
+        "opening": "doors",
+        "handed": true
+      },
+      "tall_dishwasher_in_column": {
+        "description": "Tall unit for built-in in-column dishwasher - 1 rh or lh door - fixed filler - 1 jumbo drawer - 1 shelf - 2 dividers",
+        "interior_confirmed": [
+          "fixed filler",
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.131 / PDF 133",
+        "codes": [
+          {
+            "code": "CR3601",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation printed p.131: 72 / 72 / 18 / 48 - one execution only, no gola pair.",
+          "heights_mm_top_to_bottom": [
+            720,
+            720,
+            180,
+            480
+          ]
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.131 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. The dishwasher stands in the column behind one of the 72 fronts and the page does not say which, nor dimension its opening; no gola pair is printed.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded.",
+        "opening": "doors",
+        "handed": true
+      }
+    }
+  }
+}
