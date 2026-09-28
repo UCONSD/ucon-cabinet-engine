@@ -209,7 +209,11 @@ module UCON
             # Which door heights this FAMILY offers, or nil when it offers no
             # such choice. The 78/75 pair belongs to the base pages; a wall
             # unit 360 tall has no version to pick.
-            'door_versions'      => family['door_versions'],
+            # TYPE FIRST, FAMILY SECOND, 2026-09-28 - the per-type recording the
+            # tall "for base unit" sections waited on since 2026-08-24: their
+            # family also holds plain tall units with no gola printed, so the
+            # pair could never be a family key there.
+            'door_versions'      => scoped.call('door_versions'),
             'width_mm'           => row['width_mm'],
             # THE WIDTH A FILLER IS ORDERED AT IS NOT IN ITS CODE. printed p.434
             # prices fillers by HEIGHT alone: one article covers every width

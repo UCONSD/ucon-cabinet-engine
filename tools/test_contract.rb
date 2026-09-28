@@ -6290,8 +6290,14 @@ check('AND THE SPLIT DOES NOT LEAK INTO THE PLAIN H.210 SECTION') do
   # with tall_h210.json, whose page prints a single elevation 210. Declaring
   # the pair here would hand a plain full-height door a 2070 front the catalog
   # has never printed - which is Elda Q8 at H.58.5, exactly.
-  raise 'the new section must not declare door_versions' unless
-    t210b78('C50551')['door_versions'].nil?
+  # 2026-09-28: the pair now lives on the TYPE (Registry.lookup reads type
+  # first, family second) - Andriy, off CK7744. The family still declares
+  # none, which is what this check was always protecting.
+  dv = t210b78('C50551')['door_versions']
+  raise "the type must carry its own pair: #{dv.inspect}" unless
+    dv && dv['shown_full_mm'] == 780 && dv['shown_gola_mm'] == 750 && dv['joint'] == false
+  fam = JSON.parse(File.read(File.expand_path('../registry/cesar/tall_h210_base78.json', __dir__)))['data']
+  raise 'the section must still declare no FAMILY door_versions' if fam.key?('door_versions')
   raise 'the plain section must not have gained one' unless
     Registry.lookup('CQ0531')['door_versions'].nil?
   raw = File.read(File.expand_path('../registry/cesar/tall_h210_base78.json', __dir__))
@@ -6936,7 +6942,10 @@ check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
   # this line went red first, which is exactly the job.
   # 6 -> 12 on 2026-09-28: tall for base H.84 - the microwave columns CR3652,
   # CK3659, CX3659, the H.46 oven CR2610 and the USA columns CR7744, CK7744.
-  raise "expected 12 remainder codes, got #{found}" unless found == 12
+  # 12 -> 1 on 2026-09-28: every remainder column was divided like C92640
+  # (Andriy: the upper door is drawn). CR2610 keeps its remainder - held, 15
+  # short in gola.
+  raise "expected 1 remainder code, got #{found}" unless found == 1
   # AND THE TWO HEIGHTS ARE 120 APART, EVERYWHERE. The oven-and-microwave column
   # leaves 1710 at H.210 and 1830 at H.222; 1515 becomes 1635. That is the whole
   # difference between the families, and a transcription slip breaks it here.
@@ -6989,14 +6998,16 @@ check('A REMAINDER IS EXECUTION-INDEPENDENT, or it is not a real number') do
 end
 
 check('the span is DRAWN - a remainder becomes a void slab, not an absence') do
-  u = Registry.lookup('C62610')
+  # 2026-09-28: C62610 was divided (door 665 + oven H.46 460); the last
+  # remainder in the registry is CR2610, the held H.46 column for base H.84.
+  u = Registry.lookup('CR2610')
   slabs = Generator.front_slabs(u)
   voids = slabs.select { |sl| sl[:kind] == :void }
   raise slabs.inspect unless voids.length == 1
   v = voids.first
-  # 195 + 780 = 975 from the bottom, and 1125 tall - the top of the column.
-  raise v.inspect unless v[:h_mm] == 1125.0 && v[:z_mm] == 975.0
-  raise v.inspect unless v[:name] == 'VOID_REMAINDER_1125'
+  # 180 + 840 = 1020 from the bottom, and 1080 tall - the top of the column.
+  raise v.inspect unless v[:h_mm] == 1080.0 && v[:z_mm] == 1020.0
+  raise v.inspect unless v[:name] == 'VOID_REMAINDER_1080'
   raise v.inspect unless v[:holds] == %w[custom_sized_front appliance_opening]
   raise 'the void must reach the top of the unit' unless
     v[:z_mm] + v[:h_mm] == u['height_mm']
@@ -10447,7 +10458,10 @@ check('Tangram panel: the same form as a box unit - door height, opening, hinge 
   # the gola door is chosen by door height, and Apply turns it into the L grip
   raise 'apply: l_grip' unless src.include?("var o=g?'l_grip'")
   # the box form's gola note takes its height from the family, not a written 75
-  raise 'golaNote is still hard-coded' unless src.include?("'Door ' + (dv.gola_mm/10) + ' opens by gola only.")
+  # 2026-09-28: the height is the shown one (84 / 81 on a tall column), which
+  # falls back to the family's gola_mm - still not a written 75.
+  raise 'golaNote is still hard-coded' unless src.include?("'Door ' + (sg/10) + ' opens by gola only.") &&
+    src.include?('sg = dv.shown_gola_mm || dv.gola_mm')
 end
 
 check('gola joint reads as one line, like the plinth - box units and Tangram') do
@@ -10568,6 +10582,25 @@ check('H.84: the depth letters are this family\'s own - BK d.35, BL d.62, BM d.6
   bad = cat.reject { |c| { 'BK' => 350, 'BL' => 620, 'BM' => 670, 'AQ' => 620, 'AS' => 670 }[c['code'][0, 2]] == Registry.lookup(c['code'])['depth_mm'] }
   raise bad.map { |c| c['code'] }.inspect unless bad.empty?
 end
+check('A TALL COLUMN FOR A BASE RUN OFFERS ITS DOOR VERSION, and draws its upper door') do
+  # Andriy, 2026-09-28, off CK7744 in the panel: two door heights and no upper door.
+  u = Registry.lookup('CK7744')
+  dv = u['door_versions']
+  raise dv.inspect unless dv && dv['full_mm'] == 2220 && dv['gola_mm'] == 2190 &&
+                          dv['shown_full_mm'] == 480 && dv['shown_gola_mm'] == 450 && dv['joint'] == false
+  raise 'the panel must offer the switch' unless UCON::CabinetEngine::Panel.gola_available?(u)
+  handle = Generator.front_slabs(u).map { |s| s[:h_mm].to_i }
+  gola   = UCON::CabinetEngine::Panel.effective_slabs(u, true).map { |s| s[:h_mm].to_i }
+  raise handle.inspect unless handle == [480, 600, 600, 540]
+  raise gola.inspect unless gola == [450, 600, 600, 540]
+  # the plain tall chapter still offers nothing, and the base still offers its own
+  raise 'CQ0531 must offer no door version' if Registry.lookup('CQ0531')['door_versions']
+  raise 'B80601 lost its family pair' unless Registry.lookup('B80601')['door_versions']['gola_mm'] == 750
+  # and no tall column may split its carcass edges the way a base does
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'gola_joint! must skip a joint:false type' unless gen.include?("return 0 if versions['joint'] == false")
+end
+
 check('THE H.84 DISHWASHER DOORS WARN IN RED: a sliding-hinge machine, and which one') do
   # Andriy, 2026-09-28: the tall door runs to the 60 plinth line and hits it on
   # a fixed hinge. The picker says so before anybody builds it.

@@ -76,7 +76,15 @@
         },
         "wall_hung": true,
         "wall_hung_note": "Printed positively: this position's margin carries 'Surch. for wall-hung version on page 548' and the depth-band glyph stands beside both d.35 and d.62. The other two positions on the page carry neither. Verified on the 175-dpi render 2026-08-24 - the same reading pattern the plain H.210 section shows, where only the plain door type hangs.",
-        "notes": "THE POSITION THIS WHOLE SECTION EXISTS FOR: two stacked single doors, 1320 over 780, so the lower front is the same height as the door of the base unit standing beside it. One code per width and depth, both hands - 'rh or lh door' twice - so hinge_side stays per-order and is never guessed. ONE PRINTED DESCRIPTION, TWO ARTICLES: the position below is headed 'Tall unit with doors' word for word and is a different article - 2 doors over 2 doors at W.90. A reader keying positions by their printed title would merge them, which is the third time this catalog has set that trap after printed p.38's two pairs."
+        "notes": "THE POSITION THIS WHOLE SECTION EXISTS FOR: two stacked single doors, 1320 over 780, so the lower front is the same height as the door of the base unit standing beside it. One code per width and depth, both hands - 'rh or lh door' twice - so hinge_side stays per-order and is never guessed. ONE PRINTED DESCRIPTION, TWO ARTICLES: the position below is headed 'Tall unit with doors' word for word and is a different article - 2 doors over 2 doors at W.90. A reader keying positions by their printed title would merge them, which is the third time this catalog has set that trap after printed p.38's two pairs.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 780,
+          "shown_gola_mm": 750,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_doors_over_doors": {
         "description": "Tall unit with doors - 2 doors - 2 doors - 4 shelves - 1 divider",
@@ -125,7 +133,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.116, and read as an absence of two things at once: no wall-hung line in this position's margin and no glyph beside either depth band, where the position above has both. An absence has to be re-read, so it is recorded here as a value rather than left missing. 175-dpi render, 2026-08-24.",
-        "notes": "W.90 only, one code per depth, not handed - a pair of doors has no hand. Printed under the SAME heading as the position above; see that position's note."
+        "notes": "W.90 only, one code per depth, not handed - a pair of doors has no hand. Printed under the SAME heading as the position above; see that position's note.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 780,
+          "shown_gola_mm": 750,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_door_jumbo_drawers": {
         "description": "Tall unit with jumbo drawers - 1 rh or lh door - 2 jumbo drawers - 3 shelves - 1 divider",
@@ -194,7 +210,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.116 - no wall-hung line in this position's margin and no glyph beside either depth band, where the first position of the same page carries both. An absence has to be written down or it is re-read as silence. 175-dpi render, 2026-08-24.",
-        "notes": "opening is recorded as 'door' following base_drawer_door at H.78, where a type mixing a hinged door with drawers takes the door's value and the hand belongs to the door; this file does not invent a new convention for a mixed front. THE MECHANISM IS NAMED AND NOT CODED: the position carries the Servo Drive glyph pointing at printed p.567, and the margin prices three LEGRABOX finishes - stainless steel, ash/brown blumotion push-pull, stainless blumotion push-pull - with no article code against any of them. Nothing is recorded as a companion, because a companion is a LINE with a code and these have none. Same blocker as printed p.112, waiting on registry/cesar/options/. WIDTH FIELD: 15 = W.45 and 16 = W.60 here, against 05 and 06 in the first position of this same page - see width_field_note."
+        "notes": "opening is recorded as 'door' following base_drawer_door at H.78, where a type mixing a hinged door with drawers takes the door's value and the hand belongs to the door; this file does not invent a new convention for a mixed front. THE MECHANISM IS NAMED AND NOT CODED: the position carries the Servo Drive glyph pointing at printed p.567, and the margin prices three LEGRABOX finishes - stainless steel, ash/brown blumotion push-pull, stainless blumotion push-pull - with no article code against any of them. Nothing is recorded as a companion, because a companion is a LINE with a code and these have none. Same blocker as printed p.112, waiting on registry/cesar/options/. WIDTH FIELD: 15 = W.45 and 16 = W.60 here, against 05 and 06 in the first position of this same page - see width_field_note.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 390,
+          "shown_gola_mm": 360,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_h46_custom_door": {
         "description": "Tall unit for oven H. 46 - 1 rh or lh custom-sized door - 1 drawer - 1 rh or lh door - 2 shelves - 2 dividers",
@@ -217,14 +241,14 @@
           "note": "Elevation printed p.121: 19,5 / 78 handle, ⌐16,5 / ⌐75 gola. The TOP front carries no dimension in either execution - it is drawn as a bar and left unnumbered, which is what 'custom-sized' means on this page. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
           "stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1125,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h46",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 665,
+              "derivation": "DERIVED 2026-09-28: remainder 1125 minus 460. Custom-sized on the page."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 460,
+              "appliance_class": "oven_h46"
             },
             {
               "kind": "front",
@@ -237,14 +261,14 @@
           ],
           "gola_stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1125,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h46",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 665,
+              "derivation": "DERIVED 2026-09-28: remainder 1125 minus 460. Custom-sized on the page."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 460,
+              "appliance_class": "oven_h46"
             },
             {
               "kind": "zone",
@@ -266,11 +290,20 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "remainder_note": "THE REMAINDER IS EXECUTION-INDEPENDENT, and that is what makes it a real number rather than an artefact: 195 + 780 = 975 and 30 + 165 + 30 + 750 = 975, so handle and gola leave the SAME 1125. The oven H.46 niche height is NOT recorded, here or anywhere - a 460 would make the door exactly 665 and the arithmetic would close, and it would be an invention in the one place the catalog has gone out of its way to say the number is not fixed."
+          "remainder_note": "THE REMAINDER IS EXECUTION-INDEPENDENT, and that is what makes it a real number rather than an artefact: 195 + 780 = 975 and 30 + 165 + 30 + 750 = 975, so handle and gola leave the SAME 1125. The oven H.46 niche height is NOT recorded, here or anywhere - a 460 would make the door exactly 665 and the arithmetic would close, and it would be an invention in the one place the catalog has gone out of its way to say the number is not fixed.",
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "THE FIRST ARTICLE IN THIS REGISTRY WITH A REMAINDER. It is buildable: the span is drawn as a void band, red, named for its height, and it appears on an elevation where before there would have been nothing. What is NOT claimed is the division. W.60 only - no W.75 is printed."
+        "notes": "THE FIRST ARTICLE IN THIS REGISTRY WITH A REMAINDER. It is buildable: the span is drawn as a void band, red, named for its height, and it appears on an elevation where before there would have been nothing. What is NOT claimed is the division. W.60 only - no W.75 is printed.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 780,
+          "shown_gola_mm": 750,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_h60_drawer_jumbo": {
         "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 drawer - 1 jumbo drawer - 1 shelf - no push-pull device - 2 dividers",
@@ -349,7 +382,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "Servo Drive glyph pointing at printed p.567 and one LEGRABOX finish priced in the margin with no article code against it - NAMED AND NOT CODED, the same blocker printed p.116's jumbo position records, waiting on registry/cesar/options/."
+        "notes": "Servo Drive glyph pointing at printed p.567 and one LEGRABOX finish priced in the margin with no article code against it - NAMED AND NOT CODED, the same blocker printed p.116's jumbo position records, waiting on registry/cesar/options/.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 585,
+          "shown_gola_mm": 555,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_h60_two_drawers_jumbo": {
         "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 1 shelf - 2 dividers",
@@ -436,7 +477,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "Three LEGRABOX finishes priced, none coded. See tall_oven_h60_drawer_jumbo."
+        "notes": "Three LEGRABOX finishes priced, none coded. See tall_oven_h60_drawer_jumbo.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 390,
+          "shown_gola_mm": 360,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_h60_two_jumbo": {
         "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 jumbo drawers - 1 shelf - 2 dividers",
@@ -515,7 +564,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "Two groups of one, so each jumbo front gives its own 30 mm - the ordinary case."
+        "notes": "Two groups of one, so each jumbo front gives its own 30 mm - the ordinary case.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 390,
+          "shown_gola_mm": 360,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_h60_jumbo_interior_drawers": {
         "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 jumbo drawer - 2 interior drawers - 1 shelf - no push-pull device - 2 dividers",
@@ -581,7 +638,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "THE TWO INTERIOR DRAWERS ARE NOT FRONTS and the elevation says so - it prints one 78 where the description lists three moving parts. They sit behind the jumbo front, so the stack holds two fronts and the export counts two handles."
+        "notes": "THE TWO INTERIOR DRAWERS ARE NOT FRONTS and the elevation says so - it prints one 78 where the description lists three moving parts. They sit behind the jumbo front, so the stack holds two fronts and the export counts two handles.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 780,
+          "shown_gola_mm": 750,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_microwave_jumbo": {
         "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - 2 dividers",
@@ -605,15 +670,19 @@
           "note": "Elevation printed p.123: 39 handle, ⌐36 gola - one front, and nothing else is dimensioned. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
           "stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1710,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h60_plus_microwave",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 510,
+              "derivation": "DERIVED 2026-09-28: remainder 1710 minus 600 - 600. Custom-sized on the page."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
             },
             {
               "kind": "front",
@@ -622,15 +691,19 @@
           ],
           "gola_stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1710,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h60_plus_microwave",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 510,
+              "derivation": "DERIVED 2026-09-28: remainder 1710 minus 600 - 600. Custom-sized on the page."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
             },
             {
               "kind": "zone",
@@ -643,11 +716,20 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "remainder_note": "390 handle against 30 + 360 gola: the same 1710 both ways."
+          "remainder_note": "390 handle against 30 + 360 gola: the same 1710 both ways.",
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "THE COLUMN ON THE AVENIDA PRIMAVERA RENDER. Two appliance openings and a custom-sized door share one span, and the catalog prints only the sum. Same shape as tall_oven_h46_custom_door and the same refusal to invent either number."
+        "notes": "THE COLUMN ON THE AVENIDA PRIMAVERA RENDER. Two appliance openings and a custom-sized door share one span, and the catalog prints only the sum. Same shape as tall_oven_h46_custom_door and the same refusal to invent either number.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 390,
+          "shown_gola_mm": 360,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_oven_microwave_jumbo_no_pushpull": {
         "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - no push-pull device - 2 dividers",
@@ -671,15 +753,19 @@
           "note": "Elevation printed p.123: 58,5 handle, ⌐55,5 gola. EVERY STACK ON THIS PAGE SUMS TO 2100 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. That invariant is not printed anywhere; it is measured, it holds on 16 of 16 codes across printed p.121-125, and it is what recovers the numbers the section does not print. Generator.front_stack raises when a stack breaks it. Account: claude/findings-2026-08-25-tall-h210-appliance-columns.md §1.",
           "stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1515,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h60_plus_microwave",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 315,
+              "derivation": "DERIVED 2026-09-28: remainder 1515 minus 600 - 600. Custom-sized on the page."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
             },
             {
               "kind": "front",
@@ -688,15 +774,19 @@
           ],
           "gola_stack_top_to_bottom": [
             {
-              "kind": "remainder",
-              "h_mm": 1515,
-              "holds": [
-                "custom_sized_front",
-                "appliance_opening",
-                "appliance_opening"
-              ],
-              "appliance_class": "oven_h60_plus_microwave",
-              "fronts_within": 1
+              "kind": "front",
+              "h_mm": 315,
+              "derivation": "DERIVED 2026-09-28: remainder 1515 minus 600 - 600. Custom-sized on the page."
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
             },
             {
               "kind": "zone",
@@ -709,11 +799,20 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "remainder_note": "585 handle against 30 + 555 gola: the same 1515 both ways."
+          "remainder_note": "585 handle against 30 + 555 gola: the same 1515 both ways.",
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "THE COLUMN ON THE AVENIDA PRIMAVERA RENDER. Two appliance openings and a custom-sized door share one span, and the catalog prints only the sum. Same shape as tall_oven_h46_custom_door and the same refusal to invent either number. Differs from tall_oven_microwave_jumbo only in the drawer height and the push-pull line."
+        "notes": "THE COLUMN ON THE AVENIDA PRIMAVERA RENDER. Two appliance openings and a custom-sized door share one span, and the catalog prints only the sum. Same shape as tall_oven_h46_custom_door and the same refusal to invent either number. Differs from tall_oven_microwave_jumbo only in the drawer height and the push-pull line.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 585,
+          "shown_gola_mm": 555,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       },
       "tall_fridge": {
         "description": "Tall unit for fridge (for sliding or fixed hinges) - 1 rh or lh door - 1 rh or lh door with fixed hinges - 1 divider",
@@ -768,7 +867,15 @@
         },
         "wall_hung": false,
         "wall_hung_note": "CONTRADICTORY, AND RECORDED AS CONTRADICTORY. The cabinet-in-a-bracket glyph IS printed beside d. 62 - verified at 600 dpi against printed p.123 position 3's, the same glyph - while the margin carries only side panel D. p.549 and feet H. 5 mm p.548, and NO 'Surch. for wall-hung version on page 548'. Everywhere else the two signals agree. This is the SECOND instance of the disagreement claude/findings-2026-08-24-pictogram-sweep.md §4 recorded for the Magicorner corner on printed p.42, and it is MIRRORED - there the margin line stood without the glyph. Recorded false because the priced offer is the one a person can order; the glyph goes to Elda beside the corner question.",
-        "notes": "Servo Flex mechanism p.567 and a horizontal grip recess for fridge p.622, both named and neither coded. One position, one code per width, d.62 only. 'doors' rather than 'door': the position prints two, one of them with fixed hinges, and hinge_side stays per-order."
+        "notes": "Servo Flex mechanism p.567 and a horizontal grip recess for fridge p.622, both named and neither coded. One position, one code per width, d.62 only. 'doors' rather than 'door': the position prints two, one of them with fixed hinges, and hinge_side stays per-order.",
+        "door_versions": {
+          "full_mm": 2100,
+          "gola_mm": 2070,
+          "shown_full_mm": 780,
+          "shown_gola_mm": 750,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
+        }
       }
     }
   }

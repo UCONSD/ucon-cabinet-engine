@@ -1057,12 +1057,16 @@ module UCON
               // failed the second, so it was shown a control that did nothing.
               document.getElementById('dvFs').style.display = (dv && st.front) ? '' : 'none';
               if(dv){
+                // A TALL COLUMN LABELS THE FRONT THAT CHANGES (2026-09-28): its
+                // arithmetic is the whole column, H and H - 30, but what the page
+                // prints - and what a person chooses between - is 84 / 81.
+                var sf = dv.shown_full_mm || dv.full_mm, sg = dv.shown_gola_mm || dv.gola_mm;
                 document.getElementById('dvFull').textContent =
-                  (dv.full_mm/10) + ' — full front';
+                  (sf/10) + ' — full front';
                 document.getElementById('dvGola').textContent =
-                  (dv.gola_mm/10) + ' — gola (−' + (dv.full_mm - dv.gola_mm) + ' mm)';
+                  (sg/10) + ' — gola (−' + (sf - sg) + ' mm)';
                 document.getElementById('golaNote').textContent =
-                  'Door ' + (dv.gola_mm/10) + ' opens by gola only. Its grip-recess profiles are separate order lines — a drawer stack needs two:';
+                  'Door ' + (sg/10) + ' opens by gola only. Its grip-recess profiles are separate order lines — a drawer stack needs two:';
               } else {
                 document.querySelector('input[name=dv][value="78"]').checked = true;
               }

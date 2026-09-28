@@ -2508,6 +2508,9 @@ module UCON
       def gola_joint!(definition, unit, gola)
         versions = (unit || {})['door_versions']
         return 0 unless versions && versions['gola_mm']
+        # A recess part-way up a tall column is not the recess this split is
+        # written for (2026-09-28): the type says joint false and nothing moves.
+        return 0 if versions['joint'] == false
 
         body = definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
         return 0 unless body
