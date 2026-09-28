@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1202 codes (386 base + 74 sink + 17 appliance + 291 wall + 3 glass wall + 14 USA tall + 217 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1207 codes (386 base + 74 sink + 17 appliance + 291 wall + 3 glass wall + 14 USA tall + 217 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, last: +5 - Horizontal Thin H.36 for base units H.84 (printed
+  # p.460, 4, the stub of its H.78 twin) and the wall filler PG0151 (p.434).
   # 2026-09-28, later still: +98, tall units for base unit H.84 - printed
   # p.126-131, 146-150, 165-169 (92, the straight positions) and the USA columns
   # of printed p.422 and p.427 (6). Three namespaced families on a 60 plinth.
@@ -286,7 +288,7 @@ check('registry loads and holds 1202 codes (386 base + 74 sink + 17 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1202
+  raise "got #{n}" unless n == 1207
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -479,9 +481,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1202 rows, each with code/dims/description/source') do
+check('registry catalog: 1207 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1202
+  raise cat.length.to_s unless cat.length == 1207
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -613,6 +615,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Tall units H. 234 | for base unit H. 84',
                                              'Tangram base units H. 84',
                                              'Tangram sideboard H. 138',
+                                             'Thin | Horizontal Thin H. 36, for base units H. 84',
                                              'Thin | Horizontal Thin H. 39, for base units H. 78',
                                              'USA elements | for base units H. 84',
                                              'USA elements | for tall units H. 210',
@@ -1385,9 +1388,10 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # the first on printed p.126 prints no wall-hung margin line - the same
   # pattern as H.78's printed p.116 - and H.222 / H.234 print it on none.
   # 98 codes, 6 hung. tall 89 -> 181.
-  raise refused.length.to_s unless refused.length == 211
+  # 2026-09-28, last: 211 -> 215, the four Horizontal Thin H.36 (printed p.460).
+  raise refused.length.to_s unless refused.length == 215
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 181, 'open_unit' => 4 }
+  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 181, 'open_unit' => 8 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5098,7 +5102,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 655
+                 'curved units, whose width is an arc' => 6 } && allowed == 659
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -5107,6 +5111,8 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # appliance_h84), jumbo +17 (P-One, XL, the USA hob and oven bases, the oven
   # bases of p.52), interior drawers +4 (the kit doors), allowed +48.
   # 2026-09-28, later still: +98 tall for base H.84 - jumbo +58, allowed +40.
+  # 2026-09-28, last: +4 Horizontal Thin H.36 and PG0151 - allowed +4 (the
+  # filler is width-ranged and never asked).
 end
 
 check('an ordered filler satisfies the contract') do
@@ -7817,10 +7823,13 @@ end
 puts "\nHorizontal Thin - the first element whose ground is another unit"
 
 check('four codes, and the page decides where they stand') do
-  rows = Registry.catalog.select { |c| c['class'] == 'open_unit' }
-  raise rows.length.to_s unless rows.length == 4
+  # 2026-09-28: p.460's H.84 twins (BA) joined; the four H.78 rows are checked as before.
+  all_rows = Registry.catalog.select { |c| c['class'] == 'open_unit' }
+  raise all_rows.length.to_s unless all_rows.length == 8
+  rows = all_rows.select { |c| c['code'].start_with?('B0') }
   raise rows.map { |r| r['code'] }.sort.inspect unless
     rows.map { |r| r['code'] }.sort == %w[B01862 B01869 B02462 B02469]
+  raise 'the H.84 Thin must be 360 tall' unless Registry.lookup('BA1869')['height_mm'] == 360
   u = Registry.lookup('B01869')
   raise u['height_mm'].inspect unless u['height_mm'] == 390
   raise u['depth_mm'].inspect  unless u['depth_mm'] == 350

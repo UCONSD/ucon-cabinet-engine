@@ -1,0 +1,36 @@
+{
+  "section": "Closing strips and fillers for Maxima and Intarsio",
+  "class": "filler",
+  "family": "Wall H.84",
+  "source_pages": "printed p.434 / PDF 436 (the H.84 row of the third position)",
+  "family_note": "No family-level keys - see fillers_h78.json.",
+  "data": {
+    "unit_types": {
+      "filler_wall_unit": {
+        "description": "Wall unit filler in door finishes from 2,3 to 15 cm - with one-piece bottom",
+        "object_class": "filler",
+        "handed": false,
+        "interior_confirmed": [
+          "one-piece bottom"
+        ],
+        "source_ref": "printed p.434 / PDF 436",
+        "front_layout": {
+          "kind": "single",
+          "note": "One finished front covering the whole face. NO hinge_axis and no mechanism - A FILLER DOES NOT OPEN, so 70_symbols draws no leaf, which is the same treatment a US appliance panel gets: it too states a single front it never swings. The kind is STATED rather than left absent because Panel.effective_slabs and Panel.gola_options both default a missing layout to 'single', and a default is not a source. THIS FAMILY HAS NO DOOR-VERSION AXIS: wall_h60.json declares door_versions null and the element is 600 mm tall, so 78/75 means nothing here and nothing about this front changes with a gola run. Until 2026-08-24 this note ended with a sentence copied from fillers_h78.json which claimed the front changed height in the gola version, quoting family H.78's own gola door height. It was an H.78 fact, it was wrong here, and it contradicted base_h78.json, which states in its own door_versions note that the axis is family-scoped. Corrected in place 2026-08-24; the mistake and how it surfaced are kept in claude/findings-2026-08-24-filler-note.md."
+        },
+        "codes": [
+          {
+            "code": "PG0151",
+            "width_range_mm": [
+              23,
+              150
+            ],
+            "depth_mm": 350
+          }
+        ],
+        "notes": "The H.84 row of the third position of printed p.434 ('Wall unit filler ... with one-piece bottom support'), family Wall H.84 (wall_h84.json). PG = Wall H.84, the letter wall_h84.json already uses. Everything fillers_wall_h60.json records about the closing-strip rule of printed p.11 applies here."
+      }
+    }
+  },
+  "extraction_note": "2026-09-28, with the H.84 fillers of the first two positions."
+}

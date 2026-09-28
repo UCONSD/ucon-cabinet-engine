@@ -82,12 +82,12 @@
        {
         "title": "Base unit filler in door finishes from 2,3 to 15 cm",
         "status": "partial",
-        "note": "10 codes, H.36 to H.138, all d.35. B70150 (H.78) held. Note PJ0150 at H.120: a wall prefix inside the base-unit table."
+        "note": "10 codes, H.36 to H.138, all d.35. B70150 (H.78) held; BK0150 (H.84) held 2026-09-28. Note PJ0150 at H.120: a wall prefix inside the base-unit table."
        },
        {
         "title": "Wall unit filler in door finishes from 2,3 to 15 cm",
         "status": "partial",
-        "note": "7 codes, H.36 to H.120, all d.35, with a one-piece bottom. PB0151 (H.36) and PD0151 (H.60) held. PD0151 is the article the five-centimetre closing-strip rule of printed p.11 has been asking for."
+        "note": "7 codes, H.36 to H.120, all d.35, with a one-piece bottom. PB0151 (H.36), PD0151 (H.60) and PG0151 (H.84, 2026-09-28) held. PD0151 is the article the five-centimetre closing-strip rule of printed p.11 has been asking for."
        },
        {
         "title": "60 to 160 degree base unit corner panel",
@@ -1961,9 +1961,9 @@
     "class": "open_unit",
     "family": "Thin",
     "section": "Thin | Finishes and price bands, Horizontal Thin, Thin H.36, Vertical Thin, accessories",
-    "printed_pages": "457, 460-468",
+    "printed_pages": "457, 461-468",
     "status": "not_extracted",
-    "note": "THE CHAPTER MINUS THE ONE PAGE THIS KITCHEN NEEDED. p.457 finishes and price bands, p.460 the same four Horizontal Thin positions for base units H.84 (BA prefix), p.461 and p.468 accessories, p.462-467 Vertical Thin - a different element, fitted between two tall units of equal height. The extracted page has its own row below."
+    "note": "THE CHAPTER MINUS THE ONE PAGE THIS KITCHEN NEEDED. p.457 finishes and price bands, p.460 the same four Horizontal Thin positions for base units H.84 (BA prefix), p.461 and p.468 accessories, p.462-467 Vertical Thin - a different element, fitted between two tall units of equal height. The extracted page has its own row below. | 2026-09-28: p.460 (Horizontal Thin H.36 for base units H.84) extracted as its own row below; the chapter entry now covers p.457 and p.461-468."
    },
    {
     "class": "open_unit",
@@ -1999,6 +1999,15 @@
     "status": "extracted",
     "extracted_on": "DEMAND-DRIVEN 2026-08-27: printed p.459 only - Horizontal Thin H. 39 for base units H. 78, four codes, registry/cesar/thin_horizontal_h39_base78.json. printed p.458 is the rules page and carries no code. NOT EXTRACTED: p.457 finishes and price bands, p.460 the same four positions for base units H.84 (BA prefix), p.461 and p.468 accessories, p.462-467 Vertical Thin - a different element, fitted between two tall units of equal height.",
     "rule_note": "printed p.458 carries no code and is the reason the element exists where it does: 'Can only be fitted below a top.' It sits on a base run and a top sits on it."
+   },
+   {
+    "class": "open_unit",
+    "family": "Thin H.36 | for base unit H.84",
+    "section": "Thin | Horizontal Thin H. 36, for base units H. 84",
+    "printed_pages": "460",
+    "status": "extracted",
+    "extracted_on": "2026-09-28",
+    "note": "Four codes, the BA twins of p.459, held as the same not-buildable stub."
    },
    {
     "class": "shelf",
