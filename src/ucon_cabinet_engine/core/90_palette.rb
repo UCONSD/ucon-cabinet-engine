@@ -653,6 +653,12 @@ module UCON
         'usa_tall_oven_h60_two_jumbo'        => 'USA tall units for oven, jumbo drawers',
         'usa_tall_oven_microwave_1door'      => 'USA tall units for oven and microwave',
         'usa_tall_oven_microwave_2doors'     => 'USA tall units for oven and microwave, two doors',
+        # 2026-09-28, Hide & Seek (printed p.196-202).
+        'hs_module_accessory'                => 'Hide & Seek, accessory module A1',
+        'hs_module_cupboard'                 => 'Hide & Seek, cupboard module A2',
+        'hs_hallway_small'                   => 'Hide & Seek, small hallway module',
+        'hs_hallway_large'                   => 'Hide & Seek, large hallway module',
+        'hs_door'                            => 'Hide & Seek, door',
         'appliance_dishwasher_door' => 'Dishwasher door',
         'base_corner'             => 'Corner units',
         'wall_top_hung_door'      => 'Top-hung door units',

@@ -1057,6 +1057,40 @@
    },
    {
     "class": "tall",
+    "collection": "Hide & Seek",
+    "family": "Hide & Seek H.198",
+    "section": "Hide & Seek tall units H. 198",
+    "printed_pages": "200",
+    "status": "not_extracted"
+   },
+   {
+    "class": "tall",
+    "collection": "Hide & Seek",
+    "family": "Hide & Seek H.210",
+    "section": "Hide & Seek tall units H. 210",
+    "printed_pages": "201",
+    "status": "not_extracted"
+   },
+   {
+    "class": "tall",
+    "collection": "Hide & Seek",
+    "family": "Hide & Seek H.222",
+    "section": "Hide & Seek tall units H. 222",
+    "printed_pages": "202",
+    "status": "extracted",
+    "extracted_on": "2026-09-28",
+    "note": "17 codes in 5 types, all held for lookup (not buildable). System pages p.196-199 read."
+   },
+   {
+    "class": "tall",
+    "collection": "Hide & Seek",
+    "family": "Hide & Seek H.234",
+    "section": "Hide & Seek tall units H. 234",
+    "printed_pages": "203",
+    "status": "not_extracted"
+   },
+   {
+    "class": "tall",
     "family": "Top elements H.36",
     "section": "Tall unit top elements H. 36 | without fixings",
     "printed_pages": "170",

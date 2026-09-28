@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1202 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 14 USA tall + 217 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1219 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 14 USA tall + 234 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, after: +17 - Hide & Seek H.222 (printed p.202), all held for
+  # lookup: the 7612 pantry door, between two tall units.
   # 2026-09-28, final: -5 - Andriy keeps only the two dishwasher-door series of
   # printed p.55; VL0630 / VL0730, VL0601 / VN0601 and VL0650 removed.
   # 2026-09-28, last: +5 - Horizontal Thin H.36 for base units H.84 (printed
@@ -290,7 +292,7 @@ check('registry loads and holds 1202 codes (386 base + 74 sink + 12 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1202
+  raise "got #{n}" unless n == 1219
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -483,9 +485,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1202 rows, each with code/dims/description/source') do
+check('registry catalog: 1219 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1202
+  raise cat.length.to_s unless cat.length == 1219
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -596,6 +598,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 96',
                                              'End elements for Maxima-Intarsio',
                                              'Glass wall units H. 96',
+                                             'Hide & Seek tall units H. 222',
                                              'Panels - Linear Elements',
                                              'Shelves - Linear Elements',
                                              'Sink base units H. 58.5',
@@ -1391,9 +1394,11 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # pattern as H.78's printed p.116 - and H.222 / H.234 print it on none.
   # 98 codes, 6 hung. tall 89 -> 181.
   # 2026-09-28, last: 211 -> 215, the four Horizontal Thin H.36 (printed p.460).
-  raise refused.length.to_s unless refused.length == 215
+  # 2026-09-28, after: 215 -> 232, Hide & Seek H.222 - floor-standing, no hung
+  # glyph or margin line on printed p.202. tall 181 -> 198.
+  raise refused.length.to_s unless refused.length == 232
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 181, 'open_unit' => 8 }
+  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 198, 'open_unit' => 8 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5104,7 +5109,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 657
+                 'curved units, whose width is an arc' => 6 } && allowed == 674
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -5116,6 +5121,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # 2026-09-28, last: +4 Horizontal Thin H.36 and PG0151 - allowed +4 (the
   # filler is width-ranged and never asked).
   # 2026-09-28, final: -5 appliance_h84 rows (Andriy) - appliance -3, allowed -2.
+  # 2026-09-28, after: +17 Hide & Seek H.222 - allowed +17.
 end
 
 check('an ordered filler satisfies the contract') do
