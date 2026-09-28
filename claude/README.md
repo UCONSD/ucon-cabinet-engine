@@ -340,6 +340,11 @@ questions for Elda.
 Maxima modules beside Tangram come at 35 / 57 / 62 / 67 by the Project Guidelines
 examples; D.57 is not a catalog base depth and reads as a D.62 reduced (989350).
 
+**Collections, 2026-09-27:** `collections-recon-2026-09-27.md` — Maxima 2.2 and
+Intarsio share one code table and differ only by the door (a finish axis: price
+band 1-11 and allowed openings); Unit and N_Elle are separate catalogs with their
+own codes and heights (geometry, picker chapters like Tangram). No "Elite" exists.
+
 **Real projects — one card per job, the kitchen that drives the engine:**
 - `project-7612-hillside-dr-2026-09-24.md` — 7612 Hillside Dr, Cesar kitchen,
   opened 2026-09-24: files, naming, what is not known yet. (545 Avenida
