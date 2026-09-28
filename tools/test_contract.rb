@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1007 codes (329 base + 44 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 125 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1025 codes (329 base + 62 sink + 9 appliance + 291 wall + 3 glass wall + 8 USA tall + 125 tall + 15 fillers + 124 end panels + 44 panel sheets + 4 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28: +18, sink bases H.84 - printed p.53-54, the straight three, for
+  # the sink side of the 7612 island (sink_base_h84.json).
   # 2026-09-26, later: +61, Maxima H.84 - printed p.49 (but for BK0100) and
   # p.51, for the straight modules of the 7612 Tangram island (base_h84.json).
   # 2026-09-26: +7, Tangram - six base modules of printed p.58-60 and the H.138
@@ -278,7 +280,7 @@ check('registry loads and holds 1007 codes (329 base + 44 sink + 9 appliance + 2
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1007
+  raise "got #{n}" unless n == 1025
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -471,9 +473,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1007 rows, each with code/dims/description/source') do
+check('registry catalog: 1025 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1007
+  raise cat.length.to_s unless cat.length == 1025
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -587,6 +589,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Shelves - Linear Elements',
                                              'Sink base units H. 58.5',
                                              'Sink base units H. 78',
+                                             'Sink base units H. 84',
                                              'Tall unit top elements H. 36 | without fixings',
                                              'Tall unit top elements H. 60 | without fixings',
                                              'Tall unit top elements H. 72 | without fixings',
@@ -5043,15 +5046,17 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
     refused == { 'appliance units' => 17, 'pull-out units' => 15,
-                 'units with jumbo drawers' => 191,
+                 'units with jumbo drawers' => 199,
                  'units with interior drawers' => 24,
                  'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 557
+                 'curved units, whose width is an arc' => 6 } && allowed == 567
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
+  # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
+  # the 10 door and doors sinks allowed.
 end
 
 check('an ordered filler satisfies the contract') do

@@ -1,0 +1,190 @@
+{
+  "section": "Sink base units H. 84",
+  "class": "base",
+  "family": "H.84",
+  "source_pages": "printed p.53-54 / PDF 55-56 (subset extracted: the three straight sink bases)",
+  "extraction_note": "Opened on demand for 7612 Hillside Dr, 2026-09-28: the sink side of the Tangram island. Extracted: sink base with door (p.53), with doors and with jumbo drawers (p.54). NOT extracted: the two corner sink bases on p.54 (AQ/AS096-126, AL1171/AL1181) - corner units need M2.2 placement, as at H.78. Prices not held here. Family keys (plinth, door versions, depths) are declared once, in base_h84.json; this file declares only the height, so the last-file-wins merge cannot take them away.",
+  "page_observations": [
+    "NO HOB GLYPH on p.53 or p.54 at either depth - the third sink section to say so (H.58.5, H.78, H.84).",
+    "EVERY STRAIGHT POSITION CARRIES THE HUNG GLYPH at d.62 and d.67, plus the margin surcharge.",
+    "No d.35 sink base and no single-jumbo-drawer sink base at H.84 (H.78 prints B80681 / B90681); the explicit rows are the authority.",
+    "Suffix 69 for the two-jumbo-drawer sink base at H.84 where H.78 prints 87 - read off this page, not decoded."
+  ],
+  "data": {
+    "height_mm": 840,
+    "unit_types": {
+      "sink_base_door": {
+        "description": "Sink base unit with door - 1 rh or lh door, 1 aluminium tray",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.53 / PDF 55",
+        "codes": [
+          {
+            "code": "BL0503",
+            "width_mm": 450,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL0603",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "BM0503",
+            "width_mm": 450,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM0603",
+            "width_mm": 600,
+            "depth_mm": 670
+          }
+        ],
+        "notes": "Elevation printed p.53: 84 / 81 (handle / gola), one full-height door. The aluminium tray is stated by the source but is interior - recorded, not drawn.",
+        "front_layout": {
+          "kind": "single",
+          "note": "One door covering the full front, as for the plain base unit."
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-09-28 on the 150-dpi render of printed p.53 / p.54: the 'Hung version' glyph (legend printed p.19) is printed beside d.62 and d.67, and the margin carries 'Surch. for wall-hung version on page 548'. No hob flame on either band."
+      },
+      "sink_base_doors": {
+        "description": "Sink base unit with doors - 2 doors, 1 aluminium tray",
+        "opening": "doors",
+        "handed": false,
+        "interior_confirmed": [
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.54 / PDF 56",
+        "codes": [
+          {
+            "code": "BL0602",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL0902",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL1202",
+            "width_mm": 1200,
+            "depth_mm": 620
+          },
+          {
+            "code": "BM0602",
+            "width_mm": 600,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM0902",
+            "width_mm": 900,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM1202",
+            "width_mm": 1200,
+            "depth_mm": 670
+          }
+        ],
+        "notes": "Elevation printed p.54: 84 / 81 (handle / gola).",
+        "front_layout": {
+          "kind": "vertical_split",
+          "count": 2,
+          "note": "Two doors; the page drawing shows an equal split. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-09-28 on the 150-dpi render of printed p.53 / p.54: the 'Hung version' glyph (legend printed p.19) is printed beside d.62 and d.67, and the margin carries 'Surch. for wall-hung version on page 548'. No hob flame on either band."
+      },
+      "sink_base_jumbo_drawers": {
+        "description": "Sink base unit with jumbo drawers - 1 top jumbo drawer with shaped interior for sink, 1 jumbo drawer with shaped back panel, 1 aluminium tray",
+        "opening": "pull-out",
+        "handed": false,
+        "interior_confirmed": [
+          "1 top jumbo drawer with shaped interior for sink",
+          "1 jumbo drawer with shaped back panel",
+          "1 aluminium tray"
+        ],
+        "source_ref": "printed p.54 / PDF 56",
+        "codes": [
+          {
+            "code": "BL0769",
+            "width_mm": 750,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL0969",
+            "width_mm": 900,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL1069",
+            "width_mm": 1050,
+            "depth_mm": 620
+          },
+          {
+            "code": "BL1269",
+            "width_mm": 1200,
+            "depth_mm": 620
+          },
+          {
+            "code": "BM0769",
+            "width_mm": 750,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM0969",
+            "width_mm": 900,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM1069",
+            "width_mm": 1050,
+            "depth_mm": 670
+          },
+          {
+            "code": "BM1269",
+            "width_mm": 1200,
+            "depth_mm": 670
+          }
+        ],
+        "notes": "Servo Drive referenced on the page as an option (p.567). LEGRABOX surcharges printed in the margin (stainless steel 215, ash/brown blumotion push-pull 65, stainless steel blumotion push-pull 280) - an order axis, not held here. No W600 row; smallest is W750.",
+        "front_layout": {
+          "kind": "horizontal",
+          "heights_mm_top_to_bottom": [
+            360,
+            480
+          ],
+          "note": "Elevation printed p.54: 36 / 48 (handle); gola 33 / 45 - the same unequal split as the plain jumbo-drawers unit on printed p.51.",
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 330
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 450
+            }
+          ],
+          "gola_note": "33 + 45 = 78 of fronts; the two 30 mm zones are carried from H.78 as for the drawer stack - an inference, not printed."
+        },
+        "wall_hung": true,
+        "wall_hung_note": "SWEPT 2026-09-28 on the 150-dpi render of printed p.53 / p.54: the 'Hung version' glyph (legend printed p.19) is printed beside d.62 and d.67, and the margin carries 'Surch. for wall-hung version on page 548'. No hob flame on either band."
+      }
+    }
+  }
+}

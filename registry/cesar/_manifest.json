@@ -522,7 +522,28 @@
     "family": "H.84",
     "section": "Sink base units H. 84",
     "printed_pages": "53-54",
-    "status": "not_extracted"
+    "status": "partial",
+    "pages": [
+     {
+      "printed": 53,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "Sink base unit with door"
+      ],
+      "note": "The page's top half is corner base units H.84 (Magicorner AQ112-122 / AS112-122, Slidecorner AQ113-123 / AS113-123), not sink bases - not extracted, corner units need M2.2 placement."
+     },
+     {
+      "printed": 54,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "Sink base unit with doors",
+       "Sink base unit w/jumbo drawers"
+      ],
+      "note": "Not extracted: Corner sink base unit (AQ096-126 / AS096-126) and Corner sink base unit with 155 degree hinges (AL1171 / AL1181) - corner units need M2.2 placement."
+     }
+    ]
    },
    {
     "class": "base",

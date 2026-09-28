@@ -51,6 +51,7 @@ existed.
 | Q32 | the Tangram L grip edging: how GOLATNG's m² is measured on an island, its profile, and the H.138 sideboard's own version | **open** 2026-09-27 · 7612 island is on it (93 to the worktop) |
 | Q33 | the sideboard C1030A prints plinth ZOCCT0D (module D's), not ZOCCT0A | **open** 2026-09-27 · one order line; looks like a misprint |
 | Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position |
+| Q35 | BL0400 / B80400 print W 30, the same as BL0300 / B80300 - a misprint for 40? | **open** 2026-09-28 · Andriy reads it as a misprint; the registry holds 300 as printed |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1353,3 +1354,18 @@ the worktop.
 1. **Is a straight Maxima H.84 at 81 the right carrier**, and does the L grip panel take the cutout?
 2. **The Tangram top with that cutout** — is it the 1500-point drawing (Linear Elements printed p.43)?
 
+## Q35 — BL0400 / B80400: width 30 or 40?
+
+**Status:** open · added 2026-09-28 · **one width, on two pages**
+
+Kitchen System printed p.49 (PDF 51, H.84) prints **BL0300 W 30** and **BL0400 W 30**, both d.62;
+the only stated difference is "BL0400 with bread bag on the right", and BL0400 costs more (band 1:
+422 against 384). H.78 does the same with B80300 / B80400. Mostly the two digits after the depth letter
+are the width (06 = 60, 09 = 90, 12 = 120, 03 = 30), so **"04" reads as 40** - though the same row
+already breaks the rule once: BL0100 is W 15. Andriy reads W 30
+as a misprint.
+1. **What is BL0400's width — 300 or 400?** And the same for B80400.
+2. If 400: is there also a 300 version with the bread bag, or is the bread bag only at 400?
+
+Until answered the registry holds **300, as printed**, and the picker card names the bread bag in
+bold (core 1.8.5).
