@@ -60,7 +60,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1320
+              "h_mm": 1320,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -69,10 +70,16 @@
             },
             {
               "kind": "front",
-              "h_mm": 750
+              "h_mm": 750,
+              "leaf": "door"
             }
           ],
-          "gola_note": "One recess, 1320 over 750. Fronts sum to 2070; with the 30 mm zone the stack is 2100."
+          "gola_note": "One recess, 1320 over 750. Fronts sum to 2070; with the 30 mm zone the stack is 2100.",
+          "leaves_top_to_bottom": [
+            "door",
+            "door"
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": true,
         "wall_hung_note": "Printed positively: this position's margin carries 'Surch. for wall-hung version on page 548' and the depth-band glyph stands beside both d.35 and d.62. The other two positions on the page carry neither. Verified on the 175-dpi render 2026-08-24 - the same reading pattern the plain H.210 section shows, where only the plain door type hangs.",
@@ -117,7 +124,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1320
+              "h_mm": 1320,
+              "leaf": "doors"
             },
             {
               "kind": "zone",
@@ -126,10 +134,16 @@
             },
             {
               "kind": "front",
-              "h_mm": 750
+              "h_mm": 750,
+              "leaf": "doors"
             }
           ],
-          "gola_note": "As tall_door_over_door: one recess, 1320 over 750."
+          "gola_note": "As tall_door_over_door: one recess, 1320 over 750.",
+          "leaves_top_to_bottom": [
+            "doors",
+            "doors"
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.116, and read as an absence of two things at once: no wall-hung line in this position's margin and no glyph beside either depth band, where the position above has both. An absence has to be re-read, so it is recorded here as a value rather than left missing. 175-dpi render, 2026-08-24.",
@@ -185,7 +199,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1320
+              "h_mm": 1320,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -206,7 +221,13 @@
               "h_mm": 360
             }
           ],
-          "gola_note": "Undercounter recess under the 1320 door, intermediate recess between the two jumbo fronts."
+          "gola_note": "Undercounter recess under the 1320 door, intermediate recess between the two jumbo fronts.",
+          "leaves_top_to_bottom": [
+            "door",
+            null,
+            null
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.116 - no wall-hung line in this position's margin and no glyph beside either depth band, where the first position of the same page carries both. An absence has to be written down or it is re-read as silence. 175-dpi render, 2026-08-24.",
@@ -243,7 +264,8 @@
             {
               "kind": "front",
               "h_mm": 665,
-              "derivation": "DERIVED 2026-09-28: remainder 1125 minus 460. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1125 minus 460. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -256,14 +278,16 @@
             },
             {
               "kind": "front",
-              "h_mm": 780
+              "h_mm": 780,
+              "leaf": "door"
             }
           ],
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
               "h_mm": 665,
-              "derivation": "DERIVED 2026-09-28: remainder 1125 minus 460. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1125 minus 460. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -286,12 +310,14 @@
             },
             {
               "kind": "front",
-              "h_mm": 750
+              "h_mm": 750,
+              "leaf": "door"
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
           "remainder_note": "THE REMAINDER IS EXECUTION-INDEPENDENT, and that is what makes it a real number rather than an artefact: 195 + 780 = 975 and 30 + 165 + 30 + 750 = 975, so handle and gola leave the SAME 1125. The oven H.46 niche height is NOT recorded, here or anywhere - a 460 would make the door exactly 665 and the arithmetic would close, and it would be an invention in the one place the catalog has gone out of its way to say the number is not fixed.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -332,7 +358,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -351,7 +378,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -378,7 +406,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory."
+          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -419,7 +448,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -442,7 +472,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -473,7 +504,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "gola_grouping_note": "THE PAGE THAT CORRECTS THE GOLA RULE. Read at 900 dpi 2026-08-25: there is a recess hook above the FIRST 18 and NONE between the two 18s, then a hook above the 36. Two recesses, three fronts - so the PAIR of drawers gives 30 mm between them, 1,5 cm each, and the jumbo gives its own 30. The rule is: A RECESS IS SUBTRACTED FROM THE FRONT GROUP BENEATH IT, and a group of two splits it equally. Every other position held so far is a group of one, which is why the older sentence - 'the lower front gives its 30 mm' - survived this long."
+          "gola_grouping_note": "THE PAGE THAT CORRECTS THE GOLA RULE. Read at 900 dpi 2026-08-25: there is a recess hook above the FIRST 18 and NONE between the two 18s, then a hook above the 36. Two recesses, three fronts - so the PAIR of drawers gives 30 mm between them, 1,5 cm each, and the jumbo gives its own 30. The rule is: A RECESS IS SUBTRACTED FROM THE FRONT GROUP BENEATH IT, and a group of two splits it equally. Every other position held so far is a group of one, which is why the older sentence - 'the lower front gives its 30 mm' - survived this long.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -514,7 +546,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -533,7 +566,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -560,7 +594,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory."
+          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -601,7 +636,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -616,7 +652,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 720
+              "h_mm": 720,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -634,7 +671,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory."
+          "appliance_opening_note": "THE 600 IS MEASURED, NOT PRINTED. The catalog says only 'for oven H. 60'. Five different front stacks on printed p.121-122 leave exactly 600, and the wall-hung H.132 unit on printed p.123 leaves it a sixth time out of a different total. Recorded as a measurement so that an Elda answer contradicting it puts the DERIVATION on trial and not somebody's memory.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -672,7 +710,8 @@
             {
               "kind": "front",
               "h_mm": 510,
-              "derivation": "DERIVED 2026-09-28: remainder 1710 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1710 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -693,7 +732,8 @@
             {
               "kind": "front",
               "h_mm": 510,
-              "derivation": "DERIVED 2026-09-28: remainder 1710 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1710 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -717,7 +757,8 @@
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
           "remainder_note": "390 handle against 30 + 360 gola: the same 1710 both ways.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -755,7 +796,8 @@
             {
               "kind": "front",
               "h_mm": 315,
-              "derivation": "DERIVED 2026-09-28: remainder 1515 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1515 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -776,7 +818,8 @@
             {
               "kind": "front",
               "h_mm": 315,
-              "derivation": "DERIVED 2026-09-28: remainder 1515 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1515 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -800,7 +843,8 @@
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
           "remainder_note": "585 handle against 30 + 555 gola: the same 1515 both ways.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED. No wall-hung line in this position's margin and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on the same chapter's sheets. Read at 600 dpi, 2026-08-25. An absence has to be written down or it is re-read as silence.",
@@ -840,17 +884,20 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1320
+              "h_mm": 1320,
+              "leaf": "door"
             },
             {
               "kind": "front",
-              "h_mm": 780
+              "h_mm": 780,
+              "leaf": "door"
             }
           ],
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1320
+              "h_mm": 1320,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -859,11 +906,13 @@
             },
             {
               "kind": "front",
-              "h_mm": 750
+              "h_mm": 750,
+              "leaf": "door"
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom, and the absence is the rule from docs/Reserved_Void_Spec_v0.1.md §4: the shorthand means 'every entry is a front', and here they are not. A partial list of heights that LOOKS complete is exactly the failure this avoids - Export.fronts_in would count the oven niche as a drawer front.",
-          "no_opening_note": "NO appliance_opening ENTRY, and that is a reading. The fronts alone sum to 2100: the fridge stands BEHIND two ordinary doors, and this page prints no niche of any kind. What the built-in fridge actually needs of the carcass is seam finding 3 - the niche width taken from the Cesar door code is 13 narrower than nominal at standard and 51 wider at flush - and it is not answered here."
+          "no_opening_note": "NO appliance_opening ENTRY, and that is a reading. The fronts alone sum to 2100: the fridge stands BEHIND two ordinary doors, and this page prints no niche of any kind. What the built-in fridge actually needs of the carcass is seam finding 3 - the niche width taken from the Cesar door code is 13 narrower than nominal at standard and 51 wider at flush - and it is not answered here.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "CONTRADICTORY, AND RECORDED AS CONTRADICTORY. The cabinet-in-a-bracket glyph IS printed beside d. 62 - verified at 600 dpi against printed p.123 position 3's, the same glyph - while the margin carries only side panel D. p.549 and feet H. 5 mm p.548, and NO 'Surch. for wall-hung version on page 548'. Everywhere else the two signals agree. This is the SECOND instance of the disagreement claude/findings-2026-08-24-pictogram-sweep.md §4 recorded for the Magicorner corner on printed p.42, and it is MIRRORED - there the margin line stood without the glyph. Recorded false because the priced offer is the one a person can order; the glyph goes to Elda beside the corner question.",

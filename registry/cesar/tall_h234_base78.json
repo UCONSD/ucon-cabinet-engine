@@ -37,7 +37,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 960
+              "h_mm": 960,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -56,7 +57,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 960
+              "h_mm": 960,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -83,7 +85,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
-          "appliance_opening_note": "THE 600 IS MEASURED, AND THIS IS THE THIRD TOTAL IT HAS BEEN MEASURED FROM. C92657 leaves 960 + 390 + 390 = 1740 out of 2340, so 600. printed p.121-122 left the same 600 six times out of 2100 and printed p.143 once out of 2220. Three totals, one answer, and the catalog prints the number nowhere."
+          "appliance_opening_note": "THE 600 IS MEASURED, AND THIS IS THE THIRD TOTAL IT HAS BEEN MEASURED FROM. C92657 leaves 960 + 390 + 390 = 1740 out of 2340, so 600. printed p.121-122 left the same 600 six times out of 2100 and printed p.143 once out of 2220. Three totals, one answer, and the catalog prints the number nowhere.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",
@@ -121,7 +124,8 @@
             {
               "kind": "front",
               "h_mm": 750,
-              "derivation": "DERIVED, not printed: 2340 - 390 - 600 - 600. The page calls it a custom-sized door."
+              "derivation": "DERIVED, not printed: 2340 - 390 - 600 - 600. The page calls it a custom-sized door.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -144,7 +148,8 @@
             {
               "kind": "front",
               "h_mm": 750,
-              "derivation": "DERIVED: 2340 - 30 - 360 - 600 - 600. The same 750 both ways, which is what the remainder note already said of the 1950."
+              "derivation": "DERIVED: 2340 - 30 - 360 - 600 - 600. The same 750 both ways, which is what the remainder note already said of the 1950.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -169,7 +174,8 @@
           "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
           "remainder_note": "390 handle against 30 + 360 gola: the same 1950 both ways. 120 more than C42640 at H.222. | The 1950 is now divided - see split_note. It still sums to 1950 both ways, which is the invariant the old recording protected and the new one keeps.",
           "split_note": "SPLIT 2026-08-27, and every part names where its number comes from. Until today this 1950 was ONE undivided remainder, because the page prints the SUM and refuses to divide it - and that was the right recording while nothing had asked. The kitchen asked: the door was not drawn, and a column with no door on a LayOut elevation reads as an open shelf. WHAT IS PRINTED on printed p.162: the family height 2340, the jumbo drawer front (39 handle, 36 gola), the contents list, and the words 'custom-sized door' - which is the catalog saying, in its own vocabulary, that this door's height is not an article dimension. WHAT IS ESTABLISHED: 600 for an oven H.60 opening, recovered from front stacks five times over (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1) and corroborated on THIS page by the position above it - C92657 prints 96/39/39, and 960+390+390 leaves exactly 600. WHAT IS DERIVED, and it is ours: 1950 - 600 - 600 = 750 for the door. WHAT THE RENDER SHOWS, read at 600 dpi 2026-08-27: door, opening, opening, drawer, and the two openings measure within a few per cent of each other - which excludes a 450 microwave opening, the only competing reading, since that would have left a 900 door. Andriy reached the same 750 independently by the same subtraction. SCOPE (learned rule 4): this is one position on one page. The twins C63640 at H.222 and C42640 at H.210 carry the same undivided shape and have NOT been split - nothing has asked them yet.",
-          "opening_note": "BOTH OPENINGS ARE 600 AND THE PAGE DOES NOT SAY WHICH MACHINE TAKES WHICH. The title is 'oven and microwave oven'; the drawing shows two equal openings with a divider between them and labels neither. So both carry the geometry class oven_h60 - a 600 opening - and which of the two the oven goes in is a per-order fact, not a catalog one. Naming the upper one 'microwave' would have been an invention with a 50 per cent chance of being backwards, and nothing geometric turns on it: they are the same size."
+          "opening_note": "BOTH OPENINGS ARE 600 AND THE PAGE DOES NOT SAY WHICH MACHINE TAKES WHICH. The title is 'oven and microwave oven'; the drawing shows two equal openings with a divider between them and labels neither. So both carry the geometry class oven_h60 - a 600 opening - and which of the two the oven goes in is a per-order fact, not a catalog one. Naming the upper one 'microwave' would have been an invention with a 50 per cent chance of being backwards, and nothing geometric turns on it: they are the same size.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",
@@ -207,7 +213,8 @@
             {
               "kind": "front",
               "h_mm": 555,
-              "derivation": "DERIVED 2026-09-28: remainder 1755 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1755 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -228,7 +235,8 @@
             {
               "kind": "front",
               "h_mm": 555,
-              "derivation": "DERIVED 2026-09-28: remainder 1755 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1755 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -252,7 +260,8 @@
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4.",
           "remainder_note": "585 against 30 + 555: the same 1755 both ways. 120 more than C43659 at H.222.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED on printed p.162. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62. Read at 150 dpi 2026-08-25.",

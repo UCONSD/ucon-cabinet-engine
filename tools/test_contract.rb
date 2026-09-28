@@ -10601,6 +10601,24 @@ check('A TALL COLUMN FOR A BASE RUN OFFERS ITS DOOR VERSION, and draws its upper
   raise 'gola_joint! must skip a joint:false type' unless gen.include?("return 0 if versions['joint'] == false")
 end
 
+check('A DOOR IN A STACK SAYS IT IS A DOOR, so the symbol is a V and not a drawer diagonal') do
+  # Andriy, 2026-09-28, off CK7744: the upper door drew a drawer's diagonal and
+  # the hinge side changed nothing.
+  top = ->(code, gola = false) {
+    u = Registry.lookup(code)
+    s = gola ? UCON::CabinetEngine::Panel.effective_slabs(u, true) : Generator.front_slabs(u)
+    s.reject { |x| x[:kind] }.map { |x| x[:leaf] }
+  }
+  raise top.call('CK7744').inspect unless top.call('CK7744') == [nil, 'door']            # bottom up
+  raise top.call('CK7744', true).inspect unless top.call('CK7744', true) == [nil, 'door']
+  raise top.call('CK0900').inspect unless top.call('CK0900') == %w[doors doors]
+  raise top.call('C62651').inspect unless top.call('C62651') == [nil, 'door']            # the 780 is a jumbo drawer
+  raise top.call('CK0603').inspect unless top.call('CK0603') == %w[door door]
+  raise 'a base drawer stack must stay drawers' unless top.call('BL0967') == [nil, nil]
+  sym = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'the symbol must branch on the leaf' unless sym.include?('if slab[:leaf]') && sym.include?("SYM_FRONT_DOOR_")
+end
+
 check('THE H.84 DISHWASHER DOORS WARN IN RED: a sliding-hinge machine, and which one') do
   # Andriy, 2026-09-28: the tall door runs to the 60 plinth line and hits it on
   # a fixed hinge. The picker says so before anybody builds it.

@@ -31,7 +31,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "doors"
             },
             {
               "kind": "appliance_opening",
@@ -50,7 +51,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "doors"
             },
             {
               "kind": "appliance_opening",
@@ -76,7 +78,8 @@
               "h_mm": 450
             }
           ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening."
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening.",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph column on printed p.422 (USA pages print none - see usa_tall_h210.json page_observations). Read 2026-09-28.",
@@ -115,7 +118,8 @@
             {
               "kind": "front",
               "h_mm": 420,
-              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -136,7 +140,8 @@
             {
               "kind": "front",
               "h_mm": 420,
-              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -159,7 +164,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom - the remainder is not a front.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph column on printed p.422 (USA pages print none - see usa_tall_h210.json page_observations). Read 2026-09-28.",

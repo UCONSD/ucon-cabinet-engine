@@ -64,7 +64,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -73,9 +74,15 @@
             },
             {
               "kind": "front",
-              "h_mm": 810
+              "h_mm": 810,
+              "leaf": "door"
             }
-          ]
+          ],
+          "leaves_top_to_bottom": [
+            "door",
+            "door"
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": true,
         "wall_hung_note": "Printed positively on printed p.126: 'Surch. for wall-hung version on page 548' in the margin and the depth-band glyph beside both bands, as the same position at H.78 (printed p.116). Checked on the 110-dpi render 2026-09-28.",
@@ -119,7 +126,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "doors"
             },
             {
               "kind": "zone",
@@ -128,9 +136,15 @@
             },
             {
               "kind": "front",
-              "h_mm": 810
+              "h_mm": 810,
+              "leaf": "doors"
             }
-          ]
+          ],
+          "leaves_top_to_bottom": [
+            "doors",
+            "doors"
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.126 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -186,7 +200,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -206,7 +221,13 @@
               "kind": "front",
               "h_mm": 450
             }
-          ]
+          ],
+          "leaves_top_to_bottom": [
+            "door",
+            null,
+            null
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.126 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -252,7 +273,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1320
+              "h_mm": 1320,
+              "leaf": "doors"
             },
             {
               "kind": "zone",
@@ -272,7 +294,13 @@
               "kind": "front",
               "h_mm": 360
             }
-          ]
+          ],
+          "leaves_top_to_bottom": [
+            "doors",
+            null,
+            null
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.127 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -329,7 +357,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -353,7 +382,14 @@
               "kind": "front",
               "h_mm": 450
             }
-          ]
+          ],
+          "leaves_top_to_bottom": [
+            "door",
+            null,
+            null,
+            null
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.127 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -400,7 +436,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "doors"
             },
             {
               "kind": "zone",
@@ -424,7 +461,14 @@
               "kind": "front",
               "h_mm": 450
             }
-          ]
+          ],
+          "leaves_top_to_bottom": [
+            "doors",
+            null,
+            null,
+            null
+          ],
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.127 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -465,7 +509,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -474,13 +519,15 @@
             },
             {
               "kind": "front",
-              "h_mm": 840
+              "h_mm": 840,
+              "leaf": "door"
             }
           ],
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -494,10 +541,12 @@
             },
             {
               "kind": "front",
-              "h_mm": 810
+              "h_mm": 810,
+              "leaf": "door"
             }
           ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.128 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -532,7 +581,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "doors"
             },
             {
               "kind": "appliance_opening",
@@ -541,13 +591,15 @@
             },
             {
               "kind": "front",
-              "h_mm": 840
+              "h_mm": 840,
+              "leaf": "doors"
             }
           ],
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "doors"
             },
             {
               "kind": "appliance_opening",
@@ -561,10 +613,12 @@
             },
             {
               "kind": "front",
-              "h_mm": 810
+              "h_mm": 810,
+              "leaf": "doors"
             }
           ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.129 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -605,7 +659,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -628,7 +683,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -658,7 +714,8 @@
               "h_mm": 450
             }
           ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.129 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -699,7 +756,8 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -718,7 +776,8 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 660
+              "h_mm": 660,
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -744,7 +803,8 @@
               "h_mm": 450
             }
           ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.130 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -782,7 +842,8 @@
             {
               "kind": "front",
               "h_mm": 420,
-              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -803,7 +864,8 @@
             {
               "kind": "front",
               "h_mm": 420,
-              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page."
+              "derivation": "DERIVED 2026-09-28: remainder 1620 minus 600 - 600. Custom-sized on the page.",
+              "leaf": "door"
             },
             {
               "kind": "appliance_opening",
@@ -826,7 +888,8 @@
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom - the remainder is not a front (docs/Reserved_Void_Spec_v0.1.md §4).",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door)."
+          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.130 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
@@ -866,17 +929,20 @@
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "door"
             },
             {
               "kind": "front",
-              "h_mm": 840
+              "h_mm": 840,
+              "leaf": "door"
             }
           ],
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1260
+              "h_mm": 1260,
+              "leaf": "door"
             },
             {
               "kind": "zone",
@@ -885,10 +951,12 @@
             },
             {
               "kind": "front",
-              "h_mm": 810
+              "h_mm": 810,
+              "leaf": "door"
             }
           ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4)."
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
         "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.131 (read 2026-09-28 from the text layer; the section's first page checked on a 110-dpi render). The depth-band glyph column beside d.62 was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",

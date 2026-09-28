@@ -926,8 +926,11 @@ module UCON
           case entry['kind']
           when 'front'
             n += 1
-            slabs << { name: "FRONT_#{n}_FROM_BOTTOM",
-                       x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1) }
+            slab = { name: "FRONT_#{n}_FROM_BOTTOM",
+                     x_mm: 0, z_mm: z.round(1), w_mm: w, h_mm: hh.round(1) }
+            # A hinged front in a stack (2026-09-28): the symbol reads it.
+            slab[:leaf] = entry['leaf'] if entry['leaf']
+            slabs << slab
           when 'remainder'
             # THE SPAN IS OWNED, THE BODY IS NOT. See §5 of
             # claude/findings-2026-08-25-tall-h210-appliance-columns.md: the
@@ -964,8 +967,14 @@ module UCON
 
       def front_stack(layout, h)
         stack = layout['stack_top_to_bottom']
-        stack ||= Array(layout['heights_mm_top_to_bottom'])
-                  .map { |hh| { 'kind' => 'front', 'h_mm' => hh } }
+        # leaves_top_to_bottom rides beside the shorthand (2026-09-28): what
+        # each front IS - 'door', 'doors' or nil for a drawer.
+        leaves = Array(layout['leaves_top_to_bottom'])
+        stack ||= Array(layout['heights_mm_top_to_bottom']).each_with_index.map do |hh, i|
+          e = { 'kind' => 'front', 'h_mm' => hh }
+          e['leaf'] = leaves[i] if leaves[i]
+          e
+        end
         total = stack.sum { |e| e['h_mm'].to_f }
         unless (total - h).abs < 0.001
           raise "front_layout heights #{stack.map { |e| e['h_mm'] }.inspect} " \

@@ -762,6 +762,34 @@ module UCON
             # no opening symbol.
             next if %i[void opening].include?(slab[:kind])
 
+            # A DOOR IN A STACK IS NOT A DRAWER (2026-09-28, Andriy, off CK7744:
+            # the upper door drew a drawer's diagonal and the hinge side did
+            # nothing). The front says what it is; a single leaf waits for its
+            # hinge side exactly as a single door does, a pair needs none.
+            if slab[:leaf]
+              z1 = z0 + slab[:z_mm]
+              leaves =
+                if slab[:leaf] == 'doors'
+                  half = slab[:w_mm] / 2.0
+                  [[slab[:x_mm], half, 'lh'], [slab[:x_mm] + half, half, 'rh']]
+                elsif hinge_side
+                  [[slab[:x_mm], slab[:w_mm], hinge_side]]
+                else
+                  []
+                end
+              leaves.each_with_index do |(lx, lw, hand), j|
+                hx = hand == 'lh' ? lx : lx + lw
+                ox = hand == 'lh' ? lx + lw : lx
+                g = definition.entities.add_group
+                g.name = "SYM_FRONT_DOOR_#{i + 1}_#{j + 1}"
+                apex = [ox.mm, y_face.mm, (z1 + slab[:h_mm] / 2.0).mm]
+                g.entities.add_line([hx.mm, y_face.mm, z1.mm], apex)
+                g.entities.add_line([hx.mm, y_face.mm, (z1 + slab[:h_mm]).mm], apex)
+                finalize(g, front_tag, mat)
+              end
+              next
+            end
+
             g = definition.entities.add_group
             g.name = "SYM_FRONT_DRAWER_#{i + 1}"
             x1 = slab[:x_mm]
