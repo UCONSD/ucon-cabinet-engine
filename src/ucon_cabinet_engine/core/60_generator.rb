@@ -630,6 +630,10 @@ module UCON
             Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
           ), depth_mm
         )
+        # WHAT THE NEIGHBOUR GAVE, collected as it is given and written onto the
+        # definition below (remember_ground!), so that Apply in the panel - which
+        # starts again from Registry.lookup - gets the same ground back.
+        inherited = {}
         # BEFORE ANY DIMENSION IS READ. base_z_mm, plinth? and the placement
         # transform all ask the unit where it stands, and for a panel the unit
         # cannot answer until its neighbour has.
@@ -649,6 +653,7 @@ module UCON
           raise ArgumentError, panel_needs_a_ground_message(code, unit) if ground.nil?
 
           unit = unit.merge(ground)
+          inherited.merge!(ground)
         end
 
         # ---- AN ELEMENT WHOSE GROUND IS ANOTHER UNIT ------------------------
@@ -664,6 +669,7 @@ module UCON
           raise ArgumentError, stands_on_needs_a_unit_message(code) if ground.nil?
 
           unit = unit.merge(ground)
+          inherited.merge!(ground)
         end
 
         # ---- A PANEL WHOSE PLINTH IS THE RUN'S (2026-09-28) -----------------
@@ -676,7 +682,10 @@ module UCON
         # ground. Nothing selected: the family's own number, as before.
         if unit['plinth_from_run']
           ground = run_plinth_ground(model)
-          unit = unit.merge(ground) if ground
+          if ground
+            unit = unit.merge(ground)
+            inherited.merge!(ground)
+          end
         end
 
         unless unit.fetch('buildable', true)
@@ -720,6 +729,7 @@ module UCON
             "CESAR_#{code}_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
           )
           e = definition.entities
+          remember_ground!(definition, inherited)
 
           # An appliance front is a PANEL, not a cabinet: it bolts onto the
           # machine's own door. No carcass — the box behind it is the client's
@@ -1581,6 +1591,34 @@ module UCON
         " PLINTH TAKEN FROM THE RUN: #{unit['plinth_h_mm'].to_i} mm, off " \
         "#{unit['plinth_from_code']} beside it - the catalog prints no plinth for this panel " \
         'and its family was drawn for an H.78 run.'
+      end
+
+      # ---- THE GROUND IS KEPT ON THE UNIT (core 1.9.3, 2026-09-28) ---------
+      # Found in 7612 Hillside Dr: two CH4640 fridge panels were built beside
+      # CK7744 on the run's 60 plinth, then Apply in the panel redrew them on
+      # 100. Apply starts again from Registry.lookup(code), and a ground taken
+      # from the SELECTED neighbour at build time lives nowhere in the registry -
+      # so plinth_from_run, an end panel's ground and a Thin's unit-below were
+      # all lost on the first Apply. The build now writes what it inherited into
+      # its own dictionary, and inherited_ground hands it back.
+      GROUND_DICT = 'UCON_GROUND'.freeze
+
+      def remember_ground!(definition, ground)
+        (ground || {}).each do |k, v|
+          next if v.nil?
+
+          definition.set_attribute(GROUND_DICT, k.to_s, v)
+        end
+      end
+
+      def inherited_ground(definition)
+        dict = definition.respond_to?(:attribute_dictionary) &&
+               definition.attribute_dictionary(GROUND_DICT)
+        return {} unless dict
+
+        h = {}
+        dict.each_pair { |k, v| h[k.to_s] = v }
+        h
       end
 
       def run_plinth_ground(model)

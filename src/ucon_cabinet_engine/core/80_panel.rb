@@ -680,7 +680,9 @@ module UCON
           return UI.messagebox("Tangram #{attrs['code']}: use the Tangram form of this panel." \
                                "\n\nNothing was changed.")
         end
-        unit  = Registry.lookup(attrs['code'])
+        # The ground the build inherited from its neighbour (core 1.9.3) - the
+        # registry alone would redraw a run-plinth panel on its family default.
+        unit  = Registry.lookup(attrs['code']).merge(Generator.inherited_ground(inst.definition))
         patch = attributes_patch(unit, payload)
         # `defn` is deliberately NOT read yet - make_unique below replaces it.
         # THE REGISTRY ROW IS NOT THIS OBJECT. Everything below asks the

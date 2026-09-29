@@ -10679,5 +10679,28 @@ check('H.84: BK0100 is not held, because its row prints no hung glyph') do
   end
 end
 
+puts "\nthe inherited ground is kept on the unit (core 1.9.3)"
+# 7612, 2026-09-28: Apply redrew the CH4640 panels built on the run's 60 on the
+# family's 100. The build now writes what it took from the neighbour onto the
+# definition, and the panel merges it back over Registry.lookup.
+class FakeGroundDefinition
+  def initialize; @d = {}; end
+  def set_attribute(dict, k, v); (@d[dict] ||= {})[k] = v; end
+  def attribute_dictionary(dict); @d[dict]; end
+end
+check('a run plinth written at build comes back for Apply, and nothing else does') do
+  d = FakeGroundDefinition.new
+  Generator.remember_ground!(d, { 'plinth_h_mm' => 60, 'plinth_from_code' => 'CK7744', 'mounting' => nil })
+  g = Generator.inherited_ground(d)
+  raise g.inspect unless g == { 'plinth_h_mm' => 60, 'plinth_from_code' => 'CK7744' }
+  u = Registry.lookup('CH4640').merge(g)
+  raise 'plinth' unless Generator.plinth_h_mm(u) == 60
+  raise 'empty' unless Generator.inherited_ground(FakeGroundDefinition.new) == {}
+end
+check('the panel reads the ground back, not the registry alone') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'apply' unless src.include?("Registry.lookup(attrs['code']).merge(Generator.inherited_ground(inst.definition))")
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

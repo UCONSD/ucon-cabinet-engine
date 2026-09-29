@@ -1407,6 +1407,10 @@ floor-standing back panel.
 5. If none of this is possible: **is there any other Cesar solution for a passage door in a run of
    tall units?** Revego (printed p.176-193) was looked at and does not fit - its door swings OUT
    and retracts into the carcass side, and the recess is a cupboard, not a passage.
+6. **Height 2270 on a 1 cm floor gap** (added 2026-09-28). The door must run from 10 mm above the
+   floor (plinth H.1 "doors on the ground", printed p.183) to 2280, the top of the H.222 columns and
+   of the fridge panels beside it on the 60 plinth. The H.222 door CHHS50 is 2220 (top 2230 on H.1),
+   H.234 is too tall. Can the door be supplied at 750 x 2270, or cut down from the H.234 door?
 
 ## Q37 — USA fridge panel H.222: the 24-inch code (7612)
 
