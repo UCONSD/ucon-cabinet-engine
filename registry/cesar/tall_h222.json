@@ -1,89 +1,375 @@
 {
-  "section": "Tall units H. 222",
-  "class": "tall",
-  "family": "Tall H.222",
-  "source_pages": "printed p.132 / PDF 134 (subset extracted: p.132 only, and on p.132 all three types)",
-  "family_naming_note": "Namespaced 'Tall H.222' for the same reason as every other tall family: the registry merges section files by family NAME, and this chapter prints a second H.222 section 'for base unit H. 78' with letters of its own.",
-  "extraction_note": "printed p.132 only - the section's first page, taken whole: three types, 14 codes, both depths. The rest of the section is the two blockers every plain tall section has: interior mechanisms the page names and does not code, and corners carrying the D/S execution letter.",
-  "letter_note": "CG = d.35 and CH = d.62, the pair printed on this page and already in code_grammar.tall_units. A LOOKUP, never a sequence.",
-  "data": {
-    "height_mm": 2220,
-    "plinth_h_mm": 100,
-    "plinth_note": "Same reading as tall_h210.json (2026-08-22), tall_h138.json and tall_h198.json: a tall unit stands in a run with the base units and its front has to line up. printed p.132 prints ONE dimension, 222, and no plinth - inherited from that decision, not read off this page.",
-    "depths_mm": [350, 620],
-    "collections": ["Maxima", "Intarsio"],
-    "source_ref": "CESAR - 2 Kitchen System.pdf printed p.132 / PDF 134",
-    "no_door_versions_note": "No door_versions, read from the page: a single elevation dimension, 222, where the base pages print a 78/75 pair.",
-    "wall_fixing_note": "The chapter notice on printed p.79 - 'IMPORTANT: 35 cm deep tall units must be fixed to the wall' - applies to every CG code in this file. Installation, not geometry.",
-    "page_observations": [
-      "NOTHING ON THIS PAGE CAN BE HUNG. Not one of the three positions carries printed p.19's 'Hung version' glyph, and not one margin carries 'Surch. for wall-hung version on page 548' - where the three shorter plain tall families all offer it on at least the plain door type. Verified on a 170-dpi render 2026-08-23. THE WHOLE FAMILY IS REFUSED, which is the first time the registry has held such a thing, and it is recorded per position anyway because that is where the reading is made.",
-      "AND THE PLAIN DOOR CHANGES ITS SUFFIX AT THE SAME TIME. H.138, H.198 and H.210 print 31 for the one-door type; H.222 and H.234 print 02. The two families that cannot be hung are the two that renumbered the door - recorded as an OBSERVATION with two instances and used for nothing, because a correlation across two families is exactly what this chapter has punished five times.",
-      "The two-door type stays 30 and the kit-ready door stays 35 - so the renumbering touches one position out of three."
+ "section": "Tall units H. 222",
+ "class": "tall",
+ "family": "Tall H.222",
+ "source_pages": "printed p.132-136 / PDF 134-138: p.132 whole, p.133 whole, p.134 but for the corner tall unit, p.136 whole (2026-09-28); p.135 (corner tall units) not held",
+ "family_naming_note": "Namespaced 'Tall H.222' for the same reason as every other tall family: the registry merges section files by family NAME, and this chapter prints a second H.222 section 'for base unit H. 78' with letters of its own.",
+ "extraction_note": "printed p.132 only - the section's first page, taken whole: three types, 14 codes, both depths. The rest of the section is the two blockers every plain tall section has: interior mechanisms the page names and does not code, and corners carrying the D/S execution letter.",
+ "letter_note": "CG = d.35 and CH = d.62, the pair printed on this page and already in code_grammar.tall_units. A LOOKUP, never a sequence.",
+ "data": {
+  "height_mm": 2220,
+  "plinth_h_mm": 100,
+  "plinth_note": "Same reading as tall_h210.json (2026-08-22), tall_h138.json and tall_h198.json: a tall unit stands in a run with the base units and its front has to line up. printed p.132 prints ONE dimension, 222, and no plinth - inherited from that decision, not read off this page.",
+  "depths_mm": [
+   350,
+   620
+  ],
+  "collections": [
+   "Maxima",
+   "Intarsio"
+  ],
+  "source_ref": "CESAR - 2 Kitchen System.pdf printed p.132 / PDF 134",
+  "no_door_versions_note": "No door_versions, read from the page: a single elevation dimension, 222, where the base pages print a 78/75 pair.",
+  "wall_fixing_note": "The chapter notice on printed p.79 - 'IMPORTANT: 35 cm deep tall units must be fixed to the wall' - applies to every CG code in this file. Installation, not geometry.",
+  "page_observations": [
+   "NOTHING ON THIS PAGE CAN BE HUNG. Not one of the three positions carries printed p.19's 'Hung version' glyph, and not one margin carries 'Surch. for wall-hung version on page 548' - where the three shorter plain tall families all offer it on at least the plain door type. Verified on a 170-dpi render 2026-08-23. THE WHOLE FAMILY IS REFUSED, which is the first time the registry has held such a thing, and it is recorded per position anyway because that is where the reading is made.",
+   "AND THE PLAIN DOOR CHANGES ITS SUFFIX AT THE SAME TIME. H.138, H.198 and H.210 print 31 for the one-door type; H.222 and H.234 print 02. The two families that cannot be hung are the two that renumbered the door - recorded as an OBSERVATION with two instances and used for nothing, because a correlation across two families is exactly what this chapter has punished five times.",
+   "The two-door type stays 30 and the kit-ready door stays 35 - so the renumbering touches one position out of three."
+  ],
+  "unit_types": {
+   "tall_door": {
+    "description": "Tall unit with door - 1 rh or lh door - 4 shelves - 1 divider",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "4 shelves",
+     "1 divider"
     ],
-    "unit_types": {
-      "tall_door": {
-        "description": "Tall unit with door - 1 rh or lh door - 4 shelves - 1 divider",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": ["4 shelves", "1 divider"],
-        "source_ref": "printed p.132 / PDF 134",
-        "wall_hung": false,
-        "wall_hung_note": "PRINTED ONLY AS ART - printed p.132 / PDF 134. No 'Hung version' glyph on either depth band and no wall-hung surcharge in the margin. THE PLAIN DOOR TYPE IS OFFERED WALL-HUNG IN ALL THREE SHORTER PLAIN TALL FAMILIES and is refused here, which is what makes the glyph a per-position, per-family reading and not a rule about the type.",
-        "codes": [
-          { "code": "CG0302", "width_mm": 300, "depth_mm": 350 },
-          { "code": "CG0502", "width_mm": 450, "depth_mm": 350 },
-          { "code": "CG0602", "width_mm": 600, "depth_mm": 350 },
-          { "code": "CG0702", "width_mm": 750, "depth_mm": 350 },
-          { "code": "CH0302", "width_mm": 300, "depth_mm": 620 },
-          { "code": "CH0502", "width_mm": 450, "depth_mm": 620 },
-          { "code": "CH0602", "width_mm": 600, "depth_mm": 620 },
-          { "code": "CH0702", "width_mm": 750, "depth_mm": 620 }
-        ],
-        "notes": "Four widths at each depth. SUFFIX 02, where H.138, H.198 and H.210 all print 31 for this position. ONE CODE, BOTH HANDS.",
-        "front_layout": {
-          "kind": "single",
-          "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
-        }
-      },
-      "tall_two_doors": {
-        "description": "Tall unit with doors - 2 doors - 4 shelves - 1 divider",
-        "opening": "doors",
-        "handed": false,
-        "interior_confirmed": ["4 shelves", "1 divider"],
-        "source_ref": "printed p.132 / PDF 134",
-        "wall_hung": false,
-        "wall_hung_note": "PRINTED ONLY AS ART - printed p.132 / PDF 134. No glyph on either depth band, no margin surcharge. Offered wall-hung at H.138 and refused at H.198, H.210 and here.",
-        "codes": [
-          { "code": "CG0930", "width_mm": 900, "depth_mm": 350 },
-          { "code": "CG1230", "width_mm": 1200, "depth_mm": 350 },
-          { "code": "CH0930", "width_mm": 900, "depth_mm": 620 },
-          { "code": "CH1230", "width_mm": 1200, "depth_mm": 620 }
-        ],
-        "notes": "Two widths, 90 and 120, as at H.198 and H.210. Suffix 30, unchanged.",
-        "front_layout": {
-          "kind": "vertical_split",
-          "count": 2,
-          "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
-        }
-      },
-      "tall_door_kit_ready": {
-        "description": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section - 1 rh or lh door with 155 degree hinges - 2 shelves - 1 divider",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": ["155 degree hinges", "2 shelves", "1 divider"],
-        "source_ref": "printed p.132 / PDF 134",
-        "wall_hung": false,
-        "wall_hung_note": "PRINTED ONLY AS ART - printed p.132 / PDF 134. No glyph on the d.62 band, no margin surcharge. The kit-ready door is refused in every plain tall family that prints one - the one part of this pattern that has never varied, and still recorded per position.",
-        "codes": [
-          { "code": "CH0535", "width_mm": 450, "depth_mm": 620 },
-          { "code": "CH0635", "width_mm": 600, "depth_mm": 620 }
-        ],
-        "notes": "d.62 ONLY - no CG counterpart, so a 35 cm deep tall unit cannot take the bottom-section kit. Suffix 35, as at H.198 and H.210 and unlike H.138's 05. 'See kit on page 569' is CHOSEN and the 155 degree hinges are IMPLIED, and NEITHER is recorded: the kit catalog (registry/cesar/options/, printed p.568-569) is not held and there is no way for a person to choose one. FIVE positions in five chapters now point at that one unread page.",
-        "front_layout": {
-          "kind": "single",
-          "note": "One door covering the full 2220 front. The kit, if ordered, sits BEHIND this door and changes nothing the envelope draws."
-        }
-      }
-    }
+    "source_ref": "printed p.132 / PDF 134",
+    "wall_hung": false,
+    "wall_hung_note": "PRINTED ONLY AS ART - printed p.132 / PDF 134. No 'Hung version' glyph on either depth band and no wall-hung surcharge in the margin. THE PLAIN DOOR TYPE IS OFFERED WALL-HUNG IN ALL THREE SHORTER PLAIN TALL FAMILIES and is refused here, which is what makes the glyph a per-position, per-family reading and not a rule about the type.",
+    "codes": [
+     {
+      "code": "CG0302",
+      "width_mm": 300,
+      "depth_mm": 350
+     },
+     {
+      "code": "CG0502",
+      "width_mm": 450,
+      "depth_mm": 350
+     },
+     {
+      "code": "CG0602",
+      "width_mm": 600,
+      "depth_mm": 350
+     },
+     {
+      "code": "CG0702",
+      "width_mm": 750,
+      "depth_mm": 350
+     },
+     {
+      "code": "CH0302",
+      "width_mm": 300,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0502",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0602",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0702",
+      "width_mm": 750,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "Four widths at each depth. SUFFIX 02, where H.138, H.198 and H.210 all print 31 for this position. ONE CODE, BOTH HANDS.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
+    },
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_two_doors": {
+    "description": "Tall unit with doors - 2 doors - 4 shelves - 1 divider",
+    "opening": "doors",
+    "handed": false,
+    "interior_confirmed": [
+     "4 shelves",
+     "1 divider"
+    ],
+    "source_ref": "printed p.132 / PDF 134",
+    "wall_hung": false,
+    "wall_hung_note": "PRINTED ONLY AS ART - printed p.132 / PDF 134. No glyph on either depth band, no margin surcharge. Offered wall-hung at H.138 and refused at H.198, H.210 and here.",
+    "codes": [
+     {
+      "code": "CG0930",
+      "width_mm": 900,
+      "depth_mm": 350
+     },
+     {
+      "code": "CG1230",
+      "width_mm": 1200,
+      "depth_mm": 350
+     },
+     {
+      "code": "CH0930",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH1230",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "Two widths, 90 and 120, as at H.198 and H.210. Suffix 30, unchanged.",
+    "front_layout": {
+     "kind": "vertical_split",
+     "count": 2,
+     "note": "Two doors meeting in the middle. Equal widths are a representation assumption consistent with the drawing, not a stated dimension."
+    },
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_door_kit_ready": {
+    "description": "Tall unit with door that can be fitted with a drawer and jumbo drawer kit in the bottom section - 1 rh or lh door with 155 degree hinges - 2 shelves - 1 divider",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "155 degree hinges",
+     "2 shelves",
+     "1 divider"
+    ],
+    "source_ref": "printed p.132 / PDF 134",
+    "wall_hung": false,
+    "wall_hung_note": "PRINTED ONLY AS ART - printed p.132 / PDF 134. No glyph on the d.62 band, no margin surcharge. The kit-ready door is refused in every plain tall family that prints one - the one part of this pattern that has never varied, and still recorded per position.",
+    "codes": [
+     {
+      "code": "CH0535",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0635",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62 ONLY - no CG counterpart, so a 35 cm deep tall unit cannot take the bottom-section kit. Suffix 35, as at H.198 and H.210 and unlike H.138's 05. 'See kit on page 569' is CHOSEN and the 155 degree hinges are IMPLIED, and NEITHER is recorded: the kit catalog (registry/cesar/options/, printed p.568-569) is not held and there is no way for a person to choose one. FIVE positions in five chapters now point at that one unread page.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front. The kit, if ordered, sits BEHIND this door and changes nothing the envelope draws."
+    },
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_pull_out_door": {
+    "description": "Tall unit with pull-out door - 1 door - 1 pull-out mechanism - 1 divider - no Push-pull device",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "1 pull-out mechanism",
+     "1 divider"
+    ],
+    "source_ref": "printed p.133 / PDF 135",
+    "codes": [
+     {
+      "code": "CH0350",
+      "width_mm": 300,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0550",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0650",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62 only. Mechanisms and accessories printed p.513. '1 door', not '1 rh or lh door': the front travels out, it has no hand.",
+    "front_layout": {
+     "kind": "single",
+     "mechanism": "pull_out_door",
+     "note": "One full-height 2220 front carried by the pull-out mechanism, not a swinging leaf. The opening symbol is not drawn, as for the base pull-out door: the travel is not in the catalog."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.133 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_pull_out_dispensa": {
+    "description": "\"Dispensa\" tall unit with pull-out door - 1 door - 1 pull-out mechanism - 1 divider - no Push-pull device",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "1 pull-out mechanism",
+     "1 divider"
+    ],
+    "source_ref": "printed p.133 / PDF 135",
+    "codes": [
+     {
+      "code": "CH0385",
+      "width_mm": 300,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0585",
+      "width_mm": 450,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62 only. Mechanisms p.514; electrical e-touch opening p.567, margin 'ETOUCH mech. with power adapter 1.087' - named, no code.",
+    "front_layout": {
+     "kind": "single",
+     "mechanism": "pull_out_door",
+     "note": "One full-height 2220 front carried by the pull-out mechanism, not a swinging leaf. The opening symbol is not drawn, as for the base pull-out door: the travel is not in the catalog."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.133 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_tandem": {
+    "description": "\"Tandem\" tall unit with pull-out shelves - 1 rh or lh door - 1 rh or lh pull-out mechanism - 1 divider - no Push-pull device",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "1 rh or lh pull-out mechanism (Tandem)",
+     "1 divider"
+    ],
+    "source_ref": "printed p.133 / PDF 135",
+    "codes": [
+     {
+      "code": "CH0586",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH0686",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62 only. A hinged door with the Tandem shelves swinging out behind it (mechanisms p.515). The mechanism hand follows the door hand.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.133 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_convoy": {
+    "description": "\"Convoy\" tall unit with pull-out shelves - 1 rh or lh door - 1 rh or lh pull-out mechanism - no Push-pull device - 1 divider",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "1 rh or lh pull-out mechanism (Convoy)",
+     "1 divider"
+    ],
+    "source_ref": "printed p.134 / PDF 136",
+    "codes": [
+     {
+      "code": "CH0688",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62, W.60 only. Mechanisms p.515; e-touch p.567, margin 'ETOUCH mech. with power adapter 1.087' - named, no code.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.134 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_broom": {
+    "description": "Tall broom cupboard with door - 1 rh or lh door - 1 shelf - 1 divider",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "1 shelf",
+     "1 divider"
+    ],
+    "source_ref": "printed p.134 / PDF 136",
+    "codes": [
+     {
+      "code": "CH1512",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "CH1612",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62 only. PROHIBITION MARK: not in 'Maxima 2.2 with framed door' - finish is not modelled (M1.6), so it lives here. Accessories p.516 (broom holders, drawn beside the row).",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.134 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_fridge_single_door": {
+    "description": "Tall unit for fridge with single door (for sliding or fixed hinges) - 1 rh or lh door - 1 divider - fridge with fixed Kamat hinge with a surcharge",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "1 divider"
+    ],
+    "source_ref": "printed p.136 / PDF 138",
+    "codes": [
+     {
+      "code": "CH9611",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62, W.60. An integrated fridge column with one full-height door. Servo Flex p.567. Margin surcharges named, not coded: Servo Flex 1.107, power adapter 224, Kamat hinge 81. The appliance niche is not drawn for this type (European built-in fridge, the door is the cabinet's).",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.136 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   },
+   "tall_fridge_door": {
+    "description": "Tall unit for fridge with door - 1 rh or lh door - not suitable for fixed hinges - 1 divider",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "1 divider"
+    ],
+    "source_ref": "printed p.136 / PDF 138",
+    "codes": [
+     {
+      "code": "CH4712",
+      "width_mm": 750,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "d.62, W.75. Not suitable for fixed hinges (sliding-hinge fridge only). Servo Flex p.567; margin: Servo Flex 1.107, power adapter 224 - named, not coded.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door covering the full 2220 front, hinged on a vertical edge. hinge_side per order."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: the margin of printed p.136 carries only 'Surch. for side panel D. on page 549' and 'Surch. for feet H. 5 mm on page 548' - no wall-hung line (110-dpi render read 2026-09-28).",
+    "plinth_from_run": true,
+    "plinth_from_run_note": "2026-09-28 (Andriy, 7612 Hillside Dr, confirmed by Project Guidelines printed p.87 and p.70): a tall unit with ONE full-height front is the same article beside either base height - the 'for base unit' sections exist only for split fronts that must line up with the base drawers. So the plinth comes from the SELECTED neighbour: 60 beside an H.84 run (60 + H), 100 beside H.78, the family's 100 when nothing is selected. Kept through Apply since core 1.9.3."
+   }
   }
+ },
+ "extraction_note_2026_09_28": "p.133, p.134 (straight positions) and p.136 added for the future (Andriy, 7612 Hillside Dr): 12 codes, all d.62, all one full-height front, all on the run's plinth. NOT HELD: the corner tall units of p.134-135 (CG/CH152D/S, 180D/S, 157D/S and the Slidecorner rows) - the engine draws no corner tall."
 }

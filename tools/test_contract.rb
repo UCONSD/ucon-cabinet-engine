@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1229 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 234 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1241 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, plain tall H.222: +12 - printed p.133 (pull-out, Dispensa,
+  # Tandem), p.134 (Convoy, broom) and p.136 (fridge, single door), for the future.
   # 2026-09-28, fillers: +2 - PE0151 (Wall H.72, buildable) and BI0150 (Top
   # elements H.72, held) from printed p.434, for the 7612 top elements. Q38.
   # 2026-09-28, the row: +8 - USA fridge panels H.222, printed p.423, the
@@ -296,7 +298,7 @@ check('registry loads and holds 1229 codes (386 base + 74 sink + 12 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1229
+  raise "got #{n}" unless n == 1241
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -489,9 +491,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1229 rows, each with code/dims/description/source') do
+check('registry catalog: 1241 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1229
+  raise cat.length.to_s unless cat.length == 1241
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -1095,8 +1097,13 @@ check('FIVE PLAIN TALL FAMILIES, ONE SHAPE, AND NO AGREEMENT ABOUT HANGING') do
   raise families.inspect unless families.length == 5
   families.each do |section|
     rows = plain.select { |c| c['section'] == section }
-    raise "#{section}: #{rows.length}" unless [14, 16].include?(rows.length)
+    # 2026-09-28: H.222 alone goes on past p.132 (p.133, 134, 136: 12 codes,
+    # seven types); the p.132 shape is still checked in every family.
+    extra = section == 'Tall units H. 222' ? 12 : 0
+    raise "#{section}: #{rows.length}" unless [14 + extra, 16 + extra].include?(rows.length)
     keys = rows.map { |c| c['type_key'] }.uniq.sort
+    keys -= %w[tall_pull_out_door tall_pull_out_dispensa tall_tandem tall_convoy
+               tall_broom tall_fridge_single_door tall_fridge_door] if extra.positive?
     raise "#{section}: #{keys.inspect}" unless
       keys == %w[tall_door tall_door_kit_ready tall_two_doors]
     kit = rows.select { |c| c['type_key'] == 'tall_door_kit_ready' }
@@ -1401,9 +1408,11 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # 2026-09-28, last: 211 -> 215, the four Horizontal Thin H.36 (printed p.460).
   # 2026-09-28, after: 215 -> 232, Hide & Seek H.222 - floor-standing, no hung
   # glyph or margin line on printed p.202. tall 181 -> 198.
-  raise refused.length.to_s unless refused.length == 232
+  # 2026-09-28: 232 -> 244, not a flip. printed p.133, 134 and 136 of plain
+  # tall H.222 brought 12 codes and none carries a wall-hung margin line.
+  raise refused.length.to_s unless refused.length == 244
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 198, 'open_unit' => 8 }
+  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 210, 'open_unit' => 8 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5118,14 +5127,15 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
     refused == { 'appliance units' => 30,  # +8 2026-09-28: USA panels H.222 (p.423)
-                 'pull-out units' => 15,
+                 # +8 2026-09-28: tall pull-out, Dispensa, Tandem, Convoy H.222 (p.133-134)
+                 'pull-out units' => 23,
                  'units with jumbo drawers' => 274,
                  'units with interior drawers' => 28,
                  'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 3,
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 674
+                 'curved units, whose width is an arc' => 6 } && allowed == 678 # +4 broom, fridge H.222
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -10723,6 +10733,19 @@ check('H.72 fillers for the 7612 top elements: PE0151 builds, BI0150 is held (Q3
   raise 'PE0151' unless Registry.lookup('PE0151')['buildable'] != false && Registry.lookup('PE0151')['family'] == 'Wall H.72'
   b = Registry.lookup('BI0150')
   raise 'BI0150' unless b['buildable'] == false && b['family'] == 'Top elements H.72'
+end
+
+check('a one-door tall unit takes the run plinth; a split column keeps its own (Project Guidelines p.87)') do
+  %w[CQ0631 CH0602 C90602 CH0930 CH0535 CH0650 CH0385 CH0686 CH0688 CH1612 CH9611 CH4712].each do |c|
+    raise "#{c} must follow the run" unless Registry.lookup(c)['plinth_from_run'] == true
+  end
+  # the 'for base unit' columns, including the H.78 ones that JOIN family Tall H.222
+  %w[CK0503 CK4601 C42657 C42640].each do |c|
+    raise "#{c} must keep its family plinth" if Registry.lookup(c)['plinth_from_run']
+  end
+  u = Registry.lookup('CH0602')
+  raise 'beside H.84' unless Generator.plinth_h_mm(u.merge('plinth_h_mm' => Registry.lookup('BL0967')['plinth_h_mm'])) == 60
+  raise 'alone' unless Generator.plinth_h_mm(u) == 100
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

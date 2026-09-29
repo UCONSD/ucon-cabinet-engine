@@ -924,6 +924,36 @@
        "Tall unit with door that can be fitted with a drawer and jumbo drawer kit (d.62 only, NOT offered wall-hung)"
       ],
       "note": "NOTHING ON THIS PAGE CAN BE HUNG - no 'Hung version' glyph on any depth band and no wall-hung surcharge in any margin, where the three shorter plain tall families all offer it on at least the plain door type. The first whole family the registry holds that is refused throughout."
+     },
+     {
+      "printed": 133,
+      "status": "extracted",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "Tall unit with pull-out door: CH0350 / CH0550 / CH0650",
+       "\"Dispensa\" tall unit with pull-out door: CH0385 / CH0585",
+       "\"Tandem\" tall unit with pull-out shelves: CH0586 / CH0686"
+      ],
+      "note": "2026-09-28, for the future (Andriy). All d.62, all one full-height front, all on the run's plinth (Project Guidelines p.87)."
+     },
+     {
+      "printed": 134,
+      "status": "partial",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "\"Convoy\" tall unit with pull-out shelves: CH0688",
+       "Tall broom cupboard with door: CH1512 / CH1612 (not in Maxima 2.2 with framed door)"
+      ],
+      "note": "The corner tall unit (CG/CH152D/S, 180D/S, 157D/S) is not held - the engine draws no corner tall."
+     },
+     {
+      "printed": 136,
+      "status": "extracted",
+      "extracted_on": "2026-09-28",
+      "types": [
+       "Tall unit for fridge with single door (sliding or fixed hinges): CH9611",
+       "Tall unit for fridge with door (not for fixed hinges): CH4712"
+      ]
      }
     ]
    },
