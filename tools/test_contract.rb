@@ -10888,5 +10888,11 @@ check('placement uses the new rule and refuses a blocked side; a corner seats by
   raise 'straight' unless Generator.new_span_mm(Registry.lookup('BL0967')) == [0.0, 900.0]
 end
 
+check('a top element draws its plan symbol at its own height, not on the floor') do
+  u = Registry.lookup('SE0600').merge('stands_on_top_mm' => 2280.0)
+  raise 'datum' unless Generator.row_datum_mm(u) == 2280.0
+  raise 'floor unit' unless Generator.row_datum_mm(Registry.lookup('BL0967')) == 0
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

@@ -2879,6 +2879,12 @@ module UCON
       # global height they collide: a base unit and the wall unit above it put
       # their swing arcs on the same millimetre and neither can be read.
       def row_datum_mm(unit)
+        # A unit standing on another rides with THAT row's top (core 1.9.12):
+        # the top elements of 7612 drew their plan arcs on the floor, under the
+        # base units' own, 2280 below the element they describe.
+        on = (unit || {})['stands_on_top_mm']
+        return on.to_f if on
+
         wall_hung?(unit) ? mount_bottom_mm(unit) : 0
       end
 
