@@ -6455,8 +6455,10 @@ check('A FILLER TAKES THE SAME PATH AS A CABINET, width and all') do
   gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
   raise 'the whole unit must reach the placement - width AND depth' unless
     gen.include?('placement_transform(model, unit)')
+  # core 1.9.11: the left step uses the new unit's SPAN, which for a filler is
+  # [0, its ordered width] - the same number, and a corner's span as well.
   raise 'and the left step must use its width' unless
-    gen.include?('span[0] - new_width_mm.to_f')
+    gen.include?('span[0] - new_span[1]') && Generator.new_span_mm(strip) == [0.0, 50.0]
 end
 
 check('a unit further down the same wall is NOT attached') do
@@ -10849,6 +10851,41 @@ check('a breadcrumb opens its own level, and carries no quoted JSON in its handl
   html = UCON::CabinetEngine::Palette.picker_html([], [])
   raise 'goCrumb' unless html.include?('function goCrumb(i)') && html.include?("CRUMBS.push([st.cls,st.sec,null])")
   raise 'the old crumb is back' if html.include?("JSON.stringify(st.cls)+',null,null'")
+end
+
+puts "\nthe side rule, by the room the new unit needs (core 1.9.11)"
+check('right first, then left, else blocked - by overlap, not by who touches') do
+  pl = UCON::CabinetEngine::Placement
+  raise 'free both' unless pl.side_for(0, 600, 0, 600, []) == :right
+  raise 'touching right' unless pl.side_for(0, 600, 0, 600, [[600, 1200]]) == :left
+  # 1.9.10 missed these two: a neighbour already overlapping the place, and a gap too small
+  raise 'overlapping right' unless pl.side_for(0, 600, 0, 600, [[400, 1000]]) == :left
+  raise 'gap too small' unless pl.side_for(0, 600, 0, 600, [[750, 1350]]) == :left
+  raise 'a filler fits the gap' unless pl.side_for(0, 600, 0, 50, [[750, 1350]]) == :right
+  raise 'both taken' unless pl.side_for(0, 600, 0, 600, [[600, 1200], [-600, 0]]) == :blocked
+  raise 'far away is free' unless pl.side_for(0, 600, 0, 600, [[3000, 3600]]) == :right
+  raise 'a twin on top is not a neighbour' unless pl.side_for(0, 600, 0, 50, [[0, 600]]) == :right
+  # a corner's span starts below 0
+  raise 'corner' unless pl.side_for(0, 600, -100, 900, [[600, 1200]]) == :left
+end
+check('the row is the front plane and the height, not the mounting word') do
+  pl = UCON::CabinetEngine::Placement
+  raise 'same row' unless pl.same_row_3d?(1.0, 0.0, 60, 900, 100, 880)
+  raise 'a top element on a tall is not beside a base unit' if pl.same_row_3d?(1.0, 0.0, 60, 900, 2280, 3000)
+  raise 'a hung base unit is in its floor row' unless pl.same_row_3d?(1.0, 5.0, 300, 1140, 60, 900)
+  raise 'a wall unit is not in the base row' if pl.same_row_3d?(1.0, 0.0, 60, 900, 1400, 2120)
+  raise 'coplanar' if pl.same_row_3d?(1.0, 270.0, 60, 900, 60, 900)
+  raise 'parallel' if pl.same_row_3d?(0.5, 0.0, 60, 900, 60, 900)
+end
+check('placement uses the new rule and refuses a blocked side; a corner seats by its span') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  %w[Placement.side_for( Placement.same_row_3d?( def\ row_candidates Both\ sides\ of span[0]\ -\ new_span[1]].each do |w|
+    raise w unless src.include?(w.delete('\\'))
+  end
+  u = Registry.lookup('BK090S')
+  sp = Generator.new_span_mm(u)
+  raise sp.inspect unless sp[1] - sp[0] > 0
+  raise 'straight' unless Generator.new_span_mm(Registry.lookup('BL0967')) == [0.0, 900.0]
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

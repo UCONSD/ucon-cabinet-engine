@@ -125,9 +125,22 @@ module UCON
           return Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * on
         end
 
-        side = placement_side(model, sel, span)
+        new_span = new_span_mm(new_unit)
+        side = placement_side(model, sel, span, new_unit, new_span)
         new_width_mm = new_unit && new_unit['width_mm']
         new_depth_mm = new_unit && new_unit['depth_mm']
+        if side == :blocked
+          # A corner continues round its turn, which is not a side of this row.
+          if sel_attrs['geometry_kind'].to_s == 'corner'
+            side = :right
+          else
+            raise ArgumentError,
+                  "Both sides of #{sel_attrs['code']} are taken.\n\n" \
+                  "The rule is right first, then left - and a #{(new_span[1] - new_span[0]).round} mm " \
+                  'unit fits on neither side without overlapping a neighbour in the same row. ' \
+                  'Select the unit at the end of the run, or make room. Nothing was drawn.'
+          end
+        end
 
         # THE TURN. If the selected unit is a corner and the side the rule chose
         # is the corner's WASTED end - the one facing the perpendicular wall -
@@ -160,11 +173,13 @@ module UCON
         # caller, where a person decided it. Never blocking beats never being
         # wrong: a unit in the wrong place can be dragged, a unit that was not
         # built has to be asked for twice.
+        # Seated by the NEW unit's own span, so a corner - whose span starts
+        # below 0 and has no width - lands on the left as well (core 1.9.11).
         offset =
-          if side == :left && new_width_mm
-            span[0] - new_width_mm.to_f
+          if side == :left
+            span[0] - new_span[1]
           else
-            span[1]
+            span[1] - new_span[0]
           end
 
         t = sel.transformation
@@ -349,41 +364,41 @@ module UCON
       # that can be got wrong about geometry is here; everything that can be
       # got wrong about the decision is in Placement.side_beside, where a
       # headless check can reach it.
-      def placement_side(model, sel, span)
-        mine = Contract.read(sel.definition)
-        t    = sel.transformation
+      # The new unit's span along its own x: [0, width] for a straight one, the
+      # corner's node span for a corner (Placement.span_mm), nil-safe.
+      def new_span_mm(unit)
+        u = unit || {}
+        w = u['width_clear_mm'] || u['width_mm']
+        return [0.0, w.to_f] if w
+        if u['corner_geometry'] && u['carcass_length_mm'] && u['execution']
+          sp = Placement.span_mm(carcass_mm: u['carcass_length_mm'],
+                                 nominal_mm: u['corner_geometry'].to_s.split('x').first.to_i,
+                                 execution:  u['execution'])
+          return sp if sp
+        end
+        [0.0, 0.0]
+      end
+
+      # THE SIDE RULE, READ OFF THE MODEL (core 1.9.11). Every unit in the model
+      # - nested in groups too, and the drawn passage door - that stands in the
+      # new unit's row: parallel, coplanar at the front, overlapping in HEIGHT.
+      # Then Placement.side_for: right if the new unit fits there, else left,
+      # else :blocked. See 22_placement.rb for the rule and why it changed.
+      def placement_side(model, sel, span, new_unit = nil, new_span = nil)
+        world = ->(tr) { model.respond_to?(:edit_transform) && model.active_path ? model.edit_transform * tr : tr }
+        t    = world.call(sel.transformation)
         xv   = Geom::Vector3d.new(1, 0, 0).transform(t); xv.normalize!
         yv   = Geom::Vector3d.new(0, 1, 0).transform(t); yv.normalize!
+        z0   = (base_z_mm(new_unit) rescue 0.0).to_f
+        h    = (new_unit && new_unit['height_mm']).to_f
+        new_z = h.positive? ? [z0, z0 + h] : [-1.0e6, 1.0e6]
 
         spans = []
-        model.entities.grep(Sketchup::ComponentInstance).each do |other|
-          next if other == sel
-
-          a = Contract.read(other.definition)
-          next unless a['code'] && a['depth_mm']
-
-          other_span = span_for_attrs(a)
-          next unless other_span
-
-          ot   = other.transformation
+        row_candidates(model.entities, Geom::Transformation.new, sel, 0).each do |other, ot, other_span|
           axis = Geom::Vector3d.new(0, 1, 0).transform(ot); axis.normalize!
-
-          # MEASURED AT THE FRONT, NOT AT THE BACK - corrected 2026-08-24 after
-          # Andriy reported that a run with something on its right still built
-          # right. A row is aligned at its FRONT: a 350 filler stands in a 620
-          # run with its back 270 mm off the wall, and 270 is nine times
-          # COPLANAR_TOL_MM, so measuring backs made every shallow neighbour
-          # INVISIBLE to the rule. Invisible on the right means the right looks
-          # free, and the run keeps growing into it.
-          #
-          # The origin IS the front edge - a unit is drawn from it forwards -
-          # so the two origins projected on the depth axis are the two front
-          # planes. This is the third time today the same distinction decided
-          # something: the 8x8 leg, the turn, and now this.
           offset = (ot.origin - t.origin).dot(yv).to_mm
-
-          next unless Placement.same_row?(mine['mounting'], a['mounting'],
-                                          axis.dot(yv), offset)
+          zs = world_z_range(other, ot)
+          next unless Placement.same_row_3d?(axis.dot(yv), offset, new_z[0], new_z[1], zs[0], zs[1])
 
           ends = other_span.map do |x|
             (Geom::Point3d.new(x.mm, 0, 0).transform(ot) - t.origin).dot(xv).to_mm
@@ -391,7 +406,40 @@ module UCON
           spans << ends.minmax
         end
 
-        Placement.side_beside(span[0], span[1], spans)
+        ns = new_span || new_span_mm(new_unit)
+        Placement.side_for(span[0], span[1], ns[0], ns[1], spans)
+      end
+
+      # [instance, world transformation, span along its x] for everything that
+      # can occupy a place in a row. UCON units are not entered; plain groups
+      # and components are, three levels deep, because a run can be grouped.
+      def row_candidates(entities, tr, sel, depth, out = [])
+        entities.each do |e|
+          next unless e.is_a?(Sketchup::ComponentInstance) || e.is_a?(Sketchup::Group)
+          next if e == sel
+
+          et = tr * e.transformation
+          defn = e.respond_to?(:definition) ? e.definition : e.entities.parent
+          a = e.is_a?(Sketchup::ComponentInstance) ? (Contract.read(defn) rescue {}) : {}
+          if a && a['code'] && a['depth_mm']
+            sp = span_for_attrs(a)
+            out << [e, et, sp] if sp
+            next
+          end
+          w = defn.get_attribute('UCON_CUSTOM', 'width_mm') rescue nil
+          if w
+            out << [e, et, [0.0, w.to_f]]
+            next
+          end
+          row_candidates(e.respond_to?(:definition) ? e.definition.entities : e.entities, et, sel, depth + 1, out) if depth < 3
+        end
+        out
+      end
+
+      def world_z_range(inst, world_tr)
+        bb = inst.respond_to?(:definition) ? inst.definition.bounds : inst.entities.parent.bounds
+        zs = (0..7).map { |k| bb.corner(k).transform(world_tr).z.to_mm }
+        zs.minmax
       end
 
       # ---- corner units ---------------------------------------------------

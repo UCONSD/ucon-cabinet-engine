@@ -344,6 +344,46 @@ module UCON
       # Spans are [lo, hi] along the SELECTED unit's own x, so left and right
       # are ITS left and right: a rotated run keeps its own sense of direction
       # and a kitchen drawn at 34 degrees behaves like one drawn square.
+      # ---- THE SIDE RULE, BY THE ROOM THE NEW UNIT NEEDS (core 1.9.11) -------
+      # Andriy, 2026-09-28: 'build right; if the right is taken, build left' did
+      # not always hold. side_beside asked only whether something STARTS at my
+      # right edge, so a neighbour already overlapping the place, or a gap too
+      # small for the new unit, read as free. side_for asks the real question:
+      # would the new unit, put there, overlap anything in its row? Right first,
+      # then left, else :blocked - which the caller refuses rather than building
+      # on top of a neighbour.
+      #
+      # new_lo / new_hi are the NEW unit's own span along its x (a corner's
+      # starts below 0); the target is that span seated against my end.
+      OVERLAP_TOL_MM = 2
+      Z_OVERLAP_MIN_MM = 10
+
+      def overlap_mm(a_lo, a_hi, b_lo, b_hi)
+        [a_hi, b_hi].min - [a_lo, b_lo].max
+      end
+
+      def side_for(mine_lo, mine_hi, new_lo, new_hi, spans, tol = OVERLAP_TOL_MM)
+        w = new_hi.to_f - new_lo.to_f
+        right = [mine_hi.to_f, mine_hi.to_f + w]
+        left  = [mine_lo.to_f - w, mine_lo.to_f]
+        free = ->(t) { spans.none? { |lo, hi| overlap_mm(t[0], t[1], lo, hi) > tol } }
+        return :right if free.call(right)
+        return :left  if free.call(left)
+
+        :blocked
+      end
+
+      # THE ROW IS THE FRONT PLANE AND THE HEIGHT, NOT THE MOUNTING WORD
+      # (core 1.9.11). Parallel, coplanar at the front, and overlapping in z.
+      # A hung base unit is in its floor neighbours' row; a top element on a
+      # tall, or a Thin on a base run, is not in the row of the unit beside it.
+      def same_row_3d?(depth_axis_dot, plane_offset_mm, a_zlo, a_zhi, b_zlo, b_zhi)
+        return false if depth_axis_dot < PARALLEL_MIN
+        return false if plane_offset_mm.abs > COPLANAR_TOL_MM
+
+        overlap_mm(a_zlo, a_zhi, b_zlo, b_zhi) > Z_OVERLAP_MIN_MM
+      end
+
       def side_beside(mine_lo, mine_hi, spans, touch_mm = SNAP_MM)
         right = spans.any? { |lo, hi| hi > mine_hi && (lo - mine_hi).abs <= touch_mm }
         left  = spans.any? { |lo, hi| lo < mine_lo && (mine_lo - hi).abs <= touch_mm }
