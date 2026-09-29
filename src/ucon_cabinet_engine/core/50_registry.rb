@@ -316,8 +316,19 @@ module UCON
         me = lookup(code, manufacturer)
         return nil unless me['corner_geometry'] && me['execution']
 
-        each_code(data(manufacturer)) do |row, _fam_name, _fam, _type_key, _unit_type|
+        # THE SIBLING IS IN THE SAME FAMILY (core 1.9.4). Found by Andriy in
+        # 7612, 2026-09-28: Place selected unit swapped an H.84 corner BK090S
+        # for its H.78 twin, because the same node, door width and opposite
+        # execution exist in both families and the first one met won. The
+        # family and the depth now have to match as well - the swap changes
+        # which end the door is at, never the height, the depth or the type.
+        each_code(data(manufacturer)) do |row, fam_name, _fam, type_key, _unit_type|
           next if row['code'] == code
+          next unless fam_name == me['family']
+          # AND THE SAME TYPE: the corner SINK AQ096S found the plain corner
+          # AQ090D in the same family and swapped a sink for a cupboard.
+          next unless me['unit_type'].nil? || type_key == me['unit_type']
+          next unless row['depth_mm'].nil? || me['depth_mm'].nil? || row['depth_mm'] == me['depth_mm']
           next unless row['corner_geometry'] == me['corner_geometry']
           next unless row['execution'] && row['execution'] != me['execution']
           next unless row['door_width_mm'] == me['door_width_mm']

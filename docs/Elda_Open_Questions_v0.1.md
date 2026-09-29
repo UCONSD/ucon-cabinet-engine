@@ -54,6 +54,7 @@ existed.
 | Q35 | BL0400 / B80400 print W 30, the same as BL0300 / B80300 - a misprint for 40? | **open** 2026-09-28 · Andriy reads it as a misprint; the registry holds 300 as printed |
 | Q36 | Hide & Seek as a PASSAGE door into the 7612 pantry: a door that opens INWARD, the hallway module without its back, push-open / spring-shut, a top element on it | **open** 2026-09-28 · **the main question is the inward-opening door**; decides whether the pantry entrance is Cesar at all |
 | Q37 | USA fridge panels H.222, printed p.423: the 24" codes print CH4640 / CH4651 while 18/30/36 print CH94xx / CH97xx / CH99xx - misprint for CH9600 / CH9601? | **open** 2026-09-28 · 7612 fridge = two 24" housings, so both doors are CH4640 |
+| Q38 | Filler beside a tall unit top element H.72 (SE): p.434 prints no H.72 front-only strip - PE0151 (wall filler, one-piece bottom) or BI0150 (base filler box)? | **open** 2026-09-28 · 7612 top elements over the H.222 columns |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1424,3 +1425,16 @@ CR9600 / CR9700 / CR9900 on p.418 (H.210).
    the wine cooler door, CH4651 or CH9601.
 2. 7612 has the fridge as **two 24" housings side by side** (fridge + freezer columns), so the order
    carries this code twice.
+
+## Q38 — Filler beside a top element H.72 (7612)
+
+**Status:** open · added 2026-09-28 · **the top elements over the 7612 tall row**
+
+7612 stands tall units H.222 (for base H.84, 60 plinth) with top elements H.72 (SE, printed p.173)
+on them, to 3000. Beside the columns the H.222 strip CG0151 closes the gap. Above them, printed
+p.434 has no H.72 row in the first position (front-only strip): it jumps from BE0151 H.60 to
+B70151 H.78. H.72 appears only as **BI0150** (second position, base unit filler, box d.35) and
+**PE0151** (third position, wall unit filler with one-piece bottom, d.35).
+1. **Which article closes a gap beside a top element H.72** - BI0150, PE0151, or something else?
+2. Can CG0151 simply be ordered 2940 tall (H.222 + H.72) as one strip for the column and its top
+   element together?

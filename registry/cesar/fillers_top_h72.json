@@ -1,0 +1,36 @@
+{
+ "section": "Closing strips and fillers for Maxima and Intarsio",
+ "class": "filler",
+ "family": "Top elements H.72",
+ "source_pages": "printed p.434 / PDF 436 (the H.72 row of the second position)",
+ "family_note": "No family-level keys - tall_top_h72.json owns them.",
+ "extraction_note": "2026-09-28, for the 7612 top elements H.72; held, not buildable (Q38).",
+ "data": {
+  "unit_types": {
+   "filler_base_unit": {
+    "description": "Base unit filler in door finishes from 2,3 to 15 cm - front in door finishes - sides, bottom and top panel in melamine",
+    "object_class": "filler",
+    "handed": false,
+    "interior_confirmed": [],
+    "source_ref": "printed p.434 / PDF 436",
+    "front_layout": {
+     "kind": "single",
+     "note": "One finished front on a melamine box; it does not open."
+    },
+    "codes": [
+     {
+      "code": "BI0150",
+      "width_range_mm": [
+       23,
+       150
+      ],
+      "depth_mm": 350
+     }
+    ],
+    "notes": "The H.72 row of the second position of printed p.434 ('Base unit filler ... sides, bottom and top panel in melamine'), d.35. For 7612: the other candidate beside a top element H.72, with PE0151 (Wall H.72).",
+    "buildable": false,
+    "not_buildable_reason": "HELD FOR LOOKUP. The page prints BI0150 at H.72 in the BASE-unit filler table, and the catalog has no base family H.72 - the only H.72 standing element is the tall top element (SE, printed p.173). Joined to 'Top elements H.72' because a filler may not be held without a family, but whether Cesar means it for a top element is not printed: Elda Q38. Buildable once she answers."
+   }
+  }
+ }
+}

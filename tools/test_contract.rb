@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1227 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 234 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1229 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 234 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, fillers: +2 - PE0151 (Wall H.72, buildable) and BI0150 (Top
+  # elements H.72, held) from printed p.434, for the 7612 top elements. Q38.
   # 2026-09-28, the row: +8 - USA fridge panels H.222, printed p.423, the
   # twin of p.418 for the 7612 fridge (two 24-inch housings). usa_tall_h222.json.
   # 2026-09-28, after: +17 - Hide & Seek H.222 (printed p.202), all held for
@@ -294,7 +296,7 @@ check('registry loads and holds 1227 codes (386 base + 74 sink + 12 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1227
+  raise "got #{n}" unless n == 1229
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -487,9 +489,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1227 rows, each with code/dims/description/source') do
+check('registry catalog: 1229 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1227
+  raise cat.length.to_s unless cat.length == 1229
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -2757,7 +2759,14 @@ check('the sibling article is looked up, never spelled') do
       a['door_width_mm'] == b['door_width_mm'] &&
       a['execution'] != b['execution']
     raise "#{c['code']} is its own sibling" if twin == c['code']
+    # core 1.9.4 (7612, 2026-09-28): BK090S swapped to an H.78 twin. The
+    # sibling keeps the family, the height and the depth, and swaps back.
+    raise "#{c['code']} -> #{twin} changes family" unless a['family'] == b['family']
+    raise "#{c['code']} -> #{twin} changes height" unless a['height_mm'] == b['height_mm']
+    raise "#{c['code']} -> #{twin} changes depth" unless a['depth_mm'] == b['depth_mm']
+    raise "#{c['code']} -> #{twin} does not swap back" unless Registry.sibling_execution_code(twin) == c['code']
   end
+  raise 'BK090S' unless Registry.lookup(Registry.sibling_execution_code('BK090S'))['height_mm'] == 840
 end
 
 check('continuing a run past a corner steps over the node, not the carcass') do
@@ -10700,6 +10709,20 @@ end
 check('the panel reads the ground back, not the registry alone') do
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
   raise 'apply' unless src.include?("Registry.lookup(attrs['code']).merge(Generator.inherited_ground(inst.definition))")
+end
+
+check('tall strips take the run plinth: CG0151 beside CK7744 stands on 60, alone on 100') do
+  %w[CQ0151 CG0151 C00151].each do |c|
+    raise c unless Registry.lookup(c)['plinth_from_run'] == true
+  end
+  u = Registry.lookup('CG0151')
+  raise 'alone' unless Generator.plinth_h_mm(u) == 100
+  raise 'beside' unless Generator.plinth_h_mm(u.merge('plinth_h_mm' => Registry.lookup('CK7744')['plinth_h_mm'])) == 60
+end
+check('H.72 fillers for the 7612 top elements: PE0151 builds, BI0150 is held (Q38)') do
+  raise 'PE0151' unless Registry.lookup('PE0151')['buildable'] != false && Registry.lookup('PE0151')['family'] == 'Wall H.72'
+  b = Registry.lookup('BI0150')
+  raise 'BI0150' unless b['buildable'] == false && b['family'] == 'Top elements H.72'
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
