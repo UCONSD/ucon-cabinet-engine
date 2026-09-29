@@ -10762,9 +10762,13 @@ check('an end panel may start on its neighbour plinth; a sheet may not choose') 
   fh = Registry.lookup('FH0030').merge('plinth_h_mm' => 60, 'ground_from_code' => 'CK7744', 'mounting' => 'floor')
   raise 'offer' unless Generator.panel_bottom_choosable?(fh)
   raise 'floor' unless Generator.base_z_mm(fh) == 0.0
-  up = fh.merge('panel_bottom' => 'plinth')
-  raise 'plinth' unless Generator.base_z_mm(up) == 60.0
+  # core 1.9.7: the choice is the height itself - floor, 60 or 100.
+  up = fh.merge('panel_bottom' => '60')
+  raise '60' unless Generator.base_z_mm(up) == 60.0
   raise 'top' unless Generator.base_z_mm(up) + up['height_mm'] == 2280.0
+  raise '100' unless Generator.base_z_mm(fh.merge('panel_bottom' => '100')) == 100.0
+  raise 'no neighbour' unless Generator.base_z_mm(Registry.lookup('FH0030').merge('mounting' => 'floor', 'panel_bottom' => '60')) == 60.0
+  raise 'choices' unless Generator::PANEL_BOTTOMS == %w[floor 60 100]
   raise 'sheet' if Generator.panel_bottom_choosable?(Registry.lookup('DZAD12'))
   raise 'a cabinet has no panel bottom' if Generator.panel_bottom_choosable?(Registry.lookup('CH0602'))
 end

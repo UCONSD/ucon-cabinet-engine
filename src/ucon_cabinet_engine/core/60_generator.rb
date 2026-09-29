@@ -1507,7 +1507,13 @@ module UCON
         # the floor it stops 60 short of a column on the run's 60 plinth. The
         # default stays the floor; 'plinth' lifts the board by the plinth its
         # ground came with (panel_ground carries the neighbour's).
-        return plinth_h_mm(unit) if (unit || {})['panel_bottom'].to_s == 'plinth'
+        # core 1.9.7 (Andriy, off the panel: 'there should be a 6 cm option'):
+        # the choice is the HEIGHT, 60 or 100, not 'whatever the neighbour had' -
+        # a panel built before 1.9.3 remembers no neighbour, and the panel offered
+        # it the Standards 100 as if that were the run's.
+        b = (unit || {})['panel_bottom'].to_s
+        return b.to_f if PANEL_BOTTOMS.include?(b) && b != 'floor'
+        return plinth_h_mm(unit) if b == 'plinth' # 1.9.6 objects, if any
 
         0.0
       end
@@ -1519,7 +1525,7 @@ module UCON
       # H.84, H.10 beside H.78), and whether an end panel starts on the floor or
       # on its neighbour's plinth. Everything else has its ground from its family.
       PLINTH_CHOICES_MM = [60, 100].freeze
-      PANEL_BOTTOMS = %w[floor plinth].freeze
+      PANEL_BOTTOMS = %w[floor 60 100].freeze
 
       def plinth_choosable?(unit)
         u = unit || {}

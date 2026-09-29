@@ -458,8 +458,8 @@ module UCON
             'current' => Generator.plinth_h_mm(unit).to_i,
             'from'    => unit['plinth_chosen'] ? 'chosen' : (unit['plinth_from_code'] || 'family') }
         state['panel_bottom'] = Generator.panel_bottom_choosable?(unit) &&
-          { 'current' => unit['panel_bottom'].to_s == 'plinth' ? 'plinth' : 'floor',
-            'plinth_mm' => Generator.plinth_h_mm(unit).to_i,
+          { 'current' => (Generator.base_z_mm(unit).to_i.zero? ? 'floor' : Generator.base_z_mm(unit).to_i.to_s),
+            'run_plinth_mm' => unit['ground_from_code'] ? Generator.plinth_h_mm(unit).to_i : nil,
             'from' => unit['ground_from_code'] }
         ref = Generator.wall_hung_ref(unit)
         state['wall_hung_ref'] = ref && ref['code']
@@ -805,7 +805,7 @@ module UCON
             raise ArgumentError, "#{unit['code']} is not an end panel; it has no bottom to choose."
           end
           unless Generator::PANEL_BOTTOMS.include?(bottom)
-            raise ArgumentError, "Panel bottom #{bottom.inspect}: floor or plinth."
+            raise ArgumentError, "Panel bottom #{bottom.inspect}: on the floor, or on a 60 or 100 plinth."
           end
           g['panel_bottom'] = bottom
         end
@@ -952,7 +952,9 @@ module UCON
             </fieldset>
             <fieldset id="pbFs" style="display:none"><legend>Panel bottom</legend>
               <label><input type="radio" name="pb" value="floor" onchange="rules()"> On the floor</label><br>
-              <label><input type="radio" name="pb" value="plinth" onchange="rules()"> <span id="pbPlinthLabel">On the plinth</span></label>
+              <label><input type="radio" name="pb" value="60" onchange="rules()"> On a 60 mm plinth (H.6, base H.84)</label><br>
+              <label><input type="radio" name="pb" value="100" onchange="rules()"> On a 100 mm plinth (H.10, base H.78)</label>
+              <div id="pbNote" class="muted" style="margin:2px 0 0"></div>
             </fieldset>
             <fieldset id="mountFs"><legend>Mounting</legend>
               <label><input type="checkbox" id="wallHung" onchange="rules()"> Wall-hung (no plinth)</label>
@@ -1127,8 +1129,9 @@ module UCON
               var pb=st.panel_bottom;
               document.getElementById('pbFs').style.display=pb?'':'none';
               if(pb){
-                document.getElementById('pbPlinthLabel').textContent=
-                  'On the plinth ('+pb.plinth_mm+' mm'+(pb.from?', from '+pb.from:'')+')';
+                document.getElementById('pbNote').textContent=pb.from
+                  ?('Built beside '+pb.from+', whose plinth is '+pb.run_plinth_mm+' mm.')
+                  :'No neighbour recorded at build.';
                 document.querySelectorAll('input[name=pb]').forEach(function(r){
                   r.checked=(pb.current===r.value);});
               }
