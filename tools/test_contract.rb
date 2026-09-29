@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1241 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1287 codes (46 open units + 386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
+  # (12 base, 14 wall, 20 tall), each joining its height family.
   # 2026-09-28, plain tall H.222: +12 - printed p.133 (pull-out, Dispensa,
   # Tandem), p.134 (Convoy, broom) and p.136 (fridge, single door), for the future.
   # 2026-09-28, fillers: +2 - PE0151 (Wall H.72, buildable) and BI0150 (Top
@@ -298,7 +300,7 @@ check('registry loads and holds 1241 codes (386 base + 74 sink + 12 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1241
+  raise "got #{n}" unless n == 1287
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -491,9 +493,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1241 rows, each with code/dims/description/source') do
+check('registry catalog: 1287 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1241
+  raise cat.length.to_s unless cat.length == 1287
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -605,6 +607,8 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'End elements for Maxima-Intarsio',
                                              'Glass wall units H. 96',
                                              'Hide & Seek tall units H. 222',
+                                             'Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick',
+                                             'Open base, wall and tall units, from 45 to 90 cm wide th. 2.2',
                                              'Panels - Linear Elements',
                                              'Shelves - Linear Elements',
                                              'Sink base units H. 58.5',
@@ -1199,8 +1203,11 @@ check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked a
     prefix = row['code'][0, 2]
     expected = depths.key(prefix)
     raise "#{row['code']}: prefix #{prefix} is in no slot of #{row['section']}" if expected.nil?
+    # An open unit prints carcass + the 2,2 door plane, rounded to the half
+    # centimetre (printed p.450): d.37,5 is the d.35 slot, d.64,5 the d.62 one.
+    said = u['depth_includes_front'] ? { 375 => 350, 645 => 620 }.fetch(row['depth_mm'], row['depth_mm']) : row['depth_mm']
     raise "#{row['code']}: #{prefix} names d.#{expected} and the row says #{row['depth_mm']}" unless
-      expected.to_i == row['depth_mm']
+      expected.to_i == said
 
     checked += 1
   end
@@ -1410,9 +1417,11 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # glyph or margin line on printed p.202. tall 181 -> 198.
   # 2026-09-28: 232 -> 244, not a flip. printed p.133, 134 and 136 of plain
   # tall H.222 brought 12 codes and none carries a wall-hung margin line.
-  raise refused.length.to_s unless refused.length == 244
+  # 2026-09-28: 244 -> 276, not a flip: open base (12) and tall (20) units,
+  # printed p.455-456, carry no wall-hung margin line.
+  raise refused.length.to_s unless refused.length == 276
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 26, 'tall' => 210, 'open_unit' => 8 }
+  raise by_class.inspect unless by_class == { 'base' => 38, 'tall' => 230, 'open_unit' => 8 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5540,7 +5549,9 @@ check('NOT EVERY WALL UNIT IS d.35 - the boiler housings are 620') do
   # and H.84 doubled them the next hour. The claim is not WHICH codes are deep,
   # it is that DEPTH FOLLOWS THE JOB - a boiler housing is as deep as a base
   # unit because a boiler is, and nothing else in the chapter is.
-  deep = Registry.catalog.select { |c| c['class'] == 'wall' && c['depth_mm'] != 350 }
+  # 2026-09-28: the open wall units print d.37,5 = 35 + the door plane (p.450).
+  deep = Registry.catalog.select { |c| c['class'] == 'wall' && c['depth_mm'] != 350 &&
+                                       !Registry.lookup(c['code'])['depth_includes_front'] }
   raise 'the d.62 wall units have vanished' if deep.empty?
   raise deep.map { |c| c['depth_mm'] }.uniq.inspect unless
     deep.map { |c| c['depth_mm'] }.uniq == [620]
@@ -10788,6 +10799,27 @@ check('the panel validates the choices and moves the body by what they change') 
   raise 'refusal' unless src.include?('the catalog sells H.6 and H.10 only')
   gsrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
   raise 'unit below reads its ground' unless gsrc.include?('merge(inherited_ground(sel.definition)), attrs)')
+end
+
+puts "\nopen units, printed p.455-456 (core 1.9.8)"
+check('open units: ordered width in the printed range, no front, box from the door plane') do
+  u = Registry.lookup('BK0145')
+  raise 'range' unless u['width_range_mm'] == [150, 450] && Registry.lookup('BK0190')['width_range_mm'] == [450, 900]
+  raise 'family' unless u['family'] == 'H.84' && Generator.plinth_h_mm(u) == 60
+  raise 'flush' unless Generator.panel_front_y_mm(u) == -22.0
+  raise 'a doored unit is not moved' unless Generator.panel_front_y_mm(Registry.lookup('BL0967')) == 0.0
+  w = Registry.with_ordered_width(u, 300)
+  raise 'no front' unless Generator.front_slabs(w).empty?
+  Contract.validate!(Generator.attributes_for(w))
+  raise 'wall hangs' unless Generator.wall_hung?(Registry.lookup('PE0145'))
+  raise 'open tall follows the run' unless Registry.lookup('CG0145')['plinth_from_run'] && Registry.lookup('CH0190')['plinth_from_run']
+  raise 'H.138 open tall keeps its family' if Registry.lookup('C10145')['plinth_from_run']
+  begin
+    Registry.lookup('BE0145')
+    raise 'BE0145 must not be held'
+  rescue RuntimeError, ArgumentError, KeyError => e
+    raise e if e.message == 'BE0145 must not be held'
+  end
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

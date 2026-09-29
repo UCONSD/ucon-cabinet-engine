@@ -235,6 +235,9 @@ module UCON
             # what the picker reads, and a key added to one and not the other is
             # exactly the wall_hung bug of 2026-08-22.
             'stands_on'          => unit_type['stands_on'],
+            # core 1.9.8: an open unit's printed d. already includes the door plane
+            # (printed p.450: 'The depth measurements are based on 2.2 cm thick doors').
+            'depth_includes_front' => unit_type['depth_includes_front'],
             'shelf_length_mm'    => row['shelf_length_mm'],
             # ROW FIRST, THEN THE TYPE. A shelf states its own maximum; a
             # ceramic top's is one number for the whole page and belongs on the
@@ -853,6 +856,7 @@ module UCON
             # whose ground is a different object. Carried on the unit type, so
             # it has to be lifted here like section and class.
             'stands_on'   => unit_type['stands_on'],
+            'depth_includes_front' => unit_type['depth_includes_front'],
             'shelf_length_mm' => row['shelf_length_mm'],
             'lights_surcharge_points' => row['lights_surcharge_points'],
             'price_group' => row['price_group'],

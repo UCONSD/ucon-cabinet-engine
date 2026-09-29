@@ -653,6 +653,13 @@ module UCON
         'usa_tall_oven_h60_two_jumbo'        => 'USA tall units for oven, jumbo drawers',
         'usa_tall_oven_microwave_1door'      => 'USA tall units for oven and microwave',
         'usa_tall_oven_microwave_2doors'     => 'USA tall units for oven and microwave, two doors',
+        # 2026-09-28, open units, printed p.455-456.
+        'open_base_145'                      => 'Open base units, W.15-45',
+        'open_base_190'                      => 'Open base units, W.45-90',
+        'open_wall_145'                      => 'Open wall units, W.15-45',
+        'open_wall_190'                      => 'Open wall units, W.45-90',
+        'open_tall_145'                      => 'Open tall units, W.15-45',
+        'open_tall_190'                      => 'Open tall units, W.45-90',
         # 2026-09-28, plain tall H.222, printed p.133-134 and p.136.
         'tall_pull_out_door'                 => 'Tall units with pull-out door',
         'tall_pull_out_dispensa'             => 'Tall units "Dispensa" with pull-out door',

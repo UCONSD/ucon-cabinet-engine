@@ -2023,16 +2023,18 @@
     "family": "Open units 15-45",
     "section": "Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick",
     "printed_pages": "455",
-    "status": "not_extracted",
-    "note": "Read only as far as the index."
+    "status": "partial",
+    "extracted_on": "2026-09-28",
+    "note": "2026-09-28 (Andriy: cheap open shelving). 23 codes into 15 files open_{base,wall,tall}_*.json, each JOINING its height family (base H.58.5 / H.78 / H.84, Wall H.36-H.120, Tall H.138-H.234). Width ordered in range, depth drawn from the door plane (printed p.450), open tall on the run's plinth. BE0145 / BF0145 (base H.60) not held: no base family H.60."
    },
    {
     "class": "open_unit",
     "family": "Open units 45-90",
     "section": "Open base, wall and tall units, from 45 to 90 cm wide th. 2.2",
     "printed_pages": "456",
-    "status": "not_extracted",
-    "note": "Read only as far as the index."
+    "status": "extracted",
+    "extracted_on": "2026-09-28",
+    "note": "2026-09-28 (Andriy: cheap open shelving). 23 codes into 15 files open_{base,wall,tall}_*.json, each JOINING its height family (base H.58.5 / H.78 / H.84, Wall H.36-H.120, Tall H.138-H.234). Width ordered in range, depth drawn from the door plane (printed p.450), open tall on the run's plinth."
    },
    {
     "class": "open_unit",

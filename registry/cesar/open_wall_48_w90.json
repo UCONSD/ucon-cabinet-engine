@@ -1,0 +1,38 @@
+{
+ "section": "Open base, wall and tall units, from 45 to 90 cm wide th. 2.2",
+ "class": "wall",
+ "family": "Wall H.48",
+ "source_pages": "printed p.456 / PDF 458 (the Wall H.48 rows)",
+ "family_note": "JOINS family Wall H.48 and declares no family key: height, ground and plinth come from the family, as the fillers of printed p.434 do.",
+ "extraction_note": "2026-09-28 (Andriy: cheap open shelving of small depth). Printed p.455 and p.456 taken whole except the base H.60 row of p.455 (BE0145 / BF0145 - no base family H.60 in the catalog; the H.60 prefix belongs to the top elements).",
+ "data": {
+  "unit_types": {
+   "open_wall_190": {
+    "description": "Open wall unit, 2,2 cm thick - 1 fixed shelf",
+    "object_class": "cabinet",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [
+     "1 fixed shelf"
+    ],
+    "source_ref": "printed p.456 / PDF 458",
+    "codes": [
+     {
+      "code": "PC0190",
+      "width_range_mm": [
+       450,
+       900
+      ],
+      "depth_mm": 375
+     }
+    ],
+    "depth_includes_front": true,
+    "front_layout": {
+     "kind": "none",
+     "note": "AN OPEN UNIT HAS NO FRONT. 'none' is stated rather than left absent: Panel.effective_slabs defaults a missing layout to 'single' and would hang a door on an open box."
+    },
+    "notes": "Printed d.37,5 / d.64,5 = carcass 35 / 62 + the 2,2 door plane (printed p.450: 'The depth measurements are based on 2.2 cm thick doors'). depth_includes_front: the box is drawn from the door plane back, flush with the doored units beside it. WIDTH IS ORDERED, NOT CODED: the 0145 codes (printed p.455) cover 150-450 mm, the 0190 codes (printed p.456) 450-900 mm - the page titles. 450 is inside both ranges; which code Cesar means at exactly 450 is not printed. Finishes printed p.453-454: melamine band 1, Technomat 2, Fenix NTM 4, silk lacquer 5, gloss/structured 6, veneers 7-8, metallic, Fenix NTA; 2,2 thick in every one. Bands 3, 9 and 11 are '-' on every row."
+   }
+  }
+ }
+}

@@ -1555,6 +1555,11 @@ module UCON
       # width, and shifting it forward by a door thickness would push it into
       # the carcass it is bolted to. Its y is where the placement puts it.
       def panel_front_y_mm(unit)
+        # AN OPEN UNIT IS THE OTHER CASE (core 1.9.8). Its printed d.37,5 / d.64,5
+        # is carcass + 2,2 of door plane - printed p.450 says so in as many words -
+        # and it has no door to stand in that plane. So its box starts where the
+        # doors beside it start, exactly like an end panel.
+        return -Standards::FRONT_T_MM.to_f if (unit || {})['depth_includes_front']
         return 0.0 unless (unit || {})['object_class'].to_s == 'panel'
         return 0.0 if Registry.sheet_panel?(unit)
 
