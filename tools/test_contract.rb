@@ -7543,6 +7543,11 @@ check('every class the catalog holds has a picker label') do
   # 2026-09-27: and the chapters the picker regroups a collection into
   # (Palette.in_chapters) - a heading the picker draws needs a label too.
   chapters = Palette::CHAPTER_COLLECTIONS.values
+  # 2026-09-28: the picker's top level is the book's general index; those
+  # labels live in CHAPTER_LABELS, and every mapped section lands in one.
+  raise 'chapter labels' unless Palette::CHAPTER_ORDER.all? { |k| Palette::CHAPTER_LABELS.key?(k) }
+  unplaced = Registry.map_sections.reject { |x| Palette.chapter_of(x) }
+  raise "sections in no chapter: #{unplaced.map { |x| x['section'] }.inspect}" unless unplaced.empty?
   classes = (held + mapped + chapters).uniq
   missing = classes.reject { |c| Palette::CLASS_LABELS.key?(c) }
   raise "no label for #{missing.inspect}" unless missing.empty?
@@ -9101,7 +9106,9 @@ check('THE PICKER MUST NOT OFFER A BUILD IT WILL ALWAYS REFUSE') do
   card = src[/function showCard.+?\n              \}/m]
   raise 'showCard is gone' unless card
   raise 'the picker still offers a Build for a worktop' unless
-    card.include?("c['class'] === 'worktop'") &&
+    # 2026-09-28: the picker row's class is now its CHAPTER; the element
+    # class travels beside it as element_class.
+    card.include?("(c.element_class||c['class']) === 'worktop'") &&
     card.include?("top ? 'none' : 'block'")
   raise 'and it must say where a top IS built' unless
     card.include?('Select the run and press Worktop')
@@ -10820,6 +10827,22 @@ check('open units: ordered width in the printed range, no front, box from the do
   rescue RuntimeError, ArgumentError, KeyError => e
     raise e if e.message == 'BE0145 must not be held'
   end
+end
+
+check('the picker is the book: open units under Fillers, end elements and open units') do
+  pal = UCON::CabinetEngine::Palette
+  cat = pal.picker_catalog
+  ch = ->(code) { cat.find { |c| c['code'] == code }['class'] }
+  { 'PE0145' => 'filler', 'CG0145' => 'filler', 'CG0151' => 'filler', 'FH0030' => 'filler',
+    'BA1869' => 'thin', 'CH4640' => 'usa', 'CK7744' => 'usa', 'BL9150' => 'usa',
+    'BL0967' => 'base', 'CH0602' => 'tall', 'SE0600' => 'tall', 'PE0600' => 'wall',
+    'CHHS50' => 'hide_seek', 'MNS022038' => 'linear', 'DZAD12' => 'linear' }.each do |code, want|
+    got = ch.call(code)
+    raise "#{code} in #{got}, the book says #{want}" unless got == want
+  end
+  raise 'element class kept' unless cat.find { |c| c['code'] == 'PE0145' }['element_class'] == 'wall'
+  order = cat.map { |c| pal::CHAPTER_ORDER.index(c['class']) || 999 }
+  raise 'rows are not in the book order' unless order == order.sort
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

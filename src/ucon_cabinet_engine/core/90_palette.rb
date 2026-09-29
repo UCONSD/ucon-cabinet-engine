@@ -277,12 +277,13 @@ module UCON
       # which the book does not print and the registry therefore does not hold
       # (domain rule 1). Without the tool the picker is what it always was.
       def picker_catalog
-        cat = in_chapters(Registry.catalog)
-        return cat unless TangramTool.available?
+        return in_chapters(Registry.catalog) unless TangramTool.available?
 
         TangramTool.ensure_loaded
-        cat.map { |c| c['family'].to_s.start_with?('Tangram') ? c.merge('tangram_place' => true) : c } +
-          [TangramTool.f_row].compact
+        # F joins BEFORE the chapters are sorted, so it sits with its Tangram
+        # rows in the book's order and not after the last chapter.
+        in_chapters(Registry.catalog.map { |c| c['family'].to_s.start_with?('Tangram') ? c.merge('tangram_place' => true) : c } +
+                    [TangramTool.f_row].compact)
       rescue StandardError => e
         warn "UCON picker: Tangram rows left out - #{e.class}: #{e.message}"
         in_chapters(Registry.catalog)
@@ -304,16 +305,73 @@ module UCON
       # and this regroups the picker's rows and nothing else.
       CHAPTER_COLLECTIONS = { 'Tangram' => 'tangram' }.freeze
 
+      # ---- THE PICKER'S CHAPTERS ARE THE BOOK'S (2026-09-28) ----------------
+      # Andriy, off the open units landing under Base / Wall / Tall while the
+      # book prints them in 'Fillers, end elements and open units': the top
+      # level of the picker is now the Kitchen System's own GENERAL INDEX
+      # (printed p.3), in its order, with the Maxima-Intarsio chapter split the
+      # way the book splits it - its own sub-indexes for base units (printed
+      # p.19), tall units (p.79) and wall units (p.205). A section goes to the
+      # chapter whose first page is the last one at or before the section's
+      # first printed page - read off catalog_map, so the book decides and not a
+      # list of names. The Linear Elements book is one chapter of its own.
+      #
+      # DISPLAY ONLY, like every label here: the registry keeps its element
+      # classes, and each picker row carries its own as element_class.
+      # [first printed page, key, label]. Keys that were classes before keep
+      # their names (base, tall, wall, tangram, glass, filler).
+      KS_CHAPTERS = [
+        [19,  'base',          'Base units'],
+        [57,  'tangram',       'Tangram'],
+        [63,  'block',         'Block base units'],
+        [79,  'tall',          'Tall units'],
+        [175, 'revego',        'Revego receding door system'],
+        [195, 'hide_seek',     'Hide & Seek'],
+        [205, 'wall',          'Wall units'],
+        [257, 'unit',          'Unit'],
+        [305, 'glass',         'Glass display cabinet elements'],
+        [321, 'nelle',         'N_Elle'],
+        [397, 'nelle_framed',  'N_Elle with framed door'],
+        [409, 'usa',           'USA elements'],
+        [433, 'filler',        'Fillers, end elements and open units'],
+        [457, 'thin',          'Thin'],
+        [469, 'trilli',        'Trilli'],
+        [483, 'accessories',   'Interior accessories, mechanisms and waste bins'],
+        [527, 'lighting',      'Lighting'],
+        [547, 'modifications', 'Modifications and customisations'],
+        [577, 'handles',       'Handles, grip recesses and plinths']
+      ].freeze
+      LINEAR_CHAPTER = ['linear', 'Linear Elements (Volume 3)'].freeze
+      CHAPTER_ORDER = (KS_CHAPTERS.map { |c| c[1] } + [LINEAR_CHAPTER[0]]).freeze
+      CHAPTER_LABELS = (KS_CHAPTERS.to_h { |c| [c[1], c[2]] }
+                          .merge(LINEAR_CHAPTER[0] => LINEAR_CHAPTER[1])).freeze
+
+      def first_printed_page(pages)
+        m = pages.to_s.match(/\d+/)
+        m && m[0].to_i
+      end
+
+      # [chapter key, section's first printed page] or nil.
+      def chapter_of(sec)
+        page = first_printed_page(sec['printed_pages'])
+        return [LINEAR_CHAPTER[0], page || 0] if sec['source_pdf'].to_s.include?('Linear Elements')
+        return nil unless page
+
+        ch = KS_CHAPTERS.select { |c| c[0] <= page }.last
+        ch && [ch[1], page]
+      end
+
       def in_chapters(rows)
         by_section = {}
         Registry.map_sections.each do |sec|
-          key = CHAPTER_COLLECTIONS[sec['collection'].to_s]
-          by_section[sec['section']] = key if key
+          ch = chapter_of(sec)
+          by_section[sec['section']] = ch if ch
         end
-        rows.map do |r|
-          key = by_section[r['section']]
-          key ? r.merge('class' => key, 'element_class' => r['class']) : r
-        end
+        rows.each_with_index.map do |r, i|
+          key, page = by_section[r['section']]
+          out = key ? r.merge('class' => key, 'element_class' => r['element_class'] || r['class']) : r
+          [out, [CHAPTER_ORDER.index(out['class']) || CHAPTER_ORDER.size, page || 0, i]]
+        end.sort_by { |_r, k| k }.map(&:first)
       end
 
       # ---- THE SINK MARK, 2026-08-28 ---------------------------------------
@@ -773,7 +831,9 @@ module UCON
               var CAT = #{script_json(catalog)};
               var GAPS = #{script_json(gaps)};
               var INITIAL_INCH = #{inches ? 'true' : 'false'};
-              var CLS = #{script_json(CLASS_LABELS)};
+              var CLS = #{script_json(CLASS_LABELS.merge(CHAPTER_LABELS))};
+              var ORDER = #{script_json(CHAPTER_ORDER)};
+              var CHPAGE = #{script_json(KS_CHAPTERS.to_h { |c| [c[1], c[0]] })};
               var TYP = #{script_json(TYPE_LABELS)};
               var st = { cls:null, sec:null, typ:null, code:null };
 
@@ -825,8 +885,13 @@ module UCON
               // the map names and we hold nothing in.
               function classes(){
                 var have = uniq(CAT.map(function(c){return c['class'];}));
-                return have.concat(uniq(GAPS.map(function(g){return g['class'];}))
+                var all = have.concat(uniq(GAPS.map(function(g){return g['class'];}))
                   .filter(function(v){ return v && have.indexOf(v) < 0; }));
+                // The book's order (Palette::CHAPTER_ORDER), not the order found.
+                var at = function(v){ var i = ORDER.indexOf(v); return i < 0 ? 999 : i; };
+                return all.map(function(v,i){ return [v,i]; })
+                  .sort(function(a,b){ return (at(a[0]) - at(b[0])) || (a[1] - b[1]); })
+                  .map(function(p){ return p[0]; });
               }
               function holds(cls){
                 return CAT.some(function(c){ return c['class'] === cls; });
@@ -864,9 +929,25 @@ module UCON
                 var el = document.getElementById('content'); el.innerHTML='';
                 document.getElementById('card').style.display='none';
                 document.getElementById('buildBtn').style.display='none';
-                if(!st.cls){ list(classes(),
-                  function(v){return CLS[v]||v;}, function(v){ setLevel(v,null,null); },
-                  function(v){ return holds(v) ? null : 'catalog only'; }); return; }
+                if(!st.cls){
+                  // EVERY CHAPTER OF THE GENERAL INDEX, in the book's order. One
+                  // we have not even mapped is shown too, inert, with its page -
+                  // so the picker reads as the book does and a missing chapter
+                  // is visible rather than absent.
+                  var known = classes();
+                  var full = ORDER.concat(known.filter(function(k){ return ORDER.indexOf(k) < 0; }));
+                  full.forEach(function(v){
+                    if(known.indexOf(v) >= 0){
+                      list([v], function(x){return CLS[x]||x;}, function(x){ setLevel(x,null,null); },
+                           function(x){ return holds(x) ? null : 'catalog only'; });
+                    } else {
+                      var g = document.createElement('div'); g.className='ghost';
+                      g.innerHTML = row(esc(CLS[v]||v) + (CHPAGE[v] ? ' <small>· printed p.' + CHPAGE[v] + '</small>' : ''),
+                                        'not mapped');
+                      el.appendChild(g);
+                    }
+                  });
+                  return; }
                 if(!st.sec){ list(uniq(rows().map(function(c){return c.section;})),
                   function(v){return v;}, function(v){ setLevel(st.cls,v,null); });
                   ghosts(el, function(g){ return g.level==='section' && g['class']===st.cls; },
@@ -1037,7 +1118,7 @@ module UCON
                 // the row. Andriy: "не нужны предустановленные опции, это для
                 // филлеров". Keyed on the CLASS, because that is what the presets
                 // were chosen for.
-                ((c['class'] === 'filler') ? [50, 100, 150] : [])
+                (((c.element_class||c['class']) === 'filler') ? [50, 100, 150] : [])
                   .filter(function(mm){ return mm >= lo && mm <= hi; })
                   .forEach(function(mm){
                     var pb = document.createElement('button'); pb.className='wbtn';
@@ -1257,7 +1338,7 @@ module UCON
                     c.carcass_length_mm + ' × ' + c.depth_mm + ' · door ' + c.door_width_mm +
                     '<br><i>' + c.execution + ' execution — the mirror is a different code; ' +
                     'the door hand is set in the properties panel</i>'
-                  : c['class'] === 'end_panel'
+                  : (c.element_class||c['class']) === 'end_panel'
                   ? 'H ' + c.height_mm + ' × D ' + c.depth_mm + ' mm, ' +
                     c.width_mm + ' mm thick' +
                     '<br><i>the depth is the catalog\u2019s DRAWN d. \u2014 the carcass ' +
@@ -1295,7 +1376,7 @@ module UCON
                     'Drawn by the Tangram tool from the brochure plan \u2014 PRELIMINARY, ' +
                     'the curve is confirmed by Cesar.</i>';
                 }
-                var top = c['class'] === 'worktop';
+                var top = (c.element_class||c['class']) === 'worktop';
                 if(top){
                   el.innerHTML += '<br><i>A top is not built from a list: it is as ' +
                     'long as the run it covers and its depth is a band chosen against ' +
