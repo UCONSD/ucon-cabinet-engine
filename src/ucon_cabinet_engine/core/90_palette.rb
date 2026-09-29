@@ -913,16 +913,29 @@ module UCON
                              if(ts.length===1) st.typ = ts[0]; }
               }
 
+              // EACH CRUMB OPENS ITS OWN LEVEL (2026-09-28, Andriy: 'Base units H. 39'
+              // threw him back to the start of the catalog). Two faults: every crumb
+              // opened the level ABOVE its own, and the section and type crumbs
+              // wrote JSON strings - double quotes - inside a double-quoted onclick,
+              // which cut the handler short. The targets now live in CRUMBS and a
+              // crumb carries only its index.
+              var CRUMBS = [];
               function crumb(){
-                var parts = [];
-                parts.push(st.cls ? link(CLS[st.cls]||st.cls, 'null,null,null') : '');
-                if(st.sec) parts.push(link(st.sec, JSON.stringify(st.cls)+',null,null'));
-                if(st.typ) parts.push(link(TYP[st.typ]||st.typ,
-                  JSON.stringify(st.cls)+','+JSON.stringify(st.sec)+',null'));
-                document.getElementById('crumb').innerHTML =
-                  parts.filter(Boolean).join(' › ') || 'Catalog';
+                CRUMBS = [[null,null,null]];
+                var parts = [link('Catalog', 0)];
+                if(st.cls){ CRUMBS.push([st.cls,null,null]); parts.push(link(CLS[st.cls]||st.cls, CRUMBS.length-1)); }
+                if(st.sec){ CRUMBS.push([st.cls,st.sec,null]); parts.push(link(st.sec, CRUMBS.length-1)); }
+                if(st.typ){ CRUMBS.push([st.cls,st.sec,st.typ]); parts.push(link(TYP[st.typ]||st.typ, CRUMBS.length-1)); }
+                document.getElementById('crumb').innerHTML = parts.join(' › ');
               }
-              function link(txt, args){ return '<a onclick="setLevel('+args+')">'+txt+'</a>'; }
+              function link(txt, i){ return '<a onclick="goCrumb('+i+')">'+esc(txt)+'</a>'; }
+              function goCrumb(i){
+                var c = CRUMBS[i];
+                // setLevel auto-advances past a level with one choice - a crumb
+                // must land exactly where it says, so this sets the level directly.
+                st = { cls:c[0], sec:c[1], typ:c[2], code:null };
+                render();
+              }
 
               function render(){
                 crumb();

@@ -10845,5 +10845,11 @@ check('the picker is the book: open units under Fillers, end elements and open u
   raise 'rows are not in the book order' unless order == order.sort
 end
 
+check('a breadcrumb opens its own level, and carries no quoted JSON in its handler') do
+  html = UCON::CabinetEngine::Palette.picker_html([], [])
+  raise 'goCrumb' unless html.include?('function goCrumb(i)') && html.include?("CRUMBS.push([st.cls,st.sec,null])")
+  raise 'the old crumb is back' if html.include?("JSON.stringify(st.cls)+',null,null'")
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
