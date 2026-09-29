@@ -1,0 +1,124 @@
+{
+ "section": "USA elements | for tall units H. 222",
+ "class": "tall",
+ "collection": "USA elements",
+ "family": "USA Tall H.222",
+ "source_pages": "printed p.423 / PDF 425 (taken whole: both types)",
+ "family_naming_note": "Twin of 'USA Tall H.210' (usa_tall_h210.json), namespaced for the same reason: the metric chapter also has a family called H.222. Same two types, same four widths, height 2220 instead of 2100. Everything said in usa_tall_h210.json about the hand, the nominal width, the wine cooler aperture and the finish restriction applies here unchanged and is not copied as prose - only the data is repeated.",
+ "extraction_note": "2026-09-28 for 7612 Hillside Dr (Andriy: fridge as two 24\" housings beside CK7744 in the H.222 row). The whole page, 8 codes.",
+ "code_note": "THE 24-INCH CODES BREAK THE PATTERN AND ARE COPIED AS PRINTED. 18/30/36 read CH94xx/CH97xx/CH99xx, the twins of CR94xx/CR97xx/CR99xx on p.418; the 24 prints CH4640 and CH4651, not CH9600/CH9601. Could be a misprint - ask Elda before ordering (Q37). The registry keeps the printed code: a code is never corrected by pattern.",
+ "data": {
+  "height_mm": 2220,
+  "plinth_h_mm": 100,
+  "plinth_h_note": "Fallback 100 when nothing is selected, as usa_tall_h210.json. Beside an H.84 run plinth_from_run gives 60: 60 + 2220 = 2280, the same top as a Tall H.222 | for base unit H.84 column.",
+  "plinth_continues": true,
+  "plinth_from_run": true,
+  "plinth_from_run_note": "Same decision as usa_tall_h210.json (Andriy 2026-09-28): the plinth follows the selected neighbour.",
+  "appliance_niche": {
+   "bottom": "floor",
+   "bottom_correction_2026_08_26": "CORRECTED 2026-08-26 (Andriy, owed 10 finding 1). The datum moved from the top of the plinth to the FLOOR, and the 2026-08-22 decision below is reversed rather than erased (learned rule 9). It was right about the elevation and wrong about the machine: drawn from plinth_top the opening came out 2033,6 tall against the 2133,6 the appliance makers require, so the TOP was correct and the HEIGHT was a hundred millimetres short. The appliance seam found it the first time it ran. The plinth line is still drawn across the front, and the plinth ORDERED there is one with a cutout - the same sentence the dishwasher already carries, and the housing now says it on itself through Generator.niche_span_note.",
+   "top_mm": 2133.6,
+   "trust": "indicative",
+   "source": "appliance",
+   "bottom_note": "The housing starts at the TOP of the plinth, not on the floor (Andriy, 2026-08-22, off the model: the phantom was coming out from under the plinth). The number itself is not stored here - it is Standards::PLINTH_H_MM, and a second copy of 100 would be a second thing to change. CORRECTION 2026-08-22: it is now this family's own plinth_h_mm, read by Generator.plinth_h_mm; Standards::PLINTH_H_MM is only the fallback for a family that does not state one. The point of the sentence stands - the number is written once and asked for, never copied.",
+   "top_note": "84 in = 2133,6. Both Thermador panel-ready wine columns print 'Required Cutout Size (HxWxD): 84\" x 18\" x 25\"' and '84\" x 24\" x 25\"' - the same 84 whatever the width, which is what makes it a housing standard rather than a model dimension. Measured table: _manifest.json external_specs.us_appliance_housing_cutouts.",
+   "why_it_matters": "Our front runs 100 to 2200 and the housing runs 100 to 2133,6, so 66,4 is left over ABOVE the appliance and INSIDE the housing. That gap is already written up in representation_notes as the thing that will need a custom closing panel - drawing the niche to the real cutout is what makes it visible instead of merely recorded."
+  },
+  "plinth_note": "OURS, NOT THE CATALOG'S. The plinth belongs to the RUN, not to this article - nothing on printed p.418 mentions one. We draw it under this panel so the plinth line does not BREAK on the drawing wherever a fridge stands in the run. Decided by Andriy 2026-08-21: draw exactly the plinth a base cabinet gets, so it is not lost on the sheet. The dishwasher door on printed p.47 deliberately gets NONE - the plinth in front of that machine really is cut away - which is why this is a per-family flag and not a rule about appliance panels.",
+  "representation_notes": [
+   "WIDTH DRAWN NOMINAL, as usa_tall_h210.json.",
+   "HEIGHT: 84 in housing = 2133,6 against a 2220 panel on a 60 plinth (top 2280), so 146,4 is left over above the appliance inside the housing - more than the 66,4 of H.210 on 100. The closing panel is not extracted here either."
+  ],
+  "unit_types": {
+   "usa_fridge_door": {
+    "description": "Door for USA fridge - 1 door",
+    "object_class": "appliance_front",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [],
+    "source_ref": "printed p.423 / PDF 425",
+    "codes": [
+     {
+      "code": "CH9400",
+      "width_mm": 457,
+      "depth_mm": 22
+     },
+     {
+      "code": "CH4640",
+      "width_mm": 610,
+      "depth_mm": 22
+     },
+     {
+      "code": "CH9700",
+      "width_mm": 762,
+      "depth_mm": 22
+     },
+     {
+      "code": "CH9900",
+      "width_mm": 914,
+      "depth_mm": 22
+     }
+    ],
+    "notes": "Same article as on p.418 (see usa_tall_h210.json usa_fridge_door), 2220 tall. Hand drawn in the elevation only, never ordered.",
+    "front_layout": {
+     "kind": "single",
+     "hand_shown": "elevation_only",
+     "note": "One full-height panel, 2220 tall. No hinge_axis: this is not a hung door. The hand IS drawn, but in the front elevation and nowhere else - the plan arc and the open leaf both describe a swing that belongs to the appliance, and asserting one would be a drawing we cannot stand behind."
+    }
+   },
+   "usa_wine_cooler_door": {
+    "description": "Door for USA fridge - 1 wine cooler door",
+    "object_class": "appliance_front",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [],
+    "source_ref": "printed p.423 / PDF 425",
+    "codes": [
+     {
+      "code": "CH9401",
+      "width_mm": 457,
+      "depth_mm": 22
+     },
+     {
+      "code": "CH4651",
+      "width_mm": 610,
+      "depth_mm": 22
+     },
+     {
+      "code": "CH9701",
+      "width_mm": 762,
+      "depth_mm": 22
+     },
+     {
+      "code": "CH9901",
+      "width_mm": 914,
+      "depth_mm": 22
+     }
+    ],
+    "notes": "Same article as on p.418 (see usa_tall_h210.json usa_wine_cooler_door), 2220 tall. Stainless steel protection 234 points, no code; no-entry for Maxima 2.2 with framed door and Metal doors; use melamine, Technomat, Unicolor or Fenix - printed again on p.423.",
+    "front_layout": {
+     "kind": "single",
+     "hand_shown": "elevation_only",
+     "note": "One full-height panel, 2220 tall, with a rectangular aperture through it. The catalog dimensions neither the aperture nor its position, so the rails below are carried from appliance specifications and the hole is drawn INDICATIVE - see cutout.trust. Hand in the front elevation only, for the same reasons as the plain fridge door.",
+     "cutout": {
+      "kind": "rectangular_aperture",
+      "trust": "indicative",
+      "source": "appliance",
+      "rail_side_mm": 80,
+      "rail_top_mm": 156,
+      "rail_bottom_mm": 243,
+      "centred_horizontally": true,
+      "aperture_note": "The aperture is DERIVED, never stored: width = panel width - 2 x rail_side, height = panel height - rail_top - rail_bottom. Every appliance maker dimensions the RAILS and lets the aperture follow, because the rails are what stay constant when the panel width changes. Storing the aperture instead would need a row per width and would disagree with itself the first time a width was added.",
+      "evidence": {
+       "measured_table": "_manifest.json external_specs.wine_cooler_panel_apertures - three manufacturer specifications, read 2026-08-22. The numbers live there and only there: this article takes a default from that table, it does not keep a second copy of it.",
+       "why_these_defaults": "rail_side and rail_top CONVERGE across two unrelated makers (79/79/84 and 155/158/158), so 80 and 156 are defensible. rail_bottom does not converge at all (111 against 243) and 243 is taken because these are US widths meeting US appliances, while the Miele figure belongs to a 60 cm European column that never carries a 2100 front. That third number is the guess, and it is why the WHOLE aperture is marked indicative rather than only its lower edge.",
+       "cesar_side": "Cesar prices this front at exactly x1.5 of the plain fridge door in every width and every finish column - 200->300, 323->484, 528->791, 665->999, 1333->2001 on CR9700/CR9701, and the same ratio on CR9400/9401, CH9700/9701, CH4640/4651. A multiplier that ignores the size of the hole is a price for the VARIANT, not for a piece of machining - the catalog's own evidence that it holds no geometry for it. Nor is there a cutout article: printed p.548 and p.554-556 list no machining line for a front. What does exist is a paid engineering service on printed p.541 (989394, 108 points, 'Feasibility study regarding cutouts and positioning'), which is the mechanism by which dimensions travel from us to the factory.",
+       "the_drawing_is_not_a_drawing": "The p.418 elevation was compared vector by vector against the plain door above it (pdftocairo -svg): the SAME artwork, differing by exactly two line segments. Its frame reads 12-15 % of width at the sides and 5-6 % of height top and bottom, but the panel is drawn at 1:2.83 while the real widths run 1:2.30 to 1:3.44. Not to scale, and the left-hand view labelled 210 is a side view with no aperture at all.",
+       "open_with_elda": "Whether the factory wants the aperture dimensions from us or takes them from the appliance model named in the order. One line, still unsent, in the mini-order request."
+      }
+     }
+    }
+   }
+  }
+ }
+}

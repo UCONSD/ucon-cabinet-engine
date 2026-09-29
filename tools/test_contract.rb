@@ -268,7 +268,9 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1219 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 14 USA tall + 234 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1227 codes (386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 234 tall + 16 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-28, the row: +8 - USA fridge panels H.222, printed p.423, the
+  # twin of p.418 for the 7612 fridge (two 24-inch housings). usa_tall_h222.json.
   # 2026-09-28, after: +17 - Hide & Seek H.222 (printed p.202), all held for
   # lookup: the 7612 pantry door, between two tall units.
   # 2026-09-28, final: -5 - Andriy keeps only the two dishwasher-door series of
@@ -292,7 +294,7 @@ check('registry loads and holds 1219 codes (386 base + 74 sink + 12 appliance + 
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1219
+  raise "got #{n}" unless n == 1227
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -485,9 +487,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1219 rows, each with code/dims/description/source') do
+check('registry catalog: 1227 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1219
+  raise cat.length.to_s unless cat.length == 1227
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -625,6 +627,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'USA elements | for base units H. 84',
                                              'USA elements | for tall units H. 210',
                                              'USA elements | for tall units H. 210 for base unit H. 84',
+                                             'USA elements | for tall units H. 222',
                                              'USA elements | for tall units H. 222 for base unit H. 84',
                                              'Wall units H. 120',
                                              'Wall units H. 36',
@@ -3400,8 +3403,11 @@ CUTOUT_TYPES = Registry.data['families'].flat_map do |fam_name, fam|
 end.select { |_f, _k, t| (t['front_layout'] || {})['cutout'] }
 
 check('exactly one unit type in the registry carries a cutout, and it is the wine cooler') do
-  keys = CUTOUT_TYPES.map { |_f, k, _t| k }
+  # 2026-09-28: one TYPE, now in two families - H.210 (p.418) and H.222 (p.423).
+  keys = CUTOUT_TYPES.map { |_f, k, _t| k }.uniq
+  fams = CUTOUT_TYPES.map { |f, _k, _t| f }.sort
   raise keys.inspect unless keys == ['usa_wine_cooler_door']
+  raise fams.inspect unless fams == ['USA Tall H.210', 'USA Tall H.222']
 end
 
 check('every cutout is marked indicative and sourced from the appliance') do
@@ -5102,7 +5108,8 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
   # BEFORE the catalog's list and is not part of it, and jumbo/allowed are back
   # to the numbers they held before the panels landed.
   raise "refusals now #{refused.inspect}, allowed #{allowed}" unless
-    refused == { 'appliance units' => 22, 'pull-out units' => 15,
+    refused == { 'appliance units' => 30,  # +8 2026-09-28: USA panels H.222 (p.423)
+                 'pull-out units' => 15,
                  'units with jumbo drawers' => 274,
                  'units with interior drawers' => 28,
                  'end panels, whose width is a thickness' => 124,

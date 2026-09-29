@@ -53,6 +53,7 @@ existed.
 | Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position; 2026-09-28: + the BM0967 drawer base under the downdraft |
 | Q35 | BL0400 / B80400 print W 30, the same as BL0300 / B80300 - a misprint for 40? | **open** 2026-09-28 · Andriy reads it as a misprint; the registry holds 300 as printed |
 | Q36 | Hide & Seek as a PASSAGE door into the 7612 pantry: a door that opens INWARD, the hallway module without its back, push-open / spring-shut, a top element on it | **open** 2026-09-28 · **the main question is the inward-opening door**; decides whether the pantry entrance is Cesar at all |
+| Q37 | USA fridge panels H.222, printed p.423: the 24" codes print CH4640 / CH4651 while 18/30/36 print CH94xx / CH97xx / CH99xx - misprint for CH9600 / CH9601? | **open** 2026-09-28 · 7612 fridge = two 24" housings, so both doors are CH4640 |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1407,3 +1408,15 @@ floor-standing back panel.
    tall units?** Revego (printed p.176-193) was looked at and does not fit - its door swings OUT
    and retracts into the carcass side, and the recess is a cupboard, not a passage.
 
+## Q37 — USA fridge panel H.222: the 24-inch code (7612)
+
+**Status:** open · added 2026-09-28 · **both fridge doors of 7612**
+
+Kitchen System printed p.423 (USA elements for tall units H.222) lists the door for a USA fridge as
+CH9400 18", **CH4640 24"**, CH9700 30", CH9900 36", and the wine cooler door as CH9401,
+**CH4651**, CH9701, CH9901. Every other width follows the CH9x pattern, the twin of CR9400 /
+CR9600 / CR9700 / CR9900 on p.418 (H.210).
+1. **Is CH4640 the right code for the 24" fridge door H.222, or is it CH9600?** Same question for
+   the wine cooler door, CH4651 or CH9601.
+2. 7612 has the fridge as **two 24" housings side by side** (fridge + freezer columns), so the order
+   carries this code twice.

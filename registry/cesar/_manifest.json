@@ -1838,7 +1838,20 @@
     "family": "H.222",
     "section": "USA elements | for tall units H. 222",
     "printed_pages": "423-426",
-    "status": "not_extracted"
+    "status": "partial",
+    "extracted_on": "2026-09-28",
+    "note": "2026-09-28: printed p.423 whole, 8 codes (usa_tall_h222.json), family 'USA Tall H.222', for 7612 Hillside Dr. 424-426 not read.",
+    "pages": [
+     {
+      "printed": 423,
+      "status": "extracted",
+      "types": [
+       "Door for USA fridge (1 door): CH9400 W.45.7 / CH4640 W.61 / CH9700 W.76.2 / CH9900 W.91.4",
+       "Door for USA fridge (1 wine cooler door): CH9401 / CH4651 / CH9701 / CH9901, same four widths"
+      ],
+      "note": "The 24-inch codes print CH4640 / CH4651, off the CH9x pattern - kept as printed, Elda Q37."
+     }
+    ]
    },
    {
     "class": "tall",
