@@ -92,7 +92,9 @@
         },
         "wall_hung": false,
         "wall_hung_note": "REFUSED IN THE CATALOG'S OWN WORDS, in the section title: 'without fixings'. Not a missing glyph and not a derivation - the strongest form of this reading the chapter offers, and the same kind printed p.37 gives with 'not available wall hung'. Read at 150 and 600 dpi, 2026-08-25.",
-        "notes": "NO SHELF, and the difference from H.72 is printed: this position lists the door and nothing else, while printed p.173 adds '1 shelf'. A 360 box that holds no shelf is worth writing down rather than assuming it was an omission. THE MECHANISM IS NAMED AND NOT CODED: the margin prices 'Servo Drive mechanism <=120' at 554 with no article code against it, so nothing is recorded as a companion - a companion is a LINE with a code and this has none. Same blocker as printed p.112 and printed p.116's jumbo position."
+        "notes": "NO SHELF, and the difference from H.72 is printed: this position lists the door and nothing else, while printed p.173 adds '1 shelf'. A 360 box that holds no shelf is worth writing down rather than assuming it was an omission. THE MECHANISM IS NAMED AND NOT CODED: the margin prices 'Servo Drive mechanism <=120' at 554 with no article code against it, so nothing is recorded as a companion - a companion is a LINE with a code and this has none. Same blocker as printed p.112 and printed p.116's jumbo position.",
+        "stands_on": "unit_below",
+        "stands_on_note": "2026-09-28, core 1.9.6 (Andriy, 7612): a top element rests on the tall unit beneath it - printed p.170-173, 'without fixings' - so its bottom is that unit's top, read off the SELECTED unit through its code and its own ground (a one-door tall on the run's 60 plinth tops out at 2280). Before this it was drawn on the floor and placed by hand or by probe. Nothing selected: refused, as Horizontal Thin is."
       }
     }
   }

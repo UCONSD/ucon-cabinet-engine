@@ -10748,5 +10748,43 @@ check('a one-door tall unit takes the run plinth; a split column keeps its own (
   raise 'alone' unless Generator.plinth_h_mm(u) == 100
 end
 
+puts "\nthe ground a person may choose (core 1.9.6)"
+check('the plinth switch is offered exactly where the plinth follows the run') do
+  %w[CH0602 CG0930 CH0650 CH4640 CR9600 CG0151].each do |c|
+    raise "#{c} must offer 6/10" unless Generator.plinth_choosable?(Registry.lookup(c))
+  end
+  %w[BL0967 B80601 CK7744 CK0503 BK0151 PG0151 FH0030 SE0600].each do |c|
+    raise "#{c} must not offer a plinth" if Generator.plinth_choosable?(Registry.lookup(c))
+  end
+  raise 'choices' unless Generator::PLINTH_CHOICES_MM == [60, 100]
+end
+check('an end panel may start on its neighbour plinth; a sheet may not choose') do
+  fh = Registry.lookup('FH0030').merge('plinth_h_mm' => 60, 'ground_from_code' => 'CK7744', 'mounting' => 'floor')
+  raise 'offer' unless Generator.panel_bottom_choosable?(fh)
+  raise 'floor' unless Generator.base_z_mm(fh) == 0.0
+  up = fh.merge('panel_bottom' => 'plinth')
+  raise 'plinth' unless Generator.base_z_mm(up) == 60.0
+  raise 'top' unless Generator.base_z_mm(up) + up['height_mm'] == 2280.0
+  raise 'sheet' if Generator.panel_bottom_choosable?(Registry.lookup('DZAD12'))
+  raise 'a cabinet has no panel bottom' if Generator.panel_bottom_choosable?(Registry.lookup('CH0602'))
+end
+check('top elements and their fillers stand on the unit below') do
+  %w[SB0600 SD0600 SE0600 BE0151 BI0150].each do |c|
+    raise c unless Generator.stands_on_unit_below?(Registry.lookup(c))
+  end
+  u = Registry.lookup('SE0600').merge('stands_on_top_mm' => 2280.0)
+  raise 'z' unless Generator.base_z_mm(u) == 2280.0
+  raise 'message' unless Generator.stands_on_needs_a_unit_message('SE0600', Registry.lookup('SE0600')).include?('without fixings')
+end
+check('the panel validates the choices and moves the body by what they change') do
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  %w[def\ ground_patch def\ shift_body! plinthFs pbFs plinth_mm panel_bottom].each do |w|
+    raise w unless src.include?(w.delete('\\'))
+  end
+  raise 'refusal' unless src.include?('the catalog sells H.6 and H.10 only')
+  gsrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'unit below reads its ground' unless gsrc.include?('merge(inherited_ground(sel.definition)), attrs)')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

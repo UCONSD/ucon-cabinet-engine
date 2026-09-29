@@ -666,7 +666,7 @@ module UCON
         # has since moved.
         if stands_on_unit_below?(unit)
           ground = unit_below_ground(model)
-          raise ArgumentError, stands_on_needs_a_unit_message(code) if ground.nil?
+          raise ArgumentError, stands_on_needs_a_unit_message(code, unit) if ground.nil?
 
           unit = unit.merge(ground)
           inherited.merge!(ground)
@@ -1501,7 +1501,34 @@ module UCON
       # A hung panel is the other case and keeps the hung datum: "on the floor"
       # is meaningless 1400 up a wall.
       def panel_base_z_mm(unit)
-        wall_hung?(unit) ? mount_bottom_mm(unit) : 0.0
+        return mount_bottom_mm(unit) if wall_hung?(unit)
+        # ON THE NEIGHBOUR'S PLINTH, when a person says so (core 1.9.6). Andriy,
+        # 2026-09-28, 7612: FH0030 is 2220 like the column it closes, and from
+        # the floor it stops 60 short of a column on the run's 60 plinth. The
+        # default stays the floor; 'plinth' lifts the board by the plinth its
+        # ground came with (panel_ground carries the neighbour's).
+        return plinth_h_mm(unit) if (unit || {})['panel_bottom'].to_s == 'plinth'
+
+        0.0
+      end
+
+      # ---- WHAT A PERSON MAY CHOOSE ABOUT THE GROUND (core 1.9.6) -----------
+      # Two choices, each offered only where the catalog leaves it open:
+      # the plinth height of a unit whose plinth follows its run (one-front tall,
+      # USA panels, tall strips - Project Guidelines p.87 / p.70: H.6 beside
+      # H.84, H.10 beside H.78), and whether an end panel starts on the floor or
+      # on its neighbour's plinth. Everything else has its ground from its family.
+      PLINTH_CHOICES_MM = [60, 100].freeze
+      PANEL_BOTTOMS = %w[floor plinth].freeze
+
+      def plinth_choosable?(unit)
+        u = unit || {}
+        u['plinth_from_run'] ? !wall_hung?(u) : false
+      end
+
+      def panel_bottom_choosable?(unit)
+        u = unit || {}
+        u['object_class'].to_s == 'panel' && !Registry.sheet_panel?(u) && !wall_hung?(u)
       end
 
       # ITS FRONT EDGE IS IN THE PLANE OF THE DOORS. Every unit is drawn from
@@ -1586,6 +1613,10 @@ module UCON
       # is selected, when it hangs, or when its family states no plinth - the
       # caller then keeps its own family's number.
       def run_plinth_note(unit)
+        if unit['plinth_chosen']
+          return " PLINTH CHOSEN: #{unit['plinth_h_mm'].to_i} mm (H.#{(unit['plinth_h_mm'].to_i / 10)}), " \
+                 'set in the properties panel - Project Guidelines p.87 / p.70.'
+        end
         return '' unless unit['plinth_from_code']
 
         " PLINTH TAKEN FROM THE RUN: #{unit['plinth_h_mm'].to_i} mm, off " \
@@ -1605,7 +1636,10 @@ module UCON
 
       def remember_ground!(definition, ground)
         (ground || {}).each do |k, v|
-          next if v.nil?
+          if v.nil?
+            definition.delete_attribute(GROUND_DICT, k.to_s) if definition.respond_to?(:delete_attribute)
+            next
+          end
 
           definition.set_attribute(GROUND_DICT, k.to_s, v)
         end
@@ -1652,7 +1686,10 @@ module UCON
         code  = attrs['code'].to_s
         return nil if code.empty?
 
-        below = Registry.lookup(code)
+        # THE UNIT'S OWN GROUND, not only its code's (core 1.9.6): a one-door
+        # tall on the run's 60 plinth is 2280 high, and Registry.lookup alone
+        # says 2320 - a top element would have floated 40 mm above it.
+        below = effective(Registry.lookup(code).merge(inherited_ground(sel.definition)), attrs)
         top = base_z_mm(below).to_f + below['height_mm'].to_f
         return nil unless top.positive?
 
@@ -1661,7 +1698,13 @@ module UCON
         nil
       end
 
-      def stands_on_needs_a_unit_message(code)
+      def stands_on_needs_a_unit_message(code, unit = nil)
+        if unit && unit['family'].to_s.start_with?('Top elements')
+          return "#{code} cannot stand on the floor.\n\n" \
+                 "It is a tall unit TOP ELEMENT - printed p.170-173, 'without fixings': it rests " \
+                 "on the tall unit beneath it, so its bottom is that unit's top.\n\n" \
+                 'Select the tall unit it sits on and build again. Nothing was drawn.'
+        end
         "#{code} cannot stand on the floor.\n\n" \
         "printed p.458 opens with 'Can only be fitted below a top', and the page " \
         'draws the three in order: a set of base units underneath, this module, ' \

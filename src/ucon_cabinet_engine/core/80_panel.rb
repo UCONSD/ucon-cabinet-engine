@@ -452,6 +452,15 @@ module UCON
           Array((attrs || {})['variants']).any? { |v| v['key'] == LED_VARIANT_KEY }
         state['led_temperature'] = led_temperature_of(attrs)
         state['wall_hung_available'] = Generator.wall_hung_available?(unit)
+        # core 1.9.6 - the ground choices, and what is chosen now.
+        state['plinth_choice'] = Generator.plinth_choosable?(unit) &&
+          { 'options' => Generator::PLINTH_CHOICES_MM,
+            'current' => Generator.plinth_h_mm(unit).to_i,
+            'from'    => unit['plinth_chosen'] ? 'chosen' : (unit['plinth_from_code'] || 'family') }
+        state['panel_bottom'] = Generator.panel_bottom_choosable?(unit) &&
+          { 'current' => unit['panel_bottom'].to_s == 'plinth' ? 'plinth' : 'floor',
+            'plinth_mm' => Generator.plinth_h_mm(unit).to_i,
+            'from' => unit['ground_from_code'] }
         ref = Generator.wall_hung_ref(unit)
         state['wall_hung_ref'] = ref && ref['code']
         # WHAT THE CHECKBOX SHOULD SHOW, decided HERE and not in the HTML.
@@ -488,6 +497,7 @@ module UCON
           return @dialog.execute_script("render(#{state.to_json})")
         end
         unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
+        unit  = unit.merge(Generator.inherited_ground(inst.definition)) if unit
         @dialog.execute_script("render(#{selection_state(unit, attrs).to_json})")
       end
 
@@ -683,6 +693,13 @@ module UCON
         # The ground the build inherited from its neighbour (core 1.9.3) - the
         # registry alone would redraw a run-plinth panel on its family default.
         unit  = Registry.lookup(attrs['code']).merge(Generator.inherited_ground(inst.definition))
+        # THE GROUND CHOICES (core 1.9.6): the plinth of a run-plinth unit, the
+        # bottom of an end panel. Validated here, written with the other facts
+        # below, and the body is moved by exactly the change they make.
+        old_z   = Generator.base_z_mm(Generator.effective(unit, attrs))
+        gpatch  = ground_patch(unit, payload)
+        unit    = unit.merge(gpatch.reject { |_k, v| v.nil? })
+        gpatch.each_key { |k| unit.delete(k) if gpatch[k].nil? }
         patch = attributes_patch(unit, payload)
         # `defn` is deliberately NOT read yet - make_unique below replaces it.
         # THE REGISTRY ROW IS NOT THIS OBJECT. Everything below asks the
@@ -723,6 +740,9 @@ module UCON
           make_instance_unique!(inst)
           defn = inst.definition
           Contract.write!(defn, attrs.merge(patch))
+          step = 'moving the body to the chosen ground'
+          Generator.remember_ground!(defn, gpatch)
+          shift_body!(defn, Generator.base_z_mm(chosen) - old_z)
           # ASKED OF THE FRONT, NOT OF THE OPENING - 2026-08-29. This read
           # `patch['opening_method'] == 'gola'`, which is a fact only something
           # that OPENS ever has, so a filler could never have had its front
@@ -759,6 +779,50 @@ module UCON
       # unit has none, which is what makes that safe. HOW one is built is the
       # generator's answer and not ours: this method deliberately holds no
       # dimension, no material and no setback.
+      # The two ground choices, or nothing. A choice the unit does not offer is
+      # refused by name rather than ignored - a rule that lives only in HTML is
+      # not a rule.
+      def ground_patch(unit, payload)
+        g = {}
+        want = payload['plinth_mm'].to_s
+        unless want.empty?
+          unless Generator.plinth_choosable?(unit)
+            raise ArgumentError, "#{unit['code']} takes its plinth from its family; there is no choice to make."
+          end
+          mm = want.to_i
+          unless Generator::PLINTH_CHOICES_MM.include?(mm)
+            raise ArgumentError, "Plinth #{want} mm: the catalog sells H.6 and H.10 only (printed p.624)."
+          end
+          if mm != Generator.plinth_h_mm(unit).to_i || unit['plinth_chosen']
+            g['plinth_h_mm'] = mm
+            g['plinth_chosen'] = true
+            g['plinth_from_code'] = nil
+          end
+        end
+        bottom = payload['panel_bottom'].to_s
+        unless bottom.empty?
+          unless Generator.panel_bottom_choosable?(unit)
+            raise ArgumentError, "#{unit['code']} is not an end panel; it has no bottom to choose."
+          end
+          unless Generator::PANEL_BOTTOMS.include?(bottom)
+            raise ArgumentError, "Panel bottom #{bottom.inspect}: floor or plinth."
+          end
+          g['panel_bottom'] = bottom
+        end
+        g
+      end
+
+      # Everything but the plinth moves with the ground; the plinth and the
+      # fronts are redrawn right after, the symbols after that.
+      def shift_body!(defn, dz_mm)
+        return if dz_mm.abs < 0.01
+
+        movers = defn.entities.to_a.reject { |e| e.is_a?(Sketchup::Group) && e.name == 'PLINTH' }
+        defn.entities.transform_entities(
+          Geom::Transformation.translation(Geom::Vector3d.new(0, 0, dz_mm.mm)), movers
+        )
+      end
+
       def rebuild_plinth(model, defn, unit)
         doomed = defn.entities.grep(Sketchup::Group).select { |g| g.name == 'PLINTH' }
         defn.entities.erase_entities(doomed) unless doomed.empty?
@@ -880,6 +944,15 @@ module UCON
               <div id="ledNote" class="muted" style="margin:2px 0 0"></div>
               <div id="ledTempWarn" class="flag" style="display:none"></div>
               <div id="ledWarn" class="flag" style="display:none"></div>
+            </fieldset>
+            <fieldset id="plinthFs" style="display:none"><legend>Plinth</legend>
+              <label><input type="radio" name="plinth" value="60" onchange="rules()"> H.6 &mdash; 60 mm (beside base H.84)</label><br>
+              <label><input type="radio" name="plinth" value="100" onchange="rules()"> H.10 &mdash; 100 mm (beside base H.78)</label>
+              <div id="plinthNote" class="muted" style="margin:2px 0 0"></div>
+            </fieldset>
+            <fieldset id="pbFs" style="display:none"><legend>Panel bottom</legend>
+              <label><input type="radio" name="pb" value="floor" onchange="rules()"> On the floor</label><br>
+              <label><input type="radio" name="pb" value="plinth" onchange="rules()"> <span id="pbPlinthLabel">On the plinth</span></label>
             </fieldset>
             <fieldset id="mountFs"><legend>Mounting</legend>
               <label><input type="checkbox" id="wallHung" onchange="rules()"> Wall-hung (no plinth)</label>
@@ -1043,6 +1116,22 @@ module UCON
                   if(k===st.led_temperature)o.selected=true;ts.add(o);});
                 if(!st.led_temperature)none.selected=true;
               }
+              var pc=st.plinth_choice;
+              document.getElementById('plinthFs').style.display=pc?'':'none';
+              document.querySelectorAll('input[name=plinth]').forEach(function(r){
+                r.checked=!!pc && String(pc.current)===r.value;});
+              document.getElementById('plinthNote').textContent=!pc?'':
+                (pc.from==='chosen'?'Chosen here.':
+                 pc.from==='family'?'No neighbour was selected at build: the family default.':
+                 'Taken from '+pc.from+' at build.');
+              var pb=st.panel_bottom;
+              document.getElementById('pbFs').style.display=pb?'':'none';
+              if(pb){
+                document.getElementById('pbPlinthLabel').textContent=
+                  'On the plinth ('+pb.plinth_mm+' mm'+(pb.from?', from '+pb.from:'')+')';
+                document.querySelectorAll('input[name=pb]').forEach(function(r){
+                  r.checked=(pb.current===r.value);});
+              }
               WALL_HUNG_REF=st.wall_hung_ref||'';
               document.getElementById('mountFs').style.display=
                 st.wall_hung_available?'':'none';
@@ -1103,7 +1192,11 @@ module UCON
                      hardware_ref:(!gola&&document.getElementById('hmode').value==='factory')
                                         ?document.getElementById('handle').value:'',
                      hinge_side:HANDED?document.getElementById('hinge').value:'',
-                     wall_hung:document.getElementById('wallHung').checked};
+                     wall_hung:document.getElementById('wallHung').checked,
+                     plinth_mm:(STATE&&STATE.plinth_choice&&document.querySelector('input[name=plinth]:checked'))
+                               ?document.querySelector('input[name=plinth]:checked').value:'',
+                     panel_bottom:(STATE&&STATE.panel_bottom&&document.querySelector('input[name=pb]:checked'))
+                               ?document.querySelector('input[name=pb]:checked').value:''};
               sketchup.apply(JSON.stringify(p));
             }
             // ---- Tangram: its own form, the same choices the book prints ----
