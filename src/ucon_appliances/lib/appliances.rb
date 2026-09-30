@@ -37,7 +37,7 @@ module UCON
     # extension loader reads it from here; the panel shows it beside the
     # engine's core version. Two extensions, two clocks, on purpose - a shared
     # number would make "the engine runs without appliances" untestable.
-    VERSION = '0.6.2'
+    VERSION = '0.6.3'
 
     module_function
 

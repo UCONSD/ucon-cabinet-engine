@@ -771,9 +771,11 @@ end
 # The first eight models, for 7612 Hillside Dr. Every value from the Design and
 # Planning Guide Vol. 10.1, printed pages (claude/thermador-recon-2026-09-24.md).
 
-TH_7612 = %w[CIT36YWBB UCVM36XS VTI1FZ MEDMC301WS T36IT100NP T24IW905SP DWHD660EPR TCM24PS].freeze
+# 2026-09-30: T24IR905SP + T24IF905SP joined (the fridge became 24 + 24).
+TH_7612 = %w[CIT36YWBB UCVM36XS VTI1FZ MEDMC301WS T36IT100NP T24IW905SP DWHD660EPR TCM24PS
+             T24IR905SP T24IF905SP].freeze
 
-check('the eight 7612 models are in the Thermador catalogue and nowhere else') do
+check('the ten 7612 models are in the Thermador catalogue and nowhere else') do
   A.for_brand('thermador').map { |a| a['model'] }.sort == TH_7612.sort &&
     TH_7612.all? { |m| A.brand_key_of(m) == 'thermador' }
 end

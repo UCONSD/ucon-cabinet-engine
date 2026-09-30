@@ -5,7 +5,7 @@
  "generated": "2026-09-24",
  "units": "mm, measured from the finished floor",
  "rule": "a value appears here only if it is printed in the manufacturer's own document (design guide, planning guide or specification sheet), with that document named on the value",
- "note": "Thermador: the first eight models, for 7612 Hillside Dr (decisions-2026-09-24-appliance-brands.md, thermador-recon-2026-09-24.md). Every value is read from the Design and Planning Guide Vol. 10.1 and names its PRINTED page. No prices here - prices are checked when a proposal is made.",
+ "note": "Thermador: the first eight models, for 7612 Hillside Dr (decisions-2026-09-24-appliance-brands.md, thermador-recon-2026-09-24.md). Every value is read from the Design and Planning Guide Vol. 10.1 and names its PRINTED page. No prices here - prices are checked when a proposal is made. 2026-09-30: T24IR905SP + T24IF905SP added (7612 fridge 24 + 24, Andriy); T36IT100NP and TCM24PS stay in the catalogue but are no longer in the 7612 list.",
  "sources": [
   {
    "brand": "Thermador",
@@ -358,6 +358,80 @@
     "ventilation: rear panel removed or cut 19 11/16 x 15 3/4 in (500 x 400), and 1 3/8 in (35) gap to the wall (p.226)",
     "in a 30 in column it needs the trim kit TCMTK30RS (p.224)",
     "TCM24PS is the plumbed model; TCM24TS has a refillable reservoir (p.224)"
+   ]
+  },
+  {
+   "model": "T24IR905SP",
+   "brand": "Thermador",
+   "series": "Freedom",
+   "type": "refrigeration_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "product_name": "24\" Freedom Built-In Fresh Food Column, custom panel",
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 2134,
+     "d": 635,
+     "source": "thermador-design-guide-vol10.1.pdf p.155"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "electrical rating not transcribed yet",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.198"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "cutout 84 x 24 x 25 in (p.155); columns take 84-85 3/16 in (2134-2164) high (p.198); appliance 83 3/4 x 23 3/4 x 24 in (p.155)",
+    "no ice maker and no water dispenser in the fresh food column (p.155) - no water line",
+    "7612 Hillside Dr (Andriy 2026-09-30): the fridge is 24 + 24, this column beside T24IF905SP; the freezer column ships with the side-by-side kit, no heater kit for this pair (p.164)",
+    "custom panel 3/4 in (19 mm) on the page (p.198); the Cesar CH4640 front is 22 mm - Elda W2"
+   ]
+  },
+  {
+   "model": "T24IF905SP",
+   "brand": "Thermador",
+   "series": "Freedom",
+   "type": "freezer_tall",
+   "install_class": "tall_opening",
+   "finish": "panel_ready",
+   "nominal_w_in": 24,
+   "product_name": "24\" Freedom Built-In Freezer Column with Internal Ice Maker, custom panel",
+   "installations": {
+    "standard": {
+     "w": 610,
+     "h": 2134,
+     "d": 635,
+     "source": "thermador-design-guide-vol10.1.pdf p.157"
+    }
+   },
+   "services": [
+    {
+     "service": "power",
+     "datum_x": "none",
+     "spec": "electrical rating not transcribed yet",
+     "note": "",
+     "source": "thermador-design-guide-vol10.1.pdf p.204"
+    },
+    {
+     "service": "water",
+     "datum_x": "none",
+     "spec": "cold water for the internal ice maker",
+     "note": "variable water-line position shown on the cutout drawing (p.204)",
+     "source": "thermador-design-guide-vol10.1.pdf p.204"
+    }
+   ],
+   "ada_variant": null,
+   "notes": [
+    "cutout 84 x 24 x 25 in (p.157); columns take 84-85 3/16 in (2134-2164) high (p.204); appliance 84 x 23 3/4 x 24 in (p.157)",
+    "a side-by-side installation kit is included with every freezer column (p.164)",
+    "7612 Hillside Dr (Andriy 2026-09-30): the fridge is 24 + 24, this column beside T24IR905SP"
    ]
   }
  ]
