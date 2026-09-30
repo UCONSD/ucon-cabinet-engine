@@ -1324,6 +1324,21 @@ module UCON
                 var h = document.getElementById('whint');
                 if(h) h.textContent = why;
               }
+              // A HELD CODE IS NOT OFFERED A BUILD (core 1.9.15). Search and the
+              // type list already grey it out; the size and depth grids did not,
+              // so BI0150 (held for Elda Q38) was measured, pressed and refused
+              // by a dialog (Andriy, 2026-09-30). The reason goes in the hint.
+              var syncBuildSized = syncBuild;
+              syncBuild = function(c){
+                if(c && c.buildable === false && !c.tangram_place){
+                  document.getElementById('buildBtn').style.display = 'none';
+                  var h = document.getElementById('whint');
+                  if(h) h.textContent = 'Held, not buildable yet' +
+                    (c.not_buildable_reason ? ' \u2014 ' + c.not_buildable_reason : '.');
+                  return;
+                }
+                syncBuildSized(c);
+              };
               function sizeGrid(el){
                 var rs = rows();
                 if(rs.length && rs[0].corner_geometry){ cornerList(el); return; }

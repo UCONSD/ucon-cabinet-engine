@@ -10946,5 +10946,13 @@ check('measure button is wired: raytest in the generator, callback and handler i
   ["'measure_gap'", 'sketchup.measure_gap(', 'function measured(r)'].each { |t| raise "palette: #{t}" unless pal.include?(t) }
 end
 
+puts "\na held code is not offered a Build (core 1.9.15)"
+check('syncBuild hides Build and shows the reason for a held code') do
+  pal = File.read(File.expand_path('../src/ucon_cabinet_engine/core/90_palette.rb', __dir__))
+  raise 'wrapper' unless pal.include?('var syncBuildSized = syncBuild;') && pal.include?("'Held, not buildable yet'")
+  c = UCON::CabinetEngine::Registry.lookup('BI0150')
+  raise 'BI0150 still held' unless c && c['buildable'] == false && c['not_buildable_reason'].to_s.include?('Q38')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
