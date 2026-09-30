@@ -794,6 +794,22 @@ module UCON
           end
         end
 
+        # ---- A FILLER STANDS IN ITS NEIGHBOUR'S ROW (core 1.9.16) ------------
+        # Andriy, 2026-09-30, v0.4: SE0700 (a top element on 2280) selected,
+        # Measure, a filler built - and drawn from the floor, because a filler
+        # knew only its own family's ground. Beside a unit that is off the floor
+        # (hung, or standing on another) the filler hangs at THAT unit's bottom;
+        # and a filler whose height is not the neighbour's is refused in a
+        # sentence instead of drawn somewhere else.
+        if unit['object_class'].to_s == 'filler' && !stands_on_unit_below?(unit)
+          ground, why = filler_beside_ground(model, unit)
+          raise ArgumentError, why if why
+          if ground
+            unit = unit.merge(ground)
+            inherited.merge!(ground)
+          end
+        end
+
         unless unit.fetch('buildable', true)
           raise ArgumentError,
                 "#{code} is in the registry but cannot be built yet.\n\n" \
@@ -1822,6 +1838,41 @@ module UCON
         { 'stands_on_top_mm' => top, 'stands_on_code' => code }
       rescue StandardError
         nil
+      end
+
+      # [ground, nil] / [nil, why] / [nil, nil] for a filler beside the selected
+      # unit. Read through the neighbour's code and its own ground, never its
+      # geometry (the same rule as unit_below_ground). A neighbour that is not a
+      # registry unit - the drawn passage door - says nothing either way.
+      def filler_beside_ground(model, filler)
+        sel = selected_unit(model)
+        return [nil, nil] unless sel
+
+        attrs = Contract.read(sel.definition) || {}
+        code  = attrs['code'].to_s
+        return [nil, nil] if code.empty?
+
+        row = (Registry.lookup(code) rescue nil)
+        return [nil, nil] unless row
+
+        nb = effective(row.merge(inherited_ground(sel.definition)), attrs)
+        nb_h = nb['height_mm'].to_f
+        f_h  = filler['height_mm'].to_f
+        if nb_h.positive? && f_h.positive? && (nb_h - f_h).abs > 1
+          return [nil, "#{filler['code']} is #{f_h.round} mm high, and #{code} beside it is #{nb_h.round}.\n\n" \
+                       "A filler closes the gap in ONE row, so it is as high as the unit it " \
+                       "stands beside. Pick the filler of #{code}'s own height" +
+                       (nb['family'].to_s.start_with?('Top elements') ? ' - beside a top element H.72 that is PE0151 (Wall units H.72).' : '.') +
+                       "\n\nNothing was drawn."]
+        end
+
+        bottom = base_z_mm(nb).to_f
+        return [nil, nil] unless wall_hung?(nb) || nb['stands_on_top_mm']
+        return [nil, nil] unless bottom > 1
+
+        [{ 'mounting' => 'wall_hung', 'mount_bottom_mm' => bottom }, nil]
+      rescue StandardError
+        [nil, nil]
       end
 
       def stands_on_needs_a_unit_message(code, unit = nil)

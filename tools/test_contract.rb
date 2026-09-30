@@ -10954,5 +10954,17 @@ check('syncBuild hides Build and shows the reason for a held code') do
   raise 'BI0150 still held' unless c && c['buildable'] == false && c['not_buildable_reason'].to_s.include?('Q38')
 end
 
+puts "\na filler stands in its neighbour's row (core 1.9.16)"
+check('build asks filler_beside_ground: hangs beside a raised unit, refuses a wrong height') do
+  gen = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'wired' unless gen.include?("ground, why = filler_beside_ground(model, unit)")
+  raise 'helper' unless gen.include?('def filler_beside_ground(model, filler)')
+  raise 'hangs' unless gen.include?("{ 'mounting' => 'wall_hung', 'mount_bottom_mm' => bottom }")
+  raise 'refusal' unless gen.include?('A filler closes the gap in ONE row')
+  pe = UCON::CabinetEngine::Registry.lookup('PE0151')
+  se = UCON::CabinetEngine::Registry.lookup('SE0700')
+  raise 'PE0151 is the H.72 filler beside a top element' unless pe['height_mm'] == se['height_mm'] && pe['object_class'] == 'filler'
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
