@@ -852,19 +852,26 @@ module UCON
         # (a laundry unit) or a constant of the class (an appliance panel).
         if %w[bottom top].include?(layout['hinge_axis'].to_s)
           axis  = layout['hinge_axis'].to_s
-          marks = hung_marks(w, z0, front_height_mm || h, y_face, axis)
+          # One V per leaf when the front is split by request (core 1.9.13).
+          n  = [unit['front_split'].to_i, 1].max
+          lw = w.to_f / n
+          (0...n).each do |i|
+            dx = i * lw
+            marks = hung_marks(lw, z0, front_height_mm || h, y_face, axis)
+            sfx = n > 1 ? "_#{i + 1}" : ''
 
-          g = definition.entities.add_group
-          g.name = axis == 'top' ? 'SYM_FRONT_TOP_HUNG' : 'SYM_FRONT_BOTTOM_HUNG'
-          marks[:front].each do |a, b|
-            g.entities.add_line([a[0].mm, a[1].mm, a[2].mm], [b[0].mm, b[1].mm, b[2].mm])
+            g = definition.entities.add_group
+            g.name = (axis == 'top' ? 'SYM_FRONT_TOP_HUNG' : 'SYM_FRONT_BOTTOM_HUNG') + sfx
+            marks[:front].each do |a, b|
+              g.entities.add_line([(a[0] + dx).mm, a[1].mm, a[2].mm], [(b[0] + dx).mm, b[1].mm, b[2].mm])
+            end
+            finalize(g, front_tag, mat)
+
+            g = definition.entities.add_group
+            g.name = (axis == 'top' ? 'SYM_PLAN_TOP_HUNG' : 'SYM_PLAN_BOTTOM_HUNG') + sfx
+            dashed_rect(g, marks[:plan_rect].map { |x, y| [x + dx, y] }, z_plan)
+            finalize(g, plan_tag, mat)
           end
-          finalize(g, front_tag, mat)
-
-          g = definition.entities.add_group
-          g.name = axis == 'top' ? 'SYM_PLAN_TOP_HUNG' : 'SYM_PLAN_BOTTOM_HUNG'
-          dashed_rect(g, marks[:plan_rect], z_plan)
-          finalize(g, plan_tag, mat)
           return
         end
 

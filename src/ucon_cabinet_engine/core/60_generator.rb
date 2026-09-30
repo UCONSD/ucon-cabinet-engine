@@ -935,6 +935,15 @@ module UCON
                     w_mm: p[:door], h_mm: h }]
         end
 
+        # A single front split by request into n equal leaves (front_split_of).
+        if (n = unit['front_split'].to_i) > 1 && (layout['kind'] || 'single') == 'single'
+          sw = w / n.to_f
+          return (0...n).map do |i|
+            { name: "FRONT_#{i + 1}_OF_#{n}", x_mm: (i * sw).round(1), z_mm: 0,
+              w_mm: sw.round(1), h_mm: h }
+          end
+        end
+
         case layout['kind']
         # A PANEL HAS NO FRONT, and the empty list is the whole answer. Stated
         # rather than reached by absence: the `else` below hands anything it
@@ -2792,7 +2801,33 @@ module UCON
         # two screens above: a key written correctly that the thing which needs
         # it is never given. Fourth time this year (learned rule 11).
         u['variants'] = a['variants'] unless a['variants'].nil?
+        # A FRONT SPLIT REQUEST (core 1.9.13) lives as a variant - the object
+        # contract has no key for it and must not grow one for a request - and
+        # is read back here so the fronts and their marks follow it on rebuild.
+        n = front_split_of(u)
+        u['front_split'] = n if n
         u
+      end
+
+      FRONT_SPLIT_KEY = 'FRONT SPLIT'.freeze
+
+      def front_split_of(unit)
+        v = Array((unit || {})['variants']).find { |x| x['key'] == FRONT_SPLIT_KEY }
+        m = v && v['value'].to_s.match(/\A(\d+) x/)
+        n = m && m[1].to_i
+        n && n > 1 ? n : nil
+      end
+
+      # 7612, 2026-09-30 (Andriy): ONE box 1220 over two 24-inch fridge panels,
+      # with TWO top-hung fronts of 610 on the line of the panels below. The
+      # catalog prints the top element with one top-hung door; two is a request
+      # to Elda (Q39), so it is a variant that says NOT PRINTED, never a type.
+      def front_split_variant(unit, n)
+        w = drawn_width_mm(unit).to_f / n
+        { 'key' => FRONT_SPLIT_KEY,
+          'value' => "#{n} x #{w.round} mm #{(unit['front_layout'] || {})['hinge_axis'] ? "#{unit['front_layout']['hinge_axis']}-hung " : ''}fronts - REQUESTED, NOT PRINTED",
+          'label' => "#{n} fronts #{w.round}",
+          'source_ref' => 'No printed position: the type prints one front. Elda Q39 (7612), after Avenida Q11 / estimate 30833 row 8.' }
       end
 
       # ---- the wall-hung option (printed p.548) -------------------------

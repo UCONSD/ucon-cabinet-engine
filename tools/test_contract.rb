@@ -10894,5 +10894,19 @@ check('a top element draws its plan symbol at its own height, not on the floor')
   raise 'floor unit' unless Generator.row_datum_mm(Registry.lookup('BL0967')) == 0
 end
 
+check('a front split by request: one box, n equal top-hung fronts, kept as a variant') do
+  u = Registry.with_ordered_width(Registry.lookup('SE1200'), 1220)
+  v = Generator.front_split_variant(u, 2)
+  raise v.inspect unless v['key'] == 'FRONT SPLIT' && v['value'].start_with?('2 x 610 mm top-hung') && v['value'].include?('NOT PRINTED')
+  attrs = Generator.attributes_for(u)
+  attrs['variants'] = Array(attrs['variants']) + [v]
+  Contract.validate!(attrs)
+  e = Generator.effective(u, attrs)
+  raise 'read back' unless e['front_split'] == 2
+  sl = Generator.front_slabs(e)
+  raise sl.inspect unless sl.map { |x| [x[:x_mm], x[:w_mm]] } == [[0.0, 610.0], [610.0, 610.0]]
+  raise 'no split without the variant' unless Generator.front_slabs(u).size == 1
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

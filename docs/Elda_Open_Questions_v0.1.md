@@ -55,6 +55,7 @@ existed.
 | Q36 | Hide & Seek as a PASSAGE door into the 7612 pantry: a door that opens INWARD, the hallway module without its back, push-open / spring-shut, a top element on it | **open** 2026-09-28 · **the main question is the inward-opening door**; decides whether the pantry entrance is Cesar at all |
 | Q37 | USA fridge panels H.222, printed p.423: the 24" codes print CH4640 / CH4651 while 18/30/36 print CH94xx / CH97xx / CH99xx - misprint for CH9600 / CH9601? | **open** 2026-09-28 · 7612 fridge = two 24" housings, so both doors are CH4640 |
 | Q38 | Filler beside a tall unit top element H.72 (SE): p.434 prints no H.72 front-only strip - PE0151 (wall filler, one-piece bottom) or BI0150 (base filler box)? | **open** 2026-09-28 · 7612 top elements over the H.222 columns |
+| Q39 | ONE top element **1220 × 720 × 620** over two 24" USA fridge panels (7612) - drawn as SE1200 +20, as Avenida's PE1299 was one body | open 2026-09-30 · asks for the made-to-drawing code |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1438,3 +1439,31 @@ B70151 H.78. H.72 appears only as **BI0150** (second position, base unit filler,
 1. **Which article closes a gap beside a top element H.72** - BI0150, PE0151, or something else?
 2. Can CG0151 simply be ordered 2940 tall (H.222 + H.72) as one strip for the column and its top
    element together?
+
+## Q39 — Two top elements at 610 over two 24-inch fridge panels (7612)
+
+**Status:** open · added 2026-09-30 · **the top row over the 7612 fridges**
+
+The same question as **Q11** (Avenida Primavera, SD0631 at 610), now at H.72. In 7612 two 24"
+panel-ready fridge columns stand side by side behind two USA fridge panels **CH4640** (W.61 each,
+printed p.423), between two end panels FH0030. Above them the run continues with tall unit top
+elements H.72 at d.62 (printed p.173), and the doors of the top elements should line up with the
+fridge panels below: **2 × 610**.
+
+p.173 prints the top element H.72 (SE, one top-hung door, one shelf) at W.45 / 60 / 75 / 90 / 120.
+The drawing first showed SE0600 at 610 twice; **as on Avenida (Andriy, 2026-09-30) it now shows ONE
+body, SE1200 at 1220 mm**, marked WIDTH INCREASE - REQUESTED, NOT PRINTED. We do not reuse PE1299:
+that code belongs to its own position on its own estimate.
+
+On Avenida Primavera your estimate 30833 answered Q11 with **PE1299, a made-to-drawing element
+("ELEMENTO A DISEGNO"), row 8** - one body for the pair, at 1200 on paper.
+
+1. **Please treat it as on Avenida: one made-to-drawing element 1220 × 720 × 620, top-hung,**
+   and send us its code - and write the width at **1220**, not 1200: the housing below is
+   2 × 610 and 48 in = 1219,2.
+2. **With TWO top-hung fronts of 610 in the one box** (Andriy, 2026-09-30), lining up with the two
+   fridge panels below - is that possible? Two lift mechanisms in one 1220 carcass, a centre
+   division or none? The drawing shows it that way (variant FRONT SPLIT, requested). If only one
+   door of 1220 can be made, tell us and we redraw.
+3. If neither is possible: SE1200 (W.120) with 10 mm at each end? (The front-only strip starts at
+   23 mm, printed p.434, so we doubt it.)
