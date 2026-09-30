@@ -1935,6 +1935,24 @@
    },
    {
     "class": "glass",
+    "family": "Glass H.72",
+    "section": "Glass wall units H. 72",
+    "printed_pages": "313",
+    "status": "extracted",
+    "extracted_on": "2026-09-30",
+    "note": "2026-09-30 (Andriy, 7612 sink wall variant A): the H.72 block of printed p.313, both positions, TE0541 / TE0641 / TE0940, registry/cesar/glass_wall_h72.json. The H.60 block of the same page (TD) is not taken."
+   },
+   {
+    "class": "glass",
+    "family": "Glass H.84",
+    "section": "Glass wall units H. 84",
+    "printed_pages": "314",
+    "status": "extracted",
+    "extracted_on": "2026-09-30",
+    "note": "2026-09-30 (Andriy, 7612 sink wall variant A): the H.84 block of printed p.314 - the other half of the H.96 page - both positions, TG0541 / TG0641 / TG0940, registry/cesar/glass_wall_h84.json."
+   },
+   {
+    "class": "glass",
     "family": "Glass H.96",
     "section": "Glass wall units H. 96",
     "printed_pages": "314",

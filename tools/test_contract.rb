@@ -268,7 +268,8 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1287 codes (46 open units + 386 base + 74 sink + 12 appliance + 291 wall + 3 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1293 codes (46 open units + 386 base + 74 sink + 12 appliance + 291 wall + 9 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+  # 2026-09-30, glass wall H.72 / H.84: +6 - printed p.313-314, the 7612 sink wall.
   # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
   # (12 base, 14 wall, 20 tall), each joining its height family.
   # 2026-09-28, plain tall H.222: +12 - printed p.133 (pull-out, Dispensa,
@@ -300,7 +301,7 @@ check('registry loads and holds 1287 codes (46 open units + 386 base + 74 sink +
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1287
+  raise "got #{n}" unless n == 1293
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -493,9 +494,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1287 rows, each with code/dims/description/source') do
+check('registry catalog: 1293 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1287
+  raise cat.length.to_s unless cat.length == 1293
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -605,6 +606,8 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 84',
                                              'Dish-drainer units H. 96',
                                              'End elements for Maxima-Intarsio',
+                                             'Glass wall units H. 72',
+                                             'Glass wall units H. 84',
                                              'Glass wall units H. 96',
                                              'Hide & Seek tall units H. 222',
                                              'Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick',
@@ -5141,7 +5144,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'units with jumbo drawers' => 274,
                  'units with interior drawers' => 28,
                  'end panels, whose width is a thickness' => 124,
-                 'tall or wall units with framed glass doors' => 3,
+                 'tall or wall units with framed glass doors' => 9, # +6 2026-09-30 glass H.72 / H.84
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
                  'curved units, whose width is an arc' => 6 } && allowed == 678 # +4 broom, fridge H.222
@@ -10906,6 +10909,41 @@ check('a front split by request: one box, n equal top-hung fronts, kept as a var
   sl = Generator.front_slabs(e)
   raise sl.inspect unless sl.map { |x| [x[:x_mm], x[:w_mm]] } == [[0.0, 610.0], [610.0, 610.0]]
   raise 'no split without the variant' unless Generator.front_slabs(u).size == 1
+end
+
+puts "\nfiller width measured to the wall or the next unit (core 1.9.14)"
+check('gap_reading: the narrowest ray wins, the spread shows an uneven wall') do
+  pl = UCON::CabinetEngine::Placement
+  g = pl.gap_reading([72.4, nil, 75.0, 73.1])
+  raise g.inspect unless g['min_mm'] == 72.4 && g['max_mm'] == 75.0 && (g['spread_mm'] - 2.6).abs < 1e-9
+  raise g.inspect unless g['hits'] == 3 && g['of'] == 4
+  raise 'no hits is nil' unless pl.gap_reading([nil, nil]).nil?
+end
+check('filler_side: right first, then left, nothing beyond the reach') do
+  pl = UCON::CabinetEngine::Placement
+  s, r = pl.filler_side([40], [20])
+  raise [s, r].inspect unless s == 'right' && r['min_mm'] == 40
+  s, r = pl.filler_side([900], [55])
+  raise [s, r].inspect unless s == 'left' && r['min_mm'] == 55
+  s, r = pl.filler_side([nil], [30])
+  raise [s, r].inspect unless s == 'left'
+  s, r = pl.filler_side([400], [600])
+  raise [s, r].inspect unless s.nil? && r['min_mm'] == 400
+  s, r = pl.filler_side([], [])
+  raise [s, r].inspect unless s.nil? && r.nil?
+  s, r = pl.filler_side([0.0], [42])
+  raise [s, r].inspect unless s == 'left' && r['min_mm'] == 42   # flush on the right is taken
+  s, r = pl.filler_side([1.5], [0.2])
+  raise [s, r].inspect unless s.nil?
+  raise 'reach is 150' unless pl::FILLER_REACH_MM == 150
+  raise 'flush under 3' unless pl::FILLER_MIN_MM == 3
+end
+check('measure button is wired: raytest in the generator, callback and handler in the picker') do
+  core = File.expand_path('../src/ucon_cabinet_engine/core', __dir__)
+  gen = File.read(File.join(core, '60_generator.rb'))
+  pal = File.read(File.join(core, '90_palette.rb'))
+  %w[def\ measure_filler_gap model.raytest force_side include?(sel)].each { |t| raise "generator: #{t}" unless gen.include?(t.tr('\\', '')) }
+  ["'measure_gap'", 'sketchup.measure_gap(', 'function measured(r)'].each { |t| raise "palette: #{t}" unless pal.include?(t) }
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

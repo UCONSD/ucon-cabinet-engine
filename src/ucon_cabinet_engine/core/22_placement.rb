@@ -384,6 +384,37 @@ module UCON
         overlap_mm(a_zlo, a_zhi, b_zlo, b_zhi) > Z_OVERLAP_MIN_MM
       end
 
+      # ---- MEASURING A FILLER'S GAP (core 1.9.14) ---------------------------
+      # Andriy, 2026-09-30: select a unit, pick a filler, and the width is
+      # measured to the nearest wall or neighbour instead of taped. The model
+      # is sampled at several points of the unit's end - low, middle, high,
+      # front, back - because walls are not flat; the filler takes the SMALLEST
+      # reading so it always fits, and the spread is reported, not hidden.
+      # A side with no reading within the reach is open. Right first, as the
+      # side rule: the right side if it reads within max_mm, else the left.
+      FILLER_REACH_MM = 150
+
+      def gap_reading(samples)
+        hits = Array(samples).compact.map(&:to_f)
+        return nil if hits.empty?
+
+        { 'min_mm' => hits.min, 'max_mm' => hits.max, 'spread_mm' => hits.max - hits.min,
+          'hits' => hits.size, 'of' => Array(samples).size }
+      end
+
+      # A gap under FILLER_MIN_MM is a neighbour standing flush: that side is taken.
+      FILLER_MIN_MM = 3
+
+      def filler_side(right_samples, left_samples, max_mm = FILLER_REACH_MM)
+        r = gap_reading(right_samples)
+        l = gap_reading(left_samples)
+        fits = ->(g) { g && g['min_mm'] >= FILLER_MIN_MM && g['min_mm'] <= max_mm }
+        return ['right', r] if fits[r]
+        return ['left', l] if fits[l]
+
+        [nil, r || l]
+      end
+
       def side_beside(mine_lo, mine_hi, spans, touch_mm = SNAP_MM)
         right = spans.any? { |lo, hi| hi > mine_hi && (lo - mine_hi).abs <= touch_mm }
         left  = spans.any? { |lo, hi| lo < mine_lo && (mine_lo - hi).abs <= touch_mm }

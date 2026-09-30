@@ -244,17 +244,30 @@ module UCON
         # can state neither dimension. A panel out of Linear Elements p.215-220
         # is priced by the square metre and cut to size: the picker asks for both
         # numbers or the build is refused for a height nothing could type.
-        @picker.add_action_callback('build') do |_, code, width, height|
+        @picker.add_action_callback('build') do |_, code, width, height, side|
           begin
             Generator.build(
               code,
               width_mm: (width.to_s.strip.empty? ? nil : width.to_s.strip),
               height_mm: (height.to_s.strip.empty? ? nil : height.to_s.strip),
-              appliance: appliance_for(code)
+              appliance: appliance_for(code),
+              side: side.to_s.empty? ? nil : side.to_s
             )
           rescue StandardError => e
             UI.messagebox("Build failed:\n\n#{e.message}")
           end
+        end
+        # THE FILLER GAP, MEASURED (core 1.9.14). The answer goes back into the
+        # picker's width box; nothing is built until Build is pressed.
+        @picker.add_action_callback('measure_gap') do |_, lo, hi|
+          r = begin
+            Generator.measure_filler_gap(Sketchup.active_model, hi.to_f.positive? ? hi.to_f : Placement::FILLER_REACH_MM)
+          rescue StandardError => e
+            { 'error' => e.message }
+          end
+          r['lo'] = lo.to_f
+          r['hi'] = hi.to_f
+          @picker.execute_script("measured(#{r.to_json})")
         end
         # TANGRAM, 2026-09-27: the picker places a Tangram module through the
         # SAME tool the menu uses - tools/tangram_place.rb - with the choices
@@ -1151,9 +1164,25 @@ module UCON
                 // NO re-render on input - it would take the focus away between
                 // two digits. Only the Build button and the hint are touched.
                 // A PRESET may re-render, because the click has already ended.
-                inp.oninput = function(){ st.w = inp.value; syncBuild(c); };
+                inp.oninput = function(){ st.w = inp.value; st.side = null; syncBuild(c); };
                 wrap.appendChild(inp);
+                // MEASURE (core 1.9.14): the gap beside the selected unit, read
+                // off the model, fills the box. A filler only.
+                if((c.element_class||c['class']) === 'filler'){
+                  var mb = document.createElement('button'); mb.className='wbtn';
+                  mb.style.cssText = 'flex:0 0 auto;min-width:64px';
+                  mb.textContent = 'Measure';
+                  mb.title = 'Measure the gap from the selected unit to the nearest wall or unit';
+                  mb.onclick = function(){ sketchup.measure_gap(String(lo), String(hi)); };
+                  wrap.appendChild(mb);
+                }
                 el.appendChild(wrap);
+                if(st.measure_note){
+                  var mn = document.createElement('div'); mn.className='hint';
+                  mn.style.cssText = 'font-size:11px;margin:2px 0 6px;color:' + (st.measure_bad ? '#c62828' : '#555');
+                  mn.textContent = st.measure_note;
+                  el.appendChild(mn);
+                }
                 // AND A HEIGHT, WHEN THE ARTICLE STATES NONE. A filler has a
                 // height from its family and only the width is asked. A sheet
                 // out of Linear Elements p.215-220 has neither: it is priced by
@@ -1437,7 +1466,28 @@ module UCON
                 }
                 sketchup.build(st.code,
                   (c && c.width_range_mm)  ? String(parseInt(st.w, 10)) : '',
-                  (c && c.height_range_mm) ? String(parseInt(st.h, 10)) : '');
+                  (c && c.height_range_mm) ? String(parseInt(st.h, 10)) : '',
+                  st.side || '');
+              }
+              // The measurement, back from Ruby (core 1.9.14).
+              function measured(r){
+                st.measure_bad = false;
+                if(r.error){ st.measure_note = r.error; st.measure_bad = true; render(); return; }
+                var rd = r.reading;
+                if(!r.side || !rd){
+                  st.measure_note = 'No wall or unit within ' + r.hi + ' mm of ' + r.code + ' on either side.';
+                  st.measure_bad = true; render(); return;
+                }
+                var w = r.width_mm;
+                st.side = r.side;
+                st.measure_note = 'Gap ' + r.side + ' of ' + r.code + ': ' + w + ' mm' +
+                  (rd.spread_mm > 2 ? '  (the wall runs ' + Math.round(rd.min_mm) + '\u2013' + Math.round(rd.max_mm) +
+                                       ' - the smallest is taken)' : '') +
+                  '  \u00b7 ' + rd.hits + ' of ' + rd.of + ' readings';
+                if(w < r.lo){ st.measure_note += '. Below ' + r.lo + ' mm: no strip that narrow is made.'; st.measure_bad = true; }
+                if(w > r.hi){ st.measure_note += '. Above ' + r.hi + ' mm: another article or two fillers.'; st.measure_bad = true; }
+                st.w = String(w);
+                render();
               }
               window.onload = function(){
                 if(INCH) document.getElementById('units').className = 'on';

@@ -127,6 +127,8 @@ module UCON
 
         new_span = new_span_mm(new_unit)
         side = placement_side(model, sel, span, new_unit, new_span)
+        forced = new_unit && new_unit['force_side'].to_s
+        side = forced.to_sym if %w[left right].include?(forced)
         new_width_mm = new_unit && new_unit['width_mm']
         new_depth_mm = new_unit && new_unit['depth_mm']
         if side == :blocked
@@ -364,6 +366,59 @@ module UCON
       # that can be got wrong about geometry is here; everything that can be
       # got wrong about the decision is in Placement.side_beside, where a
       # headless check can reach it.
+      # ---- THE GAP BESIDE THE SELECTED UNIT, MEASURED (core 1.9.14) ---------
+      # Rays out of each end of the selected unit's CARCASS along its own x,
+      # on a 3 x 2 grid (low / middle / high, front / back), first visible
+      # face hit within REACH that is not the unit's own. Placement.filler_side picks the side and the
+      # smallest reading. Returns a hash for the picker, or raises in a sentence.
+      MEASURE_REACH_MM = 2000
+
+      def measure_filler_gap(model, max_mm = Placement::FILLER_REACH_MM)
+        sel = selected_unit(model)
+        raise ArgumentError, 'Select the unit the filler goes beside, then measure.' unless sel
+
+        attrs = Contract.read(sel.definition) || {}
+        span = span_for_attrs(attrs)
+        raise ArgumentError, "#{attrs['code']} cannot be measured along a run." unless span
+
+        world = model.respond_to?(:edit_transform) && model.active_path ? model.edit_transform * sel.transformation : sel.transformation
+        body = sel.definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
+        bb = body ? body.bounds : sel.definition.bounds
+        y0 = bb.min.y.to_mm + 20; y1 = bb.max.y.to_mm - 20
+        z0 = bb.min.z.to_mm; z1 = bb.max.z.to_mm
+        zs = [z0 + 30, (z0 + z1) / 2.0, z1 - 30]
+        ys = [y0, y1]
+        xv = Geom::Vector3d.new(1, 0, 0).transform(world); xv.normalize!
+        # Each ray starts 5 mm INSIDE the unit's own end and skips the unit's own
+        # faces: started outside, a neighbour standing flush would put the start
+        # inside the neighbour and read its FAR face (live run 214, 2026-09-30).
+        shoot = lambda do |x_end, dir|
+          ys.product(zs).map do |y, z|
+            face = Geom::Point3d.new(x_end.mm, y.mm, z.mm).transform(world)
+            pt   = Geom::Point3d.new((x_end - dir * 5).mm, y.mm, z.mm).transform(world)
+            v    = dir.positive? ? xv : xv.reverse
+            hit = nil
+            8.times do
+              hit = model.raytest([pt, v], true)
+              break unless hit && hit[1].include?(sel)
+
+              pt = hit[0].offset(v, 0.1.mm)
+              hit = nil
+            end
+            next nil unless hit
+
+            d = (hit[0] - face).dot(v).to_mm
+            d.between?(-1.0, MEASURE_REACH_MM) ? [d, 0.0].max : nil
+          end
+        end
+        right = shoot.call(span[1], 1)
+        left  = shoot.call(span[0], -1)
+        side, reading = Placement.filler_side(right, left, max_mm)
+        { 'side' => side, 'code' => attrs['code'], 'reading' => reading,
+          'width_mm' => reading && side ? reading['min_mm'].floor : nil,
+          'right' => Placement.gap_reading(right), 'left' => Placement.gap_reading(left) }
+      end
+
       # The new unit's span along its own x: [0, width] for a straight one, the
       # corner's node span for a corner (Placement.span_mm), nil-safe.
       def new_span_mm(unit)
@@ -633,7 +688,7 @@ module UCON
       # whether the change is a printed modification or an unprinted request -
       # this method never decides that and must not learn how.
       def build(code, model = Sketchup.active_model, width_mm: nil, height_mm: nil,
-                depth_mm: nil, appliance: nil, installation: nil)
+                depth_mm: nil, appliance: nil, installation: nil, side: nil)
         # THREE DIMENSIONS CAN COME FROM THE ORDER, and until 2026-08-28 this
         # line ordered two. The third arrived with the ceramic tops and was
         # found by the picker rather than by the suite: printed p.110 prices one
@@ -678,6 +733,9 @@ module UCON
             Registry.with_ordered_width(Registry.lookup(code), width_mm), height_mm
           ), depth_mm
         )
+        # A side chosen by a MEASUREMENT (core 1.9.14): the gap was read on that
+        # side, so the filler goes there even if the other side is free too.
+        unit = unit.merge('force_side' => side.to_s) if %w[left right].include?(side.to_s)
         # WHAT THE NEIGHBOUR GAVE, collected as it is given and written onto the
         # definition below (remember_ground!), so that Apply in the panel - which
         # starts again from Registry.lookup - gets the same ground back.
