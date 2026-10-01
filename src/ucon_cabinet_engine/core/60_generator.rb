@@ -1197,6 +1197,8 @@ module UCON
       #
       # UNTESTED HEADLESS - it needs SketchUp, like everything that draws. Try
       # it in the model before believing it.
+      TAG_APPLIANCE_OPENING = 'UCON — Appliance opening'
+
       def draw_void_slab(entities, slab, unit, z0, t)
         void = slab[:kind] == :void
         mat = Geometry.material(entities.model,
@@ -1231,6 +1233,14 @@ module UCON
         box.set_attribute(Contract::DICTIONARY, 'height_mm', slab[:h_mm])
         box.set_attribute(Contract::DICTIONARY, 'width_mm', slab[:w_mm])
         box.set_attribute(Contract::DICTIONARY, 'notes', note)
+        # A NICHE ON ITS OWN TAG (core 1.9.17, Andriy 2026-09-30: the oven's 3D
+        # is in, the grey niche block is in front of it). Turn the tag off and
+        # the appliance shows; the reservation is still there for the order.
+        # A void stays untagged: TO BE FILLED is meant to be seen.
+        unless void
+          layers = entities.model.layers
+          box.layer = layers[TAG_APPLIANCE_OPENING] || layers.add(TAG_APPLIANCE_OPENING)
+        end
         box
       end
 

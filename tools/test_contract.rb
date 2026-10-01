@@ -10966,5 +10966,14 @@ check('build asks filler_beside_ground: hangs beside a raised unit, refuses a wr
   raise 'PE0151 is the H.72 filler beside a top element' unless pe['height_mm'] == se['height_mm'] && pe['object_class'] == 'filler'
 end
 
+puts "\nappliance openings: one per niche, on their own tag (core 1.9.17)"
+check('rebuild_fronts clears the stack reservations it redraws; a niche goes on its tag') do
+  core = File.expand_path('../src/ucon_cabinet_engine/core', __dir__)
+  pan = File.read(File.join(core, '80_panel.rb'))
+  gen = File.read(File.join(core, '60_generator.rb'))
+  raise 'apply clears openings' unless pan.include?("g.name.start_with?('APPLIANCE_OPENING') || g.name.start_with?('VOID_REMAINDER')")
+  raise 'tag' unless gen.include?("TAG_APPLIANCE_OPENING = 'UCON — Appliance opening'") && gen.include?('box.layer = layers[TAG_APPLIANCE_OPENING]')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

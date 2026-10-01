@@ -19,6 +19,10 @@ sources/**/*.xls
 # defined by WHERE it is, not by what it is saved as.
 sources/**/*.doc
 sources/**/*.docx
+# Added 2026-09-30: manufacturer CAD packages (Thermador TradeCAD - skp, dwg,
+# rfa, obj, max, textures). Heavy vendor files, obtained from the vendor's CAD
+# library; kept on disk, never in git. By folder, for the same reason as above.
+sources/appliances/*/cad/
 
 # --- SketchUp scratch ---
 *.skb

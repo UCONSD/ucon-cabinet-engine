@@ -834,8 +834,14 @@ module UCON
       def rebuild_fronts(model, defn, unit, gola)
         # The 8x8 corner filler shares the door's height, so it is rebuilt with
         # the fronts, not left behind at the old one.
+        # AND THE RESERVATIONS IN THE STACK (core 1.9.17). draw_front_slab draws
+        # them with the fronts - APPLIANCE_OPENING_* and VOID_REMAINDER_* - and
+        # this list named only FRONT*, so every Apply added one more copy:
+        # CK7744 in 7612 v0.4 carried TEN openings, five per niche, stacked at
+        # 35% opacity until they read as a solid grey block over the oven.
         doomed = defn.entities.grep(Sketchup::Group).select do |g|
-          g.name.start_with?('FRONT') || g.name == 'FILLER_8X8'
+          g.name.start_with?('FRONT') || g.name == 'FILLER_8X8' ||
+            g.name.start_with?('APPLIANCE_OPENING') || g.name.start_with?('VOID_REMAINDER')
         end
         defn.entities.erase_entities(doomed) unless doomed.empty?
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
