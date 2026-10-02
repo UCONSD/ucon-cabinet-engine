@@ -2928,6 +2928,9 @@ module UCON
         if !u['width_range_mm'] && width_modified?(a) && !a['width_mm'].nil?
           u = Registry.with_ordered_width(u, a['width_mm'])
         end
+        # AND THE HEIGHT, the same two cases (core 1.9.20). Before the variants
+        # below on purpose: DOOR TO FLOOR measures from the restored height.
+        u = with_object_height(u, a)
         # AND THE VARIANTS, which are neither of the two above. An INSTANCE_KEY
         # overrides what the catalog said; the ordered width restores what it
         # never said; a VARIANT is a choice the catalog has no opinion about at
@@ -2967,6 +2970,48 @@ module UCON
 
       def width_modified?(attrs)
         Array((attrs || {})['variants']).any? { |x| WIDTH_MOD_KEYS.include?(x['key']) }
+      end
+
+      HEIGHT_MOD_KEYS = ['HEIGHT INCREASE', 'HEIGHT REDUCTION'].freeze
+
+      def height_modified?(attrs)
+        Array((attrs || {})['variants']).any? { |x| HEIGHT_MOD_KEYS.include?(x['key']) }
+      end
+
+      # THE HEIGHT THE ORDER CHOSE, put back over the registry row (core
+      # 1.9.20, 7612-S2). The mirror of the 1.9.19 width fix and found by its
+      # review: effective restored a modified width and not a modified height,
+      # so Apply on B80601 cut to 720 would have rebuilt fronts, symbols and the
+      # contract's front_height_mm at the catalog 780 over a 720 carcass.
+      #
+      # A SHEET (height_range_mm) has no catalog height at all - its height IS
+      # the order - so it is restored unconditionally, as a sheet's width is.
+      # A FIXED height only when the object carries its own HEIGHT INCREASE /
+      # REDUCTION variant: that is the record that the build validated it, and
+      # a stray height_mm without one may not out-vote the registry.
+      #
+      # Ordering rules and refusals stay Registry.with_ordered_height's; the
+      # one refusal added here is about DRAWING. A stack of fronts sums to its
+      # height, and the catalog prints the surcharge for a reduction (printed
+      # p.548) but not which front absorbs it - so a stacked unit at a modified
+      # height is refused by name instead of guessed (Elda Q17 territory).
+      def with_object_height(unit, attrs)
+        a = attrs || {}
+        asked = a['height_mm']
+        return unit if asked.nil? || asked.to_s.empty?
+        return Registry.with_ordered_height(unit, asked) if unit['height_range_mm']
+        return unit unless height_modified?(a)
+        return unit if (asked.to_f - unit['height_mm'].to_f).abs < 0.001
+
+        if (unit['front_layout'] || {})['kind'] == 'horizontal'
+          raise ArgumentError,
+                "#{unit['code']} at #{asked} mm (catalog #{unit['height_mm']}): a stack of fronts " \
+                'cannot be drawn at a modified height - the catalog prices the change ' \
+                '(printed p.548) but does not print which front absorbs it. Ask Elda; ' \
+                'nothing is guessed.'
+        end
+
+        Registry.with_ordered_height(unit, asked)
       end
 
       def front_split_of(unit)

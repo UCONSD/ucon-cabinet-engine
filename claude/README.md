@@ -357,6 +357,8 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `spec-2026-10-02-tall-doors-to-floor.md` — 7612-S1: the DOOR TO FLOOR
     variant (core 1.9.18), the tall row's fronts lengthened to 10 mm above the
     floor on the 60 plinth; Elda Q40.
+  - `spec-2026-10-02-modified-height-on-apply.md` — 7612-S2: a HEIGHT
+    INCREASE / REDUCTION survives Apply (latent; found by the review of 1.9.19).
 
 ---
 

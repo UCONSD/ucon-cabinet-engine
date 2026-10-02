@@ -696,6 +696,10 @@ module UCON
         # The ground the build inherited from its neighbour (core 1.9.3) - the
         # registry alone would redraw a run-plinth panel on its family default.
         unit  = Registry.lookup(attrs['code']).merge(Generator.inherited_ground(inst.definition))
+        # AND ITS ORDERED HEIGHT (core 1.9.20): attributes_patch reads the
+        # height off THIS unit for front_height_mm, and the bare registry row
+        # wrote the catalog 780 into the contract of a unit cut to 720.
+        unit  = Generator.with_object_height(unit, attrs)
         # THE GROUND CHOICES (core 1.9.6): the plinth of a run-plinth unit, the
         # bottom of an end panel. Validated here, written with the other facts
         # below, and the body is moved by exactly the change they make.

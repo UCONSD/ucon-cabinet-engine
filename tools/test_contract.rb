@@ -11134,5 +11134,65 @@ check('a WIDTH REDUCTION on a fixed code reaches the front: SE0900 cut to 762 ->
   raise Generator.front_slabs(e).inspect unless Generator.front_slabs(e).map { |x| x[:w_mm] } == [762]
 end
 
+puts "\na modified height survives Apply (core 1.9.20)"
+def hmod(code, h)
+  base = Registry.lookup(code)
+  [base, Generator.attributes_for(Registry.with_ordered_height(base, h))]
+end
+check('spec row 1: B80601 cut to 720 - effective 720, fronts 720 / gola 690, contract front height 720 / 690') do
+  base, attrs = hmod('B80601', 720)
+  raise 'variant recorded' unless Generator.height_modified?(attrs)
+  e = Generator.effective(base, attrs)
+  raise e['height_mm'].inspect unless e['height_mm'] == 720
+  raise 'front' unless Generator.front_slabs(e).map { |x| x[:h_mm] } == [720]
+  raise 'gola front' unless Panel.effective_slabs(e, true).map { |x| x[:h_mm] } == [690]
+  u = Generator.with_object_height(base, attrs)
+  raise 'patch 78' unless Panel.attributes_patch(u, { 'door_version' => '78', 'opening_method' => 'push_to_open' })['front_height_mm'] == 720
+  raise 'patch 75' unless Panel.attributes_patch(u, { 'door_version' => '75', 'gola_system' => 'L-shaped' })['front_height_mm'] == 690
+  raise 'idempotent' unless Generator.effective(u, attrs)['height_mm'] == 720
+  pan = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'apply restores the height before attributes_patch' unless pan.include?('unit  = Generator.with_object_height(unit, attrs)')
+end
+check('spec row 3: a stray height_mm with no height variant keeps the registry height') do
+  base = Registry.lookup('B80601')
+  stray = Generator.attributes_for(base).merge('height_mm' => 720)
+  raise 'stray height taken' unless Generator.effective(base, stray)['height_mm'] == 780
+end
+check('spec row 4: a sheet (DV731Q) gets its ordered height unconditionally') do
+  base = Registry.lookup('DV731Q')
+  attrs = Generator.attributes_for(Registry.with_ordered_height(Registry.with_ordered_width(base, 750), 43))
+  raise 'no height variant on a sheet' if Generator.height_modified?(attrs)
+  raise 'restored' unless Generator.effective(base, attrs)['height_mm'] == 43
+end
+check('spec row 5: end panels C00130 2280 / B70130 720 - effective keeps the order height, Apply moves nothing') do
+  { 'C00130' => 2280, 'B70130' => 720 }.each do |code, h|
+    base, attrs = hmod(code, h)
+    e = Generator.effective(base, attrs)
+    raise "#{code} #{e['height_mm']}" unless e['height_mm'] == h
+    # Apply's dz is base_z(chosen) - base_z(effective); both now start from the
+    # height the BUILD drew, so the panel stays where the build put it.
+    built = Generator.base_z_mm(Registry.with_ordered_height(base, h))
+    dz = Generator.base_z_mm(Generator.effective(Generator.with_object_height(base, attrs), attrs)) - built
+    raise "#{code} dz #{dz}" unless dz.abs < 0.001
+  end
+end
+check('spec row 6: a stack (CK7744) at a modified height is refused by name') do
+  base, attrs = hmod('CK7744', 2160)
+  begin
+    Generator.effective(base, attrs)
+    raise 'drawn'
+  rescue ArgumentError => ex
+    raise ex.message unless ex.message.include?('CK7744') && ex.message.include?('stack of fronts')
+  end
+end
+check('spec row 7: height + DOOR TO FLOOR - the lowered front reaches the top of the reduced carcass') do
+  base, attrs = hmod('B80601', 720)
+  attrs['variants'] = Array(attrs['variants']) + [Generator.door_to_floor_variant(Generator.effective(base, attrs), '10')]
+  e = Generator.effective(base, attrs)
+  z0 = Generator.base_z_mm(e)
+  sl = Generator.front_slabs(e).first
+  raise sl.inspect unless (z0 + sl[:z_mm] - 10).abs < 0.001 && (z0 + sl[:z_mm] + sl[:h_mm] - (z0 + 720)).abs < 0.001
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
