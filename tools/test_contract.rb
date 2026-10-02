@@ -11064,5 +11064,75 @@ check('export: a stored DOOR TO FLOOR that no longer draws says NOT DRAWN, with 
   raise 'abc' unless Export.rows([bad]).any? { |r| r['description'].to_s.include?('NOT DRAWN: DOOR TO FLOOR "abc"') }
 end
 
+puts "\ndoor symbols follow the drawn front; a modified width reaches the fronts (core 1.9.19)"
+check('front_span_mm: CH4640 with DOOR TO FLOOR - the V stands on the lowered front, 10..2280') do
+  sy = UCON::CabinetEngine::Symbols
+  _u, _attrs, e = dtf_unit('CH4640', 'plinth_h_mm' => 60)
+  lo, h = sy.front_span_mm(e, UCON::CabinetEngine::Panel.effective_slabs(e, false), nil)
+  z0 = Generator.base_z_mm(e)
+  raise [lo, h].inspect unless (z0 + lo - 10).abs < 0.001 && (z0 + lo + h - 2280).abs < 0.001
+  lo, h = sy.front_span_mm(e, nil, nil)
+  raise [lo, h].inspect unless lo == -50.0 && h == 2270.0
+  plain = Registry.lookup('CH4640')
+  raise 'no variant, no move' unless sy.front_span_mm(plain, nil, nil) == [0.0, 2220.0]
+  raise 'gola top without slabs' unless sy.front_span_mm(plain, nil, 2190) == [0.0, 2190.0]
+  src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'single branch asks' unless src.include?('lo, door_h = front_span_mm(unit, slabs, front_height_mm)')
+  raise 'hung branch asks' unless src.include?('marks = hung_marks(lw, z0 + lo, span, y_face, axis)')
+end
+check('the 3-D open leaf stands on the drawn front: CR0631 DOOR TO FLOOR opens from 10, a hung leaf follows its span') do
+  sy = UCON::CabinetEngine::Symbols
+  got = []
+  # The leaf's z math is pure; only draw_leaf_group touches SketchUp. It is
+  # caught here and handed back, so the numbers are checked, not the source.
+  orig = sy.method(:draw_leaf_group)
+  sy.define_singleton_method(:draw_leaf_group) { |_d, rings, z0, name, _t, _m| got << [name, z0, rings]; nil }
+  begin
+    _u, _a, e = dtf_unit('CR0631')
+    z0 = Generator.base_z_mm(e)
+    span = sy.front_span_mm(e, nil, nil)
+    sy.draw_open_leaf(nil, e, e['front_layout'], e['width_mm'], e['height_mm'], z0,
+                      nil, -1, 'lh', nil, nil, span)
+    name, zb, rings = got.last
+    zs = rings.flatten(1).map { |pt| pt[2] }
+    raise got.inspect unless name == 'SYM_DOOR_1' && (zb + zs.min - 10).abs < 0.001 && (zb + zs.max - 2200).abs < 0.001
+    got.clear
+    se = Registry.lookup('SE1200')
+    sy.draw_open_leaf(nil, se, se['front_layout'], 1200, 720, 2280.0, nil, -1, nil, nil, nil, [-50.0, 770.0])
+    name, zb, rings = got.last
+    zs = rings.flatten(1).map { |pt| pt[2] }
+    raise got.inspect unless name == 'SYM_DOOR_TOP_HUNG' && zb == 2230.0 && (zs.max - 770).abs < 25
+    got.clear
+    sy.draw_open_leaf(nil, se, se['front_layout'], 1200, 720, 2280.0, nil, -1, nil, nil, nil)
+    raise 'no span keeps the old answer' unless got.last[1] == 2280.0
+  ensure
+    sy.define_singleton_method(:draw_leaf_group, orig)
+  end
+end
+check('a WIDTH INCREASE on a fixed code reaches the fronts and FRONT SPLIT: SE1200 @1220 -> 2 x 610') do
+  base = Registry.lookup('SE1200')
+  wide = Registry.with_ordered_width(base, 1220)
+  attrs = Generator.attributes_for(wide)
+  raise 'variant recorded' unless Generator.width_modified?(attrs)
+  e = Generator.effective(base, attrs)
+  raise e['width_mm'].inspect unless e['width_mm'] == 1220
+  raise 'unsplit' unless Generator.front_slabs(e).map { |x| [x[:x_mm], x[:w_mm]] } == [[0, 1220]]
+  v = Generator.front_split_variant(e, 2)
+  raise v['value'] unless v['value'] == '2 x 610 mm top-hung fronts - REQUESTED, NOT PRINTED'
+  attrs['variants'] = Array(attrs['variants']) + [v]
+  e2 = Generator.effective(base, attrs)
+  raise Generator.front_slabs(e2).inspect unless
+    Generator.front_slabs(e2).map { |x| [x[:x_mm], x[:w_mm]] } == [[0.0, 610.0], [610.0, 610.0]]
+  # Without the object's own width variant a stray width_mm does not out-vote the registry.
+  stray = Generator.attributes_for(base).merge('width_mm' => 1220)
+  raise 'stray width taken' unless Generator.effective(base, stray)['width_mm'] == 1200
+end
+check('a WIDTH REDUCTION on a fixed code reaches the front: SE0900 cut to 762 -> one front 762') do
+  base = Registry.lookup('SE0900')
+  attrs = Generator.attributes_for(Registry.with_ordered_width(base, 762))
+  e = Generator.effective(base, attrs)
+  raise Generator.front_slabs(e).inspect unless Generator.front_slabs(e).map { |x| x[:w_mm] } == [762]
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

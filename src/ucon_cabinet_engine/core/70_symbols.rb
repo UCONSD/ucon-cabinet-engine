@@ -643,9 +643,13 @@ module UCON
       # Drawer stacks fall through and get nothing: a drawer front is not a
       # leaf, and its travel is already in the plan symbol.
       def draw_open_leaf(definition, unit, layout, w, h, z0,
-                         front_height_mm, y_face, hinge_side, door_tag, mat)
+                         front_height_mm, y_face, hinge_side, door_tag, mat, span = nil)
         t  = Standards::FRONT_T_MM
-        fh = front_height_mm || h
+        # The leaf stands where the closed front is drawn (core 1.9.19), the
+        # same front_span_mm the elevation V uses - so a DOOR TO FLOOR door
+        # opens from 10, not from the carcass bottom. No span: the old answer.
+        lo, fh = span || [0.0, (front_height_mm || h).to_f]
+        zb = z0 + lo
         kind = layout['kind'] || 'single'
 
         # ELEVATION ONLY. Some objects show which side opens but must not
@@ -666,7 +670,7 @@ module UCON
           axis = layout['hinge_axis'].to_s
           z    = axis == 'top' ? fh : 0
           rings = open_leaf_slab(w, [0, z], [-fh, z], t)
-          return draw_leaf_group(definition, rings, z0,
+          return draw_leaf_group(definition, rings, zb,
                                  "SYM_DOOR_#{axis.upcase}_HUNG", door_tag, mat)
         end
 
@@ -695,7 +699,7 @@ module UCON
         leaves.each_with_index do |leaf, i|
           hx = leaf[:hinge] == 'lh' ? leaf[:x] : leaf[:x] + leaf[:w]
           quad = swing_quad(hx, y_face, leaf[:w], leaf[:hinge], t)
-          draw_leaf_group(definition, open_leaf_prism(quad, 0, fh), z0,
+          draw_leaf_group(definition, open_leaf_prism(quad, 0, fh), zb,
                           "SYM_DOOR_#{i + 1}", door_tag, mat)
         end
         nil
@@ -709,6 +713,25 @@ module UCON
         draw_box(g, rings, z0)
         finalize(g, door_tag, mat)
         nil
+      end
+
+      # WHERE THE DOOR SYMBOL STANDS, measured from the carcass bottom: the
+      # [bottom, height] of the fronts actually drawn (core 1.9.19). The single
+      # and hung branches below used to start at z0 with the unit's height, so
+      # a DOOR TO FLOOR front ran 10..2280 while its V stayed on 60..2280 -
+      # found on CH4640 in 7612 v0.4. A stack never had the defect because it
+      # always walked the slabs. Pure, checked headless.
+      #
+      # Without slabs, a stated front height (the gola door) still sets the TOP,
+      # as it did; the bottom comes from the generator's own slabs either way.
+      def front_span_mm(unit, slabs, front_height_mm)
+        fronts = Array(slabs || Generator.front_slabs(unit)).reject { |sl| sl[:kind] }
+        return [0.0, (front_height_mm || unit['height_mm']).to_f] if fronts.empty?
+
+        lo = fronts.map { |sl| sl[:z_mm].to_f }.min
+        hi = fronts.map { |sl| sl[:z_mm].to_f + sl[:h_mm].to_f }.max
+        hi = front_height_mm.to_f if slabs.nil? && front_height_mm
+        [lo, hi - lo]
       end
 
       def draw(model, definition, unit, hinge_side, front_height_mm = nil, slabs = nil)
@@ -741,7 +764,8 @@ module UCON
         # The leaf where it ends up. Drawn for every kind of door and before
         # any branch returns, so no type can quietly miss out.
         draw_open_leaf(definition, unit, layout, w, h, z0,
-                       front_height_mm, y_face, hinge_side, door_tag, mat)
+                       front_height_mm, y_face, hinge_side, door_tag, mat,
+                       front_span_mm(unit, slabs, front_height_mm))
 
         # Glass, for the same reason and in the same place: every branch below
         # returns, so anything that must apply to all door types is drawn here
@@ -855,9 +879,10 @@ module UCON
           # One V per leaf when the front is split by request (core 1.9.13).
           n  = [unit['front_split'].to_i, 1].max
           lw = w.to_f / n
+          lo, span = front_span_mm(unit, slabs, front_height_mm)
           (0...n).each do |i|
             dx = i * lw
-            marks = hung_marks(lw, z0, front_height_mm || h, y_face, axis)
+            marks = hung_marks(lw, z0 + lo, span, y_face, axis)
             sfx = n > 1 ? "_#{i + 1}" : ''
 
             g = definition.entities.add_group
@@ -886,7 +911,8 @@ module UCON
              { x: w / 2.0, w: w / 2.0, hinge: 'rh' }]
           end
 
-        door_h = front_height_mm || h
+        lo, door_h = front_span_mm(unit, slabs, front_height_mm)
+        zd = z0 + lo
 
         leaves.each_with_index do |leaf, i|
           hinge_x   = leaf[:hinge] == 'lh' ? leaf[:x] : leaf[:x] + leaf[:w]
@@ -894,9 +920,9 @@ module UCON
 
           g = definition.entities.add_group
           g.name = "SYM_FRONT_#{i + 1}"
-          apex = [opening_x.mm, y_face.mm, (z0 + door_h / 2.0).mm]
-          g.entities.add_line([hinge_x.mm, y_face.mm, z0.mm], apex)
-          g.entities.add_line([hinge_x.mm, y_face.mm, (z0 + door_h).mm], apex)
+          apex = [opening_x.mm, y_face.mm, (zd + door_h / 2.0).mm]
+          g.entities.add_line([hinge_x.mm, y_face.mm, zd.mm], apex)
+          g.entities.add_line([hinge_x.mm, y_face.mm, (zd + door_h).mm], apex)
           finalize(g, front_tag, mat)
 
           # Same rule as the open leaf: an elevation-only hand stops here.

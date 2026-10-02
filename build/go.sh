@@ -40,17 +40,13 @@ echo "===== 2. stage, BY NAME ====="
 # not travel with the repository. .gitignore is here for the same reason - it
 # was never in the staging list either, so a change to it could not be committed
 # by the script that reads it.
-# 2026-10-02 (core 1.9.18, DOOR TO FLOOR): THIS RUN STAGES FILES, NOT
-# DIRECTORIES. `git add -A <dir>` swept an untracked spec into 18ee014 in
-# silence (see below); a file list cannot. Every file this change touched, and
-# the two notes written today, by name - nothing else.
+# 2026-10-02 (core 1.9.19): FILES, NOT DIRECTORIES - every file this change
+# touched and today's 7612 note, by name, nothing else. `git add -A <dir>`
+# swept an untracked spec into 18ee014 in silence (see below); a list cannot.
 git add src/ucon_cabinet_engine/core/00_version.rb \
         src/ucon_cabinet_engine/core/60_generator.rb \
-        src/ucon_cabinet_engine/core/80_panel.rb \
-        src/ucon_cabinet_engine/core/85_export.rb \
+        src/ucon_cabinet_engine/core/70_symbols.rb \
         tools/test_contract.rb \
-        claude/README.md \
-        claude/spec-2026-10-02-tall-doors-to-floor.md \
         claude/project-7612-hillside-dr-2026-09-24.md \
         build/go.sh
 

@@ -2917,6 +2917,17 @@ module UCON
         # settle the second one. Validated on the way back in, so an edited
         # object cannot smuggle a width the article cannot be made at.
         u = Registry.with_ordered_width(u, a['width_mm']) if u['width_range_mm']
+        # AND A MODIFIED WIDTH ON A FIXED-WIDTH CODE (core 1.9.19). The line
+        # above only ever ran for fillers, so a SE1200 built at 1220 (WIDTH
+        # INCREASE) or a SE0900 cut to 762 (WIDTH REDUCTION) came back from
+        # here at the catalog width: the carcass stayed 1220 but every rebuilt
+        # front, and FRONT SPLIT, measured 1200 - 7612 v0.4, two fronts of 600
+        # under a 1220 box. Gated on the object's OWN width variant, so only a
+        # width the build already validated and recorded is restored; a stray
+        # width_mm without one still cannot out-vote the registry.
+        if !u['width_range_mm'] && width_modified?(a) && !a['width_mm'].nil?
+          u = Registry.with_ordered_width(u, a['width_mm'])
+        end
         # AND THE VARIANTS, which are neither of the two above. An INSTANCE_KEY
         # overrides what the catalog said; the ordered width restores what it
         # never said; a VARIANT is a choice the catalog has no opinion about at
@@ -2951,6 +2962,12 @@ module UCON
       end
 
       FRONT_SPLIT_KEY = 'FRONT SPLIT'.freeze
+
+      WIDTH_MOD_KEYS = ['WIDTH INCREASE', 'WIDTH REDUCTION'].freeze
+
+      def width_modified?(attrs)
+        Array((attrs || {})['variants']).any? { |x| WIDTH_MOD_KEYS.include?(x['key']) }
+      end
 
       def front_split_of(unit)
         v = Array((unit || {})['variants']).find { |x| x['key'] == FRONT_SPLIT_KEY }
