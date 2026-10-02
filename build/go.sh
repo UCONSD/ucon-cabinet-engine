@@ -11,21 +11,21 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "===== 1. the suites, under the Ruby macOS ships ====="
-ruby -v
+/usr/bin/ruby -v
 # The count line, found by what it SAYS rather than by where it sits: two of
 # the three suites end with a blank line and one does not, so a tail -1 printed
 # an empty line for the seam on 2026-08-28 and looked like a suite that had not
 # run at all.
-printf 'test_contract        '; ruby tools/test_contract.rb      | grep 'checks,' | tail -1
-printf 'test_appliances      '; ruby tools/test_appliances.rb    | grep 'checks,' | tail -1
-printf 'test_appliance_seam  '; ruby tools/test_appliance_seam.rb | grep 'checks,' | tail -1
+printf 'test_contract        '; /usr/bin/ruby tools/test_contract.rb      | grep 'checks,' | tail -1
+printf 'test_appliances      '; /usr/bin/ruby tools/test_appliances.rb    | grep 'checks,' | tail -1
+printf 'test_appliance_seam  '; /usr/bin/ruby tools/test_appliance_seam.rb | grep 'checks,' | tail -1
 
 # AND THE SUMMARY LINES ABOVE ARE NOT THE CHECK. A tail cannot fail a build:
 # the pipe swallows the exit status, so the suites are RUN AGAIN for their
 # status, silently, and set -e stops here if any of them is red.
-ruby tools/test_contract.rb      > /dev/null
-ruby tools/test_appliances.rb    > /dev/null
-ruby tools/test_appliance_seam.rb > /dev/null
+/usr/bin/ruby tools/test_contract.rb      > /dev/null
+/usr/bin/ruby tools/test_appliances.rb    > /dev/null
+/usr/bin/ruby tools/test_appliance_seam.rb > /dev/null
 
 echo
 echo "===== 2. stage, BY NAME ====="
@@ -40,18 +40,19 @@ echo "===== 2. stage, BY NAME ====="
 # not travel with the repository. .gitignore is here for the same reason - it
 # was never in the staging list either, so a change to it could not be committed
 # by the script that reads it.
-git add -A registry/cesar src/ucon_cabinet_engine src/ucon_cabinet_engine.rb \
-        src/ucon_appliances src/ucon_appliances.rb claude docs \
-        tools/test_contract.rb tools/test_appliances.rb tools/test_appliance_seam.rb \
-        tools/probe_inbox_hold_71.rb tools/probe_inbox_hold_82.rb \
-        tools/probe_inbox_hold_107.rb tools/probe_inbox_hold_112.rb \
-        tools/probe_verify_finishes.rb \
-        tools/probe_top_measure.rb \
-        tools/probe_recon_elements.rb \
-        tools/probe_bridge.rb \
-        tools/module_grid.rb \
-        tools/tangram_place.rb \
-        .gitignore build/go.sh CLAUDE.md
+# 2026-10-02 (core 1.9.18, DOOR TO FLOOR): THIS RUN STAGES FILES, NOT
+# DIRECTORIES. `git add -A <dir>` swept an untracked spec into 18ee014 in
+# silence (see below); a file list cannot. Every file this change touched, and
+# the two notes written today, by name - nothing else.
+git add src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/60_generator.rb \
+        src/ucon_cabinet_engine/core/80_panel.rb \
+        src/ucon_cabinet_engine/core/85_export.rb \
+        tools/test_contract.rb \
+        claude/README.md \
+        claude/spec-2026-10-02-tall-doors-to-floor.md \
+        claude/project-7612-hillside-dr-2026-09-24.md \
+        build/go.sh
 
 echo
 # tools/probe_bridge.rb JOINED THE LIST, 2026-08-30, and it had been TRACKED and

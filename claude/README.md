@@ -354,6 +354,9 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
 - `project-7612-hillside-dr-2026-09-24.md` — 7612 Hillside Dr, Cesar kitchen,
   opened 2026-09-24: files, naming, what is not known yet. (545 Avenida
   Primavera predates cards; its state lives in `repo-state.md` and the handoffs.)
+  - `spec-2026-10-02-tall-doors-to-floor.md` — 7612-S1: the DOOR TO FLOOR
+    variant (core 1.9.18), the tall row's fronts lengthened to 10 mm above the
+    floor on the 60 plinth; Elda Q40.
 
 ---
 

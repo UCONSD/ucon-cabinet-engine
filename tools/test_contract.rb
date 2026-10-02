@@ -10975,5 +10975,94 @@ check('rebuild_fronts clears the stack reservations it redraws; a niche goes on 
   raise 'tag' unless gen.include?("TAG_APPLIANCE_OPENING = 'UCON — Appliance opening'") && gen.include?('box.layer = layers[TAG_APPLIANCE_OPENING]')
 end
 
+puts "\nDOOR TO FLOOR: the lowest front runs down to N mm above the floor (core 1.9.18)"
+def dtf_unit(code, ground = {})
+  u = Registry.lookup(code).merge(ground)
+  attrs = Generator.attributes_for(u)
+  attrs['variants'] = Array(attrs['variants']) + [Generator.door_to_floor_variant(u, '10')]
+  Contract.validate!(attrs)
+  [u, attrs, Generator.effective(u, attrs)]
+end
+check('spec row 1: a tall on plinth 60 - front bottom at 10 above the floor, top unchanged, no plinth box') do
+  u, attrs, e = dtf_unit('CH4640', 'plinth_h_mm' => 60)
+  v = attrs['variants'].last
+  raise v.inspect unless v['key'] == 'DOOR TO FLOOR' && v['value'] == '10'
+  raise 'read back' unless e['door_to_floor_mm'] == 10.0
+  z0 = Generator.base_z_mm(e)
+  sl = Generator.front_slabs(e)
+  raise sl.inspect unless sl.size == 1
+  bottom = z0 + sl[0][:z_mm]
+  raise "bottom #{bottom}" unless (bottom - 10).abs < 0.001
+  raise "top #{z0 + sl[0][:z_mm] + sl[0][:h_mm]}" unless (z0 + sl[0][:z_mm] + sl[0][:h_mm] - 2280).abs < 0.001
+  raise 'plinth drawn in front of the door' unless Generator.plinth_behind_door?(e)
+  raise 'ground unchanged' unless Generator.plinth?(e) && Generator.plinth_h_mm(e) == 60
+  raise 'no variant, no change' unless Generator.front_slabs(u) == [{ name: 'FRONT', x_mm: 0, z_mm: 0, w_mm: 610, h_mm: 2220 }]
+  raise 'no variant draws a plinth' if Generator.plinth_behind_door?(Generator.effective(u, Generator.attributes_for(u)))
+  # Behaviour, not source: draw_plinth answers nil before it touches entities.
+  raise 'draw_plinth drew' unless Generator.draw_plinth(nil, e, nil).nil?
+end
+check('spec row 3: CK7744 - only the bottom front grows by 50; the niches and the upper door stay') do
+  u, _attrs, e = dtf_unit('CK7744')
+  before = Generator.front_slabs(u)
+  after  = Generator.front_slabs(e)
+  raise after.inspect unless after[0][:name] == 'FRONT_1_FROM_BOTTOM' && after[0][:z_mm] == -50.0 && after[0][:h_mm] == 530.0
+  raise 'the rest moved' unless after[1..-1] == before[1..-1]
+  if defined?(UCON::CabinetEngine::Panel) && UCON::CabinetEngine::Panel.respond_to?(:effective_slabs)
+    g = UCON::CabinetEngine::Panel.effective_slabs(e, true)
+    low = g.find { |x| x[:name] == 'FRONT_1_FROM_BOTTOM' }
+    raise g.inspect unless low[:z_mm] == -50.0 && low[:h_mm] == 500.0
+  end
+end
+check('spec row 6: a bad value is refused by name and the variant is not written') do
+  u = Registry.lookup('CK7744')
+  { '0' => 'more than 0', '-5' => 'more than 0', '60' => 'less than the plinth height',
+    '75' => 'less than the plinth height', 'abc' => 'not a number', '' => 'not a number',
+    '10 x' => 'not a number' }.each do |val, why|
+    begin
+      Generator.door_to_floor_variant(u, val)
+      raise "#{val.inspect} accepted"
+    rescue ArgumentError => ex
+      raise "#{val.inspect}: #{ex.message}" unless ex.message.include?(why) && ex.message.include?('DOOR TO FLOOR')
+    end
+  end
+  raise '10 mm reads' unless Generator.door_to_floor_check(u, '10 mm')[0] == 10.0
+  # A stored value that does not pass is not drawn - the front stays on the carcass.
+  attrs = Generator.attributes_for(u)
+  attrs['variants'] = [{ 'key' => 'DOOR TO FLOOR', 'value' => '60' }]
+  e = Generator.effective(u, attrs)
+  raise 'drawn anyway' if e['door_to_floor_mm'] || Generator.front_slabs(e) != Generator.front_slabs(u)
+end
+check('spec row 7: no front - panel, shelf, worktop - refused by name') do
+  %w[C00130 MNS022038 TOPDR008040].each do |code|
+    begin
+      Generator.door_to_floor_variant(Registry.lookup(code), '10')
+      raise "#{code} accepted"
+    rescue ArgumentError => ex
+      raise "#{code}: #{ex.message}" unless ex.message.include?(code) && ex.message.include?('no front')
+    end
+  end
+end
+check('spec row 8: export says DOOR HEIGHT INCREASE ... REQUESTED, NOT PRINTED, and invents no code') do
+  _u, attrs, _e = dtf_unit('CK7744')
+  rows = Export.rows([attrs])
+  line = rows.find { |r| r['description'].to_s.include?('DOOR HEIGHT INCREASE') }
+  raise rows.map { |r| r['description'] }.inspect unless line
+  raise line.inspect unless line['description'] == 'DOOR HEIGHT INCREASE to 10 mm above floor - REQUESTED, NOT PRINTED'
+  raise "a code was invented: #{line['code'].inspect}" unless line['code'].to_s.empty? && line['level'] == 1
+  raise 'one key, two spellings' unless Export::DOOR_TO_FLOOR_KEY == Generator::DOOR_TO_FLOOR_KEY
+  raise 'other variants unchanged' unless Export.variant_description('key' => 'FRONT SPLIT', 'value' => 'x') == 'FRONT SPLIT: x'
+end
+check('export: a stored DOOR TO FLOOR that no longer draws says NOT DRAWN, with the reason') do
+  _u, attrs, _e = dtf_unit('CK7744')
+  hung = attrs.merge('mounting' => 'wall_hung')
+  line = Export.rows([hung]).find { |r| r['description'].to_s.include?('DOOR HEIGHT INCREASE') }
+  raise 'line lost' unless line
+  raise line['description'] unless line['description'].include?('NOT DRAWN') && line['description'].include?('no gap to the floor')
+  ok = Export.rows([attrs]).find { |r| r['description'].to_s.include?('DOOR HEIGHT INCREASE') }
+  raise 'valid one flagged' if ok['description'].include?('NOT DRAWN')
+  bad = attrs.merge('variants' => [{ 'key' => 'DOOR TO FLOOR', 'value' => 'abc' }])
+  raise 'abc' unless Export.rows([bad]).any? { |r| r['description'].to_s.include?('NOT DRAWN: DOOR TO FLOOR "abc"') }
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

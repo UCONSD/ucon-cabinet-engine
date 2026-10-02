@@ -995,7 +995,16 @@ module UCON
         unit['width_clear_mm'] || unit['width_mm']
       end
 
+      # The slabs as the catalog draws them, then the one per-object request
+      # that moves a front OUTSIDE the carcass: DOOR TO FLOOR (core 1.9.18).
+      # Applied here and not at each return below, so every layout kind -
+      # single, split, stack - gets it from one place, the way FRONT SPLIT is
+      # read in one place.
       def front_slabs(unit)
+        lower_to_floor(front_slabs_as_printed(unit), unit)
+      end
+
+      def front_slabs_as_printed(unit)
         w = drawn_width_mm(unit)
         h = unit['height_mm']
         layout = unit['front_layout'] || { 'kind' => 'single' }
@@ -2829,6 +2838,9 @@ module UCON
       # redraw unconditionally.
       def draw_plinth(entities, unit, model)
         return nil unless plinth?(unit)
+        # DOOR TO FLOOR (core 1.9.18): the plinth is still there, behind the
+        # door - only its drawn box goes, plinth? and the ground are unchanged.
+        return nil if plinth_behind_door?(unit)
 
         s = Standards
         plinth = Geometry.box(
@@ -2925,6 +2937,16 @@ module UCON
         # is read back here so the fronts and their marks follow it on rebuild.
         n = front_split_of(u)
         u['front_split'] = n if n
+        # DOOR TO FLOOR (core 1.9.18) - the same shape as FRONT SPLIT: a
+        # request, so a variant and never a contract key. A stored value that
+        # no longer passes (the ground changed under it) is simply not drawn -
+        # the order still carries the line, and the front stays on the carcass
+        # rather than being drawn through the floor.
+        v = door_to_floor_variant_of(u)
+        if v
+          mm, _why = door_to_floor_check(u, v['value'])
+          u['door_to_floor_mm'] = mm if mm
+        end
         u
       end
 
@@ -2947,6 +2969,115 @@ module UCON
           'value' => "#{n} x #{w.round} mm #{(unit['front_layout'] || {})['hinge_axis'] ? "#{unit['front_layout']['hinge_axis']}-hung " : ''}fronts - REQUESTED, NOT PRINTED",
           'label' => "#{n} fronts #{w.round}",
           'source_ref' => 'No printed position: the type prints one front. Elda Q39 (7612), after Avenida Q11 / estimate 30833 row 8.' }
+      end
+
+      # ---- DOOR TO FLOOR (core 1.9.18) -----------------------------------
+      #
+      # 7612, 2026-10-02 (Andriy): the whole tall row gets doors that run down
+      # to 10 mm above the floor, on the line of the passage door, while the
+      # carcasses stay on their 60 plinth. The catalog prints NO height
+      # increase for these articles - printed p.548 prices reductions only, and
+      # plinth H.1 "doors on the ground" is printed for Revego / Hide & Seek
+      # alone (printed p.183 / p.196) - so, exactly like FRONT SPLIT, it is a
+      # per-object request to Cesar (Elda Q40): drawn, and said on the order as
+      # NOT PRINTED, with no surcharge code (domain rule 1).
+      #
+      # The value is the height of the front's bottom ABOVE THE FLOOR, in mm,
+      # not the amount added: the passage door fixes the line (10), and that is
+      # the number that has to agree across the row whatever each unit's ground.
+      # The top of the front does not move.
+      DOOR_TO_FLOOR_KEY = 'DOOR TO FLOOR'.freeze
+
+      def door_to_floor_variant_of(unit)
+        Array((unit || {})['variants']).find { |x| x['key'] == DOOR_TO_FLOOR_KEY }
+      end
+
+      # How far the carcass bottom stands above the floor of its own row - the
+      # gap a lowered front has to cover. Measured from row_datum_mm, so a unit
+      # that hangs, or stands on another, has no gap and refuses on its own.
+      def door_to_floor_ground_mm(unit)
+        base_z_mm(unit).to_f - row_datum_mm(unit).to_f
+      end
+
+      # [mm, nil] when the request can be drawn, [nil, reason] when not. Pure,
+      # and the ONE judge: the variant writer raises with its reason, effective
+      # reads the same answer and draws nothing when it is a refusal.
+      def door_to_floor_check(unit, value)
+        u = unit || {}
+        code = u['code'] || 'This object'
+        m = value.to_s.strip.match(/\A(-?\d+(?:[.,]\d+)?)\s*(?:mm)?\z/i)
+        return [nil, "DOOR TO FLOOR #{value.inspect}: not a number of mm above the floor."] unless m
+
+        mm = m[1].tr(',', '.').to_f
+        return [nil, "DOOR TO FLOOR #{m[1]} mm: the front's bottom must be above the floor (more than 0)."] unless mm > 0
+
+        # A corner door covers part of its carcass only; taking the plinth away
+        # behind it would open the rest of the corner to the floor.
+        if u['geometry_kind'] == 'corner'
+          return [nil, "#{code} is a corner unit: DOOR TO FLOOR is not drawn on a corner door."]
+        end
+
+        slabs = front_slabs_as_printed(u)
+        fronts = slabs.reject { |sl| sl[:kind] }
+        return [nil, "#{code} has no front: DOOR TO FLOOR needs a front to lengthen."] if fronts.empty?
+        unless bottom_fronts(slabs).any?
+          return [nil, "#{code}: its lowest element is not a front, so no front can run down to the floor."]
+        end
+
+        # Hung or stacked: base_z and row_datum are the same height, so there
+        # is no gap at all - said as that, not as "stands 0 mm above its floor".
+        if wall_hung?(u) || u['stands_on_top_mm']
+          return [nil, "#{code} hangs / stands on another unit: there is no gap to the floor for DOOR TO FLOOR."]
+        end
+
+        ground = door_to_floor_ground_mm(u)
+        unless mm < ground
+          return [nil, "DOOR TO FLOOR #{m[1]} mm: #{code} stands #{ground.round} mm above its floor; " \
+                       'the front can only run down into that gap (less than the plinth height).']
+        end
+        [mm, nil]
+      end
+
+      # The variant line, refused by name (ArgumentError) when it cannot be
+      # drawn. Value is the bare number, as stored and as read back.
+      def door_to_floor_variant(unit, value)
+        mm, why = door_to_floor_check(unit, value)
+        raise ArgumentError, why unless mm
+
+        { 'key' => DOOR_TO_FLOOR_KEY,
+          'value' => (mm % 1).zero? ? mm.to_i.to_s : mm.to_s,
+          'label' => "door to #{(mm % 1).zero? ? mm.to_i : mm} mm above floor",
+          'source_ref' => 'No printed position: the catalog prints door height reductions only (printed p.548). Elda Q40 (7612).' }
+      end
+
+      # The fronts that start at the carcass bottom - the only ones a lowered
+      # front can be. A pair of leaves side by side are both lowest.
+      def bottom_fronts(slabs)
+        slabs.select { |sl| sl[:kind].nil? && sl[:z_mm].to_f.abs < 0.001 }
+      end
+
+      # Bottom front(s) run down to the requested height above the floor; the
+      # top stays where it was, so the slab grows by exactly what it drops.
+      # Everything else in the stack - niches, upper doors - is untouched.
+      def lower_to_floor(slabs, unit)
+        mm = (unit || {})['door_to_floor_mm']
+        return slabs unless mm
+
+        drop = (door_to_floor_ground_mm(unit) - mm.to_f).round(1)
+        return slabs unless drop > 0
+
+        low = bottom_fronts(slabs)
+        slabs.map do |sl|
+          next sl unless low.include?(sl)
+
+          sl.merge(z_mm: (sl[:z_mm].to_f - drop).round(1), h_mm: (sl[:h_mm].to_f + drop).round(1))
+        end
+      end
+
+      # The plinth is behind a front that runs past it; drawing its box would
+      # put a second face in front of the lengthened door.
+      def plinth_behind_door?(unit)
+        !(unit || {})['door_to_floor_mm'].nil?
       end
 
       # ---- the wall-hung option (printed p.548) -------------------------

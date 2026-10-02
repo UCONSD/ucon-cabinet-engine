@@ -143,7 +143,7 @@ module UCON
           a = attrs || {}
           kids = []
           hand_row(a).tap { |r| kids << r if r }
-          variant_rows(a['variants'], 1).each { |r| kids << r }
+          variant_rows(a['variants'], 1, a).each { |r| kids << r }
           hardware_row(a).tap { |r| kids << r if r }
           Array(a['companion_refs']).each do |line|
             kids << companion_row(line)
@@ -321,12 +321,47 @@ module UCON
                     'note' => 'variant line; one code serves both hands (estimate 2026/30829)')
       end
 
-      def variant_rows(variants, level)
+      def variant_rows(variants, level, owner = nil)
         Array(variants).map do |v|
           blank.merge('level' => level,
-                      'description' => "#{v['key']}: #{v['value']}",
+                      'description' => variant_description(v, owner),
                       'note' => v['source_ref'])
         end
+      end
+
+      # DOOR TO FLOOR (core 1.9.18) is stored as a bare number - the drawing
+      # reads it - and the order has to SAY what it is: a height increase the
+      # catalog does not print, requested by name with no code, because no
+      # surcharge code exists for it (domain rule 1). The key is spelled here
+      # rather than taken from Generator: this file is loaded before 60 headless.
+      DOOR_TO_FLOOR_KEY = 'DOOR TO FLOOR'.freeze
+
+      def variant_description(v, owner = nil)
+        if v['key'] == DOOR_TO_FLOOR_KEY
+          line = "DOOR HEIGHT INCREASE to #{v['value']} mm above floor - REQUESTED, NOT PRINTED"
+          why = owner && door_to_floor_refusal(owner, v)
+          return why ? "#{line} - NOT DRAWN: #{why}" : line
+        end
+
+        "#{v['key']}: #{v['value']}"
+      end
+
+      # THE ORDER MUST NOT ASK FOR WHAT THE DRAWING DID NOT SHOW. A stored
+      # value can stop passing after it was written - the unit was hung, or set
+      # on another - and Generator.effective then draws the front on the
+      # carcass. The line still goes out (it is what was requested) but says
+      # so. Asked of the generator at CALL time, never at load: headless this
+      # file loads before 60, and alone it loads without it.
+      def door_to_floor_refusal(owner, v)
+        return nil unless defined?(Generator) && Generator.respond_to?(:door_to_floor_check)
+
+        unit = Registry.lookup(owner['code'].to_s)
+        return nil unless unit
+
+        _mm, why = Generator.door_to_floor_check(Generator.effective(unit, owner), v['value'])
+        why
+      rescue StandardError => e
+        "could not be checked (#{e.message})"
       end
 
       def hardware_row(a)

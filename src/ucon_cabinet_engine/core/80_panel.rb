@@ -363,7 +363,10 @@ module UCON
           # out here and kept only the fronts, which quietly dropped anything
           # else in the stack. A 30 mm recess survived that treatment; a
           # RESERVATION does not - see Generator.slabs_from_stack.
-          Generator.slabs_from_stack(stack, unit['width_mm'])
+          # DOOR TO FLOOR (core 1.9.18) is applied inside front_slabs, which
+          # this branch does not go through - so it is asked for here too, or a
+          # gola column would lose its lengthened bottom front on every Apply.
+          Generator.lower_to_floor(Generator.slabs_from_stack(stack, unit['width_mm']), unit)
         else
           Generator.front_slabs(unit)
         end
