@@ -1202,11 +1202,15 @@ check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked a
     # slot is (family, depth, GEOMETRY), and the corner half is recorded in the
     # grammar's corner_letters rather than forced into the same table.
     next unless (row['geometry_kind'] || 'linear') == 'linear'
-    # AND THE OPEN END UNITS OF printed p.450-451 HAVE THEIR OWN LETTERS (X1 / X8
-    # / XL at d.64,5, B2 at H.39 d.69,5, the d.62 prefix on a back-to-back box).
-    # Recorded in the grammar's end_unit_letters, checked below, skipped here -
-    # the corner precedent, not a loosening: every other base row still answers.
-    next if row['type_key'].to_s.start_with?('open_end_unit_')
+    # AND SOME OPEN END UNITS OF printed p.450-451 HAVE THEIR OWN LETTERS: X1 / X8
+    # / XL at d.64,5, B2 at H.39 d.69,5, and a single-depth prefix on a
+    # back-to-back box. Recorded in the grammar's end_unit_letters and pinned
+    # row by row in the S4 table check; skipped here - and ONLY those. B00250,
+    # B70250, B90250, BK0250, BM0250 still answer to this grammar (narrowed
+    # after review 2026-10-03; the first cut skipped every end unit).
+    next if row['type_key'] == 'open_end_unit_20_double' ||
+            (row['type_key'] == 'open_end_unit_20' &&
+             (row['code'].start_with?('X') || row['code'] == 'B20250'))
 
     slots = map[u['family'].to_s]
     next unless slots.is_a?(Hash)
@@ -1219,7 +1223,8 @@ check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked a
     raise "#{row['code']}: prefix #{prefix} is in no slot of #{row['section']}" if expected.nil?
     # An open unit prints carcass + the 2,2 door plane, rounded to the half
     # centimetre (printed p.450): d.37,5 is the d.35 slot, d.64,5 the d.62 one.
-    said = u['depth_includes_front'] ? { 375 => 350, 645 => 620 }.fetch(row['depth_mm'], row['depth_mm']) : row['depth_mm']
+    # d.69,5 the d.67 one - first printed by the end units of p.450-452 (2026-10-03).
+    said = u['depth_includes_front'] ? { 375 => 350, 645 => 620, 695 => 670 }.fetch(row['depth_mm'], row['depth_mm']) : row['depth_mm']
     raise "#{row['code']}: #{prefix} names d.#{expected} and the row says #{row['depth_mm']}" unless
       expected.to_i == said
 
@@ -11325,6 +11330,62 @@ check('S4 row 2-3: every printed code, the irregular ones as printed') do
   raise 'base H.39' unless Registry.lookup('B00250')['height_mm'] == 390
 end
 
+check('S4 table: all 39 rows - code, family, depth and band 1 as printed on p.450-452') do
+  # Added after review 2026-10-03: the first S4 checks pinned four depths and one
+  # price, so a mistyped depth or point on any other row passed. Band 1 is the
+  # first printed column; the full band map was compared against the text layer
+  # by script in the S4 session and again by the reviewer.
+  want = [
+    ['B00250', 'H.39', 375, 108],
+    ['X10250', 'H.39', 645, 138],
+    ['B20250', 'H.39', 695, 145],
+    ['BE0250', 'Top elements H.60', 375, 127],
+    ['XF0250', 'Top elements H.60', 645, 161],
+    ['BG0250', 'Top elements H.60', 695, 163],
+    ['BF0251', 'Top elements H.60', 750, 164],
+    ['BF0253', 'Top elements H.60', 1020, 194],
+    ['BF0254', 'Top elements H.60', 1070, 203],
+    ['BF0257', 'Top elements H.60', 1290, 242],
+    ['B70250', 'H.78', 375, 149],
+    ['X80250', 'H.78', 645, 203],
+    ['B90250', 'H.78', 695, 204],
+    ['B80251', 'H.78', 750, 206],
+    ['B80253', 'H.78', 1020, 230],
+    ['B80254', 'H.78', 1070, 242],
+    ['B80257', 'H.78', 1290, 288],
+    ['BK0250', 'H.84', 375, 185],
+    ['XL0250', 'H.84', 645, 224],
+    ['BM0250', 'H.84', 695, 230],
+    ['BK0251', 'H.84', 750, 237],
+    ['BK0253', 'H.84', 1020, 275],
+    ['BK0254', 'H.84', 1070, 289],
+    ['BK0257', 'H.84', 1290, 344],
+    ['C10250', 'Tall H.138', 375, 287],
+    ['F20250', 'Tall H.138', 645, 366],
+    ['C20251', 'Tall H.138', 695, 384],
+    ['CE0250', 'Tall H.198', 375, 333],
+    ['FF0250', 'Tall H.198', 645, 413],
+    ['CF0251', 'Tall H.198', 695, 434],
+    ['CQ0250', 'Tall H.210', 375, 355],
+    ['FR0250', 'Tall H.210', 645, 433],
+    ['CR0251', 'Tall H.210', 695, 456],
+    ['CG0250', 'Tall H.222', 375, 363],
+    ['FH0250', 'Tall H.222', 645, 454],
+    ['CH0251', 'Tall H.222', 695, 477],
+    ['C00250', 'Tall H.234', 375, 385],
+    ['F90205', 'Tall H.234', 645, 496],
+    ['C90251', 'Tall H.234', 695, 499]
+  ]
+  raw = end_open_rows.map { |r| [r['code'], r] }.to_h
+  raise raw.length.to_s unless raw.length == want.length
+  bad = want.reject do |code, fam, depth, band1|
+    u = Registry.lookup(code)
+    u['family'] == fam && u['depth_mm'] == depth && u['width_mm'] == 200 &&
+      raw[code]['price_points_by_band']['1'] == band1
+  end
+  raise bad.map(&:first).inspect unless bad.empty?
+end
+
 check('S4 row 4: a single-depth end unit is an open box W.200 that joins its family') do
   u = Registry.lookup('CG0250')
   raise u['family'] unless u['family'] == 'Tall H.222'
@@ -11339,7 +11400,8 @@ check('S4 row 5: the back-to-back depths are the printed envelope, built; H.60 h
   raise 'd.102 is 64,5 + 37,5' unless Registry.lookup('BK0253')['depth_mm'] == 1020
   h60 = %w[BE0250 XF0250 BG0250 BF0251 BF0253 BF0254 BF0257].map { |c| Registry.lookup(c) }
   raise 'H.60 rows must be held and NOT built' unless h60.all? { |x| x['buildable'] == false }
-  raise 'and must say why' unless h60.all? { |x| x['not_buildable_reason'].to_s.include?('no base family H.60') }
+  raise 'and must say why' unless h60.all? { |x| x['not_buildable_reason'].to_s.include?('no base-unit chapter H.60') &&
+                                      x['not_buildable_reason'].to_s.include?('DO NOT simply flip buildable') }
 end
 
 check("S4 row 6-7: '-' is absent, never 0; the d.129 footnote rides on the d.129 rows") do
