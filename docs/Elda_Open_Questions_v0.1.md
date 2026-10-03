@@ -60,7 +60,7 @@ existed.
 | Q41 | 7612: two **box fillers 108 wide, carcass d.620** left of the passage door - 108 x 620 x 2220 (front 2270, to 10 mm above the floor) and 108 x 620 x 720 above it - SPECIAL ORDER, p.434 prints box fillers only to H.138 and d.35 | open 2026-10-02 · **supersedes Q38** (Andriy chose a box at full depth instead of a strip) · drawn as UCON-BESP-002 / 003, NO ARTICLE |
 | Q42 | 7612 worktops in **Dekton 2 cm** (group D, colour to be agreed): Tangram island top 3045 x 1290 as ONE sheet (band 130), its curves, the hob and downdraft cutouts; sink-wall top in two pieces 1572 + 2772 joined at the BL0665 / BL1269 seam, undermount sink cutout | open 2026-10-02 · please price and confirm; we do not compute it |
 | Q43 | 7612 sink-wall uppers, handle-free: six PF0631 at **W.55 x H.93,8 carcass** (width + height reduction) with the **standard 960 door** kept, i.e. the door runs 22 below the shortened carcass over a lit shelf MNS022000 1722 x 325 (Sky-B); fillers PF0151 the same; window-end panels PF0030 standard | open 2026-10-02 · rewritten same day: carcass reduced instead of a 982 door · variant FRONT BELOW (core 1.9.21) |
-| Q44 | 7612 pantry: the back of the tall row clad in **HPL DZBZ00 18 Bianco Kos**, full 3000 in one sheet (pieces 108 / 762 / 1220 x 3000, 750 x 720 above the passage), plus the fridge niche side (623 x 2280) and a melamine filler above the fridges (1220 x 623 bottom + 1220 x 116 face) - fixing kit for TALL units? | open 2026-10-02 · if none, UCON fixes on site |
+| Q44 | 7612 pantry: the back of the tall row clad in **HPL DZBZ00 18 Bianco Kos**, split at 2280 - the joint between the tall units and the top elements (2026-10-03; pieces 108 / 762 / 1220 x 2280 and 858 / 762 / 1220 x 720), plus the fridge niche side (623 x 2280) and a melamine filler above the fridges (1220 x 623 bottom + 1220 x 116 face) - fixing kit for TALL units? | open 2026-10-02 · if none, UCON fixes on site |
 | Q45 | 7612 pantry broom closet: **CH1612** tall broom cupboard H.222 d.62 + accessory set **995635**, top element SE0600 over it, **both WITHOUT DOORS (special order)**; it stands in the void behind the corner end panel C00130 and opens into the pantry - power socket inside for a cordless vacuum | open 2026-10-02 · confirm the set fits an open CH1612, the socket cutout, and how a doorless unit is ordered (addendum) |
 
 Three more were **answered without ever being numbered** — see that section below.
@@ -1548,7 +1548,12 @@ block a standard end panel **PF0030 (H.96, d.37,5)**, 1465..2425, its end lappin
 The pantry sits behind the 7612 tall row, so the backs of the tall units are its wall. We clad them in **HPL
 laminate DZBZ00 18, Bianco Kos** (Linear Elements printed p.216, max 1260 x 4180), each piece **full height 3000 in
 one sheet**, joints on the cabinet joints: **108 x 3000** (behind the box filler), **762 x 3000** (behind CK7744),
-**1220 x 3000** (behind the fridges), **750 x 720** above the passage. The same laminate gives the **right side of the niche for the two Thermador 24 in columns, 623 x 2280** (cutout
+**1220 x 3000** (behind the fridges), **750 x 720** above the passage.
+**REVISED 2026-10-03 (Andriy): a 3000 sheet cannot be carried into the pantry and stood up (door 770 x 2429, room
+1266 deep, ceiling about 3043). Split at z 2280, the joint between the tall units and the top elements, so both
+edges land on carcass ends; vertical joints unchanged; over the passage one upper piece covers the strip too. Now six
+pieces: 108 x 2280, 762 x 2280, 1220 x 2280 below; 858 x 720, 762 x 720, 1220 x 720 above. Billed 7,06 m2 (min 0,5
+per piece) against 6,99 before.** The paragraph above is kept as the first version. The same laminate gives the **right side of the niche for the two Thermador 24 in columns, 623 x 2280** (cutout
 2 x 610 wide, 2134..2164 high, appliance 24 in deep + panel = the 25 in of the spec; 623 from the back of the CH4640
 doors to the carcass backs). Above the columns (2164 -> SE1200 at 2280, 116) a **filler in carcass melamine DZAD00 18**:
 bottom 1220 x 623 at 2146..2164 and face 1220 x 116 on the appliance plane, behind the doors.
