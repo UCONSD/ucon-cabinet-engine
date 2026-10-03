@@ -49,12 +49,15 @@ echo "===== 2. stage, BY NAME ====="
 # commit carried 3. The README already names them; this commit makes that true.
 # 2026-10-03, S4 review fixes: the H.60 reason and the end-unit grammar text
 # corrected, the 39-row table check, the grammar exemption narrowed, the
-# back-to-back limits written down. 6 files predicted; the list must print 6.
-git add registry/cesar/_manifest.json \
-        registry/cesar/end_open_top_h60.json \
-        registry/cesar/end_open_h78.json \
-        registry/cesar/end_open_h84.json \
+# back-to-back limits written down. 6 files predicted; the list printed 6.
+# 2026-10-03, 7612-S8 (core 1.9.23): open units drawn as boards, not a solid
+# block. 7 files predicted; the list must print 7.
+git add src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/10_standards.rb \
+        src/ucon_cabinet_engine/core/60_generator.rb \
         tools/test_contract.rb \
+        claude/README.md \
+        claude/spec-2026-10-03-open-carcass-geometry.md \
         build/go.sh
 
 echo

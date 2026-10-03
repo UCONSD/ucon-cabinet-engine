@@ -11424,5 +11424,78 @@ check('S4 row 1: the grey p.450-452 row is gone, the finishes pages stay a gap, 
   raise 'labels' unless labels['open_end_unit_20'] && labels['open_end_unit_20_double']
 end
 
+puts "\nopen units drawn as boards, not blocks (core 1.9.23, spec 7612-S8)"
+check('S8: open_unit? is asked of the data - p.455-456 yes; end units, Thin, panels, fillers, doored units no') do
+  yes = %w[BL0190 BK0145 PB0190 PE0145 CG0190 C00190 B30190]
+  no  = %w[CG0250 BK0250 B80257 BA1869 CG0151 BL0967 CK7744]
+  bad = yes.reject { |c| Generator.open_unit?(Registry.lookup(c)) } + no.select { |c| Generator.open_unit?(Registry.lookup(c)) }
+  raise "wrong answer for #{bad.inspect}" unless bad.empty?
+end
+
+check('S8: the shelf count is the row - H.84 2, H.58,5 1, wall H.72 1, H.36 0, tall H.222 5, H.234 6') do
+  want = { 'BL0190' => 2, 'B30190' => 1, 'PE0190' => 1, 'PB0190' => 0, 'CG0190' => 5, 'C00190' => 6 }
+  got = want.keys.map { |c| [c, Generator.open_shelf_count(Registry.lookup(c))] }.to_h
+  raise got.inspect unless got == want
+end
+
+s8_box = lambda do |parts|
+  xs = parts.flat_map { |_, x, _, _, w, _, _| [x, x + w] }
+  ys = parts.flat_map { |_, _, y, _, _, d, _| [y, y + d] }
+  zs = parts.flat_map { |_, _, _, z, _, _, h| [z, z + h] }
+  [xs.min, xs.max, ys.min, ys.max, zs.min, zs.max].map { |v| v.to_f.round(1) }
+end
+s8_overlap = lambda do |parts|
+  parts.combination(2).select do |a, b|
+    ox = [a[1] + a[4], b[1] + b[4]].min - [a[1], b[1]].max
+    oy = [a[2] + a[5], b[2] + b[5]].min - [a[2], b[2]].max
+    oz = [a[3] + a[6], b[3] + b[6]].min - [a[3], b[3]].max
+    ox > 0.05 && oy > 0.05 && oz > 0.05
+  end.map { |a, b| "#{a[0]}/#{b[0]}" }
+end
+
+check('S8: BL0190 891 on the 60 plinth - seven boards, the envelope of the old box, shelves at equal clear spacing') do
+  u = Registry.with_ordered_width(Registry.lookup('BL0190'), 891)
+  parts = Generator.open_carcass_parts(u, 60, 891, u['depth_mm'], u['height_mm'])
+  names = parts.map(&:first)
+  raise names.inspect unless names == %w[SIDE_L SIDE_R BOTTOM TOP BACK SHELF_1 SHELF_2]
+  env = s8_box.call(parts)
+  raise "envelope #{env.inspect}" unless env == [0.0, 891.0, -22.0, 623.0, 60.0, 900.0]
+  zs = parts.select { |p| p[0].start_with?('SHELF') }.map { |p| p[3] }
+  raise "shelves at #{zs.inspect}" unless zs == [332.7, 605.3]
+  raise "boards overlap: #{s8_overlap.call(parts).inspect}" unless s8_overlap.call(parts).empty?
+  back = parts.find { |p| p[0] == 'BACK' }
+  raise 'back is 22, flush with the rear face' unless back[5] == 22.0 && (back[2] + back[5]).round(1) == 623.0
+end
+
+check('S8: PB0190 (H.36, without shelf) is five boards; a wall unit hangs, its boards start at its own z0') do
+  u = Registry.with_ordered_width(Registry.lookup('PB0190'), 600)
+  parts = Generator.open_carcass_parts(u, 1400, 600, u['depth_mm'], u['height_mm'])
+  raise parts.map(&:first).inspect unless parts.size == 5
+  raise s8_box.call(parts).inspect unless s8_box.call(parts) == [0.0, 600.0, -22.0, 353.0, 1400.0, 1760.0]
+end
+
+check('S8: every open unit in the registry draws at the narrowest ordered width, no board overlaps; exactly 46 of them') do
+  reg = Registry.codes.map { |c| Registry.lookup(c) }.select { |u| Generator.open_unit?(u) }
+  raise "#{reg.size} open units, the registry holds 46" unless reg.size == 46
+  bad = reg.map do |u|
+    w = (u['width_range_mm'] || [u['width_mm']]).first
+    o = Registry.with_ordered_width(u, w)
+    parts = Generator.open_carcass_parts(o, 0, o['width_mm'], o['depth_mm'], o['height_mm'])
+    env = s8_box.call(parts)
+    ok = env == [0.0, o['width_mm'].to_f, -22.0, (o['depth_mm'] - 22).to_f, 0.0, o['height_mm'].to_f] &&
+         s8_overlap.call(parts).empty? && parts.size == 5 + Generator.open_shelf_count(o)
+    ok ? nil : "#{u['code']} #{env.inspect}"
+  end.compact
+  raise bad.first(5).inspect unless bad.empty?
+end
+
+check('S8: build takes the open branch, the boards inherit the CARCASS colour, Apply is untouched') do
+  gsrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/60_generator.rb', __dir__))
+  raise 'branch' unless gsrc.include?("if open_unit?(unit)\n            draw_open_carcass(e, unit, z0, w, d, h, carcass_mat)")
+  raise 'boards carry no colour of their own' unless gsrc.include?('Geometry.box(g.entities, name, x, y, z, pw, pd, ph, nil)')
+  psrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'Apply must not redraw CARCASS (it shifts it)' if psrc.include?("'CARCASS'")
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

@@ -90,6 +90,16 @@ module UCON
       # becomes its fallback, not its authority.
       WALL_MOUNT_BOTTOM_MM = 1400
 
+      # AN OPEN UNIT IS A BOX OF BOARDS, NOT A BLOCK (core 1.9.23, spec 7612-S8).
+      # Andriy built BL0190 from the picker on 2026-10-03 and got a solid block:
+      # every linear article was one CARCASS box, and an open unit has no door to
+      # hide it. Every board of the open units of printed p.455-456 is 2,2 - the
+      # page title says "th. 2.2" and the finishes table prints "Thickness 2,2"
+      # for every band. The BACK is not printed at all; 22 flush with the rear
+      # face is Andriy's drawing decision (B1, 2026-10-03) until Elda answers Q48.
+      OPEN_PANEL_T_MM      = 22
+      OPEN_BACK_T_MM       = 22
+
       # Where each number's authority comes from. Anything marked
       # :ucon_working_standard is ours to change; :elda_confirmed is not.
       STATUS = {
@@ -106,7 +116,9 @@ module UCON
         # has confirmed 1400, it is what we draw until a real kitchen says
         # otherwise. Loosely corroborated by the led-bar height of 132 on the
         # electrical diagram, printed p.16 - a hint, not a rule.
-        WALL_MOUNT_BOTTOM_MM: :project_default_pending_m1_6
+        WALL_MOUNT_BOTTOM_MM: :project_default_pending_m1_6,
+        OPEN_PANEL_T_MM:      :catalog_printed,
+        OPEN_BACK_T_MM:       :assumption_pending_elda
       }.freeze
 
       SOURCE_DOCUMENT = 'CESAR_SketchUp_Script_Template_Control_v0.1.md'

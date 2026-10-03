@@ -952,7 +952,15 @@ module UCON
           # The group keeps the name CARCASS even for a panel, which is not
           # what a panel is: selected_top_mm and the gap audits measure a box
           # by that name, and renaming it would make a panel invisible to them.
-          Geometry.box(e, 'CARCASS', 0, panel_front_y_mm(unit), z0, w, d, h, carcass_mat)
+          # AN OPEN UNIT IS DRAWN AS ITS BOARDS (core 1.9.23, spec 7612-S8): it has
+          # no door to hide a solid box, and BL0190 came out of the picker as a
+          # block on 2026-10-03. Same CARCASS group, same envelope - only its
+          # inside changes. See open_carcass_parts.
+          if open_unit?(unit)
+            draw_open_carcass(e, unit, z0, w, d, h, carcass_mat)
+          else
+            Geometry.box(e, 'CARCASS', 0, panel_front_y_mm(unit), z0, w, d, h, carcass_mat)
+          end
 
           front_slabs(unit).each do |slab|
             draw_front_slab(e, slab, unit, z0, front_mat)
@@ -1685,6 +1693,83 @@ module UCON
       def panel_bottom_choosable?(unit)
         u = unit || {}
         u['object_class'].to_s == 'panel' && !Registry.sheet_panel?(u) && !wall_hung?(u)
+      end
+
+      # ---- an open unit, drawn as its boards (core 1.9.23, spec 7612-S8) ---
+      #
+      # THE QUESTION IS ASKED OF THE DATA, NOT OF A CODE LIST. An open unit of
+      # printed p.455-456 is a cabinet with front_layout 'none' whose type says
+      # "Open base / wall / tall unit". Three other things also have no front and
+      # must stay solid: panels and fillers (object_class says so), the open end
+      # units W.20 of p.450-452 (their shelf count is not printed - the icon draws
+      # shelves, nobody has counted them in writing), and the Horizontal Thin
+      # (a cabinet with a METAL shelf, not this construction). The description
+      # test is what keeps the last two out.
+      def open_unit?(unit)
+        u = unit || {}
+        return false unless u['object_class'].to_s == 'cabinet'
+        return false unless (u['front_layout'] || {})['kind'].to_s == 'none'
+
+        u['description'].to_s.match?(/\AOpen (base|wall|tall) unit\b/i)
+      end
+
+      # How many fixed shelves the row states. "without shelf" (wall H.36) has an
+      # empty interior_confirmed and is 0; a type that states nothing is 0 too -
+      # an invented shelf would be a drawing of something nobody read.
+      def open_shelf_count(unit)
+        Array((unit || {})['interior_confirmed']).each do |line|
+          m = line.to_s.match(/(\d+)\s+fixed shel/i)
+          return m[1].to_i if m
+        end
+        0
+      end
+
+      # The boards, as [name, x, y, z, w, d, h] in mm in the unit frame. PURE.
+      # The envelope is exactly the solid box it replaces - x 0..w, y y0..y0+d,
+      # z z0..z0+h - because seven readers measure CARCASS by its bounds
+      # (selected_top_mm, the filler measure, placement, the gap audits, Apply's
+      # shift, the probes). Sides full height and depth; the back full height
+      # between the sides, flush with the rear face; top, bottom and shelves
+      # between the sides, from the front plane to the back. Shelves at equal
+      # clear spacing - the spacing is not printed, the icon is the only source,
+      # so it is an assumption and stays one until a page says otherwise.
+      def open_carcass_parts(unit, z0, w, d, h)
+        t  = Standards::OPEN_PANEL_T_MM.to_f
+        b  = Standards::OPEN_BACK_T_MM.to_f
+        y0 = panel_front_y_mm(unit)
+        iw = w - 2 * t
+        id = d - b
+        n  = open_shelf_count(unit)
+        unless iw.positive? && id.positive? && (h - 2 * t - n * t).positive?
+          raise ArgumentError, "#{unit['code']}: #{w} x #{d} x #{h} is too small for an open box of #{t} boards with #{n} shelves"
+        end
+
+        parts = [
+          ['SIDE_L', 0,     y0,      z0,         t,  d,  h],
+          ['SIDE_R', w - t, y0,      z0,         t,  d,  h],
+          ['BOTTOM', t,     y0,      z0,         iw, id, t],
+          ['TOP',    t,     y0,      z0 + h - t, iw, id, t],
+          ['BACK',   t,     y0 + id, z0,         iw, b,  h]
+        ]
+        clear = (h - 2 * t - n * t) / (n + 1).to_f
+        (1..n).each do |k|
+          parts << ["SHELF_#{k}", t, y0, (z0 + t + k * clear + (k - 1) * t).round(1), iw, id, t]
+        end
+        parts
+      end
+
+      # The CARCASS group holds the boards as nested groups, so its bounds are
+      # their union. The colour sits on CARCASS and the boards inherit it: a
+      # finish painted on the body (probe_verify_finishes reads CARCASS) must
+      # reach every board, which a material on each board would block.
+      def draw_open_carcass(entities, unit, z0, w, d, h, material)
+        g = entities.add_group
+        g.name = 'CARCASS'
+        open_carcass_parts(unit, z0, w, d, h).each do |name, x, y, z, pw, pd, ph|
+          Geometry.box(g.entities, name, x, y, z, pw, pd, ph, nil)
+        end
+        g.material = material
+        g
       end
 
       # ITS FRONT EDGE IS IN THE PLANE OF THE DOORS. Every unit is drawn from

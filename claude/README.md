@@ -369,6 +369,9 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
     racks, printed p.464-470.
   - `spec-2026-10-03-trilli.md` - 7612-S7: Trilli, printed p.471-484; the code
     depends on the finish band - owner decides the picker shape first.
+  - `spec-2026-10-03-open-carcass-geometry.md` - 7612-S8: open units of
+    printed p.455-456 drawn as boards (sides, top, bottom, back 22, fixed
+    shelves), not a solid block (core 1.9.23).
 
 ---
 
