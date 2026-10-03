@@ -44,15 +44,13 @@ echo "===== 2. stage, BY NAME ====="
 # touched, the README index line, the new spec and the two notes that ride
 # along, by name, nothing else. `git add -A <dir>` swept an untracked spec
 # into 18ee014 in silence (see below); a list cannot.
-git add src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/60_generator.rb \
-        src/ucon_cabinet_engine/core/70_symbols.rb \
-        src/ucon_cabinet_engine/core/85_export.rb \
-        tools/test_contract.rb \
-        claude/README.md \
-        claude/spec-2026-10-02-front-below-carcass.md \
-        claude/project-7612-hillside-dr-2026-09-24.md \
-        docs/Elda_Open_Questions_v0.1.md \
+# 2026-10-03: the four open-units specs, by name. They missed 13b3871 because the
+# list above was still the 1.9.21 list - the session predicted 7 files and the
+# commit carried 3. The README already names them; this commit makes that true.
+git add claude/spec-2026-10-03-open-end-units.md \
+        claude/spec-2026-10-03-shelves-back-panel.md \
+        claude/spec-2026-10-03-vertical-thin.md \
+        claude/spec-2026-10-03-trilli.md \
         build/go.sh
 
 echo
