@@ -268,7 +268,7 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1293 codes (46 open units + 386 base + 74 sink + 12 appliance + 291 wall + 9 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1332 codes (46 open units + 39 open end units + 386 base + 74 sink + 12 appliance + 291 wall + 9 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
   # 2026-09-30, glass wall H.72 / H.84: +6 - printed p.313-314, the 7612 sink wall.
   # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
   # (12 base, 14 wall, 20 tall), each joining its height family.
@@ -300,8 +300,10 @@ check('registry loads and holds 1293 codes (46 open units + 386 base + 74 sink +
   # 2026-08-27: +44, and they are the first codes here out of a book that is not
   # the Kitchen System - Linear Elements printed p.215-220, panels priced by the
   # square metre. See the source_pdf note in 50_registry.rb -> data.
+  # 2026-10-03: +39, the open end units W.20 of printed p.450-452 (spec
+  # 7612-S4), nine files end_open_*.json; the seven H.60 rows held, not built.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1293
+  raise "got #{n}" unless n == 1332
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -494,9 +496,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1293 rows, each with code/dims/description/source') do
+check('registry catalog: 1332 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1293
+  raise cat.length.to_s unless cat.length == 1332
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -588,7 +590,9 @@ check('split storage: every catalog row is stamped with its section and class') 
   raise "missing stamps: #{bad.map { |c| c['code'] }.inspect}" unless bad.empty?
 
   sections = cat.map { |c| c['section'] }.uniq.sort
-  raise sections.inspect unless sections == ['Adjoining end side panel for N_Elle',
+  # 2026-10-03: '2.2 cm thick open end units' (printed p.450-452) sorts first.
+  raise sections.inspect unless sections == ['2.2 cm thick open end units',
+                                             'Adjoining end side panel for N_Elle',
                                              'Adjoining end side panel for N_Elle with framed door',
                                              'Base units H. 39',
                                              'Base units H. 48',
@@ -1179,6 +1183,8 @@ check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked a
     grammar['filler_letter_collision'].to_s.include?('BJ')
   raise 'the corner prefixes must stay recorded' unless
     grammar['corner_letters'].to_s.include?('AU')
+  raise 'the end-unit prefixes must stay recorded' unless
+    grammar['end_unit_letters'].to_s.include?('X8')
 
   # AND THE CODES MUST AGREE WITH THE MAP. Where the grammar states a depth per
   # prefix, every held code of that family must sit in the slot its own prefix
@@ -1196,6 +1202,11 @@ check('A BASE PREFIX NAMES A (FAMILY, DEPTH) SLOT - and the grammar is checked a
     # slot is (family, depth, GEOMETRY), and the corner half is recorded in the
     # grammar's corner_letters rather than forced into the same table.
     next unless (row['geometry_kind'] || 'linear') == 'linear'
+    # AND THE OPEN END UNITS OF printed p.450-451 HAVE THEIR OWN LETTERS (X1 / X8
+    # / XL at d.64,5, B2 at H.39 d.69,5, the d.62 prefix on a back-to-back box).
+    # Recorded in the grammar's end_unit_letters, checked below, skipped here -
+    # the corner precedent, not a loosening: every other base row still answers.
+    next if row['type_key'].to_s.start_with?('open_end_unit_')
 
     slots = map[u['family'].to_s]
     next unless slots.is_a?(Hash)
@@ -1422,9 +1433,11 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # tall H.222 brought 12 codes and none carries a wall-hung margin line.
   # 2026-09-28: 244 -> 276, not a flip: open base (12) and tall (20) units,
   # printed p.455-456, carry no wall-hung margin line.
-  raise refused.length.to_s unless refused.length == 276
+  # 2026-10-03: 276 -> 315, not a flip: the 39 open end units of printed
+  # p.450-452 carry no wall-hung margin line. base 38 -> 62, tall 230 -> 245.
+  raise refused.length.to_s unless refused.length == 315
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 38, 'tall' => 230, 'open_unit' => 8 }
+  raise by_class.inspect unless by_class == { 'base' => 62, 'tall' => 245, 'open_unit' => 8 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -5147,7 +5160,7 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'tall or wall units with framed glass doors' => 9, # +6 2026-09-30 glass H.72 / H.84
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 678 # +4 broom, fridge H.222
+                 'curved units, whose width is an arc' => 6 } && allowed == 717 # +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -11288,6 +11301,65 @@ check('spec row 8: export says FRONT PROJECTING ... (printed p.554), no code; NO
   raise 'one key, two spellings' unless Export::FRONT_BELOW_KEY == Generator::FRONT_BELOW_KEY
   bad = attrs.merge('variants' => [{ 'key' => 'FRONT BELOW', 'value' => '500' }])
   raise 'NOT DRAWN' unless Export.rows([bad]).any? { |r| r['description'].to_s.include?('FRONT PROJECTING 500') && r['description'].include?('NOT DRAWN') }
+end
+
+puts "\nopen end units W.20 - printed p.450-452 (spec 7612-S4)"
+
+def end_open_rows
+  Dir[File.join(__dir__, '..', 'registry', 'cesar', 'end_open_*.json')].sort.flat_map do |f|
+    JSON.parse(File.read(f))['data']['unit_types'].values.flat_map { |u| u['codes'] }
+  end
+end
+
+check('S4 row 2-3: every printed code, the irregular ones as printed') do
+  codes = end_open_rows.map { |r| r['code'] }
+  raise codes.length.to_s unless codes.length == 39 && codes.uniq.length == 39
+  # Copied, never "corrected" (domain rule 5): F2- on a C- page, -51 where the
+  # sisters read -50, and -05.
+  %w[F20250 C20251 F90205 X10250 X80250 XL0250 B00250 C00250].each do |c|
+    raise "#{c} missing" unless codes.include?(c)
+  end
+  u = Registry.lookup('F20250')
+  raise u.inspect unless u['width_mm'] == 200 && u['depth_mm'] == 645 && u['height_mm'] == 1380
+  raise 'tall H.234' unless Registry.lookup('F90205')['height_mm'] == 2340
+  raise 'base H.39' unless Registry.lookup('B00250')['height_mm'] == 390
+end
+
+check('S4 row 4: a single-depth end unit is an open box W.200 that joins its family') do
+  u = Registry.lookup('CG0250')
+  raise u['family'] unless u['family'] == 'Tall H.222'
+  raise u['depth_mm'].to_s unless u['depth_mm'] == 375 && u['depth_includes_front']
+  raise 'an open unit has no front' unless Generator.front_slabs(u).empty?
+  raise 'buildable' unless u['buildable']
+end
+
+check('S4 row 5: the back-to-back depths are the printed envelope, built; H.60 held, not built') do
+  u = Registry.lookup('B80257')
+  raise u.inspect unless u['depth_mm'] == 1290 && u['height_mm'] == 780 && u['buildable']
+  raise 'd.102 is 64,5 + 37,5' unless Registry.lookup('BK0253')['depth_mm'] == 1020
+  h60 = %w[BE0250 XF0250 BG0250 BF0251 BF0253 BF0254 BF0257].map { |c| Registry.lookup(c) }
+  raise 'H.60 rows must be held and NOT built' unless h60.all? { |x| x['buildable'] == false }
+  raise 'and must say why' unless h60.all? { |x| x['not_buildable_reason'].to_s.include?('no base family H.60') }
+end
+
+check("S4 row 6-7: '-' is absent, never 0; the d.129 footnote rides on the d.129 rows") do
+  rows = end_open_rows
+  raise "a '-' became a number" unless rows.all? { |r| (r['price_points_by_band'].keys & %w[3 9 11]).empty? }
+  raise 'a zero crept in' if rows.any? { |r| r['price_points_by_band'].values.include?(0) }
+  raise 'band 10 of BK0257 is 1.043' unless rows.find { |r| r['code'] == 'BK0257' }['price_points_by_band']['10'] == 1043
+  d129 = rows.select { |r| r['depth_mm'] == 1290 }
+  raise d129.length.to_s unless d129.length == 3 &&
+    d129.all? { |r| r['finish_note'].to_s.include?('No Fenix NTA for D. 129') }
+  raise 'only d.129 carries it' if (rows - d129).any? { |r| r['finish_note'] }
+end
+
+check('S4 row 1: the grey p.450-452 row is gone, the finishes pages stay a gap, the picker names the level') do
+  raise 'p.450-452 is held and must not be a gap' if
+    Registry.gaps.any? { |g| g['section'] == '2.2 cm thick open end units' }
+  raise 'p.453-454 finishes must still be offered as a gap' unless
+    Registry.gaps.any? { |g| g['section'] == '2.2 cm thick open end units | Finishes and price bands' }
+  labels = UCON::CabinetEngine::Palette::TYPE_LABELS
+  raise 'labels' unless labels['open_end_unit_20'] && labels['open_end_unit_20_double']
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

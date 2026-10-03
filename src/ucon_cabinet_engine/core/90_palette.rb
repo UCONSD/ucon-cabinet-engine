@@ -731,6 +731,10 @@ module UCON
         'open_wall_190'                      => 'Open wall units, W.45-90',
         'open_tall_145'                      => 'Open tall units, W.15-45',
         'open_tall_190'                      => 'Open tall units, W.45-90',
+        # 2026-10-03 (S4): printed p.450-452. The '_double' rows span two runs
+        # standing back to back (d.75-129) and are named so the picker says it.
+        'open_end_unit_20'                   => 'Open end units, W.20',
+        'open_end_unit_20_double'            => 'Open end units, W.20, back-to-back depth',
         # 2026-09-28, plain tall H.222, printed p.133-134 and p.136.
         'tall_pull_out_door'                 => 'Tall units with pull-out door',
         'tall_pull_out_dispensa'             => 'Tall units "Dispensa" with pull-out door',

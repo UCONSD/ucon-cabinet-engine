@@ -2032,9 +2032,18 @@
     "class": "open_unit",
     "family": "2.2 cm open end units",
     "section": "2.2 cm thick open end units",
-    "printed_pages": "450-454",
+    "printed_pages": "450-452",
+    "status": "extracted",
+    "note": "2026-10-03, spec 7612-S4: taken whole, 39 codes in 9 files end_open_*.json, each JOINING its height family - base H.39 (3), H.78 (7), H.84 (7), Tall H.138 / H.198 / H.210 / H.222 / H.234 (3 each), and 7 'for base unit H. 60' rows held in Top elements H.60 NOT BUILDABLE (no base family H.60; see end_open_top_h60.json). W.20 coded; single depths d.37,5 / 64,5 / 69,5 and, on the base pages, combined d.75 / 102 / 107 / 129 built as the printed envelope. Irregular tall codes (F20250, C20251, F90205) copied as printed. Was: 'Read only as far as the index', printed_pages 450-454; the finishes pages 453-454 now have their own row below.",
+    "extracted_on": "2026-10-03"
+   },
+   {
+    "class": "open_unit",
+    "family": "2.2 cm open end units",
+    "section": "2.2 cm thick open end units | Finishes and price bands",
+    "printed_pages": "453-454",
     "status": "not_extracted",
-    "note": "Read only as far as the index. Chapter 'Fillers, end elements and open units', printed index p.433. Its running head is 'Fillers - End elements / Open units'."
+    "note": "2026-10-03: split off the row above when p.450-452 were extracted. The finish and price-band tables for the end units and the open units of p.455-456. Nothing reads them yet - there is no appearance layer (M1.8). Bands 3, 9 and 11 are '-' on every row of p.450-452."
    },
    {
     "class": "open_unit",
@@ -2196,7 +2205,8 @@
    },
    "corner_letters": "AND A CORNER HAS ITS OWN PREFIXES AT THE SAME DEPTHS. printed p.42 prices the H.78 corner base units as B7 at d.35 - shared with the plain units - and then AU at d.62 and AW at d.67, where the plain units read B8 and B9. So the slot a prefix names is (family, depth, GEOMETRY), and two of the three H.78 corner prefixes are not in the family_depth_letter table at all. Found 2026-08-23 by a check written to tie the codes to that table: it failed on AU090S, which is exactly what it was for.",
    "filler_letter_collision": "printed p.434 prices base-unit fillers one per HEIGHT with no depth axis: B0 (39), BC (48), BJ (58,5), BE (60), BI (72), B7 (78), BK (84). Four match the d.35 member of the unit family and BJ DOES NOT - BJ is H.39 at d.47 on printed p.24. So a filler prefix cannot be used to find a base family, and the wall chapter's happy result does not generalise. OPEN FOR ELDA. Note also PJ0150 at H.120 inside the base-unit filler table, a wall prefix in a base table, flagged when p.434 was first read.",
-   "appliance_article_numbers": "THE APPLIANCE POSITIONS DO NOT USE THE CHAPTER'S WIDTH INDEX. printed p.34 prices the compact-oven base as B48698 at W.60 and B48999 at W.90, where this chapter's index reads 06 and 09; the same four-digit tails appear at H.78 d.62 (B88698 / B88798 / B88999) and d.67 (B98698 / B98798 / B98999), and the d.62 pair is priced identically to the H.58.5 one in every band. So the two-character prefix is still the (family, depth) key and the four digits are an ARTICLE NUMBER shared across families, not a width plus a suffix. READ, NOT DECODED."
+   "appliance_article_numbers": "THE APPLIANCE POSITIONS DO NOT USE THE CHAPTER'S WIDTH INDEX. printed p.34 prices the compact-oven base as B48698 at W.60 and B48999 at W.90, where this chapter's index reads 06 and 09; the same four-digit tails appear at H.78 d.62 (B88698 / B88798 / B88999) and d.67 (B98698 / B98798 / B98999), and the d.62 pair is priced identically to the H.58.5 one in every band. So the two-character prefix is still the (family, depth) key and the four digits are an ARTICLE NUMBER shared across families, not a width plus a suffix. READ, NOT DECODED.",
+   "end_unit_letters": "2026-10-03, printed p.450-451: THE OPEN END UNITS DO NOT SIT IN family_depth_letter AND ARE NOT FORCED IN. Their d.64,5 rows read X1 (H.39), X8 (H.78), XL (H.84) - an X where the doored units of the same depth read B1 / B8 / BL - and H.39's d.69,5 row reads B2, a letter the H.39 doored units never use. The combined-depth rows (d.75-129) reuse the d.62 doored prefix (B8, BK) for a box that is no single depth at all. Same shape as the corner letters: the slot is (family, depth, KIND), and the end units are read off their explicit rows only (domain rule 5)."
   },
   "tall_units": {
    "shape": "two-character family prefix + width_index + type_suffix, e.g. CQ0331 - and the prefix is a PAIR, one member per depth",

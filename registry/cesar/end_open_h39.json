@@ -1,0 +1,78 @@
+{
+ "section": "2.2 cm thick open end units",
+ "class": "base",
+ "family": "H.39",
+ "source_pages": "printed p.450 / PDF 452 (the base unit H. 39 rows)",
+ "family_note": "JOINS family H.39 and declares no family key: height, ground and plinth come from the family, as the fillers of printed p.434 and the open units of printed p.455 do.",
+ "extraction_note": "2026-10-03, spec 7612-S4 (Andriy: every Cesar open element findable in the picker, for the 7612 pantry end beside the door casing). Printed p.450-452 taken whole, 39 codes in 9 files: text layer of PDF 452-454 cross-read against 110-dpi renders.",
+ "data": {
+  "unit_types": {
+   "open_end_unit_20": {
+    "description": "Open end unit for base unit H. 39, W.20, 2,2 cm thick",
+    "object_class": "cabinet",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [],
+    "source_ref": "printed p.450 / PDF 452",
+    "codes": [
+     {
+      "code": "B00250",
+      "width_mm": 200,
+      "depth_mm": 375,
+      "price_points_by_band": {
+       "1": 108,
+       "2": 118,
+       "4": 129,
+       "5": 142,
+       "6": 209,
+       "7": 217,
+       "8": 259,
+       "10": 313
+      },
+      "side_panel": "for 35-cm deep side panel + door thickness"
+     },
+     {
+      "code": "X10250",
+      "width_mm": 200,
+      "depth_mm": 645,
+      "price_points_by_band": {
+       "1": 138,
+       "2": 151,
+       "4": 163,
+       "5": 182,
+       "6": 220,
+       "7": 250,
+       "8": 316,
+       "10": 389
+      },
+      "side_panel": "for 62-cm deep side panel + door thickness"
+     },
+     {
+      "code": "B20250",
+      "width_mm": 200,
+      "depth_mm": 695,
+      "price_points_by_band": {
+       "1": 145,
+       "2": 159,
+       "4": 172,
+       "5": 191,
+       "6": 232,
+       "7": 263,
+       "8": 331,
+       "10": 410
+      },
+      "side_panel": "for 67-cm deep side panel + door thickness"
+     }
+    ],
+    "depth_includes_front": true,
+    "front_layout": {
+     "kind": "none",
+     "note": "AN OPEN UNIT HAS NO FRONT. 'none' is stated rather than left absent: Panel.effective_slabs defaults a missing layout to 'single' and would hang a door on an open box (same reason as open_tall_222.json)."
+    },
+    "wall_hung": false,
+    "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version' line in the margin of printed p.450-452 (110-dpi renders, 2026-10-03).",
+    "notes": "Printed d.37,5 / 64,5 / 69,5 = side panel 35 / 62 / 67 + the 2,2 door plane (printed p.450 header: 'The depth measurements are based on 2.2 cm thick doors'). depth_includes_front: drawn from the door plane back, flush with the doored units beside it. WIDTH 20 IS CODED, NOT ORDERED: one width per row, unlike the 15-45 / 45-90 open units of printed p.455-456. price_points_by_band: the printed points, bands 1-11 of printed p.453-454. Bands 3, 9 and 11 are '-' on every row of p.450-452 and are ABSENT from the map, never 0 - '-' means not made in that finish. Nothing reads these yet (no appearance layer, M1.8); they are held because the row prints them and a re-read costs a render. The icon draws the open box with intermediate shelves; their number is read off an icon only and not recorded (interior_confirmed stays empty)."
+   }
+  }
+ }
+}

@@ -47,10 +47,24 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-10-03: the four open-units specs, by name. They missed 13b3871 because the
 # list above was still the 1.9.21 list - the session predicted 7 files and the
 # commit carried 3. The README already names them; this commit makes that true.
-git add claude/spec-2026-10-03-open-end-units.md \
-        claude/spec-2026-10-03-shelves-back-panel.md \
-        claude/spec-2026-10-03-vertical-thin.md \
-        claude/spec-2026-10-03-trilli.md \
+# 2026-10-03, S4 (core 1.9.22): the open end units W.20 of printed p.450-452 -
+# nine new section files, the manifest, the palette labels, the version, the
+# checks, and the two dated lines. 16 files predicted; the list below must print 16.
+git add registry/cesar/_manifest.json \
+        registry/cesar/end_open_h39.json \
+        registry/cesar/end_open_top_h60.json \
+        registry/cesar/end_open_h78.json \
+        registry/cesar/end_open_h84.json \
+        registry/cesar/end_open_tall_138.json \
+        registry/cesar/end_open_tall_198.json \
+        registry/cesar/end_open_tall_210.json \
+        registry/cesar/end_open_tall_222.json \
+        registry/cesar/end_open_tall_234.json \
+        src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/90_palette.rb \
+        tools/test_contract.rb \
+        claude/repo-state.md \
+        claude/project-7612-hillside-dr-2026-09-24.md \
         build/go.sh
 
 echo
