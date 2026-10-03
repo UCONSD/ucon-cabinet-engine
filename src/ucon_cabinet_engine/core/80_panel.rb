@@ -224,7 +224,13 @@ module UCON
 
           case method
           when 'gola'
-            nil # already validated above, with the rest of what belongs to the front
+            # A GOLA FRONT HAS NO HANDLE (core 1.9.24). The patch never said so,
+            # so a handle chosen earlier rode along in the merged attributes: the
+            # 7612 island stood on gola with M00001 on four fronts and VL0640 on
+            # Elevation B the same. nil here is a DELETE - Contract.write! drops
+            # every key whose value is not present.
+            patch['hardware_ref']    = nil
+            patch['hardware_source'] = nil
           when 'handle'
             if payload['hardware_mode'] == 'client'
               patch['hardware_ref']    = ''
@@ -255,6 +261,14 @@ module UCON
         # floor` onto a wall filler - this bug's mirror image, a control that
         # acts where it was never shown. What the generator built stands until
         # somebody is actually asked.
+        # SOMETHING THAT DOES NOT OPEN KEEPS NO OPENING FACTS (core 1.9.24). A
+        # filler has a front and no `opening`; until now Apply simply left
+        # whatever was there, and the 7612 BK0150 fillers carried
+        # opening_method "handle" from their first build into a gola run.
+        unless opens
+          %w[opening_method hardware_ref hardware_source hinge_side].each { |k| patch[k] = nil }
+        end
+
         hang = false
         if opens
           hang = payload['wall_hung'] ? true : false
@@ -848,7 +862,8 @@ module UCON
         # 35% opacity until they read as a solid grey block over the oven.
         doomed = defn.entities.grep(Sketchup::Group).select do |g|
           g.name.start_with?('FRONT') || g.name == 'FILLER_8X8' ||
-            g.name.start_with?('APPLIANCE_OPENING') || g.name.start_with?('VOID_REMAINDER')
+            g.name.start_with?('APPLIANCE_OPENING') || g.name.start_with?('VOID_REMAINDER') ||
+            g.name.start_with?('GOLA_FILLER_PROFILE')
         end
         defn.entities.erase_entities(doomed) unless doomed.empty?
         front_mat = Geometry.material(model, 'UCON_Front_White', [245, 245, 245])
@@ -862,6 +877,12 @@ module UCON
         effective_slabs(unit, gola).each do |slab|
           Generator.draw_front_slab(defn.entities, slab, unit, z0, front_mat)
         end
+
+        # The dishwasher's own recess piece, drawn only on a gola front (1.9.24).
+        Generator.draw_gola_filler_profile(
+          defn.entities, unit, gola,
+          Geometry.material(model, 'UCON_Carcass_Light_Gray', [220, 220, 216])
+        )
 
         if unit['geometry_kind'] == 'corner'
           front_h = effective_slabs(unit, gola).first[:h_mm]

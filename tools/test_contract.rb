@@ -1681,7 +1681,9 @@ check('an appliance panel may take door 75 without ordering its own GOL profile'
   u = Registry.lookup('V80630')
   patch = Panel.attributes_patch(u, 'door_version' => '75', 'hardware_ref' => '')
   raise patch.inspect unless patch['front_height_mm'] == 750 && patch['opening_method'] == 'gola'
-  raise 'no profile must be invented' if patch.key?('hardware_ref')
+  # 1.9.24: a gola patch now CARRIES hardware_ref => nil, which is a delete (a stale handle
+  # must leave). The rule tested is unchanged: no code may be invented.
+  raise 'no profile must be invented' unless patch['hardware_ref'].nil?
   # A cabinet still must name one - that rule is source-backed and unchanged.
   cab = Registry.lookup('B80601')
   begin
@@ -9921,8 +9923,10 @@ check('...AND IT IS GIVEN NO OPENING METHOD, BECAUSE IT DOES NOT OPEN') do
   # short; nothing about it opens; and nothing may pretend otherwise.
   p75 = Panel.attributes_patch(FILLER_B78,
                                'door_version' => '75', 'gola_system' => 'L-shaped')
-  raise "opening_method leaked: #{p75['opening_method'].inspect}" if p75.key?('opening_method')
-  raise 'a handle reached a filler' if p75.key?('hardware_ref')
+  # 1.9.24: the patch now DELETES them (key => nil) instead of leaving whatever was there -
+  # a filler built with "handle" kept it into a gola run (7612 v0.4). Still: none may be SET.
+  raise "opening_method leaked: #{p75['opening_method'].inspect}" unless p75['opening_method'].nil?
+  raise 'a handle reached a filler' unless p75['hardware_ref'].nil?
 end
 
 check('A FILLER IN THE 75 VERSION ORDERS ITS OWN LENGTH OF PROFILE') do
@@ -11495,6 +11499,41 @@ check('S8: build takes the open branch, the boards inherit the CARCASS colour, A
   raise 'boards carry no colour of their own' unless gsrc.include?('Geometry.box(g.entities, name, x, y, z, pw, pd, ph, nil)')
   psrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
   raise 'Apply must not redraw CARCASS (it shifts it)' if psrc.include?("'CARCASS'")
+end
+
+puts "\ngola fixes from 7612 Elevation B (core 1.9.24)"
+check('1.9.24: a horizontal layout with ONE front (BL0665 waste pull-out) orders no intermediate profile') do
+  one = Panel.attributes_patch(Registry.lookup('BL0665'), 'door_version' => '75', 'gola_system' => 'L-shaped')
+  codes = Array(one['companion_refs']).map { |l| l['code'] }
+  raise codes.inspect if codes.include?('GOL002') || !codes.include?('GOL001')
+  two = Panel.attributes_patch(Registry.lookup('BL0967'), 'door_version' => '75', 'gola_system' => 'L-shaped')
+  raise 'the drawer unit lost its intermediate' unless Array(two['companion_refs']).map { |l| l['code'] }.include?('GOL002')
+  raise 'B81253 drawer stack' unless Generator.gola_positions_for(Registry.lookup('B81253')) == %w[undercounter intermediate]
+end
+
+check('1.9.24: the dishwasher panel orders 995946, not a GOL profile, even when a system is passed') do
+  u = Registry.lookup('VL0640')
+  p = Panel.attributes_patch(u, 'door_version' => '75', 'gola_system' => 'L-shaped')
+  codes = Array(p['companion_refs']).map { |l| l['code'] }
+  raise codes.inspect unless codes.include?('995946') && codes.none? { |c| c.start_with?('GOL') }
+end
+
+check('1.9.24: a gola front deletes a handle chosen before') do
+  u = Registry.lookup('BL0967')
+  before = Generator.attributes_for(u).merge('opening_method' => 'handle', 'hardware_ref' => 'M00001', 'hardware_source' => 'factory')
+  after = before.merge(Panel.attributes_patch(u, 'door_version' => '75', 'gola_system' => 'L-shaped'))
+  raise after.slice('hardware_ref', 'hardware_source').inspect unless after['hardware_ref'].nil? && after['hardware_source'].nil?
+  Contract.validate!(after.reject { |_k, v| v.nil? })
+end
+
+check('1.9.24: the dishwasher recess piece is drawn only on a gola front, filling the 30 mm over the panel') do
+  u = Registry.lookup('VL0640').merge('width_mm' => 600)
+  b = Generator.gola_filler_profile_box(u, true)
+  raise b.inspect unless b && b[:w_mm] == 600.0 && b[:h_mm] == 30.0 && b[:z_mm] == Generator.base_z_mm(u) + 810.0
+  raise 'drawn on a 78 front' if Generator.gola_filler_profile_box(u, false)
+  raise 'drawn over a cabinet' if Generator.gola_filler_profile_box(Registry.lookup('BL0967'), true)
+  psrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/80_panel.rb', __dir__))
+  raise 'Apply must erase the old piece' unless psrc.include?("g.name.start_with?('GOLA_FILLER_PROFILE')")
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

@@ -51,13 +51,14 @@ echo "===== 2. stage, BY NAME ====="
 # corrected, the 39-row table check, the grammar exemption narrowed, the
 # back-to-back limits written down. 6 files predicted; the list printed 6.
 # 2026-10-03, 7612-S8 (core 1.9.23): open units drawn as boards, not a solid
-# block. 7 files predicted; the list must print 7.
+# block. 7 files predicted; the list printed 7.
+# 2026-10-03, core 1.9.24: gola fixes found on 7612 Elevation B (one-front stack,
+# dishwasher recess piece 995946, stale handle, filler opening facts).
+# 5 files predicted; the list must print 5.
 git add src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/10_standards.rb \
         src/ucon_cabinet_engine/core/60_generator.rb \
+        src/ucon_cabinet_engine/core/80_panel.rb \
         tools/test_contract.rb \
-        claude/README.md \
-        claude/spec-2026-10-03-open-carcass-geometry.md \
         build/go.sh
 
 echo

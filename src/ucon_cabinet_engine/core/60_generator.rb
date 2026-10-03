@@ -1374,9 +1374,72 @@ module UCON
       # needs the second. Same rule the picker used to apply to its dropdown -
       # moved here, where companions are resolved, because a rule in the UI is
       # a rule the order cannot rely on.
+      # AN INTERMEDIATE PROFILE JOINS TWO FRONTS, SO IT NEEDS TWO (core 1.9.24).
+      # This asked only for a horizontal LAYOUT, and a horizontal layout with
+      # ONE front exists: BL0665, the P-One waste pull-out - "one full-height
+      # front carried by the waste pull-out", printed 84 / 81, and its own
+      # gola_note says "undercounter profile only". 7612 v0.4, 2026-10-03: put
+      # on gola, it ordered GOL002 for a joint it does not have (Andriy: "the
+      # second one is not needed"). So the fronts are COUNTED, from whichever
+      # form the stack is written in; a stack this cannot read keeps the old
+      # answer rather than guessing a smaller order.
       def gola_positions_for(unit)
-        kind = (unit['front_layout'] || {})['kind']
-        kind == 'horizontal' ? %w[undercounter intermediate] : %w[undercounter]
+        layout = unit['front_layout'] || {}
+        return %w[undercounter] unless layout['kind'] == 'horizontal'
+
+        fronts =
+          if layout['gola_stack_top_to_bottom']
+            layout['gola_stack_top_to_bottom'].count { |z| z['kind'].to_s == 'front' }
+          elsif layout['stack_top_to_bottom']
+            layout['stack_top_to_bottom'].count { |z| z['kind'].to_s == 'front' }
+          elsif layout['heights_mm_top_to_bottom']
+            Array(layout['heights_mm_top_to_bottom']).size
+          end
+        fronts && fronts < 2 ? %w[undercounter] : %w[undercounter intermediate]
+      end
+
+      # THE DISHWASHER'S RECESS PIECE IS ITS OWN ARTICLE (core 1.9.24). Printed
+      # p.56 (H.84) / p.47 (H.78): "Filler profile between the dishwasher and
+      # the top", 995945 / 995946 by width, drawn spanning from cabinet side to
+      # cabinet side under the worktop. Over an appliance there is no carcass
+      # for a GOL profile to sit on - that piece is what closes the recess there.
+      # So an object that carries a filler_profile companion takes NO GOL line
+      # of its own: 7612 v0.4 ordered GOL001 over the dishwasher on 2026-10-03
+      # and Andriy took it off ("not that one - the dishwasher has its own").
+      def own_recess_piece?(unit)
+        (unit['companions'] || []).any? { |c| c['role'].to_s == 'filler_profile' }
+      end
+
+      # And the piece is DRAWN when the front is gola, because otherwise the
+      # 30 mm recess over the panel is a hole through to the machine - it read as
+      # "transparent" on Elevation B. Over a cabinet the carcass fills that view
+      # and the zone stays empty by the 2026-08-16 decision; over an appliance
+      # nothing does. Representation: the full drawn width, the recess height
+      # (full door - gola door), 20 deep behind the front plane - the section of
+      # the profile is not printed, so no truer shape is claimed.
+      GOLA_FILLER_PROFILE_DEPTH_MM = 20
+
+      def gola_filler_profile_box(unit, gola)
+        return nil unless gola && own_recess_piece?(unit)
+
+        versions = unit['door_versions'] || {}
+        full = (versions['full_mm'] || unit['height_mm']).to_f
+        gmm  = versions['gola_mm'].to_f
+        return nil unless gmm.positive? && full > gmm
+
+        z0 = base_z_mm(unit)
+        { x_mm: 0.0, y_mm: 0.0, z_mm: z0 + gmm, w_mm: drawn_width_mm(unit).to_f,
+          d_mm: GOLA_FILLER_PROFILE_DEPTH_MM.to_f, h_mm: full - gmm }
+      end
+
+      def draw_gola_filler_profile(entities, unit, gola, material)
+        b = gola_filler_profile_box(unit, gola)
+        return nil unless b
+
+        code = ((unit['companions'] || []).find { |c| c['role'].to_s == 'filler_profile' } || {})
+        code = (code['map'] || {})[unit['width_mm'].to_s] || code['code']
+        Geometry.box(entities, "GOLA_FILLER_PROFILE#{code ? "_#{code}" : ''}",
+                     b[:x_mm], b[:y_mm], b[:z_mm], b[:w_mm], b[:d_mm], b[:h_mm], material)
       end
 
       def companion_refs_for(unit, gola_system = nil)
@@ -1399,7 +1462,8 @@ module UCON
           line['source_ref'] = c['source_ref'] if c['source_ref']
           line
         end
-        lines = lines.compact + gola_profile_refs(unit, gola_system)
+        lines = lines.compact
+        lines += gola_profile_refs(unit, gola_system) unless own_recess_piece?(unit)
         lines.empty? ? nil : lines
       end
 
