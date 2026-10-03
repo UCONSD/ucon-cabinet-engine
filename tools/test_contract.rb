@@ -11558,5 +11558,13 @@ check('1.9.25: BL0565 (W45, kit 995625) - two bins side by side; a unit without 
   raise 'draw must call it before the branches' unless ssrc.index('draw_bins(model, definition, unit, z0') < ssrc.index('# ---- drawer stacks')
 end
 
+puts "\nfinish panels in the front colour (core 1.9.26)"
+check('1.9.26: end/corner panels and top fillers take the front colour; sheets, cabinets and fillers keep the carcass colour') do
+  want = { 'C00130' => :front, 'B70130' => :front, 'PF0030' => :front, 'DV731Q' => :front,
+           'DZBZ00' => :carcass, 'DZAD00' => :carcass, 'BL0967' => :carcass, 'BK0150' => :carcass }
+  got = want.keys.map { |c| [c, Generator.body_finish(Registry.lookup(c))] }.to_h
+  raise got.inspect unless got == want
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)

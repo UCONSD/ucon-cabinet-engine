@@ -959,7 +959,10 @@ module UCON
           if open_unit?(unit)
             draw_open_carcass(e, unit, z0, w, d, h, carcass_mat)
           else
-            Geometry.box(e, 'CARCASS', 0, panel_front_y_mm(unit), z0, w, d, h, carcass_mat)
+            # A FINISH PANEL IS DRAWN IN THE FRONT'S COLOUR (core 1.9.26) - see
+            # body_finish.
+            body_mat = body_finish(unit) == :front ? front_mat : carcass_mat
+            Geometry.box(e, 'CARCASS', 0, panel_front_y_mm(unit), z0, w, d, h, body_mat)
           end
 
           front_slabs(unit).each do |slab|
@@ -1757,6 +1760,25 @@ module UCON
       def panel_bottom_choosable?(unit)
         u = unit || {}
         u['object_class'].to_s == 'panel' && !Registry.sheet_panel?(u) && !wall_hung?(u)
+      end
+
+      # ---- which colour a body is drawn in (core 1.9.26) ----------------------
+      #
+      # Andriy, 7612 HERO, 2026-10-03: "the corner panels and the top fillers are
+      # a different colour from the fronts". They were drawn in carcass grey, and
+      # they are not carcass: an end side panel, a top filler, a corner panel is
+      # ordered IN THE DOOR FINISH (the FINISH variants on C00130 / B70130 /
+      # DV731Q say so) and is seen beside the doors. A panel SHEET (Linear
+      # Elements) in melamine, laminate or Technomat keeps the carcass colour - it
+      # is painted with its own material by whoever places it (HPL Bianco Kos,
+      # carcass melamine). A sheet in a DOOR finish - veneer or lacquer, like the
+      # DV731Q top fillers cut from veneered sheet - is a finish piece too.
+      def body_finish(unit)
+        u = unit || {}
+        return :carcass unless u['object_class'].to_s == 'panel'
+        return :front unless Registry.sheet_panel?(u)
+
+        "#{u['finish_family']} #{u['description']}".match?(/veneer|lacquer/i) ? :front : :carcass
       end
 
       # ---- an open unit, drawn as its boards (core 1.9.23, spec 7612-S8) ---

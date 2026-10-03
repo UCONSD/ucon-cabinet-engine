@@ -56,9 +56,12 @@ echo "===== 2. stage, BY NAME ====="
 # predicted; the list printed 5.
 # 2026-10-03, core 1.9.25: P-One waste bins drawn dashed. 4 files predicted;
 # the list printed 4.
-# 2026-10-03, docs only: Q44 revised - the pantry cladding split at 2280.
-# 2 files predicted; the list must print 2.
-git add docs/Elda_Open_Questions_v0.1.md \
+# 2026-10-03, docs only: Q44 revised. 2 files predicted; the list printed 2.
+# 2026-10-03, core 1.9.26: finish panels drawn in the front colour.
+# 4 files predicted; the list must print 4.
+git add src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/60_generator.rb \
+        tools/test_contract.rb \
         build/go.sh
 
 echo
