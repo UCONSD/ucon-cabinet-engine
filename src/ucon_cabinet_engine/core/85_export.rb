@@ -343,7 +343,31 @@ module UCON
           return why ? "#{line} - NOT DRAWN: #{why}" : line
         end
 
+        if v['key'] == FRONT_BELOW_KEY
+          line = "FRONT PROJECTING #{v['value']} mm below the carcass - priced as the next " \
+                 'standard-height front up (printed p.554)'
+          why = owner && front_below_refusal(owner, v)
+          return why ? "#{line} - NOT DRAWN: #{why}" : line
+        end
+
         "#{v['key']}: #{v['value']}"
+      end
+
+      # FRONT BELOW (core 1.9.21), spelled here for the same load-order reason.
+      FRONT_BELOW_KEY = 'FRONT BELOW'.freeze
+
+      # Same rule as door_to_floor_refusal: the order says when the drawing
+      # did not show what it asks for.
+      def front_below_refusal(owner, v)
+        return nil unless defined?(Generator) && Generator.respond_to?(:front_below_check)
+
+        unit = Registry.lookup(owner['code'].to_s)
+        return nil unless unit
+
+        _mm, why = Generator.front_below_check(Generator.effective(unit, owner), v['value'])
+        why
+      rescue StandardError => e
+        "could not be checked (#{e.message})"
       end
 
       # THE ORDER MUST NOT ASK FOR WHAT THE DRAWING DID NOT SHOW. A stored

@@ -359,6 +359,8 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
     floor on the 60 plinth; Elda Q40.
   - `spec-2026-10-02-modified-height-on-apply.md` — 7612-S2: a HEIGHT
     INCREASE / REDUCTION survives Apply (latent; found by the review of 1.9.19).
+  - `spec-2026-10-02-front-below-carcass.md` — 7612-S3: FRONT BELOW, a door that
+    projects below a hung carcass (handle-free uppers over the light shelf).
 
 ---
 

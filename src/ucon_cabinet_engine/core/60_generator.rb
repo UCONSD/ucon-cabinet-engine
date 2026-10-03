@@ -2961,6 +2961,14 @@ module UCON
           mm, _why = door_to_floor_check(u, v['value'])
           u['door_to_floor_mm'] = mm if mm
         end
+        # FRONT BELOW (core 1.9.21), the same shape again, measured from the
+        # carcass instead of the floor. Each check refuses while the other
+        # variant is on the object, so two answers to one question draw neither.
+        v = front_below_variant_of(u)
+        if v
+          mm, _why = front_below_check(u, v['value'])
+          u['front_below_mm'] = mm if mm
+        end
         u
       end
 
@@ -3067,6 +3075,11 @@ module UCON
       def door_to_floor_check(unit, value)
         u = unit || {}
         code = u['code'] || 'This object'
+        # Two answers to "where does the lowest front end" (core 1.9.21).
+        if front_below_variant_of(u)
+          return [nil, "#{code} already carries FRONT BELOW: DOOR TO FLOOR and FRONT BELOW " \
+                       'cannot both set the bottom of one front - remove one.']
+        end
         m = value.to_s.strip.match(/\A(-?\d+(?:[.,]\d+)?)\s*(?:mm)?\z/i)
         return [nil, "DOOR TO FLOOR #{value.inspect}: not a number of mm above the floor."] unless m
 
@@ -3123,9 +3136,12 @@ module UCON
       # Everything else in the stack - niches, upper doors - is untouched.
       def lower_to_floor(slabs, unit)
         mm = (unit || {})['door_to_floor_mm']
-        return slabs unless mm
+        below = (unit || {})['front_below_mm']
+        return slabs unless mm || below
 
-        drop = (door_to_floor_ground_mm(unit) - mm.to_f).round(1)
+        # DOOR TO FLOOR names where the bottom ends (above the floor); FRONT
+        # BELOW names how far it drops (below the carcass). Same move.
+        drop = (mm ? door_to_floor_ground_mm(unit) - mm.to_f : below.to_f).round(1)
         return slabs unless drop > 0
 
         low = bottom_fronts(slabs)
@@ -3140,6 +3156,91 @@ module UCON
       # put a second face in front of the lengthened door.
       def plinth_behind_door?(unit)
         !(unit || {})['door_to_floor_mm'].nil?
+      end
+
+      # ---- FRONT BELOW (core 1.9.21) -------------------------------------
+      #
+      # 7612, 2026-10-02 (Andriy): the sink-wall uppers get doors that run
+      # 22 mm below the hung carcass, over the light shelf; the slot behind the
+      # lowered door is the grip, so no handles. Kitchen System printed
+      # p.554-557 (Fronts) prices it - "projecting door fronts, refer to the
+      # cost of the next standard-height front up" - so it is drawn and said on
+      # the order, with no code invented (domain rule 1).
+      #
+      # DOOR TO FLOOR's mirror, measured from the CARCASS bottom: that one
+      # refuses a hung unit by design, this one is meant for it. The value is
+      # the drop in mm; the top of the front does not move. 100 is the limit:
+      # nothing read prints a projection that far, and a bigger number is far
+      # likelier a typed height than a projection.
+      FRONT_BELOW_KEY = 'FRONT BELOW'.freeze
+      FRONT_BELOW_MAX_MM = 100
+
+      def front_below_variant_of(unit)
+        Array((unit || {})['variants']).find { |x| x['key'] == FRONT_BELOW_KEY }
+      end
+
+      # [mm, nil] or [nil, reason]; the one judge, as door_to_floor_check is.
+      def front_below_check(unit, value)
+        u = unit || {}
+        code = u['code'] || 'This object'
+        if door_to_floor_variant_of(u)
+          return [nil, "#{code} already carries DOOR TO FLOOR: FRONT BELOW and DOOR TO FLOOR " \
+                       'cannot both set the bottom of one front - remove one.']
+        end
+
+        m = value.to_s.strip.match(/\A(-?\d+(?:[.,]\d+)?)\s*(?:mm)?\z/i)
+        return [nil, "FRONT BELOW #{value.inspect}: not a number of mm below the carcass."] unless m
+
+        mm = m[1].tr(',', '.').to_f
+        return [nil, "FRONT BELOW #{m[1]} mm: the drop must be more than 0."] unless mm > 0
+        unless mm <= FRONT_BELOW_MAX_MM
+          return [nil, "FRONT BELOW #{m[1]} mm: more than #{FRONT_BELOW_MAX_MM} mm below the carcass " \
+                       'is not a projecting front - check the number.']
+        end
+
+        if u['geometry_kind'] == 'corner'
+          return [nil, "#{code} is a corner unit: FRONT BELOW is not drawn on a corner door."]
+        end
+
+        slabs = front_slabs_as_printed(u)
+        return [nil, "#{code} has no front: FRONT BELOW needs a front to lengthen."] if slabs.none? { |sl| sl[:kind].nil? }
+        unless bottom_fronts(slabs).any?
+          return [nil, "#{code}: its lowest element is not a front, so no front can project below it."]
+        end
+
+        # A hung unit may not project to or past the floor either (review of
+        # 1.9.21): the carcass bottom is its mount height, and a drop of that
+        # much or more would put the front on or through the floor.
+        if wall_hung?(u)
+          bottom = base_z_mm(u).to_f
+          unless mm < bottom
+            return [nil, "FRONT BELOW #{m[1]} mm: #{code} hangs with its carcass bottom at " \
+                         "#{bottom.round} mm above the floor; the front cannot drop that far."]
+          end
+        end
+
+        # A standing unit may project only into the gap above its own floor;
+        # reaching the floor is a different request with its own name.
+        unless wall_hung?(u)
+          gap = door_to_floor_ground_mm(u)
+          unless mm < gap
+            return [nil, "FRONT BELOW #{m[1]} mm: #{code} stands #{gap.round} mm above its floor, so " \
+                         'the front would reach it - that is DOOR TO FLOOR, not FRONT BELOW.']
+          end
+        end
+        [mm, nil]
+      end
+
+      def front_below_variant(unit, value)
+        mm, why = front_below_check(unit, value)
+        raise ArgumentError, why unless mm
+
+        n = (mm % 1).zero? ? mm.to_i : mm
+        { 'key' => FRONT_BELOW_KEY,
+          'value' => n.to_s,
+          'label' => "front #{n} mm below the carcass",
+          'source_ref' => 'Kitchen System printed p.554-557 (Fronts): a projecting door front is priced ' \
+                          'as the next standard-height front up. No code of its own.' }
       end
 
       # ---- the wall-hung option (printed p.548) -------------------------

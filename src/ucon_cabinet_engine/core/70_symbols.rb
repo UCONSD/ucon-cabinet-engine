@@ -663,7 +663,7 @@ module UCON
           # Catalog geometry, printed per family. NEVER derived: the two
           # push-up systems move differently and only the page knows how.
           rings = open_leaf_slab(w, ol['upper_mm'], ol['free_mm'], t)
-          return draw_leaf_group(definition, rings, z0, 'SYM_DOOR_MECHANISM', door_tag, mat)
+          return draw_leaf_group(definition, rings, zb, 'SYM_DOOR_MECHANISM', door_tag, mat)
         end
 
         if %w[bottom top].include?(layout['hinge_axis'].to_s)

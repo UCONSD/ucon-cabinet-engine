@@ -56,6 +56,10 @@ existed.
 | Q37 | USA fridge panels H.222, printed p.423: the 24" codes print CH4640 / CH4651 while 18/30/36 print CH94xx / CH97xx / CH99xx - misprint for CH9600 / CH9601? | **open** 2026-09-28 · 7612 fridge = two 24" housings, so both doors are CH4640 |
 | Q38 | Filler beside a tall unit top element H.72 (SE): p.434 prints no H.72 front-only strip - PE0151 (wall filler, one-piece bottom) or BI0150 (base filler box)? | **open** 2026-09-28 · 7612 top elements over the H.222 columns |
 | Q39 | ONE top element **1220 × 720 × 620** over two 24" USA fridge panels (7612) - drawn as SE1200 +20, as Avenida's PE1299 was one body | open 2026-09-30 · asks for the made-to-drawing code |
+| Q40 | 7612 tall row: fronts lengthened to **10 mm above the floor** over the 60 plinth (CK7744 bottom drawer, 2 x CH4640, the box filler) - can Cesar supply the increased height, how is it written? Also: d.75 end panel of p.441 beside a fridge door hinged on the far side, H.234 reduced to 2280, on the floor on H.5 feet | open 2026-10-02 · drawn as variant DOOR TO FLOOR (core 1.9.18) |
+| Q41 | 7612: two **box fillers 108 wide, carcass d.620** left of the passage door - 108 x 620 x 2220 (front 2270, to 10 mm above the floor) and 108 x 620 x 720 above it - SPECIAL ORDER, p.434 prints box fillers only to H.138 and d.35 | open 2026-10-02 · **supersedes Q38** (Andriy chose a box at full depth instead of a strip) · drawn as UCON-BESP-002 / 003, NO ARTICLE |
+| Q42 | 7612 worktops in **Dekton 2 cm** (group D, colour to be agreed): Tangram island top 3045 x 1290 as ONE sheet (band 130), its curves, the hob and downdraft cutouts; sink-wall top in two pieces 1572 + 2772 joined at the BL0665 / BL1269 seam, undermount sink cutout | open 2026-10-02 · please price and confirm; we do not compute it |
+| Q43 | 7612 sink-wall uppers, handle-free: six PF0631 cut to 550 with doors **projecting 22 mm below the carcass** (priced as the next standard front, p.554), over a lit shelf MNS022000 cut 1722 x 325 with Sky-B; window-end panels PJ0030 reduced to 982 lapping the shelf ends | open 2026-10-02 · drawn as variant FRONT BELOW (core 1.9.21) |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1467,3 +1471,69 @@ On Avenida Primavera your estimate 30833 answered Q11 with **PE1299, a made-to-d
    door of 1220 can be made, tell us and we redraw.
 3. If neither is possible: SE1200 (W.120) with 10 mm at each end? (The front-only strip starts at
    23 mm, printed p.434, so we doubt it.)
+
+## Q40 — Tall-row fronts down to 10 mm above the floor (7612)
+
+**Status:** open · added 2026-10-02 · **the whole 7612 tall row**
+
+The tall units stand on the H.6 plinth (H.222 for base H.84, top 2280). Andriy wants every front of
+the row to run down to **10 mm above the floor** - the line of the pantry passage door - so the plinth
+disappears behind the doors: CK7744 bottom drawer front 10..540 instead of 60..540, both CH4640
+fridge panels 2270 instead of 2220, and the box filler of Q41. Printed p.548 prices height
+REDUCTIONS only; plinth H.1 "doors on the ground" is printed for Revego and Hide & Seek only
+(p.183 / p.196).
+1. Can Cesar supply these fronts at the increased height, and how should it be written on the order?
+2. The corner end panel at the sink wall: we ordered the **d.75 panel of p.441** (for doors hinged on
+   the side opposite the 45-degree edge - the CH4640 next to it is hinged on the far side), **H.234
+   reduced to 2280**, standing **on the floor on H.5 adjustable feet** (989053), and B70130 reduced to
+   720 above it; both 750 deep, scribed to the wall on site (opening 745). Is that the right
+   execution?
+
+## Q41 — Box fillers at full depth beside the passage door (7612)
+
+**Status:** open · added 2026-10-02 · **supersedes Q38**
+
+Left of the pantry passage door the row closes with a 108 mm gap. Instead of the front-only strip
+CG0151 (and PE0151 d.35 above it, Q38), Andriy wants **box fillers at the depth of the row**:
+- lower: **108 x 620 x 2220** carcass on the 60 plinth, front in door finish **2270** (to 10 mm above
+  the floor, as Q40);
+- upper: **108 x 620 x 720** on top of it, front 720, up to 3000.
+Front finish RR10 Rovere Mediterraneo (First wood veneers, vertical grain), carcass melamine like
+the row. Printed p.434 prints box fillers (sides, bottom and top in melamine) only up to H.138 and
+d.35, so we treat both as **special order** and they are on our list as "CUSTOM SIZE - NO ARTICLE".
+1. Can Cesar make them, and under which code (made to drawing, as PE1299 on Avenida)?
+2. If not: what does Cesar recommend for a 108 gap at d.62 beside a tall unit and its top element?
+
+## Q42 — Worktops in Dekton 2 cm (7612)
+
+**Status:** open · added 2026-10-02 · **please price; we prepare, you calculate**
+
+Material for all worktops: **Dekton, 2 cm, price group D** (Avorio / Grigio / Grafite / Marmorio / Lunar /
+Creta / Kelya - the colour will be agreed with the client; the drawing shows a light placeholder).
+Linear Elements printed p.48 lists Dekton 1,2 / 2 for Tangram tops; p.107 prices TOPDR008020.
+1. **Island (Tangram)** - one top following the island outline, 3045 long x 1290 deep (drawing).
+   We read it as ONE sheet in the 130 band (max length 314). Please confirm, and count the Tangram
+   curve modules on the top (printed p.108, per curve) - we see C x 2, E, B but you know the rule.
+   Cutouts: induction hob **Thermador CIT36YWBB** (Freedom, frameless) and downdraft **Thermador
+   UCVM36XS** behind it (its specs we can send). Edge: plain, no profile unless you advise one.
+2. **Sink wall** - straight top 4344 x 645, longer than one sheet, so **two pieces: 1572 + 2772**,
+   joint at x 3502 = over the BL0665 / BL1269 cabinet seam, 238 mm left of the sink cutout (not through
+   the sink). **Undermount sink**, single bowl 30 in, cutout about 724 x 419 (model; final from the
+   sink chosen). One visible end on the right? (the left end meets the corner end panel).
+3. Anything in our assumptions that does not work for Dekton - tell us and we redraw.
+
+## Q43 — Handle-free uppers over a lit shelf (7612)
+
+**Status:** open · added 2026-10-02
+
+Each side of the window: three wall units **PF0631 reduced to W.55** (H.96, d.35, hung at 1465..2425). Under each
+block a **2,2 shelf MNS022000 cut to 1722 x 325** with the **Sky-B** lamp (p.224: shelf less 3 = 1719, 3000K). The
+doors run **22 mm below the carcass**, down to the underside of the shelf; the shelf's front edge is **25 mm behind
+the back of the doors**, so the slot behind the lowered door is the grip - no handles, no grip edge. At the window
+end of each block an end panel **PJ0030 (H.120, d.37,5) reduced to 982**, 1443..2425, so its end laps over the shelf.
+1. Can the PF0631 door be supplied 982 high on a 960 carcass (p.554: projecting fronts priced as the next standard
+   height)? How is it written on the order?
+2. Does the hinge / door gap work with a door 22 below the carcass bottom (the shelf is fixed under the carcass)?
+3. MNS022000 cut to 325 deep with the Sky-B - confirm the lamp position (p.224 says 18 mm in from the edge in depth)
+   still works at that depth, and which transformer / switch you propose.
+

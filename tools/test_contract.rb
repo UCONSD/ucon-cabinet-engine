@@ -11194,5 +11194,101 @@ check('spec row 7: height + DOOR TO FLOOR - the lowered front reaches the top of
   raise sl.inspect unless (z0 + sl[:z_mm] - 10).abs < 0.001 && (z0 + sl[:z_mm] + sl[:h_mm] - (z0 + 720)).abs < 0.001
 end
 
+puts "\nFRONT BELOW: a door projecting below a hung carcass (core 1.9.21)"
+def fb_unit(value = '22')
+  base = Registry.lookup('PF0631')
+  attrs = Generator.attributes_for(Registry.with_ordered_width(base, 550)).merge('mount_bottom_mm' => 1465)
+  attrs['variants'] = Array(attrs['variants']) + [Generator.front_below_variant(Generator.effective(base, attrs), value)]
+  Contract.validate!(attrs)
+  [base, attrs, Generator.effective(base, attrs)]
+end
+check('spec row 1: PF0631 @550 hung at 1465 - front 1443..2425, width 550; the V and open leaf follow') do
+  _b, attrs, e = fb_unit
+  v = attrs['variants'].last
+  raise v.inspect unless v['key'] == 'FRONT BELOW' && v['value'] == '22'
+  raise 'read back' unless e['front_below_mm'] == 22.0
+  z0 = Generator.base_z_mm(e)
+  sl = Generator.front_slabs(e)
+  raise sl.inspect unless sl.size == 1 && sl[0][:w_mm] == 550
+  raise "bottom #{z0 + sl[0][:z_mm]}" unless (z0 + sl[0][:z_mm] - 1443).abs < 0.001
+  raise "top #{z0 + sl[0][:z_mm] + sl[0][:h_mm]}" unless (z0 + sl[0][:z_mm] + sl[0][:h_mm] - 2425).abs < 0.001
+  lo, h = UCON::CabinetEngine::Symbols.front_span_mm(e, Panel.effective_slabs(e, false), nil)
+  raise [lo, h].inspect unless lo == -22.0 && h == 982.0
+  raise 'no plinth question' if Generator.plinth_behind_door?(e)
+end
+check('spec row 4: FRONT BELOW 0, -5, 101, abc, empty refused by name; 100 accepted') do
+  u = Generator.effective(Registry.lookup('PF0631'), Generator.attributes_for(Registry.lookup('PF0631')))
+  { '0' => 'more than 0', '-5' => 'more than 0', '101' => 'more than 100 mm', 'abc' => 'not a number',
+    '' => 'not a number' }.each do |val, why|
+    begin
+      Generator.front_below_variant(u, val)
+      raise "#{val.inspect} accepted"
+    rescue ArgumentError => ex
+      raise "#{val.inspect}: #{ex.message}" unless ex.message.include?(why) && ex.message.include?('FRONT BELOW')
+    end
+  end
+  raise '100' unless Generator.front_below_check(u, '100')[0] == 100.0
+end
+check('spec row 5: FRONT BELOW on an object with no front is refused by name') do
+  %w[C00130 MNS022038].each do |code|
+    begin
+      Generator.front_below_variant(Registry.lookup(code), '22')
+      raise "#{code} accepted"
+    rescue ArgumentError => ex
+      raise "#{code}: #{ex.message}" unless ex.message.include?(code) && ex.message.include?('no front')
+    end
+  end
+end
+check('spec row 6: FRONT BELOW and DOOR TO FLOOR on one object - each refuses, neither is drawn') do
+  u = Registry.lookup('CK7744')
+  attrs = Generator.attributes_for(u)
+  attrs['variants'] = [Generator.door_to_floor_variant(u, '10')]
+  e = Generator.effective(u, attrs)
+  raise 'fb accepted' if Generator.front_below_check(e, '22')[0]
+  raise Generator.front_below_check(e, '22')[1] unless Generator.front_below_check(e, '22')[1].include?('already carries DOOR TO FLOOR')
+  attrs['variants'] << { 'key' => 'FRONT BELOW', 'value' => '22' }
+  both = Generator.effective(u, attrs)
+  raise 'drawn' if both['door_to_floor_mm'] || both['front_below_mm']
+  raise 'slabs moved' unless Generator.front_slabs(both) == Generator.front_slabs(u)
+  raise Generator.door_to_floor_check(both, '10')[1] unless Generator.door_to_floor_check(both, '10')[1].include?('already carries FRONT BELOW')
+end
+check('spec row 7: a standing unit may project only short of the floor, else DOOR TO FLOOR is named') do
+  u = Registry.lookup('CK7744') # plinth 60
+  raise 'short of the floor' unless Generator.front_below_check(u, '22')[0] == 22.0
+  why = Generator.front_below_check(u, '60')[1]
+  raise why.inspect unless why && why.include?('DOOR TO FLOOR')
+end
+check('FRONT BELOW on a hung unit may not reach the floor: B80601 hung at 100, 100 refused, 99 accepted') do
+  u = Registry.lookup('B80601').merge('mounting' => 'wall_hung', 'mount_bottom_mm' => 100)
+  raise 'hung' unless Generator.wall_hung?(u) && Generator.base_z_mm(u) == 100.0
+  why = Generator.front_below_check(u, '100')[1]
+  raise why.inspect unless why && why.include?('B80601 hangs') && why.include?('100 mm above the floor')
+  raise '99' unless Generator.front_below_check(u, '99')[0] == 99.0
+end
+check('the push-up mechanism leaf starts where the lowered front starts') do
+  sy = UCON::CabinetEngine::Symbols
+  got = []
+  orig = sy.method(:draw_leaf_group)
+  sy.define_singleton_method(:draw_leaf_group) { |_d, rings, z0, name, _t, _m| got << [name, z0, rings]; nil }
+  begin
+    layout = { 'kind' => 'single', 'open_leaf' => { 'upper_mm' => [0, 400], 'free_mm' => [-300, 450] } }
+    sy.draw_open_leaf(nil, {}, layout, 600, 400, 1465.0, nil, -1, nil, nil, nil, [-22.0, 422.0])
+    raise got.inspect unless got.last[0] == 'SYM_DOOR_MECHANISM' && got.last[1] == 1443.0
+  ensure
+    sy.define_singleton_method(:draw_leaf_group, orig)
+  end
+end
+check('spec row 8: export says FRONT PROJECTING ... (printed p.554), no code; NOT DRAWN when it no longer draws') do
+  _b, attrs, _e = fb_unit
+  line = Export.rows([attrs]).find { |r| r['description'].to_s.include?('FRONT PROJECTING') }
+  raise 'line lost' unless line
+  raise line['description'] unless line['description'] ==
+    'FRONT PROJECTING 22 mm below the carcass - priced as the next standard-height front up (printed p.554)'
+  raise "a code was invented: #{line['code'].inspect}" unless line['code'].to_s.empty? && line['level'] == 1
+  raise 'one key, two spellings' unless Export::FRONT_BELOW_KEY == Generator::FRONT_BELOW_KEY
+  bad = attrs.merge('variants' => [{ 'key' => 'FRONT BELOW', 'value' => '500' }])
+  raise 'NOT DRAWN' unless Export.rows([bad]).any? { |r| r['description'].to_s.include?('FRONT PROJECTING 500') && r['description'].include?('NOT DRAWN') }
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
