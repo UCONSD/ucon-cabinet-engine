@@ -59,7 +59,9 @@ existed.
 | Q40 | 7612 tall row: fronts lengthened to **10 mm above the floor** over the 60 plinth (CK7744 bottom drawer, 2 x CH4640, the box filler) - can Cesar supply the increased height, how is it written? Also: d.75 end panel of p.441 beside a fridge door hinged on the far side, H.234 reduced to 2280, on the floor on H.5 feet | open 2026-10-02 · drawn as variant DOOR TO FLOOR (core 1.9.18) |
 | Q41 | 7612: two **box fillers 108 wide, carcass d.620** left of the passage door - 108 x 620 x 2220 (front 2270, to 10 mm above the floor) and 108 x 620 x 720 above it - SPECIAL ORDER, p.434 prints box fillers only to H.138 and d.35 | open 2026-10-02 · **supersedes Q38** (Andriy chose a box at full depth instead of a strip) · drawn as UCON-BESP-002 / 003, NO ARTICLE |
 | Q42 | 7612 worktops in **Dekton 2 cm** (group D, colour to be agreed): Tangram island top 3045 x 1290 as ONE sheet (band 130), its curves, the hob and downdraft cutouts; sink-wall top in two pieces 1572 + 2772 joined at the BL0665 / BL1269 seam, undermount sink cutout | open 2026-10-02 · please price and confirm; we do not compute it |
-| Q43 | 7612 sink-wall uppers, handle-free: six PF0631 cut to 550 with doors **projecting 22 mm below the carcass** (priced as the next standard front, p.554), over a lit shelf MNS022000 cut 1722 x 325 with Sky-B; window-end panels PJ0030 reduced to 982 lapping the shelf ends | open 2026-10-02 · drawn as variant FRONT BELOW (core 1.9.21) |
+| Q43 | 7612 sink-wall uppers, handle-free: six PF0631 at **W.55 x H.93,8 carcass** (width + height reduction) with the **standard 960 door** kept, i.e. the door runs 22 below the shortened carcass over a lit shelf MNS022000 1722 x 325 (Sky-B); fillers PF0151 the same; window-end panels PF0030 standard | open 2026-10-02 · rewritten same day: carcass reduced instead of a 982 door · variant FRONT BELOW (core 1.9.21) |
+| Q44 | 7612 pantry: the back of the tall row clad in **HPL DZBZ00 18 Bianco Kos**, full 3000 in one sheet (pieces 108 / 762 / 1220 x 3000, 750 x 720 above the passage), plus the fridge niche side (623 x 2280) and a melamine filler above the fridges (1220 x 623 bottom + 1220 x 116 face) - fixing kit for TALL units? | open 2026-10-02 · if none, UCON fixes on site |
+| Q45 | 7612 pantry broom closet: **CH1612** tall broom cupboard H.222 d.62 + accessory set **995635**, top element SE0600 over it, **both WITHOUT DOORS (special order)**; it stands in the void behind the corner end panel C00130 and opens into the pantry - power socket inside for a cordless vacuum | open 2026-10-02 · confirm the set fits an open CH1612, the socket cutout, and how a doorless unit is ordered (addendum) |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1524,16 +1526,40 @@ Linear Elements printed p.48 lists Dekton 1,2 / 2 for Tangram tops; p.107 prices
 
 ## Q43 — Handle-free uppers over a lit shelf (7612)
 
+**Status:** open · added 2026-10-02 · rewritten the same day (Andriy: keep doors and side panels standard, shorten
+the carcass instead of lengthening the door)
+
+Each side of the window: three wall units **PF0631, carcass reduced to W.55 x H.93,8** (H.96 family, d.35), hung
+1487..2425, **with the standard H.96 door 960 kept** - so the door runs 22 mm below the shortened carcass, 1465..2425.
+In that 22 mm, under each block, a **2,2 shelf MNS022000 cut to 1722 x 325** with the **Sky-B** lamp (p.224: shelf less
+3 = 1719, 3000K); its front edge is **25 mm behind the back of the doors**, so the slot behind the door is the grip -
+no handles, no grip edge. The end fillers **PF0151 72** the same way (carcass 938, front 960). At the window end of each
+block a standard end panel **PF0030 (H.96, d.37,5)**, 1465..2425, its end lapping over the shelf end.
+1. Can the carcass be reduced to 938 while the door stays 960? (printed p.548 says reduced units get reduced fronts;
+   here we ask the opposite.) How should it be written on the order, and what does it cost?
+2. Hinges / door gap with a door 22 below the carcass bottom and the shelf fixed under the carcass - any issue?
+3. MNS022000 cut to 325 deep with the Sky-B - confirm the lamp position (p.224: 18 mm in from the edge in depth)
+   at that depth, and which transformer / switch you propose.
+
+## Q44 — Pantry cladding and the fridge niche in HPL (7612)
+
 **Status:** open · added 2026-10-02
 
-Each side of the window: three wall units **PF0631 reduced to W.55** (H.96, d.35, hung at 1465..2425). Under each
-block a **2,2 shelf MNS022000 cut to 1722 x 325** with the **Sky-B** lamp (p.224: shelf less 3 = 1719, 3000K). The
-doors run **22 mm below the carcass**, down to the underside of the shelf; the shelf's front edge is **25 mm behind
-the back of the doors**, so the slot behind the lowered door is the grip - no handles, no grip edge. At the window
-end of each block an end panel **PJ0030 (H.120, d.37,5) reduced to 982**, 1443..2425, so its end laps over the shelf.
-1. Can the PF0631 door be supplied 982 high on a 960 carcass (p.554: projecting fronts priced as the next standard
-   height)? How is it written on the order?
-2. Does the hinge / door gap work with a door 22 below the carcass bottom (the shelf is fixed under the carcass)?
-3. MNS022000 cut to 325 deep with the Sky-B - confirm the lamp position (p.224 says 18 mm in from the edge in depth)
-   still works at that depth, and which transformer / switch you propose.
+The pantry sits behind the 7612 tall row, so the backs of the tall units are its wall. We clad them in **HPL
+laminate DZBZ00 18, Bianco Kos** (Linear Elements printed p.216, max 1260 x 4180), each piece **full height 3000 in
+one sheet**, joints on the cabinet joints: **108 x 3000** (behind the box filler), **762 x 3000** (behind CK7744),
+**1220 x 3000** (behind the fridges), **750 x 720** above the passage. The same laminate gives the **right side of the niche for the two Thermador 24 in columns, 623 x 2280** (cutout
+2 x 610 wide, 2134..2164 high, appliance 24 in deep + panel = the 25 in of the spec; 623 from the back of the CH4640
+doors to the carcass backs). Above the columns (2164 -> SE1200 at 2280, 116) a **filler in carcass melamine DZAD00 18**:
+bottom 1220 x 623 at 2146..2164 and face 1220 x 116 on the appliance plane, behind the doors.
+1. The panel-fixing kits on p.214 (990483..990492) are sized for BASE units. Is there a kit for tall units and top
+   elements? If not, we fix on site - just tell us.
+2. Any reason not to use DZBZ00 for the niche side and top (load of the anti-tip bracket, ventilation is at the front)?
 
+
+### Q45 addendum (2026-10-02) — broom closet without doors
+Andriy decided: **CH1612 and the SE0600 above it are ordered WITHOUT DOORS** (open cupboards in the pantry, special order).
+3. Can Cesar supply CH1612 / SE0600 without the door (and without hinges / the top-hung lift), and how is it written
+   on the order - same code with a note, or a different code (an open tall unit)?
+4. With no door the carcass inside and the front edges are seen: which interior finish and edge do you recommend,
+   and does the 995635 accessory set still fit an open CH1612?

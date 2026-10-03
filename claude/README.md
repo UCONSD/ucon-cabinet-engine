@@ -361,6 +361,14 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
     INCREASE / REDUCTION survives Apply (latent; found by the review of 1.9.19).
   - `spec-2026-10-02-front-below-carcass.md` — 7612-S3: FRONT BELOW, a door that
     projects below a hung carcass (handle-free uppers over the light shelf).
+  - `spec-2026-10-03-open-end-units.md` - 7612-S4: open end units W.20,
+    printed p.450-452, into the registry and the picker.
+  - `spec-2026-10-03-shelves-back-panel.md` - 7612-S5: back panel MNSSCH018,
+    shelf d.38 on concealed supports 990307 (Linear Elements p.225-228); Q51.
+  - `spec-2026-10-03-vertical-thin.md` - 7612-S6: Vertical Thin and bottle
+    racks, printed p.464-470.
+  - `spec-2026-10-03-trilli.md` - 7612-S7: Trilli, printed p.471-484; the code
+    depends on the finish band - owner decides the picker shape first.
 
 ---
 
