@@ -734,6 +734,78 @@ module UCON
         [lo, hi - lo]
       end
 
+      # ---- WASTE BINS, DASHED (core 1.9.25) ----------------------------------
+      #
+      # Andriy, 7612 v0.4, 2026-10-03: show the bin configuration inside the trash
+      # unit - dashed, in elevation and from above, "as simple as possible". The
+      # kit is a companion ordered beside the unit (waste_bin_kit, printed p.524),
+      # so the drawing follows the ORDER: no kit line, no bins drawn.
+      #
+      # Printed p.524, P-One: W45 kit 995625 = 2 bins (27+27 l) side by side;
+      # W60 kit 995626 = 3 bins (55+17+17 l) - the big one on the left half, the
+      # two small ones one behind the other on the right. Both kits print 50 deep
+      # and 51,9 high. Side inset 30 is OURS (the kit's own width is not printed
+      # against the carcass) - a representation, like every symbol here.
+      BIN_KITS = {
+        '995625' => { h_mm: 519.0, d_mm: 500.0, split: :halves },
+        '995626' => { h_mm: 519.0, d_mm: 500.0, split: :big_and_two }
+      }.freeze
+      BIN_SIDE_INSET_MM = 30.0
+      BIN_FRONT_GAP_MM  = 20.0
+
+      def bin_kit_code(unit)
+        c = ((unit || {})['companions'] || []).find { |x| x['role'].to_s == 'waste_bin_kit' }
+        return nil unless c
+
+        c['by'] == 'width' ? (c['map'] || {})[unit['width_mm'].to_s] : c['code']
+      end
+
+      # PURE. Segments in the unit frame, mm: :front as [x, z] pairs, :plan as
+      # [x, y] pairs (y from the carcass front backwards).
+      def bin_lines(unit, z0)
+        kit = BIN_KITS[bin_kit_code(unit).to_s]
+        return nil unless kit
+
+        w  = Generator.drawn_width_mm(unit).to_f
+        x0 = BIN_SIDE_INSET_MM
+        x1 = w - BIN_SIDE_INSET_MM
+        return nil unless x1 - x0 > 100
+
+        rect = lambda do |a0, b0, a1, b1|
+          [[[a0, b0], [a1, b0]], [[a1, b0], [a1, b1]], [[a1, b1], [a0, b1]], [[a0, b1], [a0, b0]]]
+        end
+        xm = (x0 + x1) / 2.0
+        zb = z0.to_f + Standards::PANEL_T_MM
+        zt = zb + kit[:h_mm]
+        y0 = BIN_FRONT_GAP_MM
+        y1 = y0 + kit[:d_mm]
+        front = rect.call(x0, zb, x1, zt) + [[[xm, zb], [xm, zt]]]
+        plan  = rect.call(x0, y0, x1, y1) + [[[xm, y0], [xm, y1]]]
+        plan << [[xm, (y0 + y1) / 2.0], [x1, (y0 + y1) / 2.0]] if kit[:split] == :big_and_two
+        { front: front, plan: plan, code: bin_kit_code(unit) }
+      end
+
+      # THE PLAN LINES SIT ON TOP, NOT ON THE FLOOR. Every other plan symbol here
+      # uses z_plan at the row datum; for a base unit that is the floor, under its
+      # own worktop, and a top view never sees it. The bins exist to be read from
+      # above (Andriy), so they ride 1 mm over the carcass top plus the project's
+      # worktop when one is declared.
+      def draw_bins(model, definition, unit, z0, y_face, front_tag, plan_tag, mat)
+        ls = bin_lines(unit, z0)
+        return nil unless ls
+
+        g = definition.entities.add_group
+        g.name = 'SYM_FRONT_BINS'
+        ls[:front].each { |(a, b)| g.entities.add_line([a[0].mm, y_face.mm, a[1].mm], [b[0].mm, y_face.mm, b[1].mm]) }
+        finalize(g, front_tag, mat)
+        zt = z0.to_f + unit['height_mm'].to_f + (Project.worktop_t_mm(model) || 0.0) + 1.0
+        p = definition.entities.add_group
+        p.name = 'SYM_PLAN_BINS'
+        ls[:plan].each { |(a, b)| p.entities.add_line([a[0].mm, a[1].mm, zt.mm], [b[0].mm, b[1].mm, zt.mm]) }
+        finalize(p, plan_tag, mat)
+        [g, p]
+      end
+
       def draw(model, definition, unit, hinge_side, front_height_mm = nil, slabs = nil)
         clear(definition)
         layout = unit['front_layout'] || {}
@@ -771,6 +843,9 @@ module UCON
         # returns, so anything that must apply to all door types is drawn here
         # or it is quietly missed by one of them.
         draw_glass_hatch(definition, unit, z0, y_face, front_tag, mat, slabs)
+
+        # The bins of a waste unit, before any branch returns (core 1.9.25).
+        draw_bins(model, definition, unit, z0, y_face, front_tag, plan_tag, mat)
 
         # The light, and it is here for the third time for the same reason:
         # before any branch can return without it.

@@ -52,12 +52,12 @@ echo "===== 2. stage, BY NAME ====="
 # back-to-back limits written down. 6 files predicted; the list printed 6.
 # 2026-10-03, 7612-S8 (core 1.9.23): open units drawn as boards, not a solid
 # block. 7 files predicted; the list printed 7.
-# 2026-10-03, core 1.9.24: gola fixes found on 7612 Elevation B (one-front stack,
-# dishwasher recess piece 995946, stale handle, filler opening facts).
-# 5 files predicted; the list must print 5.
+# 2026-10-03, core 1.9.24: gola fixes found on 7612 Elevation B. 5 files
+# predicted; the list printed 5.
+# 2026-10-03, core 1.9.25: P-One waste bins drawn dashed (elevation + plan).
+# 4 files predicted; the list must print 4.
 git add src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/60_generator.rb \
-        src/ucon_cabinet_engine/core/80_panel.rb \
+        src/ucon_cabinet_engine/core/70_symbols.rb \
         tools/test_contract.rb \
         build/go.sh
 

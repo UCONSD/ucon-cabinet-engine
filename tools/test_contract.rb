@@ -11536,5 +11536,27 @@ check('1.9.24: the dishwasher recess piece is drawn only on a gola front, fillin
   raise 'Apply must erase the old piece' unless psrc.include?("g.name.start_with?('GOLA_FILLER_PROFILE')")
 end
 
+puts "\nwaste bins drawn dashed (core 1.9.25)"
+check('1.9.25: BL0665 (W60, kit 995626) - outline + split in elevation; outline + split + small-bin line in plan') do
+  sy = UCON::CabinetEngine::Symbols
+  u = Registry.lookup('BL0665')
+  ls = sy.bin_lines(u, 60)
+  raise 'no bins' unless ls && ls[:code] == '995626'
+  raise "front #{ls[:front].size}" unless ls[:front].size == 5
+  raise "plan #{ls[:plan].size}" unless ls[:plan].size == 6
+  xs = ls[:front].flatten(1).map(&:first)
+  raise xs.minmax.inspect unless xs.minmax == [30.0, 570.0]
+  zs = ls[:front].flatten(1).map(&:last)
+  raise zs.minmax.inspect unless zs.minmax == [78.0, 597.0]
+end
+check('1.9.25: BL0565 (W45, kit 995625) - two bins side by side; a unit without a kit draws none') do
+  sy = UCON::CabinetEngine::Symbols
+  ls = sy.bin_lines(Registry.lookup('BL0565'), 60)
+  raise 'W45' unless ls && ls[:code] == '995625' && ls[:plan].size == 5
+  raise 'drawn without a kit' if sy.bin_lines(Registry.lookup('BL0967'), 60)
+  ssrc = File.read(File.expand_path('../src/ucon_cabinet_engine/core/70_symbols.rb', __dir__))
+  raise 'draw must call it before the branches' unless ssrc.index('draw_bins(model, definition, unit, z0') < ssrc.index('# ---- drawer stacks')
+end
+
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
 exit($failures.zero? ? 0 : 1)
