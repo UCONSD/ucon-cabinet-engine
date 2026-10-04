@@ -372,6 +372,12 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `spec-2026-10-03-open-carcass-geometry.md` - 7612-S8: open units of
     printed p.455-456 drawn as boards (sides, top, bottom, back 22, fixed
     shelves), not a solid block (core 1.9.23).
+  - `LayOut_Sheet_Template_Spec_v1.md` - 7612: the 11x17 LayOut sheet template
+    for the writer (frame, title block A, scales, dimension rules D1, schedule);
+    added 2026-10-03.
+  - `handoff-2026-10-03-layout-template-7612.md` - 7612: decisions on the LayOut
+    template and on the order content for the estimate request to Elda
+    (FOR ESTIMATE ONLY); written in chat without the bridge, 2026-10-03 night.
 
 ---
 

@@ -60,8 +60,13 @@ existed.
 | Q41 | 7612: two **box fillers 108 wide, carcass d.620** left of the passage door - 108 x 620 x 2220 (front 2270, to 10 mm above the floor) and 108 x 620 x 720 above it - SPECIAL ORDER, p.434 prints box fillers only to H.138 and d.35 | open 2026-10-02 · **supersedes Q38** (Andriy chose a box at full depth instead of a strip) · drawn as UCON-BESP-002 / 003, NO ARTICLE |
 | Q42 | 7612 worktops in **Dekton 2 cm** (group D, colour to be agreed): Tangram island top 3045 x 1290 as ONE sheet (band 130), its curves, the hob and downdraft cutouts; sink-wall top in two pieces 1572 + 2772 joined at the BL0665 / BL1269 seam, undermount sink cutout | open 2026-10-02 · please price and confirm; we do not compute it |
 | Q43 | 7612 sink-wall uppers, handle-free: six PF0631 at **W.55 x H.93,8 carcass** (width + height reduction) with the **standard 960 door** kept, i.e. the door runs 22 below the shortened carcass over a lit shelf MNS022000 1722 x 325 (Sky-B); fillers PF0151 the same; window-end panels PF0030 standard | open 2026-10-02 · rewritten same day: carcass reduced instead of a 982 door · variant FRONT BELOW (core 1.9.21) |
-| Q44 | 7612 pantry: the back of the tall row clad in **HPL DZBZ00 18 Bianco Kos**, split at 2280 - the joint between the tall units and the top elements (2026-10-03; pieces 108 / 762 / 1220 x 2280 and 858 / 762 / 1220 x 720), plus the fridge niche side (623 x 2280) and a melamine filler above the fridges (1220 x 623 bottom + 1220 x 116 face) - fixing kit for TALL units? | open 2026-10-02 · if none, UCON fixes on site |
-| Q45 | 7612 pantry broom closet: **CH1612** tall broom cupboard H.222 d.62 + accessory set **995635**, top element SE0600 over it, **both WITHOUT DOORS (special order)**; it stands in the void behind the corner end panel C00130 and opens into the pantry - power socket inside for a cordless vacuum | open 2026-10-02 · confirm the set fits an open CH1612, the socket cutout, and how a doorless unit is ordered (addendum) |
+| Q44 | 7612 pantry: the back of the tall row clad in **HPL DZBZ00 18 Bianco Kos**, split at 2280 - the joint between the tall units and the top elements (2026-10-03; pieces 108 / 762 / 1220 x 2280 and 858 / 762 / 1220 x 720), plus the fridge niche side (623 x 2280) and a melamine filler above the fridges (1220 x 623 bottom + 1220 x 116 face) - fixing kit for TALL units? | open 2026-10-02 · if none, UCON fixes on site · **REVISED 2026-10-03 (Andriy): cladding in melamine LM51 Grigio Fumo, DZAD00 18 (p.215) instead of HPL DZBZ00** |
+| Q45 | 7612 pantry broom closet: **CH1612** tall broom cupboard H.222 d.62 + accessory set **995635**, top element SE0600 over it, **both WITHOUT DOORS (special order)**; it stands in the void behind the corner end panel C00130 and opens into the pantry - power socket inside for a cordless vacuum | open 2026-10-02 · confirm the set fits an open CH1612, the socket cutout, and how a doorless unit is ordered (addendum) · **WITHDRAWN 2026-10-03: CH1612 / SE0600 removed from the model; not asked** |
+| Q47 | 7612 pantry open units 450-900 (...0190: C00190 x3, BL0190 x3, PG0190): one price for any ordered width? any surcharge for a width off the series, and which code at exactly 450? | open 2026-10-03 |
+| Q48 | 7612 pantry open units in **melamine LM17 Antracite** (band 1, printed p.453): finish of the inside, back and edges; can small appliances stand on top of the open base (the top is the 2,2 carcass, no worktop)? | open 2026-10-03 · written for veneer RR in the recon, re-aimed at melamine after Andriy chose LM17 |
+| Q49 | 7612 open units, fixed shelves: can other shelf heights be ordered (special order)? | open 2026-10-03 |
+| Q50 | 7612 open tall and wall units: are wall fixings included? | open 2026-10-03 |
+| Q51 | shelf MNS022038 d.38 on concealed supports 990307 against their "recommended max. 35 cm" | **not asked** 2026-10-03 · only for pantry variant C, which was not built |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1561,6 +1566,11 @@ bottom 1220 x 623 at 2146..2164 and face 1220 x 116 on the appliance plane, behi
    elements? If not, we fix on site - just tell us.
 2. Any reason not to use DZBZ00 for the niche side and top (load of the anti-tip bracket, ventilation is at the front)?
 
+**REVISED 2026-10-03 (Andriy), second time: the six cladding pieces are now melamine, not HPL - DZAD00 18, LM51 Grigio
+Fumo on both sides (Linear Elements printed p.215, sheet 205 x 278; Grigio fumo is in its finish list), same pieces and
+the same split at 2280. The pantry fronts are LM51 too. The paragraphs above are kept as the earlier versions; question 2
+now reads DZAD00 for the cladding, the niche side is unchanged.**
+
 
 ### Q45 addendum (2026-10-02) — broom closet without doors
 Andriy decided: **CH1612 and the SE0600 above it are ordered WITHOUT DOORS** (open cupboards in the pantry, special order).
@@ -1568,3 +1578,40 @@ Andriy decided: **CH1612 and the SE0600 above it are ordered WITHOUT DOORS** (op
    on the order - same code with a note, or a different code (an open tall unit)?
 4. With no door the carcass inside and the front edges are seen: which interior finish and edge do you recommend,
    and does the 995635 accessory set still fit an open CH1612?
+
+## Q47 — Open units 450-900: price per ordered width (7612)
+
+**Status:** open · added 2026-10-03
+
+The 7612 pantry uses open units from printed p.455-456 at ordered widths: C00190 at 900 / 600 / 900, BL0190 at
+800 / 450 / 600, PG0190 at 645. 1. Is the price the same for any width inside 450-900? 2. Is there a surcharge for a
+width that is not a round series width? 3. At exactly 450, which code - ...0145 or ...0190?
+
+## Q48 — Open units in melamine: inside, back, edges; load on top (7612)
+
+**Status:** open · added 2026-10-03
+
+The open units are ordered in **melamine LM17 Antracite** (Melamine finishes, price band 1, printed p.453). 1. Are the
+inside, the back and the edges all LM17, or is any part in another finish? 2. The top of the open base BL0190 is the
+2,2 carcass (the pantry worktop is by others and covers only part of it): may small appliances stand directly on it?
+
+## Q49 — Fixed shelves at other heights (7612)
+
+**Status:** open · added 2026-10-03
+
+The open units print fixed shelves. Can the shelf positions be changed on order (special order), and how is it
+written?
+
+## Q50 — Wall fixings for open tall and wall units (7612)
+
+**Status:** open · added 2026-10-03
+
+Are the fixings to the wall for C00190 (tall, d.37,5) and PG0190 (wall) included in the article, or ordered apart?
+
+## Q51 — Shelf d.38 on supports 990307 (not asked)
+
+**Status:** not asked · added 2026-10-03
+
+Linear Elements printed p.227-228 sells shelf MNS022038 at d.38 while supports 990307 say "recommended max. 35 cm".
+Recorded from the recon of 2026-10-03; it applies only to pantry variant C (back panel + shelves), which was not
+built, so it is not in the 7612 estimate request.

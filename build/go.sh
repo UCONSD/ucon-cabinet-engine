@@ -57,11 +57,16 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-10-03, core 1.9.25: P-One waste bins drawn dashed. 4 files predicted;
 # the list printed 4.
 # 2026-10-03, docs only: Q44 revised. 2 files predicted; the list printed 2.
-# 2026-10-03, core 1.9.26: finish panels drawn in the front colour.
-# 4 files predicted; the list must print 4.
-git add src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/60_generator.rb \
-        tools/test_contract.rb \
+# 2026-10-03, core 1.9.26: finish panels in the front colour. 4 printed 4.
+# 2026-10-03, evening housekeeping: the 7612 card brought up to date.
+# 2 files predicted; the list must print 2. (Never run - folded into the next.)
+# 2026-10-03, night: 7612 estimate request, stages 1-3 (docs only) plus the
+# card entries of the evening. 6 files predicted; the list must print 6.
+git add claude/project-7612-hillside-dr-2026-09-24.md \
+        claude/README.md \
+        claude/LayOut_Sheet_Template_Spec_v1.md \
+        claude/handoff-2026-10-03-layout-template-7612.md \
+        docs/Elda_Open_Questions_v0.1.md \
         build/go.sh
 
 echo
