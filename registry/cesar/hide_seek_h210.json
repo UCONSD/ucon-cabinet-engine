@@ -1,0 +1,187 @@
+{
+  "section": "Hide & Seek tall units H. 210",
+  "class": "tall",
+  "collection": "Hide & Seek",
+  "family": "Hide & Seek H.210",
+  "source_pages": "printed p.201 / PDF 203 (codes), with the system pages p.196-199 / PDF 198-201 read for what the modules are",
+  "system_note": "Hide & Seek (printed p.195-203): 'a system that houses cabinets inside it, creating an accessible and accessorised cupboard unit', SMALL (A + I) and LARGE (A + I + A), LH or RH. Module heights are the tall heights - 198 / 210 / 222 / 234 - and 'to calculate the right height from the floor of the module always add the height of the plinth (H. 1, H. 6 cm or H. 10 cm)'. If base or tall units stand next to an A module, 'always add a 2.5 cm wide spacer-filler' (p.198). NOT available in Natural Stone, Engineered Stone, Ceramics, Glass, Metals, glass doors, Groove, Shaker doors and Lacquered Intarsio (p.196). Whether a top element may stand on it is not printed.",
+  "extraction_note": "2026-10-04, group 1 of the catalog recon (Andriy: generate what can be generated with confidence): the H.210 twin of printed p.202 - 17 codes in 5 types, ALL held for lookup and none buildable, for the reason hide_seek_h222.json gives. Codes zipped against the H.222 page position by position, widths checked by script. The visible side panel rows are priced without codes and not held.",
+  "data": {
+    "height_mm": 2100,
+    "plinth_h_mm": 100,
+    "plinth_note": "The page offers 1, 6 or 10 cm. 100 is the tall chapter default and is a placeholder: every type here is held for lookup and not buildable, so nothing draws it. hide_seek_h222.json chose 60 for the 7612 run it joins.",
+    "depths_mm": [
+      645,
+      695
+    ],
+    "unit_types": {
+      "hs_module_accessory": {
+        "description": "Hide & Seek accessory module (A1) - the inside can be fitted with base units, shelves and/or tall units",
+        "opening": "none",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.201 / PDF 203",
+        "codes": [
+          {
+            "code": "CRMS21",
+            "width_mm": 620,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS22",
+            "width_mm": 670,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS23",
+            "width_mm": 750,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS25",
+            "width_mm": 620,
+            "depth_mm": 695
+          },
+          {
+            "code": "CRMS26",
+            "width_mm": 670,
+            "depth_mm": 695
+          },
+          {
+            "code": "CRMS27",
+            "width_mm": 750,
+            "depth_mm": 695
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. A Hide & Seek module is a shell, not a box with a front: the system is a walk-in cupboard assembled from modules A and I with one door hung on A (printed p.196-198). No front_layout kind or shape draws it yet, and an envelope would draw a closed cabinet where the page draws a room.",
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph on printed p.201 (read on a 130-dpi render 2026-09-28); the system is floor-standing by its own drawings (printed p.196-198).",
+        "notes": "'An empty tall unit that can be fitted with base units, shelves and/or tall units' (printed p.199): d.64,5 takes units W.60, d.69,5 takes units W.60 + 2 x 2,5 cm fillers. A 'Visible side panel for accessorised module' is priced beside it WITHOUT A CODE (printed p.201) - not held. Ski-B LED in the top panel or Mininoor in the side panel is possible (p.199)."
+      },
+      "hs_module_cupboard": {
+        "description": "Hide & Seek accessorised module (A2) - for use as a cupboard",
+        "opening": "none",
+        "handed": true,
+        "interior_confirmed": [
+          "broom compartment",
+          "shelf compartment W.30 (d.64,5) or W.45 (d.69,5)"
+        ],
+        "source_ref": "printed p.201 / PDF 203",
+        "codes": [
+          {
+            "code": "CRMS31",
+            "width_mm": 620,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS32",
+            "width_mm": 670,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS33",
+            "width_mm": 750,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS35",
+            "width_mm": 620,
+            "depth_mm": 695
+          },
+          {
+            "code": "CRMS36",
+            "width_mm": 670,
+            "depth_mm": 695
+          },
+          {
+            "code": "CRMS37",
+            "width_mm": 750,
+            "depth_mm": 695
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. A Hide & Seek module is a shell, not a box with a front: the system is a walk-in cupboard assembled from modules A and I with one door hung on A (printed p.196-198). No front_layout kind or shape draws it yet, and an envelope would draw a closed cabinet where the page draws a room.",
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph on printed p.201 (read on a 130-dpi render 2026-09-28); the system is floor-standing by its own drawings (printed p.196-198).",
+        "notes": "Pre-accessorised: 'available LH or RH (the LH module has a LH broom compartment; the RH module has a RH broom compartment). The shelf compartment (W. 30/45) can be fitted with interior drawers/jumbo drawers' (printed p.199). The hand is not in the code - an order axis. Its visible side panel is priced without a code (p.202)."
+      },
+      "hs_hallway_small": {
+        "description": "Hide & Seek small hallway module (I) - rh or lh end module: top panel, side panel and floor-standing back panel",
+        "opening": "none",
+        "handed": true,
+        "interior_confirmed": [
+          "top panel",
+          "side panel",
+          "floor-standing back panel"
+        ],
+        "source_ref": "printed p.201 / PDF 203",
+        "codes": [
+          {
+            "code": "CRMS01",
+            "width_mm": 750,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS05",
+            "width_mm": 750,
+            "depth_mm": 695
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. A Hide & Seek module is a shell, not a box with a front: the system is a walk-in cupboard assembled from modules A and I with one door hung on A (printed p.196-198). No front_layout kind or shape draws it yet, and an envelope would draw a closed cabinet where the page draws a room.",
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph on printed p.201 (read on a 130-dpi render 2026-09-28); the system is floor-standing by its own drawings (printed p.196-198).",
+        "notes": "'The hallway module can never be fitted with a door hinge which must always be installed on accessorised module A' (printed p.198). Small version = A + I. The floor-standing BACK PANEL closes it - for 7612, where the door leads into a pantry behind the wall, whether it can be ordered without the back is an Elda question."
+      },
+      "hs_hallway_large": {
+        "description": "Hide & Seek large hallway module (I) - between two modules A",
+        "opening": "none",
+        "handed": false,
+        "interior_confirmed": [
+          "top panel",
+          "floor-standing back panel"
+        ],
+        "source_ref": "printed p.201 / PDF 203",
+        "codes": [
+          {
+            "code": "CRMS11",
+            "width_mm": 750,
+            "depth_mm": 645
+          },
+          {
+            "code": "CRMS15",
+            "width_mm": 750,
+            "depth_mm": 695
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. A Hide & Seek module is a shell, not a box with a front: the system is a walk-in cupboard assembled from modules A and I with one door hung on A (printed p.196-198). No front_layout kind or shape draws it yet, and an envelope would draw a closed cabinet where the page draws a room.",
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph on printed p.201 (read on a 130-dpi render 2026-09-28); the system is floor-standing by its own drawings (printed p.196-198).",
+        "notes": "Large version = A + I + A (printed p.197-198); the drawing shows no side panel of its own - the two A modules are its sides."
+      },
+      "hs_door": {
+        "description": "Hide & Seek door for module H 210 - W.75, with interior door straightener, opened by a handle",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "interior door straightener"
+        ],
+        "source_ref": "printed p.201 / PDF 203",
+        "codes": [
+          {
+            "code": "CRM550",
+            "width_mm": 750,
+            "depth_mm": 22
+          }
+        ],
+        "buildable": false,
+        "not_buildable_reason": "HELD FOR LOOKUP. The door hangs on module A and covers the hallway I (printed p.196, p.198); it is drawn with the system, not alone.",
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no wall-hung margin line and no depth-band glyph on printed p.201 (read on a 130-dpi render 2026-09-28); the system is floor-standing by its own drawings (printed p.196-198).",
+        "notes": "Printed p.196: 'Access to the cupboard ... is gained by means of a door provided with an interior door straightener ... It is opened by means of a handle.' Available in all Cesar door finishes except those for framed doors and for steel. 7612 (Andriy, 2026-09-28): push to open inward, spring shut flush - not what the page prints; an Elda question. W.75 is the only door width at every height. THE DOOR CODE BREAKS THE PAGE PATTERN AND IS COPIED AS PRINTED: CRM550, where the modules on the same page read CRMSxx and H.222 / H.198 print CHHS50 / CFMS50. Checked on a 200-dpi crop of printed p.201 (2026-10-04) - the page prints CRM550. Could be a misprint; a code is never corrected by pattern. Ask Elda before ordering."
+      }
+    }
+  }
+}

@@ -65,10 +65,26 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-10-05: the 7612 drawing set writer v1.6 and the estimate request, plus the
 # two lines the suite asked for (Q52 in the status table, the handoff in
 # claude/README.md). 6 files predicted; the list must print 6.
-git add tools/layout/ucon_sheet_template.rb \
-        tools/layout/ucon_drawing_set.rb \
-        docs/Elda_Open_Questions_v0.1.md \
-        claude/handoff-2026-10-04-7612-estimate-sent.md \
+# The 2026-10-05 drawing-set commit printed 6 and is pushed (16d7497).
+# 2026-10-05, core 1.9.27: catalog recon group 1, 230 codes (1332 -> 1562).
+# 19 files predicted; the list must print 19.
+git add registry/cesar/_manifest.json \
+        registry/cesar/tall_h198_base78.json \
+        registry/cesar/tall_h210_base78.json \
+        registry/cesar/tall_h222_base78.json \
+        registry/cesar/tall_h234_base78.json \
+        registry/cesar/base_h48.json \
+        registry/cesar/tall_top_h48.json \
+        registry/cesar/glass_wall_h60.json \
+        registry/cesar/glass_wall_h120.json \
+        registry/cesar/hide_seek_h198.json \
+        registry/cesar/hide_seek_h210.json \
+        registry/cesar/hide_seek_h234.json \
+        registry/cesar/wall_h36.json \
+        src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/90_palette.rb \
+        tools/test_contract.rb \
+        claude/catalog-group1-2026-10-04.md \
         claude/README.md \
         build/go.sh
 

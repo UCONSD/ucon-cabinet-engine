@@ -268,7 +268,7 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1332 codes (46 open units + 39 open end units + 386 base + 74 sink + 12 appliance + 291 wall + 9 glass wall + 22 USA tall + 246 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1562 codes (46 open units + 39 open end units + 416 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
   # 2026-09-30, glass wall H.72 / H.84: +6 - printed p.313-314, the 7612 sink wall.
   # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
   # (12 base, 14 wall, 20 tall), each joining its height family.
@@ -302,8 +302,17 @@ check('registry loads and holds 1332 codes (46 open units + 39 open end units + 
   # square metre. See the source_pdf note in 50_registry.rb -> data.
   # 2026-10-03: +39, the open end units W.20 of printed p.450-452 (spec
   # 7612-S4), nine files end_open_*.json; the seven H.60 rows held, not built.
+  # 2026-10-04: +121, group 1 of the catalog recon - the straight tall positions
+  # for base unit H.78: H.198 printed p.102-109 (39, new file tall_h198_base78.json),
+  # H.210 p.117-118 (14), H.222 p.137-142 (34), H.234 p.156-161 (34). Corners,
+  # the single-elevation 19,5 / 55,5 positions and the wall-hung H.132 not held.
+  # 2026-10-04, batch 2: +45 - base H.48 printed p.29 whole (30), Top elements
+  # H.48 p.171 whole (9, tall_top_h48.json), glass wall H.60 / H.120 p.313 / p.315 (6).
+  # 2026-10-04, batch 3: +51 - Hide & Seek H.198 / H.210 / H.234 (printed p.200,
+  # 201, 203), 17 each, held for lookup like H.222; none buildable.
+  # 2026-10-04, batch 4: +13 - the H.36 compound wall units of printed p.212.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1332
+  raise "got #{n}" unless n == 1562
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -496,9 +505,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1332 rows, each with code/dims/description/source') do
+check('registry catalog: 1562 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1332
+  raise cat.length.to_s unless cat.length == 1562
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -610,10 +619,15 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Dish-drainer units H. 84',
                                              'Dish-drainer units H. 96',
                                              'End elements for Maxima-Intarsio',
+                                             'Glass wall units H. 120',
+                                             'Glass wall units H. 60',
                                              'Glass wall units H. 72',
                                              'Glass wall units H. 84',
                                              'Glass wall units H. 96',
+                                             'Hide & Seek tall units H. 198',
+                                             'Hide & Seek tall units H. 210',
                                              'Hide & Seek tall units H. 222',
+                                             'Hide & Seek tall units H. 234',
                                              'Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick',
                                              'Open base, wall and tall units, from 45 to 90 cm wide th. 2.2',
                                              'Panels - Linear Elements',
@@ -622,10 +636,12 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Sink base units H. 78',
                                              'Sink base units H. 84',
                                              'Tall unit top elements H. 36 | without fixings',
+                                             'Tall unit top elements H. 48 | without fixings',
                                              'Tall unit top elements H. 60 | without fixings',
                                              'Tall unit top elements H. 72 | without fixings',
                                              'Tall units H. 138',
                                              'Tall units H. 198',
+                                             'Tall units H. 198 | for base unit H. 78',
                                              'Tall units H. 210',
                                              'Tall units H. 210 | for base unit H. 78',
                                              'Tall units H. 210 | for base unit H. 84',
@@ -1440,9 +1456,17 @@ check('103 codes refuse the hung version, and every move of that number is dated
   # printed p.455-456, carry no wall-hung margin line.
   # 2026-10-03: 276 -> 315, not a flip: the 39 open end units of printed
   # p.450-452 carry no wall-hung margin line. base 38 -> 62, tall 230 -> 245.
-  raise refused.length.to_s unless refused.length == 315
+  # 2026-10-04: 315 -> 428, not a flip: group 1 brought 121 tall codes for base
+  # unit H.78 and 113 carry no wall-hung margin line. The 8 that do are H.198's
+  # first position (printed p.102, six codes) and its oven column with doors
+  # (p.106, C82601 / C82701) - the H.198 twin of printed p.116. tall 245 -> 358.
+  # 2026-10-04, batch 2: 428 -> 437, the nine top elements H.48 of printed p.171
+  # refuse in words ('without fixings'); base H.48 p.29 is hung on every position.
+  # 2026-10-04, batch 3: 437 -> 488, Hide & Seek H.198 / H.210 / H.234 - floor-standing,
+  # no hung glyph or margin line on printed p.200, 201, 203, as on p.202. tall 367 -> 418.
+  raise refused.length.to_s unless refused.length == 488
   by_class = refused.group_by { |u| u['unit_class'] }.transform_values(&:length)
-  raise by_class.inspect unless by_class == { 'base' => 62, 'tall' => 245, 'open_unit' => 8 }
+  raise by_class.inspect unless by_class == { 'base' => 62, 'tall' => 418, 'open_unit' => 8 }
 end
 
 puts "\nwaste units (Trash & Recycle) and their bin kits"
@@ -1821,13 +1845,17 @@ rejects('a mounting outside the enum', with('mounting' => 'ceiling'), 'is not on
 rejects('a hung object at a non-positive height',
         with('mounting' => 'wall_hung', 'mount_bottom_mm' => 0), 'must be positive')
 
-check('H.36 is now the whole page: 17 codes in three types, all d.35') do
+check('H.36 is now the whole section: 30 codes in six types, all d.35') do
+  # 2026-10-04: 17 -> 30, printed p.212 (the three compound positions) taken whole.
   rows = Registry.catalog.select { |c| c['section'] == 'Wall units H. 36' }
-  raise rows.length.to_s unless rows.length == 17
+  raise rows.length.to_s unless rows.length == 30
   raise rows.map { |r| r['height_mm'] }.uniq.inspect unless rows.map { |r| r['height_mm'] }.uniq == [360]
   raise rows.map { |r| r['depth_mm'] }.uniq.inspect unless rows.map { |r| r['depth_mm'] }.uniq == [350]
   by_type = rows.group_by { |r| r['type_key'] }.map { |k, v| [k, v.length] }.sort
   raise by_type.inspect unless by_type == [['wall_bottom_hung_door', 6],
+                                           ['wall_compound_2_top_hung', 5],
+                                           ['wall_compound_3_push_up', 4],
+                                           ['wall_compound_3_top_hung', 4],
                                            ['wall_push_up_door', 5],
                                            ['wall_top_hung_door', 6]]
   # The push-up type is NARROWER: W.60-120, no W.45.
@@ -2084,9 +2112,10 @@ check('a hood variant is excluded by decision, dated, with its reason') do
   whole = (wall_sections - hoods).select { |s| s['status'] == 'extracted' }
   raise whole.map { |s| s['section'] }.inspect unless
     whole.map { |s| s['section'] }.sort ==
-      ['Dish-drainer units H. 36', 'Dish-drainer units H. 48']
+      ['Dish-drainer units H. 36', 'Dish-drainer units H. 48', 'Wall units H. 36']
+  # 2026-10-04: Wall units H.36 joins them - printed p.212 closed the section.
   raise 'a whole section still says when it was read' unless
-    whole.all? { |s| s['extracted_on'] == '2026-08-23' }
+    whole.all? { |s| s['extracted_on'] == (s['section'] == 'Wall units H. 36' ? '2026-10-04' : '2026-08-23') }
 end
 
 check('the wall grammar warning travels with the chapter, not with our memory of H.78') do
@@ -2149,8 +2178,10 @@ check('THE WALL CHAPTER IS OPEN END TO END: thirteen sections held, eleven hood 
   # at once. THAT RATIO IS THE FINDING OF THIS CHAPTER: the wall units are READ,
   # and what is missing is one answer from the factory, not more transcription.
   pages = wall.select { |g| g['level'] == 'type' }.map { |g| g['printed'] }
+  # 2026-10-04: p.212 LEFT - the H.36 compounds were read (group 1 of the catalog
+  # recon). Every page left is a corner waiting on Elda Q7b, and nothing else.
   raise pages.inspect unless pages ==
-    %w[p.212 p.216 p.223 p.225 p.230 p.233 p.239 p.242 p.246 p.249 p.252 p.253 p.254]
+    %w[p.216 p.223 p.225 p.230 p.233 p.239 p.242 p.246 p.249 p.252 p.253 p.254]
 end
 
 check('p.211 and p.221 are whole pages now, push-up included') do
@@ -5161,13 +5192,15 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
     refused == { 'appliance units' => 30,  # +8 2026-09-28: USA panels H.222 (p.423)
                  # +8 2026-09-28: tall pull-out, Dispensa, Tandem, Convoy H.222 (p.133-134)
                  'pull-out units' => 23,
-                 'units with jumbo drawers' => 274,
-                 'units with interior drawers' => 28,
+                 # +83 / +4 2026-10-04: group 1, tall for base unit H.78
+                 # +24 2026-10-04 batch 2: base H.48 jumbo and compound (p.29)
+                 'units with jumbo drawers' => 381,
+                 'units with interior drawers' => 32,
                  'end panels, whose width is a thickness' => 124,
-                 'tall or wall units with framed glass doors' => 9, # +6 2026-09-30 glass H.72 / H.84
+                 'tall or wall units with framed glass doors' => 15, # +6 2026-09-30 glass H.72 / H.84; +6 2026-10-04 H.60 / H.120
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 717 # +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
+                 'curved units, whose width is an arc' => 6 } && allowed == 830 # +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -5351,7 +5384,8 @@ check('A COMPOUND UNIT MUST ADD UP - its modules sum to its width, everywhere') 
       end
     end
   end
-  raise "expected 57 compound rows, checked #{checked}" unless checked == 57
+  # 2026-10-04: 57 -> 70, the thirteen H.36 compounds of printed p.212.
+  raise "expected 70 compound rows, checked #{checked}" unless checked == 70
 end
 
 check('a compound is ONE front, not a split - the modules are carcass') do
@@ -5373,7 +5407,9 @@ check('the finish restrictions are RECORDED and say they are not enforced') do
   # 2026-09-28: 21 -> 22, the H.84 Shaker dishwasher door of printed p.55 - a
   # prohibition like every other. (Briefly 23, with an 'available_only' that
   # was a misread glyph, and the platform door since removed.)
-  raise blocks.length.to_s unless blocks.length == 22
+  # 2026-10-04: 22 -> 23, the H.48 compound with jumbo drawer of printed p.29;
+  # 23 -> 26, the three H.36 compound wall positions of printed p.212.
+  raise blocks.length.to_s unless blocks.length == 26
   blocks.each do |b|
     raise b.inspect unless b['kind'] == 'not_available'
     raise 'a restriction without its page' unless b['source_ref'].to_s.include?('printed p.')
@@ -6691,11 +6727,13 @@ check('the kit defines the shared submenu root without requiring the other exten
 end
 
 puts "\ntall unit top elements - printed p.170 and p.173, what closes the wall"
-check('nineteen top elements, d.62 only, and they refuse the hung version IN WORDS') do
+check('twenty-eight top elements, d.62 only, and they refuse the hung version IN WORDS') do
   # 10 -> 19 on 2026-08-25 when printed p.172 came in: H.36 five, H.72 five,
-  # H.60 nine. printed p.171 (H.48) is still unread on purpose.
+  # H.60 nine. printed p.171 (H.48) was then still unread on purpose.
+  # 2026-10-04: 19 -> 28, printed p.171 taken whole (group 1 of the catalog recon,
+  # Andriy) - the SC twin of p.172.
   top = Registry.catalog.select { |c| c['section'].to_s.start_with?('Tall unit top elements') }
-  raise top.length.to_s unless top.length == 19
+  raise top.length.to_s unless top.length == 28
   raise 'top elements are d.62 only' unless
     top.map { |c| Registry.lookup(c['code'])['depth_mm'] }.uniq == [620]
   raise 'widths' unless top.map { |c| Registry.lookup(c['code'])['width_mm'] }.uniq.sort ==
@@ -6707,13 +6745,15 @@ check('nineteen top elements, d.62 only, and they refuse the hung version IN WOR
   # reduce, and there is nothing above 600 to reduce from.
   side = top.select { |c| Registry.lookup(c['code'])['unit_type'] == 'top_element_door' }
   raise "side-hinged singles: #{side.map { |c| c['code'] }.inspect}" unless
-    side.map { |c| Registry.lookup(c['code'])['width_mm'] }.sort == [450, 600]
+    side.map { |c| Registry.lookup(c['code'])['width_mm'] }.sort == [450, 450, 600, 600]
   two = top.select { |c| Registry.lookup(c['code'])['unit_type'] == 'top_element_two_doors' }
   raise "two-door tops: #{two.map { |c| c['code'] }.inspect}" unless
-    two.map { |c| Registry.lookup(c['code'])['width_mm'] }.sort == [900, 1200]
-  # and only ONE of the three held heights sells either of them
-  raise 'the side-hinged positions must live at H.60 alone, for now' unless
-    (side + two).map { |c| c['section'] }.uniq == ['Tall unit top elements H. 60 | without fixings']
+    two.map { |c| Registry.lookup(c['code'])['width_mm'] }.sort == [900, 900, 1200, 1200]
+  # and only TWO of the four heights sell either of them - 2026-10-04, H.48 joins
+  # H.60: printed p.171 and p.172 are the chapter's only side-hinged pages.
+  raise 'the side-hinged positions must live at H.48 and H.60 alone' unless
+    (side + two).map { |c| c['section'] }.uniq.sort == ['Tall unit top elements H. 48 | without fixings',
+                                                        'Tall unit top elements H. 60 | without fixings']
   # The FIRST codes in this registry to refuse by the catalog's own sentence
   # rather than by a missing pictogram: the section title is 'without fixings'.
   top.each do |c|

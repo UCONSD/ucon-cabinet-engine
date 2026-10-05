@@ -718,6 +718,8 @@ module UCON
         'tall_doors_jumbo_drawers'           => 'Tall units, two doors over jumbo drawers',
         'tall_door_drawers_jumbo'            => 'Tall units, door over drawers and jumbo drawer',
         'tall_doors_drawers_jumbo'           => 'Tall units, two doors over drawers and jumbo drawer',
+        'tall_door_drawer_jumbo'             => 'Tall units, door over drawer and jumbo drawer',
+        'tall_doors_drawer_jumbo'            => 'Tall units, two doors over drawer and jumbo drawer',
         'tall_oven_h60_doors'                => 'Tall units for oven H.60, doors',
         'tall_oven_h60_doors_pairs'          => 'Tall units for oven H.60, pairs of doors',
         'tall_dishwasher_in_column'          => 'Tall units for in-column dishwasher',

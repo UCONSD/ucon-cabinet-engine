@@ -1,312 +1,51 @@
 {
-  "section": "Tall units H. 222 | for base unit H. 78",
+  "section": "Tall units H. 198 | for base unit H. 78",
   "class": "tall",
-  "family": "Tall H.222",
-  "source_pages": "printed p.143 / PDF 145 (subset extracted: p.143 only; the section runs printed p.137-145) | 2026-10-04: + printed p.137, 138, 139, 141, 142",
-  "family_naming_note": "SAME FAMILY AS tall_h222.json, DIFFERENT SECTION - exactly the relationship tall_h210_base78.json has with tall_h210.json, and for the same reason. The catalog prints these as two chapters with two letter pairs, CG/CH for printed p.132-136 and C3/C4 here, but the physical family is one: 2220 tall on a 100 plinth. This file declares no family-level key of its own.",
-  "extraction_note": "printed p.143 taken WHOLE 2026-08-25, demand-driven and NOT speculative: Andriy chose H.222 + top H.72 for the Avenida Primavera east wall, which is the combination that reaches a 3048 ceiling with 8 mm to spare, and this is the page that carries that wall's oven-and-microwave column. 3 positions, 4 codes, d.62 only. Verified against a 150-dpi render after pdftotext agreed with it line for line. printed p.137-142, p.144 and p.145 remain unread; their headings are scanned and recorded in _manifest catalog_map. | 2026-10-04, GROUP 1 OF THE CATALOG RECON (Andriy: generate what can be generated with confidence): printed p.137, 138, 139, 141, 142 - 34 codes in 13 types, every straight position. Each stack sums to 2220 in both executions; widths, depths and codes checked by script against the text layer. NOT HELD: printed p.139 position 3 and p.140 position 1 (C37564 / C37664 / C47564 / C47664, C37964 / C47964) and p.142 position 2 (C48655 / C48754). ONE ELEVATION, NOT TWO: these positions print a single profile, 19,5 over 55,5 with no gola column, and the fronts do not sum to the column - the same shape as printed p.41 (19,5 + 55,5 = 750 under H.78) and C68654 on printed p.121, both deliberately not held. A height we cannot name is a height we do not write down. Also not held: the corner tall units (Elda Q7b, corner placement) and the wall-hung H.132 unit on the same sheets.",
-  "ladder_note": "THE TWO HEIGHTS ARE 120 APART AND SO IS EVERY REMAINDER. printed p.121's oven-and-microwave column leaves 1710 at H.210 and this page's leaves 1830 at H.222; 1515 becomes 1635. The difference is 120 in both, which is the whole difference between the families. That is a consequence of the arithmetic and not a rule read from the page - it is recorded because it makes a future transcription error visible, not because the catalog says it.",
+  "family": "Tall H.198",
+  "source_pages": "printed p.102-109 / PDF 104-111 (the straight positions; the corner tall units, the wall-hung H.132 unit and the single-elevation positions are not held)",
+  "family_naming_note": "SAME FAMILY AS tall_h198.json, DIFFERENT SECTION - exactly as tall_h210_base78.json is to tall_h210.json. The catalog prints C7/C8 here against CE/CF on printed p.97-101; the physical family is one, 1980 tall on a 100 plinth.",
+  "family_keys_note": "NO FAMILY-LEVEL DATA KEYS: tall_h198.json owns height_mm, plinth_h_mm, depths and collections for family 'Tall H.198', and 50_registry.rb refuses two files that state the same family fact.",
+  "door_versions_note": "No data.door_versions: the split is recorded per type in gola_stack_top_to_bottom.",
+  "extraction_note": "2026-10-04, GROUP 1 OF THE CATALOG RECON (Andriy: generate what can be generated with confidence): printed p.102, 103, 104, 106, 107, 108, 109 - 39 codes in 16 types, every straight position. Each stack sums to 1980 in both executions; widths, depths and codes checked by script against the text layer. NOT HELD: printed p.104 position 3 and p.105 position 1 (C77564 / C77664 / C87564 / C87664, C77964 / C87964) and p.107 position 3 (C88654 / C88754); printed p.109 position 2 (C83659), whose custom-sized door is TOP-HUNG at H.198 where the H.210-234 twins print an rh or lh door - a different leaf, not a copied one. ONE ELEVATION, NOT TWO: these positions print a single profile, 19,5 over 55,5 with no gola column, and the fronts do not sum to the column - the same shape as printed p.41 (19,5 + 55,5 = 750 under H.78) and C68654 on printed p.121, both deliberately not held. A height we cannot name is a height we do not write down. Also not held: the corner tall units (Elda Q7b, corner placement) and the wall-hung H.132 unit on the same sheets.",
   "data": {
     "unit_types": {
-      "tall_oven_h60_two_jumbo": {
-        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 jumbo drawers - 2 shelves - 2 dividers",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": [
-          "2 shelves",
-          "2 dividers"
-        ],
-        "source_ref": "printed p.143 / PDF 145",
-        "codes": [
-          {
-            "code": "C42657",
-            "width_mm": 600,
-            "depth_mm": 620
-          },
-          {
-            "code": "C42757",
-            "width_mm": 750,
-            "depth_mm": 620
-          }
-        ],
-        "front_layout": {
-          "kind": "horizontal",
-          "note": "Elevation printed p.143: 84 / 39 / 39 handle, 84 / ⌐36 / ⌐36 gola. EVERY STACK ON THIS PAGE SUMS TO 2220 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. Same invariant as printed p.121-125 at 2100, measured again from a different total. Generator.front_stack raises when a stack breaks it.",
-          "stack_top_to_bottom": [
-            {
-              "kind": "front",
-              "h_mm": 840,
-              "leaf": "door"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "front",
-              "h_mm": 390
-            },
-            {
-              "kind": "front",
-              "h_mm": 390
-            }
-          ],
-          "gola_stack_top_to_bottom": [
-            {
-              "kind": "front",
-              "h_mm": 840,
-              "leaf": "door"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "zone",
-              "h_mm": 30,
-              "role": "intermediate recess"
-            },
-            {
-              "kind": "front",
-              "h_mm": 360
-            },
-            {
-              "kind": "zone",
-              "h_mm": 30,
-              "role": "intermediate recess"
-            },
-            {
-              "kind": "front",
-              "h_mm": 360
-            }
-          ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4. The shorthand means 'every entry is a front', and here they are not.",
-          "appliance_opening_note": "THE 600 IS MEASURED, AND THIS PAGE IS THE INDEPENDENT WITNESS. printed p.121-122 left exactly 600 six times over from a total of 2100; C42657 leaves it a seventh time from a total of 2220 - 840 + 390 + 390 = 1620, and 2220 - 1620 = 600. A number derived once from one total is arithmetic; derived again from a different total it is a measurement. Still not printed anywhere, and still recorded as a derivation so that an Elda answer contradicting it puts the DERIVATION on trial.",
-          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
-        },
-        "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED on printed p.143. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on this same chapter's sheets. Read at 150 dpi 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "THE INDEPENDENT WITNESS FOR THE 600 NICHE - see front_layout.appliance_opening_note. Two groups of one, so each jumbo front gives its own 30 mm. Three LEGRABOX finishes priced, none coded: named and not coded, the same blocker as printed p.121.",
-        "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
-          "shown_full_mm": 390,
-          "shown_gola_mm": 360,
-          "joint": false,
-          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
-        }
-      },
-      "tall_oven_microwave_jumbo": {
-        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - 2 dividers",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": [
-          "1 shelf",
-          "1 adjustable divider with stainless steel protection",
-          "2 dividers"
-        ],
-        "source_ref": "printed p.143 / PDF 145",
-        "codes": [
-          {
-            "code": "C42640",
-            "width_mm": 600,
-            "depth_mm": 620
-          }
-        ],
-        "front_layout": {
-          "kind": "horizontal",
-          "note": "Elevation printed p.143: 39 handle, ⌐36 gola - one front, and nothing else is dimensioned. EVERY STACK ON THIS PAGE SUMS TO 2220 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. Same invariant as printed p.121-125 at 2100, measured again from a different total. Generator.front_stack raises when a stack breaks it.",
-          "stack_top_to_bottom": [
-            {
-              "kind": "front",
-              "h_mm": 630,
-              "derivation": "DERIVED 2026-09-28: remainder 1830 minus 600 - 600. Custom-sized on the page.",
-              "leaf": "door"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "front",
-              "h_mm": 390
-            }
-          ],
-          "gola_stack_top_to_bottom": [
-            {
-              "kind": "front",
-              "h_mm": 630,
-              "derivation": "DERIVED 2026-09-28: remainder 1830 minus 600 - 600. Custom-sized on the page.",
-              "leaf": "door"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "zone",
-              "h_mm": 30,
-              "role": "intermediate recess"
-            },
-            {
-              "kind": "front",
-              "h_mm": 360
-            }
-          ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4. The shorthand means 'every entry is a front', and here they are not.",
-          "remainder_note": "390 handle against 30 + 360 gola: the same 1830 both ways, and execution-independence is what makes the span a real number. 120 more than printed p.121's 1710, which is the whole difference between H.210 and H.222.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
-          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
-        },
-        "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED on printed p.143. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on this same chapter's sheets. Read at 150 dpi 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "THE COLUMN THE AVENIDA PRIMAVERA EAST WALL NEEDS at the chosen height. Twin of C63640 at H.210. The custom-sized door and the two appliance openings share one span and the catalog prints only the sum; no oven or microwave opening height is recorded here or anywhere.",
-        "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
-          "shown_full_mm": 390,
-          "shown_gola_mm": 360,
-          "joint": false,
-          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
-        }
-      },
-      "tall_oven_microwave_jumbo_no_pushpull": {
-        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 shelf - 1 adjustable divider with stainless steel protection - no push-pull device - 2 dividers",
-        "opening": "door",
-        "handed": true,
-        "interior_confirmed": [
-          "1 shelf",
-          "1 adjustable divider with stainless steel protection",
-          "2 dividers"
-        ],
-        "source_ref": "printed p.143 / PDF 145",
-        "codes": [
-          {
-            "code": "C43659",
-            "width_mm": 600,
-            "depth_mm": 620
-          }
-        ],
-        "front_layout": {
-          "kind": "horizontal",
-          "note": "Elevation printed p.143: 58,5 handle, ⌐55,5 gola. EVERY STACK ON THIS PAGE SUMS TO 2220 - fronts, 30 mm recesses and appliance openings together, in BOTH executions. Same invariant as printed p.121-125 at 2100, measured again from a different total. Generator.front_stack raises when a stack breaks it.",
-          "stack_top_to_bottom": [
-            {
-              "kind": "front",
-              "h_mm": 435,
-              "derivation": "DERIVED 2026-09-28: remainder 1635 minus 600 - 600. Custom-sized on the page.",
-              "leaf": "door"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "front",
-              "h_mm": 585
-            }
-          ],
-          "gola_stack_top_to_bottom": [
-            {
-              "kind": "front",
-              "h_mm": 435,
-              "derivation": "DERIVED 2026-09-28: remainder 1635 minus 600 - 600. Custom-sized on the page.",
-              "leaf": "door"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "appliance_opening",
-              "h_mm": 600,
-              "appliance_class": "oven_h60"
-            },
-            {
-              "kind": "zone",
-              "h_mm": 30,
-              "role": "intermediate recess"
-            },
-            {
-              "kind": "front",
-              "h_mm": 555
-            }
-          ],
-          "no_shorthand_note": "NO heights_mm_top_to_bottom - docs/Reserved_Void_Spec_v0.1.md §4. The shorthand means 'every entry is a front', and here they are not.",
-          "remainder_note": "585 handle against 30 + 555 gola: the same 1635 both ways. 120 more than printed p.123's 1515.",
-          "split_note": "SPLIT 2026-09-28 (Andriy: 'the upper door is drawn' - the rule C92640 at H.234 got on 2026-08-27, carried to every remainder column). The page prints the SUM and calls the top door custom-sized. The openings are the ESTABLISHED ones: 600 for an oven H.60 (claude/findings-2026-08-25-tall-h210-appliance-columns.md 1), a second 600 for the microwave/double oven as C92640's render showed - HERE BY ANALOGY, NOT RE-READ on this page (learned rule 4) - and 460 for an oven H.46. The door is DERIVED: remainder minus openings, the same number in both executions. The real door height is set by the appliance at order time (7612: Thermador MEDMC301WS wants a 1248 flush opening in CK7744, i.e. a 492 door).",
-          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
-        },
-        "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED on printed p.143. No wall-hung line in this position's margin - only side panel D. p.549 and feet H. 5 mm p.548 - and no cabinet-in-a-bracket glyph beside d.62, where printed p.123 position 3 and printed p.125 both carry the glyph on this same chapter's sheets. Read at 150 dpi 2026-08-25. An absence has to be written down or it is re-read as silence.",
-        "notes": "Twin of C63659 at H.210. Differs from the position above only in the drawer height and the push-pull line. NOTE THE LETTER: C43659 against C42640 on the same page - the four-digit tail is POSITION-scoped and does not decode, which printed p.116 already proved on itself.",
-        "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
-          "shown_full_mm": 585,
-          "shown_gola_mm": 555,
-          "joint": false,
-          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second - the per-type recording the 2026-08-24 note asked for, so the plain tall sections of the same family (no gola printed) still get none. full_mm / gola_mm are the whole column, H and H - 30, because that is the arithmetic the panel does; shown_* are the numbers the page prints for the front that changes, and the panel labels the choice with them. joint false: the carcass-joint split of the base units (Generator.gola_joint!) is written for a recess at the top and does not apply to a recess part-way up a column."
-        }
-      },
       "tall_door_over_door": {
-        "description": "Tall unit with doors - 1 rh or lh door - 1 rh or lh door - 5 shelves - 1 divider",
+        "description": "Tall unit with doors - 1 rh or lh door - 1 rh or lh door - 4 shelves - 1 divider",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "5 shelves",
+          "4 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.137 / PDF 139",
+        "source_ref": "printed p.102 / PDF 104",
         "codes": [
           {
-            "code": "C30503",
+            "code": "C70551",
             "width_mm": 450,
             "depth_mm": 350
           },
           {
-            "code": "C30603",
+            "code": "C70651",
             "width_mm": 600,
             "depth_mm": 350
           },
           {
-            "code": "C30703",
+            "code": "C70751",
             "width_mm": 750,
             "depth_mm": 350
           },
           {
-            "code": "C40503",
+            "code": "C80551",
             "width_mm": 450,
             "depth_mm": 620
           },
           {
-            "code": "C40603",
+            "code": "C80651",
             "width_mm": 600,
             "depth_mm": 620
           },
           {
-            "code": "C40703",
+            "code": "C80751",
             "width_mm": 750,
             "depth_mm": 620
           }
@@ -314,14 +53,14 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             780
           ],
-          "note": "Elevation: 144 / 78 handle, 144 / 75 gola. The recess sits BETWEEN the fronts, at the worktop of the H.78 run beside it.",
+          "note": "Elevation: 120 / 78 handle, 120 / 75 gola. The recess sits BETWEEN the fronts, at the worktop of the H.78 run beside it.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "door"
             },
             {
@@ -341,12 +80,12 @@
           ],
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
-        "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.137 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung": true,
+        "wall_hung_note": "PRINTED: this position's margin carries 'Surch. for wall-hung version on page 548' on printed p.102 (text layer, 2026-10-04).",
         "notes": " Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 780,
           "shown_gola_mm": 750,
           "joint": false,
@@ -354,22 +93,22 @@
         }
       },
       "tall_doors_over_doors": {
-        "description": "Tall unit with doors - 2 doors - 2 doors - 5 shelves - 1 divider",
+        "description": "Tall unit with doors - 2 doors - 2 doors - 4 shelves - 1 divider",
         "opening": "door",
         "handed": false,
         "interior_confirmed": [
-          "5 shelves",
+          "4 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.137 / PDF 139",
+        "source_ref": "printed p.102 / PDF 104",
         "codes": [
           {
-            "code": "C30902",
+            "code": "C70950",
             "width_mm": 900,
             "depth_mm": 350
           },
           {
-            "code": "C40902",
+            "code": "C80950",
             "width_mm": 900,
             "depth_mm": 620
           }
@@ -377,14 +116,14 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             780
           ],
-          "note": "Elevation: 144 / 78 handle, 144 / 75 gola. The recess sits BETWEEN the fronts, at the worktop of the H.78 run beside it.",
+          "note": "Elevation: 120 / 78 handle, 120 / 75 gola. The recess sits BETWEEN the fronts, at the worktop of the H.78 run beside it.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "doors"
             },
             {
@@ -405,11 +144,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.137 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.102 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": " Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 780,
           "shown_gola_mm": 750,
           "joint": false,
@@ -417,32 +156,32 @@
         }
       },
       "tall_door_drawers_jumbo": {
-        "description": "Tall unit with drawers and jumbo drawer - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 4 shelves - 1 divider",
+        "description": "Tall unit with drawers and jumbo drawer - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 3 shelves - 1 divider",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "4 shelves",
+          "3 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.137 / PDF 139",
+        "source_ref": "printed p.102 / PDF 104",
         "codes": [
           {
-            "code": "C31553",
+            "code": "C71553",
             "width_mm": 450,
             "depth_mm": 350
           },
           {
-            "code": "C31653",
+            "code": "C71653",
             "width_mm": 600,
             "depth_mm": 350
           },
           {
-            "code": "C41553",
+            "code": "C81553",
             "width_mm": 450,
             "depth_mm": 620
           },
           {
-            "code": "C41653",
+            "code": "C81653",
             "width_mm": 600,
             "depth_mm": 620
           }
@@ -450,16 +189,16 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             195,
             195,
             390
           ],
-          "note": "Elevation: 144 / 19,5 / 19,5 / 39 handle, 144 / 18 / 18 / 36 gola. The pair of drawers shares one 30 mm recess, 15 each (the grouping rule read at 900 dpi on printed p.122); the jumbo gives its own.",
+          "note": "Elevation: 120 / 19,5 / 19,5 / 39 handle, 120 / 18 / 18 / 36 gola. The pair of drawers shares one 30 mm recess, 15 each (the grouping rule read at 900 dpi on printed p.122); the jumbo gives its own.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "door"
             },
             {
@@ -494,11 +233,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.137 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.102 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 390,
           "shown_gola_mm": 360,
           "joint": false,
@@ -506,22 +245,22 @@
         }
       },
       "tall_doors_drawers_jumbo": {
-        "description": "Tall unit with drawers and jumbo drawer - 2 doors - 2 drawers - 1 jumbo drawer - 4 shelves - 1 divider",
+        "description": "Tall unit with drawers and jumbo drawer - 2 doors - 2 drawers - 1 jumbo drawer - 3 shelves - 1 divider",
         "opening": "door",
         "handed": false,
         "interior_confirmed": [
-          "4 shelves",
+          "3 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.138 / PDF 140",
+        "source_ref": "printed p.103 / PDF 105",
         "codes": [
           {
-            "code": "C31953",
+            "code": "C71953",
             "width_mm": 900,
             "depth_mm": 350
           },
           {
-            "code": "C41953",
+            "code": "C81953",
             "width_mm": 900,
             "depth_mm": 620
           }
@@ -529,16 +268,16 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             195,
             195,
             390
           ],
-          "note": "Elevation: 144 / 19,5 / 19,5 / 39 handle, 144 / 18 / 18 / 36 gola. The pair of drawers shares one 30 mm recess, 15 each (the grouping rule read at 900 dpi on printed p.122); the jumbo gives its own.",
+          "note": "Elevation: 120 / 19,5 / 19,5 / 39 handle, 120 / 18 / 18 / 36 gola. The pair of drawers shares one 30 mm recess, 15 each (the grouping rule read at 900 dpi on printed p.122); the jumbo gives its own.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "doors"
             },
             {
@@ -573,11 +312,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.138 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.103 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 390,
           "shown_gola_mm": 360,
           "joint": false,
@@ -585,32 +324,32 @@
         }
       },
       "tall_door_jumbo_drawers": {
-        "description": "Tall unit with jumbo drawers - 1 rh or lh door - 2 jumbo drawers - 4 shelves - 1 divider",
+        "description": "Tall unit with jumbo drawers - 1 rh or lh door - 2 jumbo drawers - 3 shelves - 1 divider",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "4 shelves",
+          "3 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.138 / PDF 140",
+        "source_ref": "printed p.103 / PDF 105",
         "codes": [
           {
-            "code": "C31557",
+            "code": "C71557",
             "width_mm": 450,
             "depth_mm": 350
           },
           {
-            "code": "C31657",
+            "code": "C71657",
             "width_mm": 600,
             "depth_mm": 350
           },
           {
-            "code": "C41557",
+            "code": "C81557",
             "width_mm": 450,
             "depth_mm": 620
           },
           {
-            "code": "C41657",
+            "code": "C81657",
             "width_mm": 600,
             "depth_mm": 620
           }
@@ -618,15 +357,15 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             390,
             390
           ],
-          "note": "Elevation: 144 / 39 / 39 handle, 144 / 36 / 36 gola. Each jumbo front gives its own 30 mm.",
+          "note": "Elevation: 120 / 39 / 39 handle, 120 / 36 / 36 gola. Each jumbo front gives its own 30 mm.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "door"
             },
             {
@@ -656,11 +395,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.138 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.103 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 390,
           "shown_gola_mm": 360,
           "joint": false,
@@ -668,22 +407,22 @@
         }
       },
       "tall_doors_jumbo_drawers": {
-        "description": "Tall unit with jumbo drawers - 2 doors - 2 jumbo drawers - 4 shelves - 1 divider",
+        "description": "Tall unit with jumbo drawers - 2 doors - 2 jumbo drawers - 3 shelves - 1 divider",
         "opening": "door",
         "handed": false,
         "interior_confirmed": [
-          "4 shelves",
+          "3 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.138 / PDF 140",
+        "source_ref": "printed p.103 / PDF 105",
         "codes": [
           {
-            "code": "C31957",
+            "code": "C71957",
             "width_mm": 900,
             "depth_mm": 350
           },
           {
-            "code": "C41957",
+            "code": "C81957",
             "width_mm": 900,
             "depth_mm": 620
           }
@@ -691,15 +430,15 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             390,
             390
           ],
-          "note": "Elevation: 144 / 39 / 39 handle, 144 / 36 / 36 gola. Each jumbo front gives its own 30 mm.",
+          "note": "Elevation: 120 / 39 / 39 handle, 120 / 36 / 36 gola. Each jumbo front gives its own 30 mm.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "doors"
             },
             {
@@ -729,11 +468,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.138 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.103 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 390,
           "shown_gola_mm": 360,
           "joint": false,
@@ -741,32 +480,32 @@
         }
       },
       "tall_door_drawer_jumbo": {
-        "description": "Tall unit with drawers and jumbo drawer - 1 rh or lh door - 1 drawer - 1 jumbo drawer - 4 shelves - no Push-pull device - 1 divider",
+        "description": "Tall unit with drawers and jumbo drawer - 1 rh or lh door - 1 drawer - 1 jumbo drawer - 3 shelves - no Push–pull device - 1 divider",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "4 shelves",
+          "3 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.139 / PDF 141",
+        "source_ref": "printed p.104 / PDF 106",
         "codes": [
           {
-            "code": "C31564",
+            "code": "C77558",
             "width_mm": 450,
             "depth_mm": 350
           },
           {
-            "code": "C31664",
+            "code": "C77658",
             "width_mm": 600,
             "depth_mm": 350
           },
           {
-            "code": "C41564",
+            "code": "C87558",
             "width_mm": 450,
             "depth_mm": 620
           },
           {
-            "code": "C41664",
+            "code": "C87658",
             "width_mm": 600,
             "depth_mm": 620
           }
@@ -774,15 +513,15 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             195,
             585
           ],
-          "note": "Elevation: 144 / 19,5 / 58,5 handle, 144 / 16,5 / 55,5 gola. Two groups of one, each gives 30 mm.",
+          "note": "Elevation: 120 / 19,5 / 58,5 handle, 120 / 16,5 / 55,5 gola. Two groups of one, each gives 30 mm.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "door"
             },
             {
@@ -812,11 +551,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.139 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.104 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 585,
           "shown_gola_mm": 555,
           "joint": false,
@@ -824,22 +563,22 @@
         }
       },
       "tall_doors_drawer_jumbo": {
-        "description": "Tall unit with drawers and jumbo drawer - 2 doors - 1 drawer - 1 jumbo drawer - 4 shelves - no Push–pull device - 1 divider",
+        "description": "Tall unit with drawers and jumbo drawer - 2 doors - 1 drawer - 1 jumbo drawer - 3 shelves - no Push–pull device - 1 divider",
         "opening": "door",
         "handed": false,
         "interior_confirmed": [
-          "4 shelves",
+          "3 shelves",
           "1 divider"
         ],
-        "source_ref": "printed p.139 / PDF 141",
+        "source_ref": "printed p.104 / PDF 106",
         "codes": [
           {
-            "code": "C31964",
+            "code": "C77958",
             "width_mm": 900,
             "depth_mm": 350
           },
           {
-            "code": "C41964",
+            "code": "C87958",
             "width_mm": 900,
             "depth_mm": 620
           }
@@ -847,15 +586,15 @@
         "front_layout": {
           "kind": "horizontal",
           "heights_mm_top_to_bottom": [
-            1440,
+            1200,
             195,
             585
           ],
-          "note": "Elevation: 144 / 19,5 / 58,5 handle, 144 / 16,5 / 55,5 gola. Two groups of one, each gives 30 mm.",
+          "note": "Elevation: 120 / 19,5 / 58,5 handle, 120 / 16,5 / 55,5 gola. Two groups of one, each gives 30 mm.",
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 1440,
+              "h_mm": 1200,
               "leaf": "doors"
             },
             {
@@ -885,11 +624,11 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.139 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.104 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 585,
           "shown_gola_mm": 555,
           "joint": false,
@@ -897,33 +636,33 @@
         }
       },
       "tall_oven_h60_doors": {
-        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 rh or lh door - 3 shelves - 2 dividers",
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 rh or lh door - 2 shelves - 2 dividers",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "3 shelves",
+          "2 shelves",
           "2 dividers"
         ],
-        "source_ref": "printed p.141 / PDF 143",
+        "source_ref": "printed p.106 / PDF 108",
         "codes": [
           {
-            "code": "C42601",
+            "code": "C82601",
             "width_mm": 600,
             "depth_mm": 620
           },
           {
-            "code": "C42701",
+            "code": "C82701",
             "width_mm": 750,
             "depth_mm": 620
           }
         ],
         "front_layout": {
           "kind": "horizontal",
-          "note": "Elevation: 84 over the oven, 78 / 75 below. 840 + 600 + 780 = 2220; the 600 is the chapter's measured oven opening, not printed.",
+          "note": "Elevation: 60 over the oven, 78 / 75 below. 600 + 600 + 780 = 1980; the 600 is the chapter's measured oven opening, not printed.",
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -940,7 +679,7 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -962,12 +701,12 @@
           "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
-        "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.141 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung": true,
+        "wall_hung_note": "PRINTED: this position's margin carries 'Surch. for wall-hung version on page 548' on printed p.106 (text layer, 2026-10-04).",
         "notes": " Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 780,
           "shown_gola_mm": 750,
           "joint": false,
@@ -975,28 +714,28 @@
         }
       },
       "tall_oven_h60_doors_pairs": {
-        "description": "Tall unit for oven H. 60 - 2 doors - 2 doors - 3 shelves - 2 dividers",
+        "description": "Tall unit for oven H. 60 - 2 doors - 2 doors - 2 shelves - 2 dividers",
         "opening": "door",
         "handed": false,
         "interior_confirmed": [
-          "3 shelves",
+          "2 shelves",
           "2 dividers"
         ],
-        "source_ref": "printed p.141 / PDF 143",
+        "source_ref": "printed p.106 / PDF 108",
         "codes": [
           {
-            "code": "C42900",
+            "code": "C82900",
             "width_mm": 900,
             "depth_mm": 620
           }
         ],
         "front_layout": {
           "kind": "horizontal",
-          "note": "Elevation: 84 over the oven, 78 / 75 below. 840 + 600 + 780 = 2220; the 600 is the chapter's measured oven opening, not printed.",
+          "note": "Elevation: 60 over the oven, 78 / 75 below. 600 + 600 + 780 = 1980; the 600 is the chapter's measured oven opening, not printed.",
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "doors"
             },
             {
@@ -1013,7 +752,7 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "doors"
             },
             {
@@ -1036,45 +775,221 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.141 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.106 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": " Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 780,
           "shown_gola_mm": 750,
           "joint": false,
           "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
         }
       },
-      "tall_oven_h60_two_drawers_jumbo": {
-        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 2 shelves - 2 dividers",
+      "tall_oven_h46_custom_door": {
+        "description": "Tall unit for oven H. 46 - 1 rh or lh custom–sized door - 1 drawer - 1 rh or lh door - 2 shelves",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "2 shelves",
-          "2 dividers"
+          "2 shelves"
         ],
-        "source_ref": "printed p.141 / PDF 143",
+        "source_ref": "printed p.107 / PDF 109",
         "codes": [
           {
-            "code": "C42653",
+            "code": "C82610",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: custom-sized door over the H.46 oven, 19,5 / 78 handle, 16,5 / 75 gola below - the twin of printed p.121.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 545,
+              "derivation": "DERIVED 2026-10-04: 1980 minus 460 - 195 - 780. Custom-sized on the page.",
+              "leaf": "door"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 460,
+              "appliance_class": "oven_h46"
+            },
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 780,
+              "leaf": "door"
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 545,
+              "derivation": "DERIVED 2026-10-04: 1980 minus 460 - 195 - 780. Custom-sized on the page.",
+              "leaf": "door"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 460,
+              "appliance_class": "oven_h46"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 750,
+              "leaf": "door"
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.107 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
+        "door_versions": {
+          "full_mm": 1980,
+          "gola_mm": 1950,
+          "shown_full_mm": 780,
+          "shown_gola_mm": 750,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
+        }
+      },
+      "tall_oven_h60_drawer_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 drawer - 1 jumbo drawer - 1 shelf - no Push–pull device - 1 divider",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "1 divider"
+        ],
+        "source_ref": "printed p.107 / PDF 109",
+        "codes": [
+          {
+            "code": "C82650",
             "width_mm": 600,
             "depth_mm": 620
           },
           {
-            "code": "C42753",
+            "code": "C82750",
             "width_mm": 750,
             "depth_mm": 620
           }
         ],
         "front_layout": {
           "kind": "horizontal",
-          "note": "Elevation: 84 over the oven, 19,5 / 19,5 / 39 handle, 18 / 18 / 36 gola below.",
+          "note": "Elevation: 60 over the oven, 19,5 / 58,5 handle, 16,5 / 55,5 gola below.",
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
+              "leaf": "door"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 195
+            },
+            {
+              "kind": "front",
+              "h_mm": 585
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 600,
+              "leaf": "door"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 165
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "intermediate recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 555
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.107 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
+        "door_versions": {
+          "full_mm": 1980,
+          "gola_mm": 1950,
+          "shown_full_mm": 585,
+          "shown_gola_mm": 555,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
+        }
+      },
+      "tall_oven_h60_two_drawers_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 drawers - 1 jumbo drawer - 1 shelf - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 shelf",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.108 / PDF 110",
+        "codes": [
+          {
+            "code": "C82653",
+            "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C82753",
+            "width_mm": 750,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: 60 over the oven, 19,5 / 19,5 / 39 handle, 18 / 18 / 36 gola below.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -1098,7 +1013,7 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -1133,45 +1048,45 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.141 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.108 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 390,
           "shown_gola_mm": 360,
           "joint": false,
           "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
         }
       },
-      "tall_oven_h60_drawer_jumbo": {
-        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 drawer - 1 jumbo drawer - 2 shelves - no Push–pull device - 2 dividers",
+      "tall_oven_h60_two_jumbo": {
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 2 jumbo drawers - 1 shelf - 2 dividers",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "2 shelves",
+          "1 shelf",
           "2 dividers"
         ],
-        "source_ref": "printed p.142 / PDF 144",
+        "source_ref": "printed p.108 / PDF 110",
         "codes": [
           {
-            "code": "C42650",
+            "code": "C82657",
             "width_mm": 600,
             "depth_mm": 620
           },
           {
-            "code": "C42750",
+            "code": "C82757",
             "width_mm": 750,
             "depth_mm": 620
           }
         ],
         "front_layout": {
           "kind": "horizontal",
-          "note": "Elevation: 84 over the oven, 19,5 / 58,5 handle, 16,5 / 55,5 gola below.",
+          "note": "Elevation: 60 over the oven, 39 / 39 handle, 36 / 36 gola below.",
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -1181,17 +1096,17 @@
             },
             {
               "kind": "front",
-              "h_mm": 195
+              "h_mm": 390
             },
             {
               "kind": "front",
-              "h_mm": 585
+              "h_mm": 390
             }
           ],
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -1206,7 +1121,7 @@
             },
             {
               "kind": "front",
-              "h_mm": 165
+              "h_mm": 360
             },
             {
               "kind": "zone",
@@ -1215,47 +1130,52 @@
             },
             {
               "kind": "front",
-              "h_mm": 555
+              "h_mm": 360
             }
           ],
           "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.142 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.108 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
-          "shown_full_mm": 585,
-          "shown_gola_mm": 555,
+          "full_mm": 1980,
+          "gola_mm": 1950,
+          "shown_full_mm": 390,
+          "shown_gola_mm": 360,
           "joint": false,
           "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
         }
       },
       "tall_oven_h60_jumbo_interior_drawers": {
-        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 jumbo drawer - 2 interior drawers - 2 shelves - no Push-pull device - 2 dividers",
+        "description": "Tall unit for oven H. 60 - 1 rh or lh door - 1 jumbo drawer - 2 interior drawers - 1 shelf - no Push–pull device - 2 dividers",
         "opening": "door",
         "handed": true,
         "interior_confirmed": [
-          "2 shelves",
+          "1 shelf",
           "2 dividers"
         ],
-        "source_ref": "printed p.142 / PDF 144",
+        "source_ref": "printed p.108 / PDF 110",
         "codes": [
           {
-            "code": "C42602",
+            "code": "C82651",
             "width_mm": 600,
+            "depth_mm": 620
+          },
+          {
+            "code": "C82751",
+            "width_mm": 750,
             "depth_mm": 620
           }
         ],
         "front_layout": {
           "kind": "horizontal",
-          "note": "Elevation: 84 over the oven, ONE 78 / 75 below. The two interior drawers sit behind the jumbo front and are not fronts.",
+          "note": "Elevation: 60 over the oven, ONE 78 / 75 below. The two interior drawers sit behind the jumbo front and are not fronts.",
           "stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -1271,7 +1191,7 @@
           "gola_stack_top_to_bottom": [
             {
               "kind": "front",
-              "h_mm": 840,
+              "h_mm": 600,
               "leaf": "door"
             },
             {
@@ -1293,19 +1213,100 @@
           "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
         },
         "wall_hung": false,
-        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.142 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.108 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
         "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
         "door_versions": {
-          "full_mm": 2220,
-          "gola_mm": 2190,
+          "full_mm": 1980,
+          "gola_mm": 1950,
           "shown_full_mm": 780,
           "shown_gola_mm": 750,
           "joint": false,
           "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
         }
+      },
+      "tall_oven_microwave_jumbo": {
+        "description": "Tall unit for oven and microwave oven - 1 rh or lh custom-sized door - 1 jumbo drawer - 1 adjustable divider with stainless steel protection - 2 dividers",
+        "opening": "door",
+        "handed": true,
+        "interior_confirmed": [
+          "1 adjustable divider with stainless steel protection",
+          "2 dividers"
+        ],
+        "source_ref": "printed p.109 / PDF 111",
+        "codes": [
+          {
+            "code": "C83643",
+            "width_mm": 600,
+            "depth_mm": 620
+          }
+        ],
+        "front_layout": {
+          "kind": "horizontal",
+          "note": "Elevation: custom-sized door, oven and microwave openings, 39 / 36 below - the twin of printed p.123.",
+          "stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 390,
+              "derivation": "DERIVED 2026-10-04: 1980 minus 600 - 600 - 390. Custom-sized on the page.",
+              "leaf": "door"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "front",
+              "h_mm": 390
+            }
+          ],
+          "gola_stack_top_to_bottom": [
+            {
+              "kind": "front",
+              "h_mm": 390,
+              "derivation": "DERIVED 2026-10-04: 1980 minus 600 - 600 - 390. Custom-sized on the page.",
+              "leaf": "door"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "appliance_opening",
+              "h_mm": 600,
+              "appliance_class": "oven_h60"
+            },
+            {
+              "kind": "zone",
+              "h_mm": 30,
+              "role": "undercounter recess"
+            },
+            {
+              "kind": "front",
+              "h_mm": 360
+            }
+          ],
+          "no_shorthand_note": "NO heights_mm_top_to_bottom: the stack holds an appliance opening, and the shorthand means every entry is a front (docs/Reserved_Void_Spec_v0.1.md §4).",
+          "leaves_note": "LEAVES, 2026-09-28 (Andriy: the upper door of a column was drawn with a drawer's diagonal, and the hinge side changed nothing). A horizontal stack drew EVERY front as a drawer. Each front now says what it is - leaf 'door' (one hinged leaf, hinge_side per order, never guessed) or 'doors' (a pair) - read off the printed description in order, top to bottom; a front without a leaf is a drawer."
+        },
+        "wall_hung": false,
+        "wall_hung_note": "NOT OFFERED: no 'Surch. for wall-hung version on page 548' line in this position's margin on printed p.109 (text layer, 2026-10-04). The depth-band glyph column was not swept on a render for this position - the margin line is the priced offer and is what is recorded.",
+        "notes": "Servo Drive p.567; LEGRABOX margin prices named, not coded. Extracted 2026-10-04 (group 1 of the catalog recon): codes, widths and depths checked by script against the text layer; the elevation is the section twin of the held H.210 / H.84 positions.",
+        "door_versions": {
+          "full_mm": 1980,
+          "gola_mm": 1950,
+          "shown_full_mm": 390,
+          "shown_gola_mm": 360,
+          "joint": false,
+          "note": "TYPE-SCOPED, 2026-09-28 (Andriy, off CK7744 in the panel: 'two door heights, one for gola, one for handle'). Registry.lookup now reads door_versions from the unit type first and the family second. full_mm / gola_mm are the whole column, H and H - 30; shown_* are the numbers the page prints for the front that changes. joint false: the carcass-joint split of the base units does not apply to a recess part-way up a column."
+        }
       }
     }
-  },
-  "family_keys_note": "THIS FILE DECLARES NO FAMILY-LEVEL DATA KEYS, and the omission is enforced rather than chosen: 50_registry.rb merges section files by family and refuses two files that state the same family fact, even when they agree in substance. tall_h222.json owns height_mm 2220, plinth_h_mm 100, depths_mm and collections for family 'Tall H.222'; restating them here cost one run of the suite on 2026-08-25 and the error named both files and the key. Section facts that are NOT family facts live at the top level of this file instead - see depth_note.",
-  "depth_note": "d.62 ONLY on printed p.143 - one 'd. 62' label serves all three code tables and no second band appears."
+  }
 }

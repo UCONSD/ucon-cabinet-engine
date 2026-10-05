@@ -381,6 +381,10 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `handoff-2026-10-04-7612-estimate-sent.md` - 7612: the estimate request sent
     to Elda on 2026-10-04 (drawings v1.6, order CSV v0.4), which questions went
     in it, and what is next.
+  - `catalog-group1-2026-10-04.md` - catalog recon group 1: 230 codes generated
+    with confidence (tall for base H.78, base H.48 p.29, top H.48, glass wall
+    H.60/H.120, Hide & Seek 198/210/234, wall H.36 compounds), and what was read
+    and deliberately not held (core 1.9.27).
 
 ---
 

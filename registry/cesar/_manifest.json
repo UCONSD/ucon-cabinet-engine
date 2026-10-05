@@ -164,7 +164,7 @@
     "printed_pages": "28-31",
     "status": "partial",
     "extracted_on": "2026-08-23",
-    "note": "EXTRACTED 2026-08-23: printed p.28 whole, three types, 30 codes, all three depths - registry/cesar/base_h48.json. BC = d.35, BQ = d.47, BD = d.62, READ OFF THE PAGE: the printed table runs d.35 / d.47 / d.62 and the letters run BC / BQ / BD, where alphabetically they are BC / BD / BQ. Sorting them would have swapped 470 and 620.",
+    "note": "EXTRACTED 2026-08-23: printed p.28 whole, three types, 30 codes, all three depths - registry/cesar/base_h48.json. BC = d.35, BQ = d.47, BD = d.62, READ OFF THE PAGE: the printed table runs d.35 / d.47 / d.62 and the letters run BC / BQ / BD, where alphabetically they are BC / BD / BQ. Sorting them would have swapped 470 and 620. | 2026-10-04: group 1 - printed p.29 held whole.",
     "pages": [
      {
       "printed": 28,
@@ -178,10 +178,11 @@
      },
      {
       "printed": 29,
-      "status": "not_extracted",
+      "status": "extracted",
       "types": [
        "Base units H. 48"
-      ]
+      ],
+      "note": "2026-10-04: held whole (group 1)."
      },
      {
       "printed": 30,
@@ -678,8 +679,45 @@
     "family": "H.198",
     "section": "Tall units H. 198 | for base unit H. 78",
     "printed_pages": "102-110",
-    "status": "not_extracted",
-    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C7 = d.35 and C8 = d.62. C8 is the letter the USA elements recon read on printed p.417 (C87757) and recorded as a NEW letter - it is not new, it is this family. See code_grammar.usa_elements.family_letters_are_not_new."
+    "status": "partial",
+    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C7 = d.35 and C8 = d.62. C8 is the letter the USA elements recon read on printed p.417 (C87757) and recorded as a NEW letter - it is not new, it is this family. See code_grammar.usa_elements.family_letters_are_not_new. | 2026-10-04: group 1 - printed p.102, 103, 104, 106, 107, 108, 109 straight positions held; corners, single-elevation positions and the wall-hung H.132 unit not held.",
+    "pages": [
+     {
+      "printed": 102,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 103,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 104,
+      "status": "partial",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 106,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 107,
+      "status": "partial",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 108,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 109,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     }
+    ]
    },
    {
     "class": "tall",
@@ -758,7 +796,7 @@
     "section": "Tall units H. 210 | for base unit H. 78",
     "printed_pages": "116-125",
     "status": "partial",
-    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units. EXTRACTION OPENED 2026-08-24, demand-driven: Andriy chose H.210 for the Avenida Primavera tall wall, so this section - not the plain one - is the one that kitchen needs. printed p.116 held whole; the nine pages above it are what remains, and printed p.121-123 and p.125 are the appliance columns the render draws. | 2026-08-25: printed p.121, 122, 123 and 125 HELD - 8 types, 13 codes, all d.62, all refusing the hung version. printed p.117-120 and p.124 remain unread. Two positions on the held sheets are read and deliberately not held (C68654/C68754 and C62691) - see their pages.",
+    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C5 = d.35 and C6 = d.62 - its OWN pair, unlike the H.84 companion below. Nine pages: door and jumbo-drawer combinations whose front splits align with an adjacent base unit H.78, corners, oven and microwave housings, and fridge units. EXTRACTION OPENED 2026-08-24, demand-driven: Andriy chose H.210 for the Avenida Primavera tall wall, so this section - not the plain one - is the one that kitchen needs. printed p.116 held whole; the nine pages above it are what remains, and printed p.121-123 and p.125 are the appliance columns the render draws. | 2026-08-25: printed p.121, 122, 123 and 125 HELD - 8 types, 13 codes, all d.62, all refusing the hung version. printed p.117-120 and p.124 remain unread. Two positions on the held sheets are read and deliberately not held (C68654/C68754 and C62691) - see their pages. | 2026-10-04: group 1 - printed p.117, 118 straight positions held; corners, single-elevation positions and the wall-hung H.132 unit not held.",
     "extracted_on": "2026-08-25",
     "pages": [
      {
@@ -774,19 +812,19 @@
      },
      {
       "printed": 117,
-      "status": "not_extracted",
+      "status": "extracted",
       "types": [
        "Tall unit with jumbo drawers - 2 doors, 2 jumbo drawers"
       ],
-      "note": "Servo Drive and LEGRABOX in the margin, no article codes. Heading read, page not read."
+      "note": "Servo Drive and LEGRABOX in the margin, no article codes. Heading read, page not read. | 2026-10-04: straight positions held (group 1)."
      },
      {
       "printed": 118,
-      "status": "not_extracted",
+      "status": "partial",
       "types": [
        "Tall unit with drawer and jumbo drawer - 1 rh or lh door, 1 drawer, 1 jumbo drawer"
       ],
-      "note": "Heading read, page not read. Elevation prints 19,5 / 58,5 handle and 16,5 / 55,5 gola."
+      "note": "Heading read, page not read. Elevation prints 19,5 / 58,5 handle and 16,5 / 55,5 gola. | 2026-10-04: straight positions held (group 1)."
      },
      {
       "printed": 119,
@@ -963,8 +1001,35 @@
     "section": "Tall units H. 222 | for base unit H. 78",
     "printed_pages": "137-145",
     "status": "partial",
-    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have. | 2026-08-25: printed p.143 HELD WHOLE - 3 positions, 4 codes, d.62. OPENED BECAUSE THE KITCHEN ASKED: Andriy chose H.222 + top element H.72 for the Avenida Primavera east wall, the combination that reaches a 3048 ceiling with 8 mm to spare, and p.143 carries that wall's oven-and-microwave column (C42640). THE PAGE IS THE TWIN OF printed p.123 AT A GREATER HEIGHT and it settles a measurement: C42657 leaves exactly 600 for an oven H.60 from a total of 2220, where printed p.121-122 left the same 600 six times from 2100. Same number, two totals. printed p.137-142, p.144 and p.145 remain unread - their headings are scanned: p.141-142 more oven columns, p.144 a corner tall unit for oven W.60/W.75 plus fridge units, p.145 more fridge.",
-    "extracted_on": "2026-08-25"
+    "note": "The tall family letter is a PAIR - first prefix d.35, second d.62 - and it is a LOOKUP, never a sequence. Here C3 = d.35 and C4 = d.62. Adds a corner tall unit for oven W.60 and W.75 that the H.210 section does not have. | 2026-08-25: printed p.143 HELD WHOLE - 3 positions, 4 codes, d.62. OPENED BECAUSE THE KITCHEN ASKED: Andriy chose H.222 + top element H.72 for the Avenida Primavera east wall, the combination that reaches a 3048 ceiling with 8 mm to spare, and p.143 carries that wall's oven-and-microwave column (C42640). THE PAGE IS THE TWIN OF printed p.123 AT A GREATER HEIGHT and it settles a measurement: C42657 leaves exactly 600 for an oven H.60 from a total of 2220, where printed p.121-122 left the same 600 six times from 2100. Same number, two totals. printed p.137-142, p.144 and p.145 remain unread - their headings are scanned: p.141-142 more oven columns, p.144 a corner tall unit for oven W.60/W.75 plus fridge units, p.145 more fridge. | 2026-10-04: group 1 - printed p.137, 138, 139, 141, 142 straight positions held; corners, single-elevation positions and the wall-hung H.132 unit not held.",
+    "extracted_on": "2026-08-25",
+    "pages": [
+     {
+      "printed": 137,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 138,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 139,
+      "status": "partial",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 141,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 142,
+      "status": "partial",
+      "note": "2026-10-04: straight positions held (group 1)."
+     }
+    ]
    },
    {
     "class": "tall",
@@ -1038,8 +1103,35 @@
     "section": "Tall units H. 234 | for base unit H. 78",
     "printed_pages": "156-164",
     "status": "partial",
-    "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter. | 2026-08-25: printed p.162 HELD WHOLE - 3 positions, 4 codes, d.62. The east wall went H.234 + top H.60, the one combination that both opens sideways and reaches a 3048 ceiling with 8 mm to spare. C92640 is that wall's oven-and-microwave column. THE 600 OVEN NICHE IS MEASURED A THIRD TIME HERE, out of a total of 2340. printed p.156-161, p.163 and p.164 remain unread.",
-    "extracted_on": "2026-08-25"
+    "note": "SHARES ITS LETTERS WITH printed p.151-155: C0 = d.35 and C9 = d.62 here too, separated only by the four-digit tail. The second of the two shared pairs in this chapter. | 2026-08-25: printed p.162 HELD WHOLE - 3 positions, 4 codes, d.62. The east wall went H.234 + top H.60, the one combination that both opens sideways and reaches a 3048 ceiling with 8 mm to spare. C92640 is that wall's oven-and-microwave column. THE 600 OVEN NICHE IS MEASURED A THIRD TIME HERE, out of a total of 2340. printed p.156-161, p.163 and p.164 remain unread. | 2026-10-04: group 1 - printed p.156, 157, 158, 160, 161 straight positions held; corners, single-elevation positions and the wall-hung H.132 unit not held.",
+    "extracted_on": "2026-08-25",
+    "pages": [
+     {
+      "printed": 156,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 157,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 158,
+      "status": "partial",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 160,
+      "status": "extracted",
+      "note": "2026-10-04: straight positions held (group 1)."
+     },
+     {
+      "printed": 161,
+      "status": "partial",
+      "note": "2026-10-04: straight positions held (group 1)."
+     }
+    ]
    },
    {
     "class": "tall",
@@ -1091,7 +1183,8 @@
     "family": "Hide & Seek H.198",
     "section": "Hide & Seek tall units H. 198",
     "printed_pages": "200",
-    "status": "not_extracted"
+    "status": "extracted",
+    "note": "2026-10-04: group 1 - printed p.200 held whole for lookup (hide_seek_h198.json), none buildable, twin of H.222."
    },
    {
     "class": "tall",
@@ -1099,7 +1192,8 @@
     "family": "Hide & Seek H.210",
     "section": "Hide & Seek tall units H. 210",
     "printed_pages": "201",
-    "status": "not_extracted"
+    "status": "extracted",
+    "note": "2026-10-04: group 1 - printed p.201 held whole for lookup (hide_seek_h210.json), none buildable, twin of H.222."
    },
    {
     "class": "tall",
@@ -1117,7 +1211,8 @@
     "family": "Hide & Seek H.234",
     "section": "Hide & Seek tall units H. 234",
     "printed_pages": "203",
-    "status": "not_extracted"
+    "status": "extracted",
+    "note": "2026-10-04: group 1 - printed p.203 held whole for lookup (hide_seek_h234.json), none buildable, twin of H.222."
    },
    {
     "class": "tall",
@@ -1133,8 +1228,8 @@
     "family": "Top elements H.48",
     "section": "Tall unit top elements H. 48 | without fixings",
     "printed_pages": "171",
-    "status": "not_extracted",
-    "note": "Prefix SC. See the note on printed p.170. | 2026-08-25: heading and prefix confirmed on the render, page NOT read. BOTH CARRY A SECOND STRAIGHT POSITION the H.36 and H.72 sections do not - 'Top element with door - 1 rh or lh door - 1 shelf' - so this chapter's four pages are not four copies of one page at four heights. Held back deliberately: the wall's top height is not chosen yet, and a page read for a height nobody picks is the extraction queue coming back in through the side door."
+    "status": "extracted",
+    "note": "Prefix SC. See the note on printed p.170. | 2026-08-25: heading and prefix confirmed on the render, page NOT read. BOTH CARRY A SECOND STRAIGHT POSITION the H.36 and H.72 sections do not - 'Top element with door - 1 rh or lh door - 1 shelf' - so this chapter's four pages are not four copies of one page at four heights. Held back deliberately: the wall's top height is not chosen yet, and a page read for a height nobody picks is the extraction queue coming back in through the side door. | 2026-10-04: group 1 - printed p.171 held whole."
    },
    {
     "class": "tall",
@@ -1159,8 +1254,8 @@
     "family": "H.36",
     "section": "Wall units H. 36",
     "printed_pages": "211-212",
-    "status": "partial",
-    "note": "CODE GRAMMAR IS NEW AND MUST NOT BE CARRIED OVER FROM H.78. Read from the source 2026-08-18: P + family letter + width index + type suffix. Family letters confirmed by direct read ONLY for PB = H.36 (printed p.211), PE = H.72 (p.228), PG = H.84 (p.238). The width index is a LOOKUP with irregular rounding (15=01, 30=03, 45=05, 60=06, 75=07, 90=09, 105=10, 120=12, 150=15, 180=18, 240=24) - never compute it. The type suffix is not stable even inside one family: 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84, and 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows.",
+    "status": "extracted",
+    "note": "CODE GRAMMAR IS NEW AND MUST NOT BE CARRIED OVER FROM H.78. Read from the source 2026-08-18: P + family letter + width index + type suffix. Family letters confirmed by direct read ONLY for PB = H.36 (printed p.211), PE = H.72 (p.228), PG = H.84 (p.238). The width index is a LOOKUP with irregular rounding (15=01, 30=03, 45=05, 60=06, 75=07, 90=09, 105=10, 120=12, 150=15, 180=18, 240=24) - never compute it. The type suffix is not stable even inside one family: 04 is a two-module compound unit at H.36 but two stacked top-hung doors at H.72/H.84, and 30 is a pull-out door at W.15 but two doors at W.60/W.90. Decode only from explicit registry rows. | 2026-10-04: group 1 - printed p.212 (compound units) held whole; the section is complete.",
     "pages": [
      {
       "printed": 211,
@@ -1187,15 +1282,16 @@
      },
      {
       "printed": 212,
-      "status": "not_extracted",
+      "status": "extracted",
       "types": [
        "Compound wall unit with top-hung door (2 modules)",
        "Compound wall unit with top-hung door (3 compartments)",
        "Compound wall unit with push-up door (3 compartments)"
       ],
-      "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes."
+      "note": "Deferred: compound units carry INTERNAL PARTITIONS, which is new geometry. Widths run to 240 and the asterisked widths restrict door finishes. | 2026-10-04: held whole (group 1)."
      }
-    ]
+    ],
+    "extracted_on": "2026-10-04"
    },
    {
     "class": "wall",
@@ -1936,11 +2032,29 @@
    {
     "class": "glass",
     "family": "Glass H.72",
+    "section": "Glass wall units H. 60",
+    "printed_pages": "313",
+    "status": "extracted",
+    "extracted_on": "2026-09-30",
+    "note": "2026-10-04: group 1 - the H.60 block of printed p.313 held whole (glass_wall_h60.json), twin of H.72."
+   },
+   {
+    "class": "glass",
+    "family": "Glass H.72",
     "section": "Glass wall units H. 72",
     "printed_pages": "313",
     "status": "extracted",
     "extracted_on": "2026-09-30",
     "note": "2026-09-30 (Andriy, 7612 sink wall variant A): the H.72 block of printed p.313, both positions, TE0541 / TE0641 / TE0940, registry/cesar/glass_wall_h72.json. The H.60 block of the same page (TD) is not taken."
+   },
+   {
+    "class": "glass",
+    "family": "Glass H.72",
+    "section": "Glass wall units H. 120",
+    "printed_pages": "315",
+    "status": "extracted",
+    "extracted_on": "2026-09-30",
+    "note": "2026-10-04: group 1 - the H.120 block of printed p.315 held whole (glass_wall_h120.json), twin of H.72."
    },
    {
     "class": "glass",
