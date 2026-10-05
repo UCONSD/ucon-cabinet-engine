@@ -378,6 +378,9 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `handoff-2026-10-03-layout-template-7612.md` - 7612: decisions on the LayOut
     template and on the order content for the estimate request to Elda
     (FOR ESTIMATE ONLY); written in chat without the bridge, 2026-10-03 night.
+  - `handoff-2026-10-04-7612-estimate-sent.md` - 7612: the estimate request sent
+    to Elda on 2026-10-04 (drawings v1.6, order CSV v0.4), which questions went
+    in it, and what is next.
 
 ---
 

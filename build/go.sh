@@ -62,11 +62,14 @@ echo "===== 2. stage, BY NAME ====="
 # 2 files predicted; the list must print 2. (Never run - folded into the next.)
 # 2026-10-03, night: 7612 estimate request, stages 1-3 (docs only) plus the
 # card entries of the evening. 6 files predicted; the list must print 6.
-git add claude/project-7612-hillside-dr-2026-09-24.md \
-        claude/README.md \
-        claude/LayOut_Sheet_Template_Spec_v1.md \
-        claude/handoff-2026-10-03-layout-template-7612.md \
+# 2026-10-05: the 7612 drawing set writer v1.6 and the estimate request, plus the
+# two lines the suite asked for (Q52 in the status table, the handoff in
+# claude/README.md). 6 files predicted; the list must print 6.
+git add tools/layout/ucon_sheet_template.rb \
+        tools/layout/ucon_drawing_set.rb \
         docs/Elda_Open_Questions_v0.1.md \
+        claude/handoff-2026-10-04-7612-estimate-sent.md \
+        claude/README.md \
         build/go.sh
 
 echo

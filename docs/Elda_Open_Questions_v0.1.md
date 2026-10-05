@@ -52,13 +52,13 @@ existed.
 | Q33 | the sideboard C1030A prints plinth ZOCCT0D (module D's), not ZOCCT0A | **open** 2026-09-27 · one order line; looks like a misprint |
 | Q34 | cooktop + downdraft on a straight Maxima H.84 (81 on the L grip) between curved modules, and the Tangram top with that cutout | **open** 2026-09-27 · the 7612 island's one appliance position; 2026-09-28: + the BM0967 drawer base under the downdraft |
 | Q35 | BL0400 / B80400 print W 30, the same as BL0300 / B80300 - a misprint for 40? | **open** 2026-09-28 · Andriy reads it as a misprint; the registry holds 300 as printed |
-| Q36 | Hide & Seek as a PASSAGE door into the 7612 pantry: a door that opens INWARD, the hallway module without its back, push-open / spring-shut, a top element on it | **open** 2026-09-28 · **the main question is the inward-opening door**; decides whether the pantry entrance is Cesar at all |
+| Q36 | Hide & Seek as a PASSAGE door into the 7612 pantry: a door that opens INWARD, the hallway module without its back, push-open / spring-shut, a top element on it | **open** 2026-09-28 · **the main question is the inward-opening door**; decides whether the pantry entrance is Cesar at all · **2026-10-04 (Andriy): it should be a PIVOT door - Cesar to check and propose options; D1 on the drawings** |
 | Q37 | USA fridge panels H.222, printed p.423: the 24" codes print CH4640 / CH4651 while 18/30/36 print CH94xx / CH97xx / CH99xx - misprint for CH9600 / CH9601? | **open** 2026-09-28 · 7612 fridge = two 24" housings, so both doors are CH4640 |
 | Q38 | Filler beside a tall unit top element H.72 (SE): p.434 prints no H.72 front-only strip - PE0151 (wall filler, one-piece bottom) or BI0150 (base filler box)? | **open** 2026-09-28 · 7612 top elements over the H.222 columns |
 | Q39 | ONE top element **1220 × 720 × 620** over two 24" USA fridge panels (7612) - drawn as SE1200 +20, as Avenida's PE1299 was one body | open 2026-09-30 · asks for the made-to-drawing code |
 | Q40 | 7612 tall row: fronts lengthened to **10 mm above the floor** over the 60 plinth (CK7744 bottom drawer, 2 x CH4640, the box filler) - can Cesar supply the increased height, how is it written? Also: d.75 end panel of p.441 beside a fridge door hinged on the far side, H.234 reduced to 2280, on the floor on H.5 feet | open 2026-10-02 · drawn as variant DOOR TO FLOOR (core 1.9.18) |
 | Q41 | 7612: two **box fillers 108 wide, carcass d.620** left of the passage door - 108 x 620 x 2220 (front 2270, to 10 mm above the floor) and 108 x 620 x 720 above it - SPECIAL ORDER, p.434 prints box fillers only to H.138 and d.35 | open 2026-10-02 · **supersedes Q38** (Andriy chose a box at full depth instead of a strip) · drawn as UCON-BESP-002 / 003, NO ARTICLE |
-| Q42 | 7612 worktops in **Dekton 2 cm** (group D, colour to be agreed): Tangram island top 3045 x 1290 as ONE sheet (band 130), its curves, the hob and downdraft cutouts; sink-wall top in two pieces 1572 + 2772 joined at the BL0665 / BL1269 seam, undermount sink cutout | open 2026-10-02 · please price and confirm; we do not compute it |
+| Q42 | 7612 worktops in **Dekton 2 cm** (group D, colour to be agreed): Tangram island top 3045 x 1290 as ONE sheet (band 130), its curves, the hob and downdraft cutouts; sink-wall top in two pieces 1572 + 2772 joined at the BL0665 / BL1269 seam, undermount sink cutout | open 2026-10-02 · please price and confirm; we do not compute it · **ADDED 2026-10-04: backsplash Dekton 1.2 cm on the sink wall, two pieces 1773 x 545 either side of the window** |
 | Q43 | 7612 sink-wall uppers, handle-free: six PF0631 at **W.55 x H.93,8 carcass** (width + height reduction) with the **standard 960 door** kept, i.e. the door runs 22 below the shortened carcass over a lit shelf MNS022000 1722 x 325 (Sky-B); fillers PF0151 the same; window-end panels PF0030 standard | open 2026-10-02 · rewritten same day: carcass reduced instead of a 982 door · variant FRONT BELOW (core 1.9.21) |
 | Q44 | 7612 pantry: the back of the tall row clad in **HPL DZBZ00 18 Bianco Kos**, split at 2280 - the joint between the tall units and the top elements (2026-10-03; pieces 108 / 762 / 1220 x 2280 and 858 / 762 / 1220 x 720), plus the fridge niche side (623 x 2280) and a melamine filler above the fridges (1220 x 623 bottom + 1220 x 116 face) - fixing kit for TALL units? | open 2026-10-02 · if none, UCON fixes on site · **REVISED 2026-10-03 (Andriy): cladding in melamine LM51 Grigio Fumo, DZAD00 18 (p.215) instead of HPL DZBZ00** |
 | Q45 | 7612 pantry broom closet: **CH1612** tall broom cupboard H.222 d.62 + accessory set **995635**, top element SE0600 over it, **both WITHOUT DOORS (special order)**; it stands in the void behind the corner end panel C00130 and opens into the pantry - power socket inside for a cordless vacuum | open 2026-10-02 · confirm the set fits an open CH1612, the socket cutout, and how a doorless unit is ordered (addendum) · **WITHDRAWN 2026-10-03: CH1612 / SE0600 removed from the model; not asked** |
@@ -67,6 +67,7 @@ existed.
 | Q49 | 7612 open units, fixed shelves: can other shelf heights be ordered (special order)? | open 2026-10-03 |
 | Q50 | 7612 open tall and wall units: are wall fixings included? | open 2026-10-03 |
 | Q51 | shelf MNS022038 d.38 on concealed supports 990307 against their "recommended max. 35 cm" | **not asked** 2026-10-03 · only for pantry variant C, which was not built |
+| Q52 | 7612: inside grip edging for jumbo drawers (Maxima 2.2 order form, Project Guidelines p.65-66) with the L-shaped grip recess in black aluminium - what does Cesar recommend? | **asked** 2026-10-04 in the estimate request · TBD on sheet A-705 |
 
 Three more were **answered without ever being numbered** — see that section below.
 
@@ -1529,6 +1530,11 @@ Linear Elements printed p.48 lists Dekton 1,2 / 2 for Tangram tops; p.107 prices
    sink chosen). One visible end on the right? (the left end meets the corner end panel).
 3. Anything in our assumptions that does not work for Dekton - tell us and we redraw.
 
+**ADDED 2026-10-04 (Andriy): backsplash on the sink wall in Dekton 1.2 cm, same group D and colour as the tops.**
+Two pieces 1773 x 545 (top of the worktop 920 to the underside of the lit shelf board 1465; corrected 2026-10-04 from 479, the shelf light symbol had been read as the shelf), either side of the
+window trim (x 1930-3703 and 4501-6274), 12 mm against the wall. Please price with the tops. The pantry
+backsplash and countertop are by others.
+
 ## Q43 — Handle-free uppers over a lit shelf (7612)
 
 **Status:** open · added 2026-10-02 · rewritten the same day (Andriy: keep doors and side panels standard, shorten
@@ -1615,3 +1621,19 @@ Are the fixings to the wall for C00190 (tall, d.37,5) and PG0190 (wall) included
 Linear Elements printed p.227-228 sells shelf MNS022038 at d.38 while supports 990307 say "recommended max. 35 cm".
 Recorded from the recon of 2026-10-03; it applies only to pantry variant C (back panel + shelves), which was not
 built, so it is not in the 7612 estimate request.
+
+## 2026-10-04 — 7612 estimate request SENT to Elda
+
+Andriy sent "7612 Hillside Dr — Request for Estimate (Cesar kitchen and pantry)" on 2026-10-04 to
+elda@dzineelements.com, cc learco.bolletta@cesar.it, g@dzineelements.com. Attachments:
+7612_Hillside_Dr_Drawings_v1.6.pdf (19 sheets) and 7612_Hillside_Dr_Kitchen_Preliminary_Model_v0_4_order.csv.
+**Questions asked in it:** Q34.3, Q35, Q36 (as a PIVOT door, D1 - Cesar to propose options), Q37, Q39, Q40, Q41,
+Q42 (+ backsplash 1773 x 545), Q43, Q44 (melamine LM51 DZAD00), Q47, Q48, Q49, Q50, and one new one, listed below as
+Q52. Not asked: Q38, Q45 (withdrawn), Q51.
+
+## Q52 — Inside grip edging for jumbo drawers (7612)
+
+**Status:** asked 2026-10-04 in the estimate request · from the Maxima 2.2 order form (Project Guidelines p.65-66)
+
+The order form has a field "inside grip edging for jumbo drawers". With the L-shaped grip recess in black aluminium,
+what does Cesar recommend? Left as TBD on sheet A-705.
