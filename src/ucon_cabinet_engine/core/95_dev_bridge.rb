@@ -26,7 +26,7 @@
 # piece of typing this whole tool exists to remove. So the pair belongs
 # together: the button that breaks the bridge, and the button that puts it back.
 #
-# WHAT THIS DOES NOT DO, ON PURPOSE: it never arms. `ProbeBridge.arm!` makes the
+# WHAT THIS DID NOT DO, ON PURPOSE, UNTIL 2026-10-07 (see below): it never armed. `ProbeBridge.arm!` makes the
 # next run COMMIT instead of roll back, and that is a decision somebody types out
 # in full, every time, with the model in front of them. A one-click arm is how a
 # probe applies to a kitchen nobody meant to change.
@@ -43,6 +43,26 @@
 # accounting would have said "rolled back" over a kitchen that had changed.
 #
 # So the answer now says so out loud. THE ORDER IS: reload the bridge, THEN arm.
+#
+# A CONFIRMED ARM, NOT A ONE-CLICK ARM — 2026-10-07, Andriy's decision.
+# Typing `UCON::ProbeBridge.arm!` before every applying run had become the one
+# piece of typing left, and it carried no information: the console line does not
+# say WHICH file it arms. So the arm now goes through one named file and one
+# question. The rules, each enforced by tools/test_contract.rb:
+#
+#   * Only a file named `NNN_..._ARMED.rb.hold` in tools/probe_inbox/ can be
+#     applied. A .hold is never run by the bridge; it waits for a person.
+#   * The palette shows WHICH file, WHICH model it names (UCON-MODEL) and the
+#     file's own opening comment, and asks Yes/No. Nothing happens on No.
+#   * Refused if the bridge is not ticking, if more than one .hold waits, or if
+#     any plain .rb probe is already queued — an arm must never fall on a probe
+#     nobody was shown.
+#   * arm! is called in exactly one place, arm_and_release!, and only after the
+#     checks; the file is renamed .hold -> .rb in the same breath, so the very
+#     next run is the file that was shown.
+#   * The question is asked BEFORE anything is armed or released, so the modal
+#     box cannot hold up a run (see `announce` for why a modal and a timer do
+#     not mix).
 
 module UCON
   module CabinetEngine
@@ -91,6 +111,50 @@ module UCON
         end
 
         load path
+        true
+      end
+
+      # ---- the confirmed arm (2026-10-07) -------------------------------------
+      def inbox
+        File.join(File.dirname(path), 'probe_inbox')
+      end
+
+      # Plain .rb probes already queued - the bridge would run them next.
+      def queued_probes
+        Dir.glob(File.join(inbox, '*.rb')).sort
+      end
+
+      def waiting_holds
+        Dir.glob(File.join(inbox, '*_ARMED.rb.hold')).sort
+      end
+
+      # The ONE file that may be applied now, or an error that says why not.
+      def waiting_probe
+        raise ArgumentError, 'The probe bridge is not running. Press "Reload probe bridge (dev)" first.' unless running?
+        q = queued_probes
+        raise ArgumentError, "A probe is already queued and would take the arm:\n#{q.map { |f| File.basename(f) }.join("\n")}" unless q.empty?
+        h = waiting_holds
+        raise ArgumentError, 'Nothing is waiting: there is no *_ARMED.rb.hold in tools/probe_inbox/.' if h.empty?
+        raise ArgumentError, "More than one probe is waiting - apply them one at a time:\n#{h.map { |f| File.basename(f) }.join("\n")}" if h.size > 1
+        h.first
+      end
+
+      # What the person is shown before saying Yes: name, model, opening comment.
+      def confirm_text(hold)
+        head = File.open(hold, 'r') { |f| f.read(4096) }.to_s.lines
+        model = head.join[/^[[:blank:]]*#[[:blank:]]*UCON-MODEL[[:blank:]]*:[[:blank:]]*(\S.*?)[[:blank:]]*$/, 1] || '(default model)'
+        about = head.select { |l| l =~ /^\s*#/ && l !~ /UCON-MODEL/ }.first(8).map { |l| l.sub(/^\s*#\s?/, '').rstrip }
+        "APPLY THIS PROBE TO THE MODEL?\n\n#{File.basename(hold)}\nmodel: #{model}\n\n#{about.join("\n")}\n\nYes = arm and run it once (it COMMITS). No = nothing happens."
+      end
+
+      # The only place arm! is called. Checks again (the inbox may have changed
+      # while the question was open), arms, and releases the shown file.
+      def arm_and_release!(hold)
+        raise ArgumentError, 'not a waiting probe' unless File.basename(hold.to_s) =~ /_ARMED\.rb\.hold\z/ && File.file?(hold)
+        raise ArgumentError, 'the inbox changed while the question was open' unless waiting_probe == hold
+        ::UCON::ProbeBridge.arm!
+        File.rename(hold, hold.sub(/\.hold\z/, ''))
+        ::Sketchup.status_text = "Probe bridge ARMED for #{File.basename(hold, '.hold')} - it runs within a few seconds." if defined?(::Sketchup)
         true
       end
 

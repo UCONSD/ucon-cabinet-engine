@@ -172,6 +172,20 @@ module UCON
             UI.messagebox("The probe bridge was not reloaded.\n\n#{e.message}")
           end
         end
+        # THE CONFIRMED ARM (2026-10-07). Shows the one waiting *_ARMED.rb.hold,
+        # asks Yes/No, and only on Yes arms and releases THAT file. The question
+        # comes before anything changes, so the modal cannot hold up a run.
+        # See core/95_dev_bridge.rb.
+        @dialog.add_action_callback('apply_probe') do |_|
+          begin
+            hold = DevBridge.waiting_probe
+            if UI.messagebox(DevBridge.confirm_text(hold), MB_YESNO) == IDYES
+              DevBridge.arm_and_release!(hold)
+            end
+          rescue StandardError => e
+            UI.messagebox("Nothing was applied.\n\n#{e.message}")
+          end
+        end
         @dialog.add_action_callback('reload') do |_|
           begin
             files = CabinetEngine.load_core
@@ -1544,7 +1558,7 @@ module UCON
             <button onclick="sketchup.retag()">Retag model for LayOut…</button>
             <button onclick="sketchup.orphans()">Bodies no rule owns…</button>
             <button onclick="sketchup.reload()">Reload core</button>
-            #{DevBridge.available? ? '<button onclick="sketchup.reload_bridge()">Reload probe bridge (dev)</button>' : ''}
+            #{DevBridge.available? ? '<button onclick="sketchup.reload_bridge()">Reload probe bridge (dev)</button><button onclick="sketchup.apply_probe()">Apply waiting probe… (dev)</button>' : ''}
             <div class="grp">Opening symbols</div>
             <div class="row">
               <button class="seg" onclick="sketchup.symbols('plan')">Plan</button>

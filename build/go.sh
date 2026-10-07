@@ -68,24 +68,12 @@ echo "===== 2. stage, BY NAME ====="
 # The 2026-10-05 drawing-set commit printed 6 and is pushed (16d7497).
 # 2026-10-05, core 1.9.27: catalog recon group 1, 230 codes (1332 -> 1562).
 # 19 files predicted; the list must print 19.
-git add registry/cesar/_manifest.json \
-        registry/cesar/tall_h198_base78.json \
-        registry/cesar/tall_h210_base78.json \
-        registry/cesar/tall_h222_base78.json \
-        registry/cesar/tall_h234_base78.json \
-        registry/cesar/base_h48.json \
-        registry/cesar/tall_top_h48.json \
-        registry/cesar/glass_wall_h60.json \
-        registry/cesar/glass_wall_h120.json \
-        registry/cesar/hide_seek_h198.json \
-        registry/cesar/hide_seek_h210.json \
-        registry/cesar/hide_seek_h234.json \
-        registry/cesar/wall_h36.json \
-        src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/90_palette.rb \
+# 2026-10-07: palette button "Apply waiting probe... (dev)" - a confirmed,
+# one-file arm instead of typing UCON::ProbeBridge.arm! in the Ruby Console.
+# 4 files predicted; the list must print 4.
+git add src/ucon_cabinet_engine/core/90_palette.rb \
+        src/ucon_cabinet_engine/core/95_dev_bridge.rb \
         tools/test_contract.rb \
-        claude/catalog-group1-2026-10-04.md \
-        claude/README.md \
         build/go.sh
 
 echo

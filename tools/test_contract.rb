@@ -8558,7 +8558,7 @@ check('the dev bridge door answers without loading anything') do
   raise D.status_line unless D.status_line.include?('OFF')
 end
 
-check('the bridge button never arms, and is drawn only in a dev checkout') do
+check('the bridge buttons arm only through one confirmed file, and are drawn only in a dev checkout') do
   # arm! makes the next probe COMMIT instead of roll back. That is typed out in
   # full, every time, with the model in front of you - a one-click arm is how a
   # probe applies to a kitchen nobody meant to change.
@@ -8580,9 +8580,19 @@ check('the bridge button never arms, and is drawn only in a dev checkout') do
   raise 'the palette button arms in one click' if
     cb2.gsub(/^\s*#.*$/, '').include?('arm!')
 
-  # In DevBridge, every occurrence must sit inside a quoted string - i.e. it is
-  # something the tool SAYS, never something it does.
-  dev.gsub(/^\s*#.*$/, '').lines.each do |ln|
+  # 2026-10-07, Andriy's decision: ONE place may arm - arm_and_release!, which
+  # re-checks the inbox and releases exactly the file the person was shown.
+  # Everywhere else in DevBridge the method may only be NAMED, never called.
+  body = dev[/      def arm_and_release!\(hold\).*?\n      end\n/m] or
+    raise 'arm_and_release! could not be found'
+  raise 'arm_and_release! must arm the bridge exactly once' unless
+    body.scan('::UCON::ProbeBridge.arm!').size == 1
+  raise 'arm_and_release! must re-check the inbox before arming' unless
+    body.index('waiting_probe') && body.index('waiting_probe') < body.index('ProbeBridge.arm!')
+  raise 'arm_and_release! must accept only *_ARMED.rb.hold' unless body.include?('_ARMED')
+  # In the rest of DevBridge, every occurrence must sit inside a quoted string -
+  # i.e. it is something the tool SAYS, never something it does.
+  dev.sub(body, '').gsub(/^\s*#.*$/, '').lines.each do |ln|
     next unless ln.include?('arm!')
     raise "DevBridge calls arm! rather than naming it: #{ln.strip}" unless
       ln =~ /['"][^'"]*arm!/
@@ -8590,6 +8600,27 @@ check('the bridge button never arms, and is drawn only in a dev checkout') do
 
   raise 'the palette must have a reload_bridge callback' unless
     pal.include?("add_action_callback('reload_bridge')")
+  # The apply button: the question first, the arm only on Yes, and only via
+  # arm_and_release! - never a direct ProbeBridge.arm!.
+  ap = pal[/add_action_callback\('apply_probe'\).*?\n        end\n/m] or
+    raise 'the apply_probe callback could not be found'
+  code = ap.gsub(/^\s*#.*$/, '')
+  raise 'the apply button arms directly' if code.include?('ProbeBridge.arm!')
+  q = code.index('UI.messagebox(DevBridge.confirm_text') or raise 'the apply button must ask first'
+  raise 'the question must be Yes/No' unless code.include?('MB_YESNO') && code.include?('IDYES')
+  a = code.index('arm_and_release!') or raise 'the apply button must go through arm_and_release!'
+  raise 'the apply button arms before it asks' unless q < a
+  raise 'the apply button must be drawn only in a dev checkout' unless
+    pal =~ /DevBridge\.available\? \?[^\n]*apply_probe/
+  # Headless there is no bridge: both doors must refuse, loudly.
+  begin
+    D.arm_and_release!('nothing.rb'); raise 'arm_and_release! accepted a non-hold file'
+  rescue ArgumentError
+  end
+  begin
+    D.waiting_probe; raise 'waiting_probe answered with no bridge running'
+  rescue ArgumentError
+  end
   raise 'the palette button must be conditional on there being a bridge' unless
     pal.include?('DevBridge.available? ?')
   # AND THE MENU MUST NOT HAVE GROWN ONE. The item was tried and taken back
