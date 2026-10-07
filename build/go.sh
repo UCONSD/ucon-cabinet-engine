@@ -68,12 +68,10 @@ echo "===== 2. stage, BY NAME ====="
 # The 2026-10-05 drawing-set commit printed 6 and is pushed (16d7497).
 # 2026-10-05, core 1.9.27: catalog recon group 1, 230 codes (1332 -> 1562).
 # 19 files predicted; the list must print 19.
-# 2026-10-07: palette button "Apply waiting probe... (dev)" - a confirmed,
-# one-file arm instead of typing UCON::ProbeBridge.arm! in the Ruby Console.
-# 4 files predicted; the list must print 4.
-git add src/ucon_cabinet_engine/core/90_palette.rb \
-        src/ucon_cabinet_engine/core/95_dev_bridge.rb \
-        tools/test_contract.rb \
+# 2026-10-07: palette button "Apply waiting probe... (dev)" - 4 printed 4 (38ecf69).
+# 2026-10-07, housekeeping: "Claude outputs/" ignored. 2 files predicted;
+# the list must print 2.
+git add .gitignore \
         build/go.sh
 
 echo

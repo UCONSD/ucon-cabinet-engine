@@ -53,3 +53,9 @@ build/*
 tools/probe_inbox/
 tools/probe_outbox.txt
 tools/probe_log.txt
+
+# --- Claude outputs/: the desktop app's delivery folder, 2026-10-07 ---
+# Summaries and PDFs Claude hands over in the chat land here. They are copies
+# of deliverables (the durable ones live in the claude.ai Project and in claude/),
+# not source - and as an untracked folder they made every status look dirty.
+Claude outputs/
