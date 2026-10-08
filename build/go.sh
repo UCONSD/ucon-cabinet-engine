@@ -71,7 +71,10 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-10-07: palette button "Apply waiting probe... (dev)" - 4 printed 4 (38ecf69).
 # 2026-10-07, housekeeping: "Claude outputs/" ignored. 2 files predicted;
 # the list must print 2.
-git add .gitignore \
+# 2026-10-07, housekeeping commit printed 2 and is pushed (f6e1600).
+# 2026-10-07, AP Capital: the LayOut set writer for the REC-LAU wall (16 sheets,
+# run by read-only probe 598). 2 files predicted; the list must print 2.
+git add tools/layout/ap_drawing_set.rb \
         build/go.sh
 
 echo
