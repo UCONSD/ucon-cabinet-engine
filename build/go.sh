@@ -19,6 +19,7 @@ echo "===== 1. the suites, under the Ruby macOS ships ====="
 printf 'test_contract        '; /usr/bin/ruby tools/test_contract.rb      | grep 'checks,' | tail -1
 printf 'test_appliances      '; /usr/bin/ruby tools/test_appliances.rb    | grep 'checks,' | tail -1
 printf 'test_appliance_seam  '; /usr/bin/ruby tools/test_appliance_seam.rb | grep 'checks,' | tail -1
+printf 'test_wallpanels      '; /usr/bin/ruby tools/test_wallpanels.rb    | grep 'checks,' | tail -1
 
 # AND THE SUMMARY LINES ABOVE ARE NOT THE CHECK. A tail cannot fail a build:
 # the pipe swallows the exit status, so the suites are RUN AGAIN for their
@@ -26,6 +27,7 @@ printf 'test_appliance_seam  '; /usr/bin/ruby tools/test_appliance_seam.rb | gre
 /usr/bin/ruby tools/test_contract.rb      > /dev/null
 /usr/bin/ruby tools/test_appliances.rb    > /dev/null
 /usr/bin/ruby tools/test_appliance_seam.rb > /dev/null
+/usr/bin/ruby tools/test_wallpanels.rb    > /dev/null
 
 echo
 echo "===== 2. stage, BY NAME ====="
@@ -74,7 +76,22 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-10-07, housekeeping commit printed 2 and is pushed (f6e1600).
 # 2026-10-07, AP Capital: the LayOut set writer for the REC-LAU wall (16 sheets,
 # run by read-only probe 598). 2 files predicted; the list must print 2.
-git add tools/layout/ap_drawing_set.rb \
+# 2026-10-07 AP Capital commit printed 2 and is pushed (5a4352b).
+# 2026-10-08, AP Capital: the REC-LAU wall tools made general - generators
+# (tools/wallpanels/), one JSON per wall, the general LayOut writer, the suite
+# test_wallpanels (joined the suites above), the note and its README line.
+# 12 files predicted; the list must print 12.
+git add tools/wallpanels/wall_panels.rb \
+        tools/wallpanels/wall_model.rb \
+        tools/wallpanels/walls/AP_BF_Recreation_Laundry.json \
+        tools/wallpanels/fixtures/rec_lau_model_568.json \
+        tools/wallpanels/fixtures/rec_lau_probe_566_570.json \
+        tools/wallpanels/fixtures/rec_lau_drilling_panels.csv \
+        tools/wallpanels/fixtures/rec_lau_drilling_frames_CNC_S.csv \
+        tools/test_wallpanels.rb \
+        tools/layout/wall_drawing_set.rb \
+        claude/spec-2026-10-08-wallpanels-generators.md \
+        claude/README.md \
         build/go.sh
 
 echo

@@ -1,0 +1,133 @@
+{
+  "_about": "Wall-panel wall spec. Geometry rules and numbers for ONE wall; everything the generators and the LayOut set need that is not a rule. mm, wall-local: x along the wall from its left end as seen from the room, z up from finished floor, y = 0 at the wall face, negative toward the room.",
+  "id": "AP_BF_Recreation_Laundry",
+  "model": "AP_BF_Recreation_Laundry",
+  "prefix": "REC-LAU",
+  "files": {
+    "set": "AP_REC-LAU_Drawings_v{rev}.layout",
+    "panels_csv": "AP_REC-LAU_drilling_panels.csv",
+    "frames_csv": "AP_REC-LAU_drilling_frames_CNC_S.csv"
+  },
+
+  "wall": { "length": 7616, "height": 3112, "thickness": 170 },
+
+  "build_up": {
+    "frame_t": 19.05, "clip_gap": 3.3, "panel_t": 22, "face": 44.3,
+    "_face": "frame 19 + gap 3.3 + panel 22 (spec v5). The model's frames are 3/4 in = 19.05; the face is kept at 44.3 as built (probe 596)."
+  },
+
+  "panels": {
+    "joint": 10, "margin_floor": 10, "margin_ceiling": 10, "margin_ends": 10,
+    "max_width": 1220,
+    "_max_width": "ASSUMED, not a recorded decision: one MDF sheet width. REC-LAU's columns come out the same for any value from 1061 to 1266. Override per segment with columns[].",
+    "width_step": 0.1,
+    "row_seam": { "from_door": "D01", "_": "horizontal joint along the top of the door leaf cladding (handoff 2026-10-07: the door is one of the grid's panels)" },
+    "columns": [3, "D01", 2, { "over": "WINE", "n": 2 }, 1],
+    "numbering": [[2, 1, "L"], [3, 1, "U"], [4, 2, "U"], [5, 2, "L"], [6, 3, "L"], [7, 3, "U"], [8, 4, "U"], [9, 5, "U"], [10, 6, "U"],
+                  [11, 7, "U"], [12, 8, "U"], [13, 5, "L"], [14, 6, "L"], [15, 9, "U"], [16, 9, "L"]],
+    "_numbering": "[number, column, row] as on TM Italia order 260318 (Ares set). Leave numbering out for a new wall and the generator numbers column by column, lower row first, from 1.",
+    "material": "MDF 22, finish per TM"
+  },
+
+  "openings": [
+    { "id": "D01", "kind": "door", "x0": 2509, "x1": 3504, "h": 2505,
+      "leaf": { "w": 884, "h": 2404, "floor_gap": 10, "t": 12 },
+      "rebate": { "inset": 2.5, "depth": 10, "_": "panels passing in front of the door frame lose their rear 10 mm inside x0+2.5 .. x1-2.5, z < h (probe 538)" },
+      "frame": { "gap_head": 9, "gap_side": 4.3, "gap_floor": 0, "jamb": 201.8, "jamb_y0": -32.3, "jamb_y1": 169.5 },
+      "handing": "Right-handed, opens into Laundry, concealed hinges, soft-close" },
+    { "id": "WINE", "kind": "opening", "x0": 4698, "x1": 6600, "h": 2505,
+      "panel_overlap": 55,
+      "_panel_overlap": "panel edges P14 / P16 run 55 mm into the opening (TM layout; Q9 - TBD until the glass door is measured)",
+      "label": "WINE ROOM (GLASS DOOR INSTALLED)" }
+  ],
+
+  "subframe": {
+    "strip": 98, "strip_wide": 152,
+    "_strip": "4 in strip = 98 (12 per sheet width, 1/8 in cutter); 6 in = 152 (proposal 2026-10-07)",
+    "seam_overrun": 20, "floor_gap": 25, "tier_joint": 2380, "max_length": 2438,
+    "sheet": { "w": 1219.2, "l": 2438.4, "kerf": 3.2 },
+    "prefix_old": "F"
+  },
+
+  "clips": {
+    "make": "Fastmount VL-03H", "mount": "recess",
+    "edge": 75, "edge_min": 40, "row_max": 600, "wide_panel": 900, "hole_d": 25,
+    "_": "543: centre 75 from panel edges, rows <= 600 apart, 3 columns on a panel wider than 900; 564: a column over a stile moves onto the stile centre, but never closer than 40 to the panel edge",
+    "row_over_opening": 2555.8,
+    "_row_over_opening": "LEGACY, kept so REC-LAU regenerates its issued drilling: the bottom row over an opening sits at 2555.8, the centre of the OLD frames' rail (562). The rule for a new wall is the centre of the bottom rail over the opening (2554 here) - leave this key out.",
+    "panel_depth": 7, "frame_depth": 8
+  },
+
+  "sheets": {
+    "rev": "1.1",
+    "tags": { "ProjectName": "AP Capital", "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+              "ProjectNumber": "TM 260318", "ClientName": "AP Capital", "Designer": "AD", "Drafter": "AD",
+              "CheckedBy": " ", "Issue": "For factory review", "Revision": "1.1", "IssueDate": "10.08.26",
+              "Status": "FOR FACTORY REVIEW",
+              "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+              "Rev1": "0.1", "Rev1Desc": "Pilot A-301", "Rev1Date": "10.07.26",
+              "Rev2": "0.2", "Rev2Desc": "Tables G-002, A-701, A-702", "Rev2Date": "10.08.26",
+              "Rev3": "0.3", "Rev3Desc": "Views A-101..A-601", "Rev3Date": "10.08.26",
+              "Rev4": "1.1", "Rev4Desc": "Full set, clip gap 3.3", "Rev4Date": "10.08.26" },
+    "logo": "CE_logo_cube_transparent.png",
+    "cover_title": "RECREATION -> LAUNDRY WALL · WALL PANELS, BACKING FRAMES, CLIPS, CONCEALED DOOR D01",
+    "side_from": "RECREATION",
+    "door_side": "Laundry",
+    "drill": { "D-01": [["P02", "P05", "P06", "P13"]], "D-02": [["P14", "P16"]],
+               "D-03": [["P03", "P04", "P07", "P08"], ["P09", "P10", "P11"]], "D-04": [["P12", "P15"]] },
+    "_drill": "panels per D-sheet, row by row. Leave out for a new wall: the packer fills 1:15 sheets left to right.",
+    "tbd_panels": ["P11", "P12", "P14", "P16"],
+    "tbd_note": "Q9 - edge / bottom TBD (wine-room door)",
+    "questions": [
+      ["Q1", "A-501 A-502", "TM", "Door D01 must be flush with the wall panels. Our build-up: backing frame 19 + clip gap 3.3 (Fastmount VL-03H, recess mount) + panel 22 = finished face 44.3 mm from wall. Please confirm a jamb depth of 201.8 mm on a 170 mm wall, and send the revised hinge/stop detail."],
+      ["Q2", "A-501", "TM", "Opening per UCON survey is 995 x 2505 mm (your drawing: 989 x 2451). Please build D01 to our opening with your technical gaps: head 9, sides 4.3, floor 0 -> frame 986.3 x 2496, leaf cladding 884 x 2404, 10 mm to finished floor. Please confirm."],
+      ["Q3", "A-501", "TM", "Right-handed, opens into Laundry, concealed hinges, soft-close. Please send hinge make, model and specification."],
+      ["Q4", "A-502", "TM", "Your section shows the leaf body and hinge block down to 0 mm at the floor; only the cladding has a 5 mm gap. What is the actual clearance of the leaf body? Is there a threshold or seal?"],
+      ["Q5", "A-502", "TM", "Door cladding thickness: the current profile shows 12 mm, an older table showed 25 mm. Please confirm 12 mm."],
+      ["Q6", "A-202 D-01..D-04", "TM", "Panels are hung on Fastmount VL-03H clips, recess mount, gap 3.3. Please make the clip recesses in the panel backs at the factory per sheets D-01..D-04 (D25 x 7 deep). Please confirm which clip half goes into the panel (we assume male) and that you can drill per the schedule."],
+      ["Q8", "A-101", "Info", "Wall height per UCON survey is 3112 mm (your drawing: 3052). Panel rows are laid out to 3112."],
+      ["Q9", "A-301", "Site", "Wine room glass door is installed; final measurement pending. Panel edges P14/P16 at the opening and bottom of P11/P12 are TBD until then."],
+      ["Q10", "D-01..D-04", "TM", "All drilling coordinates are given from the panel BACK: X from the left edge as seen from the back, Z from the bottom edge. A control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."]
+    ],
+    "red_questions": ["Q9"],
+    "bubbles": {
+      "A-101": [["Q8", 450, 2850], ["Q9", 5649, 900]],
+      "A-301": [["Q9", 4873, 1250], ["Q9", 6425, 1250], ["Q9", 5200, 2274], ["Q9", 6100, 2274], ["Q1", 3256.5, 1600]],
+      "A-202": [["Q6", 1290, 3200]]
+    },
+    "notes": {
+      "A-101": ["Wall, openings and heights per UCON site survey - they govern over factory drawings.",
+                "Wall 170 mm. Openings: D01 995 x 2505 from 2509; wine room 1902 x 2505 from 4698.",
+                "Q8: wall height 3112 (factory drawing 3052). Q9: wine-room glass door to be measured."],
+      "A-101_red": [2],
+      "A-301": ["All joints 10 mm. 10 mm to floor, ceiling and wall corners. No baseboard.",
+                "Panel MDF 22 on backing frame 19 + clip gap 3.3: face 44.3 mm from wall. D01 flush with panels.",
+                "Numbers per TM Italia order 260318. Panel widths above, wall and openings below (UCON survey).",
+                "P06, P07, P08, P09, P13 rebated at the D01 frame, 12 mm face remains - see A-501.",
+                "Q9: P14 / P16 edges and bottom of P11 / P12 TBD until the wine-room door is measured - see G-002."],
+      "A-301_red": [4],
+      "A-501": ["D01: right-handed, opens into Laundry, concealed hinges, soft-close, handles (Laundry side) by client. Profile per TM Italia DWG 20260903 rev.3.",
+                "Built to the UCON opening 995 x 2505 with TM technical gaps head 9, sides 4.3, floor 0: frame 986.3 x 2496 (Q2).",
+                "Leaf cladding 884 x 2404 x 12, 10 mm to finished floor; joint 10 to P08 above, 10 to P07 / P09 (rebated) beside.",
+                "Cladding face flush with panels at 44.3 mm from wall (frame 19 + clip gap 3.3 + panel 22) -> jamb depth {jamb} on wall 170 (Q1).",
+                "Q3: hinge make / model to be confirmed by TM."],
+      "A-501_red": [4],
+      "G-001": ["All dimensions in millimetres. Do not scale the drawings.",
+                "Dimensions per UCON site survey govern. From TM Italia drawings only the door D01 profile is used.",
+                "Build-up from the wall: backing frame S (plywood 19) + clip gap 3.3 + panel P (MDF 22) = finished face 44.3. Door D01 flush with the panels (jamb 201.8, Q1).",
+                "All joints 10 mm. 10 mm to floor, ceiling and wall corners. No baseboard.",
+                "Numbering: P02..P16 panels (TM order 260318), S01..S15 backing frames, Hnn clip recess per panel, D01 door.",
+                "Clips: Fastmount VL-03H, recess mount, 103 on this wall. Panel recesses D25 x 7 made by the factory per D-01..D-04 (back view); frame holes D25 x 8 by UCON CNC.",
+                "Panels: MDF 22, finish per TM. P06, P07, P08, P09, P13 rebated at the D01 frame (12 mm face remains).",
+                "Red marks are open questions or TBD items (Q9 wine-room door). Not for production until G-002 is answered and the set is reissued."],
+      "G-001_red": [7]
+    },
+    "scenes": {
+      "cover": "04 3D", "wall_elev": "01 Wall — Elevation", "wall_plan": "01 Wall — Plan",
+      "frames_elev": "02 Wall + Subframe — Elevation", "frames_plan": "02 Wall + Subframe — Plan",
+      "clips": "02 Clips — X-ray", "panels_elev": "03 Doors + Panels — Elevation", "panels_plan": "03 Doors + Panels — Plan",
+      "door_plan": "05 D01 — Plan Section", "door_section": "06 D01 — Section", "iso": "04 3D"
+    },
+    "plan_cut": 1200
+  }
+}

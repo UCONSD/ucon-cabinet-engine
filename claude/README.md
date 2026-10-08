@@ -385,6 +385,10 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
     with confidence (tall for base H.78, base H.48 p.29, top H.48, glass wall
     H.60/H.120, Hide & Seek 198/210/234, wall H.36 compounds), and what was read
     and deliberately not held (core 1.9.27).
+- AP Capital, 29 Waves End - wall panels, backing frames, clips, concealed doors (TM Italia):
+  - `spec-2026-10-08-wallpanels-generators.md` - the REC -> LAU wall tools made general:
+    `tools/wallpanels/` (generators + one JSON per wall), `tools/layout/wall_drawing_set.rb`;
+    proof by `tools/test_wallpanels.rb` and probes 599c / 600; the A-702 sheet-pattern finding.
 
 ---
 
