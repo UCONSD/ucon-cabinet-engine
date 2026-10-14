@@ -283,6 +283,17 @@ module UCON
             # says what the page draws, so a cut can be refused on it.
             'shape'              => unit_type['shape'],
             'plan_geometry'      => unit_type['plan_geometry'],
+            # A MIRROR (core 1.9.30, 7612 bathrooms): an accessory with no
+            # carcass, drawn by Generator.draw_mirror. The family holds the
+            # drawing assumptions (frame, depth, default bottom) because the book
+            # prints none of them (BL-19); the type holds its printed versions.
+            'accessory_kind'     => unit_type['accessory_kind'],
+            'mirror'             => (unit_type['accessory_kind'] == 'mirror' ?
+                                     { 'bottom_mm' => family['mirror_bottom_mm'],
+                                       'frame_mm'  => family['mirror_frame_mm'],
+                                       'versions'  => unit_type['versions'] || [],
+                                       'light'     => unit_type['light'],
+                                       'code_note' => unit_type['code_note'] } : nil),
             'buildable'          => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
             # THE GUARD Generator.wall_hung_available? READS. It was written on
@@ -465,6 +476,9 @@ module UCON
         # chord of an arc the book does not print; cutting it is not a width
         # reduction, it is a different curve. Refused before the prose list.
         return 'curved units, whose width is an arc' if unit['shape'] == 'curved'
+        # A MIRROR IS SOLD IN ITS PRINTED SIZES, 2026-10-14. The book prints a
+        # fixed list of W x H per model and no modification of any kind.
+        return 'mirrors, sold only in their printed sizes' if unit['accessory_kind'].to_s == 'mirror'
 
         WIDTH_MOD_FORBIDDEN.each { |why, test| return why if test.call(unit) }
         nil
@@ -648,6 +662,8 @@ module UCON
       # later with a worse message. So it is refused here, and the reason given
       # is ours rather than the page's.
       def height_modification_refusal(unit)
+        return 'mirrors, sold only in their printed sizes' if unit['accessory_kind'].to_s == 'mirror'
+
         return 'an appliance housing takes its opening height from the appliance, ' \
                'not from the carcass - change the appliance, not the box' if
           %w[appliance appliance_front].include?(unit['object_class'].to_s)
@@ -881,6 +897,7 @@ module UCON
             'buildable' => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
             'shape' => unit_type['shape'],
+            'accessory_kind' => unit_type['accessory_kind'],
             'corner_geometry' => row['corner_geometry'],
             'execution' => row['execution'],
             'door_width_mm' => row['door_width_mm'],

@@ -2309,6 +2309,50 @@
       ]
      }
     ]
+   },
+   {
+    "class": "mirror",
+    "family": "Bath Mirror",
+    "book": "CESAR - Bathroom Collection.pdf",
+    "section": "Mirrors | Bathroom Collection",
+    "printed_pages": "181-185",
+    "status": "extracted",
+    "extracted_on": "2026-10-14",
+    "note": "Bathroom Collection mirrors: Round, Rectangular and Oval Make Up, Riflesso - 22 sizes, all held in registry/cesar/bath_mirrors.json. NO ARTICLE CODES ARE PRINTED ('specchiera' in the Code column): rows carry UCON keys UCON-MIR-... (BL-19). Only Rectangular Make Up 70x70 and 120x70 are buildable (7612, Andriy 2026-10-14); the rest are placeholders.",
+    "pages": [
+     {
+      "printed": 182,
+      "status": "extracted",
+      "types": [
+       "Round Make Up (5 sizes, placeholder)"
+      ],
+      "extracted_on": "2026-10-14"
+     },
+     {
+      "printed": 183,
+      "status": "extracted",
+      "types": [
+       "Rectangular Make Up (9 sizes: 70x70 and 120x70 buildable, 7 placeholder)"
+      ],
+      "extracted_on": "2026-10-14"
+     },
+     {
+      "printed": 184,
+      "status": "extracted",
+      "types": [
+       "Oval Make Up (3 sizes, placeholder)"
+      ],
+      "extracted_on": "2026-10-14"
+     },
+     {
+      "printed": 185,
+      "status": "extracted",
+      "types": [
+       "Riflesso (5 sizes, placeholder)"
+      ],
+      "extracted_on": "2026-10-14"
+     }
+    ]
    }
   ]
  },

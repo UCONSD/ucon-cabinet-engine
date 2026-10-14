@@ -369,9 +369,13 @@ module UCON
         [577, 'handles',       'Handles, grip recesses and plinths']
       ].freeze
       LINEAR_CHAPTER = ['linear', 'Linear Elements (Volume 3)'].freeze
-      CHAPTER_ORDER = (KS_CHAPTERS.map { |c| c[1] } + [LINEAR_CHAPTER[0]]).freeze
+      # THE MIRRORS ARE IN THE BATHROOM BOOK, 2026-10-14. Their pages (181-185)
+      # would otherwise fall into the Kitchen System's Revego chapter by page
+      # number alone - a page number means nothing outside its own book.
+      MIRROR_CHAPTER = ['mirror', 'Mirrors (Bathroom Collection)'].freeze
+      CHAPTER_ORDER = (KS_CHAPTERS.map { |c| c[1] } + [LINEAR_CHAPTER[0], MIRROR_CHAPTER[0]]).freeze
       CHAPTER_LABELS = (KS_CHAPTERS.to_h { |c| [c[1], c[2]] }
-                          .merge(LINEAR_CHAPTER[0] => LINEAR_CHAPTER[1])).freeze
+                          .merge(LINEAR_CHAPTER[0] => LINEAR_CHAPTER[1], MIRROR_CHAPTER[0] => MIRROR_CHAPTER[1])).freeze
 
       def first_printed_page(pages)
         m = pages.to_s.match(/\d+/)
@@ -382,6 +386,7 @@ module UCON
       def chapter_of(sec)
         page = first_printed_page(sec['printed_pages'])
         return [LINEAR_CHAPTER[0], page || 0] if sec['source_pdf'].to_s.include?('Linear Elements')
+        return [MIRROR_CHAPTER[0], page || 0] if sec['class'].to_s == 'mirror'
         return nil unless page
 
         ch = KS_CHAPTERS.select { |c| c[0] <= page }.last
@@ -676,7 +681,9 @@ module UCON
         # above it.
         'worktop' => 'Worktops',
         # 2026-09-27: a COLLECTION with a chapter of its own - see in_chapters.
-        'tangram' => 'Tangram'
+        'tangram' => 'Tangram',
+        # 2026-10-14 (core 1.9.30): Bathroom Collection mirrors, printed p.181-185.
+        'mirror' => 'Mirrors (Bathroom Collection)'
       }.freeze
 
       # Display labels only — UCON's own vocabulary for the picker. The
@@ -710,6 +717,11 @@ module UCON
         'base_doors'              => 'Two-door units',
         # BATHROOM COLLECTION, 2026-10-14 (7612 bathrooms): printed headings.
         'bath_washbasin_door'     => 'Washbasin units, one door',
+        'mirror_rect_make_up'     => 'Rectangular Make Up mirror',
+        'mirror_rect_make_up_other_sizes' => 'Rectangular Make Up mirror — other sizes (placeholder)',
+        'mirror_round_make_up'    => 'Round Make Up mirror (placeholder)',
+        'mirror_oval_make_up'     => 'Oval Make Up mirror (placeholder)',
+        'mirror_riflesso'         => 'Riflesso round mirror (placeholder)',
         'bath_washbasin_doors'    => 'Washbasin units, two doors',
         'bath_washbasin_jumbo_shaped_interior' => 'Washbasin units, jumbo + shaped interior drawer',
         'washbasin_jumbo_shaped_drawer' => 'Washbasin units, shaped drawer + jumbo',

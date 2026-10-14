@@ -398,6 +398,7 @@ module UCON
         @dialog.add_action_callback('ready')  { |_| push_selection }
         @dialog.add_action_callback('apply')  { |_, json| apply(JSON.parse(json)) }
         @dialog.add_action_callback('apply_tangram') { |_, json| apply_tangram(JSON.parse(json)) }
+        @dialog.add_action_callback('apply_mirror') { |_, json| apply_mirror(JSON.parse(json)) }
         @dialog.show
         install_observer
         nil
@@ -514,6 +515,11 @@ module UCON
           return @dialog.execute_script("render(#{state.to_json})")
         end
         unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
+        if unit && unit['accessory_kind'].to_s == 'mirror'
+          state = mirror_state(unit, attrs)
+          state['core_version'] = core_version
+          return @dialog.execute_script("render(#{state.to_json})")
+        end
         unit  = unit.merge(Generator.inherited_ground(inst.definition)) if unit
         @dialog.execute_script("render(#{selection_state(unit, attrs).to_json})")
       end
@@ -689,6 +695,48 @@ module UCON
         rescue StandardError => e
           model.abort_operation
           UI.messagebox("Tangram: nothing was changed.\n\n#{e.class}: #{e.message}")
+        end
+        push_selection
+      end
+
+      # ---- a mirror: its own short form (core 1.9.30) -------------------------
+      # Frame, light, anti-fog - the three choices the book prints outside any
+      # code - and the hanging height. PURE: the suite reads it.
+      def mirror_state(unit, attrs)
+        ch = Generator.mirror_choice(attrs)
+        { 'mirror' => {
+            'code' => attrs['code'], 'desc' => unit['description'],
+            'dims' => "#{unit['width_mm'] / 10}×#{unit['height_mm'] / 10} cm",
+            'frames' => Generator.mirror_frames(unit), 'lights' => Generator.mirror_lights(unit),
+            'light_labels' => Generator::MIRROR_LIGHTS,
+            'frame' => ch['frame'], 'light' => ch['light'], 'anti_fog' => ch['anti_fog'],
+            'bottom_mm' => attrs['mount_bottom_mm'],
+            'status' => "#{attrs['code_status']} / #{attrs['status']}",
+            'code_note' => (unit['mirror'] || {})['code_note'] } }
+      end
+
+      def apply_mirror(payload)
+        inst = selected_unit_instance
+        return UI.messagebox('Select a mirror first.') unless inst
+        attrs = Contract.read(inst.definition)
+        unit = Registry.lookup(attrs['code'])
+        return UI.messagebox('This is not a mirror.') unless unit['accessory_kind'].to_s == 'mirror'
+
+        model = Sketchup.active_model
+        model.start_operation('UCON: apply mirror properties', true)
+        begin
+          bottom = payload['bottom_mm'].to_s.strip.empty? ? attrs['mount_bottom_mm'].to_i : payload['bottom_mm'].to_f.round
+          raise ArgumentError, "Bottom #{bottom} mm: give a height above the floor" unless bottom.positive?
+          frame = payload['frame'].to_s.empty? ? nil : payload['frame'].to_s
+          variants = Generator.mirror_variants(unit, frame, payload['light'].to_s, payload['anti_fog'] ? true : false)
+          make_instance_unique!(inst)
+          defn = inst.definition
+          Generator.draw_mirror(model, defn, unit, frame, bottom)
+          Contract.write!(defn, attrs.merge('variants' => variants, 'mount_bottom_mm' => bottom))
+          model.commit_operation
+        rescue StandardError => e
+          model.abort_operation
+          UI.messagebox("Mirror: nothing was changed.\n\n#{e.class}: #{e.message}")
         end
         push_selection
       end
@@ -1008,6 +1056,21 @@ module UCON
             </fieldset>
             <button onclick="apply()">Apply</button>
           </div>
+          <div id="mrForm" style="display:none">
+            <h3 id="mrCode"></h3><div class="muted" id="mrDesc"></div>
+            <div class="flag" id="mrNote" style="margin:3px 0"></div>
+            <fieldset id="mrFrameFs"><legend>Frame</legend>
+              <select id="mrFrame"></select>
+            </fieldset>
+            <fieldset><legend>Light</legend>
+              <select id="mrLight"></select>
+              <label style="display:block;margin:3px 0 0"><input type="checkbox" id="mrFog" style="margin:0;width:auto"> Anti-fog</label>
+            </fieldset>
+            <fieldset><legend>Hanging height</legend>
+              <label>Bottom from floor, mm <input type="number" id="mrBottom" style="width:80px"></label>
+            </fieldset>
+            <button onclick="applyMirror()">Apply</button>
+          </div>
           <div id="tgForm" style="display:none">
             <h3 id="tgCode"></h3><div class="muted" id="tgDesc"></div>
             <!-- THE SAME FORM AS A BOX UNIT, 2026-09-27 (Andriy): door height,
@@ -1129,6 +1192,12 @@ module UCON
                   'markup and its callbacks at open, so Apply here is still the '+
                   'old one. Close this panel and open it again.';
               }
+              var mr=st.mirror||null;
+              document.getElementById('mrForm').style.display=mr?'':'none';
+              if(mr){ document.getElementById('empty').style.display='none';
+                      document.getElementById('form').style.display='none';
+                      document.getElementById('tgForm').style.display='none';
+                      renderMirror(st); return; }
               var tg=st.tangram||null;
               document.getElementById('tgForm').style.display=tg?'':'none';
               if(tg){ document.getElementById('empty').style.display='none';
@@ -1294,6 +1363,30 @@ module UCON
                 opening:o,
                 hardware_mode:hm,
                 hardware_ref:(o==='handle'&&hm==='factory')?document.getElementById('tgHandle').value:''}));
+            }
+            // ---- Mirror: frame, light, anti-fog, height (core 1.9.30) ----
+            function renderMirror(st){
+              var m=st.mirror;
+              document.getElementById('mrCode').textContent=m.code+'  ('+m.dims+')';
+              document.getElementById('mrDesc').textContent=(m.desc||'')+' \u00b7 '+m.status;
+              document.getElementById('mrNote').textContent='No Cesar code is printed for mirrors - this is a UCON key (BL-19).';
+              var fr=document.getElementById('mrFrame'); fr.innerHTML='';
+              (m.frames||[]).forEach(function(f){var o=document.createElement('option');o.value=f;o.textContent=f;fr.appendChild(o);});
+              document.getElementById('mrFrameFs').style.display=(m.frames&&m.frames.length)?'':'none';
+              if(m.frame)fr.value=m.frame;
+              var li=document.getElementById('mrLight'); li.innerHTML='';
+              (m.lights||[]).forEach(function(l){var o=document.createElement('option');o.value=l;o.textContent=(m.light_labels||{})[l]||l;li.appendChild(o);});
+              if(m.light)li.value=m.light;
+              document.getElementById('mrFog').checked=!!m.anti_fog;
+              document.getElementById('mrBottom').value=m.bottom_mm||'';
+            }
+            function applyMirror(){
+              var fs=document.getElementById('mrFrameFs').style.display!=='none';
+              sketchup.apply_mirror(JSON.stringify({
+                frame:fs?document.getElementById('mrFrame').value:'',
+                light:document.getElementById('mrLight').value,
+                anti_fog:document.getElementById('mrFog').checked,
+                bottom_mm:document.getElementById('mrBottom').value}));
             }
             window.onload=function(){sketchup.ready();};
           </script></body></html>

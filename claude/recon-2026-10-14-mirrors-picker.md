@@ -62,3 +62,15 @@
 
 ## Вопрос Элде
 BL-19 — см. `docs/Elda_Questions_7612_Baths_Laundry_v0.1.md`.
+
+## Сделано — core 1.9.30 (Андрей 2026-10-14: «только то, что в проекте, остальное плейсхолдерами; важны опции, такие как подсветка»)
+- `registry/cesar/bath_mirrors.json`: семейство «Bath Mirror», раздел «Mirrors | Bathroom Collection», класс `mirror`, object_class `accessory`. **22 позиции, ключи UCON-MIR-…** (ROU / RMU / OVL / RIF), размеры и баллы со страниц (баллы — только справка, в объект не идут).
+  - Строятся только **UCON-MIR-RMU-070x070** и **UCON-MIR-RMU-120x070** (то, что в 7612). Остальные 20 — плейсхолдеры (`buildable: false`, причина в реестре).
+- Опции (variants, строки заказа без кода): **FRAME** Black / White / Champagne (у Riflesso нет), **LIGHT** Front light / Front light + backlight, **ANTI-FOG** Yes. По умолчанию Black + Front light.
+- Размер не меняется (отказ: «mirrors, sold only in their printed sizes»).
+- Генератор: свой построитель (`Generator.build_mirror` / `draw_mirror`): рама в отделке, стекло белое, штриховка стекла на теге фасадов; низ 1250 по умолчанию; если выделена тумба — зеркало по её центру, на её задней плоскости.
+- Панель свойств: своя форма для зеркала — Frame, Light, Anti-fog, высота низа; Apply перерисовывает.
+- Экспорт: строка зеркала + строки FRAME/LIGHT/ANTI-FOG; в примечании «NOT A CESAR CODE - UCON key … (BL-19)».
+- Пикер: глава «Mirrors (Bathroom Collection)» (страницы 181–185 больше не попадают в Revego по номеру).
+- Тесты: 707 / 120 / 46 / 399, 0 падений (перепись 1636 → 1658, 4 новые проверки зеркал).
+- Модель 7612 (probe 685): шесть зеркал, нарисованных вручную, заменены объектами движка — те же размеры и места, Black + Front light.

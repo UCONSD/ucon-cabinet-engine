@@ -191,6 +191,139 @@ module UCON
         Geom::Transformation.translation(Geom::Vector3d.new(0, 0, -o.z)) * shifted
       end
 
+      # ---- mirrors (core 1.9.30, 7612 bathrooms, Andriy 2026-10-14) -----------
+      #
+      # Bathroom Collection printed p.182-185. THE BOOK PRINTS NO CODE ('specchiera'
+      # in the Code column), so the registry rows carry UCON keys (UCON-MIR-...) and
+      # say so; and it prints no frame width, no depth and no fixing - the family
+      # holds 20 / 35 as drawing assumptions (BL-19). What the order needs from a
+      # mirror is its MODEL + SIZE (the key) and three choices the page prints
+      # outside any code: the frame, the light and anti-fog. Those are VARIANTS
+      # (Contract v2 §1.4) - order lines with no article code of their own - and
+      # never carry the points, which stay in the registry for reference.
+      #
+      # Drawn the way the drawings draw glass (probe 684, Andriy): the frame in its
+      # finish, the pane white and opaque, and the reading on the hatch - pairs of
+      # 45 degree lines on the elevation tag, Symbols.glass_hatch.
+      MIRROR_FRAMES = { 'Black' => [25, 25, 25], 'White' => [245, 245, 245],
+                        'Champagne' => [201, 174, 128] }.freeze
+      MIRROR_LIGHTS = { 'front' => 'Front light', 'front+back' => 'Front light + backlight' }.freeze
+      MIRROR_FRAME_KEY = 'FRAME'
+      MIRROR_LIGHT_KEY = 'LIGHT'
+      MIRROR_ANTIFOG_KEY = 'ANTI-FOG'
+
+      def mirror_frames(unit)
+        Array((unit['mirror'] || {})['versions']).flat_map { |v| Array(v['frame']) }.uniq
+      end
+
+      def mirror_lights(unit)
+        Array((unit['mirror'] || {})['versions']).map { |v| v['light'] }.compact.uniq
+      end
+
+      # The three choices as variants. PURE, so the suite can hold it.
+      def mirror_variants(unit, frame, light, anti_fog)
+        frames = mirror_frames(unit)
+        lights = mirror_lights(unit)
+        src = unit['source_ref']
+        out = []
+        unless frames.empty?
+          raise ArgumentError, "Frame #{frame.inspect}: this mirror is printed in #{frames.join(' / ')}" unless frames.include?(frame)
+          out << { 'key' => MIRROR_FRAME_KEY, 'value' => frame, 'label' => "Frame: #{frame}", 'source_ref' => src }
+        end
+        raise ArgumentError, "Light #{light.inspect}: this mirror is printed with #{lights.join(' / ')}" unless lights.include?(light)
+        out << { 'key' => MIRROR_LIGHT_KEY, 'value' => MIRROR_LIGHTS[light] || light,
+                 'label' => "#{MIRROR_LIGHTS[light] || light}, #{(unit['mirror'] || {})['light']}", 'source_ref' => src }
+        out << { 'key' => MIRROR_ANTIFOG_KEY, 'value' => 'Yes', 'label' => 'Anti-fog', 'source_ref' => src } if anti_fog
+        out
+      end
+
+      def mirror_choice(attrs)
+        v = Array((attrs || {})['variants'])
+        light_v = (v.find { |x| x['key'] == MIRROR_LIGHT_KEY } || {})['value']
+        { 'frame' => (v.find { |x| x['key'] == MIRROR_FRAME_KEY } || {})['value'],
+          'light' => MIRROR_LIGHTS.key(light_v) || 'front',
+          'anti_fog' => v.any? { |x| x['key'] == MIRROR_ANTIFOG_KEY } }
+      end
+
+      def mirror_attributes(unit, variants, bottom_mm)
+        a = attributes_for(unit)
+        a.delete('opening_method')
+        a.delete('front_height_mm')
+        a['opening']         = 'none'
+        a['mounting']        = 'wall_hung'
+        a['mount_bottom_mm'] = bottom_mm
+        a['variants']        = variants
+        a['notes'] = [a['notes'], (unit['mirror'] || {})['code_note']].compact.join(' ')
+        a
+      end
+
+      # Geometry in the definition: back on y 0, face toward -y (the way every
+      # unit here faces), x 0..W, bottom at bottom_mm.
+      def draw_mirror(model, definition, unit, frame, bottom_mm)
+        e = definition.entities
+        e.erase_entities(e.to_a) unless e.length.zero?
+        m = unit['mirror'] || {}
+        w = unit['width_mm'].to_f; h = unit['height_mm'].to_f; d = unit['depth_mm'].to_f
+        f = (m['frame_mm'] || 20).to_f; z0 = bottom_mm.to_f
+        black = Geometry.material(model, 'UCON_Edge_Black', [0, 0, 0])
+        rgb = MIRROR_FRAMES[frame] || MIRROR_FRAMES['Black']
+        frame_mat = Geometry.material(model, "UCON_Mirror_Frame_#{frame || 'none'}", rgb)
+        white = Geometry.material(model, 'UCON CAD White', [255, 255, 255])
+        g = Geometry.box(e, 'MIRROR_FRAME', 0, -d, z0, w, d, h, frame_mat)
+        g.entities.grep(Sketchup::Edge).each { |x| x.material = black }
+        glass = e.add_group; glass.name = 'MIRROR_GLASS'
+        inset = frame.nil? ? 0.0 : f
+        y = -d - 1.0
+        pts = [[inset, y, z0 + inset], [w - inset, y, z0 + inset], [w - inset, y, z0 + h - inset], [inset, y, z0 + h - inset]]
+        face = glass.entities.add_face(pts.map { |px, py, pz| Geom::Point3d.new(px.mm, py.mm, pz.mm) })
+        face.material = white; face.back_material = white
+        glass.entities.grep(Sketchup::Edge).each { |x| x.material = black }
+        sym = e.add_group; sym.name = 'SYM_FRONT_GLASS_1'
+        gw = w - 2 * inset; gh = h - 2 * inset; ys = y - 0.5
+        rect = [[inset, z0 + inset], [inset + gw, z0 + inset], [inset + gw, z0 + inset + gh], [inset, z0 + inset + gh]]
+        rect.each_index { |j| a = rect[j]; b = rect[(j + 1) % 4]; sym.entities.add_line([a[0].mm, ys.mm, a[1].mm], [b[0].mm, ys.mm, b[1].mm]) }
+        Symbols.glass_hatch(inset, z0 + inset, gw, gh).each do |a, b|
+          sym.entities.add_line([a[0].mm, ys.mm, a[1].mm], [b[0].mm, ys.mm, b[1].mm])
+        end
+        Symbols.finalize(sym, Symbols.tag(model, Symbols::TAG_FRONT), Symbols.symbol_material(model))
+        definition
+      end
+
+      # Placement: over the selected unit, centred on it and on its back face;
+      # with nothing selected, at the origin.
+      def mirror_placement(model, unit)
+        sel = selected_unit(model)
+        return Geom::Transformation.new unless sel
+
+        c = sel.definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
+        b = c ? c.bounds : sel.definition.bounds
+        xc = (b.min.x + b.max.x) / 2.0
+        sel.transformation * Geom::Transformation.translation(Geom::Vector3d.new(xc - unit['width_mm'].mm / 2.0, b.max.y, 0))
+      end
+
+      def build_mirror(model, code, unit)
+        m = unit['mirror'] || {}
+        frame = mirror_frames(unit).include?('Black') ? 'Black' : mirror_frames(unit).first
+        variants = mirror_variants(unit, frame, mirror_lights(unit).first, false)
+        bottom = (m['bottom_mm'] || 1250).to_i
+        placement = mirror_placement(model, unit)
+        model.start_operation("UCON: build #{code}", true)
+        begin
+          definition = model.definitions.add("CESAR_#{code}_#{Time.now.strftime('%Y%m%d_%H%M%S')}")
+          draw_mirror(model, definition, unit, frame, bottom)
+          Contract.write!(definition, mirror_attributes(unit, variants, bottom))
+          instance = model.active_entities.add_instance(definition, placement)
+          instance.name = "Cesar #{code} — #{unit['description']}"
+          model.selection.clear
+          model.selection.add(instance)
+          model.commit_operation
+          instance
+        rescue StandardError
+          model.abort_operation
+          raise
+        end
+      end
+
       def selected_unit(model)
         model.selection.grep(Sketchup::ComponentInstance).find do |i|
           # a Tangram F has no code (none is printed) and is a unit all the same
@@ -815,6 +948,10 @@ module UCON
                 "#{code} is in the registry but cannot be built yet.\n\n" \
                 "#{unit['not_buildable_reason']}"
         end
+
+        # A MIRROR HAS NO CARCASS (core 1.9.30). Everything below this line is
+        # a box builder - plinth, carcass, fronts - so a mirror leaves here.
+        return build_mirror(model, code, unit) if unit['accessory_kind'].to_s == 'mirror'
 
         s    = Standards
         # DRAWN, not ordered - see drawn_width_mm. For everything except a

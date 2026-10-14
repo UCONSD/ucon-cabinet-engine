@@ -86,16 +86,22 @@ echo "===== 2. stage, BY NAME ====="
 # stated hanging height, picker labels, census/book checks moved. 11 files
 # predicted. The tall_h210.json pull-out PILOT of 2026-10-05 is still parked in
 # build/parked/ and NOT in this commit.
-# 2026-10-14 (core 1.9.29 commit pushed): docs only - vanities placed in all five
-# 7612 bathrooms (probes 662-680), the M-MST bridge/make-up table recon, the
-# separate Elda list for baths + laundry (BL-01..BL-19), mirrors 681-684 and the
-# mirrors picker recon. 7 files predicted.
-git add claude/README.md \
-        claude/recon-2026-10-14-7612-baths-laundry.md \
-        claude/recon-2026-10-14-7612-baths-catalog-arrangements.md \
-        claude/recon-2026-10-14-7612-mmst-bridge.md \
+# 2026-10-14 docs commits pushed (b76b1a0, f355eec).
+# 2026-10-14, core 1.9.30: Bathroom Collection mirrors into the registry and the
+# picker (22 UCON keys, no code is printed; 2 buildable for 7612, 20 placeholders),
+# mirror builder, mirror form in the properties panel, export note, 4 checks.
+# 12 files predicted.
+git add registry/cesar/bath_mirrors.json \
+        registry/cesar/_manifest.json \
+        src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/50_registry.rb \
+        src/ucon_cabinet_engine/core/60_generator.rb \
+        src/ucon_cabinet_engine/core/80_panel.rb \
+        src/ucon_cabinet_engine/core/85_export.rb \
+        src/ucon_cabinet_engine/core/90_palette.rb \
+        tools/test_contract.rb \
         claude/recon-2026-10-14-mirrors-picker.md \
-        docs/Elda_Questions_7612_Baths_Laundry_v0.1.md \
+        claude/recon-2026-10-14-7612-baths-laundry.md \
         build/go.sh
 
 echo

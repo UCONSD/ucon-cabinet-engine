@@ -1,0 +1,533 @@
+{
+ "section": "Mirrors | Bathroom Collection",
+ "class": "mirror",
+ "family": "Bath Mirror",
+ "source_pdf": "CESAR - Bathroom Collection.pdf",
+ "source_pages": "printed p.181-185 / PDF 183-187",
+ "extraction_note": "2026-10-14, 7612 Hillside Dr bathrooms (Andriy): mirrors into the picker, only what the project uses is buildable (Rectangular Make Up 70x70 and 120x70); every other printed size and model is held as a placeholder. Four models, 22 sizes. Anti-fog surcharge 86 points on every page. Points are held for reference only and never written to an object. See claude/recon-2026-10-14-mirrors-picker.md.",
+ "family_naming_note": "'Bath Mirror' - the 'Bath ' prefix tells the book check this family lives in the Bathroom Collection.",
+ "data": {
+  "mounting": "wall_hung",
+  "mounting_note": "A mirror hangs on the wall. Default bottom 1250 from the floor = the p.193 arrangement (top 85, mirror bottom 125). A project decision, changeable per object.",
+  "mirror_bottom_mm": 1250,
+  "mirror_frame_mm": 20,
+  "mirror_depth_mm": 35,
+  "mirror_dims_note": "Frame width and depth are not printed (BL-19); 20 / 35 are UCON drawing assumptions.",
+  "anti_fog_surcharge_points": 86,
+  "collections": [
+   "Maxima",
+   "Intarsio",
+   "Unit",
+   "Ondula"
+  ],
+  "unit_types": {
+   "mirror_rect_make_up": {
+    "object_class": "accessory",
+    "accessory_kind": "mirror",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [],
+    "light": "LED 9.6 W/m dynamic white 2700>6000K with switch",
+    "code_printed": false,
+    "code_note": "NO ARTICLE CODE IS PRINTED: the Code column of printed p.182-185 reads 'specchiera' (Italian for mirror) on every row. The code here is a UCON KEY, prefixed UCON- so it can never pass for a Cesar article; code_status stays PRELIMINARY. Replace with the factory code from Metron / Elda (BL-19) when known.",
+    "description": "Rectangular Make Up mirror - frame White/Black or Champagne, front light (+ backlight optional)",
+    "shape": "rectangle",
+    "source_ref": "printed p.183 / PDF 185",
+    "versions": [
+     {
+      "key": "black_white_front",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front",
+      "lead_weeks": 6
+     },
+     {
+      "key": "black_white_front_back",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front+back",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front_back",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front+back",
+      "lead_weeks": 6
+     }
+    ],
+    "codes": [
+     {
+      "code": "UCON-MIR-RMU-070x070",
+      "width_mm": 700,
+      "height_mm": 700,
+      "depth_mm": 35,
+      "printed_size": "70x70",
+      "points_by_version": {
+       "black_white_front": 419,
+       "champagne_front": 547,
+       "black_white_front_back": 611,
+       "champagne_front_back": 704
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-120x070",
+      "width_mm": 1200,
+      "height_mm": 700,
+      "depth_mm": 35,
+      "printed_size": "120x70",
+      "points_by_version": {
+       "black_white_front": 598,
+       "champagne_front": 784,
+       "black_white_front_back": 889,
+       "champagne_front_back": 1041
+      }
+     }
+    ],
+    "notes": "Held and BUILDABLE: the two sizes 7612 uses. Frame width and depth are NOT printed - drawn 20 frame / 35 deep (UCON assumption, BL-19)."
+   },
+   "mirror_rect_make_up_other_sizes": {
+    "object_class": "accessory",
+    "accessory_kind": "mirror",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [],
+    "light": "LED 9.6 W/m dynamic white 2700>6000K with switch",
+    "code_printed": false,
+    "code_note": "NO ARTICLE CODE IS PRINTED: the Code column of printed p.182-185 reads 'specchiera' (Italian for mirror) on every row. The code here is a UCON KEY, prefixed UCON- so it can never pass for a Cesar article; code_status stays PRELIMINARY. Replace with the factory code from Metron / Elda (BL-19) when known.",
+    "description": "Rectangular Make Up mirror - other printed sizes",
+    "shape": "rectangle",
+    "source_ref": "printed p.183 / PDF 185",
+    "versions": [
+     {
+      "key": "black_white_front",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front",
+      "lead_weeks": 6
+     },
+     {
+      "key": "black_white_front_back",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front+back",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front_back",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front+back",
+      "lead_weeks": 6
+     }
+    ],
+    "codes": [
+     {
+      "code": "UCON-MIR-RMU-060x060",
+      "width_mm": 600,
+      "height_mm": 600,
+      "depth_mm": 35,
+      "printed_size": "60x60",
+      "points_by_version": {
+       "black_white_front": 368,
+       "champagne_front": 481,
+       "black_white_front_back": 541,
+       "champagne_front_back": 622
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-080x080",
+      "width_mm": 800,
+      "height_mm": 800,
+      "depth_mm": 35,
+      "printed_size": "80x80",
+      "points_by_version": {
+       "black_white_front": 460,
+       "champagne_front": 602,
+       "black_white_front_back": 663,
+       "champagne_front_back": 771
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-100x100",
+      "width_mm": 1000,
+      "height_mm": 1000,
+      "depth_mm": 35,
+      "printed_size": "100x100",
+      "points_by_version": {
+       "black_white_front": 579,
+       "champagne_front": 766,
+       "black_white_front_back": 862,
+       "champagne_front_back": 1012
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-120x120",
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "depth_mm": 35,
+      "printed_size": "120x120",
+      "points_by_version": {
+       "black_white_front": 726,
+       "champagne_front": 958,
+       "black_white_front_back": 1048,
+       "champagne_front_back": 1241
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-060x070",
+      "width_mm": 600,
+      "height_mm": 700,
+      "depth_mm": 35,
+      "printed_size": "60x70",
+      "points_by_version": {
+       "black_white_front": 388,
+       "champagne_front": 508,
+       "black_white_front_back": 584,
+       "champagne_front_back": 672
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-090x070",
+      "width_mm": 900,
+      "height_mm": 700,
+      "depth_mm": 35,
+      "printed_size": "90x70",
+      "points_by_version": {
+       "black_white_front": 460,
+       "champagne_front": 600,
+       "black_white_front_back": 662,
+       "champagne_front_back": 771
+      }
+     },
+     {
+      "code": "UCON-MIR-RMU-100x070",
+      "width_mm": 1000,
+      "height_mm": 700,
+      "depth_mm": 35,
+      "printed_size": "100x70",
+      "points_by_version": {
+       "black_white_front": 510,
+       "champagne_front": 672,
+       "black_white_front_back": 777,
+       "champagne_front_back": 904
+      }
+     }
+    ],
+    "buildable": false,
+    "not_buildable_reason": "PLACEHOLDER (Andriy 2026-10-14: only what 7612 uses is built now - Rectangular Make Up 70x70 and 120x70). Size and points are held from the page; the drawing is not wired for this shape/size yet."
+   },
+   "mirror_round_make_up": {
+    "object_class": "accessory",
+    "accessory_kind": "mirror",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [],
+    "light": "LED 9.6 W/m dynamic white 2700>6000K with switch",
+    "code_printed": false,
+    "code_note": "NO ARTICLE CODE IS PRINTED: the Code column of printed p.182-185 reads 'specchiera' (Italian for mirror) on every row. The code here is a UCON KEY, prefixed UCON- so it can never pass for a Cesar article; code_status stays PRELIMINARY. Replace with the factory code from Metron / Elda (BL-19) when known.",
+    "description": "Round Make Up mirror - frame White/Black or Champagne, front light (+ backlight optional)",
+    "shape": "round",
+    "source_ref": "printed p.182 / PDF 184",
+    "versions": [
+     {
+      "key": "black_white_front",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front",
+      "lead_weeks": 6
+     },
+     {
+      "key": "black_white_front_back",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front+back",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front_back",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front+back",
+      "lead_weeks": 6
+     }
+    ],
+    "codes": [
+     {
+      "code": "UCON-MIR-ROU-D071",
+      "width_mm": 710,
+      "height_mm": 710,
+      "depth_mm": 35,
+      "printed_size": "Ø 71",
+      "points_by_version": {
+       "black_white_front": 391,
+       "champagne_front": 497,
+       "black_white_front_back": 556,
+       "champagne_front_back": 712
+      }
+     },
+     {
+      "code": "UCON-MIR-ROU-D085",
+      "width_mm": 850,
+      "height_mm": 850,
+      "depth_mm": 35,
+      "printed_size": "Ø 85",
+      "points_by_version": {
+       "black_white_front": 443,
+       "champagne_front": 594,
+       "black_white_front_back": 611,
+       "champagne_front_back": 771
+      }
+     },
+     {
+      "code": "UCON-MIR-ROU-D101",
+      "width_mm": 1010,
+      "height_mm": 1010,
+      "depth_mm": 35,
+      "printed_size": "Ø 101",
+      "points_by_version": {
+       "black_white_front": 526,
+       "champagne_front": 764,
+       "black_white_front_back": 711,
+       "champagne_front_back": 902
+      }
+     },
+     {
+      "code": "UCON-MIR-ROU-D121",
+      "width_mm": 1210,
+      "height_mm": 1210,
+      "depth_mm": 35,
+      "printed_size": "Ø 121",
+      "points_by_version": {
+       "black_white_front": 637,
+       "champagne_front": 997,
+       "black_white_front_back": 883,
+       "champagne_front_back": 1123
+      }
+     },
+     {
+      "code": "UCON-MIR-ROU-D141",
+      "width_mm": 1410,
+      "height_mm": 1410,
+      "depth_mm": 35,
+      "printed_size": "Ø 141",
+      "points_by_version": {
+       "black_white_front": 718,
+       "champagne_front": 1302,
+       "black_white_front_back": 987,
+       "champagne_front_back": 1310
+      }
+     }
+    ],
+    "buildable": false,
+    "not_buildable_reason": "PLACEHOLDER (Andriy 2026-10-14: only what 7612 uses is built now - Rectangular Make Up 70x70 and 120x70). Size and points are held from the page; the drawing is not wired for this shape/size yet."
+   },
+   "mirror_oval_make_up": {
+    "object_class": "accessory",
+    "accessory_kind": "mirror",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [],
+    "light": "LED 9.6 W/m dynamic white 2700>6000K with switch",
+    "code_printed": false,
+    "code_note": "NO ARTICLE CODE IS PRINTED: the Code column of printed p.182-185 reads 'specchiera' (Italian for mirror) on every row. The code here is a UCON KEY, prefixed UCON- so it can never pass for a Cesar article; code_status stays PRELIMINARY. Replace with the factory code from Metron / Elda (BL-19) when known.",
+    "description": "Oval Make Up mirror - frame White/Black or Champagne, front light (+ backlight optional)",
+    "shape": "oval",
+    "source_ref": "printed p.184 / PDF 186",
+    "versions": [
+     {
+      "key": "black_white_front",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front",
+      "lead_weeks": 6
+     },
+     {
+      "key": "black_white_front_back",
+      "frame": [
+       "Black",
+       "White"
+      ],
+      "light": "front+back",
+      "lead_weeks": 5
+     },
+     {
+      "key": "champagne_front_back",
+      "frame": [
+       "Champagne"
+      ],
+      "light": "front+back",
+      "lead_weeks": 6
+     }
+    ],
+    "codes": [
+     {
+      "code": "UCON-MIR-OVL-050x100",
+      "width_mm": 500,
+      "height_mm": 1000,
+      "depth_mm": 35,
+      "printed_size": "50x100",
+      "points_by_version": {
+       "black_white_front": 507,
+       "champagne_front": 657,
+       "black_white_front_back": 663,
+       "champagne_front_back": 809
+      }
+     },
+     {
+      "code": "UCON-MIR-OVL-050x110",
+      "width_mm": 500,
+      "height_mm": 1100,
+      "depth_mm": 35,
+      "printed_size": "50x110",
+      "points_by_version": {
+       "black_white_front": 541,
+       "champagne_front": 704,
+       "black_white_front_back": 687,
+       "champagne_front_back": 846
+      }
+     },
+     {
+      "code": "UCON-MIR-OVL-060x120",
+      "width_mm": 600,
+      "height_mm": 1200,
+      "depth_mm": 35,
+      "printed_size": "60x120",
+      "points_by_version": {
+       "black_white_front": 605,
+       "champagne_front": 823,
+       "black_white_front_back": 740,
+       "champagne_front_back": 942
+      }
+     }
+    ],
+    "buildable": false,
+    "not_buildable_reason": "PLACEHOLDER (Andriy 2026-10-14: only what 7612 uses is built now - Rectangular Make Up 70x70 and 120x70). Size and points are held from the page; the drawing is not wired for this shape/size yet."
+   },
+   "mirror_riflesso": {
+    "object_class": "accessory",
+    "accessory_kind": "mirror",
+    "opening": "none",
+    "handed": false,
+    "interior_confirmed": [],
+    "light": "LED 9.6 W/m dynamic white 2700>6000K with switch",
+    "code_printed": false,
+    "code_note": "NO ARTICLE CODE IS PRINTED: the Code column of printed p.182-185 reads 'specchiera' (Italian for mirror) on every row. The code here is a UCON KEY, prefixed UCON- so it can never pass for a Cesar article; code_status stays PRELIMINARY. Replace with the factory code from Metron / Elda (BL-19) when known.",
+    "description": "Riflesso round mirror - no frame, one version",
+    "shape": "round",
+    "source_ref": "printed p.185 / PDF 187",
+    "versions": [
+     {
+      "key": "single",
+      "frame": [],
+      "light": "front",
+      "lead_weeks": 6
+     }
+    ],
+    "codes": [
+     {
+      "code": "UCON-MIR-RIF-D070",
+      "width_mm": 700,
+      "height_mm": 700,
+      "depth_mm": 35,
+      "printed_size": "Ø 70",
+      "points_by_version": {
+       "single": 282
+      }
+     },
+     {
+      "code": "UCON-MIR-RIF-D080",
+      "width_mm": 800,
+      "height_mm": 800,
+      "depth_mm": 35,
+      "printed_size": "Ø 80",
+      "points_by_version": {
+       "single": 319
+      }
+     },
+     {
+      "code": "UCON-MIR-RIF-D100",
+      "width_mm": 1000,
+      "height_mm": 1000,
+      "depth_mm": 35,
+      "printed_size": "Ø 100",
+      "points_by_version": {
+       "single": 398
+      }
+     },
+     {
+      "code": "UCON-MIR-RIF-D120",
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "depth_mm": 35,
+      "printed_size": "Ø 120",
+      "points_by_version": {
+       "single": 489
+      }
+     },
+     {
+      "code": "UCON-MIR-RIF-D140",
+      "width_mm": 1400,
+      "height_mm": 1400,
+      "depth_mm": 35,
+      "printed_size": "Ø 140",
+      "points_by_version": {
+       "single": 686
+      }
+     }
+    ],
+    "buildable": false,
+    "not_buildable_reason": "PLACEHOLDER (Andriy 2026-10-14: only what 7612 uses is built now - Rectangular Make Up 70x70 and 120x70). Size and points are held from the page; the drawing is not wired for this shape/size yet."
+   }
+  }
+ }
+}

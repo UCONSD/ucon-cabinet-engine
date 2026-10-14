@@ -275,8 +275,18 @@ module UCON
           'p_mm' => a['depth_mm'],
           'um' => UNIT_UM, 'qty' => 1,
           'status' => a['status'], 'code_status' => a['code_status'],
-          'note' => ordered_width_note(a)
+          'note' => ucon_key_note(a) || ordered_width_note(a)
         )
+      end
+
+      # A UCON KEY IS NOT A CESAR CODE, 2026-10-14 (core 1.9.30). The mirrors in
+      # the Bathroom Collection print no code ('specchiera'), so their rows carry
+      # UCON-... keys. Whoever reads the sheet must not take one for an article.
+      def ucon_key_note(a)
+        return nil unless a['code'].to_s.start_with?('UCON-')
+
+        'NOT A CESAR CODE - UCON key; the price list prints no code for this ' \
+        'article (Bathroom Collection mirrors) - order by model and size (BL-19)'
       end
 
       # WHEN THE L COLUMN IS OUR NUMBER AND NOT THE CATALOG'S.

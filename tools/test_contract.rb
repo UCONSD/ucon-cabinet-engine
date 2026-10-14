@@ -268,7 +268,7 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1636 codes (46 open units + 39 open end units + 490 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1658 codes (46 open units + 39 open end units + 490 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops + 22 mirrors)') do
   # 2026-09-30, glass wall H.72 / H.84: +6 - printed p.313-314, the 7612 sink wall.
   # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
   # (12 base, 14 wall, 20 tall), each joining its height family.
@@ -313,7 +313,8 @@ check('registry loads and holds 1636 codes (46 open units + 39 open end units + 
   # 2026-10-04, batch 4: +13 - the H.36 compound wall units of printed p.212.
   n = Registry.codes.length
   # 1562 -> 1636 2026-10-14: the THIRD BOOK, Bathroom Collection p.85 and p.90-91 (74 base-class codes, 7612 bathrooms)
-  raise "got #{n}" unless n == 1636
+  # 1636 -> 1658 2026-10-14 (core 1.9.30): Bathroom Collection mirrors p.182-185, 22 UCON keys (no code is printed)
+  raise "got #{n}" unless n == 1658
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -506,9 +507,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1636 rows, each with code/dims/description/source') do
+check('registry catalog: 1658 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1636 # +74 2026-10-14 Bathroom Collection
+  raise cat.length.to_s unless cat.length == 1658 # +22 2026-10-14 mirrors; +74 2026-10-14 Bathroom Collection
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -630,6 +631,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Hide & Seek tall units H. 210',
                                              'Hide & Seek tall units H. 222',
                                              'Hide & Seek tall units H. 234',
+                                             'Mirrors | Bathroom Collection',
                                              'Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick',
                                              'Open base, wall and tall units, from 45 to 90 cm wide th. 2.2',
                                              'Panels - Linear Elements',
@@ -693,7 +695,7 @@ check('split storage: every catalog row is stamped with its section and class') 
   # order picks one.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
     cat.map { |c| c['class'] }.uniq.sort ==
-      %w[base end_panel filler open_unit panel_sheet shelf tall wall worktop]
+      %w[base end_panel filler mirror open_unit panel_sheet shelf tall wall worktop]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -5203,7 +5205,9 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'tall or wall units with framed glass doors' => 15, # +6 2026-09-30 glass H.72 / H.84; +6 2026-10-04 H.60 / H.120
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 848 # +18 2026-10-14 Bathroom Collection doors (p.85, p.90); +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
+                 'curved units, whose width is an arc' => 6,
+                 # 2026-10-14 (core 1.9.30): the 22 Bathroom Collection mirrors - printed sizes only.
+                 'mirrors, sold only in their printed sizes' => 22 } && allowed == 848 # +18 2026-10-14 Bathroom Collection doors (p.85, p.90); +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -11644,6 +11648,44 @@ check('1.9.26: end/corner panels and top fillers take the front colour; sheets, 
            'DZBZ00' => :carcass, 'DZAD00' => :carcass, 'BL0967' => :carcass, 'BK0150' => :carcass }
   got = want.keys.map { |c| [c, Generator.body_finish(Registry.lookup(c))] }.to_h
   raise got.inspect unless got == want
+end
+
+puts "\nmirrors - Bathroom Collection printed p.182-185 (core 1.9.30)"
+check('1.9.30: 22 mirrors held, 2 buildable (7612), every key says it is not a Cesar code') do
+  rows = Registry.catalog.select { |c| c['class'] == 'mirror' }
+  raise rows.size.to_s unless rows.size == 22
+  raise 'a mirror key could pass for a Cesar code' unless rows.all? { |c| c['code'].start_with?('UCON-MIR-') }
+  built = rows.select { |c| c['buildable'] }.map { |c| c['code'] }.sort
+  raise built.inspect unless built == %w[UCON-MIR-RMU-070x070 UCON-MIR-RMU-120x070]
+  u = Registry.lookup('UCON-MIR-RMU-120x070')
+  raise u.inspect unless u['width_mm'] == 1200 && u['height_mm'] == 700 && u['accessory_kind'] == 'mirror'
+  raise 'the code note must say none is printed' unless u['mirror']['code_note'].to_s.include?('specchiera')
+end
+check('1.9.30: a mirror is refused any size change - printed sizes only') do
+  u = Registry.lookup('UCON-MIR-RMU-070x070')
+  raise 'width' unless Registry.width_modification_refusal(u).to_s.include?('printed sizes')
+  raise 'height' unless Registry.height_modification_refusal(u).to_s.include?('printed sizes')
+end
+check('1.9.30: frame, light and anti-fog are variants; points never ride along; attributes are contract-valid') do
+  u = Registry.lookup('UCON-MIR-RMU-120x070')
+  raise Generator.mirror_frames(u).inspect unless Generator.mirror_frames(u) == %w[Black White Champagne]
+  raise Generator.mirror_lights(u).inspect unless Generator.mirror_lights(u) == %w[front front+back]
+  v = Generator.mirror_variants(u, 'Black', 'front+back', true)
+  raise v.inspect unless v.map { |x| x['key'] } == %w[FRAME LIGHT ANTI-FOG] && v[1]['value'] == 'Front light + backlight'
+  a = Generator.mirror_attributes(u, v, 1250)
+  Contract.validate!(a)
+  raise a.inspect unless a['mounting'] == 'wall_hung' && a['mount_bottom_mm'] == 1250 && !a.key?('opening_method')
+  raise 'a points figure reached the object' if a.to_s =~ /points/i && a['variants'].to_s =~ /\d{3}/
+  raise 'Gold accepted' unless (begin; Generator.mirror_variants(u, 'Gold', 'front', false); false; rescue ArgumentError; true; end)
+  ch = Generator.mirror_choice(a)
+  raise ch.inspect unless ch == { 'frame' => 'Black', 'light' => 'front+back', 'anti_fog' => true }
+end
+check('1.9.30: the placeholders refuse to build and say why') do
+  %w[UCON-MIR-RMU-060x060 UCON-MIR-ROU-D071 UCON-MIR-OVL-050x100 UCON-MIR-RIF-D070].each do |c|
+    u = Registry.lookup(c)
+    raise c unless u['buildable'] == false && u['not_buildable_reason'].to_s.include?('PLACEHOLDER')
+  end
+  raise 'Riflesso has a frame' unless Generator.mirror_frames(Registry.lookup('UCON-MIR-RIF-D070')).empty?
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"
