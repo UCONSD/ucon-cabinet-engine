@@ -398,6 +398,7 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
     almost to the ceiling; HVAC register to the ceiling (mechanical plans).
   - `recon-2026-10-14-7612-baths-catalog-arrangements.md` - Bathroom Collection arrangements
     (p.187-197) read for rules, building blocks with points, options per bathroom.
+  - `recon-2026-10-14-7612-mmst-bridge.md` - M-MST bridge / make-up table between the two vanities: catalogue check, options A/B/C
 
 ---
 

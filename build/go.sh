@@ -86,16 +86,14 @@ echo "===== 2. stage, BY NAME ====="
 # stated hanging height, picker labels, census/book checks moved. 11 files
 # predicted. The tall_h210.json pull-out PILOT of 2026-10-05 is still parked in
 # build/parked/ and NOT in this commit.
-git add registry/cesar/bath_washbasin_h58_5.json \
-        registry/cesar/bath_base_h58_5.json \
-        registry/cesar/_manifest.json \
-        src/ucon_cabinet_engine/core/80_panel.rb \
-        src/ucon_cabinet_engine/core/90_palette.rb \
-        src/ucon_cabinet_engine/core/00_version.rb \
-        tools/test_contract.rb \
-        claude/README.md \
+# 2026-10-14 (core 1.9.29 commit pushed): docs only - vanities placed in all five
+# 7612 bathrooms (probes 662-680), the M-MST bridge/make-up table recon, the
+# separate Elda list for baths + laundry (BL-01..BL-18). 6 files predicted.
+git add claude/README.md \
         claude/recon-2026-10-14-7612-baths-laundry.md \
         claude/recon-2026-10-14-7612-baths-catalog-arrangements.md \
+        claude/recon-2026-10-14-7612-mmst-bridge.md \
+        docs/Elda_Questions_7612_Baths_Laundry_v0.1.md \
         build/go.sh
 
 echo
