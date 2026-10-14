@@ -79,3 +79,7 @@ Master bath: two wall-hung Intarsio vanities 1690 each, 1035 apart under a windo
 ### BL-18 — Drawer under the make-up table (M-MST)
 Under the 1035 MDi make-up table (BL-17) we want one drawer, front 100 or 120 high, no cabinet below. Proposal: Kitchen System Legrabox "Drawer H. 9 – with runners without front" W.105 d.40 (996K30, p.570), runners fixed to the two 2.2 Intarsio end panels with packers (opening 1035), Intarsio front 1031 × 120 to size, Blumotion push-to-open. Can this be ordered with the bathroom units? Does the H.9 drawer fit a 100 front, or is 120 the minimum?
 Ящик под столиком: Legrabox H.9 W.105 d.40 на торцевые панели, фасад Intarsio в размер, push-to-open — можно ли так заказать и минимальный фасад 100 или 120.
+
+### BL-19 — Mirror article codes and dimensions
+Bathroom Collection printed p.182–185 (Round / Rectangular / Oval Make Up, Riflesso) print "specchiera" in the Code column — no article codes. (1) What are the order codes for each size and version (frame White/Black/Champagne, front light / front + backlight), and how is anti-fog ordered? (2) Mirror depth, frame width, wall fixing and the distance from the wall — for our drawings. For 7612 we plan Rectangular Make Up, black frame, front light: 70×70 ×1, 120×70 ×5.
+Коды зеркал (в прайсе вместо кода слово «specchiera»), глубина/рама/крепление.

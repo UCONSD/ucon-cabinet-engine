@@ -88,11 +88,13 @@ echo "===== 2. stage, BY NAME ====="
 # build/parked/ and NOT in this commit.
 # 2026-10-14 (core 1.9.29 commit pushed): docs only - vanities placed in all five
 # 7612 bathrooms (probes 662-680), the M-MST bridge/make-up table recon, the
-# separate Elda list for baths + laundry (BL-01..BL-18). 6 files predicted.
+# separate Elda list for baths + laundry (BL-01..BL-19), mirrors 681-684 and the
+# mirrors picker recon. 7 files predicted.
 git add claude/README.md \
         claude/recon-2026-10-14-7612-baths-laundry.md \
         claude/recon-2026-10-14-7612-baths-catalog-arrangements.md \
         claude/recon-2026-10-14-7612-mmst-bridge.md \
+        claude/recon-2026-10-14-mirrors-picker.md \
         docs/Elda_Questions_7612_Baths_Laundry_v0.1.md \
         build/go.sh
 
