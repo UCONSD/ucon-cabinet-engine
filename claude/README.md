@@ -389,6 +389,11 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `spec-2026-10-08-wallpanels-generators.md` - the REC -> LAU wall tools made general:
     `tools/wallpanels/` (generators + one JSON per wall), `tools/layout/wall_drawing_set.rb`;
     proof by `tools/test_wallpanels.rb` and probes 599c / 600; the A-702 sheet-pattern finding.
+- 7612 Hillside Dr - bathrooms and laundry (Cesar Bathroom Collection + Kitchen System):
+  - `recon-2026-10-14-7612-baths-laundry.md` - Bathroom Collection recon, room codes
+    (M-PWD, M-BA1, M-MST, L-BA2, L-BA3, L-LAU), and the L-LAU v0.1 build log (probes 618-634).
+  - `recon-2026-10-14-7612-laundry-wall-units-to-ceiling.md` - L-LAU wall units H.72 -> H.96
+    almost to the ceiling; HVAC register to the ceiling (mechanical plans).
 
 ---
 

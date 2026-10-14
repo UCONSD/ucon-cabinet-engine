@@ -851,6 +851,32 @@ module UCON
         # before any branch can return without it.
         draw_led(definition, unit, z0, led_tag, mat)
 
+        # ---- pull-out doors (core 1.9.28) -----------------------------------
+        # Andriy, 7612 L-LAU, 2026-10-14, off BL0100: a pull-out door "lost the
+        # dashed diagonal that says it opens by pulling out". It never had one -
+        # base_h84.json held the symbol back because the mechanism's travel is
+        # not printed. His rule now: a front that PULLS OUT carries the drawer
+        # symbol, the one diagonal top-left to bottom-right, whatever runs it.
+        # The plan travel reuses the drawer runner rule for the depth; that is
+        # a representation, like every symbol here, not the mechanism's spec.
+        if layout['mechanism'].to_s == 'pull_out_door'
+          lo, span = front_span_mm(unit, slabs, front_height_mm)
+          g = definition.entities.add_group
+          g.name = 'SYM_FRONT_PULLOUT_DOOR'
+          g.entities.add_line([0, y_face.mm, (z0 + lo + span).mm], [w.mm, y_face.mm, (z0 + lo).mm])
+          finalize(g, front_tag, mat)
+          travel = Generator.runner_travel_for(unit['depth_mm'])
+          if travel
+            y1 = y_face - travel
+            yb = y1 + s::FRONT_T_MM
+            g = definition.entities.add_group
+            g.name = 'SYM_PLAN_PULLOUT'
+            dashed_rect(g, [[0, yb], [w, yb], [w, y1], [0, y1]], z_plan)
+            finalize(g, plan_tag, mat)
+          end
+          return
+        end
+
         # ---- drawer stacks -------------------------------------------------
         if kind == 'horizontal'
           (slabs || Generator.front_slabs(unit)).each_with_index do |slab, i|

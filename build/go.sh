@@ -81,16 +81,16 @@ echo "===== 2. stage, BY NAME ====="
 # (tools/wallpanels/), one JSON per wall, the general LayOut writer, the suite
 # test_wallpanels (joined the suites above), the note and its README line.
 # 12 files predicted; the list must print 12.
-git add tools/wallpanels/wall_panels.rb \
-        tools/wallpanels/wall_model.rb \
-        tools/wallpanels/walls/AP_BF_Recreation_Laundry.json \
-        tools/wallpanels/fixtures/rec_lau_model_568.json \
-        tools/wallpanels/fixtures/rec_lau_probe_566_570.json \
-        tools/wallpanels/fixtures/rec_lau_drilling_panels.csv \
-        tools/wallpanels/fixtures/rec_lau_drilling_frames_CNC_S.csv \
-        tools/test_wallpanels.rb \
-        tools/layout/wall_drawing_set.rb \
-        claude/spec-2026-10-08-wallpanels-generators.md \
+# 2026-10-14, core 1.9.28: 7612 L-LAU - pull-out door draws the drawer diagonal,
+# plus the two 7612 bathrooms/laundry notes and their README lines, and this
+# script itself (the suite checks it stages itself). 7 files predicted. The tall_h210.json pull-out PILOT of 2026-10-05 is NOT in this
+# commit: it waits for Andriy's check in the model and is parked, whole, in
+# build/parked/tall_h210.json.pilot-2026-10-05 (git-ignored).
+git add src/ucon_cabinet_engine/core/70_symbols.rb \
+        src/ucon_cabinet_engine/core/00_version.rb \
+        registry/cesar/base_h84.json \
+        claude/recon-2026-10-14-7612-baths-laundry.md \
+        claude/recon-2026-10-14-7612-laundry-wall-units-to-ceiling.md \
         claude/README.md \
         build/go.sh
 

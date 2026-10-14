@@ -60,7 +60,7 @@
         "front_layout": {
           "kind": "single",
           "mechanism": "pull_out_door",
-          "note": "One full-height front carried by a pull-out mechanism (see printed p.512), not a swinging leaf. Slab geometry is that of a single door; the opening SYMBOL is deliberately not drawn yet - a swing V would be a lie and the pull-out travel of this mechanism is not in the catalog. Drawing rule owed in docs/Drawing_Spec_v0.1.md."
+          "note": "One full-height front carried by a pull-out mechanism (see printed p.512), not a swinging leaf. Slab geometry is that of a single door; the opening SYMBOL is the drawer diagonal (top-left to bottom-right), drawn by 70_symbols.rb since core 1.9.28 - Andriy, 7612 L-LAU, 2026-10-14: a front that pulls out carries the drawer symbol. A swing V would be a lie; the plan travel is the drawer runner rule, a representation (the mechanism travel is not printed)."
         },
         "wall_hung": true,
         "wall_hung_note": "SWEPT 2026-09-26 on the 110-dpi render of printed p.49 / p.51: the 'Hung version' glyph (legend printed p.19) is printed beside every depth band this type holds.",
