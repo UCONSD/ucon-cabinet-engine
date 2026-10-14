@@ -714,6 +714,18 @@ module UCON
         # height off THIS unit for front_height_mm, and the bare registry row
         # wrote the catalog 780 into the contract of a unit cut to 720.
         unit  = Generator.with_object_height(unit, attrs)
+        # THE HANGING HEIGHT ALREADY ON THE OBJECT SURVIVES APPLY (core 1.9.29).
+        # Andriy, 7612 bathroom pilot BA60987, 2026-10-14: hung at 285 (worktop
+        # top 890), he switched the grip to gola and the unit jumped to 1400.
+        # attributes_patch asked Generator.mount_bottom_mm of the bare registry
+        # row, which knows no stated height, so a unit that hangs by nature got
+        # the wall default back on every Apply. mount_bottom_mm already says a
+        # stated value wins; it was simply never shown one. Only a unit that is
+        # hung NOW carries it - a base unit being ticked to hang for the first
+        # time still gets the family default.
+        if attrs['mounting'].to_s == 'wall_hung' && !attrs['mount_bottom_mm'].nil?
+          unit = unit.merge('mount_bottom_mm' => attrs['mount_bottom_mm'])
+        end
         # THE GROUND CHOICES (core 1.9.6): the plinth of a run-plinth unit, the
         # bottom of an end panel. Validated here, written with the other facts
         # below, and the body is moved by exactly the change they make.

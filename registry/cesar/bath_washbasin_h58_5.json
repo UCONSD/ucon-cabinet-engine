@@ -1,0 +1,295 @@
+{
+ "section": "Washbasin units H. 58.5 | Bathroom Collection",
+ "class": "base",
+ "family": "Bath Washbasin H.58.5",
+ "source_pdf": "CESAR - Bathroom Collection.pdf",
+ "source_pages": "Bathroom Collection (price list April 2026) printed p.85 / PDF 87 whole; p.86 / PDF 88 held back (see extraction_note)",
+ "extraction_note": "2026-10-14, 7612 Hillside Dr bathrooms. PILOT BA60987 checked in a test model by Andriy (2026-10-14: 'all fine', after the core 1.9.29 Apply fix); the rest of printed p.85 generated the same way: four types, 26 codes, d.47 (BA6) and d.62 (BA4). NOT held: printed p.86 'Base unit with drawers - 1 jumbo drawer, 1 shaped drawer' suffix 86 (10 codes) - it prints ONE elevation pair, 28 / 28, where every other two-front position prints a handle pair and a gola pair; which one it is cannot be read off the page. Ask Elda.",
+ "family_naming_note": "Namespaced 'Bath ...' because the registry merges section files by family NAME and the Kitchen System already holds 'H.58.5' (base_h58_5.json). The Bathroom Collection's own letters: BA6 = d.47, BA4 = d.62 (printed p.85, p.90). Section names carry '| Bathroom Collection' because the catalog map keys sections by name and the Kitchen System prints a 'Base units H. 58.5' of its own.",
+ "data": {
+  "height_mm": 585,
+  "mounting": "wall_hung",
+  "mounting_note": "The bathroom Maxima units are wall-hung by nature: every arrangement (printed p.188-194) hangs them, the general features (printed p.32) show the wall-hung fixing, and the sections print no plinth. The hanging height is a PROJECT decision - 7612: worktop top 890 (35 in), carcass bottom 890 - 20 - 585 = 285 (Andriy 2026-10-14).",
+  "door_versions": {
+   "full_mm": 585,
+   "gola_mm": 555,
+   "source_ref": "printed p.85 / p.90",
+   "note": "58,5 full, 55,5 gola on the single-front positions - the same 30 mm the kitchen families print."
+  },
+  "depths_mm": [
+   470,
+   620
+  ],
+  "collections": [
+   "Maxima",
+   "Intarsio"
+  ],
+  "unit_types": {
+   "bath_washbasin_door": {
+    "description": "Washbasin unit with door - 1 rh or lh door",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [],
+    "source_ref": "printed p.85 / PDF 87",
+    "codes": [
+     {
+      "code": "BA60661",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40661",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "W.60 only, both depths.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door, hinged on a vertical edge; hinge_side per order. Elevation printed p.85: 58,5 / 55,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 555
+      }
+     ],
+     "gola_note": "Single front loses 30 under the worktop (58,5 / 55,5 printed)."
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "bath_washbasin_doors": {
+    "description": "Washbasin unit with doors - 2 doors",
+    "opening": "doors",
+    "handed": false,
+    "interior_confirmed": [],
+    "source_ref": "printed p.85 / PDF 87",
+    "codes": [
+     {
+      "code": "BA60960",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61260",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40960",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41260",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "W.90 and W.120 only.",
+    "front_layout": {
+     "kind": "vertical_split",
+     "note": "Two doors, equal split as drawn (representation). Elevation printed p.85: 58,5 / 55,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 555
+      }
+     ],
+     "gola_note": "Single front loses 30 under the worktop (58,5 / 55,5 printed).",
+     "count": 2
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "bath_washbasin_jumbo_shaped_interior": {
+    "description": "Washbasin unit with jumbo drawer - 1 shaped interior drawer, 1 jumbo drawer",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "1 shaped interior drawer",
+     "1 jumbo drawer"
+    ],
+    "source_ref": "printed p.85 / PDF 87",
+    "codes": [
+     {
+      "code": "BA60691",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60791",
+      "width_mm": 750,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60991",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61091",
+      "width_mm": 1050,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61291",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40691",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40791",
+      "width_mm": 750,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40991",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41091",
+      "width_mm": 1050,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41291",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "One full-height front carried by the jumbo drawer; the shaped (U-cut) interior drawer behind it.",
+    "front_layout": {
+     "kind": "horizontal",
+     "note": "One full-height front (jumbo). Elevation printed p.85: 58,5 / 55,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 555
+      }
+     ],
+     "gola_note": "Single front loses 30 under the worktop (58,5 / 55,5 printed).",
+     "heights_mm_top_to_bottom": [
+      585
+     ]
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "washbasin_jumbo_shaped_drawer": {
+    "description": "Washbasin unit with drawers - 1 shaped drawer (top, around the trap), 1 jumbo drawer",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "1 jumbo drawer",
+     "1 shaped drawer"
+    ],
+    "source_ref": "printed p.85 / PDF 87",
+    "codes": [
+     {
+      "code": "BA60687",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60787",
+      "width_mm": 750,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60987",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61087",
+      "width_mm": 1050,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61287",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40687",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40787",
+      "width_mm": 750,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40987",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41087",
+      "width_mm": 1050,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41287",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "Printed 'Base unit with drawers - 1 jumbo ddrawer - 1 shaped drawer'. The shaped drawer is the TOP one: printed p.32 item 9 and the washbasin drawings of printed p.35. PILOT BA60987 checked 2026-10-14.",
+    "front_layout": {
+     "kind": "horizontal",
+     "heights_mm_top_to_bottom": [
+      292.5,
+      292.5
+     ],
+     "note": "Elevation printed p.85: 29,2 / 29,2 (handle), taken as 292,5 + 292,5 = 585; gola 24,7 / 27,7.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30.5,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 247
+      },
+      {
+       "kind": "zone",
+       "h_mm": 30.5,
+       "role": "intermediate recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 277
+      }
+     ],
+     "gola_note": "Printed gola fronts 24.7 / 27.7; the remaining 61 is split equally between the two recesses (30.5 each) - an INFERENCE, not printed. Check against the factory drawing."
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   }
+  }
+ }
+}

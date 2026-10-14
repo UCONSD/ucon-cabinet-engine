@@ -268,7 +268,7 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1562 codes (46 open units + 39 open end units + 416 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
+check('registry loads and holds 1636 codes (46 open units + 39 open end units + 490 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops)') do
   # 2026-09-30, glass wall H.72 / H.84: +6 - printed p.313-314, the 7612 sink wall.
   # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
   # (12 base, 14 wall, 20 tall), each joining its height family.
@@ -312,7 +312,8 @@ check('registry loads and holds 1562 codes (46 open units + 39 open end units + 
   # 201, 203), 17 each, held for lookup like H.222; none buildable.
   # 2026-10-04, batch 4: +13 - the H.36 compound wall units of printed p.212.
   n = Registry.codes.length
-  raise "got #{n}" unless n == 1562
+  # 1562 -> 1636 2026-10-14: the THIRD BOOK, Bathroom Collection p.85 and p.90-91 (74 base-class codes, 7612 bathrooms)
+  raise "got #{n}" unless n == 1636
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -505,9 +506,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1562 rows, each with code/dims/description/source') do
+check('registry catalog: 1636 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1562
+  raise cat.length.to_s unless cat.length == 1636 # +74 2026-10-14 Bathroom Collection
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -606,6 +607,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Base units H. 39',
                                              'Base units H. 48',
                                              'Base units H. 58.5',
+                                             'Base units H. 58.5 | Bathroom Collection',
                                              'Base units H. 78',
                                              'Base units H. 78 | for household appliances',
                                              'Base units H. 84',
@@ -666,7 +668,8 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Wall units H. 60',
                                              'Wall units H. 72',
                                              'Wall units H. 84',
-                                             'Wall units H. 96']
+                                             'Wall units H. 96',
+                                             'Washbasin units H. 58.5 | Bathroom Collection']
   # tall arrived 2026-08-21 with printed p.418 - the first non base/wall class.
   # 'filler' arrived 2026-08-23 with printed p.434 and is the first class that
   # is OURS rather than the catalog's - one chapter whose rows are base, wall
@@ -5194,13 +5197,13 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  'pull-out units' => 23,
                  # +83 / +4 2026-10-04: group 1, tall for base unit H.78
                  # +24 2026-10-04 batch 2: base H.48 jumbo and compound (p.29)
-                 'units with jumbo drawers' => 381,
-                 'units with interior drawers' => 32,
+                 'units with jumbo drawers' => 415, # +34 2026-10-14 Bathroom Collection (suffix 87/91/57/66)
+                 'units with interior drawers' => 54, # +22 2026-10-14 Bathroom Collection (suffix 91/52)
                  'end panels, whose width is a thickness' => 124,
                  'tall or wall units with framed glass doors' => 15, # +6 2026-09-30 glass H.72 / H.84; +6 2026-10-04 H.60 / H.120
                  # 2026-09-26: a new bucket, Tangram's five curved bases and its
                  # curved sideboard; the straight spice rack joins the allowed.
-                 'curved units, whose width is an arc' => 6 } && allowed == 830 # +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
+                 'curved units, whose width is an arc' => 6 } && allowed == 848 # +18 2026-10-14 Bathroom Collection doors (p.85, p.90); +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -7751,8 +7754,14 @@ check('THE REGISTRY NOW HOLDS TWO BOOKS, and every code says which') do
   # THIRD ONE 2026-08-28, added on purpose exactly as the comment above asks:
   # the ceramic tops are printed p.110 of the same book.
   volume_three = %w[panel_sheet shelf worktop]
+  # THE THIRD BOOK, 2026-10-14: the Bathroom Collection. Its rows are class
+  # 'base' like the kitchen's, so the class cannot tell the books apart - the
+  # family does ('Bath ...', namespaced for exactly this reason).
   wrong = Registry.catalog.reject do |r|
-    want = volume_three.include?(r['class']) ? 'CESAR - 3 Linear Elements.pdf' : 'CESAR - 2 Kitchen System.pdf'
+    want = if r['family'].to_s.start_with?('Bath ') then 'CESAR - Bathroom Collection.pdf'
+           elsif volume_three.include?(r['class']) then 'CESAR - 3 Linear Elements.pdf'
+           else 'CESAR - 2 Kitchen System.pdf'
+           end
     r['source_ref'].to_s.start_with?("#{want} ")
   end
   raise "cite the wrong book: #{wrong.map { |r| r['code'] }.first(8).inspect}" unless wrong.empty?

@@ -708,6 +708,12 @@ module UCON
         'tangram_fixed_f'         => 'Tangram F - fixed end (no code)',
         'base_door'               => 'Door units',
         'base_doors'              => 'Two-door units',
+        # BATHROOM COLLECTION, 2026-10-14 (7612 bathrooms): printed headings.
+        'bath_washbasin_door'     => 'Washbasin units, one door',
+        'bath_washbasin_doors'    => 'Washbasin units, two doors',
+        'bath_washbasin_jumbo_shaped_interior' => 'Washbasin units, jumbo + shaped interior drawer',
+        'washbasin_jumbo_shaped_drawer' => 'Washbasin units, shaped drawer + jumbo',
+        'base_jumbo_drawers_equal_gola' => 'Jumbo drawer units (2 jumbo, equal gola fronts)',
         'base_drawers_jumbo'      => 'Drawer units (2 + jumbo)',
         'base_jumbo_drawers'      => 'Jumbo drawer units (2 jumbo)',
         'base_drawer_jumbo'       => 'Drawer + jumbo units',

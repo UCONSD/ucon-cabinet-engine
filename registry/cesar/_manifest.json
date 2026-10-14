@@ -2248,6 +2248,67 @@
     "status": "extracted",
     "extracted_on": "DEMAND-DRIVEN 2026-08-28: the kitchen had no object_class worktop at all, and Andriy chose ceramic, then Dekton Marmorio (group D) off the swatches. ONLY the 4/6 cm page. printed p.104 (1,2 cm) and p.107 (2,2 cm) are the same grammar at other thicknesses and are not extracted; printed p.112-114 (dual-height, Monolith, Shark) and p.115-117 (splashbacks, upstand) are not either. The tops price list runs printed p.77-212 and almost all of it is still unread.",
     "note": "THE CODE DOES NOT DETERMINE THE PRICE HERE - one code, five finish groups, eight depth bands. The group is an order axis under domain rule 6, not part of the article."
+   },
+   {
+    "class": "base",
+    "family": "Bath Washbasin H.58.5",
+    "book": "CESAR - Bathroom Collection.pdf",
+    "section": "Washbasin units H. 58.5 | Bathroom Collection",
+    "printed_pages": "85-86",
+    "status": "partial",
+    "extracted_on": "2026-10-14",
+    "note": "THE THIRD BOOK. Bathroom Collection (price list April 2026), printed p.85 taken whole after the pilot BA60987 was checked in a test model by Andriy (7612 Hillside Dr, 2026-10-14): four types, 26 codes, BA6 = d.47, BA4 = d.62 - registry/cesar/bath_washbasin_h58_5.json. Wall-hung by nature (family mounting). printed p.86 suffix 86 NOT held: one elevation pair 28 / 28 where every other two-front position prints handle and gola - ask Elda. See claude/recon-2026-10-14-7612-baths-catalog-arrangements.md.",
+    "pages": [
+     {
+      "printed": 85,
+      "status": "extracted",
+      "extracted_on": "2026-10-14",
+      "types": [
+       "Base unit with door (2 codes, W.60)",
+       "Base unit with doors (4 codes, W.90/120)",
+       "Base unit with jumbo drawer - shaped interior drawer (10 codes, suffix 91)",
+       "Base unit with drawers - jumbo + shaped drawer (10 codes, suffix 87)"
+      ]
+     },
+     {
+      "printed": 86,
+      "status": "not_extracted",
+      "types": [
+       "Base unit with drawers - 1 jumbo drawer, 1 shaped drawer, suffix 86 (10 codes) - one elevation pair 28 / 28, handle or gola not readable; ask Elda"
+      ]
+     }
+    ]
+   },
+   {
+    "class": "base",
+    "family": "Bath Base H.58.5",
+    "book": "CESAR - Bathroom Collection.pdf",
+    "section": "Base units H. 58.5 | Bathroom Collection",
+    "printed_pages": "90-91",
+    "status": "extracted",
+    "extracted_on": "2026-10-14",
+    "note": "Bathroom Collection printed p.90-91 taken whole: five types, 48 codes, BA6 = d.47, BA4 = d.62 - registry/cesar/bath_base_h58_5.json. Suffix 57 and suffix 66 are the same unit at the same prices; the only printed difference is the gola pair (24,5 / 27,5 vs 27,5 / 27,5) - which grip recess each serves is not printed; ask Elda.",
+    "pages": [
+     {
+      "printed": 90,
+      "status": "extracted",
+      "extracted_on": "2026-10-14",
+      "types": [
+       "Base unit with door (6 codes)",
+       "Base unit with doors (6 codes)",
+       "Base unit with jumbo drawer + interior drawer (12 codes, suffix 52)",
+       "Base unit with jumbo drawers (12 codes, suffix 57)"
+      ]
+     },
+     {
+      "printed": 91,
+      "status": "extracted",
+      "extracted_on": "2026-10-14",
+      "types": [
+       "Base unit with jumbo drawers (12 codes, suffix 66, gola 27,5 / 27,5)"
+      ]
+     }
+    ]
    }
   ]
  },

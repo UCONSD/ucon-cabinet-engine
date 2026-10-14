@@ -1,0 +1,451 @@
+{
+ "section": "Base units H. 58.5 | Bathroom Collection",
+ "class": "base",
+ "family": "Bath Base H.58.5",
+ "source_pdf": "CESAR - Bathroom Collection.pdf",
+ "source_pages": "Bathroom Collection (price list April 2026) printed p.90-91 / PDF 92-93, the section taken whole",
+ "extraction_note": "2026-10-14, 7612 Hillside Dr bathrooms, after the pilot BA60987. Five types, 48 codes, d.47 (BA6) and d.62 (BA4).",
+ "family_naming_note": "See bath_washbasin_h58_5.json.",
+ "data": {
+  "height_mm": 585,
+  "mounting": "wall_hung",
+  "mounting_note": "The bathroom Maxima units are wall-hung by nature: every arrangement (printed p.188-194) hangs them, the general features (printed p.32) show the wall-hung fixing, and the sections print no plinth. The hanging height is a PROJECT decision - 7612: worktop top 890 (35 in), carcass bottom 890 - 20 - 585 = 285 (Andriy 2026-10-14).",
+  "door_versions": {
+   "full_mm": 585,
+   "gola_mm": 555,
+   "source_ref": "printed p.85 / p.90",
+   "note": "58,5 full, 55,5 gola on the single-front positions - the same 30 mm the kitchen families print."
+  },
+  "depths_mm": [
+   470,
+   620
+  ],
+  "collections": [
+   "Maxima",
+   "Intarsio"
+  ],
+  "unit_types": {
+   "base_door": {
+    "description": "Base unit with door - 1 rh or lh door, 1 shelf",
+    "opening": "door",
+    "handed": true,
+    "interior_confirmed": [
+     "1 shelf"
+    ],
+    "source_ref": "printed p.90 / PDF 92",
+    "codes": [
+     {
+      "code": "BA60301",
+      "width_mm": 300,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60501",
+      "width_mm": 450,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60601",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40301",
+      "width_mm": 300,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40501",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40601",
+      "width_mm": 600,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "W.30/45/60, both depths.",
+    "front_layout": {
+     "kind": "single",
+     "note": "One door; hinge_side per order. Elevation printed p.90: 58,5 / 55,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 555
+      }
+     ],
+     "gola_note": "Single front loses 30 under the worktop (58,5 / 55,5 printed)."
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "base_doors": {
+    "description": "Base unit with doors - 2 doors, 1 shelf",
+    "opening": "doors",
+    "handed": false,
+    "interior_confirmed": [
+     "1 shelf"
+    ],
+    "source_ref": "printed p.90 / PDF 92",
+    "codes": [
+     {
+      "code": "BA60600",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60900",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61200",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40600",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40900",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41200",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "W.60/90/120, both depths.",
+    "front_layout": {
+     "kind": "vertical_split",
+     "note": "Two doors, equal split as drawn (representation). Elevation printed p.90: 58,5 / 55,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 555
+      }
+     ],
+     "gola_note": "Single front loses 30 under the worktop (58,5 / 55,5 printed).",
+     "count": 2
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "base_jumbo_drawer_interior_drawer": {
+    "description": "Base unit with jumbo drawer - 1 jumbo drawer, 1 interior drawer",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "1 jumbo drawer",
+     "1 interior drawer"
+    ],
+    "source_ref": "printed p.90 / PDF 92",
+    "codes": [
+     {
+      "code": "BA60552",
+      "width_mm": 450,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60652",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60752",
+      "width_mm": 750,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60952",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61052",
+      "width_mm": 1050,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61252",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40552",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40652",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40752",
+      "width_mm": 750,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40952",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41052",
+      "width_mm": 1050,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41252",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "W.45-120, both depths.",
+    "front_layout": {
+     "kind": "horizontal",
+     "note": "One full-height front (jumbo), interior drawer behind. Elevation printed p.90: 58,5 / 55,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 30,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 555
+      }
+     ],
+     "gola_note": "Single front loses 30 under the worktop (58,5 / 55,5 printed).",
+     "heights_mm_top_to_bottom": [
+      585
+     ]
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "base_jumbo_drawers": {
+    "description": "Base unit with jumbo drawers - 2 jumbo drawers",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "2 jumbo drawers"
+    ],
+    "source_ref": "printed p.90 / PDF 92",
+    "codes": [
+     {
+      "code": "BA60557",
+      "width_mm": 450,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60657",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60757",
+      "width_mm": 750,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60957",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61057",
+      "width_mm": 1050,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61257",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40557",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40657",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40757",
+      "width_mm": 750,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40957",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41057",
+      "width_mm": 1050,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41257",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "Suffix 57: gola fronts printed UNEQUAL, 24,5 / 27,5.",
+    "front_layout": {
+     "kind": "horizontal",
+     "heights_mm_top_to_bottom": [
+      292.5,
+      292.5
+     ],
+     "note": "Elevation printed p.90: 29 / 29 (handle), taken as 292,5 + 292,5 = 585; gola 24,5 / 27,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 32.5,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 245
+      },
+      {
+       "kind": "zone",
+       "h_mm": 32.5,
+       "role": "intermediate recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 275
+      }
+     ],
+     "gola_note": "Printed gola fronts 24.5 / 27.5; the remaining 65 is split equally between the two recesses (32.5 each) - an INFERENCE, not printed. Check against the factory drawing."
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   },
+   "base_jumbo_drawers_equal_gola": {
+    "description": "Base unit with jumbo drawers - 2 jumbo drawers (equal gola fronts)",
+    "opening": "pull-out",
+    "handed": false,
+    "interior_confirmed": [
+     "2 jumbo drawers"
+    ],
+    "source_ref": "printed p.91 / PDF 93",
+    "codes": [
+     {
+      "code": "BA60566",
+      "width_mm": 450,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60666",
+      "width_mm": 600,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60766",
+      "width_mm": 750,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA60966",
+      "width_mm": 900,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61066",
+      "width_mm": 1050,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA61266",
+      "width_mm": 1200,
+      "depth_mm": 470
+     },
+     {
+      "code": "BA40566",
+      "width_mm": 450,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40666",
+      "width_mm": 600,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40766",
+      "width_mm": 750,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA40966",
+      "width_mm": 900,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41066",
+      "width_mm": 1050,
+      "depth_mm": 620
+     },
+     {
+      "code": "BA41266",
+      "width_mm": 1200,
+      "depth_mm": 620
+     }
+    ],
+    "notes": "Suffix 66, same description and same prices as suffix 57 on p.90; the only printed difference is the gola pair, 27,5 / 27,5 instead of 24,5 / 27,5. Which grip recess each one is for is not printed - ask Elda.",
+    "front_layout": {
+     "kind": "horizontal",
+     "heights_mm_top_to_bottom": [
+      292.5,
+      292.5
+     ],
+     "note": "Elevation printed p.91: 29 / 29 (handle), taken as 292,5 + 292,5; gola 27,5 / 27,5.",
+     "gola_stack_top_to_bottom": [
+      {
+       "kind": "zone",
+       "h_mm": 17.5,
+       "role": "undercounter recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 275
+      },
+      {
+       "kind": "zone",
+       "h_mm": 17.5,
+       "role": "intermediate recess"
+      },
+      {
+       "kind": "front",
+       "h_mm": 275
+      }
+     ],
+     "gola_note": "Printed gola fronts 27.5 / 27.5; the remaining 35 is split equally between the two recesses (17.5 each) - an INFERENCE, not printed. Check against the factory drawing."
+    },
+    "wall_hung": true,
+    "wall_hung_note": "Wall-hung is the family's mounting; see data.mounting_note."
+   }
+  }
+ }
+}
