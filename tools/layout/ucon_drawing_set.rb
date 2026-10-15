@@ -246,6 +246,8 @@ module UCON
       tops.each { |t| hatch(c4(vp, p3, t[a0k], t[a1k], t[:z0], t[:z1])) }
       Array(@notes_here).each { |txt, am, zm| q = vp.model_to_paper_point(p3.(am, zm)); note_text(txt, q.x, q.y) }
       @notes_here = nil
+      # a caller's own drawing over the view (bath set v0.4: scale figures), in the view's own coordinates
+      if @after_elev then @after_elev.call(vp, p3); @after_elev = nil end
       # rows below: floor chain (+ short spans), then overall
       used = chain(vp, p3, fpts, 0, :below, ROW, plen)
       dim(vp, p3, [amin, 0], [amax, 0], ROW * (used + 1), :below)

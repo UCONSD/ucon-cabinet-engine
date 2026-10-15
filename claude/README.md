@@ -400,6 +400,8 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
     (p.187-197) read for rules, building blocks with points, options per bathroom.
   - `recon-2026-10-14-7612-mmst-bridge.md` - M-MST bridge / make-up table between the two vanities: catalogue check, options A/B/C
   - `recon-2026-10-14-mirrors-picker.md` - Bathroom Collection mirrors (p.181-185): sizes, versions, no printed codes; picker proposal
+  - `handoff-2026-10-14-7612-baths-drawings-v0.3.md` - client approval set v0.3, baths + laundry, 14 sheets;
+    `tools/layout/bath_drawing_set.rb` (bath elevation / plan, two sheets per room).
 
 ---
 
