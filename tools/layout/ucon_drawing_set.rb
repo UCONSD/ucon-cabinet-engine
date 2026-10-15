@@ -31,6 +31,9 @@ module UCON
     # MILLIMETRES ONLY (Andriy 2026-10-04). Was D1, inches to 1/16 over mm; inch_txt stays for a set that wants it.
     def d1(mmv) = mmv.round.to_s
 
+    # the text a dimension prints; a set that works in inches overrides it (MEP kitchen, Andriy 2026-10-15)
+    def dim_text(mmv) = d1(mmv)
+
     # ---------------------------------------------------------------- model facts
     def collect(model)
       ce = UCON::CabinetEngine
@@ -141,7 +144,7 @@ module UCON
         @conn_err ||= "#{e.class}: #{e.message}"
       end
       d.custom_text = true
-      t = d.text; t.plain_text = d1(mmv)
+      t = d.text; t.plain_text = dim_text(mmv)
       # the custom text comes back in LayOut's default Helvetica unless it carries its own style (set 329c, pdffonts)
       t.style = dim_style.get_sub_style(Layout::Style::DIMENSION_TEXT) rescue nil
       d.text = t

@@ -1,0 +1,349 @@
+{
+  "about": "MEP point rules by ROLE of an object. Offsets from the anchor: u along the run from the anchor CENTRE (+ = + run axis), z above the floor (centre of box / stub), v from the anchor BACK face into the room. A project file maps roles to objects. status: SOURCE = manufacturer document (source names it), PLANNING = our default until a document or a decision, DECISION = Andriy. Points without a position (schedule only) have no u/z. Island (Andriy 2026-10-15): every utility of the cooktop inside the cooktop cabinet, on its back panel, on one line.",
+  "roles": {
+    "sink_base": {
+      "points": [
+        {
+          "id": "P1",
+          "sys": "P",
+          "sym": "HW",
+          "u": -152,
+          "z": 508,
+          "item": "Hot water stub-out (faucet + dishwasher)",
+          "req": "1/2\" HW, dual-outlet angle stop (faucet + DW 3/8\" supply). DW needs 120-149 F.",
+          "status": "PLANNING",
+          "src": "v0.2"
+        },
+        {
+          "id": "P2",
+          "sys": "P",
+          "sym": "CW",
+          "u": 152,
+          "z": 508,
+          "item": "Cold water stub-out (faucet + RO)",
+          "req": "1/2\" CW, dual-outlet angle stop (faucet + RO feed).",
+          "status": "PLANNING",
+          "src": "v0.2"
+        },
+        {
+          "id": "P3",
+          "sys": "P",
+          "sym": "DR",
+          "u": 0,
+          "z": 381,
+          "item": "Sink drain / trap arm",
+          "req": "2\" waste stub-out (1 1/2\" trap arm), low enough for the disposal discharge.",
+          "status": "PLANNING",
+          "src": "v0.2; TBV with the disposal model"
+        },
+        {
+          "id": "E7",
+          "sys": "E",
+          "sym": "SPLIT",
+          "u": 398,
+          "z": 457,
+          "item": "Disposal + RO receptacle",
+          "req": "120 V 20 A duplex, split-wired: one half switched (disposal, E8), one half always on (RO pump).",
+          "status": "PLANNING",
+          "src": "v0.2"
+        },
+        {
+          "id": "E8",
+          "sys": "E",
+          "item": "Disposal switch",
+          "req": "Countertop AIR SWITCH, hole in the worktop behind the sink; air tube to the switch module on E7.",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-06"
+        },
+        {
+          "id": "P4",
+          "sys": "P",
+          "item": "Reverse osmosis (client-supplied)",
+          "req": "Cold feed from P2, drain saddle on P3 tailpiece, RO faucet hole in the worktop. Unit / tank in the sink base.",
+          "status": "PLANNING",
+          "src": "RO model TBD"
+        },
+        {
+          "id": "P5",
+          "sys": "P",
+          "item": "Dishwasher drain + worktop holes",
+          "req": "NO air gap: drain hose with HIGH LOOP under the worktop to the disposal inlet. Worktop holes by default 3: faucet, soap dispenser, disposal air switch.",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-06"
+        }
+      ]
+    },
+    "dishwasher": {
+      "points": [
+        {
+          "id": "E6",
+          "sys": "E",
+          "sym": "J",
+          "u": 248,
+          "z": 102,
+          "item": "Dishwasher power",
+          "req": "120 V 15 A dedicated, HARDWIRED, 12-2 w/ ground. Cable stub low at the rear of the opening.",
+          "status": "PLANNING",
+          "src": "v0.2; verify Dacor DDW24G9000APDA manual"
+        }
+      ]
+    },
+    "tall_oven": {
+      "points": [
+        {
+          "id": "E1",
+          "sys": "E",
+          "sym": "J240",
+          "u": 0,
+          "z": 305,
+          "item": "Wall oven Thermador MEDMC301WS",
+          "req": "208/240 V, 50 A @240 V (40 A @208 V), 10.2 kW, 4-wire, dedicated. J-box within reach of the oven conduit, 2\" hole for the conduit.",
+          "status": "SOURCE",
+          "src": "Thermador installation guide 8001185222_A, Electrical Installation"
+        },
+        {
+          "id": "W1",
+          "sys": "P",
+          "sym": "W",
+          "u": 269,
+          "z": 152,
+          "item": "Freezer ice maker water (T24IF905SP)",
+          "req": "1/4\" OD cold water line, 40-120 psi. Shut-off valve accessible OUTSIDE the freezer niche (here: lower compartment of the oven column).",
+          "status": "PLANNING",
+          "src": "v0.2; Spec Book T24IF905SP p.23-25"
+        }
+      ]
+    },
+    "fridge_column": {
+      "points": [
+        {
+          "id": "E?",
+          "sys": "E",
+          "sym": "DUP",
+          "u": 0,
+          "z": 150,
+          "item": "Column receptacle",
+          "req": "120 V 15 A dedicated receptacle. Thermador: next to the appliance; if not possible, BEHIND it within 6\" (152) from the niche side and max 9\" (229) above the niche floor, only if it can be switched off at the breaker.",
+          "status": "SOURCE",
+          "src": "Thermador T24IR installation 8001252458_B p.10; Spec Book p.21 'A: area for power connection'"
+        }
+      ]
+    },
+    "cooktop_gas_island": {
+      "points": [
+        {
+          "id": "G1",
+          "sys": "G",
+          "sym": "G",
+          "u": -350,
+          "z": 125,
+          "item": "Gas supply, cooktop Thermador SGSXP365TS",
+          "req": "Gas stub with accessible shut-off valve on the BACK PANEL inside the cooktop cabinet, on the utility line under the downdraft body. Size, pressure and regulator per Thermador SGSXP365TS (Spec Book p.1-3) and the gas trade.",
+          "status": "PLANNING",
+          "src": "Spec Book SGSXP365TS p.1-3 (to read for size)"
+        },
+        {
+          "id": "E4",
+          "sys": "E",
+          "sym": "DUP",
+          "u": -200,
+          "z": 125,
+          "item": "Cooktop igniters Thermador SGSXP365TS",
+          "req": "120 V 15 A receptacle for the igniters, 3-prong; cooktop cord 60\" (1,800 W). Gas cooktop - was 208/240 V for the induction CIT36YWBB in v0.2.",
+          "status": "SOURCE",
+          "src": "Spec Book SGSXP365TS p.1 (Technical details)"
+        },
+        {
+          "id": "E5",
+          "sys": "E",
+          "sym": "DUP",
+          "u": 250,
+          "z": 125,
+          "item": "Downdraft Thermador UCVM36XS + in-line blower VTI1FZ",
+          "req": "120 V 15 A receptacle for the downdraft (30\" cord). VTI1FZ 120 V on a dedicated 15 A breaker, wired from the downdraft.",
+          "status": "SOURCE",
+          "src": "UCVM36XS guide 8001302687_B; VTI1FZ guide p.3"
+        }
+      ]
+    },
+    "downdraft_duct": {
+      "points": [
+        {
+          "id": "M1",
+          "sys": "M",
+          "sym": "DUCT",
+          "u": 0,
+          "z": 0,
+          "item": "Downdraft exhaust duct",
+          "req": "8\" round RIGID duct (no flex) from UCVM36XS down through the floor to VTI1FZ in the tech room, then to an exterior wall cap with backdraft damper. Max 50 ft (15 m) equivalent length. Gas cooktop: seal kit UCV36ST and min. 27 sq in (174 cm2) opening in the toe-kick AND the cabinet base. No recirculation.",
+          "status": "SOURCE",
+          "src": "UCVM36XS guide 8001302687_B p.10, 13-14, 18"
+        },
+        {
+          "id": "M2",
+          "sys": "M",
+          "item": "Make-up air",
+          "req": "Downdraft 600 CFM with a gas appliance in the house: make-up air required (CRC M1503, above 400 CFM). Air from the tech room below, motorized damper interlocked with the downdraft (UCVM36XS make-up air damper wiring p.22). GC + AHJ confirm.",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-07: MUA from the tech room"
+        }
+      ]
+    },
+    "basin_wall_faucet": {
+      "points": [
+        {
+          "id": "HW",
+          "sys": "P",
+          "sym": "HW",
+          "u": -75,
+          "z": 1000,
+          "item": "Hot water to the wall faucet valve",
+          "req": "1/2\" HW to the rough-in valve of a WALL-MOUNTED lavatory faucet, centred on the basin. Spout outlet about 150 above the top (top 850); valve depth and outlet height per the faucet model.",
+          "status": "PLANNING",
+          "src": "Andriy 2026-10-15: all bathroom faucets from the wall; model of faucet TBD"
+        },
+        {
+          "id": "CW",
+          "sys": "P",
+          "sym": "CW",
+          "u": 75,
+          "z": 1000,
+          "item": "Cold water to the wall faucet valve",
+          "req": "1/2\" CW to the same rough-in valve.",
+          "status": "PLANNING",
+          "src": "Andriy 2026-10-15; faucet model TBD"
+        },
+        {
+          "id": "DR",
+          "sys": "P",
+          "sym": "DR",
+          "u": 0,
+          "z": 500,
+          "item": "Basin drain / trap arm",
+          "req": "1 1/2\" waste stub-out inside the wall-hung vanity, behind the drawers, under the integrated MDi basin. Height to confirm with the Cesar washbasin unit (shaped drawer).",
+          "status": "PLANNING",
+          "src": "Cesar Bathroom Collection washbasin units; to confirm"
+        }
+      ]
+    },
+    "mirror_lit": {
+      "points": [
+        {
+          "id": "E?",
+          "sys": "E",
+          "sym": "J",
+          "u": 0,
+          "z": 1600,
+          "item": "Lit mirror (Cesar Make Up, front LED)",
+          "req": "120 V J-box behind the mirror, centred, for the mirror LED and its switch. Exact box position per the mirror fixing (Elda BL-19).",
+          "status": "PLANNING",
+          "src": "Andriy 2026-10-15: mirrors with light; Elda BL-19 open"
+        }
+      ]
+    },
+    "laundry_sink": {
+      "points": [
+        {
+          "id": "HW",
+          "sys": "P",
+          "sym": "HW",
+          "u": -152,
+          "z": 508,
+          "item": "Hot water, laundry sink faucet",
+          "req": "1/2\" HW stub-out with angle stop.",
+          "status": "PLANNING",
+          "src": "as kitchen sink (v0.2)"
+        },
+        {
+          "id": "CW",
+          "sys": "P",
+          "sym": "CW",
+          "u": 152,
+          "z": 508,
+          "item": "Cold water, laundry sink faucet",
+          "req": "1/2\" CW stub-out with angle stop.",
+          "status": "PLANNING",
+          "src": "as kitchen sink (v0.2)"
+        },
+        {
+          "id": "DR",
+          "sys": "P",
+          "sym": "DR",
+          "u": 0,
+          "z": 381,
+          "item": "Laundry sink drain",
+          "req": "2\" waste stub-out (1 1/2\" trap arm).",
+          "status": "PLANNING",
+          "src": "as kitchen sink (v0.2)"
+        }
+      ]
+    },
+    "washer_box": {
+      "points": [
+        {
+          "id": "WB",
+          "sys": "P",
+          "sym": "WB",
+          "u": 0,
+          "z": "center",
+          "item": "Washer outlet box",
+          "req": "Recessed washer box: HW + CW valves (1/2\"), 2\" standpipe with trap. Above the raised top, accessible.",
+          "status": "PLANNING",
+          "src": "laundry model (MEP box, nominal)"
+        }
+      ]
+    },
+    "dryer": {
+      "points": [
+        {
+          "id": "E240",
+          "sys": "E",
+          "sym": "R240",
+          "u": 116,
+          "z": 1180,
+          "item": "Dryer, electric",
+          "req": "240 V 30 A dedicated, NEMA 14-30R receptacle (electric dryer option).",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-15: rough-in for electric AND gas"
+        },
+        {
+          "id": "GAS",
+          "sys": "G",
+          "sym": "G",
+          "u": -234,
+          "z": 300,
+          "item": "Dryer, gas",
+          "req": "Gas stub with accessible shut-off valve behind the dryer (gas dryer option); dryer also needs 120 V (E washer/dryer receptacle).",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-15: rough-in for electric AND gas"
+        },
+        {
+          "id": "VENT",
+          "sys": "M",
+          "sym": "DUCT",
+          "u": 0,
+          "z": 450,
+          "item": "Dryer exhaust",
+          "req": "4\" rigid metal duct to the outside, length per the dryer manual (CMC 504.4).",
+          "status": "PLANNING",
+          "src": "dryer model TBD (LG-class 27\")"
+        }
+      ]
+    },
+    "washer": {
+      "points": [
+        {
+          "id": "E120",
+          "sys": "E",
+          "sym": "DUP",
+          "u": 233,
+          "z": 1180,
+          "item": "Washer receptacle",
+          "req": "120 V 20 A dedicated laundry circuit (CEC 210.11(C)(2)); also feeds a gas dryer.",
+          "status": "PLANNING",
+          "src": "washer model TBD (LG-class 27\")"
+        }
+      ]
+    }
+  }
+}

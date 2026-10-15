@@ -1,0 +1,435 @@
+{
+  "project": "7612 Hillside Dr - bathrooms",
+  "model": "7612_Hillside_Dr_Bathrooms_v0.1 (probe 715: faucet and mirror bounds)",
+  "rooms": [
+    {
+      "code": "M-PWD",
+      "name": "POWDER ROOM",
+      "x0": 0,
+      "wall": 0
+    },
+    {
+      "code": "M-BA1",
+      "name": "GUEST BATH",
+      "x0": 3000,
+      "wall": 0
+    },
+    {
+      "code": "M-MST",
+      "name": "MASTER BATH",
+      "x0": 7300,
+      "wall": 0
+    },
+    {
+      "code": "L-BA2",
+      "name": "BATH 2",
+      "x0": 0,
+      "wall": -6000
+    },
+    {
+      "code": "L-BA3",
+      "name": "BATH 3",
+      "x0": 4500,
+      "wall": -6000
+    }
+  ],
+  "refs": {
+    "M-PWD": {
+      "axis": "x",
+      "at": 0,
+      "text": "left wall (M-PWD)"
+    },
+    "M-BA1": {
+      "axis": "x",
+      "at": 3000,
+      "text": "left wall (M-BA1)"
+    },
+    "M-MST": {
+      "axis": "x",
+      "at": 7300,
+      "text": "left wall (M-MST)"
+    },
+    "L-BA2": {
+      "axis": "x",
+      "at": 0,
+      "text": "left wall (L-BA2)"
+    },
+    "L-BA3": {
+      "axis": "x",
+      "at": 4500,
+      "text": "left wall (L-BA3)"
+    }
+  },
+  "anchors": [
+    {
+      "role": "basin_wall_faucet",
+      "box": {
+        "code": "FAUCET",
+        "x0": 448,
+        "x1": 488,
+        "y0": -220,
+        "y1": -40,
+        "z0": 850,
+        "z1": 1050
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-PWD",
+      "room": "M-PWD",
+      "lab": "S",
+      "where": "POWDER ROOM, basin 1, wall behind the vanity",
+      "ids": {
+        "HW": "P101",
+        "CW": "P102",
+        "DR": "P103"
+      }
+    },
+    {
+      "role": "mirror_lit",
+      "box": {
+        "code": "MIRROR",
+        "x0": 118,
+        "x1": 818,
+        "y0": -36,
+        "y1": 0,
+        "z0": 1250,
+        "z1": 1950
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-PWD",
+      "room": "M-PWD",
+      "lab": "S",
+      "id": "E104",
+      "where": "POWDER ROOM, behind mirror 1"
+    },
+    {
+      "role": "basin_wall_faucet",
+      "box": {
+        "code": "FAUCET",
+        "x0": 3598,
+        "x1": 3638,
+        "y0": -220,
+        "y1": -40,
+        "z0": 850,
+        "z1": 1050
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-BA1",
+      "room": "M-BA1",
+      "lab": "S",
+      "where": "GUEST BATH, basin 1, wall behind the vanity",
+      "ids": {
+        "HW": "P201",
+        "CW": "P202",
+        "DR": "P203"
+      }
+    },
+    {
+      "role": "mirror_lit",
+      "box": {
+        "code": "MIRROR",
+        "x0": 3018,
+        "x1": 4218,
+        "y0": -36,
+        "y1": 0,
+        "z0": 1250,
+        "z1": 1950
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-BA1",
+      "room": "M-BA1",
+      "lab": "S",
+      "id": "E204",
+      "where": "GUEST BATH, behind mirror 1"
+    },
+    {
+      "role": "basin_wall_faucet",
+      "box": {
+        "code": "FAUCET",
+        "x0": 8498,
+        "x1": 8538,
+        "y0": -220,
+        "y1": -40,
+        "z0": 850,
+        "z1": 1050
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "where": "MASTER BATH, basin 1, wall behind the vanity",
+      "ids": {
+        "HW": "P301",
+        "CW": "P302",
+        "DR": "P303"
+      }
+    },
+    {
+      "role": "basin_wall_faucet",
+      "box": {
+        "code": "FAUCET",
+        "x0": 10477,
+        "x1": 10517,
+        "y0": -220,
+        "y1": -40,
+        "z0": 850,
+        "z1": 1050
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "where": "MASTER BATH, basin 2, wall behind the vanity",
+      "ids": {
+        "HW": "P304",
+        "CW": "P305",
+        "DR": "P306"
+      }
+    },
+    {
+      "role": "mirror_lit",
+      "box": {
+        "code": "MIRROR",
+        "x0": 7545,
+        "x1": 8745,
+        "y0": -36,
+        "y1": 0,
+        "z0": 1250,
+        "z1": 1950
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "id": "E307",
+      "where": "MASTER BATH, behind mirror 1"
+    },
+    {
+      "role": "mirror_lit",
+      "box": {
+        "code": "MIRROR",
+        "x0": 10270,
+        "x1": 11470,
+        "y0": -36,
+        "y1": 0,
+        "z0": 1250,
+        "z1": 1950
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "id": "E308",
+      "where": "MASTER BATH, behind mirror 2"
+    },
+    {
+      "role": "basin_wall_faucet",
+      "box": {
+        "code": "FAUCET",
+        "x0": 598,
+        "x1": 638,
+        "y0": -6220,
+        "y1": -6040,
+        "z0": 850,
+        "z1": 1050
+      },
+      "axis": "x",
+      "back": -6000,
+      "ref": "L-BA2",
+      "room": "L-BA2",
+      "lab": "S",
+      "where": "BATH 2, basin 1, wall behind the vanity",
+      "ids": {
+        "HW": "P401",
+        "CW": "P402",
+        "DR": "P403"
+      }
+    },
+    {
+      "role": "mirror_lit",
+      "box": {
+        "code": "MIRROR",
+        "x0": 18,
+        "x1": 1218,
+        "y0": -6036,
+        "y1": -6000,
+        "z0": 1250,
+        "z1": 1950
+      },
+      "axis": "x",
+      "back": -6000,
+      "ref": "L-BA2",
+      "room": "L-BA2",
+      "lab": "S",
+      "id": "E404",
+      "where": "BATH 2, behind mirror 1"
+    },
+    {
+      "role": "basin_wall_faucet",
+      "box": {
+        "code": "FAUCET",
+        "x0": 5237,
+        "x1": 5277,
+        "y0": -6220,
+        "y1": -6040,
+        "z0": 850,
+        "z1": 1050
+      },
+      "axis": "x",
+      "back": -6000,
+      "ref": "L-BA3",
+      "room": "L-BA3",
+      "lab": "S",
+      "where": "BATH 3, basin 1, wall behind the vanity",
+      "ids": {
+        "HW": "P501",
+        "CW": "P502",
+        "DR": "P503"
+      }
+    },
+    {
+      "role": "mirror_lit",
+      "box": {
+        "code": "MIRROR",
+        "x0": 4657,
+        "x1": 5857,
+        "y0": -6036,
+        "y1": -6000,
+        "z0": 1250,
+        "z1": 1950
+      },
+      "axis": "x",
+      "back": -6000,
+      "ref": "L-BA3",
+      "room": "L-BA3",
+      "lab": "S",
+      "id": "E504",
+      "where": "BATH 3, behind mirror 1"
+    }
+  ],
+  "placed": [
+    {
+      "id": "E105",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 968,
+      "y": 0,
+      "z": 1100,
+      "ref": "M-PWD",
+      "room": "M-PWD",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Beside the mirror; final location with the client.",
+      "where": "POWDER ROOM, beside the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    },
+    {
+      "id": "E205",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 4368,
+      "y": 0,
+      "z": 1100,
+      "ref": "M-BA1",
+      "room": "M-BA1",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Beside the mirror; final location with the client.",
+      "where": "GUEST BATH, beside the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    },
+    {
+      "id": "E309",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 7395,
+      "y": 0,
+      "z": 1100,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Beside the mirror; final location with the client.",
+      "where": "MASTER BATH, beside the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    },
+    {
+      "id": "E310",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 11620,
+      "y": 0,
+      "z": 1100,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Beside the mirror; final location with the client.",
+      "where": "MASTER BATH, beside the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    },
+    {
+      "id": "E311",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 9100,
+      "y": 0,
+      "z": 950,
+      "ref": "M-MST",
+      "room": "M-MST",
+      "lab": "S",
+      "item": "Make-up table receptacle",
+      "req": "120 V 20 A GFCI above the make-up table, side of the window - location with the client.",
+      "where": "MASTER BATH",
+      "status": "PLANNING",
+      "src": "location ours"
+    },
+    {
+      "id": "E405",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 1368,
+      "y": -6000,
+      "z": 1100,
+      "ref": "L-BA2",
+      "room": "L-BA2",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Beside the mirror; final location with the client.",
+      "where": "BATH 2, beside the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    },
+    {
+      "id": "E505",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 4580,
+      "y": -6000,
+      "z": 1100,
+      "ref": "L-BA3",
+      "room": "L-BA3",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Beside the mirror; final location with the client.",
+      "where": "BATH 3, beside the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    }
+  ],
+  "notes": [
+    "Toilets, shower valves, shower drains, exhaust fans: by others - not shown.",
+    "Faucets: wall-mounted in every bathroom (Andriy 2026-10-15); the MDi tops have no tap hole."
+  ]
+}

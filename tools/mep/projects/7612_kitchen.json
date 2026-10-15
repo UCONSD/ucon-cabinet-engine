@@ -1,0 +1,276 @@
+{
+  "project": "7612 Hillside Dr - kitchen + pantry",
+  "model": "7612_Hillside_Dr_Kitchen_Preliminary_Model_v0.4.1 (walls as proposed)",
+  "package": "Thermador + Dacor, invoice Design Hub 2S00011898 V (2026-10-09): SGSXP365TS, UCVM36XS, VTI1FZ, MEDMC301WS, T24IR905SP, T24IF905SP, HEATRKIT20, Dacor DDW24G9000APDA",
+  "refs": {
+    "CL": {
+      "axis": "x",
+      "at": 4102,
+      "text": "CL window / sink"
+    },
+    "S": {
+      "axis": "y",
+      "at": -4068,
+      "text": "S wall face"
+    },
+    "E": {
+      "axis": "x",
+      "at": 6274,
+      "text": "E wall face"
+    },
+    "W": {
+      "axis": "x",
+      "at": 0,
+      "text": "W wall face"
+    },
+    "N": {
+      "axis": "y",
+      "at": 0,
+      "text": "pantry N wall face"
+    }
+  },
+  "anchors": [
+    {
+      "role": "sink_base",
+      "code": "BL1202",
+      "axis": "x",
+      "back": -483,
+      "ref": "CL",
+      "where": "Sink base BL1202, back wall",
+      "lab": "S"
+    },
+    {
+      "role": "dishwasher",
+      "code": "VL0640",
+      "axis": "x",
+      "back": -483,
+      "ref": "CL",
+      "where": "DW opening 600, rear",
+      "lab": "S"
+    },
+    {
+      "role": "tall_oven",
+      "code": "CK7744",
+      "axis": "y",
+      "back": 1284,
+      "ref": "S",
+      "where": "Oven column CK7744, lower compartment",
+      "lab": "W"
+    },
+    {
+      "role": "fridge_column",
+      "code": "CH4640",
+      "pick": {
+        "y0": -2448
+      },
+      "axis": "y",
+      "back": 1284,
+      "ref": "S",
+      "id": "E2",
+      "item": "Freezer column T24IF905SP",
+      "where": "Freezer niche, rear, low",
+      "lab": "W"
+    },
+    {
+      "role": "fridge_column",
+      "code": "CH4640",
+      "pick": {
+        "y0": -1838
+      },
+      "axis": "y",
+      "back": 1284,
+      "ref": "S",
+      "id": "E3",
+      "item": "Fresh food column T24IR905SP",
+      "where": "Fridge niche, rear, low",
+      "note": "T24IR905SP: install door stop pins (bag D, manual p. 79) - door limited to 90 deg (Andriy 2026-10-15)",
+      "lab": "W"
+    },
+    {
+      "role": "cooktop_gas_island",
+      "code": "BM0967",
+      "axis": "x",
+      "back": "y0",
+      "v": 18,
+      "ref": "CL",
+      "where": "Cooktop cabinet BM0967, back panel inside, utility line under the downdraft body (bottom 174 / 6 7/8\")",
+      "lab": "S",
+      "pick": {
+        "x0": 3852,
+        "y0": -3586.4
+      }
+    },
+    {
+      "role": "downdraft_duct",
+      "code": "BM0967",
+      "pick": {
+        "x0": 3852,
+        "y0": -3586.4
+      },
+      "axis": "x",
+      "back": "y0",
+      "v": 90,
+      "ref": "CL",
+      "where": "Floor under the cooktop, rear of BM0967",
+      "lab": "N"
+    }
+  ],
+  "placed": [
+    {
+      "id": "E9",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 2440,
+      "y": -483,
+      "z": 1150,
+      "ref": "CL",
+      "item": "Countertop receptacle",
+      "req": "120 V 20 A GFCI, small-appliance circuit 1. Cutout in the Dekton backsplash (fabricator).",
+      "where": "Backsplash, left run",
+      "status": "PLANNING",
+      "src": "v0.2",
+      "lab": "S"
+    },
+    {
+      "id": "E10",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 3250,
+      "y": -483,
+      "z": 1150,
+      "ref": "CL",
+      "item": "Countertop receptacle",
+      "req": "120 V 20 A GFCI, small-appliance circuit 1. Cutout in the Dekton backsplash (fabricator).",
+      "where": "Backsplash, left run",
+      "status": "PLANNING",
+      "src": "v0.2",
+      "lab": "S"
+    },
+    {
+      "id": "E11",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 4950,
+      "y": -483,
+      "z": 1150,
+      "ref": "CL",
+      "item": "Countertop receptacle",
+      "req": "120 V 20 A GFCI, small-appliance circuit 2. Cutout in the Dekton backsplash (fabricator).",
+      "where": "Backsplash, right run",
+      "status": "PLANNING",
+      "src": "v0.2",
+      "lab": "S"
+    },
+    {
+      "id": "E12",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 5820,
+      "y": -483,
+      "z": 1150,
+      "ref": "CL",
+      "item": "Countertop receptacle",
+      "req": "120 V 20 A GFCI, small-appliance circuit 2. Cutout in the Dekton backsplash (fabricator).",
+      "where": "Backsplash, right run",
+      "status": "PLANNING",
+      "src": "v0.2",
+      "lab": "S"
+    },
+    {
+      "id": "E13",
+      "sys": "E",
+      "sym": "J",
+      "x": 5650,
+      "y": -4031,
+      "z": 305,
+      "ref": "CL",
+      "item": "Island receptacle provision",
+      "req": "Per CEC in force: receptacle on the island or a J-box provision. Type and location with the client (pop-up / side mount).",
+      "where": "Island back",
+      "status": "PLANNING",
+      "src": "v0.2; client decision",
+      "lab": "S"
+    },
+    {
+      "id": "E14",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 480,
+      "y": -12,
+      "z": 1150,
+      "ref": "W",
+      "item": "Pantry countertop receptacle",
+      "req": "120 V 20 A GFCI. In the 12 mm backsplash by others.",
+      "where": "Pantry window wall, left of the window",
+      "status": "PLANNING",
+      "src": "v0.2",
+      "lab": "S"
+    },
+    {
+      "id": "E15",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 1895,
+      "y": -470,
+      "z": 1150,
+      "ref": "N",
+      "refaxis": "y",
+      "item": "Pantry countertop receptacle",
+      "req": "120 V 20 A GFCI. In the 12 mm backsplash by others.",
+      "where": "Pantry niche wall (east)",
+      "status": "PLANNING",
+      "src": "v0.2",
+      "lab": "W"
+    },
+    {
+      "id": "L1",
+      "sys": "L",
+      "sym": "LED",
+      "x": 2827,
+      "y": -483,
+      "z": 2300,
+      "ref": "CL",
+      "item": "LED feed - light shelf + uppers, left",
+      "req": "Switched 120 V J-box behind the wall unit (cutout in the back panel); LED driver inside the cabinet. Profile / driver per Cesar.",
+      "where": "Behind wall units PF0631, left",
+      "status": "PLANNING",
+      "src": "v0.2; Cesar TBD",
+      "lab": "S"
+    },
+    {
+      "id": "L2",
+      "sys": "L",
+      "sym": "LED",
+      "x": 5377,
+      "y": -483,
+      "z": 2300,
+      "ref": "CL",
+      "item": "LED feed - light shelf + uppers, right",
+      "req": "Switched 120 V J-box behind the wall unit (cutout in the back panel); LED driver inside the cabinet. Profile / driver per Cesar.",
+      "where": "Behind wall units PF0631, right",
+      "status": "PLANNING",
+      "src": "v0.2; Cesar TBD",
+      "lab": "S"
+    }
+  ],
+  "tails": [
+    {
+      "ids": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "ft": 10,
+      "why": "tall cabinets / fridge columns"
+    },
+    {
+      "ids": [
+        "E4",
+        "E5",
+        "E13"
+      ],
+      "ft": 5,
+      "why": "island"
+    }
+  ]
+}

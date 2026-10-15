@@ -1,0 +1,104 @@
+{
+  "source": "7612_Hillside_Dr_MEP_Rough-In_v0.2.pdf, sheet M-301 (schedule), 2026-10-06. horiz / z in mm as printed in brackets.",
+  "points": {
+    "E1": [
+      1239,
+      305
+    ],
+    "E2": [
+      1925,
+      2400
+    ],
+    "E3": [
+      2535,
+      2400
+    ],
+    "E4": [
+      2124,
+      305
+    ],
+    "E5": [
+      2314,
+      305
+    ],
+    "E6": [
+      1148,
+      102
+    ],
+    "E7": [
+      398,
+      457
+    ],
+    "E9": [
+      1662,
+      1150
+    ],
+    "E10": [
+      852,
+      1150
+    ],
+    "E11": [
+      848,
+      1150
+    ],
+    "E12": [
+      1718,
+      1150
+    ],
+    "E13": [
+      624,
+      305
+    ],
+    "E14": [
+      480,
+      1150
+    ],
+    "E15": [
+      470,
+      1150
+    ],
+    "P1": [
+      152,
+      508
+    ],
+    "P2": [
+      152,
+      508
+    ],
+    "P3": [
+      0,
+      381
+    ],
+    "W1": [
+      1508,
+      152
+    ],
+    "M1": [
+      1972,
+      0
+    ],
+    "L1": [
+      1275,
+      2300
+    ],
+    "L2": [
+      1275,
+      2300
+    ]
+  },
+  "schedule_only": [
+    "E8",
+    "P4",
+    "P5",
+    "M2"
+  ],
+  "expected_changes": {
+    "E2": "height 2400 -> 150: Thermador T24IF/T24IR receptacle low, behind or next to the column (manual p.10)",
+    "E3": "height 2400 -> 150: same rule",
+    "E4": "gas cooktop SGSXP365TS: 120 V igniters; moved into the cooktop cabinet BM0967 back panel, utility line (Andriy 2026-10-15)",
+    "G1": "new: gas supply to the cooktop",
+    "E5": "moved into the cooktop cabinet BM0967 back panel, utility line (Andriy 2026-10-15)",
+    "M1": "island tied to the window wall: horizontal from CL window / sink, not the E wall (Andriy 2026-10-15)",
+    "E13": "island tied to the window wall: horizontal from CL window / sink, not the E wall (Andriy 2026-10-15)"
+  }
+}

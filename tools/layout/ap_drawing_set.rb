@@ -335,7 +335,7 @@ module UCON
       bub(pt2(WX + 0.2, y + 0.15), 'S01', red: false, d: 0.34, size: 6.5); text('Backing frame number (A-201, A-702)', WX + 0.6, y + 0.08, @l_sheet, size: 8); y += 0.40
       text('P02', WX + 0.2, y + 0.05, @l_sheet, size: 9, align: :center); text('Panel number per TM order 260318', WX + 0.6, y + 0.08, @l_sheet, size: 8); y += 0.36
       line(WX + 0.05, y + 0.25, WX + 0.35, y + 0.05, @l_sheet, w: 0.5, dash: true); line(WX + 0.05, y + 0.25, WX + 0.35, y + 0.45, @l_sheet, w: 0.5, dash: true)
-      text('Door swing on elevation - apex at the hinge side', WX + 0.6, y + 0.18, @l_sheet, size: 8); y += 0.55
+      text('Door swing on elevation - base at the hinges, apex at the handle side', WX + 0.6, y + 0.18, @l_sheet, size: 8); y += 0.55
       rect(WX + 0.08, y + 0.02, 0.25, 0.22, @l_sheet, stroke: MINOR, sw: 0.25, fill: [222, 222, 222]); text('Rebate at D01 frame (back view, D-sheets)', WX + 0.6, y + 0.06, @l_sheet, size: 8)
       label('GENERAL NOTES', x2, WY, @l_sheet)
       line(x2, WY + 0.22, x2 + w, WY + 0.22, @l_sheet, w: 1.0)

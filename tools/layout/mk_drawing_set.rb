@@ -487,7 +487,7 @@ module UCON
       rect(x2 + 0.08, y + 0.04, 0.25, 0.18, @l_sheet, stroke: MINOR, sw: 0.25, fill: [222, 222, 222]); text("Rear #{f1(bu['rebate'])} rebate at the DK1 / DK2 frame (back view)", x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
       rect(x2 + 0.08, y + 0.04, 0.25, 0.18, @l_sheet, stroke: MINOR, sw: 0.25, fill: STONE); text('Stone plinth - by others', x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
       line(x2 + 0.05, y + 0.25, x2 + 0.35, y + 0.05, @l_sheet, w: 0.5, dash: true); line(x2 + 0.05, y + 0.25, x2 + 0.35, y + 0.45, @l_sheet, w: 0.5, dash: true)
-      text('Door swing on elevation - apex at the hinge side', x2 + 0.6, y + 0.18, @l_sheet, size: 8); y += 0.62
+      text('Door swing on elevation - base at the hinges, apex at the handle side', x2 + 0.6, y + 0.18, @l_sheet, size: 8); y += 0.62
       label('GENERAL NOTES', x2, y, @l_sheet); y += 0.22
       line(x2, y, x2 + w, y, @l_sheet, w: 1.0); y += 0.10
       (sh['notes']['G-001'] || []).each_with_index do |(n, red), i|

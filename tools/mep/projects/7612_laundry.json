@@ -1,0 +1,147 @@
+{
+  "project": "7612 Hillside Dr - laundry",
+  "model": "7612_Hillside_Dr_Laundry_v0.2 (probe 715)",
+  "room": "L-LAU",
+  "refs": {
+    "L-LAU": {
+      "axis": "x",
+      "at": 0,
+      "text": "left wall (L-LAU)"
+    }
+  },
+  "anchors": [
+    {
+      "role": "laundry_sink",
+      "code": "BL0603",
+      "axis": "x",
+      "back": 0,
+      "ref": "L-LAU",
+      "lab": "S",
+      "where": "Laundry sink base BL0603, back wall",
+      "ids": {
+        "HW": "P601",
+        "CW": "P602",
+        "DR": "P603"
+      }
+    },
+    {
+      "role": "washer_box",
+      "box": {
+        "code": "WASHER-BOX",
+        "x0": 1757,
+        "x1": 2007,
+        "y0": -1,
+        "y1": 0,
+        "z0": 1067,
+        "z1": 1297
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "L-LAU",
+      "lab": "S",
+      "where": "Above the raised top, behind the washer",
+      "ids": {
+        "WB": "P604"
+      }
+    },
+    {
+      "role": "dryer",
+      "box": {
+        "code": "DRYER",
+        "x0": 841,
+        "x1": 1527,
+        "y0": -868,
+        "y1": -100,
+        "z0": 0,
+        "z1": 991
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "L-LAU",
+      "lab": "S",
+      "where": "Behind the dryer (left machine)",
+      "ids": {
+        "E240": "E602",
+        "GAS": "G601",
+        "VENT": "M601"
+      }
+    },
+    {
+      "role": "washer",
+      "box": {
+        "code": "WASHER",
+        "x0": 1574,
+        "x1": 2260,
+        "y0": -868,
+        "y1": -100,
+        "z0": 0,
+        "z1": 991
+      },
+      "axis": "x",
+      "back": 0,
+      "ref": "L-LAU",
+      "lab": "S",
+      "where": "Behind the washer (right machine), above the raised top",
+      "ids": {
+        "E120": "E601"
+      }
+    }
+  ],
+  "placed": [
+    {
+      "id": "E603",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 650,
+      "y": 0,
+      "z": 1150,
+      "ref": "L-LAU",
+      "lab": "S",
+      "item": "Countertop receptacle, left (sink side)",
+      "req": "120 V 20 A GFCI, laundry circuit.",
+      "where": "Backsplash, left top",
+      "status": "PLANNING",
+      "src": "location ours"
+    },
+    {
+      "id": "E604",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 2640,
+      "y": 0,
+      "z": 1150,
+      "ref": "L-LAU",
+      "lab": "S",
+      "item": "Countertop receptacle, right",
+      "req": "120 V 20 A GFCI, laundry circuit.",
+      "where": "Backsplash, right top",
+      "status": "PLANNING",
+      "src": "location ours"
+    },
+    {
+      "id": "L601",
+      "sys": "L",
+      "sym": "LED",
+      "x": 1475,
+      "y": 0,
+      "z": 2300,
+      "ref": "L-LAU",
+      "lab": "S",
+      "item": "LED feed - light shelf 2951 (Sky-B 2948)",
+      "req": "Switched 120 V J-box behind the middle wall unit; transformer inside the cabinet; switch location with the client (Elda BL-11).",
+      "where": "Behind wall unit PF0930 (middle)",
+      "status": "PLANNING",
+      "src": "Elda BL-11 open"
+    },
+    {
+      "id": "M602",
+      "sys": "M",
+      "item": "HVAC register relocation",
+      "req": "Move the supply register from the back wall to the ceiling so the wall units can run to 10 mm under the ceiling (Andriy 2026-10-14).",
+      "where": "Laundry back wall -> ceiling",
+      "status": "DECISION",
+      "src": "Andriy 2026-10-14",
+      "ref": "L-LAU"
+    }
+  ]
+}
