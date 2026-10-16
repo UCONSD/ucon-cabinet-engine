@@ -20,8 +20,17 @@ module UCON
     end
 
     # boxes from collect (symbol keys) -> the string-keyed boxes mep_points.rb reads
-    def mep_boxes
-      @boxes.map { |b| { 'code' => b[:code], 'cls' => b[:cls], 'x0' => b[:x0], 'x1' => b[:x1], 'y0' => b[:y0], 'y1' => b[:y1], 'z0' => b[:z0], 'z1' => b[:z1] } }
+    # model given: 'back' = world direction of the carcass back ('x+' 'x-' 'y+' 'y-'), the instance's local +y (the
+    # engine builds y = 0 at the front, depth along +y; probe 746). Blocking goes only where a back is on the wall.
+    def mep_boxes(model = nil)
+      @boxes.map do |b|
+        h = { 'code' => b[:code], 'cls' => b[:cls], 'x0' => b[:x0], 'x1' => b[:x1], 'y0' => b[:y0], 'y1' => b[:y1], 'z0' => b[:z0], 'z1' => b[:z1] }
+        if model && (e = model.find_entity_by_id(b[:id]))
+          v = e.transformation.yaxis
+          h['back'] = v.x.abs > v.y.abs ? (v.x > 0 ? 'x+' : 'x-') : (v.y > 0 ? 'y+' : 'y-')
+        end
+        h
+      end
     end
 
     # ---------------------------------------------------------------- units
@@ -232,7 +241,7 @@ module UCON
       add(e, l)
     end
 
-    def mep_page_cover(skp, scene, pts, zones: [], blocks: [], ducts: [], floor_drop: 300, footprints: [])
+    def mep_page_cover(skp, scene, pts, zones: [], blocks: [], ducts: [], floor_drop: 300, footprints: [], bars: [])
       next_page('COVER', cover: true)
       cover(placeholder: false)
       vp = viewport(skp, scene, 0.965, 2.20, 16.229 - 0.965, 6.65, render: :raster)
@@ -250,6 +259,13 @@ module UCON
         z = b['along'] == 'x' ? pp.(b['a1'], b['at'], b['cl']) : pp.(b['at'], b['a1'], b['cl'])
         line(a.x, a.y, z.x, z.y, l, w: 3.0, c: MEP_SYS_C['B'])
         text("#{b['id']} 2x6", (a.x + z.x) / 2, (a.y + z.y) / 2 - 0.16, l, size: 5.5, font: MONO, c: INK2, align: :center)
+      end
+      # blocking by others (anti-tip 2x4): its axis, brown, with its id
+      bars.each do |br|
+        xm = (br[:x0] + br[:x1]) / 2.0; zm = (br[:z0] + br[:z1]) / 2.0
+        a = pp.(xm, br[:y0], zm); z = pp.(xm, br[:y1], zm)
+        line(a.x, a.y, z.x, z.y, l, w: 2.5, c: [0x8A, 0x5A, 0x2B])
+        text("#{br[:id]} 2x4 BY CABINET INSTALLERS", (a.x + z.x) / 2, (a.y + z.y) / 2 - 0.16, l, size: 5.5, font: MONO, c: [0x8A, 0x5A, 0x2B], align: :center)
       end
       # plumbing zones: the rectangle in the wall plane
       zones.each do |zn|
@@ -394,6 +410,15 @@ module UCON
         line(x, y + (u.y - v.y).abs / 2, x + (u.x - v.x).abs, y + (u.y - v.y).abs / 2, l, w: 0.35, c: INK2, dash: true)
         text("#{b['id']}  2x6 BLOCKING  CL #{mep_len(b['cl'])}", x + (u.x - v.x).abs - 0.04, y - 0.13, l, size: 6.5, font: MONO, c: INK2, align: :right)
       end
+      # other blocking shown for information, by others (Andriy 2026-10-15: the anti-tip 2x4 over the tall wall stays
+      # on our drawings, marked BY CABINET INSTALLERS): { id:, a0:, a1:, z0:, z1:, label:, hidden: } - dashed when it
+      # sits behind what the view shows
+      Array(c[:bars]).each do |br|
+        u = vp.model_to_paper_point(p3.(br[:a0], br[:z1])); v = vp.model_to_paper_point(p3.(br[:a1], br[:z0]))
+        x = [u.x, v.x].min; y = [u.y, v.y].min
+        rect(x, y, (u.x - v.x).abs, [(u.y - v.y).abs, 0.03].max, l, stroke: [0x8A, 0x5A, 0x2B], sw: 0.75, fill: [0xEF, 0xE3, 0xD3], dash: br[:hidden])
+        text("#{br[:id]}  #{br[:label]}", x + (u.x - v.x).abs / 2, y + [(u.y - v.y).abs, 0.03].max + 0.05, l, size: 6, font: MONO, c: [0x8A, 0x5A, 0x2B], align: :center)
+      end
       # plumbing zones
       zones = Array(c[:zones])
       zones.each do |zn|
@@ -448,6 +473,7 @@ module UCON
       vf = free.reject { |p| p['sys'] == 'M' }.map { |p| [vp.model_to_paper_point(p3.(right_end, p['z'])), p['z'], p['id']] }
       zones.each { |zn| [zn['z0'], zn['z1']].each { |zz| vf << [vp.model_to_paper_point(p3.(right_end, zz)), zz, 'PZ'] } }
       c[:blocks].each { |b| vf << [vp.model_to_paper_point(p3.(right_end, b['cl'])), b['cl'], "#{b['id']} CL"] }
+      Array(c[:bars]).each { |br| zc = (br[:z0] + br[:z1]) / 2.0; vf << [vp.model_to_paper_point(p3.(right_end, zc)), zc, "#{br[:id]} CL"] }
       nv = mep_ordinate(Geom::Point2d.new(re.x + ROW, re.y), uv, [1.0, 0.0], vf, zero: [re, 'FIN. FLOOR'])
       @log << "#{c[:scene]}: #{pts.size} points, #{zones.size} zones, #{c[:blocks].size} blocking; ordinate along #{nh}, heights #{nv}#{@ord_rot_fail ? ' / ' + @ord_rot_fail : ''}"
       vp

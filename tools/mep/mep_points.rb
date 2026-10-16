@@ -145,7 +145,7 @@ module UCON
       out
     end
 
-    # BLOCKING (Andriy 2026-10-15): one 2x6 per zone, its axis 50 below the top edge of what hangs on it, on the same
+    # BLOCKING (Andriy 2026-10-15): one 2x6 per zone, along the backs of the cabinets only, its axis 50 below the top edge of what hangs on it, on the same
     # axis as the hanging rail. Zones = runs of wall-hung bodies (and floor-standing talls, anchored at the top) on one
     # wall; mirrors are their own zones. Bodies touching each other (gap <= 60) with the same top make one run.
     # boxes: string-keyed; along 'x'/'y'; wall_at: the wall plane on the other axis; face: 'y1' / 'y0' / 'x0' / 'x1' =
@@ -154,9 +154,13 @@ module UCON
     BLOCK_H = 140 # 2x6 actual 5 1/2"
     def blocking(boxes, along:, face:, wall_at:, prefix: 'B', start: 1, extra: [])
       a0, a1 = along == 'x' ? %w[x0 x1] : %w[y0 y1]
+      # ONLY BEHIND CABINET BACKS (Andriy 2026-10-15, after v0.8): fillers and panels make no zone, and a cabinet
+      # counts only when its BACK is on that wall ('back' = world direction of the carcass back, from mep_boxes; the
+      # engine builds depth along local +y). Pantry C had blocking from a filler and from units standing side-on.
+      toward = { 'y1' => 'y+', 'y0' => 'y-', 'x1' => 'x+', 'x0' => 'x-' }[face]
       on = boxes.select do |b|
         (b[face].to_f - wall_at).abs <= 60 && (b['z0'].to_f > 100 || b['z1'].to_f > 2000) &&
-          %w[cabinet filler panel accessory].include?(b['cls'].to_s)
+          (b['cls'].to_s == 'accessory' || (b['cls'].to_s == 'cabinet' && (b['back'].nil? || b['back'] == toward)))
       end
       groups = on.group_by { |b| [b['cls'] == 'accessory' ? 'mirror' : 'cab', (b['z1'].to_f / 10).round] }
       zones = []

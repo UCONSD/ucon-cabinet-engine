@@ -50,7 +50,11 @@ la = MEP.points([{ 'code' => 'BL0603', 'x0' => 22.0, 'x1' => 622.0, 'y0' => -645
                 MEP.load_json(File.join(__dir__, 'mep', 'projects', '7612_laundry.json'))).map { |p| [p['id'], p] }.to_h
 check('dryer receptacle label', la['E602']['short'] == 'REC 240V 30A 14-30R', la['E602']['short'].inspect)
 kb = MEP.blocking(boxes, along: 'x', face: 'y1', wall_at: -483)
-check('kitchen blocking: two zones over the sink wall at CL 2375', kb.map { |b| [b['a0'], b['a1'], b['cl']] } == [[1930, 3674, 2375], [4530, 6274, 2375]], kb.map { |b| [b['a0'], b['a1'], b['cl']] }.inspect)
+check('kitchen blocking: two zones along the backs of the PF0631 over the sink wall at CL 2375 (no fillers / end panels)', kb.map { |b| [b['a0'], b['a1'], b['cl']] } == [[2002, 3652, 2375], [4552, 6202, 2375]], kb.map { |b| [b['a0'], b['a1'], b['cl']] }.inspect)
+side = [{ 'code' => 'SD0631', 'cls' => 'cabinet', 'x0' => 1262, 'x1' => 1907, 'y0' => -628, 'y1' => -28, 'z0' => 2440, 'z1' => 3040, 'back' => 'x+' },
+        { 'code' => 'PD0151', 'cls' => 'filler', 'x0' => 1262, 'x1' => 1637, 'y0' => -28, 'y1' => -1, 'z0' => 2440, 'z1' => 3040, 'back' => 'x+' }]
+check('no blocking on a wall that only a filler and a side-on cabinet touch (pantry C)', MEP.blocking(side, along: 'x', face: 'y1', wall_at: 0).empty?)
+check('blocking where the back IS on the wall', MEP.blocking([side[0].merge('back' => 'y+')], along: 'x', face: 'y1', wall_at: 0).size == 1)
 z = MEP.plumbing_zones(pts).find { |q| q['ids'].include?('P1') }
 check('sink plumbing zone 3875..4350 x 300..600', z && [z['x0'], z['x1'], z['z0'], z['z1']] == [3875, 4350, 300, 600], z.inspect)
 check('tails: 10 ft at E1 E2 E3, 5 ft at E4 E5 E13, none elsewhere', pts.select { |p| p['tail_ft'] }.map { |p| [p['id'], p['tail_ft']] }.sort == [['E1', 10], ['E13', 5], ['E2', 10], ['E3', 10], ['E4', 5], ['E5', 5]], pts.select { |p| p['tail_ft'] }.map { |p| [p['id'], p['tail_ft']] }.inspect)
