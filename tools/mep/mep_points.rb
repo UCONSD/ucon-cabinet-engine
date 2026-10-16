@@ -55,7 +55,9 @@ module UCON
         # v goes INTO the room from the back face: away from the anchor's far side
         far = a['axis'] == 'x' ? (back == b['y0'] ? b['y1'] : b['y0']) : (back == b['x0'] ? b['x1'] : b['x0'])
         dir = far > back ? 1 : -1
-        rule['points'].each do |r|
+        # anchor 'add': points of THIS project on top of the role's rule (7612: ice maker box and LED driver receptacle in
+        # the sink base, the ice maker stub in the freezer niche - Andriy 2026-10-16)
+        (rule['points'] + Array(a['add'])).each do |r|
           p = r.dup
           p['id'] = a['id'] if a['id'] && r['id'] == 'E?'
           p['id'] = a['ids'][r['id']] if a['ids'] && a['ids'][r['id']]
@@ -65,7 +67,7 @@ module UCON
           p['note'] = a['note'] if a['note']
           p['anchor'] = a['code']
           p['group'] = "#{a['role']}-#{ai}"
-          p['lab'] = a['lab'] if a['lab']
+          p['lab'] = a['lab'] if a['lab'] && !r['lab'] # a point may carry its own label side
           if r.key?('u')
             u = cu + r['u'].to_f
             w = back + dir * v
@@ -107,10 +109,11 @@ module UCON
     # From the symbol and the requirement text, so it can never disagree with the schedule.
     SHORT_TYPE = { 'GFCI' => 'GFCI', 'DUP' => 'REC', 'SPLIT' => 'REC SPLIT', 'J' => 'J-BOX', 'J240' => 'J-BOX', 'LED' => 'LED J-BOX',
                    'R240' => 'REC', 'HW' => 'HW', 'CW' => 'CW', 'DR' => 'DRAIN', 'W' => 'WATER', 'WB' => 'WASHER BOX', 'G' => 'GAS',
-                   'DUCT' => 'DUCT' }.freeze
+                   'DUCT' => 'DUCT', 'S' => 'SWITCH', 'LV' => 'LV CABLE', 'IMB' => 'ICE MAKER BOX' }.freeze
     def short_label(p)
       t = SHORT_TYPE[p['sym']] or return nil
       r = p['req'].to_s
+      return 'LV CABLE CL2' if p['sym'] == 'LV'
       case p['sys']
       when 'E', 'L'
         v = r[%r{208/240 V|240 V|120 V}] || (p['sys'] == 'L' ? '120 V' : nil)

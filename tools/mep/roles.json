@@ -100,17 +100,6 @@
           "req": "208/240 V, 50 A @240 V (40 A @208 V), 10.2 kW, 4-wire, dedicated. J-box within reach of the oven conduit, 2\" hole for the conduit.",
           "status": "SOURCE",
           "src": "Thermador installation guide 8001185222_A, Electrical Installation"
-        },
-        {
-          "id": "W1",
-          "sys": "P",
-          "sym": "W",
-          "u": 269,
-          "z": 152,
-          "item": "Freezer ice maker water (T24IF905SP)",
-          "req": "1/4\" OD cold water line, 40-120 psi. Shut-off valve accessible OUTSIDE the freezer niche (here: lower compartment of the oven column).",
-          "status": "PLANNING",
-          "src": "v0.2; Spec Book T24IF905SP p.23-25"
         }
       ]
     },

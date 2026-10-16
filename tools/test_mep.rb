@@ -37,7 +37,7 @@ end
 ref['schedule_only'].each { |id| check("#{id} schedule-only point present", by.key?(id) && by[id]['x'].nil?) }
 check('E4 is the gas cooktop, 120 V', by['E4']['req'].include?('120 V') && by['E4']['item'].include?('SGSXP365TS'))
 check('G1 is new', by.key?('G1') && !ref['points'].key?('G1'))
-extra = by.keys - ref['points'].keys - ref['schedule_only'] - ['G1']
+extra = by.keys - ref['points'].keys - ref['schedule_only'] - %w[G1 P6 E16 S1]
 check('no other new points', extra.empty?, extra.inspect)
 check('E3 carries the 90 deg door stop note', by['E3']['note'].to_s.include?('door stop pins'))
 check('every positioned point has a status and a source', pts.all? { |p| %w[SOURCE PLANNING DECISION].include?(p['status']) && !p['src'].to_s.empty? })
@@ -56,7 +56,13 @@ side = [{ 'code' => 'SD0631', 'cls' => 'cabinet', 'x0' => 1262, 'x1' => 1907, 'y
 check('no blocking on a wall that only a filler and a side-on cabinet touch (pantry C)', MEP.blocking(side, along: 'x', face: 'y1', wall_at: 0).empty?)
 check('blocking where the back IS on the wall', MEP.blocking([side[0].merge('back' => 'y+')], along: 'x', face: 'y1', wall_at: 0).size == 1)
 z = MEP.plumbing_zones(pts).find { |q| q['ids'].include?('P1') }
-check('sink plumbing zone 3875..4350 x 300..600', z && [z['x0'], z['x1'], z['z0'], z['z1']] == [3875, 4350, 300, 600], z.inspect)
+check('sink plumbing zone takes the ice maker box: 3775..4350 x 300..600', z && [z['x0'], z['x1'], z['z0'], z['z1']] == [3775, 4350, 300, 600], z.inspect)
+check('P6 ice maker box in the sink group, left of the zone stubs', by['P6'] && by['P6']['group'] == by['P1']['group'] && (by['P6']['x'] - 3852).abs < 1 && by['P6']['short'] == 'ICE MAKER BOX 1/4"', by['P6'] && by['P6']['short'].inspect)
+check('W1 in the freezer niche (CH4640 y -2448..-1838), from P6, no valve there', by['W1']['y'].between?(-2448, -1838) && by['W1']['req'].include?('NO valve'), by['W1']['y'].inspect)
+check('E16 switched LED receptacle in the sink base', (by['E16']['x'] - 3652).abs < 1 && by['E16']['req'].include?('SWITCHED by S1'))
+check('L1 / L2 are low voltage now', %w[L1 L2].all? { |i| by[i]['short'] == 'LV CABLE CL2' && !by[i]['req'].include?('Switched 120 V') })
+check('S1 switch label and horizontal from the window wall', by['S1']['short'] == 'SWITCH 120V 15A' && by['S1']['horiz_mm'] == 510, [by['S1']['short'], by['S1']['horiz_mm']].inspect)
+check('the oven column takes no water: no point of the MEDMC301WS but E1', pts.select { |p| p['anchor'] == 'CK7744' }.map { |p| p['id'] } == ['E1'])
 check('tails: 10 ft at E1 E2 E3, 5 ft at E4 E5 E13, none elsewhere', pts.select { |p| p['tail_ft'] }.map { |p| [p['id'], p['tail_ft']] }.sort == [['E1', 10], ['E13', 5], ['E2', 10], ['E3', 10], ['E4', 5], ['E5', 5]], pts.select { |p| p['tail_ft'] }.map { |p| [p['id'], p['tail_ft']] }.inspect)
 check('tail written into the requirement', by['E1']['req'].include?('10 ft electrical tail') && by['E4']['req'].include?('5 ft electrical tail'))
 check('labels unchanged by the tail', by['E1']['short'] == 'J-BOX 208/240V 50A' && by['E4']['short'] == 'REC 120V 15A')

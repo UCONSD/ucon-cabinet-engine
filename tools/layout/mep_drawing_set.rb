@@ -75,6 +75,13 @@ module UCON
       when 'J', 'J240', 'LED'
         circle(x, y, d, l, sw: 0.6)
         text('J', x, y - 0.052, l, size: 6, font: MONO, align: :center)
+      when 'S'
+        # wall switch: the letter S (US plan practice)
+        text('S', x, y - 0.075, l, size: 9, font: MONO, c: INK, bold: true, align: :center)
+      when 'LV'
+        # low-voltage cable outlet: small circle with LV
+        circle(x, y, d, l, sw: 0.5)
+        text('LV', x, y - 0.04, l, size: 4.2, font: MONO, align: :center)
       when 'G'
         a = d * 0.6
         line(x - a, y - a / 2, x + a, y + a / 2, l, w: 0.6); line(x + a, y + a / 2, x + a, y - a / 2, l, w: 0.6)
@@ -241,7 +248,7 @@ module UCON
       add(e, l)
     end
 
-    def mep_page_cover(skp, scene, pts, zones: [], blocks: [], ducts: [], floor_drop: 300, footprints: [], bars: [])
+    def mep_page_cover(skp, scene, pts, zones: [], blocks: [], ducts: [], floor_drop: 300, footprints: [], bars: [], routes: [])
       next_page('COVER', cover: true)
       cover(placeholder: false)
       vp = viewport(skp, scene, 0.965, 2.20, 16.229 - 0.965, 6.65, render: :raster)
@@ -266,6 +273,15 @@ module UCON
         a = pp.(xm, br[:y0], zm); z = pp.(xm, br[:y1], zm)
         line(a.x, a.y, z.x, z.y, l, w: 2.5, c: [0x8A, 0x5A, 0x2B])
         text("#{br[:id]} 2x4 BY CABINET INSTALLERS", (a.x + z.x) / 2, (a.y + z.y) / 2 - 0.16, l, size: 5.5, font: MONO, c: [0x8A, 0x5A, 0x2B], align: :center)
+      end
+      # routes in 3D: { pts: [[x, y, z], ...], c: rgb, label: } - dashed (ice maker line under the floor, LV cable)
+      routes.each do |ro|
+        q = ro[:pts].map { |x, y, z| pp.(x, y, z) }
+        q.each_cons(2) { |u, v| line(u.x, u.y, v.x, v.y, l, w: 1.0, c: ro[:c], dash: true) }
+        if ro[:label]
+          k = ro[:at] || 0; u = q[k]; v = q[k + 1]
+          text(ro[:label], (u.x + v.x) / 2, (u.y + v.y) / 2 + 0.04, l, size: 5.5, font: MONO, c: ro[:c], align: :center)
+        end
       end
       # plumbing zones: the rectangle in the wall plane
       zones.each do |zn|
@@ -419,6 +435,16 @@ module UCON
         rect(x, y, (u.x - v.x).abs, [(u.y - v.y).abs, 0.03].max, l, stroke: [0x8A, 0x5A, 0x2B], sw: 0.75, fill: [0xEF, 0xE3, 0xD3], dash: br[:hidden])
         text("#{br[:id]}  #{br[:label]}", x + (u.x - v.x).abs / 2, y + [(u.y - v.y).abs, 0.03].max + 0.05, l, size: 6, font: MONO, c: [0x8A, 0x5A, 0x2B], align: :center)
       end
+      # routes: { pts: [[along, z], ...], c: rgb, label:, at: index of the segment to label } - dashed polylines
+      # (LV cable from the driver, the ice maker line)
+      Array(c[:routes]).each do |ro|
+        q = ro[:pts].map { |am, zm| vp.model_to_paper_point(p3.(am, zm)) }
+        q.each_cons(2) { |u, v| line(u.x, u.y, v.x, v.y, l, w: 0.6, c: ro[:c], dash: true) }
+        if ro[:label]
+          k = ro[:at] || 0; u = q[k]; v = q[k + 1]
+          text(ro[:label], (u.x + v.x) / 2 + 0.05, (u.y + v.y) / 2 - 0.12, l, size: 5.5, font: MONO, c: ro[:c])
+        end
+      end
       # plumbing zones
       zones = Array(c[:zones])
       zones.each do |zn|
@@ -539,8 +565,10 @@ module UCON
               ['GFCI', 'GFCI receptacle 120 V - "GFCI" next to the symbol'],
               ['SPLIT', 'Split-wired receptacle: one half switched (disposal), one always on'],
               ['R240', '240 V receptacle (e.g. dryer 14-30R)'],
-              ['J', 'Junction box: hardwired appliance / provision / LED driver feed'],
-              ['HW', 'Plumbing stub-out: HW / CW / DRAIN / ice-maker water / washer box'],
+              ['J', 'Junction box: hardwired appliance / provision'],
+              ['S', 'Wall switch'],
+              ['LV', 'Low-voltage (Class 2) cable outlet - LED, from the driver; dashed violet = its route'],
+              ['HW', 'Plumbing stub-out / box: HW / CW / DRAIN / ice maker box + line / washer box'],
               ['G', 'Gas stub-out with accessible shut-off valve'],
               ['DUCT', 'Exhaust duct (drawn to scale on the plan)'],
               ['B', 'Blocking 2x6, band = 5 1/2" high, dashed line = its axis'],

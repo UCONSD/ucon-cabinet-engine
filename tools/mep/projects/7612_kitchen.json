@@ -27,6 +27,11 @@
       "axis": "y",
       "at": 0,
       "text": "pantry N wall face"
+    },
+    "WW": {
+      "axis": "y",
+      "at": -483,
+      "text": "window wall face"
     }
   },
   "anchors": [
@@ -37,7 +42,32 @@
       "back": -483,
       "ref": "CL",
       "where": "Sink base BL1202, back wall",
-      "lab": "S"
+      "lab": "S",
+      "add": [
+        {
+          "id": "P6",
+          "sys": "P",
+          "sym": "IMB",
+          "u": -250,
+          "z": 457,
+          "item": "Ice maker box (freezer column T24IF905SP)",
+          "req": "Recessed ice maker outlet box in the wall behind the sink base back panel (access cutout): 1/4-turn valve, 1/4\" compression outlet, water hammer arrestor; fed from the sink CW (P2) BEFORE the RO. From it ONE continuous 1/4\" OD line (soft copper, or 3/8\" PEX with 1/4\" compression adapters at both ends), no joints under the floor: down through the floor (sleeved), across the tech room (supported; insulated if unheated), up into the freezer niche to W1. No saddle valve. Pressure 29-116 psi (2-8 bar). Pressure-test before the columns go in.",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-16; recon-2026-10-16-7612-icemaker-led; Thermador T24IF905SP Spec Book p.2 (zone B, accessible waterbox), Use & Care p.9",
+          "lab": "N"
+        },
+        {
+          "id": "E16",
+          "sys": "E",
+          "sym": "DUP",
+          "u": -450,
+          "z": 457,
+          "item": "LED driver receptacle (light shelves + uppers)",
+          "req": "120 V 15 A duplex, SWITCHED by S1 (switch loop), on the back panel of the sink base, left. The LED driver (per Cesar) sits in the sink base and plugs in here; low-voltage Class 2 cable from it to L1 / L2. Not behind the toe kick: the kick is only 60 mm (2 3/8\").",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-16; recon-2026-10-16-7612-icemaker-led"
+        }
+      ]
     },
     {
       "role": "dishwasher",
@@ -69,7 +99,20 @@
       "id": "E2",
       "item": "Freezer column T24IF905SP",
       "where": "Freezer niche, rear, low",
-      "lab": "W"
+      "lab": "W",
+      "add": [
+        {
+          "id": "W1",
+          "sys": "P",
+          "sym": "W",
+          "u": 203,
+          "z": 152,
+          "item": "Ice maker water stub (freezer T24IF905SP)",
+          "req": "1/4\" OD line from the ice maker box P6 at the sink, up through the floor in the freezer niche, zone B (side away from the power, ~4\" in): capped 1/4\" compression (7/16\"-24 M) for the appliance hose (4 ft, supplied). NO valve in the niche - the shut-off is P6, serviceable without pulling the column. Connect the hose not earlier than 1 h after the column is set.",
+          "status": "DECISION",
+          "src": "Andriy 2026-10-16; recon-2026-10-16-7612-icemaker-led; Spec Book p.2-3 (zone B; water connection 2 13/16-4 3/16 in); Installation 8001164164 p.7, 61 (7/16\"-24)"
+        }
+      ]
     },
     {
       "role": "fridge_column",
@@ -225,32 +268,48 @@
     {
       "id": "L1",
       "sys": "L",
-      "sym": "LED",
+      "sym": "LV",
       "x": 2827,
       "y": -483,
       "z": 2300,
       "ref": "CL",
-      "item": "LED feed - light shelf + uppers, left",
-      "req": "Switched 120 V J-box behind the wall unit (cutout in the back panel); LED driver inside the cabinet. Profile / driver per Cesar.",
+      "item": "LED low-voltage cable - light shelf + uppers, left",
+      "req": "Low-voltage Class 2 cable (e.g. 18/2 CL2, size per the driver) from the LED driver at E16 in the sink base, in the wall behind the backsplash, out behind the wall unit (cutout in the back panel). NO 120 V here. Profile / driver per Cesar.",
       "where": "Behind wall units PF0631, left",
-      "status": "PLANNING",
-      "src": "v0.2; Cesar TBD",
+      "status": "DECISION",
+      "src": "Andriy 2026-10-16",
       "lab": "S"
     },
     {
       "id": "L2",
       "sys": "L",
-      "sym": "LED",
+      "sym": "LV",
       "x": 5377,
       "y": -483,
       "z": 2300,
       "ref": "CL",
-      "item": "LED feed - light shelf + uppers, right",
-      "req": "Switched 120 V J-box behind the wall unit (cutout in the back panel); LED driver inside the cabinet. Profile / driver per Cesar.",
+      "item": "LED low-voltage cable - light shelf + uppers, right",
+      "req": "Low-voltage Class 2 cable (e.g. 18/2 CL2, size per the driver) from the LED driver at E16 in the sink base, in the wall behind the backsplash, out behind the wall unit (cutout in the back panel). NO 120 V here. Profile / driver per Cesar.",
       "where": "Behind wall units PF0631, right",
-      "status": "PLANNING",
-      "src": "v0.2; Cesar TBD",
+      "status": "DECISION",
+      "src": "Andriy 2026-10-16",
       "lab": "S"
+    },
+    {
+      "id": "S1",
+      "sys": "E",
+      "sym": "S",
+      "x": 6274,
+      "y": -993,
+      "z": 1150,
+      "ref": "WW",
+      "refaxis": "y",
+      "item": "LED switch (recommended)",
+      "req": "120 V 15 A single-pole switch (or a dimmer matched to the driver) for E16. RECOMMENDED; whether and where to install - client and contractor discretion. Without it the LED runs from the driver / remote.",
+      "where": "E wall return at the end of the sink run, between the wall-unit front and the worktop front",
+      "status": "PLANNING",
+      "src": "Andriy 2026-10-16; probe 748 (walls)",
+      "lab": "W"
     }
   ],
   "tails": [
