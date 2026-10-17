@@ -114,11 +114,14 @@ module UCON
         if it.is_a?(String)
           d = opening(spec, it)
           lx = leaf_x(d)
-          { span: lx, n: 1, door: it }
+          { span: lx, n: (d['leaf']['n'] || 1).to_i, door: it }   # n = 2: a double door, two cladding columns
         elsif it.is_a?(Hash)
           o = opening(spec, it['over'])
           ov = (o['panel_overlap'] || 0).to_f
-          { span: [o['x0'] + ov + j, o['x1'] - ov - j], n: it['n'], over: it['over'] }
+          # an opening that runs to a wall end: on that side the panel stops margin_ends short of the end (2026-10-16)
+          sa = o['x0'] <= EPS ? pr['margin_ends'].to_f : o['x0'] + ov + j
+          sb = o['x1'] >= len - EPS ? len - pr['margin_ends'] : o['x1'] - ov - j
+          { span: [sa, sb], n: it['n'], over: it['over'] }
         end
       end
       cols = []
@@ -139,8 +142,13 @@ module UCON
       cells = []
       cols.each_with_index do |(x0, x1), ci|
         rows.each do |rk, (z0, z1)|
-          inside = spec['openings'].find { |o| x0 >= o['x0'] - EPS && x1 <= o['x1'] + EPS && z0 < o['h'] }
+          inside = spec['openings'].find { |o| x0 >= o['x0'] - EPS && x1 <= o['x1'] + EPS && (z0 < o['h'] || rk == 'U') }
           next if inside && rk == 'L'
+          # an opening with a head liner: the panel over it stops head_gap above the head (AP ML Foyer 2026-10-16)
+          z0 = [z0, inside['h'].to_f + inside['head_gap'].to_f].max if inside && rk == 'U' && inside['head_gap']
+          # a closet with a TM cabinet of known height: the panel over it starts one joint above the cabinet top, below
+          # the row if need be (Andriy 2026-10-17: walls and the ordered cabinets are fixed, panels follow them)
+          z0 = cab_top(spec, inside) + j if inside && rk == 'U' && cab_top(spec, inside)
           cells << { col: ci + 1, row: rk, x0: x0, x1: x1, z0: z0, z1: z1 }
         end
       end
@@ -200,12 +208,22 @@ module UCON
       end
     end
 
+    # top of a TM closet cabinet from the subfloor, nil if not given
+    # 2026-10-17 evening: the two cabinets differ in height - each fits its niche: top = niche head - top_gap (fit_niche);
+    # tm_top_ffl stays as TM's drawing value, for the notes only
+    def cab_top(spec, o)
+      cb = o['cabinet'] or return nil
+      return o['h'].to_f - cb['top_gap'].to_f if cb['fit_niche']
+      cb['tm_top_ffl'] or return nil
+      spec['levels']['ffl'].to_f + cb['tm_top_ffl'].to_f
+    end
+
     # the part of a panel's back that passes in front of a door frame (wall-local rectangles [x0, x1, z0, z1])
     def rebates(spec, p)
       doors(spec).map do |d|
         rb = d['rebate'] or next
         zx0 = d['x0'] + rb['inset']; zx1 = d['x1'] - rb['inset']
-        rx0 = [p[:x0], zx0].max; rx1 = [p[:x1], zx1].min; rz1 = [p[:z1], d['h'].to_f].min
+        rx0 = [p[:x0], zx0].max; rx1 = [p[:x1], zx1].min; rz1 = [p[:z1], d['h'].to_f - (rb['head_inset'] || 0).to_f].min
         next if rx0 >= rx1 - EPS || p[:z0] >= rz1 - EPS
         [r1(rx0), r1(rx1), p[:z0], r1(rz1)]
       end.compact
@@ -214,6 +232,7 @@ module UCON
     # ------------------------------------------------------------------ backing frames S
     # -> [{ id: 'S01', kind:, x0:, x1:, z0:, z1:, stiles: [[a, b, '4'|'6'], ...], rails: [[c, d, w], ...] }]
     def frames(spec, g)
+      return frames_band(spec, g) if spec['subframe']['layout'] == 'band'
       sf = spec['subframe']
       len = spec['wall']['length'].to_f
       hgt = spec['wall']['height'].to_f
@@ -251,6 +270,93 @@ module UCON
       out
     end
 
+    # BAND LAYOUT (subframe.layout = "band", AP ML Foyer, Andriy 2026-10-16). For walls whose openings run from the floor
+    # to near one head line, with the panels' horizontal joint at that line:
+    #   R1  a pier narrower than two 4" stiles gets ONE solid strip of plywood across its width (no rails).
+    #   R2  above the openings: continuous frames along the whole wall from the upper panel row's bottom to the ceiling,
+    #       cut into pieces <= max_length; a cut that would fall within a 6" strip of a panel joint moves to
+    #       `seam_overrun` past the joint centre (as REC-LAU). On the piers below: floor_gap..tier_joint..band bottom.
+    #   R3  a pier frame stops `jamb_setback` short of an opening's jamb (the frame must not show in the reveal); a
+    #       frame edge at a jamb line is allowed (the frame cannot run into the opening).
+    def frames_band(spec, g)
+      sf = spec['subframe']
+      len = spec['wall']['length'].to_f
+      hgt = spec['wall']['height'].to_f
+      wn = sf['strip'].to_f; ww = sf['strip_wide'].to_f
+      set = (sf['jamb_setback'] || 0).to_f
+      vseams = g[:cols].each_cons(2).map { |(_, a), (b, _)| [a, b] }
+      hseams = g[:seam_z] ? [g[:seam_z]] : []
+      rows = clip_rows_all(spec, g)
+      ops = spec['openings'].sort_by { |o| o['x0'] }
+      # the band cannot run below an opening head: it starts at the upper panel row or at the highest head, whichever
+      # is higher (2026-10-16: with the window-type liner the upper panels come 13 below the head, the band does not)
+      u0 = (g[:rows]['U'] || raise('band layout needs an upper panel row'))[0]
+      # an opening with a liner: the band also clears the head flange and the strips B / A behind the panel over it -
+      # it starts frame_setback above the head (= head_gap 10 + 46, as Main Kitchen S09 over W2-WIN: 3088 = 3042 + 46)
+      bz = ([u0] + ops.map { |o| o['h'].to_f + (o['liner'] ? o['frame_setback'].to_f : 0) }).max
+
+      out = []
+      piers = []
+      x = 0.0; prev = nil
+      ops.each { |o| piers << [x, o['x0'].to_f, prev, o] if o['x0'] > x + EPS; x = [x, o['x1'].to_f].max; prev = o }
+      piers << [x, len, prev, nil] if len > x + EPS
+      # setback per jamb: the opening's own frame_setback (liner openings: clear of the strips B / A, as Main Kitchen
+      # S07 / W2-WIN - frame edge 46 behind the panel edge), else the wall's jamb_setback
+      sb = ->(o) { o && o['frame_setback'] ? o['frame_setback'].to_f : set }
+      piers.each do |a, b, ol, orr|
+        a2 = a > EPS ? r1(a + sb.(ol)) : a
+        b2 = b < len - EPS ? r1(b - sb.(orr)) : b
+        [[sf['floor_gap'].to_f, sf['tier_joint'].to_f, 'LOW'], [sf['tier_joint'].to_f, bz, 'PIER']].each do |z0, z1, kind|
+          out << if b2 - a2 < 2 * wn - EPS
+                   solid(a2, b2, z0, z1, kind)
+                 else
+                   frame(a2, b2, z0, z1, kind, vseams, hseams, rows, wn, ww)
+                 end
+        end
+      end
+
+      # Andriy 2026-10-17: no raw wall through a joint - over an opening WITHOUT a liner (closet, door) the wall between
+      # its head and the band gets one solid plywood piece (LINTEL), jamb to jamb: the joints over the closet cabinet and
+      # around the closet / door panels show plywood, not wall (with jamb_setback 0 the pier frames run to the jambs)
+      ops.each do |o|
+        next if o['liner'] || bz <= o['h'].to_f + EPS
+        out << solid(o['x0'].to_f, o['x1'].to_f, o['h'].to_f, bz, 'LINTEL')
+      end
+
+      # Andriy 2026-10-17: no raw wall may show through a joint, so the band is cut at EVERY vertical panel joint
+      # (seam centre + seam_overrun: the joint lies on the 6" right stile of the left piece); a piece still longer than
+      # a sheet is cut again in equal parts (those cuts lie behind a panel). A piece narrower than its two stiles: R1.
+      lmax = sf['max_length'].to_f
+      cuts = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + sf['seam_overrun']) }.select { |c| c > EPS && c < len - EPS }
+      edges = ([0.0] + cuts + [len]).uniq.sort
+      edges = edges.each_cons(2).flat_map do |fa, fb|
+        n = [((fb - fa) / lmax - EPS).ceil, 1].max
+        (0...n).map { |k| r1(fa + (fb - fa) * k / n) }
+      end + [len]
+      edges.each_cons(2) do |fa, fb|
+        raise "band piece #{f1(fa)}..#{f1(fb)} longer than #{f1(lmax)}" if fb - fa > lmax + EPS
+        out << if fb - fa < wn + ww - EPS
+                 solid(fa, fb, bz, hgt, 'BAND')
+               else
+                 frame(fa, fb, bz, hgt, 'BAND', vseams, hseams, rows, wn, ww)
+               end
+      end
+      first = (sf['first_id'] || 1).to_i
+      out.each_with_index { |f, i| f[:id] = format('S%02d', first + i) }
+      out
+    end
+
+    # R1: one plywood strip across a narrow pier; its width code is "S" + the width in mm
+    def solid(a, b, z0, z1, kind)
+      { kind: kind, x0: a, x1: b, z0: z0, z1: z1, stiles: [[a, b, "S#{f1(b - a)}"]], rails: [] }
+    end
+
+    def strip_mm(w, sf = nil)
+      return 152 if w == '6'
+      return 98 if w == '4'
+      w.to_s.sub('S', '').to_f
+    end
+
     def frame(a, b, z0, z1, kind, vseams, hseams, rows, wn, ww)
       near_lo = ->(e, seams) { seams.any? { |s0, s1| s1 > e + EPS && s0 < e + ww - EPS } }
       near_hi = ->(e, seams) { seams.any? { |s0, s1| s0 < e - EPS && s1 > e - ww + EPS } }
@@ -260,10 +366,15 @@ module UCON
       bw = near_lo.call(z0, hseams) ? ww : wn
       tw = near_hi.call(z1, hseams) ? ww : wn
       rails = [[z0, r1(z0 + bw), bw == ww ? '6' : '4'], [r1(z1 - tw), z1, tw == ww ? '6' : '4']]
-      rows.each do |z|
-        next unless z - CLIP_R > z0 + EPS && z + CLIP_R < z1 - EPS
-        next if rails.any? { |c, d, _| z - CLIP_R >= c - EPS && z + CLIP_R <= d + EPS }
-        rails << [r1(z - wn / 2), r1(z + wn / 2), '4']
+      need = rows.select { |z| z - CLIP_R > z0 + EPS && z + CLIP_R < z1 - EPS }
+                 .reject { |z| rails.any? { |c, d, _| z - CLIP_R >= c - EPS && z + CLIP_R <= d + EPS } }
+      # rows closer than one 4" rail can carry share one rail centred between them (AP ML Foyer 2026-10-16: two panel
+      # rows 55 apart on one band frame gave two overlapping rails); one row per rail as before otherwise
+      groups = []
+      need.sort.each { |z| groups.last && z - groups.last.first <= wn - 2 * CLIP_R + EPS ? groups.last << z : groups << [z] }
+      groups.each do |g|
+        c = (g.first + g.last) / 2.0
+        rails << [r1(c - wn / 2), r1(c + wn / 2), '4']
       end
       { kind: kind, x0: a, x1: b, z0: z0, z1: z1, stiles: stiles, rails: rails.sort_by(&:first) }
     end
@@ -284,7 +395,9 @@ module UCON
     def members(fr)
       ia = fr[:stiles].first[1]; ib = fr[:stiles].last[0]
       st = fr[:stiles].each_with_index.map do |(a, b, w), k|
-        { name: "#{fr[:id]} stile #{k.zero? ? 'L' : 'R'} #{w == '6' ? 152 : 98}", x0: a, x1: b, z0: fr[:z0], z1: fr[:z1], w: w }
+        side = fr[:stiles].size == 1 ? 'solid' : (k.zero? ? 'L' : 'R')
+        { name: "#{fr[:id]} stile #{side} #{w.to_s.start_with?('S') ? w.to_s.sub('S', '') : (w == '6' ? 152 : 98)}",
+          x0: a, x1: b, z0: fr[:z0], z1: fr[:z1], w: w }
       end
       ra = fr[:rails].each_with_index.map do |(c, d, w), k|
         { name: "#{fr[:id]} rail #{k + 1} #{w == '6' ? 152 : 98}", x0: ia, x1: ib, z0: c, z1: d, w: w }
@@ -301,13 +414,15 @@ module UCON
       g[:panels].each do |p|
         base = [p[:x0] + c['edge'], p[:x1] - c['edge']]
         base.insert(1, (p[:x0] + p[:x1]) / 2.0) if p[:w] > c['wide_panel']
+        # a panel too narrow for two columns a clip apart (AP ML Foyer 170 / 180 piers): one column at its centre
+        base = [(p[:x0] + p[:x1]) / 2.0] if c['narrow_panel'] && p[:w] < c['narrow_panel']
         backing = frs.select { |f| overlap(f[:x0], f[:x1], p[:x0], p[:x1]) > EPS && overlap(f[:z0], f[:z1], p[:z0], p[:z1]) > EPS }
                      .sort_by { |f| -overlap(f[:z0], f[:z1], p[:z0], p[:z1]) }
         cols = base.map do |x|
           st = backing.flat_map { |f| members(f).first(2) }.find { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS }
           next r1(x) unless st
           r1([[(st[:x0] + st[:x1]) / 2.0, p[:x0] + c['edge_min']].max, p[:x1] - c['edge_min']].min)
-        end
+        end.uniq
         rows = clip_rows(spec, p)
         rows = rows.each_with_index.map do |z, k|
           next z if cols.all? { |x| sits?(mem, x, z) }
@@ -316,7 +431,9 @@ module UCON
             c['row_over_opening'].to_f
           else
             # the bottom rail of the frame behind each column, the lowest frame above the row
-            up = cols.map { |x| frs.select { |f| f[:z0] > z && x >= f[:x0] - EPS && x <= f[:x1] + EPS }.min_by { |f| f[:z0] } }
+            # 2026-10-16: also a frame that starts just below the row (its bottom rail centre above the row) - AP ML Foyer
+            # closet panels start 10 above the closet head, their bottom row falls on the band's bottom edge
+            up = cols.map { |x| frs.select { |f| f[:rails].first && (f[:rails].first[0] + f[:rails].first[1]) / 2.0 > z && x >= f[:x0] - EPS && x <= f[:x1] + EPS }.min_by { |f| f[:z0] } }
             raise "#{p[:id]}: no frame above row #{z} to raise it onto" if up.any?(&:nil?)
             r1(up.map { |f| (f[:rails].first[0] + f[:rails].first[1]) / 2.0 }.max)
           end
@@ -422,6 +539,8 @@ module UCON
         end
         out[w] = { pieces: pieces.size, metres: (pieces.sum / 1000.0).round(1), strips: bins.size }
       end
+      sol = cl.select { |p| p[:w].to_s.start_with?('S') }
+      out['solid'] = sol.map { |p| { w: strip_mm(p[:w]), len: p[:len], qty: p[:qty] } } unless sol.empty?
       out
     end
 
@@ -454,11 +573,66 @@ module UCON
         checks: checks(spec, g, frs, cl) }
     end
 
+    # Andriy 2026-10-17: no raw wall may show through a joint. Every joint between two panels (and between a closet
+    # panel and the cabinet top under it) must have a frame member behind it, except where the joint lies over an
+    # opening (nothing behind). -> [{ joint: 'P60|P61', x0:, x1:, z0:, z1: }] the uncovered parts, sampled at 1 mm
+    def joint_gaps(spec, g, frs)
+      j = spec['panels']['joint'].to_f
+      mem = frs.flat_map { |f| members(f) }
+      ops = spec['openings']
+      void = ->(x, z) { ops.any? { |o| x > o['x0'] + EPS && x < o['x1'] - EPS && z < o['h'] - EPS } }
+      len = spec['wall']['length'].to_f
+      fl = ops.select { |o| o['liner'] }.flat_map do |o|
+        f = o['liner']['flange'].to_f; h = o['h'].to_f
+        r = [{ x0: o['x0'] - f, x1: o['x1'] + f, z0: h, z1: h + f }]      # head flange (the liner is continuous)
+        r << { x0: o['x0'] - f, x1: o['x0'], z0: 0, z1: h + f } if o['x0'] > EPS
+        r << { x0: o['x1'], x1: o['x1'] + f, z0: 0, z1: h + f } if o['x1'] < len - EPS
+        r
+      end
+      cov = ->(x, z) { void.(x, z) || (mem + fl).any? { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS && z >= m[:z0] - EPS && z <= m[:z1] + EPS } }
+      rects = []
+      ps = g[:panels]
+      ps.each do |p|
+        ps.each do |q|
+          next if p.equal?(q)
+          d = q[:x0] - p[:x1]
+          if d > EPS && d <= j + EPS
+            z0 = [p[:z0], q[:z0]].max; z1 = [p[:z1], q[:z1]].min
+            rects << ["#{p[:id]}|#{q[:id]}", p[:x1], q[:x0], z0, z1] if z1 > z0 + EPS
+          end
+          d = q[:z0] - p[:z1]
+          if d > EPS && d <= j + EPS
+            x0 = [p[:x0], q[:x0]].max; x1 = [p[:x1], q[:x1]].min
+            rects << ["#{p[:id]}/#{q[:id]}", x0, x1, p[:z1], q[:z0]] if x1 > x0 + EPS
+          end
+        end
+        o = ops.find { |x| x['cabinet'] && cab_top(spec, x) && p[:x0] >= x['x0'] - EPS && p[:x1] <= x['x1'] + EPS && p[:z0] > x['h'] - 50 }
+        rects << ["#{o['id']} cabinet/#{p[:id]}", p[:x0], p[:x1], [cab_top(spec, o), o['h'].to_f].max, p[:z0]] if o && p[:z0] > [cab_top(spec, o), o['h'].to_f].max + EPS
+      end
+      out = []
+      rects.each do |nm, x0, x1, z0, z1|
+        xs = [x0 + 0.5, (x0 + x1) / 2.0, x1 - 0.5].uniq
+        zs = [z0 + 0.5, (z0 + z1) / 2.0, z1 - 0.5].uniq
+        vert = (x1 - x0) < (z1 - z0)
+        if vert
+          bad = (z0.ceil..z1.floor).select { |z| xs.any? { |x| !cov.(x, z) } }
+          bad.chunk_while { |a, b| b == a + 1 }.each { |r| out << { joint: nm, x0: x0, x1: x1, z0: r.first, z1: r.last } }
+        else
+          bad = (x0.ceil..x1.floor).select { |x| zs.any? { |z| !cov.(x, z) } }
+          bad.chunk_while { |a, b| b == a + 1 }.each { |r| out << { joint: nm, x0: r.first, x1: r.last, z0: z0, z1: z1 } }
+        end
+      end
+      out
+    end
+
     # what a wall must satisfy before anything is drawn; each line is a fact, an empty list is the pass
     def checks(spec, g, frs, cl)
       bad = []
       lmax = spec['subframe']['max_length']
       frs.each do |f|
+        if f[:stiles].size == 2 && f[:stiles][0][1] > f[:stiles][1][0] + EPS
+          bad << "#{f[:id]}: width #{f1(f[:x1] - f[:x0])} - the two stiles overlap"
+        end
         bad << "#{f[:id]}: height #{f1(f[:z1] - f[:z0])} > #{lmax}" if f[:z1] - f[:z0] > lmax + EPS
         bad << "#{f[:id]}: width #{f1(f[:x1] - f[:x0])} > #{lmax}" if f[:x1] - f[:x0] > lmax + EPS
       end
@@ -466,10 +640,14 @@ module UCON
       frs.each do |f|
         [f[:x0], f[:x1]].each do |x|
           next if x < EPS || x > spec['wall']['length'] - EPS
+          # 2026-10-17: pier frame | LINTEL at a closet / door jamb - the panel joint there is backed by the LINTEL
+          next if frs.any? { |l| l[:kind] == 'LINTEL' && ((l[:x0] - x).abs < EPS || (l[:x1] - x).abs < EPS) }
           s = vseams.find { |s0, s1| x > s0 - 5 && x < s1 + 5 }
           bad << "#{f[:id]}: frame joint x #{f1(x)} in the panel joint #{f1(s[0])}..#{f1(s[1])}" if s
         end
       end
+      # 2026-10-17: no raw wall through a joint
+      joint_gaps(spec, g, frs).each { |x| bad << "joint #{x[:joint]} shows the wall at x #{f1(x[:x0])}..#{f1(x[:x1])} z #{f1(x[:z0])}..#{f1(x[:z1])}" } if spec['panels']['no_wall_in_joints']
       cl.each do |c|
         p = g[:panels].find { |x| x[:id] == c[:panel] }
         e = [c[:x] - p[:x0], p[:x1] - c[:x]].min

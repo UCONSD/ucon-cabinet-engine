@@ -1,0 +1,735 @@
+{
+ "_about": "AP Capital ML Foyer - the ROOM: which wall JSONs, in which order, and everything the LayOut set needs that is not wall geometry (sheet texts, questions, scenes). The walls themselves: AP_ML_Foyer_B.json, AP_ML_Foyer_A.json. Snapshot for the writer: tools/wallpanels/room_snapshot.rb.",
+ "id": "AP_ML_Foyer",
+ "model": "AP_ML_Foyer_v1",
+ "walls": [
+  "AP_ML_Foyer_B.json",
+  "AP_ML_Foyer_A.json"
+ ],
+ "_walls": "order = sheet order; wall B first as TM (panels #47-55, then A #56-64)",
+ "ends": {
+  "B": [
+   "passage (opening to the wall end)",
+   "exterior wall (panels 10 short)"
+  ],
+  "A": [
+   "exterior wall (panels 10 short)",
+   "passage (opening to the wall end)"
+  ]
+ },
+ "files": {
+  "panels_csv": "AP_ML_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_ML_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_ML_backing_cut_list.csv",
+  "key_plan": "AP_ML_key_plan_passione.png",
+  "key_plan_aspect": 0.9615
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 252502",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.0",
+   "IssueDate": "10.16.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.0",
+   "Rev1Desc": "Issued for review",
+   "Rev1Date": "10.16.26",
+   "Rev2": " ",
+   "Rev2Desc": " ",
+   "Rev2Date": " ",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "_ProjectNumber": "TM drawing 252502_FOYER_20260310 rev 4",
+  "cover_title": "ML FOYER · WALL PANELS, BACKING FRAMES, CLIPS, DRILLING · WALLS B + A",
+  "scenes": {
+   "cover": "FOY-07 Cover ISO",
+   "iso": "FOY-07 Cover ISO",
+   "iso_frames": "FOY-08 3D Frames ISO"
+  },
+  "cover_scale": 60,
+  "iso_scale": 90,
+  "existing_groups": [
+   [
+    "B"
+   ],
+   [
+    "A"
+   ]
+  ],
+  "questions": [
+   [
+    "Q1",
+    "A-301 A-302 A-701",
+    "TM",
+    "Lower pier panels P48, P50, P55 (wall B) are {{h('P48')}} and P56, P59, P64 (wall A) {{h('P56')}} mm tall in ONE piece (MDF {{bu['panel_t']}}). Upper panels over the openings are up to {{w('P58')}} x {{h('P58')}} (P58) and {{w('P53')}} x {{h('P53')}} (P53), one piece. Can you make and ship these in one piece without risk of damage? Please state your maximum panel size; if a second joint is needed, where do you propose it?"
+   ],
+   [
+    "Q2",
+    "A-301 A-302 A-511",
+    "TM",
+    "Openings OA1, OA2, OB1: UCON proposal L-liner MDF {{ln('OA1')['t']}} (A-511): leg against the bare reveal, {{ln('OA1')['depth']}} past the wall face; flange {{ln('OA1')['flange']}} wide behind the panel, from the jamb line to the backing frame, so no raw wall shows in the panel joints; corners mitred 45. Changed from the Main Kitchen windows: wider flange, NO strips B / A on the panel back - the panel back rests on the flange. Pier panels stop {{pn('P59')['s0'] - op('OA1')['s1']}} short of the jamb line; the visible opening narrows by {{ln('OA1')['t']}} per side. Please confirm you supply the liners."
+   ],
+   [
+    "Q3",
+    "A-302",
+    "TM",
+    "Your panel 56 (wall A) starts 210 mm above the floor. Our layout: all lower panels and frames stand on the stone plinth, top FFL + {{stone - ffl}} (Q8). Is your 210 the same plinth? Please confirm the panel bottom."
+   ],
+   [
+    "Q4",
+    "A-301 A-501 A-502",
+    "TM",
+    "Office double door PANEL 5 (A-501 / A-502), built to the Main Kitchen DK1 profile: opening {{ow('OB2')}} x {{oh('OB2')}} from the subfloor, frame gaps {{dr('OB2')['gap_side']}} / {{dr('OB2')['gap_head']}}, jamb {{dr('OB2')['jamb']}} on a {{dr('OB2')['wall_t']}} wall (not surveyed), two leaves, claddings 2 x {{(dr('OB2')['clad_x'][1] - dr('OB2')['clad_x'][0] - dr('OB2')['leaf_joint']) / 2.0}} with a {{dr('OB2')['leaf_joint']}} joint, FFL + {{op('OB2')['clad'][2] - ffl}} to the panel joint {{op('OB2')['clad'][3]}} (your leaves 2 x 993 x 3038). Panels {{rebated}} pass in front of the frame and are rebated {{bu['rebate']}} at the back (A-701, D-sheets). Please confirm or send your detail."
+   ],
+   [
+    "Q5",
+    "A-210 D-01..",
+    "TM",
+    "Panels hang on Fastmount VL-03H clips, recess mount, male half in the panel back D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}}. All drilling coordinates are given from the panel BACK (X from the left edge seen from the back, Z from the bottom edge); a control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."
+   ],
+   [
+    "Q6",
+    "A-101 A-102",
+    "Site",
+    "Finished floor assumed +{{ffl}} above the subfloor (2-1/4\", as Main Kitchen); TM heights from FFL agree within 1 - 3 mm. Opening heads from the subfloor: A {{oh('OA1')}} / {{oh('OA2')}}, B {{oh('OB1')}} / {{oh('OB2')}}. Upper panels: P47 starts {{z0('P47') - oh('OB1')}} over OB1; wall A row at {{upper('A')}} = {{upper('A') - oh('OA1')}} over OA1, {{upper('A') - oh('OA2')}} over OA2; over the Office door the joint is {{seam('B')}}. Verify FFL and heads by laser before release."
+   ],
+   [
+    "Q7",
+    "A-101 A-102",
+    "Info",
+    "Pier and closet widths per UCON survey differ from your drawing by up to 6 mm (B: {{pier('OB1','NB')}} / {{ow('NB')}} / {{pier('NB','OB2')}} / {{tail('B','OB2')}} vs 355.1 / 641 / 492 / 311; A: {{pier('OA1','NA')}} / {{ow('NA')}} / {{pier('NA','OA2')}} vs 352 / 645 / 357). Panels are laid out to the UCON survey."
+   ],
+   [
+    "Q8",
+    "A-512 A-101 A-102",
+    "Site",
+    "Stone plinth by others as in the Main Kitchen (A-512): {{stn['t']}} thick, face flush with the panel face ({{bu['face']}} from the wall), top {{stone}} above the subfloor = FFL + {{stone - ffl}} (8 in), notch {{stn['notch']}} x {{stn['notch']}} at the top front edge; in front of the Office door frame the back is cut to {{stn['back_cut']}}. Please confirm the stone height for the foyer and who supplies it."
+   ],
+   [
+    "Q9",
+    "A-301 A-302 A-513",
+    "TM",
+    "Shoe cabinets: the two closets differ, so the cabinets must differ in HEIGHT - each to fit its niche (UCON survey, walls fixed). NB (doors 27 / 28): niche {{ow('NB')}} x {{oh('NB') - ffl}} above FFL -> cabinet max {{cab_top('NB') - ffl}} above FFL (your drawing {{cab('NB')['tm_top_ffl']}}). NA (doors 23 / 24): niche {{ow('NA')}} x {{oh('NA') - ffl}} -> cabinet max {{cab_top('NA') - ffl}} (your drawing {{cab('NA')['tm_top_ffl']}} = {{tm_top('NA') - oh('NA')}} HIGHER than the niche). We assume {{cab('NA')['top_gap']}} clear to the niche head and {{cab('NA')['side_gap']}} each side (width {{ow('NB') - 2 * cab('NB')['side_gap']}} / {{ow('NA') - 2 * cab('NA')['side_gap']}}; your drawing shows 645 / 653.5 on B, 645 on A). Panels P52 / P61 start {{gap_over('NB')}} above the cabinet top ({{z0('P52')}} / {{z0('P61')}} from the subfloor). Please confirm both cabinet sizes W x H x D - are they already ordered?"
+   ]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
+  "notes": {
+   "G-001": [
+    [
+     "Dimensions in mm per UCON site survey. Z from the top of the subfloor; finished floor FFL +{{ffl}} (Q6).",
+     true
+    ],
+    [
+     "Build-up from the wall face: backing frame plywood 3/4\" ({{bu['frame_t']}}) + clip gap {{bu['clip_gap']}} (Fastmount VL-03H, recess mount) + panel MDF {{bu['panel_t']}} = panel face {{bu['face']}}.",
+     false
+    ],
+    [
+     "Panels: joints 10; lower panels stand on the stone plinth (top FFL + {{stone - ffl}}, Q8), 10 below the ceiling, 10 short of the wall ends. Panels over the openings start 10 above the head, over the closets 10 above the TM cabinet top; over the Office door the joint = the cladding top {{seam('B')}}.",
+     false
+    ],
+    [
+     "Panel numbers = TM numbers (drawing 252502_FOYER rev 4): wall B P47 - P55, wall A P56 - P64. Material MDF {{bu['panel_t']}}, matte lacquer BIANCO PURO per TM.",
+     false
+    ],
+    [
+     "Openings OA1, OA2, OB1: L-liner MDF {{ln('OA1')['t']}}, flange {{ln('OA1')['flange']}} to the backing frame, no strips (UCON proposal, A-511, Q2); pier panels stop {{pn('P59')['s0'] - op('OA1')['s1']}} short of the jamb line.",
+     true
+    ],
+    [
+     "Office double door PANEL 5 by TM, drawn to the Main Kitchen DK1 profile (A-501 / A-502, Q4); panels {{rebated}} rebated {{bu['rebate']}} at the back over the frame.",
+     true
+    ],
+    [
+     "Shoe cabinets in the closets (doors 23 / 24, 27 / 28) by TM, drawn as envelopes; the two differ in height, each fits its niche (A-513, Q9). Stone plinth by others (A-512, Q8).",
+     true
+    ],
+    [
+     "Backing frames S01 - S28, clip holes in the frames: UCON shop and CNC - not for the factory. A frame member (or the liner flange) stands behind every panel joint - no raw wall in a joint; over the closets and the Office door a plywood LINTEL.",
+     false
+    ],
+    [
+     "Panel recesses for the clips: by the factory per the D-sheets, BACK VIEW (Q5).",
+     true
+    ],
+    [
+     "FOR REVIEW - not for production until the open questions are answered and the drawings are reissued.",
+     true
+    ]
+   ],
+   "A-3:B": [
+    [
+     "Shoe cabinet NB by TM - HEIGHT DIFFERS FROM NA: max top {{cab_top('NB') - ffl}} above FFL (niche - {{cab('NB')['top_gap']}}), TM drawing {{cab('NB')['tm_top_ffl']}} (Q9). P52 starts {{gap_over('NB')}} above the cabinet top = {{z0('P52')}} (A-513).",
+     true
+    ]
+   ],
+   "A-3:A": [
+    [
+     "Shoe cabinet NA by TM - HEIGHT DIFFERS FROM NB: max top {{cab_top('NA') - ffl}} above FFL (niche - {{cab('NA')['top_gap']}}), TM drawing {{cab('NA')['tm_top_ffl']}} = {{tm_top('NA') - oh('NA')}} too high (Q9). P61 starts {{gap_over('NA')}} above the cabinet top = {{z0('P61')}}, {{upper('A') - z0('P61')}} below the upper row (A-513).",
+     true
+    ]
+   ]
+  },
+  "bubbles": {
+   "A-1:B": [
+    [
+     "Q6",
+     300,
+     57.15
+    ],
+    [
+     "Q7",
+     2864,
+     2300
+    ],
+    [
+     "Q8",
+     1800,
+     160
+    ]
+   ],
+   "A-1:A": [
+    [
+     "Q6",
+     300,
+     57.15
+    ],
+    [
+     "Q7",
+     3855,
+     2300
+    ]
+   ],
+   "A-3:B": [
+    [
+     "Q1",
+     2864,
+     900
+    ],
+    [
+     "Q2",
+     3113,
+     2200
+    ],
+    [
+     "Q4",
+     4222,
+     3300
+    ],
+    [
+     "Q9",
+     2295,
+     2400
+    ]
+   ],
+   "A-3:A": [
+    [
+     "Q1",
+     3855,
+     900
+    ],
+    [
+     "Q2",
+     2680,
+     2200
+    ],
+    [
+     "Q3",
+     95,
+     400
+    ],
+    [
+     "Q9",
+     3352,
+     2400
+    ]
+   ]
+  },
+  "details": [
+   {
+    "code": "A-511",
+    "name": "OPENING LINER DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "FOY-05 Plan Section @ +1000",
+      "cam": [
+       6440,
+       0,
+       0
+      ],
+      "at": [
+       7402.3,
+       40,
+       1000
+      ],
+      "proj": "plan",
+      "title": "OA1 LEFT JAMB - PLAN SECTION AT +1000",
+      "dims": [
+       [
+        [
+         "{{ox('A') + op('OA1')['s0'] - ln('OA1')['flange']}}",
+         "{{pb}}",
+         1000
+        ],
+        [
+         "{{ox('A') + op('OA1')['s0']}}",
+         "{{pb}}",
+         1000
+        ],
+        0.35,
+        [
+         "{{ox('A') + op('OA1')['s0']}}",
+         -90000,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + pn('P56')['s1']}}",
+         "{{-bu['face']}}",
+         1000
+        ],
+        [
+         "{{ox('A') + op('OA1')['s0']}}",
+         "{{-bu['face']}}",
+         1000
+        ],
+        0.7,
+        [
+         "{{ox('A') + op('OA1')['s0']}}",
+         -90000,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + op('OA1')['s0'] + ln('OA1')['t']}}",
+         0,
+         1000
+        ],
+        [
+         "{{ox('A') + op('OA1')['s0'] + ln('OA1')['t']}}",
+         "{{ln('OA1')['depth']}}",
+         1000
+        ],
+        0.3,
+        [
+         90000,
+         0,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + op('OA1')['s0'] - 120}}",
+         0,
+         1000
+        ],
+        [
+         "{{ox('A') + op('OA1')['s0'] - 120}}",
+         "{{-bu['face']}}",
+         1000
+        ],
+        0.3,
+        [
+         -90000,
+         0,
+         1000
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "FOY-09 OA1 - Liner Head Section",
+      "cam": [
+       8652.3,
+       60,
+       3100
+      ],
+      "at": [
+       8652.3,
+       40,
+       3180
+      ],
+      "proj": "side",
+      "title": "OA1 HEAD - SECTION",
+      "dims": [
+       [
+        [
+         "{{ox('A') + 1430}}",
+         "{{-bu['face']}}",
+         "{{oh('OA1')}}"
+        ],
+        [
+         "{{ox('A') + 1430}}",
+         "{{-bu['face']}}",
+         "{{z0('P58')}}"
+        ],
+        0.35,
+        [
+         "{{ox('A') + 1430}}",
+         -90000,
+         "{{oh('OA1')}}"
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + 1430}}",
+         "{{pb}}",
+         "{{oh('OA1')}}"
+        ],
+        [
+         "{{ox('A') + 1430}}",
+         "{{pb}}",
+         "{{oh('OA1') + ln('OA1')['flange']}}"
+        ],
+        0.75,
+        [
+         "{{ox('A') + 1430}}",
+         -90000,
+         "{{oh('OA1')}}"
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + 1430}}",
+         0,
+         "{{oh('OA1') - ln('OA1')['t']}}"
+        ],
+        [
+         "{{ox('A') + 1430}}",
+         "{{ln('OA1')['depth']}}",
+         "{{oh('OA1') - ln('OA1')['t']}}"
+        ],
+        0.3,
+        [
+         "{{ox('A') + 1430}}",
+         0,
+         -90000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "UCON proposal (Andriy 2026-10-17): L-liner MDF {{ln('OA1')['t']}} lacquered, leg against the bare reveal, {{ln('OA1')['depth']}} past the wall face; flange {{ln('OA1')['flange']}} wide behind the panel, from the jamb line to the backing frame - no raw wall in the joints; corners mitred 45. No strips on the panel back: the panel rests on the flange. Panel edge {{pn('P59')['s0'] - op('OA1')['s1']}} short of the jamb line. Q2.",
+      true
+     ],
+     "Openings OA1, OA2, OB1 alike. Drawn from the model (scenes FOY-05, FOY-09)."
+    ]
+   },
+   {
+    "code": "A-512",
+    "name": "STONE PLINTH DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "FOY-10 P59 - Pier Section (stone, joint)",
+      "cam": [
+       10081.3,
+       60,
+       1600
+      ],
+      "at": [
+       10081.3,
+       40,
+       200
+      ],
+      "proj": "side",
+      "title": "PIER P59 - FLOOR, STONE PLINTH",
+      "dims": [
+       [
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         "{{ffl}}"
+        ],
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         "{{stone}}"
+        ],
+        0.35,
+        [
+         "{{ox('A') + 2859}}",
+         -90000,
+         "{{ffl}}"
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         0
+        ],
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         "{{ffl}}"
+        ],
+        0.35,
+        [
+         "{{ox('A') + 2859}}",
+         -90000,
+         0
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         "{{ffl + 100}}"
+        ],
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face'] + stn['t']}}",
+         "{{ffl + 100}}"
+        ],
+        0.3,
+        [
+         "{{ox('A') + 2859}}",
+         0,
+         90000
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         "{{stone - stn['notch']}}"
+        ],
+        [
+         "{{ox('A') + 2859}}",
+         "{{-bu['face']}}",
+         "{{stone}}"
+        ],
+        0.75,
+        [
+         "{{ox('A') + 2859}}",
+         -90000,
+         "{{stone}}"
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "FOY-05 Plan Section @ +1000",
+      "cam": [
+       6440,
+       0,
+       0
+      ],
+      "at": [
+       3113,
+       40,
+       1000
+      ],
+      "proj": "plan",
+      "title": "P50 / OB2 FRAME - PLAN AT +1000",
+      "dims": [
+       [
+        [
+         "{{op('OB2')['s0'] + 30}}",
+         0,
+         1000
+        ],
+        [
+         "{{op('OB2')['s0'] + 30}}",
+         "{{dr('OB2')['jamb_y'][0]}}",
+         1000
+        ],
+        0.3,
+        [
+         90000,
+         0,
+         1000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "Stone by others, as Main Kitchen: {{stn['t']}} thick, face = panel face {{bu['face']}} from the wall, FFL .. {{stone}} (FFL + {{stone - ffl}}), notch {{stn['notch']}} x {{stn['notch']}} at the top front edge; panels and frames stand on it. Height to confirm - Q8.",
+      true
+     ],
+     "In front of the Office door frame the stone back is cut to {{stn['back_cut']}} (the frame stands {{-dr('OB2')['jamb_y'][0]}} in front of the wall face). Drawn from the model (scenes FOY-10, FOY-05)."
+    ]
+   },
+   {
+    "code": "A-513",
+    "name": "CLOSET CABINET JUNCTION",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "FOY-11 NA - Closet Section (cabinet)",
+      "cam": [
+       10574.3,
+       200,
+       1600
+      ],
+      "at": [
+       10574.3,
+       150,
+       3120
+      ],
+      "proj": "side",
+      "title": "CLOSET NA - CABINET TOP / PANEL P61",
+      "dims": [
+       [
+        [
+         "{{ox('A') + 3352}}",
+         "{{-bu['face']}}",
+         "{{cab_top('NA')}}"
+        ],
+        [
+         "{{ox('A') + 3352}}",
+         "{{-bu['face']}}",
+         "{{z0('P61')}}"
+        ],
+        0.35,
+        [
+         "{{ox('A') + 3352}}",
+         -90000,
+         "{{cab_top('NA')}}"
+        ]
+       ],
+       [
+        [
+         "{{ox('A') + 3352}}",
+         150,
+         "{{cab_top('NA')}}"
+        ],
+        [
+         "{{ox('A') + 3352}}",
+         150,
+         "{{oh('NA')}}"
+        ],
+        0.35,
+        [
+         "{{ox('A') + 3352}}",
+         90000,
+         "{{oh('NA')}}"
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "FOY-05 Plan Section @ +1000",
+      "cam": [
+       6440,
+       0,
+       0
+      ],
+      "at": [
+       10250.3,
+       120,
+       1000
+      ],
+      "proj": "plan",
+      "title": "CLOSET NA LEFT JAMB - PLAN SECTION AT +1000",
+      "dims": [
+       [
+        [
+         "{{ox('A') + op('NA')['s0']}}",
+         "{{-bu['face']}}",
+         1000
+        ],
+        [
+         "{{ox('A') + op('NA')['s0'] + cab('NA')['side_gap']}}",
+         "{{-bu['face']}}",
+         1000
+        ],
+        0.35,
+        [
+         "{{ox('A') + op('NA')['s0']}}",
+         -90000,
+         1000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "The two TM shoe cabinets DIFFER IN HEIGHT: each fits its niche, {{cab('NA')['top_gap']}} clear to the head and {{cab('NA')['side_gap']}} each side (UCON survey, walls fixed). Drawn as envelopes: depth {{cab('NA')['depth']}}, fronts flush with the panel face. The panel over the closet starts {{gap_over('NA')}} above the cabinet top; behind the joint a plywood LINTEL, no raw wall. Q9.",
+      true
+     ],
+     "Drawn from the model (scenes FOY-11, FOY-05)."
+    ],
+    "table": {
+     "cols": [
+      [
+       "CLOSET",
+       0.9
+      ],
+      [
+       "TM DOORS",
+       0.8
+      ],
+      [
+       "NICHE W",
+       0.8
+      ],
+      [
+       "NICHE H / FFL",
+       1.0
+      ],
+      [
+       "CABINET W",
+       0.9
+      ],
+      [
+       "CABINET H MAX / FFL",
+       1.3
+      ],
+      [
+       "TM DRAWING H / FFL",
+       1.3
+      ],
+      [
+       "PANEL OVER",
+       1.6
+      ]
+     ],
+     "red": true,
+     "rows": [
+      [
+       "NB (wall B)",
+       "27 / 28",
+       "{{ow('NB')}}",
+       "{{oh('NB') - ffl}}",
+       "{{ow('NB') - 2 * cab('NB')['side_gap']}}",
+       "{{cab_top('NB') - ffl}}",
+       "{{cab('NB')['tm_top_ffl']}}",
+       "P52 from {{z0('P52') - ffl}} FFL"
+      ],
+      [
+       "NA (wall A)",
+       "23 / 24",
+       "{{ow('NA')}}",
+       "{{oh('NA') - ffl}}",
+       "{{ow('NA') - 2 * cab('NA')['side_gap']}}",
+       "{{cab_top('NA') - ffl}}",
+       "{{cab('NA')['tm_top_ffl']}}",
+       "P61 from {{z0('P61') - ffl}} FFL"
+      ]
+     ]
+    }
+   }
+  ]
+ }
+}

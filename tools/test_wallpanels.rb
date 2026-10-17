@@ -114,6 +114,31 @@ check('auto: 15 panels numbered 1..15', o2[:grid][:panels].map { |p| p[:id] }, (
 check('auto: bottom row over openings on the rail centre', o2[:clips].map { |c| c[:z] }.uniq.sort.select { |z| z > 2500 && z < 2600 }, [2554.0])
 check('auto: checks pass', o2[:checks], [])
 
+# ---- 9. AP ML Foyer, band layout (2026-10-16): R1 solid strip, R2 band frames, R3 jamb setback ---------
+# 2026-10-17: band cut at every panel joint, LINTEL over closets / door, jamb_setback 0
+{ 'A' => [9, 14, 69, 4], 'B' => [9, 14, 78, 2] }.each do |w, (np, nf, nc, nsol)|
+  sf = WP.load(File.join(DIR, 'walls', "AP_ML_Foyer_#{w}.json"))
+  of = WP.build(sf)
+  check("foyer #{w}: panels / frames / clips", [of[:grid][:panels].size, of[:frames].size, of[:clips].size], [np, nf, nc])
+  check("foyer #{w}: checks pass", of[:checks], [])
+  check("foyer #{w}: every clip fully supported", of[:clips].reject { |c| c[:support] == :ok }, [])
+  check("foyer #{w}: solid strips", of[:frames].count { |f| f[:stiles].size == 1 }, nsol)
+  band = of[:frames].select { |f| f[:kind] == 'BAND' }
+  check("foyer #{w}: band covers the wall", [band.first[:x0], band.last[:x1]], [0.0, sf['wall']['length'].to_f])
+  check("foyer #{w}: band pieces <= 2438", band.all? { |f| f[:x1] - f[:x0] <= 2438 }, true)
+  jambs = sf['openings'].flat_map { |o| [[o['x0'], o], [o['x1'], o]] }.reject { |x, _| x <= 0 || x >= sf['wall']['length'] }
+  near = of[:frames].reject { |f| f[:kind] == 'BAND' }.select do |f|
+    jambs.any? { |x, o| d = (o['frame_setback'] || sf['subframe']['jamb_setback']).to_f; [(f[:x0] - x).abs, (f[:x1] - x).abs].min.between?(0.05, d - 0.05) }
+  end
+  check("foyer #{w}: pier frames keep each jamb's setback (closet / door 0, liner 56)", near.map { |f| f[:id] }, [])
+  ids = w == 'B' ? (47..55) : (56..64)
+  check("foyer #{w}: TM panel numbers", of[:grid][:panels].map { |p| p[:id] }.sort, ids.map { |i| "P#{i}" })
+  # no raw wall through a joint (Andriy 2026-10-17; liner flange widened to the frame - variant 2)
+  check("foyer #{w}: every joint backed by a frame or the liner flange", WP.joint_gaps(sf, of[:grid], of[:frames]), [])
+  check("foyer #{w}: liner flange reaches the frame", sf['openings'].select { |o| o['liner'] }.map { |o| o['liner']['flange'] == o['frame_setback'] }.uniq, [true])
+  check("foyer #{w}: frame ids", of[:frames].map { |f| f[:id] }, (w == 'B' ? (1..14) : (15..28)).map { |i| format('S%02d', i) })
+end
+
 puts "#{$checks} checks, #{$fails.size} failures"
 $fails.each { |f| puts "FAIL #{f}" }
 exit($fails.empty? ? 0 : 1)

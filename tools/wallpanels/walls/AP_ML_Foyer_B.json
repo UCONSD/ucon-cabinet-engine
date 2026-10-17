@@ -1,0 +1,250 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital ML Foyer (29 Waves End). mm, wall-local: x along the wall from its left end as seen from the foyer, z up from the SUBFLOOR (survey zero; finished floor +57.15 as Main Kitchen), y = 0 at the wall face, negative toward the room. Geometry: UCON survey in ~/Documents/AP_ML_Foyer_v1.skp (probes 750/751b, cleaned 753). Grid H1 decided by Andriy 2026-10-16: one horizontal joint, upper panels start at the higher opening head of the wall; one long panel over each opening.",
+ "id": "AP_ML_Foyer_B",
+ "model": "AP_ML_Foyer_v1",
+ "prefix": "FOY-B",
+ "origin_model_x": 0,
+ "_origin_model_x": "wall-local x 0 = this model x (both elevations lie in the plane y = 0 of the model, face toward -y)",
+ "wall": {
+  "length": 5647,
+  "height": 4000,
+  "thickness": null,
+  "_thickness": "not surveyed (elevations only)"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "Andriy 2026-10-16: finished floor rises as in Main Kitchen (2 1/4 in); TM rev 4 heights from FFL agree within 1..3 mm",
+  "stone_top": 260.35,
+  "stone": { "t": 20, "notch": 10, "back_cut": 9.5, "_": "by others, as Main Kitchen (probe 766d): 20 thick, notch 10 x 10 at the top front edge, back cut to 9.5 in front of a door frame" }
+ },
+ "build_up": {
+  "frame_t": 19.05,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3,
+  "_face": "frame 3/4 in + Fastmount VL-03H recess gap 3.3 + panel MDF 22, as REC-LAU and Main Kitchen"
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "_margin_floor": "panels stand on the stone plinth (Andriy 2026-10-16: stone as Main Kitchen): top 260.35 = FFL + 203.2 (8 in), stone 20 thick by others, face = panel face, notch 10 x 10",
+  "max_width": 1220,
+  "width_step": 0.1,
+  "row_seam": {
+   "z": 3089,
+   "_": "B: the Office door rule (Main Kitchen DK1): cladding top = opening head 3180 - 9 - 35 - 35 - 12 = 3089 = the joint; the panel over OB1 starts 10 above its head (head_gap)"
+  },
+  "columns": [
+   {
+    "over": "OB1",
+    "n": 1
+   },
+   1,
+   {
+    "over": "NB",
+    "n": 1
+   },
+   1,
+   "OB2",
+   1
+  ],
+  "_columns": "every pier one column; over each opening / niche ONE panel (Andriy 2026-10-16: long panel, standard height turned on its side)",
+  "material": "MDF 22, finish per TM (matte lacquer BIANCO PURO per TM rev 4)",
+  "numbering": [
+   [
+    47,
+    1,
+    "U"
+   ],
+   [
+    48,
+    2,
+    "L"
+   ],
+   [
+    49,
+    2,
+    "U"
+   ],
+   [
+    52,
+    3,
+    "U"
+   ],
+   [
+    50,
+    4,
+    "L"
+   ],
+   [
+    51,
+    4,
+    "U"
+   ],
+   [
+    53,
+    5,
+    "U"
+   ],
+   [
+    55,
+    6,
+    "L"
+   ],
+   [
+    54,
+    6,
+    "U"
+   ]
+  ],
+  "_numbering": "[number, column, row] = TM Italia panel numbers, drawing 252502_FOYER rev 4 (B #47-55, A #56-64); Andriy 2026-10-16: follow the factory naming"
+ },
+ "openings": [
+  {
+   "id": "OB1",
+   "kind": "opening",
+   "x0": 0,
+   "x1": 1622,
+   "h": 3175,
+   "label": "PASSAGE (DOLOMITE SLAB)",
+   "short": "PASSAGE",
+   "panel_overlap": -10,
+   "_panel_overlap": "liner leg against the bare reveal (Andriy 2026-10-16): leg MDF 6 at 0..6 inside the jamb line, 64 past the wall face, flange 35.2 behind the panel between strips B / A; pier panels stop 10 short of the jamb line (shadow 10 to the leg), the panel over the opening spans jamb to jamb",
+   "head_gap": 10,
+   "_head_gap": "the head leg at h-6..h; the panel over the opening starts 10 above the head",
+   "liner": {
+    "t": 6,
+    "depth": 64,
+    "flange": 56,
+    "strips": null,
+    "_": "Andriy 2026-10-17: flange widened 35.2 -> 56 = frame_setback, strips B / A dropped; the panel back rests on the flange"
+   },
+   "frame_setback": 56,
+   "_frame_setback": "= the liner flange (Andriy 2026-10-17 evening, variant 2): the flange runs from the jamb line to the frame, so no raw wall shows in a joint at the liner; no strips B / A on the panel back (Main Kitchen had flange 35.2 + strips - to be widened there too)"
+  },
+  {
+   "id": "NB",
+   "kind": "opening",
+   "x0": 1975,
+   "x1": 2615,
+   "h": 3107,
+   "depth": 983,
+   "label": "SHOE CLOSET - SHOE CABINET BY TM (doors 27 / 28, RH)",
+   "short": "CLOSET\nTM 27 / 28",
+   "head_gap": 10,
+   "_head_gap": "shadow 10 above the closet head (cabinet by TM below - Q2)",
+   "cabinet": {
+    "side_gap": 3,
+    "top_gap": 3,
+    "gap": 3,
+    "front_t": 22,
+    "depth": 469.7,
+    "lower_h": 2100,
+    "fit_niche": true,
+    "_fit_niche": "Andriy 2026-10-17 evening: the cabinets must differ in height - each fits its niche (top = niche head - top_gap); TM drawing value kept as tm_top_ffl",
+    "tm_top_ffl": 3049,
+    "_tm_top_ffl": "TM 252502 rev 4, CABINET DIMENSIONS, cabinet top 3049 above FFL (DWG text 1EE9); lower front 2100 (F1FA), upper 942 (F1ED), depth 469.7. Cabinets may be ordered - fixed (Andriy 2026-10-17). TM widths unclear (B 645 / 653.5, A 645) - Q10",
+    "doors": [
+     "27",
+     "28"
+    ],
+    "_": "TM shoe cabinet (252502 rev 4, SEC 1-1 / 2-2) as an envelope to check the junction: depth 469.7, lower door 2100, the rest upper; fronts flush with the panel face; width and height to OUR survey (TM: front 653.5 on B over a 641 niche, top 3049 / 3046 FFL) - Q2"
+   }
+  },
+  {
+   "id": "OB2",
+   "kind": "door",
+   "x0": 3113,
+   "x1": 5332,
+   "h": 3180,
+   "label": "OFFICE - DOUBLE DOOR PANEL 5 BY TM (2 x 993 x 3038)",
+   "short": "OFFICE\nTM DOOR PANEL 5",
+   "leaf": {
+    "w": 2108,
+    "h": 3021.85,
+    "floor_gap": 67.15,
+    "t": 12,
+    "_": "cladding of both leaves = one grid column 2108 (P53 above one panel); FFL + 10 = 67.15 .. 3089 (kitchen: cladding top = leaf top 12 lower, leaf top = head stop bottom)",
+    "leaves": 2,
+  "joint": 10,
+  "_joint": "the two claddings meet at the centre with a 10 joint (as the panel joints)"
+   },
+   "rebate": {
+    "inset": 1.8,
+    "head_inset": 6.5,
+    "depth": 10,
+    "_": "as Main Kitchen DK1/DK2: rear 10 removed where a panel passes in front of the frame: frame outer - 2.5 (opening + 1.8), head: frame head top + 2.5 (opening head - 6.5)"
+   },
+   "frame": {
+    "gap_head": 9,
+    "gap_side": 4.3,
+    "gap_floor": 0,
+    "face": 51.2,
+    "head": 35,
+    "jamb": 201.8,
+    "jamb_y0": -32.3,
+    "jamb_y1": 169.5,
+    "wall_t": 170,
+    "_": "Main Kitchen DK1 / REC D01 profile; wall 170 per TM PANEL 5 (not surveyed)"
+   },
+   "handing": "double, opens into the Office (Passione plan), concealed hinges, soft-close closers (TM rev 4)",
+   "frame_setback": 0,
+   "_frame_setback": "Main Kitchen DK1: the frame runs to the door opening, the panel passes over the door frame (rebate)",
+   "section_x": 3700,
+   "scenes": {
+    "plan": "FOY-05 Plan Section @ +1000",
+    "section": "FOY-06 OB2 - Door Section"
+   },
+   "cams": {
+    "plan": [
+     6440,
+     0,
+     0
+    ],
+    "section": [
+     3700,
+     60,
+     1600
+    ]
+   }
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "floor_gap": 260.35,
+  "_floor_gap": "frames stand on the stone top, as Main Kitchen",
+  "tier_joint": 2694,
+  "_tier_joint": "as Main Kitchen: lower tier 260.35..2694 (2433.65 <= 2438)",
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "_layout": "R1 solid strip on a pier narrower than two 4in stiles; R2 continuous band frames above the openings, pieces <= max_length; R3 pier frames 10 short of the jambs (Andriy 2026-10-16)",
+  "jamb_setback": 0,
+  "_jamb_setback_2026_10_17": "was 10; Andriy 2026-10-17: no raw wall through a joint - pier frames run to the closet / door jambs, a LINTEL piece fills head..band over closets and the door",
+  "first_id": 1,
+  "_first_id": "frames S numbered through the foyer, wall B first as TM (UCON only, the factory does not see them)"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200,
+  "_narrow_panel": "PROPOSAL: a panel narrower than 200 (2 x edge 75 + 50) gets one clip column at its centre"
+ }
+}
