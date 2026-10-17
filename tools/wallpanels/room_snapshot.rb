@@ -58,7 +58,8 @@ module UCON
             end
             h
           end,
-          'wf' => [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]]
+          'wf' => [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]],
+          'plan_wf' => plan_wf((room['plan'] || {})[w], len)
         }
         o[:grid][:panels].each do |p|
           snap['panels'] << { 'wall' => w, 'id' => p[:id], 's0' => p[:x0], 's1' => p[:x1], 'z0' => p[:z0], 'z1' => p[:z1],
@@ -97,7 +98,7 @@ module UCON
         end
       end
       ctx = Ctx.new(snap)
-      snap['sheets'] = resolve(JSON.parse(JSON.generate(snap['sheets'])), ctx)
+      snap['sheets'] = resolve(expand(JSON.parse(JSON.generate(snap['sheets'])), snap), ctx)
       [snap, specs, outs]
     end
 
@@ -140,10 +141,12 @@ module UCON
         @s['levels']['stone_top']
       end
       def seam(wid)
-        @s['levels']['seam'][wid][0]
+        sm = @s['levels']['seam']
+        (sm.is_a?(Hash) ? sm[wid] : sm)[0]
       end
       def upper(wid)
-        @s['levels']['seam'][wid][1]
+        sm = @s['levels']['seam']
+        (sm.is_a?(Hash) ? sm[wid] : sm)[1]
       end
       def cab_top(id)
         cb = op(id)['cabinet'] || raise("{{}}: no cabinet at #{id}")
@@ -225,6 +228,31 @@ module UCON
       when Hash then v.transform_values { |x| resolve(x, ctx) }
       else v
       end
+    end
+
+    # the wall's frame in PLAN for the key plan (the model may hold unfolded elevations only): room.plan.<wall> =
+    # { start: [x, y] | end: [x, y], t: [tx, ty], n: [nx, ny] (into the room) } -> [[ox, oy], t, n]; nil = use 'wf'
+    def plan_wf(pl, len)
+      return nil unless pl
+      t = pl['t']; n = pl['n']
+      o = pl['start'] || [pl['end'][0] - len * t[0], pl['end'][1] - len * t[1]]
+      [o, t, n]
+    end
+
+    # page_notes keys 'X:*' -> one key per wall ({w} = the wall id), 'A-5:*' -> one per door ({d} = the door id)
+    def expand(sheets, snap)
+      pn = sheets['page_notes'] or return sheets
+      out = {}
+      pn.each do |k, v|
+        if k == 'A-5:*'
+          snap['doors'].each { |d| out["A-5:#{d['id']}"] = JSON.parse(JSON.generate(v).gsub('{d}', d['id'])) }
+        elsif k.end_with?(':*')
+          snap['walls'].each { |w| out[k.sub('*', w['id'])] = JSON.parse(JSON.generate(v).gsub('{w}', w['id'])) + (pn[k.sub('*', w['id'])] || []) }
+        elsif !out.key?(k)
+          out[k] = v
+        end
+      end
+      sheets.merge('page_notes' => out)
     end
 
     def wid(spec)

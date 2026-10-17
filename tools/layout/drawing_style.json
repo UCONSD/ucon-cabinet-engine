@@ -1,0 +1,33 @@
+{
+ "_about": "UCON wall-panel drawing standard (claude/spec-2026-10-17-drawing-standard.md): ONE palette and the sheet titles for every room set built by UCON::RoomSet (room_drawing_set.rb). Change the look here, not in a writer.",
+ "colors": {
+  "panel": [250, 248, 242],
+  "frame": [222, 196, 150],
+  "frame_wide": [196, 170, 125],
+  "frame_line": [120, 95, 55],
+  "stone": [214, 208, 198],
+  "window": [226, 238, 248],
+  "door": [252, 242, 214],
+  "niche": [242, 226, 226],
+  "cladding": [255, 250, 235],
+  "liner": [236, 232, 222],
+  "wall_plan": [205, 205, 205]
+ },
+ "titles": {
+  "G-001": "LEGEND, NOTES & SHEET INDEX",
+  "G-002": "OPEN QUESTIONS",
+  "A-100": "KEY PLAN",
+  "existing": "EXISTING WALL{s} - {ids}",
+  "frames": "SUBFRAME + CLIPS - {id}",
+  "A-210": "CLIP DETAIL & ORDER",
+  "panels": "PANEL LAYOUT - {id}",
+  "door": "DOOR {id}",
+  "door_details": "{id} DETAILS",
+  "A-601": "3D VIEWS",
+  "A-701": "PANEL SCHEDULE",
+  "A-702": "SUBFRAME SCHEDULE",
+  "A-703": "SUBFRAME CUT LIST & SHEETS",
+  "drill": "DRILLING {first}…{last} ({n})"
+ },
+ "key_plan": { "scale": 40, "wall_t": 172, "label_offset": 650 }
+}

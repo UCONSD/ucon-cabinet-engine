@@ -7061,7 +7061,61 @@
   "key_label_side": {
    "Wall 2": "behind",
    "A": "behind"
-  }
+  },
+  "page_notes": {
+   "A-1": [
+    [
+     "Survey by UCON. Zero = top of the subfloor; finished floor FFL +{{ffl}} (2-1/4\", to be verified on site - Q5); stone plinth by others: top {{stone}}, 20 thick, face flush with the panels, notch 10 x 10 at its top front edge (Q9).",
+     true
+    ],
+    [
+     "Window heads and the soffit to be checked by laser on site before the panels are released for production.",
+     true
+    ]
+   ],
+   "A-2:*": [
+    "Frames stand on the stone top {{stone}}; tier joint {{@s['levels']['tier_joint']}}; clear of windows and the niche by the trim strips B / A (A-511). Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10; bottom on the stone {{stone}}; horizontal seam {{seam('{w}')}} / {{upper('{w}')}} (top of the door cladding); top = ceiling - 10. Numbering P01.. per wall, left to right.",
+    "45° external corners mitred (long point dimensioned); free ends and inside corners 10 short. Panels in front of the DK1 / DK2 frames: rear {{bu['rebate']}} rebated (A-701, D-sheets).",
+    [
+     "Windows: MDF 6 L-liner on the 3rd step of the window trim, shadow 10, panel edges 13 over the opening, liner flange behind the panel between strips B 6x34 + A 6x17 glued to the panel back (A-511, Q8). Niche: liner in line with the niche wall (Q10).",
+     true
+    ],
+    [
+     "Maximum panel size to be confirmed by the factory (Q7).",
+     true
+    ]
+   ],
+   "A-5:*": [
+    [
+     "{d}: TM concealed door, profile as D01 (TM rev 5), opening per UCON survey {{ow('{d}')}} x {{oh('{d}')}} from the subfloor (Q2).",
+     true
+    ],
+    [
+     "Opens into the Butler's pantry, hinges {{dr('{d}')['hinge']}} as seen from the kitchen (Q1).",
+     true
+    ]
+   ],
+   "A-701": [
+    "Panels P01.. per wall left to right. Door cladding DK1 / DK2 by TM with the doors - not in this list."
+   ]
+  },
+  "qref": {
+   "door": "Q1",
+   "heads": "Q2",
+   "stone": "Q5",
+   "panel_size": "Q7",
+   "mitre": "Q11"
+  },
+  "finish_by": "TM",
+  "legend_niche": "Niche (stone by others)",
+  "opening_labels": {
+   "niche": "NICHE - STONE BY OTHERS"
+  },
+  "room_side": "THE KITCHEN",
+  "iso_title": "FINISHED — PANELS, TRIM, DOORS"
  },
  "doors": [
   {
@@ -7156,5 +7210,6 @@
    },
    "_src": "probes 634 / 635 (model), 636 (scenes)"
   }
- ]
+ ],
+ "_std": "2026-10-17: page_notes / qref / finish_by / legend_niche added for UCON::RoomSet (standard); MKSet ignores them"
 }

@@ -167,18 +167,6 @@
      "FOR REVIEW - not for production until the open questions are answered and the drawings are reissued.",
      true
     ]
-   ],
-   "A-3:B": [
-    [
-     "Shoe cabinet NB by TM - HEIGHT DIFFERS FROM NA: max top {{cab_top('NB') - ffl}} above FFL (niche - {{cab('NB')['top_gap']}}), TM drawing {{cab('NB')['tm_top_ffl']}} (Q9). P52 starts {{gap_over('NB')}} above the cabinet top = {{z0('P52')}} (A-513).",
-     true
-    ]
-   ],
-   "A-3:A": [
-    [
-     "Shoe cabinet NA by TM - HEIGHT DIFFERS FROM NB: max top {{cab_top('NA') - ffl}} above FFL (niche - {{cab('NA')['top_gap']}}), TM drawing {{cab('NA')['tm_top_ffl']}} = {{tm_top('NA') - oh('NA')}} too high (Q9). P61 starts {{gap_over('NA')}} above the cabinet top = {{z0('P61')}}, {{upper('A') - z0('P61')}} below the upper row (A-513).",
-     true
-    ]
    ]
   },
   "bubbles": {
@@ -730,6 +718,100 @@
      ]
     }
    }
-  ]
+  ],
+  "page_notes": {
+   "A-100": [
+    "Walls B and A face each other across the foyer; the distance between them is not surveyed - drawn schematic, not to scale between the walls. Plan: architect's (Passione, Main Level, sheet 01), reference only."
+   ],
+   "A-1": [
+    [
+     "Survey by UCON. Zero = top of the subfloor; finished floor FFL +{{ffl}} (2-1/4\", as Main Kitchen - to be verified on site, Q6). Openings run from the floor; closets hold shoe cabinets by TM. Stone plinth by others under the lower panels, top {{stone}} = FFL + {{stone - ffl}} (Q8).",
+     true
+    ],
+    [
+     "Opening heads and FFL to be checked by laser before the panels are released for production (Q6). Widths against the TM drawing: Q7.",
+     true
+    ]
+   ],
+   "A-2:*": [
+    "Pier frames from the stone top {{stone}} to the tier joint {{@s['levels']['tier_joint']}}, then to the band; above the openings one band of frames along the whole wall to the ceiling. Frames meet the liner flange at the openings and run to the closet / door jambs; a plywood LINTEL over the closets and the door; the band is cut at every vertical panel joint - a frame member behind every joint, no raw wall. A pier narrower than two 4\" stiles gets one solid strip. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, matte lacquer BIANCO PURO per TM; joints 10; lower panels on the stone top {{stone}} (Q8); horizontal joint {{seam('{w}')}} / {{upper('{w}')}}; panels over openings start 10 above the head, over the closets 10 above the cabinet top; top = ceiling - 10. Panel numbers = TM numbers (drawing 252502_FOYER rev 4).",
+    [
+     "One panel over each opening and closet - long panels, one piece (Q1). Pier panels stop {{pn('P59')['s0'] - op('OA1')['s1']}} short of the jamb line; L-liner MDF {{ln('OA1')['t']}} (strip + dashed flange, A-511, Q2).",
+     true
+    ]
+   ],
+   "A-3:B": [
+    [
+     "Shoe cabinet by TM (A-513); Office double door by TM, panels {{rebated}} rebated over its frame (A-501, Q4).",
+     true
+    ],
+    [
+     "Shoe cabinet NB by TM - HEIGHT DIFFERS FROM NA: max top {{cab_top('NB') - ffl}} above FFL (niche - {{cab('NB')['top_gap']}}), TM drawing {{cab('NB')['tm_top_ffl']}} (Q9). P52 starts {{gap_over('NB')}} above the cabinet top = {{z0('P52')}} (A-513).",
+     true
+    ]
+   ],
+   "A-3:A": [
+    [
+     "Shoe cabinet by TM (A-513).",
+     true
+    ],
+    [
+     "Shoe cabinet NA by TM - HEIGHT DIFFERS FROM NB: max top {{cab_top('NA') - ffl}} above FFL (niche - {{cab('NA')['top_gap']}}), TM drawing {{cab('NA')['tm_top_ffl']}} = {{tm_top('NA') - oh('NA')}} too high (Q9). P61 starts {{gap_over('NA')}} above the cabinet top = {{z0('P61')}}, {{upper('A') - z0('P61')}} below the upper row (A-513).",
+     true
+    ]
+   ],
+   "A-5:OB2": [
+    [
+     "OB2: Office double door PANEL 5 by TM, drawn to the Main Kitchen DK1 profile (TM D01 rev 5); opening per UCON survey {{ow('OB2')}} x {{oh('OB2')}} from the subfloor (Q4, Q6).",
+     true
+    ],
+    [
+     "Double, opens into the Office (Passione plan), concealed hinges, soft-close closers (TM rev 4).",
+     true
+    ]
+   ],
+   "A-701": [
+    "Panel numbers = TM numbers (252502 rev 4). Shoe cabinet fronts (23 / 24, 27 / 28) and the Office double door PANEL 5 by TM - not in this list."
+   ]
+  },
+  "legend_niche": "Closet with shoe cabinet by TM (reference)",
+  "cabinet_label": "TM CAB.",
+  "finish_by": "TM",
+  "room_side": "THE FOYER",
+  "iso_title": "FINISHED PANELS — WALLS B AND A, UNFOLDED SIDE BY SIDE"
+ },
+ "plan": {
+  "_": "key plan A-100 (standard 2026-10-17: from the model; the foyer model holds elevations only): B and A face each other, the gap between them is schematic - not surveyed",
+  "B": {
+   "start": [
+    0,
+    0
+   ],
+   "t": [
+    1,
+    0
+   ],
+   "n": [
+    0,
+    -1
+   ]
+  },
+  "A": {
+   "end": [
+    0,
+    -2600
+   ],
+   "t": [
+    -1,
+    0
+   ],
+   "n": [
+    0,
+    1
+   ]
+  }
  }
 }
