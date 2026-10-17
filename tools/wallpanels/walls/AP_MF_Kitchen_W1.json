@@ -1,0 +1,475 @@
+{
+ "_about": "AP Capital Main Kitchen + Breakfast, Wall 1 - generator input made 2026-10-17 from the issued snapshot AP_MF_Main_Kitchen.json (v1.0). Panels are GIVEN (issued to TM): only frames, clips, drilling, liners are generated. Walls untouched (Andriy 2026-10-17).",
+ "id": "AP_MF_Kitchen_W1",
+ "model": "AP_MF_Main Kitchen_Breakfast",
+ "wall": {
+  "length": 1630,
+  "height": 3406,
+  "ceil": [
+   [
+    0,
+    1630,
+    3406
+   ]
+  ],
+  "ends": [
+   "free end (panels 10 short)",
+   "45° corner with Wall 2"
+  ],
+  "wf": [
+   [
+    -10791.3,
+    2674.6
+   ],
+   [
+    0,
+    -1
+   ],
+   [
+    -1,
+    0
+   ]
+  ],
+  "name": "Wall 1"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5
+  },
+  "stone_runs": [
+   [
+    0,
+    1674.3
+   ]
+  ],
+  "_stone_runs": "stone plinth by others as built in the model (v1.0): continuous runs, to the wall ends and the niche / door frames"
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "row_seam": {
+   "z": 2728
+  },
+  "explicit": [
+   {
+    "id": "P01",
+    "row": "L",
+    "x0": 10.0,
+    "x1": 339.0,
+    "z0": 260.35,
+    "z1": 2728.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P02",
+    "row": "U",
+    "x0": 10.0,
+    "x1": 339.0,
+    "z0": 2738.0,
+    "z1": 3396.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P03",
+    "row": "S",
+    "x0": 349.0,
+    "x1": 877.0,
+    "z0": 260.35,
+    "z1": 813.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P04",
+    "row": "H",
+    "x0": 349.0,
+    "x1": 877.0,
+    "z0": 3038.0,
+    "z1": 3396.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P05",
+    "row": "L",
+    "x0": 887.0,
+    "x1": 1674.3,
+    "z0": 260.35,
+    "z1": 2728.0,
+    "mitre_start": false,
+    "mitre_end": true
+   },
+   {
+    "id": "P06",
+    "row": "U",
+    "x0": 887.0,
+    "x1": 1674.3,
+    "z0": 2738.0,
+    "z1": 3396.0,
+    "mitre_start": false,
+    "mitre_end": true
+   }
+  ]
+ },
+ "openings": [
+  {
+   "kind": "window",
+   "id": "W1-WIN",
+   "x0": 326,
+   "x1": 900,
+   "h": 3051,
+   "sill": 800,
+   "liner": {
+    "t": 6,
+    "depth": 64,
+    "flange": 33,
+    "strips": null,
+    "_": "2026-10-17 variant 2 (as ML Foyer): flange from the leg on the trim step to the backing frame (33 past the jamb line = frame_setback), no strips B / A",
+    "leg": [
+     23,
+     29
+    ],
+    "_leg": "leg on the 3rd step of the window trim, 23..29 into the opening from the jamb line (v1.0 liner.window.leg [-29, -23]); panels 13 into the opening"
+   },
+   "frame_setback": 33,
+   "sill_setback": 33,
+   "_frame_setback": "frame edge 46 behind the panel edge (panels 13 into the opening): jamb - 33 (Main Kitchen v1.0 S03 / S04)"
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "floor_gap": 260.35,
+  "tier_joint": 2694,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 1,
+  "band_bottom": "local"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200,
+  "fixed": [
+   [
+    "P01",
+    244.0,
+    335.4,
+    95.0,
+    75.0,
+    234.0
+   ],
+   [
+    "P01",
+    244.0,
+    914.8,
+    95.0,
+    654.4,
+    234.0
+   ],
+   [
+    "P01",
+    244.0,
+    1494.2,
+    95.0,
+    1233.8,
+    234.0
+   ],
+   [
+    "P01",
+    244.0,
+    2073.6,
+    95.0,
+    1813.2,
+    234.0
+   ],
+   [
+    "P01",
+    244.0,
+    2653.0,
+    95.0,
+    2392.7,
+    234.0
+   ],
+   [
+    "P01",
+    50.0,
+    335.4,
+    289.0,
+    75.0,
+    40.0
+   ],
+   [
+    "P01",
+    50.0,
+    914.8,
+    289.0,
+    654.4,
+    40.0
+   ],
+   [
+    "P01",
+    50.0,
+    1494.2,
+    289.0,
+    1233.8,
+    40.0
+   ],
+   [
+    "P01",
+    50.0,
+    2073.6,
+    289.0,
+    1813.2,
+    40.0
+   ],
+   [
+    "P01",
+    50.0,
+    2653.0,
+    289.0,
+    2392.7,
+    40.0
+   ],
+   [
+    "P02",
+    244.0,
+    2813.0,
+    95.0,
+    75.0,
+    234.0
+   ],
+   [
+    "P02",
+    244.0,
+    3321.0,
+    95.0,
+    583.0,
+    234.0
+   ],
+   [
+    "P02",
+    50.0,
+    2813.0,
+    289.0,
+    75.0,
+    40.0
+   ],
+   [
+    "P02",
+    50.0,
+    3321.0,
+    289.0,
+    583.0,
+    40.0
+   ],
+   [
+    "P03",
+    837.0,
+    335.4,
+    40.0,
+    75.0,
+    488.0
+   ],
+   [
+    "P03",
+    837.0,
+    738.0,
+    40.0,
+    477.6,
+    488.0
+   ],
+   [
+    "P03",
+    389.0,
+    335.4,
+    488.0,
+    75.0,
+    40.0
+   ],
+   [
+    "P03",
+    389.0,
+    738.0,
+    488.0,
+    477.6,
+    40.0
+   ],
+   [
+    "P04",
+    837.0,
+    3113.0,
+    40.0,
+    75.0,
+    488.0
+   ],
+   [
+    "P04",
+    837.0,
+    3321.0,
+    40.0,
+    283.0,
+    488.0
+   ],
+   [
+    "P04",
+    389.0,
+    3113.0,
+    488.0,
+    75.0,
+    40.0
+   ],
+   [
+    "P04",
+    389.0,
+    3321.0,
+    488.0,
+    283.0,
+    40.0
+   ],
+   [
+    "P05",
+    1581.0,
+    335.4,
+    93.3,
+    75.0,
+    694.0
+   ],
+   [
+    "P05",
+    1581.0,
+    914.8,
+    93.3,
+    654.4,
+    694.0
+   ],
+   [
+    "P05",
+    1581.0,
+    1494.2,
+    93.3,
+    1233.8,
+    694.0
+   ],
+   [
+    "P05",
+    1581.0,
+    2073.6,
+    93.3,
+    1813.2,
+    694.0
+   ],
+   [
+    "P05",
+    1581.0,
+    2653.0,
+    93.3,
+    2392.7,
+    694.0
+   ],
+   [
+    "P05",
+    982.0,
+    335.4,
+    692.3,
+    75.0,
+    95.0
+   ],
+   [
+    "P05",
+    982.0,
+    914.8,
+    692.3,
+    654.4,
+    95.0
+   ],
+   [
+    "P05",
+    982.0,
+    1494.2,
+    692.3,
+    1233.8,
+    95.0
+   ],
+   [
+    "P05",
+    982.0,
+    2073.6,
+    692.3,
+    1813.2,
+    95.0
+   ],
+   [
+    "P05",
+    982.0,
+    2653.0,
+    692.3,
+    2392.7,
+    95.0
+   ],
+   [
+    "P06",
+    1581.0,
+    2813.0,
+    93.3,
+    75.0,
+    694.0
+   ],
+   [
+    "P06",
+    1581.0,
+    3321.0,
+    93.3,
+    583.0,
+    694.0
+   ],
+   [
+    "P06",
+    982.0,
+    2813.0,
+    692.3,
+    75.0,
+    95.0
+   ],
+   [
+    "P06",
+    982.0,
+    3321.0,
+    692.3,
+    583.0,
+    95.0
+   ]
+  ],
+  "_fixed": "v1.0 panel recesses as issued to TM (AP_MK_drilling_panels_TM_v1.0.csv): kept, the frames carry them"
+ }
+}

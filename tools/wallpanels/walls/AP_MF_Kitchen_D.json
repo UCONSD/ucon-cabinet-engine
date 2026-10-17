@@ -1,0 +1,235 @@
+{
+ "_about": "AP Capital Main Kitchen + Breakfast, D - generator input made 2026-10-17 from the issued snapshot AP_MF_Main_Kitchen.json (v1.0). Panels are GIVEN (issued to TM): only frames, clips, drilling, liners are generated. Walls untouched (Andriy 2026-10-17).",
+ "id": "AP_MF_Kitchen_D",
+ "model": "AP_MF_Main Kitchen_Breakfast",
+ "wall": {
+  "length": 697,
+  "height": 3406,
+  "ceil": [
+   [
+    0,
+    697,
+    3406
+   ]
+  ],
+  "ends": [
+   "inside corner (panels 10 short)",
+   "45° corner with C"
+  ],
+  "wf": [
+   [
+    -7050.3,
+    -340
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    -1
+   ]
+  ],
+  "name": "D"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5
+  },
+  "stone_runs": [
+   [
+    0,
+    741.3
+   ]
+  ],
+  "_stone_runs": "stone plinth by others as built in the model (v1.0): continuous runs, to the wall ends and the niche / door frames"
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "row_seam": {
+   "z": 2728
+  },
+  "explicit": [
+   {
+    "id": "P42",
+    "row": "L",
+    "x0": 10.0,
+    "x1": 741.3,
+    "z0": 260.35,
+    "z1": 2728.0,
+    "mitre_start": false,
+    "mitre_end": true
+   },
+   {
+    "id": "P43",
+    "row": "U",
+    "x0": 10.0,
+    "x1": 741.3,
+    "z0": 2738.0,
+    "z1": 3396.0,
+    "mitre_start": false,
+    "mitre_end": true
+   }
+  ]
+ },
+ "openings": [],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "floor_gap": 260.35,
+  "tier_joint": 2694,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 60,
+  "band_bottom": "local"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200,
+  "fixed": [
+   [
+    "P42",
+    648.0,
+    335.4,
+    93.3,
+    75.0,
+    638.0
+   ],
+   [
+    "P42",
+    648.0,
+    914.8,
+    93.3,
+    654.4,
+    638.0
+   ],
+   [
+    "P42",
+    648.0,
+    1494.2,
+    93.3,
+    1233.8,
+    638.0
+   ],
+   [
+    "P42",
+    648.0,
+    2073.6,
+    93.3,
+    1813.2,
+    638.0
+   ],
+   [
+    "P42",
+    648.0,
+    2653.0,
+    93.3,
+    2392.7,
+    638.0
+   ],
+   [
+    "P42",
+    50.0,
+    335.4,
+    691.3,
+    75.0,
+    40.0
+   ],
+   [
+    "P42",
+    50.0,
+    914.8,
+    691.3,
+    654.4,
+    40.0
+   ],
+   [
+    "P42",
+    50.0,
+    1494.2,
+    691.3,
+    1233.8,
+    40.0
+   ],
+   [
+    "P42",
+    50.0,
+    2073.6,
+    691.3,
+    1813.2,
+    40.0
+   ],
+   [
+    "P42",
+    50.0,
+    2653.0,
+    691.3,
+    2392.7,
+    40.0
+   ],
+   [
+    "P43",
+    648.0,
+    2813.0,
+    93.3,
+    75.0,
+    638.0
+   ],
+   [
+    "P43",
+    648.0,
+    3321.0,
+    93.3,
+    583.0,
+    638.0
+   ],
+   [
+    "P43",
+    50.0,
+    2813.0,
+    691.3,
+    75.0,
+    40.0
+   ],
+   [
+    "P43",
+    50.0,
+    3321.0,
+    691.3,
+    583.0,
+    40.0
+   ]
+  ],
+  "_fixed": "v1.0 panel recesses as issued to TM (AP_MK_drilling_panels_TM_v1.0.csv): kept, the frames carry them"
+ }
+}

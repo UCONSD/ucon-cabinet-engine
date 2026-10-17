@@ -191,6 +191,15 @@ module UCON
         ObjectSpace.each_object(Sketchup::Model) do |mm|
           found << mm if mm.title.to_s =~ rx
         end
+        # 2026-10-17: a document opened after the bridge started may have no Ruby object yet, so ObjectSpace misses it
+        # (AP Main Kitchen, probes 766 / 766b: 0 matches while it was the active document). The active document
+        # always has one - count it too.
+        am = begin
+          Sketchup.active_model
+        rescue StandardError
+          nil
+        end
+        found << am if am && am.title.to_s =~ rx && found.none? { |mm| mm.equal?(am) }
         found
       end
 

@@ -1,0 +1,701 @@
+{
+ "_about": "AP Capital Main Kitchen + Breakfast - the ROOM (2026-10-17): wall JSONs AP_MF_Kitchen_<W1|W2|A|B|C|D>.json (panels GIVEN as issued v1.0, frames / clips / drilling generated), sheet texts. Snapshot for UCON::RoomSet: room_snapshot.rb. AP_MF_Main_Kitchen.json stays as the v1.0 snapshot (read from the model).",
+ "id": "AP_MK",
+ "model": "AP_MF_Main Kitchen_Breakfast",
+ "walls": [
+  "AP_MF_Kitchen_W1.json",
+  "AP_MF_Kitchen_W2.json",
+  "AP_MF_Kitchen_A.json",
+  "AP_MF_Kitchen_B.json",
+  "AP_MF_Kitchen_C.json",
+  "AP_MF_Kitchen_D.json"
+ ],
+ "files": {
+  "panels_csv": "AP_MK_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_MK_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_MK_backing_cut_list.csv"
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 260336",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.1",
+   "IssueDate": "10.17.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.0",
+   "Rev1Desc": "Issued for review",
+   "Rev1Date": "10.09.26",
+   "Rev2": "1.1",
+   "Rev2Desc": "Reissued for review",
+   "Rev2Date": "10.17.26",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "cover_title": "MAIN KITCHEN + BREAKFAST · WALL PANELS, BACKING FRAMES, CLIPS, WINDOW / NICHE TRIM, DOORS DK1 DK2",
+  "scenes": {
+   "cover": "MK-07 Cover ISO",
+   "iso": "MK-07 Cover ISO",
+   "iso_frames": "MK-08 3D Frames ISO"
+  },
+  "questions": [
+   [
+    "Q1",
+    "A-501 A-503",
+    "TM",
+    "Kitchen to Butler's doors DK1 and DK2: please confirm that both doors open INTO the Butler's pantry (push from the kitchen side, flush with the wall panels; pull from the Butler's side, G180 integrated handle on the Butler's side), concealed soft self-closing hinges toward the hood niche - DK1 hinged on its right and DK2 on its left as seen from the kitchen. Your note reads \"left handed from kitchen - right handed\"; please state which handing standard you use."
+   ],
+   [
+    "Q2",
+    "A-501 A-503",
+    "TM",
+    "Openings per UCON survey: DK1 960 x 2819 mm, DK2 998.5 x 2819 mm from the subfloor (your drawing: 988 x 2750 for both). Please build both doors to our openings with your profile and technical gaps head 9, sides 4.3: frame 951.4 x 2810 / 989.9 x 2810, leaf cladding 849 x 2660.85 / 887.5 x 2660.85, 10 mm above the finished floor, top at the panel seam 2728. Please confirm."
+   ],
+   [
+    "Q3",
+    "A-502 A-504",
+    "TM",
+    "Doors flush with our wall panels: backing frame 19 + clip gap 3.3 + panel 22 = finished face 44.3 mm from the wall (your detail 1:2 shows 42.5). Wall 172 mm: please confirm a jamb depth of 203.8 mm for both doors. The panels next to the frames are rebated 10 mm at the back where they pass in front of the frame - please confirm the frame face position so that the rebate has clearance."
+   ],
+   [
+    "Q4",
+    "A-503",
+    "TM",
+    "DK2 plan section shows wall 152 and jamb 212, while the vertical section shows 170. Our survey: 172 for both doors. Please update."
+   ],
+   [
+    "Q5",
+    "A-10x A-502",
+    "TM / site",
+    "Our levels (UCON survey from the subfloor): finished floor +2-1/4\" (57.15 mm, to be verified on site); stone plinth by others 8\" (203.2 mm) above the finished floor, top at 260.35 mm above the subfloor; our wall panels start on the plinth. Your drawing shows the panels starting 214 mm [8 7/16\"] above the floor line. Please revise the panel heights to our levels (door frames stand on the finished floor, door leaf 10 mm above it)."
+   ],
+   [
+    "Q7",
+    "A-701",
+    "TM",
+    "Please confirm the maximum panel size you can produce in lacquered MDF 22 (we assumed 2800 x 2070 mm, max column width 1220 mm). Our panels are up to 2467.65 mm high and 849 mm wide; the long horizontal strips under and over the windows are up to 2419 mm long. Painted panels may be rotated (no grain match)."
+   ],
+   [
+    "Q8",
+    "A-30x A-511",
+    "TM",
+    "UCON proposal for all window reveals (W1, W2, A, B - sides, head and sill the same), CHANGED from v1.0: the wall panels stop {{pn('P07')['s1'] - op('W2-WIN')['s0']}} mm over the opening edge; a lacquered MDF {{ln('W2-WIN')['t']}} L-liner, 4 pieces per window mitred 45 deg, stands on the 3rd step of the window trim ({{ln('W2-WIN')['leg'][0]}} into the opening, {{ln('W2-WIN')['depth']}} past the wall face); its flange runs behind the panel from the leg to the backing frame ({{ln('W2-WIN')['flange'] + ln('W2-WIN')['leg'][0]}} wide) - NO strips B / A on the panel back any more, the panel rests on the flange, and no raw wall shows in the panel joints. Under the wide windows W2 / A the sill strip (P09 / P30) is glued, no clips. Can you make the liners? Please comment or propose your detail."
+   ],
+   [
+    "Q9",
+    "A-10x A-512",
+    "TM",
+    "Stone plinth by others: 20 mm thick, face flush with our panel face (44.3 mm from the wall), top at 260.35 mm above the subfloor, with a 10 x 10 mm notch along its top front edge (shadow line under the panels). The panels stand on the stone; no groove in the panel is needed. Please confirm the panel bottom edge."
+   ],
+   [
+    "Q10",
+    "A-302",
+    "TM",
+    "Niche stone per your drawing 251161 rev 3: 3315 wide, 3067 high above the finished floor, worktop 700 deep. UCON survey of the niche: 3314 wide, 3067.85 above the finished floor, 660 deep. Please make the niche stone (back cladding, worktop, bases) max 3310 wide (2 mm clearance each side); the worktop projects about 40 mm past the wall face. Our MDF liner runs around the niche in line with the niche walls - it does not narrow the niche. Please confirm."
+   ],
+   [
+    "Q11",
+    "D-01..",
+    "TM",
+    "Mitred panels (45 deg external corners): on the D-sheets the X of the clip recesses is measured from the long point of the mitre at the panel face, as seen from the back. Please confirm that this reference suits your CNC, or tell us which reference you prefer."
+   ]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Q6 (stone window sills) is withdrawn - there are no stone sills. Please answer in the ANSWER column or by e-mail quoting the number. The drawings are reissued once all questions are answered.",
+  "notes": {
+   "G-001": [
+    [
+     "Survey by UCON. All dimensions in mm. Z from the top of the subfloor (survey zero); finished floor FFL +57.15 (2-1/4\") to be verified on site (Q5).",
+     true
+    ],
+    [
+     "Wall panels MDF 22, finish per TM, joints 10. Panel face 44.3 from the wall = backing frame 19 + clip gap 3.3 + panel 22. Panels numbered P01..P43, per wall left to right as seen from the room.",
+     false
+    ],
+    [
+     "Backing frames: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703); a frame member or the liner flange behind every panel joint - no raw wall in a joint (v1.1). Clips Fastmount VL-03H, recess mount, 266 pcs: panel recesses D25 x 7 by the factory per the D-sheets (BACK VIEW, unchanged from v1.0), frame holes D25 x 8 by UCON CNC.",
+     false
+    ],
+    [
+     "Stone plinth by others, 20 thick, face flush with the panels, notch 10 x 10 at the top front edge (Q9, A-512).",
+     true
+    ],
+    [
+     "Windows W1 / W2 / A / B: MDF 6 L-liner, flange to the backing frame, no strips (changed from v1.0) - UCON proposal (Q8, A-511). Niche: liner in line with the niche walls, flange to the frame; niche stone by others (Q10).",
+     true
+    ],
+    [
+     "Doors DK1 / DK2: TM concealed doors, profile as D01, flush with the panels, to our openings (Q1-Q4, A-501..A-504).",
+     true
+    ],
+    [
+     "Window heads and the Wall 2 soffit to be checked by laser on site before the panels are released for production.",
+     true
+    ],
+    [
+     "Red marks are open questions or TBD items. Not for production until G-002 is answered and the set is reissued.",
+     true
+    ]
+   ]
+  },
+  "bubbles": {
+   "A-1:Wall 2": [
+    [
+     "Q5",
+     350,
+     160
+    ]
+   ],
+   "A-1:A": [
+    [
+     "Q5",
+     350,
+     160
+    ]
+   ],
+   "A-3:Wall 1": [
+    [
+     "Q8",
+     613,
+     1900
+    ]
+   ],
+   "A-3:Wall 2": [
+    [
+     "Q8",
+     1882,
+     1900
+    ],
+    [
+     "Q10",
+     7590,
+     1900
+    ],
+    [
+     "Q9",
+     2000,
+     160
+    ]
+   ],
+   "A-3:A": [
+    [
+     "Q8",
+     2562,
+     1900
+    ],
+    [
+     "Q9",
+     800,
+     160
+    ]
+   ],
+   "A-3:B": [
+    [
+     "Q8",
+     1018,
+     1900
+    ]
+   ]
+  },
+  "details": [
+   {
+    "code": "A-511",
+    "name": "WINDOW LINER DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "MK-05 DK1 — Plan Section",
+      "cam": [
+       -5754.3,
+       1444.6,
+       0
+      ],
+      "at": [
+       "{{ox('Wall 2') + op('W2-WIN')['s0'] + 30}}",
+       "{{fy('Wall 2') - 10}}",
+       1000
+      ],
+      "proj": "plan",
+      "title": "W2-WIN LEFT JAMB - PLAN",
+      "dims": [
+       [
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0'] - ln('W2-WIN')['flange']}}",
+         "{{fy('Wall 2') - 22.3}}",
+         1000
+        ],
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0'] + ln('W2-WIN')['leg'][0]}}",
+         "{{fy('Wall 2') - 22.3}}",
+         1000
+        ],
+        0.35,
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0']}}",
+         -90000,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0']}}",
+         "{{fy('Wall 2') - 44.3}}",
+         1000
+        ],
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0'] + pn('P07')['s1'] - op('W2-WIN')['s0']}}",
+         "{{fy('Wall 2') - 44.3}}",
+         1000
+        ],
+        0.7,
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0']}}",
+         -90000,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0'] + ln('W2-WIN')['leg'][1]}}",
+         "{{fy('Wall 2')}}",
+         1000
+        ],
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0'] + ln('W2-WIN')['leg'][1]}}",
+         "{{fy('Wall 2') + ln('W2-WIN')['depth']}}",
+         1000
+        ],
+        0.3,
+        [
+         90000,
+         0,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0']}}",
+         "{{fy('Wall 2') + ln('W2-WIN')['depth']}}",
+         1000
+        ],
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0'] + ln('W2-WIN')['leg'][0]}}",
+         "{{fy('Wall 2') + ln('W2-WIN')['depth']}}",
+         1000
+        ],
+        0.3,
+        [
+         "{{ox('Wall 2') + op('W2-WIN')['s0']}}",
+         90000,
+         1000
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "MK-09 W2 - Window Section",
+      "cam": [
+       -8908.8,
+       1104.6,
+       1700
+      ],
+      "at": [
+       "{{ox('Wall 2') + 1882.5}}",
+       "{{fy('Wall 2') + 20}}",
+       "{{oh('W2-WIN')}}"
+      ],
+      "proj": "side",
+      "title": "W2-WIN HEAD - SECTION",
+      "dims": [
+       [
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{pn('P10')['z0']}}"
+        ],
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{oh('W2-WIN')}}"
+        ],
+        0.35,
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         -90000,
+         "{{oh('W2-WIN')}}"
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         "{{fy('Wall 2') - 22.3}}",
+         "{{oh('W2-WIN') - ln('W2-WIN')['leg'][0]}}"
+        ],
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         "{{fy('Wall 2') - 22.3}}",
+         "{{oh('W2-WIN') + ln('W2-WIN')['flange']}}"
+        ],
+        0.75,
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         -90000,
+         "{{oh('W2-WIN')}}"
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "MK-09 W2 - Window Section",
+      "cam": [
+       -8908.8,
+       1104.6,
+       1700
+      ],
+      "at": [
+       "{{ox('Wall 2') + 1882.5}}",
+       "{{fy('Wall 2') + 20}}",
+       "{{op('W2-WIN')['z0']}}"
+      ],
+      "proj": "side",
+      "title": "W2-WIN SILL - SECTION",
+      "dims": [
+       [
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         "{{fy('Wall 2') - 22.3}}",
+         "{{op('W2-WIN')['z0'] - ln('W2-WIN')['flange']}}"
+        ],
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         "{{fy('Wall 2') - 22.3}}",
+         "{{op('W2-WIN')['z0'] + ln('W2-WIN')['leg'][0]}}"
+        ],
+        0.75,
+        [
+         "{{ox('Wall 2') + 1882.5}}",
+         -90000,
+         "{{op('W2-WIN')['z0']}}"
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "UCON proposal (Andriy 2026-10-17), changed from v1.0: L-liner MDF {{ln('W2-WIN')['t']}} lacquered on the 3rd step of the window trim, {{ln('W2-WIN')['leg'][0]}} into the opening; flange {{ln('W2-WIN')['flange'] + ln('W2-WIN')['leg'][0]}} wide behind the panel, from the leg to the backing frame - no raw wall in the joints; corners mitred 45; NO strips on the panel back. Panel edges {{pn('P07')['s1'] - op('W2-WIN')['s0']}} over the opening. Q8.",
+      true
+     ],
+     "Windows W1, W2, A, B alike; niche: liner in line with the niche walls, flange to the frame (Q10). Drawn from the model (scenes MK-05, MK-09)."
+    ]
+   },
+   {
+    "code": "A-512",
+    "name": "STONE PLINTH DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "MK-10 Pier - Stone Section",
+      "cam": [
+       -7333.9,
+       1104.6,
+       1600
+      ],
+      "at": [
+       "{{ox('Wall 2') + 3457.4}}",
+       "{{fy('Wall 2') + 40}}",
+       200
+      ],
+      "proj": "side",
+      "title": "WALL 2 PIER P11 - FLOOR, STONE PLINTH",
+      "dims": [
+       [
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{ffl}}"
+        ],
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{stone}}"
+        ],
+        0.35,
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         -90000,
+         "{{ffl}}"
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         0
+        ],
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{ffl}}"
+        ],
+        0.35,
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         -90000,
+         0
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{ffl + 100}}"
+        ],
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3 + stn['t']}}",
+         "{{ffl + 100}}"
+        ],
+        0.3,
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         0,
+         90000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{stone - stn['notch']}}"
+        ],
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         "{{fy('Wall 2') - 44.3}}",
+         "{{stone}}"
+        ],
+        0.75,
+        [
+         "{{ox('Wall 2') + 3457.4}}",
+         -90000,
+         "{{stone}}"
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "MK-05 DK1 — Plan Section",
+      "cam": [
+       -5754.3,
+       1444.6,
+       0
+      ],
+      "at": [
+       "{{ox('Wall 2') + op('DK1')['s0']}}",
+       "{{fy('Wall 2') + 40}}",
+       1000
+      ],
+      "proj": "plan",
+      "title": "P13 / DK1 FRAME - PLAN AT +1000",
+      "dims": [
+       [
+        [
+         "{{ox('Wall 2') + op('DK1')['s0'] + 30}}",
+         "{{fy('Wall 2')}}",
+         1000
+        ],
+        [
+         "{{ox('Wall 2') + op('DK1')['s0'] + 30}}",
+         "{{dr('DK1')['jamb_y'][0]}}",
+         1000
+        ],
+        0.3,
+        [
+         90000,
+         0,
+         1000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "Stone by others: {{stn['t']}} thick, face = panel face {{bu['face']}} from the wall, FFL .. {{stone}} (FFL + {{stone - ffl}}), notch {{stn['notch']}} x {{stn['notch']}} at the top front edge; panels and frames stand on it. Q9.",
+      true
+     ],
+     "In front of the DK1 / DK2 frames the stone back is cut to {{stn['back_cut']}}. Drawn from the model (scenes MK-10, MK-05)."
+    ]
+   },
+   {
+    "code": "A-513",
+    "name": "DOOR / PANEL JUNCTION",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "MK-05 DK1 — Plan Section",
+      "cam": [
+       -5754.3,
+       1444.6,
+       0
+      ],
+      "at": [
+       "{{ox('Wall 2') + op('DK1')['s0'] + 40}}",
+       "{{fy('Wall 2') + 40}}",
+       1000
+      ],
+      "proj": "plan",
+      "title": "DK1 LEFT JAMB - PLAN SECTION AT +1000",
+      "dims": [
+       [
+        [
+         "{{ox('Wall 2') + pn('P13')['s1']}}",
+         "{{fy('Wall 2') - 44.3}}",
+         1000
+        ],
+        [
+         "{{ox('Wall 2') + op('DK1')['clad'][0]}}",
+         "{{fy('Wall 2') - 44.3}}",
+         1000
+        ],
+        0.35,
+        [
+         "{{ox('Wall 2') + op('DK1')['s0']}}",
+         -90000,
+         1000
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "MK-06 DK1 — Section",
+      "cam": [
+       -5754.3,
+       1104.6,
+       1600
+      ],
+      "at": [
+       -5754.3,
+       "{{fy('Wall 2') + 40}}",
+       "{{seam('Wall 2')}}"
+      ],
+      "proj": "side",
+      "title": "DK1 HEAD - CLADDING / PANEL P15",
+      "dims": [
+       [
+        [
+         -5754.3,
+         "{{fy('Wall 2') - 44.3}}",
+         "{{seam('Wall 2')}}"
+        ],
+        [
+         -5754.3,
+         "{{fy('Wall 2') - 44.3}}",
+         "{{upper('Wall 2')}}"
+        ],
+        0.35,
+        [
+         -5754.3,
+         -90000,
+         "{{seam('Wall 2')}}"
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "Panels next to and over DK1 / DK2 pass in front of the door frame: rear {{bu['rebate']}} rebated (A-701, D-sheets); cladding top = the panel joint {{seam('Wall 2')}}, joint {{upper('Wall 2') - seam('Wall 2')}}.",
+      true
+     ],
+     "DK2 alike. Drawn from the model (scenes MK-05, MK-06)."
+    ]
+   }
+  ],
+  "cover_scale": 50,
+  "iso_scale": 75,
+  "existing_groups": [
+   [
+    "Wall 1"
+   ],
+   [
+    "Wall 2"
+   ],
+   [
+    "A"
+   ],
+   [
+    "B",
+    "C",
+    "D"
+   ]
+  ],
+  "key_label_side": {
+   "Wall 2": "behind",
+   "A": "behind"
+  },
+  "page_notes": {
+   "A-1": [
+    [
+     "Survey by UCON. Zero = top of the subfloor; finished floor FFL +{{ffl}} (2-1/4\", to be verified on site - Q5); stone plinth by others: top {{stone}}, 20 thick, face flush with the panels, notch 10 x 10 at its top front edge (Q9).",
+     true
+    ],
+    [
+     "Window heads and the soffit to be checked by laser on site before the panels are released for production.",
+     true
+    ]
+   ],
+   "A-2:*": [
+    "Frames stand on the stone top {{stone}}; tier joint {{@s['levels']['tier_joint']}}; under each window a sill frame, over the openings the band starts above the liner flange; cut at every panel joint - a frame member behind every joint. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10; bottom on the stone {{stone}}; horizontal seam {{seam('{w}')}} / {{upper('{w}')}} (top of the door cladding); top = ceiling - 10. Numbering P01.. per wall, left to right.",
+    "45° external corners mitred (long point dimensioned); free ends and inside corners 10 short. Panels in front of the DK1 / DK2 frames: rear {{bu['rebate']}} rebated (A-701, D-sheets).",
+    [
+     "Windows: MDF 6 L-liner on the 3rd step of the window trim, shadow 10, panel edges {{pn('P07')['s1'] - op('W2-WIN')['s0']}} over the opening, liner flange behind the panel up to the backing frame, no strips (A-511, Q8). Niche: liner in line with the niche wall (Q10).",
+     true
+    ],
+    [
+     "Maximum panel size to be confirmed by the factory (Q7).",
+     true
+    ]
+   ],
+   "A-5:*": [
+    [
+     "{d}: TM concealed door, profile as D01 (TM rev 5), opening per UCON survey {{ow('{d}')}} x {{oh('{d}')}} from the subfloor (Q2).",
+     true
+    ],
+    [
+     "Opens into the Butler's pantry, hinges {{dr('{d}')['hinge']}} as seen from the kitchen (Q1).",
+     true
+    ]
+   ],
+   "A-701": [
+    "Panels P01.. per wall left to right. Door cladding DK1 / DK2 by TM with the doors - not in this list."
+   ]
+  },
+  "qref": {
+   "door": "Q1",
+   "heads": "Q2",
+   "stone": "Q5",
+   "panel_size": "Q7",
+   "mitre": "Q11"
+  },
+  "finish_by": "TM",
+  "legend_niche": "Niche (stone by others)",
+  "opening_labels": {
+   "niche": "NICHE - STONE BY OTHERS"
+  },
+  "room_side": "THE KITCHEN",
+  "iso_title": "FINISHED — PANELS, TRIM, DOORS"
+ }
+}

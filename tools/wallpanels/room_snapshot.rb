@@ -40,10 +40,11 @@ module UCON
         w = wid(s)
         len = s['wall']['length'].to_f; hgt = s['wall']['height'].to_f
         snap['walls'] << {
-          'id' => w, 'code' => w, 'L' => len, 'ceil' => [[0, len, hgt]], 'ends' => room['ends'][w],
+          'id' => w, 'code' => s['id'].split('_').last, 'L' => len, 'ceil' => s['wall']['ceil'] || [[0, len, hgt]],
+          'ends' => (room['ends'] || {})[w] || s['wall']['ends'],
           'openings' => s['openings'].map do |op|
-            k = op['kind'] == 'door' ? 'door' : (op['depth'] ? 'closet' : 'opening')
-            h = { 'kind' => k, 'id' => op['id'], 's0' => op['x0'], 's1' => op['x1'], 'z0' => 0, 'z1' => op['h'],
+            k = %w[door window niche].include?(op['kind']) ? op['kind'] : (op['depth'] ? 'closet' : 'opening')
+            h = { 'kind' => k, 'id' => op['id'], 's0' => op['x0'], 's1' => op['x1'], 'z0' => op['sill'] || 0, 'z1' => op['h'],
                   'label' => op['label'], 'short' => op['short'] }
             h['liner'] = op['liner'] if op['liner']
             if op['cabinet']
@@ -58,12 +59,12 @@ module UCON
             end
             h
           end,
-          'wf' => [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]],
+          'wf' => s['wall']['wf'] || [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]],
           'plan_wf' => plan_wf((room['plan'] || {})[w], len)
         }
         o[:grid][:panels].each do |p|
           snap['panels'] << { 'wall' => w, 'id' => p[:id], 's0' => p[:x0], 's1' => p[:x1], 'z0' => p[:z0], 'z1' => p[:z1],
-                              'kind' => p[:row], 'pos' => p[:pos], 'mitre_start' => false, 'mitre_end' => false,
+                              'kind' => p[:row], 'pos' => p[:pos], 'mitre_start' => p[:mitre_start] ? true : false, 'mitre_end' => p[:mitre_end] ? true : false,
                               'rebates' => (p[:rebates] || []).map do |x0, x1, z0, z1|
                                 d = s['openings'].find { |op| op['rebate'] && x0 >= op['x0'] - 200 && x1 <= op['x1'] + 200 }
                                 { 'door' => d && d['id'], 's0' => x0, 's1' => x1, 'z0' => z0, 'z1' => z1 }
@@ -79,15 +80,20 @@ module UCON
         }
         st = s['levels']['stone_top']
         snap['stone'][w] = o[:grid][:panels].select { |p| st && (p[:z0] - st).abs < 0.05 }.map { |p| [p[:x0], p[:x1]] }.sort if st
-        ox = s['origin_model_x'].to_f
+        snap['stone'][w] = s['levels']['stone_runs'] if s['levels']['stone_runs']   # as built (Main Kitchen v1.0)
+        # door coordinates in the MODEL: the wall's frame wf (origin, t along, n into the room); doors only on walls
+        # running along +x, face toward -y (ML Foyer B, Main Kitchen Wall 2) - the door pages cut along x
+        (wox, woy), wt, wn = s['wall']['wf'] || [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]]
+        ox = wox.to_f
         s['openings'].select { |op| op['kind'] == 'door' }.each do |op|
+          raise "door #{op['id']}: wall #{w} does not run along +x" unless wt == [1, 0] && wn == [0, -1]
           f = op['frame']; gs = f['gap_side'].to_f; hz = op['h'].to_f - f['gap_head'].to_f
           snap['doors'] << {
-            'id' => op['id'], 'wall' => w, 'hinge' => 'both', 'leaves' => op['leaf']['leaves'] || 1,
-            'open_x' => [ox + op['x0'], ox + op['x1']], 'frame_x' => [ox + op['x0'] + gs, ox + op['x1'] - gs],
-            'clad_x' => [ox + op['x0'] + 55.5, ox + op['x1'] - 55.5], 'jamb_y' => [f['jamb_y0'], f['jamb_y1']],
+            'id' => op['id'], 'wall' => w, 'hinge' => op['hinge'] || 'both', 'leaves' => op['leaf']['leaves'] || 1,
+            'open_x' => [WP.r1(ox + op['x0']), WP.r1(ox + op['x1'])], 'frame_x' => [WP.r1(ox + op['x0'] + gs), WP.r1(ox + op['x1'] - gs)],
+            'clad_x' => [WP.r1(ox + op['x0'] + 55.5), WP.r1(ox + op['x1'] - 55.5)], 'jamb_y' => [woy + f['jamb_y0'], woy + f['jamb_y1']],
             'head_z' => [hz - f['head'].to_f, hz], 'section_x' => op['section_x'] || ox + op['x0'] + (op['x1'] - op['x0']) / 4.0,
-            'wall_face_y' => 0, 'wall_t' => f['wall_t'], 'plan_z' => 1000, 'handing' => op['handing'],
+            'wall_face_y' => woy, 'wall_t' => f['wall_t'], 'plan_z' => 1000, 'handing' => op['handing'],
             'gap_side' => gs, 'gap_head' => f['gap_head'], 'jamb' => f['jamb'], 'leaf_joint' => op['leaf']['joint'] || 10,
             'scenes' => op['scenes'], 'cams' => op['cams']
           }
@@ -202,6 +208,10 @@ module UCON
         @s['walls'].find { |x| x['id'] == wid }['wf'][0][0]
       end
 
+      def fy(wid)
+        @s['walls'].find { |x| x['id'] == wid }['wf'][0][1]
+      end
+
       def pb
         -bu['face'] + bu['panel_t']
       end
@@ -256,7 +266,7 @@ module UCON
     end
 
     def wid(spec)
-      spec['id'].split('_').last
+      spec['wall']['name'] || spec['id'].split('_').last
     end
 
     # snapshot JSON + the three CSVs into out_dir; refuses to overwrite

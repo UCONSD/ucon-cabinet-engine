@@ -245,17 +245,24 @@ module UCON
     def self.draw_liners(w, px, pz, k)
       w['openings'].each do |o|
         ln = o['liner'] or next
-        t = ln['t'].to_f; fl = ln['flange'].to_f; z0 = lev['ffl']; h = o['z1']
+        # leg = [from, to] into the opening from the jamb line (ML Foyer [0, 6] against the reveal; Main Kitchen windows
+        # [23, 29] on the 3rd step of the window trim); flange = from the jamb line out to the backing frame
+        t = ln['t'].to_f; fl = ln['flange'].to_f; la, lb = (ln['leg'] || [0, t]).map(&:to_f)
+        sill = o['kind'] == 'window' && o['z0'].to_f > 0.5
+        z0 = sill ? o['z0'] + la : lev['ffl']; h = o['z1'] - la; zf0 = sill ? o['z0'] - fl : lev['ffl']
         sides = []
-        sides << [o['s0'], o['s0'] + t, o['s0'] - fl, o['s0']] if o['s0'] > 0.5
-        sides << [o['s1'] - t, o['s1'], o['s1'], o['s1'] + fl] if o['s1'] < w['L'] - 0.5
+        sides << [o['s0'] + la, o['s0'] + lb, o['s0'] - fl, o['s0'] + la] if o['s0'] > 0.5
+        sides << [o['s1'] - lb, o['s1'] - la, o['s1'] - la, o['s1'] + fl] if o['s1'] < w['L'] - 0.5
         sides.each do |a, b, fa, fb|
           rect(px.(a), pz.(h), (b - a) * k, (h - z0) * k, @l_sheet, stroke: INK, sw: 0.4, fill: LINERF)
-          poly([[px.(fa), pz.(z0)], [px.(fa), pz.(h + fl)], [px.(fb), pz.(h + fl)], [px.(fb), pz.(z0)]], @l_sheet, stroke: INK2, sw: 0.25, dash: true)
+          poly([[px.(fa), pz.(zf0)], [px.(fa), pz.(o['z1'] + fl)], [px.(fb), pz.(o['z1'] + fl)], [px.(fb), pz.(zf0)]], @l_sheet, stroke: INK2, sw: 0.25, dash: true)
         end
         a = o['s0'] > 0.5 ? o['s0'] - fl : o['s0']; b = o['s1'] < w['L'] - 0.5 ? o['s1'] + fl : o['s1']
-        rect(px.(o['s0']), pz.(h), (o['s1'] - o['s0']) * k, t * k, @l_sheet, stroke: INK, sw: 0.4, fill: LINERF)
-        line(px.(a), pz.(h + fl), px.(b), pz.(h + fl), @l_sheet, w: 0.25, c: INK2, dash: true)
+        rect(px.(o['s0'] + la), pz.(h), (o['s1'] - o['s0'] - 2 * la) * k, (lb - la) * k, @l_sheet, stroke: INK, sw: 0.4, fill: LINERF)
+        line(px.(a), pz.(o['z1'] + fl), px.(b), pz.(o['z1'] + fl), @l_sheet, w: 0.25, c: INK2, dash: true)
+        next unless sill
+        rect(px.(o['s0'] + la), pz.(o['z0'] + lb), (o['s1'] - o['s0'] - 2 * la) * k, (lb - la) * k, @l_sheet, stroke: INK, sw: 0.4, fill: LINERF)
+        line(px.(a), pz.(o['z0'] - fl), px.(b), pz.(o['z0'] - fl), @l_sheet, w: 0.25, c: INK2, dash: true)
       end
       return unless @s['liner']
       w['openings'].each do |o|
@@ -804,7 +811,8 @@ module UCON
         x0 = WX + i * (cw + GUT)
         q = pt2(x0 + cw / 2, WY + ch / 2)
         begin
-          vp = cropped(skp, c['scene'], c['cam'], c['at'], q, cw - 0.2, ch - 0.1, 1.0 / 5, c['proj'] == 'plan' ? PLAN : SIDE)
+          fl = ->(a) { a && a.map { |v| Float(v) } }  # tokens resolve to strings
+          vp = cropped(skp, c['scene'], fl.(c['cam']), fl.(c['at']), q, cw - 0.2, ch - 0.1, 1.0 / 5, c['proj'] == 'plan' ? PLAN : SIDE)
           # dims [a, b, offset, toward] - model mm points, resolved from the snapshot ({{tokens}}); value = |b - a|
           (c['dims'] || []).each do |da, db, off, tw|
             fa = da.map { |v| Float(v) }; fb = db.map { |v| Float(v) }; ft = tw.map { |v| Float(v) }
@@ -921,9 +929,13 @@ module UCON
       tw = 1.95
       table(WX, WY, tw, cols, lines[0, half], row_h: 0.15, size: 6)
       table(WX + tw + 0.15, WY, tw, cols, lines[half..], row_h: 0.15, size: 6)
-      # sheets at 1:40, portrait
-      k = MM / 40.0; sx0 = WX + 2 * tw + 0.55; gap = 0.35
-      per_row = ((WX + WW - sx0 + gap) / (SHEET['w'] * k + gap)).floor
+      # sheets portrait at 1:40, smaller (1:50 / 1:60 / 1:80) when the rows would run into the note at the bottom
+      sx0 = WX + 2 * tw + 0.55; gap = 0.35; k = per_row = nil
+      [40, 50, 60, 80].each do |dn|
+        k = MM / dn.to_f
+        per_row = ((WX + WW - sx0 + gap) / (SHEET['w'] * k + gap)).floor
+        break if 0.30 + (sheets.size.to_f / per_row).ceil * (SHEET['l'] * k + 0.65) <= WH - 0.60
+      end
       sheets.each_with_index do |s, i|
         r, c = i.divmod(per_row)
         x = sx0 + c * (SHEET['w'] * k + gap); y = WY + 0.30 + r * (SHEET['l'] * k + 0.65)

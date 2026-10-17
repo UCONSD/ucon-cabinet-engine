@@ -77,22 +77,31 @@ module UCON
 
     # FOYER: leg against the bare reveal (0..6 inside the jamb), 64 past the wall face; flange 35.2 behind the panel;
     # a jamb at a wall end has no leg; the head piece runs jamb to jamb (or to the wall end)
+    # L-liner: leg = [la, lb] into the opening from the jamb line (ML Foyer [0, 6] against the reveal, Main Kitchen windows
+    # [23, 29] on the trim step, niche [-6, 0] in line with the niche wall); flange from the leg out to the backing frame
+    # (flange = from the jamb line); a window ('sill') also gets the sill piece. Corners overlap = mitred 45 in the shop.
     def liner(spec, o, ffl, face, pback, len)
       l = o['liner']; t = 'liners'; id = o['id']; tk = l['t'].to_f; dp = l['depth'].to_f; fl = l['flange'].to_f
+      la, lb = (l['leg'] || [0, tk]).map(&:to_f)
       x0 = o['x0'].to_f; x1 = o['x1'].to_f; h = o['h'].to_f
+      zb = o['sill'] ? o['sill'].to_f + la : ffl
       ls = []
       if x0 > WP::EPS
-        ls << box(t, "#{id} liner L leg", x0, x0 + tk, face, dp, ffl, h)
-        ls << box(t, "#{id} liner L flange", x0 - fl, x0, pback, pback + tk, ffl, h)
+        ls << box(t, "#{id} liner L leg", x0 + la, x0 + lb, face, dp, zb, h - la)
+        ls << box(t, "#{id} liner L flange", x0 - fl, x0 + la, pback, pback + tk, zb, h - la)
       end
       if x1 < len - WP::EPS
-        ls << box(t, "#{id} liner R leg", x1 - tk, x1, face, dp, ffl, h)
-        ls << box(t, "#{id} liner R flange", x1, x1 + fl, pback, pback + tk, ffl, h)
+        ls << box(t, "#{id} liner R leg", x1 - lb, x1 - la, face, dp, zb, h - la)
+        ls << box(t, "#{id} liner R flange", x1 - la, x1 + fl, pback, pback + tk, zb, h - la)
       end
-      ls << box(t, "#{id} liner head leg", x0, x1, face, dp, h - tk, h)
-      # the head flange runs over the jamb flanges' ends (corners mitred 45 in the shop): no gap at the corner
+      ls << box(t, "#{id} liner head leg", x0 + la, x1 - la, face, dp, h - lb, h - la)
       ha = x0 > WP::EPS ? x0 - fl : x0; hb = x1 < len - WP::EPS ? x1 + fl : x1
-      ls << box(t, "#{id} liner head flange", ha, hb, pback, pback + tk, h, h + fl)
+      ls << box(t, "#{id} liner head flange", ha, hb, pback, pback + tk, h - la, h + fl)
+      if o['sill']
+        s = o['sill'].to_f
+        ls << box(t, "#{id} liner sill leg", x0 + la, x1 - la, face, dp, s + la, s + lb)
+        ls << box(t, "#{id} liner sill flange", ha, hb, pback, pback + tk, s - fl, s + la)
+      end
       ls
     end
 

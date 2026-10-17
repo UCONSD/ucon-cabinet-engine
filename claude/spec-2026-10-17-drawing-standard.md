@@ -49,3 +49,8 @@ from the style file; a page exists only if the room has its content.
 3. Kitchen: section scenes for the details (ARMED in the kitchen model), liners widened to variant 2 (frames / liners in
    the kitchen model - the kitchen is not generator-based yet), questions re-tokenised.
 4. Reissue MK v1.1 and ML v1.1 (Documents, no overwrite). REC-LAU at its next revision. Retire MKSet / FoyerSet / WallSet.
+
+## Status 2026-10-17 (evening)
+- Steps 1-4 done for Main Kitchen and ML Foyer: both released as v1.1 from UCON::RoomSet (probes 800 / 801), see
+  handoff-2026-10-17-ap-mk-v1.1-standard.md. The kitchen is generator-based now (six wall JSONs), liners widened.
+- Left: REC-LAU at its next revision; retire MKSet / FoyerSet / WallSet after it.
