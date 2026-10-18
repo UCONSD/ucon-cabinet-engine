@@ -1,0 +1,97 @@
+{
+ "_about": "AP Capital Recreation -> Laundry wall (REC-LAU) - the ROOM for the drawing standard (UCON::RoomSet, 2026-10-17): wall JSON AP_BF_Recreation_Laundry.json (one wall), sheet texts with {{tokens}}. v1.2 = v1.1 content in the standard + frames down to 10 off the floor. The wall JSON's own 'sheets' block is the v1.1 history (old WallSet).",
+ "id": "AP_BF_REC_LAU",
+ "model": "AP_BF_Recreation_Laundry",
+ "walls": ["AP_BF_Recreation_Laundry.json"],
+ "ends": { "REC-LAU": ["wall corner (panels 10 short)", "wall corner (panels 10 short)"] },
+ "files": {
+  "panels_csv": "AP_REC-LAU_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_REC-LAU_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_REC-LAU_backing_cut_list.csv"
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 260318",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.2",
+   "IssueDate": "10.17.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.1",
+   "Rev1Desc": "Issued for factory review",
+   "Rev1Date": "10.08.26",
+   "Rev2": "1.2",
+   "Rev2Desc": "Reissued for review",
+   "Rev2Date": "10.17.26",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "cover_title": "RECREATION -> LAUNDRY WALL · WALL PANELS, BACKING FRAMES, CLIPS, CONCEALED DOOR D01",
+  "scenes": { "cover": "04 3D", "iso": "04 3D", "iso_frames": "07 3D Frames" },
+  "existing_groups": [["REC-LAU"]],
+  "room_side": "RECREATION",
+  "iso_title": "FINISHED PANELS AND DOOR D01",
+  "finish_by": "TM",
+  "opening_labels": {},
+  "qref": { "drill": "Q6", "door": "Q1", "heads": "Q2", "stone": null, "panel_size": null, "mitre": null },
+  "wall_t_note": " (UCON survey)",
+  "questions": [
+   ["Q1", "A-501 A-502", "TM", "Door D01 must be flush with the wall panels. Our build-up: backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} (Fastmount VL-03H, recess mount) + panel {{bu['panel_t']}} = finished face {{bu['face']}} mm from the wall. Please confirm a jamb depth of {{dr('D01')['jamb']}} mm on a {{dr('D01')['wall_t']}} mm wall, and send the revised hinge / stop detail."],
+   ["Q2", "A-501", "TM", "Opening per UCON survey is {{ow('D01')}} x {{oh('D01')}} mm (your drawing: 989 x 2451). Please build D01 to our opening with your technical gaps: head {{dr('D01')['gap_head']}}, sides {{dr('D01')['gap_side']}}, floor 0 -> frame {{ow('D01') - 2 * dr('D01')['gap_side']}} x {{oh('D01') - dr('D01')['gap_head']}}, leaf cladding {{op('D01')['clad'][1] - op('D01')['clad'][0]}} x {{op('D01')['clad'][3] - op('D01')['clad'][2]}}, {{op('D01')['clad'][2]}} mm to the finished floor. Please confirm."],
+   ["Q3", "A-501", "TM", "Right-handed, opens into the Laundry, concealed hinges, soft-close. Please send the hinge make, model and specification."],
+   ["Q4", "A-502", "TM", "Your section shows the leaf body and hinge block down to 0 mm at the floor; only the cladding has a 5 mm gap. What is the actual clearance of the leaf body? Is there a threshold or seal?"],
+   ["Q5", "A-502", "TM", "Door cladding thickness: the current profile shows 12 mm, an older table showed 25 mm. Please confirm 12 mm."],
+   ["Q6", "A-210 D-01..", "TM", "Panels hang on Fastmount VL-03H clips, recess mount, gap {{bu['clip_gap']}}. Please make the clip recesses in the panel backs at the factory per the D-sheets (D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}} deep). Please confirm which clip half goes into the panel (we assume male) and that you can drill per the schedule."],
+   ["Q8", "A-101", "Info", "Wall height per UCON survey is {{@s['walls'][0]['ceil'][0][2]}} mm (your drawing: 3052). Panel rows are laid out to {{@s['walls'][0]['ceil'][0][2]}}."],
+   ["Q9", "A-301", "Site", "Wine room glass door is installed; final measurement pending. Panel edges P14 / P16 at the opening and the bottom of P11 / P12 are TBD until then."],
+   ["Q10", "D-01..", "TM", "All drilling coordinates are given from the panel BACK: X from the left edge as seen from the back, Z from the bottom edge. A control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Q7 was withdrawn in v1.1. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
+  "notes": {
+   "G-001": [
+    ["Survey by UCON. All dimensions in mm, Z from the finished floor. Dimensions per UCON survey govern; from the TM drawings only the D01 door profile is used.", false],
+    ["Wall panels MDF {{bu['panel_t']}}, finish per TM, joints 10; 10 to the floor, ceiling and wall corners, no baseboard. Panel face {{bu['face']}} from the wall = backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} + panel {{bu['panel_t']}}. Numbers P02..P16 as TM order 260318.", false],
+    ["Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703); a frame member behind every panel joint - no raw wall in a joint. v1.2: the lower frames start {{@s['levels']['floor_gap']}} above the floor (were 25). Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}} by the factory per the D-sheets (BACK VIEW, unchanged from v1.1), frame holes D{{@s['clips']['hole_d']}} x {{@s['clips']['frame_depth']}} by UCON CNC.", false],
+    ["Door D01: TM concealed door, flush with the panels (jamb {{dr('D01')['jamb']}}, Q1), built to our opening (Q2). Panels {{rebated}} rear {{bu['rebate']}} rebated at the D01 frame (A-701, D-sheets).", true],
+    ["Wine room: glass door installed by others; P14 / P16 edges and the bottom of P11 / P12 TBD until it is measured (Q9).", true],
+    ["Red marks are open questions or TBD items. Not for production until G-002 is answered and the set is reissued.", true]
+   ]
+  },
+  "page_notes": {
+   "A-1": [
+    ["Wall, openings and heights per UCON site survey - they govern over the factory drawings. Wall {{dr('D01')['wall_t']}}. Openings: D01 {{ow('D01')}} x {{oh('D01')}} from {{op('D01')['s0']}}; wine room {{ow('WINE')}} x {{oh('WINE')}} from {{op('WINE')['s0']}}.", false],
+    ["Q8: wall height {{@s['walls'][0]['ceil'][0][2]}} (factory drawing 3052). Q9: the wine-room glass door to be measured.", true]
+   ],
+   "A-2:*": [
+    "Frames from {{@s['levels']['floor_gap']}} above the finished floor (v1.2, were 25) to the ceiling; tier joint {{@s['levels']['tier_joint']}}; a frame member behind every panel joint. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10; 10 to the floor, ceiling and wall corners, no baseboard. Horizontal seam {{seam('{w}')}} / {{upper('{w}')}} along the top of the D01 cladding. Numbers as TM order 260318.",
+    "Panels {{rebated}} in front of the D01 frame: rear {{bu['rebate']}} rebated (A-501, A-701, D-sheets).",
+    ["Q9: P14 / P16 edges and the bottom of P11 / P12 TBD until the wine-room door is measured.", true]
+   ],
+   "A-5:*": [
+    ["{d}: TM concealed door, profile per TM DWG 20260903 rev.3, opening per UCON survey {{ow('{d}')}} x {{oh('{d}')}} from the finished floor (Q2).", true],
+    ["Right-handed, opens into the Laundry, hinges {{dr('{d}')['hinge']}} as seen from the Recreation room; concealed hinges, soft-close (Q3); handles on the Laundry side by the client.", true]
+   ],
+   "A-701": [
+    "Panels P02..P16, numbers as TM order 260318. Door cladding D01 by TM with the door - not in this list."
+   ]
+  },
+  "bubbles": {
+   "A-1:REC-LAU": [["Q8", 450, 2850], ["Q9", 5649, 900]],
+   "A-2:REC-LAU": [["Q6", 1290, 3000]],
+   "A-3:REC-LAU": [["Q9", 4873, 1250], ["Q9", 6425, 1250], ["Q9", 5200, 2274], ["Q9", 6100, 2274], ["Q1", 3256.5, 1600]]
+  }
+ }
+}

@@ -9,7 +9,10 @@
     "frames_csv": "AP_REC-LAU_drilling_frames_CNC_S.csv"
   },
 
-  "wall": { "length": 7616, "height": 3112, "thickness": 170 },
+  "wall": { "length": 7616, "height": 3112, "thickness": 170, "name": "REC-LAU",
+            "wf": [[0, 0], [1, 0], [0, -1]], "_wf": "model: wall face on y = 0 along +x from x = 0, room toward -y (probe 802)" },
+
+  "levels": { "subfloor": 0, "ffl": 0, "_ffl": "REC-LAU z is from the FINISHED floor (survey); no stone plinth, no baseboard" },
 
   "build_up": {
     "frame_t": 19.05, "clip_gap": 3.3, "panel_t": 22, "face": 44.3,
@@ -33,8 +36,12 @@
     { "id": "D01", "kind": "door", "x0": 2509, "x1": 3504, "h": 2505,
       "leaf": { "w": 884, "h": 2404, "floor_gap": 10, "t": 12 },
       "rebate": { "inset": 2.5, "depth": 10, "_": "panels passing in front of the door frame lose their rear 10 mm inside x0+2.5 .. x1-2.5, z < h (probe 538)" },
-      "frame": { "gap_head": 9, "gap_side": 4.3, "gap_floor": 0, "jamb": 201.8, "jamb_y0": -32.3, "jamb_y1": 169.5 },
-      "handing": "Right-handed, opens into Laundry, concealed hinges, soft-close" },
+      "frame": { "gap_head": 9, "gap_side": 4.3, "gap_floor": 0, "face": 51.2, "head": 35, "jamb": 201.8, "jamb_y0": -32.3, "jamb_y1": 169.5, "wall_t": 170 },
+      "handing": "Right-handed, opens into Laundry, concealed hinges, soft-close",
+      "hinge": "right", "label": "D01 - CONCEALED DOOR BY TM", "short": "D01\nTM DOOR",
+      "section_x": 3006.5,
+      "scenes": { "plan": "05 D01 — Plan Section", "section": "06 D01 — Section" },
+      "cams": { "plan": [3006.5, 400, 0], "section": [3006.5, 60, 1556] } },
     { "id": "WINE", "kind": "opening", "x0": 4698, "x1": 6600, "h": 2505,
       "panel_overlap": 55,
       "_panel_overlap": "panel edges P14 / P16 run 55 mm into the opening (TM layout; Q9 - TBD until the glass door is measured)",
@@ -44,7 +51,8 @@
   "subframe": {
     "strip": 98, "strip_wide": 152,
     "_strip": "4 in strip = 98 (12 per sheet width, 1/8 in cutter); 6 in = 152 (proposal 2026-10-07)",
-    "seam_overrun": 20, "floor_gap": 25, "tier_joint": 2380, "max_length": 2438,
+    "seam_overrun": 20, "floor_gap": 10, "tier_joint": 2380, "max_length": 2438,
+    "_floor_gap_2026_10_17": "was 25; Andriy 2026-10-17: frames down to the panels' level, 10 off the floor - no raw wall in the joints (joint_gaps empty). Frames only; panels, clips and drilling unchanged",
     "sheet": { "w": 1219.2, "l": 2438.4, "kerf": 3.2 },
     "prefix_old": "F"
   },

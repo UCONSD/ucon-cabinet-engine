@@ -53,8 +53,11 @@ module UCON
     def self.seam_of(wid) = lev['seam'].is_a?(Hash) ? lev['seam'][wid] : lev['seam']
     # question numbers the writer itself places (door, opening heads, stone, panel size, drilling) - per room, from
     # sheets.qref; the defaults are the ML Foyer numbers
-    QREF = { 'door' => 'Q4', 'heads' => 'Q6', 'stone' => 'Q8', 'panel_size' => 'Q1', 'mitre' => 'Q11' }.freeze
-    def self.qref(k) = (sh['qref'] || {})[k] || QREF[k]
+    QREF = { 'drill' => 'Q5', 'door' => 'Q4', 'heads' => 'Q6', 'stone' => 'Q8', 'panel_size' => 'Q1', 'mitre' => 'Q11' }.freeze
+    # a room's qref may set a key to null: no bubble for it (REC-LAU has no stone / panel-size / mitre question)
+    def self.qref(k) = (sh['qref'] || {}).key?(k) ? sh['qref'][k] : QREF[k]
+    # what Z is measured from (header and A-702 note): top of the subfloor unless the room says otherwise
+    def self.zfrom = sh['z_from'] || (@s['levels']['ffl'].to_f.zero? ? 'FINISHED FLOOR' : 'TOP OF THE SUBFLOOR')
     def self.qtext(no) = (sh['questions'].find { |q| q[0] == no } || [])[3]
 
     # wall-local (s along the wall, d into the room, z) -> model mm
@@ -103,6 +106,7 @@ module UCON
     end
 
     def self.bub(q, label, red: true, d: 0.30, size: 7)
+      return if label.nil?
       @l_q ||= @doc.layers.add('Bubbles', false)
       col = red ? RED : INK
       e = Layout::Ellipse.new(Geom::Bounds2d.new(q.x - d / 2, q.y - d / 2, d, d))
@@ -214,8 +218,12 @@ module UCON
       poly(pts, @l_sheet, stroke: MINOR, sw: 0.5)
       line(px.(-120), pz.(0), px.(w['L'] + 120), pz.(0), @l_sheet, w: 0.75, c: INK)
       line(px.(-120), pz.(lv['ffl']), px.(w['L'] + 120), pz.(lv['ffl']), @l_sheet, w: 0.5, c: INK, dash: true)
-      text("FFL +#{f2(lv['ffl'])}", px.(-130), pz.(lv['ffl']) - 0.07, @l_sheet, size: 6, font: MONO, c: RED, align: :right)
-      text('±0 SUBFLOOR', px.(-130), pz.(0) - 0.02, @l_sheet, size: 6, font: MONO, c: INK2, align: :right)
+      if lv['ffl'].to_f.zero?   # REC-LAU: the survey is from the finished floor - no subfloor line
+        text('±0 FFL', px.(-130), pz.(0) - 0.02, @l_sheet, size: 6, font: MONO, c: INK2, align: :right)
+      else
+        text("FFL +#{f2(lv['ffl'])}", px.(-130), pz.(lv['ffl']) - 0.07, @l_sheet, size: 6, font: MONO, c: RED, align: :right)
+        text('±0 SUBFLOOR', px.(-130), pz.(0) - 0.02, @l_sheet, size: 6, font: MONO, c: INK2, align: :right)
+      end
     end
 
     def self.draw_openings(w, px, pz, k, label: true)
@@ -355,7 +363,7 @@ module UCON
       gap = 2.2
       total = ws.sum { |w| w['L'] * k } + gap * (ws.size - 1)
       x0 = WX + WW / 2 - total / 2
-      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM T.O. SUBFLOOR")
+      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
       ws.each do |w|
         px, pz, = frame_of(w, yf, s: s, ox: x0)
         draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k)
@@ -383,7 +391,7 @@ module UCON
       next_page(name); sheet_code(code)
       yf = WY + 5.75
       px, pz, k, s = frame_of(w, yf)
-      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM T.O. SUBFLOOR")
+      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
       draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k, label: false)
       draw_panels(w, px, pz, k, ids: false, fill: nil, sw: 0.25)
       fr = draw_frames(w, px, pz, k); draw_clips(w, px, pz, k)
@@ -407,7 +415,7 @@ module UCON
       next_page(name); sheet_code(code)
       yf = WY + 5.75
       px, pz, k, s = frame_of(w, yf)
-      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM T.O. SUBFLOOR")
+      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
       draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k, label: false)
       draw_panels(w, px, pz, k); draw_liners(w, px, pz, k); draw_cabinets(w, px, pz, k)
       top = top_of(w)
@@ -549,7 +557,7 @@ module UCON
         text('L-liner MDF 6: leg (strip) + flange behind the panel (dashed)', x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
       end
       unless (@s['doors'] || []).empty?
-        rect(x2 + 0.08, y + 0.04, 0.25, 0.18, @l_sheet, stroke: INK, sw: 0.5, fill: CLADF); text('Door cladding; swing on elevation - apex at the hinges', x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
+        rect(x2 + 0.08, y + 0.04, 0.25, 0.18, @l_sheet, stroke: INK, sw: 0.5, fill: CLADF); text('Door cladding; swing on elevation - base on the hinges, apex at the handle', x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
       end
       y += 0.12
       label('GENERAL NOTES', x2, y, @l_sheet); y += 0.22
@@ -682,9 +690,13 @@ module UCON
       leaves = dr['leaves'].to_i == 2 ? [[ca, cm - jn, ca], [cm + jn, cb, cb]] : [[ca, cb, dr['hinge'] == 'right' ? cb : ca]]
       leaves.each do |a, b, hs|
         rect(px.(a), pz.(cz1), (b - a) * k, (cz1 - cz0) * k, @l_sheet, stroke: INK, sw: 0.75, fill: CLADF)
-        sl = hs == a ? b : a   # swing: apex on the hinge side
-        line(px.(hs), pz.((cz0 + cz1) / 2), px.(sl), pz.(cz1), @l_sheet, w: 0.5, dash: true)
-        line(px.(hs), pz.((cz0 + cz1) / 2), px.(sl), pz.(cz0), @l_sheet, w: 0.5, dash: true)
+        sl = hs == a ? b : a
+        # swing (Andriy 2026-10-17, one rule with the cabinet engine, docs/Drawing_Spec_v0.1.md - the European reading
+        # TM / Cesar use): the BASE of the V on the hinge edge, the APEX at the handle edge, mid-height; HINGES written
+        # at the hinge edge so a US reader cannot take it the other way
+        line(px.(sl), pz.((cz0 + cz1) / 2), px.(hs), pz.(cz1), @l_sheet, w: 0.5, dash: true)
+        line(px.(sl), pz.((cz0 + cz1) / 2), px.(hs), pz.(cz0), @l_sheet, w: 0.5, dash: true)
+        text('HINGES', px.(hs) + (hs == a ? 0.05 : -0.05), pz.((cz0 + cz1) / 2) - 0.03, @l_sheet, size: 6, font: MONO, c: INK2, align: hs == a ? :left : :right)
         text("#{f1(b - a)}", px.((a + b) / 2), pz.(1700), @l_sheet, size: 6.5, font: MONO, c: INK2, align: :center)
       end
       text("#{dr['id']} CLADDING#{leaves.size > 1 ? 'S' : ''}", px.(cm), pz.(1900), @l_sheet, size: 7, font: MONO, c: INK2, align: :center)
@@ -721,7 +733,7 @@ module UCON
       notes(WX + 5.0, WY + 5.65, WW - 5.0, [
         *pnotes("A-5:#{dr['id']}"),
         [(leaves.size > 1 ? "#{leaves.size} claddings " : 'Cladding ') + "#{leaves.map { |a, b, _| f1(b - a) }.uniq.join(' / ')} x #{f1(cz1 - cz0)}#{leaves.size > 1 ? ", joint #{f1(dr['leaf_joint'])}" : ''}, #{f1(cz0 - lev['ffl'])} above FFL, top at the panel joint #{f1(cz1)}; joints to the panels #{f1(ca - lp)} / #{f1(rp - cb)}.", false],
-        ["Door face = panel face #{f1(bu['face'])} from the wall; wall #{f1(dr['wall_t'])} (not surveyed), jamb #{f1(dr['jamb_y'][1] - dr['jamb_y'][0])}. Panels in front of the frame rebated #{f1(bu['rebate'])} at the back (A-701, D-sheets).", true],
+        ["Door face = panel face #{f1(bu['face'])} from the wall; wall #{f1(dr['wall_t'])}#{sh['wall_t_note'] || ' (not surveyed)'}, jamb #{f1(dr['jamb_y'][1] - dr['jamb_y'][0])}. Panels in front of the frame rebated #{f1(bu['rebate'])} at the back (A-701, D-sheets).", true],
         'Details 1:5 on the next sheet.'
       ], size: 7, step: 0.165)
     end
@@ -877,7 +889,7 @@ module UCON
       rest = fr[half..].map(&row)
       rest << ['TOTAL', "#{fr.size} frames", nil, nil, nil, nil, fr.sum { |f| members(f).size }.to_s, fr.sum { |f| frame_clips(f) }.to_s]
       y2 = table(WX + tw + GUT, WY, tw, cols, rest, row_h: 0.25, size: 6.5)
-      box_text("S = along the wall from its left end as seen from the room, Z = from the top of the subfloor. Stiles 4\" = 98 / 6\" = 152, rails on the clip rows. " \
+      box_text("S = along the wall from its left end as seen from the room, Z = from the #{zfrom.downcase}. Stiles 4\" = 98 / 6\" = 152, rails on the clip rows. " \
                "Frames built, drilled (D#{f1(cl['hole_d'])} x #{f1(cl['frame_depth'])}, UCON CNC) and fixed by UCON - for information, nothing to make at the factory.",
                WX, [y1, y2].max + 0.15, WW, 0.5, @l_sheet, size: 8, c: INK2)
     end
@@ -1037,7 +1049,7 @@ module UCON
         ytop += hm + 1.45
       end
       box_text('BACK VIEW - the panel seen from the WALL side. X from the LEFT edge as seen from the back, Z from the BOTTOM edge. ' \
-               "Recesses D#{f1(cl['hole_d'])} x #{f1(cl['panel_depth'])} for the #{cl['make']} male clip, made by the factory (Q5). " \
+               "Recesses D#{f1(cl['hole_d'])} x #{f1(cl['panel_depth'])} for the #{cl['make']} male clip, made by the factory#{qref('drill') ? " (#{qref('drill')})" : ''}. " \
                "Coordinates also in #{@s['files']['panels_csv'].sub('{rev}', sh['tags']['Revision'])}.",
                WX + 0.45, WY + WH - 0.55, WW - 0.45, 0.5, @l_sheet, size: 8, c: RED)
     end
@@ -1087,7 +1099,7 @@ module UCON
       plan << ['A-702', title('A-702'), -> { page_a702('A-702', title('A-702')) }]
       plan << ['A-703', title('A-703'), -> { page_a703('A-703', title('A-703')) }]
       ds.each_with_index do |rows, i|
-        c = format('D-%02d', i + 1); ids = rows.flatten.map { |p| p['id'] }.sort; n = title('drill', first: ids.first, last: ids.last, n: ids.size)
+        c = format('D-%02d', i + 1); ids = rows.flatten.map { |p| p['id'] }.sort; n = title('drill', first: ids.first, last: ids.last, n: ids.size); n = n.sub("#{ids.first}…#{ids.first}", ids.first) if ids.size == 1
         plan << [c, n, -> { page_drill(c, n, rows) }]
       end
       idx = plan.map { |c, n, _| [c, n] }

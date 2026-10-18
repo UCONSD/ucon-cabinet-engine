@@ -25,7 +25,7 @@
    "Drafter": "AD",
    "CheckedBy": " ",
    "Issue": "For review",
-   "Revision": "1.1",
+   "Revision": "1.2",
    "IssueDate": "10.17.26",
    "Status": "FOR REVIEW",
    "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
@@ -35,9 +35,9 @@
    "Rev2": "1.1",
    "Rev2Desc": "Reissued for review",
    "Rev2Date": "10.17.26",
-   "Rev3": " ",
-   "Rev3Desc": " ",
-   "Rev3Date": " ",
+   "Rev3": "1.2",
+   "Rev3Desc": "Reissued for review",
+   "Rev3Date": "10.17.26",
    "Rev4": " ",
    "Rev4Desc": " ",
    "Rev4Date": " "
@@ -684,6 +684,8 @@
    ]
   },
   "qref": {
+   "drill": null,
+   "_drill": "no drilling question in the kitchen list - MK v1.1 D-sheets carried a wrong (Q5) = levels; fixed 2026-10-17 for the next revision",
    "door": "Q1",
    "heads": "Q2",
    "stone": "Q5",

@@ -56,3 +56,23 @@
   tools/probe_bridge.rb, tools/test_wallpanels.rb, claude/spec-2026-10-17-drawing-standard.md, this handoff.
 - NOT: claude/README.md and the other modified files (another session: sinks, MEP, core).
 - Message: ~/dev/_claude/commit_msg_mk_v11.txt
+
+## Later the same day - v1.2 of all three sets (REC-LAU, Main Kitchen, ML Foyer)
+- RELEASED v1.2 FOR REVIEW into ~/Documents (probes 809 / 810 / 811b), nothing overwritten:
+  AP_REC-LAU_Drawings_v1.2 (18 sheets), AP_MK_Drawings_v1.2 (40), AP_ML_Drawings_v1.2 (23), each with
+  *_drilling_panels_TM_v1.2.csv (factory) and *_drilling_frames_CNC_S_v1.2_UCON-only.csv (NOT to the factory).
+- DOOR SWING ON ELEVATIONS (Andriy 2026-10-17): one rule with the cabinet engine (docs/Drawing_Spec_v0.1.md, the
+  European reading TM / Cesar use): BASE of the dashed V on the hinge edge, APEX at the handle edge, "HINGES" written at
+  the hinge edge. v1.0 / v1.1 of the wall-panel sets drew it the US way (apex at the hinges) - superseded by v1.2.
+  Doors checked: DK1 hinges right / DK2 left (from the kitchen), D01 right (from Recreation), OB2 double (outer edges).
+- REC-LAU in the standard: room AP_BF_REC_LAU.json (sheet texts with tokens, Q1-Q10 as v1.1), wall JSON got name / wf /
+  levels (ffl 0: Z from the FINISHED floor) / D01 scenes. Frames floor_gap 25 -> 10 (Andriy: "до уровня панелей, 10 мм
+  от пола") - no raw wall in a joint; panels, clips, drilling = v1.1 (test). Model: ARMED 804e (frames S01-S15 rebuilt),
+  scene "07 3D Frames" (left by the rolled-back 804b, kept). The wall JSON's own 'sheets' block = v1.1 history.
+- Writer: qref per room may be null (no bubble); drilling note cites qref('drill') (MK has no drilling question - MK
+  v1.1 wrongly cited Q5 = levels; fixed in v1.2); Z reference from levels.ffl (0 = finished floor); wall_t_note;
+  single-panel D-title.
+- Bridge lesson: a scene created in a rolled-back (non-ARMED) run is NOT rolled back and survives a Save; SketchUp
+  crashed once after such a run (804b). Release / draft probes now check the last ARMED of THEIR model (807b+).
+- Commit: claude/README.md is NOT in it (other session's lines) - its line for this handoff is added locally; the contract
+  test passes only with it.

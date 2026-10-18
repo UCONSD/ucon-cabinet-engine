@@ -54,3 +54,6 @@ from the style file; a page exists only if the room has its content.
 - Steps 1-4 done for Main Kitchen and ML Foyer: both released as v1.1 from UCON::RoomSet (probes 800 / 801), see
   handoff-2026-10-17-ap-mk-v1.1-standard.md. The kitchen is generator-based now (six wall JSONs), liners widened.
 - Left: REC-LAU at its next revision; retire MKSet / FoyerSet / WallSet after it.
+- 2026-10-17 later: REC-LAU in the standard too (v1.2); all three sets reissued as v1.2 with the door swing per the
+  European convention (base on the hinges, apex at the handle) - the same rule as the cabinet engine's Drawing_Spec.
+  MKSet / FoyerSet / WallSet are no longer used by any AP Capital set.

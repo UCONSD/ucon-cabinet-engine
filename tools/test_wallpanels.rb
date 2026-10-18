@@ -30,7 +30,15 @@ def near(a, b, tol = 0.051)
 end
 
 spec = WP.load(File.join(DIR, 'walls', 'AP_BF_Recreation_Laundry.json'))
+# v1.2 (Andriy 2026-10-17): frames 10 off the floor, no raw wall in a joint. The fixtures below are v1.1 as built
+# (frames from 25), so sections 1.. regenerate v1.1 with floor_gap 25; the v1.2 delta is checked right here.
+v12 = WP.build(spec)
+check('REC-LAU v1.2: floor_gap', spec['subframe']['floor_gap'], 10)
+check('REC-LAU v1.2: no raw wall in a joint', WP.joint_gaps(spec, v12[:grid], v12[:frames]), [])
+check('REC-LAU v1.2: lower frames from 10', v12[:frames].select { |f| f[:z0] < 100 }.map { |f| f[:z0] }.uniq, [10.0])
+spec = JSON.parse(JSON.generate(spec)); spec['subframe']['floor_gap'] = 25
 out = WP.build(spec)
+check('REC-LAU v1.2 vs v1.1: panels, clips, holes unchanged', [v12[:grid][:panels], v12[:clips], v12[:holes]] == [out[:grid][:panels], out[:clips], out[:holes]], true)
 g = out[:grid]
 m568 = JSON.parse(File.read(File.join(FIX, 'rec_lau_model_568.json')))
 p566 = JSON.parse(File.read(File.join(FIX, 'rec_lau_probe_566_570.json')))
