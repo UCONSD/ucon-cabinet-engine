@@ -196,6 +196,23 @@ check('safe-av: leaf step 2.5 clear of the jamb body', st.flat_map { |b| jm.sele
 check('safe-av: leaf 50 thick', ex.select { |b| b[:name] =~ /leaf/ }.group_by { |b| b[:name][0, 3] }.map { |_, bs| (bs.map { |b| b[:y][1] }.max - bs.map { |b| b[:y][0] }.min).round(1) }.uniq, [50.0])
 check('safe-av: leaf face = panel face', ex.select { |b| b[:name].end_with?('leaf') }.map { |b| b[:y][0] }.uniq, [-ss['build_up']['face']])
 
+# ---- 12. AP Dining (2026-10-19): our survey (probes 820 / 821), inside corners (A / D through, B / C between their
+# panel faces), lower 2755 as TM REV 3 with one joint all round (option A), window B as Main Kitchen, opening C as ML Foyer
+dfids = []
+%w[B A C D].each do |c|
+  sd = WP.load(File.join(DIR, 'walls', "AP_MF_Dining_#{c}.json"))
+  od = WP.build(sd)
+  check("dining #{c}: checks pass", od[:checks], [])
+  check("dining #{c}: no raw wall in a joint", WP.joint_gaps(sd, od[:grid], od[:frames]), [])
+  check("dining #{c}: every clip fully supported", od[:clips].reject { |q| q[:support] == :ok }, [])
+  check("dining #{c}: no panel taller than TM's 2755", od[:grid][:panels].map { |q| q[:z1] - q[:z0] }.max <= 2755.05, true)
+  check("dining #{c}: one row joint 3015.35 / 3025.35", od[:grid][:seam_z], [3015.35, 3025.35])
+  dfids.concat(od[:frames].map { |f| f[:id] })
+end
+check('dining: frame ids S01..S42 in sequence', dfids, (1..42).map { |i| format('S%02d', i) })
+lb = UCON::RoomExtras.pieces(WP.load(File.join(DIR, 'walls', 'AP_MF_Dining_B.json')), WP.build(WP.load(File.join(DIR, 'walls', 'AP_MF_Dining_B.json')))).select { |b| b[:name] =~ /B-WIN liner [LR] leg/ }
+check('dining B: window liner legs start on the stone top (liner.z0)', lb.map { |b| (b[:z][0] - 260.35).abs < 0.06 }.uniq, [true])
+
 puts "#{$checks} checks, #{$fails.size} failures"
 $fails.each { |f| puts "FAIL #{f}" }
 exit($fails.empty? ? 0 : 1)

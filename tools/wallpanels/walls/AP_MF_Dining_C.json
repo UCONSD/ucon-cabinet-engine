@@ -1,0 +1,209 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital main level: DINING AREA (TM 252234, DWG REV 3 2026-09-30). mm, wall-local: x along the wall from its left end as seen from the room, z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821, 2026-10-19); from TM only the panel numbering. Andriy 2026-10-19: 'as the kitchen' (inside corners as Main Kitchen D: panels 10 short; A / D run through, B / C between their panel faces; joints 10 open, panels on the stone 260.35, 10 to the ceiling); window (wall B) as the kitchen windows, the opening opposite (wall C) as the ML Foyer openings; free spans split equally; horizontal joints aligned with the window band where possible. Opening wall opposite the window (TM 3). Option A (Andriy 2026-10-19): piers cut at the room joint 3015.35 / 3025.35 (lower 2755 as TM), the band over the opening from 3054 between the pier tops.",
+ "id": "AP_MF_Dining_C",
+ "model": "AP_MF_Dining_Room",
+ "prefix": "DIN",
+ "wall": {
+  "length": 4741.4,
+  "height": 3354,
+  "ceil": [
+   [
+    0,
+    4741.4,
+    3354
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "inside corner: x 0 = the face of the Wall A panels (44.3 off its wall), panels 10 short",
+   "inside corner: x 4741.4 = the face of the Wall D panels, panels 10 short"
+  ],
+  "wf": [
+   [
+    8796.8,
+    7586.5
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    -1
+   ]
+  ],
+  "name": "Wall C",
+  "_wf": "world (model): origin = the wall's left end on its face (B / C: the A / D panel face, 44.3 in from the wall corner), x direction, room side normal (probe 821: walls group origin [8752.5, 62.5, 0])"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "Andriy 2026-10-19: heights exactly as Main Kitchen, from the subfloor",
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5,
+   "_": "by others, as Main Kitchen ('STONE AND FABRICATION NOT BY TM ITALIA', TM REV 3)"
+  },
+  "stone_runs": [
+   [
+    10.0,
+    511.7
+   ],
+   [
+    4216.3,
+    4731.4
+   ]
+  ]
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "row_seam": {
+   "z": 3015.35
+  },
+  "explicit": [
+   {
+    "id": "P20",
+    "row": "U",
+    "x0": 10.0,
+    "x1": 511.7,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P21",
+    "row": "H",
+    "x0": 521.7,
+    "x1": 1743.2,
+    "z0": 3054.0,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P22",
+    "row": "H",
+    "x0": 1753.2,
+    "x1": 2974.7,
+    "z0": 3054.0,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P23",
+    "row": "H",
+    "x0": 2984.7,
+    "x1": 4206.3,
+    "z0": 3054.0,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P24",
+    "row": "U",
+    "x0": 4216.3,
+    "x1": 4731.4,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P25",
+    "row": "L",
+    "x0": 10.0,
+    "x1": 511.7,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P26",
+    "row": "L",
+    "x0": 4216.3,
+    "x1": 4731.4,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   }
+  ],
+  "_explicit": "UCON layout v0 (2026-10-19, Andriy OK). Numbers: P = room sequence, TM ref = elevation 3 of 252234 REV 3 (TM 3-01..3-05 upper band, 3-06 / 3-07 the verticals; TM: 520 / 1213 / 1209 / 1213 / 533, verticals 2765, band 299).",
+  "tm_ref": "TM 3-01..3-05 upper band, 3-06 / 3-07 the verticals; TM: 520 / 1213 / 1209 / 1213 / 533, verticals 2765, band 299",
+  "material": "MDF 22, finish per TM"
+ },
+ "openings": [
+  {
+   "id": "C-OPN",
+   "kind": "opening",
+   "x0": 521.7,
+   "x1": 4206.3,
+   "h": 3044.0,
+   "label": "OPENING (UCON survey)",
+   "short": "OPENING",
+   "_": "UCON survey (probe 821): opening room-x 566..4250.6 (wall-local 521.7..4206.3) to the floor, head 3044. As the ML Foyer openings OA1 / OA2 (Andriy 2026-10-19).",
+   "panel_overlap": -10,
+   "_panel_overlap": "as ML Foyer: liner leg MDF 6 against the bare reveal (0..6 inside the jamb line), 64 past the wall face; pier panels stop 10 short of the jamb line, the band over the opening spans jamb to jamb",
+   "head_gap": 10,
+   "liner": {
+    "t": 6,
+    "depth": 64,
+    "flange": 56,
+    "strips": null,
+    "_": "as ML Foyer v1.1 (variant 2): flange 56 = frame_setback, no strips"
+   },
+   "frame_setback": 56
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "seam_overrun_at": {
+   "511.7": -20
+  },
+  "_seam_overrun_at": "wall C (2026-10-19): the band piece over a jamb joint must not reach the pier-top panel's clips (bottom row 3100.35 = the head flange top 3100: that piece is lifted to 3149 and the joint would show the wall 3100..3149) - at the left jamb joint the cut goes 20 BEFORE the joint (on the next piece's 4 inch left stile); the right jamb joint keeps +20",
+  "floor_gap": 260.35,
+  "tier_joint": 2694,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 22,
+  "band_bottom": "local",
+  "_": "as Main Kitchen: frames from the stone top (panel level), band over the openings, pier frames"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ }
+}

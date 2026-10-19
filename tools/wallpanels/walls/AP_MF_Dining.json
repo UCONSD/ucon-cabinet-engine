@@ -1,0 +1,722 @@
+{
+ "_about": "AP Capital main level, DINING AREA (TM 252234, DWG REV 3) - the ROOM for the drawing standard (UCON::RoomSet): wall JSONs AP_MF_Dining_B / A / C / D.json (order = TM elevations 1-4), sheet texts with {{tokens}}. v1.0 FOR REVIEW. Survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821); built by ARMED 826b (2026-10-19). From TM only the panel numbering.",
+ "id": "AP_DIN",
+ "model": "AP_MF_Dining_Room",
+ "walls": [
+  "AP_MF_Dining_B.json",
+  "AP_MF_Dining_A.json",
+  "AP_MF_Dining_C.json",
+  "AP_MF_Dining_D.json"
+ ],
+ "files": {
+  "panels_csv": "AP_DIN_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_DIN_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_DIN_backing_cut_list.csv"
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 252234",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.0",
+   "IssueDate": "10.19.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.0",
+   "Rev1Desc": "Issued for review",
+   "Rev1Date": "10.19.26",
+   "Rev2": " ",
+   "Rev2Desc": " ",
+   "Rev2Date": " ",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "cover_title": "DINING AREA · WALL PANELS, BACKING FRAMES, CLIPS, WINDOW / OPENING LINERS",
+  "scenes": {
+   "cover": "DIN-07 Cover ISO",
+   "iso": "DIN-07 Cover ISO",
+   "iso_frames": "DIN-08 3D Frames ISO"
+  },
+  "cover_scale": 75,
+  "iso_scale": 100,
+  "existing_groups": [
+   [
+    "Wall B"
+   ],
+   [
+    "Wall A"
+   ],
+   [
+    "Wall C"
+   ],
+   [
+    "Wall D"
+   ]
+  ],
+  "room_side": "THE DINING AREA",
+  "iso_title": "FINISHED PANELS, WINDOW AND OPENING LINERS",
+  "finish_by": "TM",
+  "opening_labels": {},
+  "wall_t_note": " (not surveyed)",
+  "qref": {
+   "drill": "Q8",
+   "door": null,
+   "heads": null,
+   "stone": "Q3",
+   "panel_size": "Q1",
+   "mitre": null
+  },
+  "questions": [
+   [
+    "Q1",
+    "A-301..A-304 A-701",
+    "TM",
+    "Panels to the UCON survey: walls A / D {{@s['walls'][1]['L']}} x {{@s['walls'][1]['ceil'][0][2]}}, walls B / C {{@s['walls'][0]['L']}} between the A / D panel faces; joints 10; free spans split equally. Sizes per A-701 replace your REV 3 (order 260336). Numbers: P01-P07 = your elevation 1 (1-7), P08-P19 = elevation 2 (1-12), P20-P26 = elevation 3 (1-7), P27-P38 = elevation 4 (1-12). Your drawing: walls 2 / 4 1204 / 4 x 1244 / 1204, lower 2755, upper 309. Please confirm."
+   ],
+   [
+    "Q2",
+    "A-513 A-100",
+    "TM",
+    "Inside corners as our Main Kitchen: walls A / D run through, panels {{pn('P14')['s0']}} short of walls B / C; walls B / C stand between the A / D panel faces with a 10 joint. Your REV 3 stops all panels 45 short of every corner and covers it with an 'edge covering' (OPT. 1 / OPT. 2) - we do not use it. Please confirm."
+   ],
+   [
+    "Q3",
+    "A-301..A-304 A-513",
+    "TM",
+    "Heights as our Main Kitchen: the panels sit on the stone plinth (by others) - top {{stone}} above the subfloor = {{stone - ffl}} above the finished floor - and stop 10 under the ceiling ({{@s['walls'][1]['ceil'][0][2] - 10}}). One horizontal joint {{seam('Wall A')}} / {{upper('Wall A')}} all round the room: lower panels {{h('P14')}} high as your REV 3 (the wide panels no taller than you drew them), upper {{h('P08')}}; the piers of window B / opening C cut at the same joint, the bands over them from {{z0('P02')}} / {{z0('P22')}}. Your REV 3: panels 10 above a 210 stone, up to the ceiling (upper 309). Please confirm."
+   ],
+   [
+    "Q4",
+    "A-301..A-304",
+    "TM",
+    "Joints: 10 open, as all our AP rooms. Your REV 3 note: 'between all panels brass colour wood in glossy finish'. We draw open joints - please confirm whether the brass strip is wanted; if yes, its section, finish and fixing (the clips must stay reachable)."
+   ],
+   [
+    "Q5",
+    "A-511 A-302",
+    "TM",
+    "Window (wall B), as our Main Kitchen windows: MDF {{ln('B-WIN')['t']}} L-liner, leg on the 2nd step of the window trim ({{ln('B-WIN')['leg'][0]}} into the opening, {{ln('B-WIN')['depth']}} deep), flange behind the panel to the backing frame, corners mitred 45; sides and head only - the window runs to the floor, the legs stop on the stone. Panels {{pn('P06')['s1'] - op('B-WIN')['s0']}} over the opening edge. Can you make the liners? Please comment or propose your detail."
+   ],
+   [
+    "Q6",
+    "A-512 A-303",
+    "TM",
+    "Opening (wall C), as our ML Foyer openings: MDF {{ln('C-OPN')['t']}} L-liner against the bare reveal, {{ln('C-OPN')['depth']}} past the wall face, flange {{ln('C-OPN')['flange']}} to the backing frame, corners mitred 45; pier panels {{op('C-OPN')['s0'] - pn('P25')['s1']}} short of the jamb line, band {{z0('P22') - oh('C-OPN')}} above the head. Please confirm."
+   ],
+   [
+    "Q7",
+    "A-511 A-512",
+    "TM",
+    "Your REV 3 note at the opening returns: '4X 26 mm white matt finish wood to cover clips and gap' - replaced by the liners of Q5 / Q6. Please confirm."
+   ],
+   [
+    "Q8",
+    "A-210 D-01..",
+    "TM",
+    "Panels hang on Fastmount VL-03H clips, recess mount, gap {{bu['clip_gap']}}. Please make the clip recesses in the panel backs at the factory per the D-sheets (D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}} deep). Please confirm which clip half goes into the panel (we assume male)."
+   ],
+   [
+    "Q9",
+    "D-01..",
+    "TM",
+    "All drilling coordinates are given from the panel BACK: X from the left edge as seen from the back, Z from the bottom edge. A control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."
+   ],
+   [
+    "Q10",
+    "A-511",
+    "Site",
+    "Window trim profile measured at the left jamb (seen from the room) and modelled on both jambs and the head (Andriy 2026-10-19). To be checked on site before the liners are cut."
+   ]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
+  "notes": {
+   "G-001": [
+    [
+     "Survey by UCON. All dimensions in mm, Z from the top of the subfloor. Dimensions per UCON survey govern; from the TM drawings (order 260336, 252234 REV 3) only the panel numbering is used.",
+     false
+    ],
+    [
+     "Wall panels MDF {{bu['panel_t']}}, finish per TM; joints 10 open (Q4); on the stone plinth (by others), 10 under the ceiling; inside corners as Main Kitchen - walls A / D through, B / C between them (Q2). Panel face {{bu['face']}} from the wall = backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} + panel {{bu['panel_t']}}. Numbers P01..P38 = TM elevations 1-4 (Q1).",
+     false
+    ],
+    [
+     "Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703), from the stone top {{@s['levels']['floor_gap']}}; a frame member or a liner flange behind every panel joint - no raw wall in a joint. Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses by the factory per the D-sheets (BACK VIEW), frame holes by UCON CNC.",
+     false
+    ],
+    [
+     "Window (wall B) and opening (wall C): MDF 6 L-liners as Main Kitchen / ML Foyer (A-511, A-512, Q5 - Q7).",
+     true
+    ],
+    [
+     "Red marks are open questions or TBD items. Not for production until G-002 is answered and the set is reissued.",
+     true
+    ]
+   ]
+  },
+  "page_notes": {
+   "A-1": [
+    [
+     "Walls, openings and heights per UCON site survey - they govern over the factory drawings. Window B {{ow('B-WIN')}} x {{oh('B-WIN')}}, opening C {{ow('C-OPN')}} x {{oh('C-OPN')}}, both to the floor; ceiling {{@s['walls'][1]['ceil'][0][2]}}.",
+     false
+    ]
+   ],
+   "A-2:*": [
+    "Frames from the stone top {{@s['levels']['floor_gap']}} to the ceiling; tier joint {{@s['levels']['tier_joint']}}; band over the window / opening from the head + frame setback; a frame member behind every panel joint. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10; on the stone top {{stone}}, 10 under the ceiling. Horizontal joint {{seam('{w}')}} / {{upper('{w}')}}. Numbers = TM elevations 1-4 (Q1)."
+   ],
+   "A-701": [
+    "Panels P01..P38, numbers = TM 252234 REV 3 elevations 1-4 (Q1)."
+   ]
+  },
+  "bubbles": {
+   "A-3:Wall B": [
+    [
+     "Q5",
+     2374.2,
+     1600
+    ]
+   ],
+   "A-3:Wall C": [
+    [
+     "Q6",
+     2364,
+     1600
+    ]
+   ],
+   "A-3:Wall A": [
+    [
+     "Q2",
+     300,
+     1500
+    ]
+   ],
+   "A-3:Wall D": [
+    [
+     "Q4",
+     1257,
+     2000
+    ]
+   ]
+  },
+  "details": [
+   {
+    "code": "A-511",
+    "name": "WINDOW LINER DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "DIN-06 Plan Section @ +400",
+      "cam": [
+       11167.5,
+       3824.5,
+       400
+      ],
+      "at": [
+       "{{ox('Wall B') - (op('B-WIN')['s0'] + 25)}}",
+       "{{fy('Wall B') - (-10)}}",
+       400
+      ],
+      "proj": "plan",
+      "title": "B-WIN LEFT JAMB - PLAN SECTION AT +400",
+      "dims": [
+       [
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'] - ln('B-WIN')['flange'])}}",
+         "{{fy('Wall B') - (-22.3)}}",
+         400
+        ],
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'] + ln('B-WIN')['leg'][0])}}",
+         "{{fy('Wall B') - (-22.3)}}",
+         400
+        ],
+        0.35,
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'])}}",
+         90000,
+         400
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'])}}",
+         "{{fy('Wall B') - (-44.3)}}",
+         400
+        ],
+        [
+         "{{ox('Wall B') - (pn('P06')['s1'])}}",
+         "{{fy('Wall B') - (-44.3)}}",
+         400
+        ],
+        0.7,
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'])}}",
+         90000,
+         400
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'] + ln('B-WIN')['leg'][1])}}",
+         "{{fy('Wall B') - (0)}}",
+         400
+        ],
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'] + ln('B-WIN')['leg'][1])}}",
+         "{{fy('Wall B') - (ln('B-WIN')['depth'])}}",
+         400
+        ],
+        0.3,
+        [
+         -90000,
+         0,
+         400
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'])}}",
+         "{{fy('Wall B') - (ln('B-WIN')['depth'])}}",
+         400
+        ],
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'] + ln('B-WIN')['leg'][0])}}",
+         "{{fy('Wall B') - (ln('B-WIN')['depth'])}}",
+         400
+        ],
+        0.3,
+        [
+         "{{ox('Wall B') - (op('B-WIN')['s0'])}}",
+         -90000,
+         400
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "DIN-09 Section - window / opening heads",
+      "cam": [
+       11164.0,
+       3824.5,
+       1700
+      ],
+      "at": [
+       11164.0,
+       "{{fy('Wall B') - (-20)}}",
+       "{{oh('B-WIN')}}"
+      ],
+      "proj": "side",
+      "title": "B-WIN HEAD - SECTION",
+      "dims": [
+       [
+        [
+         11164.0,
+         "{{fy('Wall B') - (-44.3)}}",
+         "{{pn('P03')['z0']}}"
+        ],
+        [
+         11164.0,
+         "{{fy('Wall B') - (-44.3)}}",
+         "{{oh('B-WIN')}}"
+        ],
+        0.35,
+        [
+         11164.0,
+         90000,
+         "{{oh('B-WIN')}}"
+        ]
+       ],
+       [
+        [
+         11164.0,
+         "{{fy('Wall B') - (-22.3)}}",
+         "{{oh('B-WIN') - ln('B-WIN')['leg'][0]}}"
+        ],
+        [
+         11164.0,
+         "{{fy('Wall B') - (-22.3)}}",
+         "{{oh('B-WIN') + ln('B-WIN')['flange']}}"
+        ],
+        0.75,
+        [
+         11164.0,
+         90000,
+         "{{oh('B-WIN')}}"
+        ]
+       ],
+       [
+        [
+         11164.0,
+         "{{fy('Wall B') - (0)}}",
+         "{{oh('B-WIN') - ln('B-WIN')['leg'][1]}}"
+        ],
+        [
+         11164.0,
+         "{{fy('Wall B') - (ln('B-WIN')['depth'])}}",
+         "{{oh('B-WIN') - ln('B-WIN')['leg'][1]}}"
+        ],
+        0.3,
+        [
+         11164.0,
+         0,
+         -90000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "UCON proposal, as Main Kitchen W2-WIN (Andriy 2026-10-19): L-liner MDF {{ln('B-WIN')['t']}} lacquered, its leg on the 2nd step of the window trim ({{ln('B-WIN')['leg'][0]}} into the opening, {{ln('B-WIN')['depth']}} deep, against the next step), {{bu['face']}} out to the panel face; flange {{ln('B-WIN')['flange'] + ln('B-WIN')['leg'][0]}} wide behind the panel, from the leg to the backing frame - no raw wall in the joints, no strips on the panel back; corners mitred 45. Panel edges {{pn('P06')['s1'] - op('B-WIN')['s0']}} over the opening = shadow 10 to the leg. Sides and head only: the window runs to the floor, the legs stop on the stone top {{ln('B-WIN')['z0']}}, nothing below (Andriy). Q5.",
+      true
+     ],
+     "Window trim profile from the UCON model: both jambs and the head, nothing along the floor (Q10). Drawn from the model (scenes DIN-06, DIN-09)."
+    ]
+   },
+   {
+    "code": "A-512",
+    "name": "OPENING LINER DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "DIN-05 Plan Section @ +1000",
+      "cam": [
+       11167.5,
+       3824.5,
+       1000
+      ],
+      "at": [
+       "{{ox('Wall C') + (op('C-OPN')['s0'] - 20)}}",
+       "{{fy('Wall C') + (-10)}}",
+       1000
+      ],
+      "proj": "plan",
+      "title": "C-OPN LEFT JAMB - PLAN SECTION AT +1000",
+      "dims": [
+       [
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'] - ln('C-OPN')['flange'])}}",
+         "{{fy('Wall C') + (-22.3)}}",
+         1000
+        ],
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'])}}",
+         "{{fy('Wall C') + (-22.3)}}",
+         1000
+        ],
+        0.35,
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'])}}",
+         -90000,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall C') + (pn('P25')['s1'])}}",
+         "{{fy('Wall C') + (-44.3)}}",
+         1000
+        ],
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'])}}",
+         "{{fy('Wall C') + (-44.3)}}",
+         1000
+        ],
+        0.7,
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'])}}",
+         -90000,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'] + ln('C-OPN')['t'])}}",
+         "{{fy('Wall C') + (0)}}",
+         1000
+        ],
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'] + ln('C-OPN')['t'])}}",
+         "{{fy('Wall C') + (ln('C-OPN')['depth'])}}",
+         1000
+        ],
+        0.3,
+        [
+         90000,
+         0,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'] - 120)}}",
+         "{{fy('Wall C') + (0)}}",
+         1000
+        ],
+        [
+         "{{ox('Wall C') + (op('C-OPN')['s0'] - 120)}}",
+         "{{fy('Wall C') + (-44.3)}}",
+         1000
+        ],
+        0.3,
+        [
+         -90000,
+         0,
+         1000
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "DIN-09 Section - window / opening heads",
+      "cam": [
+       11164.0,
+       3824.5,
+       1700
+      ],
+      "at": [
+       11164.0,
+       "{{fy('Wall C') + (20)}}",
+       "{{oh('C-OPN') + 40}}"
+      ],
+      "proj": "side",
+      "title": "C-OPN HEAD - SECTION",
+      "dims": [
+       [
+        [
+         11164.0,
+         "{{fy('Wall C') + (-44.3)}}",
+         "{{oh('C-OPN')}}"
+        ],
+        [
+         11164.0,
+         "{{fy('Wall C') + (-44.3)}}",
+         "{{z0('P22')}}"
+        ],
+        0.35,
+        [
+         11164.0,
+         -90000,
+         "{{oh('C-OPN')}}"
+        ]
+       ],
+       [
+        [
+         11164.0,
+         "{{fy('Wall C') + (-22.3)}}",
+         "{{oh('C-OPN')}}"
+        ],
+        [
+         11164.0,
+         "{{fy('Wall C') + (-22.3)}}",
+         "{{oh('C-OPN') + ln('C-OPN')['flange']}}"
+        ],
+        0.75,
+        [
+         11164.0,
+         -90000,
+         "{{oh('C-OPN')}}"
+        ]
+       ],
+       [
+        [
+         11164.0,
+         "{{fy('Wall C') + (0)}}",
+         "{{oh('C-OPN') - ln('C-OPN')['t']}}"
+        ],
+        [
+         11164.0,
+         "{{fy('Wall C') + (ln('C-OPN')['depth'])}}",
+         "{{oh('C-OPN') - ln('C-OPN')['t']}}"
+        ],
+        0.3,
+        [
+         11164.0,
+         0,
+         -90000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "UCON proposal, as the ML Foyer openings (Andriy 2026-10-19): L-liner MDF {{ln('C-OPN')['t']}} lacquered, leg against the bare reveal, {{ln('C-OPN')['depth']}} past the wall face; flange {{ln('C-OPN')['flange']}} wide behind the panel, from the jamb line to the backing frame - no raw wall in the joints, no strips; corners mitred 45. Pier panel edges {{op('C-OPN')['s0'] - pn('P25')['s1']}} short of the jamb line; the band over the opening {{z0('P22') - oh('C-OPN')}} above the head. Q6.",
+      true
+     ],
+     "Drawn from the model (scenes DIN-05, DIN-09)."
+    ]
+   },
+   {
+    "code": "A-513",
+    "name": "INSIDE CORNER + STONE PLINTH DETAIL",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "DIN-05 Plan Section @ +1000",
+      "cam": [
+       11167.5,
+       3824.5,
+       1000
+      ],
+      "at": [
+       8840,
+       150,
+       1000
+      ],
+      "proj": "plan",
+      "title": "CORNER WALL A / WALL B - PLAN SECTION AT +1000",
+      "dims": [
+       [
+        [
+         "{{ox('Wall A')}}",
+         "{{fy('Wall A') + pn('P14')['s0']}}",
+         1000
+        ],
+        [
+         "{{ox('Wall A') + bu['face']}}",
+         "{{fy('Wall A') + pn('P14')['s0']}}",
+         1000
+        ],
+        0.3,
+        [
+         -90000,
+         0,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall A') + bu['face']}}",
+         "{{fy('Wall A')}}",
+         1000
+        ],
+        [
+         "{{ox('Wall A') + bu['face']}}",
+         "{{fy('Wall A') + pn('P14')['s0']}}",
+         1000
+        ],
+        0.45,
+        [
+         90000,
+         0,
+         1000
+        ]
+       ],
+       [
+        [
+         "{{ox('Wall A') + bu['face']}}",
+         "{{fy('Wall B') - (-44.3)}}",
+         1000
+        ],
+        [
+         "{{ox('Wall B') - (pn('P07')['s1'])}}",
+         "{{fy('Wall B') - (-44.3)}}",
+         1000
+        ],
+        0.45,
+        [
+         0,
+         90000,
+         1000
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "DIN-10 Section - pier P06, stone",
+      "cam": [
+       13400.0,
+       3824.5,
+       1700
+      ],
+      "at": [
+       13400.0,
+       "{{fy('Wall B') - (-20)}}",
+       220
+      ],
+      "proj": "side",
+      "title": "PIER P06 - FLOOR, STONE PLINTH",
+      "dims": [
+       [
+        [
+         13400.0,
+         "{{fy('Wall B') - (-44.3)}}",
+         "{{ffl}}"
+        ],
+        [
+         13400.0,
+         "{{fy('Wall B') - (-44.3)}}",
+         "{{stone}}"
+        ],
+        0.5,
+        [
+         13400.0,
+         90000,
+         "{{stone}}"
+        ]
+       ],
+       [
+        [
+         13400.0,
+         "{{fy('Wall B') - (-24.3)}}",
+         "{{stone - stn['notch']}}"
+        ],
+        [
+         13400.0,
+         "{{fy('Wall B') - (-44.3)}}",
+         "{{stone - stn['notch']}}"
+        ],
+        0.3,
+        [
+         13400.0,
+         0,
+         -90000
+        ]
+       ],
+       [
+        [
+         13400.0,
+         "{{fy('Wall B') - (0)}}",
+         500
+        ],
+        [
+         13400.0,
+         "{{fy('Wall B') - (-44.3)}}",
+         500
+        ],
+        0.3,
+        [
+         13400.0,
+         0,
+         90000
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "Inside corners as Main Kitchen (Andriy 2026-10-19): walls A / D run through, their panels {{pn('P14')['s0']}} short of walls B / C; walls B / C stand between the A / D panel faces, joint 10 to them. Your REV 3 stops all panels 45 short of the corners with an 'edge covering' (OPT. 1 / OPT. 2) - not used. Q2.",
+      true
+     ],
+     [
+      "Stone plinth by others ({{stn['t']}} thick, notch {{stn['notch']}} x {{stn['notch']}}), top {{stone}} above the subfloor = {{stone - ffl}} above the finished floor; the panels sit on it. Q3.",
+      true
+     ]
+    ]
+   }
+  ]
+ }
+}

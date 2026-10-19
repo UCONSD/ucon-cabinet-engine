@@ -1,0 +1,229 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital main level: DINING AREA (TM 252234, DWG REV 3 2026-09-30). mm, wall-local: x along the wall from its left end as seen from the room, z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821, 2026-10-19); from TM only the panel numbering. Andriy 2026-10-19: 'as the kitchen' (inside corners as Main Kitchen D: panels 10 short; A / D run through, B / C between their panel faces; joints 10 open, panels on the stone 260.35, 10 to the ceiling); window (wall B) as the kitchen windows, the opening opposite (wall C) as the ML Foyer openings; free spans split equally; horizontal joints aligned with the window band where possible. Long wall (TM 4), no openings. Lower 2755 as TM REV 3 (Andriy 2026-10-19, option A: the wide panels no taller than TM drew them); one row joint 3015.35 / 3025.35 all round the room.",
+ "id": "AP_MF_Dining_D",
+ "model": "AP_MF_Dining_Room",
+ "prefix": "DIN",
+ "wall": {
+  "length": 7524.0,
+  "height": 3354,
+  "ceil": [
+   [
+    0,
+    7524.0,
+    3354
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "inside corner, runs through (panels 10 short of Wall C)",
+   "inside corner, runs through (panels 10 short of Wall B)"
+  ],
+  "wf": [
+   [
+    13582.5,
+    7586.5
+   ],
+   [
+    0,
+    -1
+   ],
+   [
+    -1,
+    0
+   ]
+  ],
+  "name": "Wall D",
+  "_wf": "world (model): origin = the wall's left end on its face (B / C: the A / D panel face, 44.3 in from the wall corner), x direction, room side normal (probe 821: walls group origin [8752.5, 62.5, 0])"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "Andriy 2026-10-19: heights exactly as Main Kitchen, from the subfloor",
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5,
+   "_": "by others, as Main Kitchen ('STONE AND FABRICATION NOT BY TM ITALIA', TM REV 3)"
+  },
+  "stone_runs": [
+   [
+    10.0,
+    7514.0
+   ]
+  ]
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "row_seam": {
+   "z": 3015.35
+  },
+  "explicit": [
+   {
+    "id": "P27",
+    "row": "U",
+    "x0": 10.0,
+    "x1": 1252.3,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P28",
+    "row": "U",
+    "x0": 1262.3,
+    "x1": 2504.6,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P29",
+    "row": "U",
+    "x0": 2514.6,
+    "x1": 3756.9,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P30",
+    "row": "U",
+    "x0": 3766.9,
+    "x1": 5009.2,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P31",
+    "row": "U",
+    "x0": 5019.2,
+    "x1": 6261.5,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P32",
+    "row": "U",
+    "x0": 6271.5,
+    "x1": 7514.0,
+    "z0": 3025.35,
+    "z1": 3344.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P33",
+    "row": "L",
+    "x0": 10.0,
+    "x1": 1252.3,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P34",
+    "row": "L",
+    "x0": 1262.3,
+    "x1": 2504.6,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P35",
+    "row": "L",
+    "x0": 2514.6,
+    "x1": 3756.9,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P36",
+    "row": "L",
+    "x0": 3766.9,
+    "x1": 5009.2,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P37",
+    "row": "L",
+    "x0": 5019.2,
+    "x1": 6261.5,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P38",
+    "row": "L",
+    "x0": 6271.5,
+    "x1": 7514.0,
+    "z0": 260.35,
+    "z1": 3015.35,
+    "mitre_start": false,
+    "mitre_end": false
+   }
+  ],
+  "_explicit": "UCON layout v0 (2026-10-19, Andriy OK). Numbers: P = room sequence, TM ref = elevation 4 of 252234 REV 3 (TM 4-01..4-06 upper, 4-07..4-12 lower; TM: 1204 / 4 x 1244 / 1204, lower 2755, upper 309).",
+  "tm_ref": "TM 4-01..4-06 upper, 4-07..4-12 lower; TM: 1204 / 4 x 1244 / 1204, lower 2755, upper 309",
+  "material": "MDF 22, finish per TM"
+ },
+ "openings": [],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "floor_gap": 260.35,
+  "tier_joint": 2694,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 31,
+  "band_bottom": "local",
+  "_": "as Main Kitchen: frames from the stone top (panel level), band over the openings, pier frames"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ }
+}

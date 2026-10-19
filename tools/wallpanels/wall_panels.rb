@@ -342,7 +342,9 @@ module UCON
       bz = heads.empty? ? sf['tier_joint'].to_f : (heads + [u0]).max
       lmax = sf['max_length'].to_f
       # the band pieces: cut at EVERY vertical panel joint (seam centre + seam_overrun), at ceiling steps, <= a sheet
-      cuts = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + sf['seam_overrun']) }.select { |c| c > EPS && c < len - EPS }
+      # 2026-10-19 (AP Dining C): seam_overrun_at { "<joint left edge>" => overrun } turns single band cuts the other way
+      ova = sf['seam_overrun_at'] || {}
+      cuts = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + (ova[f1(s0)] || sf['seam_overrun']).to_f) }.select { |c| c > EPS && c < len - EPS }
       steps = (spec['wall']['ceil'] || []).map { |c| c[1].to_f }.select { |x| x > EPS && x < len - EPS }   # ceiling steps
       cuts = cuts.reject { |c| steps.any? { |x| (c - x).abs < ww } }   # a joint by a ceiling step: cut at the step
       edges = ([0.0] + cuts + steps + [len]).uniq.sort
@@ -361,7 +363,12 @@ module UCON
         if local
           z = ([sf['tier_joint'].to_f] + over.map { |o| o['h'].to_f + (o['liner'] ? o['frame_setback'].to_f : 0) }).max
           # a piece edge must not cut through a clip: lift it to a rail centred on that clip row (Main Kitchen P14 2813)
-          while (hit = rows.find { |r| z > r - CLIP_R - EPS && z < r + CLIP_R + EPS })
+          # 2026-10-19 (AP Dining C): only the clip rows of the panels this piece is behind - a row of a pier panel must not
+          # lift the band pieces over the opening (that left the band joints bare between the head flange and the band)
+          ce = spec['clips']['edge'].to_f
+          prow = g[:panels].reject { |p| p[:glued] || [p[:x0] + ce, p[:x1] - ce].none? { |x| x > fa - EPS && x < fb + EPS } }.flat_map { |p| clip_rows(spec, p) }.uniq
+          prow = rows if spec['clips']['fixed']
+          while (hit = prow.find { |r| z > r - CLIP_R - EPS && z < r + CLIP_R + EPS })
             z = r1(hit + wn / 2)
           end
           z
@@ -567,7 +574,9 @@ module UCON
         # a panel too narrow for two columns a clip apart (AP ML Foyer 170 / 180 piers): one column at its centre
         base = [(p[:x0] + p[:x1]) / 2.0] if c['narrow_panel'] && p[:w] < c['narrow_panel']
         backing = frs.select { |f| overlap(f[:x0], f[:x1], p[:x0], p[:x1]) > EPS && overlap(f[:z0], f[:z1], p[:z0], p[:z1]) > EPS }
-                     .sort_by { |f| -overlap(f[:z0], f[:z1], p[:z0], p[:z1]) }
+                     .sort_by { |f| [f[:stiles].size == 1 ? 1 : 0, -overlap(f[:z0], f[:z1], p[:z0], p[:z1])] }
+        # 2026-10-19 (AP Dining P05): the clip columns snap to the stiles of a real frame before a solid strip - a solid
+        # covers its whole width anyway; snapping to its centre merged two columns onto a pier stile edge
         cols = base.map do |x|
           st = backing.flat_map { |f| members(f).first(2) }.find { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS }
           next r1(x) unless st

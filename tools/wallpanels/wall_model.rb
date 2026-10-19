@@ -145,6 +145,17 @@ module UCON
         raise "#{p[:id]}: #{p[:rebates].size} rebates - one per panel is drawn" if p[:rebates].size > 1
         g = pg.entities.add_group; g.layer = tp
         g.name = format('%s %s | %.1f x %.1f x %s', p[:id], p[:pos], p[:w], p[:h], WP.f1(t))
+        # 2026-10-19 (AP Dining): a panel at a 45° corner is drawn mitred - long point on the face, short point on the
+        # back (x0 / x1 run past the wall end by the face depth); plan profile pushed up z0..z1. Only without a rebate.
+        if (p[:mitre_start] || p[:mitre_end]) && p[:rebates].empty?
+          xa = p[:mitre_start] ? p[:x0] + t : p[:x0]; xb = p[:mitre_end] ? p[:x1] - t : p[:x1]
+          plan = [[p[:x0], face], [p[:x1], face], [xb, face + t], [xa, face + t]]
+          f = g.entities.add_face(plan.map { |x, y| Geom::Point3d.new(mm(x), mm(y), mm(p[:z0])) })
+          f.reverse! if f.normal.z < 0
+          f.pushpull(mm(p[:z1] - p[:z0]))
+          raise "#{g.name} not solid" unless g.manifold?
+          next
+        end
         rect = [[p[:x0], p[:z0]], [p[:x1], p[:z0]], [p[:x1], p[:z1]], [p[:x0], p[:z1]]]
         f = g.entities.add_face(rect.map { |x, z| Geom::Point3d.new(mm(x), mm(face), mm(z)) })
         f.reverse! if f.normal.y < 0

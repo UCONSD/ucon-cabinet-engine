@@ -112,7 +112,8 @@ module UCON
       l = o['liner']; t = 'liners'; id = o['id']; tk = l['t'].to_f; dp = l['depth'].to_f; fl = l['flange'].to_f
       la, lb = (l['leg'] || [0, tk]).map(&:to_f)
       x0 = o['x0'].to_f; x1 = o['x1'].to_f; h = o['h'].to_f
-      zb = o['sill'] ? o['sill'].to_f + la : ffl
+      # 2026-10-19 (AP Dining window to the floor): liner.z0 = where the legs / flanges start (Andriy: 'down to the stone')
+      zb = l['z0'] ? l['z0'].to_f : (o['sill'] ? o['sill'].to_f + la : ffl)
       ls = []
       if x0 > WP::EPS
         ls << box(t, "#{id} liner L leg", x0 + la, x0 + lb, face, dp, zb, h - la)
