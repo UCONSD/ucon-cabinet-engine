@@ -167,6 +167,35 @@ fids = []
 end
 check('kitchen: frame ids S01.. in sequence across the six walls, no repeats', fids, (1..fids.size).map { |i| format('S%02d', i) })
 
+# ---- 11. AP Safe / AV (2026-10-17): our survey (probe 812c), TM pull doors centred in our openings, panels 3 from the
+# leaves, free spans split equally (Andriy); profile tm_pull (no stops / casings / cladding, leaf flush with the panels)
+require_relative 'wallpanels/room_extras'
+ss = WP.load(File.join(DIR, 'walls', 'AP_BF_Safe_AV.json'))
+so = WP.build(ss)
+check('safe-av: checks pass', so[:checks], [])
+check('safe-av: no raw wall in a joint', WP.joint_gaps(ss, so[:grid], so[:frames]), [])
+check('safe-av: TM numbers P01-P14', so[:grid][:panels].map { |q| q[:id] }.sort, (1..14).map { |i| format('P%02d', i) })
+sp = so[:grid][:panels].to_h { |q| [q[:id], q] }
+check('safe-av: rows 10..2499 / 2509..2837 (joint along the leaf top)', sp.values.map { |q| [q[:row], q[:z0], q[:z1]] }.uniq.sort, [['L', 10.0, 2499.0], ['U', 2509.0, 2837.0]])
+ss['openings'].each do |o|
+  la = o['x0'] + o['clad_inset']; lb = o['x1'] - o['clad_inset']
+  check("safe-av #{o['id']}: leaf centred, width = opening - 2 x 52 + 19", [((la + lb) / 2.0).round(1), (lb - la).round(1)],
+        [((o['x0'] + o['x1']) / 2.0).round(1), (o['x1'] - o['x0'] - 85.0).round(1)])
+  nb = so[:grid][:panels].select { |q| q[:row] == 'L' && ((q[:x1] - la).abs - 10).abs < 0.05 || ((q[:x0] - lb).abs - 10).abs < 0.05 && q[:row] == 'L' }
+  check("safe-av #{o['id']}: a lower panel 10 from each leaf edge", nb.size, 2)
+  check("safe-av #{o['id']}: jamb = wall + 32.3 - 18 (front 12 behind the panel face)", o['frame']['jamb'], (o['frame']['wall_t'] + 14.3).round(1))
+  check("safe-av #{o['id']}: rebate as all AP walls (rear 10)", o['rebate']['depth'], 10)
+end
+check('safe-av: equal free spans', [%w[P09], %w[P10 P11], %w[P12 P13 P14]].map { |ids| ids.map { |i| sp[i][:w] }.minmax.then { |a, b| (b - a).round(1) <= 0.1 } }, [true, true, true])
+check('safe-av: side rebates 30 wide (frame + 2.5 .. panel edge 10 from the leaf)', sp.values.flat_map { |q| q[:rebates].map { |r| (r[1] - r[0]).round(1) } }.reject { |w| w > 100 }.uniq, [30.0])
+ex = UCON::RoomExtras.pieces(ss, so).select { |b| b[:tag] == 'doors' }
+check('safe-av: door pieces (3 jamb parts + 3 lip parts + leaf + leaf step, x 2)', ex.size, 16)
+st = ex.select { |b| b[:name].end_with?('leaf step') }
+jm = ex.select { |b| b[:name] =~ /frame jamb [LR]\z/ }
+check('safe-av: leaf step 2.5 clear of the jamb body', st.flat_map { |b| jm.select { |j| (j[:x][1] - b[:x][0]).abs < 10 || (b[:x][1] - j[:x][0]).abs < 10 }.map { |j| [(b[:x][0] - j[:x][1]).abs, (j[:x][0] - b[:x][1]).abs].min.round(1) } }.uniq, [2.5])
+check('safe-av: leaf 50 thick', ex.select { |b| b[:name] =~ /leaf/ }.group_by { |b| b[:name][0, 3] }.map { |_, bs| (bs.map { |b| b[:y][1] }.max - bs.map { |b| b[:y][0] }.min).round(1) }.uniq, [50.0])
+check('safe-av: leaf face = panel face', ex.select { |b| b[:name].end_with?('leaf') }.map { |b| b[:y][0] }.uniq, [-ss['build_up']['face']])
+
 puts "#{$checks} checks, #{$fails.size} failures"
 $fails.each { |f| puts "FAIL #{f}" }
 exit($fails.empty? ? 0 : 1)

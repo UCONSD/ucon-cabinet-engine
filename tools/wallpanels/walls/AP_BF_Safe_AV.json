@@ -1,0 +1,370 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital basement: Garage wall to the SAFE / AV rooms. mm, wall-local: x along the wall from its left end as seen from the GARAGE, z up from the floor of the model (survey zero), y = 0 at the wall face (Garage side), negative toward the Garage. Geometry: UCON survey = ~/Documents/AP_BF_Safe_AV.skp (probe 812c, 2026-10-17). From TM (rev3 DISEGNO PORTE, order 252260, DWG 2026-10-12) only the door profile (Andriy). Draft 2026-10-08: safeav_proposal.png. Built in the model by ARMED 813b. The ROOM file is AP_BF_SAV_Room.json (a room file named AP_BF_SAFE_AV.json would BE this file on the Mac disk - case-insensitive).",
+ "id": "AP_BF_Safe_AV",
+ "model": "AP_BF_Safe_AV",
+ "prefix": "SAFE-AV",
+ "files": {
+  "set": "AP_SAFE-AV_Drawings_v{rev}.layout",
+  "panels_csv": "AP_SAFE-AV_drilling_panels_TM.csv",
+  "frames_csv": "AP_SAFE-AV_drilling_frames_CNC_S_UCON-only.csv"
+ },
+ "wall": {
+  "length": 8026,
+  "height": 2847,
+  "thickness": 362,
+  "name": "SAFE-AV",
+  "wf": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    -1
+   ]
+  ],
+  "_wf": "model: Garage face on y = 0 along +x from x = 0, Garage toward -y (probe 812c)",
+  "_thickness": "362 for x 0..2900.5 (Safe room), 171.5 for x 2900.5..8026 (AV room); the step is on the room side (probe 812c)"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 0,
+  "_ffl": "z from the model floor (survey); no stone plinth, no baseboard (as REC-LAU)"
+ },
+ "build_up": {
+  "frame_t": 19.05,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3,
+  "_face": "frame 3/4 in + Fastmount VL-03H recess gap 3.3 + panel MDF 22, as REC-LAU / Main Kitchen / ML Foyer"
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 10,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "width_step": 0.1,
+  "row_seam": {
+   "z": 2499,
+   "_": "Andriy 2026-10-17 (rev of draft 2): 10 between the panels and the door leaf all round - the horizontal joint runs along the leaf top (2499), as the other AP doors (cladding top = the panel joint): lower 10..2499, upper 2509..2837"
+  },
+  "explicit": [
+   {
+    "id": "P01",
+    "row": "U",
+    "x0": 10,
+    "x1": 978.5,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P02",
+    "row": "U",
+    "x0": 988.5,
+    "x1": 2126.5,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P03",
+    "row": "U",
+    "x0": 2136.5,
+    "x1": 3172,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P04",
+    "row": "U",
+    "x0": 3182,
+    "x1": 4217.5,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P05",
+    "row": "U",
+    "x0": 4227.5,
+    "x1": 5146.5,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P06",
+    "row": "U",
+    "x0": 5156.5,
+    "x1": 6103,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P07",
+    "row": "U",
+    "x0": 6113,
+    "x1": 7059.5,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P08",
+    "row": "U",
+    "x0": 7069.5,
+    "x1": 8016,
+    "z0": 2509,
+    "z1": 2837,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P09",
+    "row": "L",
+    "x0": 10,
+    "x1": 978.5,
+    "z0": 10,
+    "z1": 2499,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P10",
+    "row": "L",
+    "x0": 2136.5,
+    "x1": 3172,
+    "z0": 10,
+    "z1": 2499,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P11",
+    "row": "L",
+    "x0": 3182,
+    "x1": 4217.5,
+    "z0": 10,
+    "z1": 2499,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P12",
+    "row": "L",
+    "x0": 5156.5,
+    "x1": 6103,
+    "z0": 10,
+    "z1": 2499,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P13",
+    "row": "L",
+    "x0": 6113,
+    "x1": 7059.5,
+    "z0": 10,
+    "z1": 2499,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P14",
+    "row": "L",
+    "x0": 7069.5,
+    "x1": 8016,
+    "z0": 10,
+    "z1": 2499,
+    "mitre_start": false,
+    "mitre_end": false
+   }
+  ],
+  "_explicit": "Andriy 2026-10-17: TM leaves centred in OUR openings, joint 10 to the leaves and between panels, free spans split EQUALLY (968.5 / 2 x 1035.5 / 3 x 946.5) - = the draft of 2026-10-08. Numbers = TM cut list 252260 rev3: P01-P08 upper, P09-P14 lower, left to right; the lower cells of the door columns are the TM leaves",
+  "material": "MDF 22, finish per TM"
+ },
+ "openings": [
+  {
+   "id": "D02",
+   "kind": "door",
+   "x0": 946,
+   "x1": 2169,
+   "h": 2542,
+   "_h": "UCON survey (AP_BF_Safe_AV.skp, probe 812c). Safe: the model opening runs to the ceiling; it will be lowered to the AV head (Andriy 2026-10-17) -> 2542.",
+   "hinge": "right",
+   "handing": "opens into the Garage (pull side = Garage, TM 'DX A TIRARE'), hinges right seen from the Garage; integrated handle on the inside, push-to-open by TM (not guaranteed)",
+   "profile": "tm_pull",
+   "_profile": "TM rev3 DISEGNO PORTE (DWG 2026-10-12, 'DISEGNI NOSTRI' ASSIEME / TELAIO / PORTA): frame 47 (lip 35), 5 from the wall jamb; veneered 50 leaf, no applied panel, leaf face = panel face. Opens TOWARD the panels (Garage) - the other AP doors open away. Panels 10 from the leaf, rear-10 rebate over the frame (Andriy 2026-10-17)",
+   "leaf": {
+    "w": 1138,
+    "h": 2494,
+    "floor_gap": 5,
+    "leaves": 1,
+    "_": "leaf = opening - 2 x (5 + 47) + 2 x 9.5 overlap on the frame rebate (TM: 1222 -> 1137, 1000 -> 915) = 1138; h = frame top - 38 - 5 floor gap (TM 2535 -> 2492; ours 2537 -> 2494); top 2499, 3 under the head panel (TM 2497 / 2500)",
+    "t": 50,
+    "step": {
+     "t": 12,
+     "inset": 12
+    },
+    "_t": "TM rev3 PORTA plan (DWG): leaf 50 = face part 38 (full width, flush with the panel face, front on the frame lip line + 4) + back step 12 deep, 12 narrower each side (TM 915 -> 891), 2.5 clear of the frame body. Veneered, no applied panel ('PORTA IMPIALLACCIATA SENZA PANNELLO RIPORTATO'). Differs from D01 / DK1 / OB2 (leaf 43 + gap 3 + cladding 12 = 58) because this door opens TOWARD the cladding (Garage side) - Andriy 2026-10-17: as TM drew it"
+   },
+   "clad_inset": 42.5,
+   "_clad_inset": "leaf edge from the opening edge (DK1 profile: 55.5 hard-coded)",
+   "rebate": {
+    "inset": 2.5,
+    "head_inset": 2.5,
+    "depth": 10,
+    "_": "Andriy 2026-10-17: the panel rebate as on all our AP walls (Main Kitchen / ML Foyer: rear 10 removed where the panel passes in front of the door frame, to the frame + 2.5) - NOT TM's BATTENTE 38 x 18. Frame outer at opening + 5 -> rebate from + 2.5; head: frame top h - 5 -> to h - 2.5"
+   },
+   "frame": {
+    "gap_side": 5,
+    "gap_head": 5,
+    "gap_floor": 0,
+    "face": 47,
+    "head": 38,
+    "jamb": 376.3,
+    "jamb_y0": -32.3,
+    "jamb_y1": 344,
+    "wall_t": 362,
+    "_": "Andriy 2026-10-17: jamb to OUR survey; frame front 12 behind the panel face (= the panel's remaining 12 at the rear-10 rebate, as Main Kitchen DK1: jamb_y0 -32.3), back 18 short of the far face: wall 362 -> jamb 376.3. TM drew 210 on 170 with the front 4 behind a 62 face (their BATTENTE 38 x 18) - the profile is moved back accordingly.",
+    "lip": 35,
+    "lip_depth": 26,
+    "_lip": "TM profile (DWG ASSIEME): jamb body 47, front lip 35; lip 26 deep here (front -32.3 to the leaf face part's back -6.3), so the 50 leaf (38 + step 12) keeps TM's relation to the body; leaf edge 2.5 clear of the lip"
+   },
+   "frame_setback": 0,
+   "label": "D02 - SAFE ROOM DOOR BY TM (pull, opens into the Garage)",
+   "short": "D02\nTM DOOR",
+   "section_x": 1251.8,
+   "scenes": {
+    "plan": "SAV-05 D02 — Plan Section",
+    "section": "SAV-06 D02 — Section"
+   },
+   "cams": {
+    "plan": [
+     1557.5,
+     150,
+     0
+    ],
+    "section": [
+     1251.8,
+     150,
+     1400
+    ]
+   }
+  },
+  {
+   "id": "D03",
+   "kind": "door",
+   "x0": 4185,
+   "x1": 5189,
+   "h": 2542,
+   "_h": "UCON survey (AP_BF_Safe_AV.skp, probe 812c). AV opening as surveyed.",
+   "hinge": "left",
+   "handing": "opens into the Garage (pull side = Garage, TM 'SX A TIRARE'), hinges left seen from the Garage; integrated handle on the inside, push-to-open by TM (not guaranteed)",
+   "profile": "tm_pull",
+   "_profile": "TM rev3 DISEGNO PORTE (DWG 2026-10-12, 'DISEGNI NOSTRI' ASSIEME / TELAIO / PORTA): frame 47 (lip 35), 5 from the wall jamb; veneered 50 leaf, no applied panel, leaf face = panel face. Opens TOWARD the panels (Garage) - the other AP doors open away. Panels 10 from the leaf, rear-10 rebate over the frame (Andriy 2026-10-17)",
+   "leaf": {
+    "w": 919,
+    "h": 2494,
+    "floor_gap": 5,
+    "leaves": 1,
+    "_": "leaf = opening - 2 x (5 + 47) + 2 x 9.5 overlap on the frame rebate (TM: 1222 -> 1137, 1000 -> 915) = 919; h = frame top - 38 - 5 floor gap (TM 2535 -> 2492; ours 2537 -> 2494); top 2499, 3 under the head panel (TM 2497 / 2500)",
+    "t": 50,
+    "step": {
+     "t": 12,
+     "inset": 12
+    },
+    "_t": "TM rev3 PORTA plan (DWG): leaf 50 = face part 38 (full width, flush with the panel face, front on the frame lip line + 4) + back step 12 deep, 12 narrower each side (TM 915 -> 891), 2.5 clear of the frame body. Veneered, no applied panel ('PORTA IMPIALLACCIATA SENZA PANNELLO RIPORTATO'). Differs from D01 / DK1 / OB2 (leaf 43 + gap 3 + cladding 12 = 58) because this door opens TOWARD the cladding (Garage side) - Andriy 2026-10-17: as TM drew it"
+   },
+   "clad_inset": 42.5,
+   "_clad_inset": "leaf edge from the opening edge (DK1 profile: 55.5 hard-coded)",
+   "rebate": {
+    "inset": 2.5,
+    "head_inset": 2.5,
+    "depth": 10,
+    "_": "Andriy 2026-10-17: the panel rebate as on all our AP walls (Main Kitchen / ML Foyer: rear 10 removed where the panel passes in front of the door frame, to the frame + 2.5) - NOT TM's BATTENTE 38 x 18. Frame outer at opening + 5 -> rebate from + 2.5; head: frame top h - 5 -> to h - 2.5"
+   },
+   "frame": {
+    "gap_side": 5,
+    "gap_head": 5,
+    "gap_floor": 0,
+    "face": 47,
+    "head": 38,
+    "jamb": 185.8,
+    "jamb_y0": -32.3,
+    "jamb_y1": 153.5,
+    "wall_t": 171.5,
+    "_": "Andriy 2026-10-17: jamb to OUR survey; frame front 12 behind the panel face (= the panel's remaining 12 at the rear-10 rebate, as Main Kitchen DK1: jamb_y0 -32.3), back 18 short of the far face: wall 171.5 -> jamb 185.8. TM drew 210 on 170 with the front 4 behind a 62 face (their BATTENTE 38 x 18) - the profile is moved back accordingly.",
+    "lip": 35,
+    "lip_depth": 26,
+    "_lip": "TM profile (DWG ASSIEME): jamb body 47, front lip 35; lip 26 deep here (front -32.3 to the leaf face part's back -6.3), so the 50 leaf (38 + step 12) keeps TM's relation to the body; leaf edge 2.5 clear of the lip"
+   },
+   "frame_setback": 0,
+   "label": "D03 - AV ROOM DOOR BY TM (pull, opens into the Garage)",
+   "short": "D03\nTM DOOR",
+   "section_x": 4436.0,
+   "scenes": {
+    "plan": "SAV-05 D03 — Plan Section",
+    "section": "SAV-06 D03 — Section"
+   },
+   "cams": {
+    "plan": [
+     4687.0,
+     150,
+     0
+    ],
+    "section": [
+     4436.0,
+     150,
+     1400
+    ]
+   }
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "floor_gap": 10,
+  "tier_joint": 2380,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 1,
+  "_": "as ML Foyer / Main Kitchen: frames 10 off the floor (panel level), pier frames to the door jambs, band over the doors; S numbered from 1 (UCON only)",
+  "band_bottom": "local",
+  "_band_bottom": "as Main Kitchen: each band piece starts over the doors it touches (door head), pier frames reach the piece over them; no liner openings on this wall"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ }
+}

@@ -42,6 +42,7 @@ module UCON
 
     # TM door as Main Kitchen DK1; FOYER: double - two leaves and two claddings meeting at the centre, stops both sides
     def door(spec, o, ffl, face)
+      return door_tm_pull(o, ffl, face) if o['profile'] == 'tm_pull'
       f = o['frame']; t = 'doors'; id = o['id']
       x0 = o['x0'].to_f; x1 = o['x1'].to_f; h = o['h'].to_f
       gs = f['gap_side'].to_f; jt = f['head'].to_f
@@ -64,7 +65,7 @@ module UCON
         box(t, "#{id} back casing head", x0 - 35.2, x1 + 35.2, wt - 7.2, wt + 10.0, hz + 5.1, hz + 74.6)
       ]
       la = fa + jt + 35; lb = fb - jt - 35     # leaf edges 3 clear of the stops (DK1 stop side: O - 74.3); FOYER: stops both sides
-      ca = x0 + 55.5; cb = x1 - 55.5
+      ci = (o['clad_inset'] || 55.5).to_f; ca = x0 + ci; cb = x1 - ci
       jn = (o['leaf']['joint'] || 10).to_f / 2   # cladding joint at the centre (leaves 3 apart)
       if n == 2
         ls << box(t, "#{id} leaf L", la, c - 1.5, -29.3, 13.7, cz0, lt) << box(t, "#{id} leaf R", c + 1.5, lb, -29.3, 13.7, cz0, lt)
@@ -73,6 +74,33 @@ module UCON
         ls << box(t, "#{id} leaf", la, lb, -29.3, 13.7, cz0, lt) << box(t, "#{id} cladding", ca, cb, face, face + 12, cz0, ct)
       end
       ls
+    end
+
+    # AP SAFE / AV (2026-10-17): TM pull door, rev3 DISEGNO PORTE - no stops, no casings, no cladding. Jamb = body
+    # `face` wide from lip_depth behind its front to jamb_y1, plus a front lip `lip` wide (4 behind the panel face);
+    # the veneered leaf (t, TM 50) sits flush with the panel face, clad_inset from the opening edge, 2.5 clear of the lips;
+    # its back step (leaf.step t x inset, TM 12 x 12) runs inside the jamb body, 2.5 clear of it.
+    # Head the same: body head - 38 .. hz (the leaf top runs under it), lip from the leaf top + 3.
+    def door_tm_pull(o, ffl, face)
+      f = o['frame']; t = 'doors'; id = o['id']
+      x0 = o['x0'].to_f; x1 = o['x1'].to_f; h = o['h'].to_f
+      gs = f['gap_side'].to_f; fw = f['face'].to_f; lw = f['lip'].to_f; ld = f['lip_depth'].to_f
+      jy0 = f['jamb_y0'].to_f; jy1 = f['jamb_y1'].to_f; jb = jy0 + ld
+      hz = h - f['gap_head'].to_f
+      lf = o['leaf']; cz0 = lf['floor_gap'].to_f; ct = cz0 + lf['h'].to_f
+      ci = o['clad_inset'].to_f; ca = x0 + ci; cb = x1 - ci
+      st = (lf['step'] || {})['t'].to_f; si = (lf['step'] || {})['inset'].to_f   # back step of the leaf (TM 12 x 12)
+      fa = x0 + gs; fb = x1 - gs
+      [
+        box(t, "#{id} frame jamb L", fa, fa + fw, jb, jy1, ffl, hz),
+        box(t, "#{id} frame jamb R", fb - fw, fb, jb, jy1, ffl, hz),
+        box(t, "#{id} frame head", fa + fw, fb - fw, jb, jy1, hz - f['head'].to_f, hz),
+        box(t, "#{id} frame lip L", fa, fa + lw, jy0, jb, ffl, hz),
+        box(t, "#{id} frame lip R", fb - lw, fb, jy0, jb, ffl, hz),
+        box(t, "#{id} frame lip head", fa + lw, fb - lw, jy0, jb, ct + 3, hz),
+        box(t, "#{id} leaf", ca, cb, face, face + lf['t'].to_f - st, cz0, ct),
+        box(t, "#{id} leaf step", ca + si, cb - si, face + lf['t'].to_f - st, face + lf['t'].to_f, cz0, ct)
+      ].reject { |b| b[:y][1] - b[:y][0] < 0.05 }
     end
 
     # FOYER: leg against the bare reveal (0..6 inside the jamb), 64 past the wall face; flange 35.2 behind the panel;

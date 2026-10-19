@@ -557,7 +557,7 @@ module UCON
         text('L-liner MDF 6: leg (strip) + flange behind the panel (dashed)', x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
       end
       unless (@s['doors'] || []).empty?
-        rect(x2 + 0.08, y + 0.04, 0.25, 0.18, @l_sheet, stroke: INK, sw: 0.5, fill: CLADF); text('Door cladding; swing on elevation - base on the hinges, apex at the handle', x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
+        rect(x2 + 0.08, y + 0.04, 0.25, 0.18, @l_sheet, stroke: INK, sw: 0.5, fill: CLADF); text("#{@s['doors'].all? { |d| d['profile'] == 'tm_pull' } ? 'Door leaf (TM, flush with the panels)' : 'Door cladding'}; swing on elevation - base on the hinges, apex at the handle", x2 + 0.6, y + 0.06, @l_sheet, size: 8); y += 0.30
       end
       y += 0.12
       label('GENERAL NOTES', x2, y, @l_sheet); y += 0.22
@@ -699,7 +699,8 @@ module UCON
         text('HINGES', px.(hs) + (hs == a ? 0.05 : -0.05), pz.((cz0 + cz1) / 2) - 0.03, @l_sheet, size: 6, font: MONO, c: INK2, align: hs == a ? :left : :right)
         text("#{f1(b - a)}", px.((a + b) / 2), pz.(1700), @l_sheet, size: 6.5, font: MONO, c: INK2, align: :center)
       end
-      text("#{dr['id']} CLADDING#{leaves.size > 1 ? 'S' : ''}", px.(cm), pz.(1900), @l_sheet, size: 7, font: MONO, c: INK2, align: :center)
+      pull = dr['profile'] == 'tm_pull'   # AP SAFE / AV 2026-10-17: veneered TM leaf flush with the panels, no cladding
+      text(pull ? "#{dr['id']} LEAF (TM)" : "#{dr['id']} CLADDING#{leaves.size > 1 ? 'S' : ''}", px.(cm), pz.(1900), @l_sheet, size: 7, font: MONO, c: INK2, align: :center)
       # chains: top = panel edges + cladding, bottom = opening, left = levels, right = opening height
       lp = near.select { |p| p['s1'] <= ca + 1 && p['z0'] < 1000 }.map { |p| p['s1'] }.max
       rp = near.select { |p| p['s0'] >= cb - 1 && p['z0'] < 1000 }.map { |p| p['s0'] }.min
@@ -718,7 +719,21 @@ module UCON
       xc = dr['section_x']; yw = dr['wall_face_y']; zc = dr['plan_z']
       qp = pt2(WX + WW - 3.55, WY + 0.25 + 2.3)
       xm = (dr['open_x'][0] + dr['open_x'][1]) / 2.0
-      pv = cropped(skp, dr['scenes']['plan'], dr['cams']['plan'], [xm, yw + 380, zc], qp, 6.6, 4.6, 1.0 / ps, PLAN)
+      # a door opening TOWARD the panels (tm_pull, AP SAFE / AV 2026-10-17): centre the view so the swing fits in front
+      rsw = dr['clad_x'][1] - dr['clad_x'][0]
+      yc = pull ? yw + (dr['wall_t'].to_f - bu['face'] - rsw) / 2.0 : yw + 380
+      pv = cropped(skp, dr['scenes']['plan'], dr['cams']['plan'], [xm, yc, zc], qp, 6.6, 4.6, 1.0 / ps, PLAN)
+      # swing on the plan (Andriy 2026-10-17): the leaf open at 90 degrees, dashed, and its arc from the latch edge;
+      # pivot = the hinge edge of the leaf face; tm_pull opens into the room the panels face (-y)
+      if pull
+        hx = dr['hinge'] == 'right' ? dr['clad_x'][1] : dr['clad_x'][0]; ux = dr['hinge'] == 'right' ? -1 : 1
+        py = yw - bu['face']; pp = ->(x, y) { pv.model_to_paper_point(P(x, y, zc)) }
+        a0 = pp.(hx, py); a1 = pp.(hx, py - rsw)
+        line(a0.x, a0.y, a1.x, a1.y, @l_sheet, w: 0.5, c: INK2, dash: true)
+        arc = (0..18).map { |i| t = Math::PI / 2 * i / 18; pp.(hx + ux * rsw * Math.cos(t), py - rsw * Math.sin(t)) }
+        arc.each_cons(2) { |m, n| line(m.x, m.y, n.x, n.y, @l_sheet, w: 0.35, c: INK2, dash: true) }
+        text('SWING', a1.x + (ux.positive? ? 0.08 : -0.08), a1.y - 0.04, @l_sheet, size: 6, font: MONO, c: INK2, align: ux.positive? ? :left : :right)
+      end
       x0 = dr['open_x'][0]; x1 = dr['open_x'][1]; yf0 = yw - bu['face']; yb = yw + dr['wall_t']
       kit = P(xc, -9000, zc)
       vdim(pv, P(dr['clad_x'][0], yf0, zc), P(dr['clad_x'][1], yf0, zc), 0.25, kit, dr['clad_x'][1] - dr['clad_x'][0])
@@ -728,11 +743,16 @@ module UCON
       vdim(pv, P(xl, yf0, zc), P(xl, yw, zc), 0.25, lft, bu['face'])
       vdim(pv, P(x1 + 70, dr['jamb_y'][0], zc), P(x1 + 70, dr['jamb_y'][1], zc), 0.30, rgt, 0,
            label: "#{f1(dr['jamb_y'][1] - dr['jamb_y'][0])} JAMB")
-      bub(pv.model_to_paper_point(P(xc, yw + 450, zc)), qref('door'))
+      bub(pv.model_to_paper_point(pull ? P(xm, yw - bu['face'] - rsw * 0.3, zc) : P(xc, yw + 450, zc)), qref('door'))
       vlabel(WX + 5.0, WY + 5.05, WW - 5.0, 2, code, "#{dr['id']} PLAN SECTION AT #{f1(zc)}", "1:#{ps}")
       notes(WX + 5.0, WY + 5.65, WW - 5.0, [
         *pnotes("A-5:#{dr['id']}"),
-        [(leaves.size > 1 ? "#{leaves.size} claddings " : 'Cladding ') + "#{leaves.map { |a, b, _| f1(b - a) }.uniq.join(' / ')} x #{f1(cz1 - cz0)}#{leaves.size > 1 ? ", joint #{f1(dr['leaf_joint'])}" : ''}, #{f1(cz0 - lev['ffl'])} above FFL, top at the panel joint #{f1(cz1)}; joints to the panels #{f1(ca - lp)} / #{f1(rp - cb)}.", false],
+        if pull
+          st = dr['leaf_step'] || {}
+          ["Leaf #{f1(cb - ca)} x #{f1(cz1 - cz0)} x #{f1(dr['leaf_t'])} (face #{f1(dr['leaf_t'].to_f - st['t'].to_f)} + back step #{f1(st['t'])} x #{f1(st['inset'])}), veneered, no applied panel, face = panel face; #{f1(cz0 - lev['ffl'])} above FFL, top #{f1(cz1)}; joints to the panels #{f1(ca - lp)} / #{f1(rp - cb)}. Opens toward the panels.", false]
+        else
+          [(leaves.size > 1 ? "#{leaves.size} claddings " : 'Cladding ') + "#{leaves.map { |a, b, _| f1(b - a) }.uniq.join(' / ')} x #{f1(cz1 - cz0)}#{leaves.size > 1 ? ", joint #{f1(dr['leaf_joint'])}" : ''}, #{f1(cz0 - lev['ffl'])} above FFL, top at the panel joint #{f1(cz1)}; joints to the panels #{f1(ca - lp)} / #{f1(rp - cb)}.", false]
+        end,
         ["Door face = panel face #{f1(bu['face'])} from the wall; wall #{f1(dr['wall_t'])}#{sh['wall_t_note'] || ' (not surveyed)'}, jamb #{f1(dr['jamb_y'][1] - dr['jamb_y'][0])}. Panels in front of the frame rebated #{f1(bu['rebate'])} at the back (A-701, D-sheets).", true],
         'Details 1:5 on the next sheet.'
       ], size: 7, step: 0.165)

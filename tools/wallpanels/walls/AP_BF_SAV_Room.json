@@ -1,0 +1,223 @@
+{
+ "_about": "AP Capital basement, Garage wall to the SAFE / AV rooms (SAFE-AV) - the ROOM (file AP_BF_SAV_Room.json - not AP_BF_SAFE_AV: the Mac disk ignores case and that name IS the wall JSON) for the drawing standard (UCON::RoomSet): wall JSON AP_BF_Safe_AV.json (one wall), sheet texts with {{tokens}}. v1.0 FOR REVIEW. Survey = ~/Documents/AP_BF_Safe_AV.skp (probe 812c); built by ARMED 813b (2026-10-17). From TM (order 252260, GARAGE WALL TO SAFE AND AV ROOM REV3 - DISEGNO PORTE, DWG 2026-10-12) only the door profile.",
+ "id": "AP_BF_SAV_Room",
+ "model": "AP_BF_Safe_AV",
+ "walls": [
+  "AP_BF_Safe_AV.json"
+ ],
+ "ends": {
+  "SAFE-AV": [
+   "wall corner (panels 10 short)",
+   "wall corner (panels 10 short)"
+  ]
+ },
+ "files": {
+  "panels_csv": "AP_SAFE-AV_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_SAFE-AV_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_SAFE-AV_backing_cut_list.csv"
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 252260",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.0",
+   "IssueDate": "10.17.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.0",
+   "Rev1Desc": "Issued for review",
+   "Rev1Date": "10.17.26",
+   "Rev2": " ",
+   "Rev2Desc": " ",
+   "Rev2Date": " ",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "cover_title": "GARAGE -> SAFE / AV ROOMS WALL · WALL PANELS, BACKING FRAMES, CLIPS, TM DOORS D02 / D03",
+  "scenes": {
+   "cover": "SAV-07 Cover ISO",
+   "iso": "SAV-07 Cover ISO",
+   "iso_frames": "SAV-08 3D Frames ISO"
+  },
+  "existing_groups": [
+   [
+    "SAFE-AV"
+   ]
+  ],
+  "room_side": "GARAGE",
+  "iso_title": "FINISHED PANELS AND DOORS D02 / D03",
+  "finish_by": "TM",
+  "opening_labels": {},
+  "qref": {
+   "drill": "Q8",
+   "door": "Q1",
+   "heads": null,
+   "stone": null,
+   "panel_size": "Q7",
+   "mitre": null
+  },
+  "wall_t_note": " (UCON survey)",
+  "questions": [
+   [
+    "Q1",
+    "A-501..A-504",
+    "TM",
+    "Door frames to the UCON survey. Our build-up: backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} (Fastmount VL-03H, recess) + panel {{bu['panel_t']}} = panel face {{bu['face']}} mm from the wall (your drawing: 40 + 22). The panels are rebated at the back 10 over the frame, as on all our AP walls (not your BATTENTE 38 x 18), so the frame front sits 12 behind the panel face (as the other AP doors, frame front {{-dr('D02')['jamb_y'][0]}} from the wall face): D02 (Safe) jamb {{dr('D02')['jamb']}} on a {{dr('D02')['wall_t']}} wall, D03 (AV) jamb {{dr('D03')['jamb']}} on a {{dr('D03')['wall_t']}} wall (your drawing: 210 on 170, front 4 behind a 62 face). Please confirm you can make these depths."
+   ],
+   [
+    "Q2",
+    "A-501 A-503",
+    "TM",
+    "Openings per UCON survey: D02 {{ow('D02')}} x {{oh('D02')}}, D03 {{ow('D03')}} x {{oh('D03')}} (your drawing: 1222 / 1000 x 2540). Your gaps (sides {{dr('D02')['gap_side']}}, head {{dr('D02')['gap_head']}}) give frames {{ow('D02') - 2 * dr('D02')['gap_side']}} / {{ow('D03') - 2 * dr('D03')['gap_side']}} x {{oh('D02') - dr('D02')['gap_head']}} and leaves {{op('D02')['clad'][1] - op('D02')['clad'][0]}} / {{op('D03')['clad'][1] - op('D03')['clad'][0]}} x {{op('D02')['clad'][3] - op('D02')['clad'][2]}}, {{op('D02')['clad'][2]}} above the floor (your drawing: 1137 / 915 x 2492). Please confirm."
+   ],
+   [
+    "Q3",
+    "A-501",
+    "TM",
+    "Safe door (D02): your production drawings TELAIO / PORTA / PANNELLI marked 'DX A TIRARE' show 990 / 915 / 920 - the AV door sizes. Please issue the drawings of the Safe door to the sizes in Q2."
+   ],
+   [
+    "Q4",
+    "A-501 A-503",
+    "TM",
+    "Handing: both doors open into the Garage (pull side = Garage). Your drawing: D02 hinges on the right, D03 on the left, as seen from the Garage. Daniel's list of 01/12/2026 says Safe 'Left-Handed', AV 'Right-Handed'. Please confirm both describe the same doors."
+   ],
+   [
+    "Q5",
+    "A-502 A-504",
+    "TM",
+    "Leaf: {{dr('D02')['leaf_t']}} thick (face {{dr('D02')['leaf_t'] - dr('D02')['leaf_step']['t']}} + back step {{dr('D02')['leaf_step']['t']}} x {{dr('D02')['leaf_step']['inset']}}), veneered, no applied panel, face flush with the wall panels, 10 joint to the panels all round - as your PORTA section. Integrated handle on the room side; on the Garage side push-to-open (not guaranteed by TM). Please confirm the leaf build-up, finish and the push-to-open hardware."
+   ],
+   [
+    "Q6",
+    "A-101",
+    "Site",
+    "The Safe opening runs to the ceiling today; it will be lowered to {{oh('D02')}} (the AV head) by others before the frame is set. Frame and panels are drawn to {{oh('D02')}}."
+   ],
+   [
+    "Q7",
+    "A-301 A-701",
+    "TM",
+    "Panels to the UCON survey: wall {{@s['walls'][0]['L']}} x {{@s['walls'][0]['ceil'][0][2]}} (your drawing: 8016 x 2844), leaves centred in our openings, joints 10 - also around the door leaves, the horizontal joint along the leaf top {{op('D02')['clad'][3]}} - free spans split equally. Sizes per A-701 replace your cut list 252260 rev 3 (P01-P14 = your numbers 1-14). Panels in front of the door frames: rear 10 rebate as on our other AP walls, instead of your BATTENTE 38 x 18. Please confirm."
+   ],
+   [
+    "Q8",
+    "A-210 D-01..",
+    "TM",
+    "Panels hang on Fastmount VL-03H clips, recess mount, gap {{bu['clip_gap']}}. Please make the clip recesses in the panel backs at the factory per the D-sheets (D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}} deep). Please confirm which clip half goes into the panel (we assume male)."
+   ],
+   [
+    "Q9",
+    "D-01..",
+    "TM",
+    "All drilling coordinates are given from the panel BACK: X from the left edge as seen from the back, Z from the bottom edge. A control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."
+   ]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
+  "notes": {
+   "G-001": [
+    [
+     "Survey by UCON. All dimensions in mm, Z from the floor. Dimensions per UCON survey govern; from the TM drawings (order 252260, rev 3) only the door profile is used.",
+     false
+    ],
+    [
+     "Wall panels MDF {{bu['panel_t']}}, finish per TM; joints 10, also to the door leaves; 10 to the floor, ceiling and wall corners, no baseboard. Panel face {{bu['face']}} from the wall = backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} + panel {{bu['panel_t']}}. Numbers P01..P14 as TM cut list 252260 (Q7).",
+     false
+    ],
+    [
+     "Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703), {{@s['levels']['floor_gap']}} above the floor; a frame member behind every panel joint - no raw wall in a joint. Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses by the factory per the D-sheets (BACK VIEW), frame holes by UCON CNC.",
+     false
+    ],
+    [
+     "Doors D02 (Safe) / D03 (AV): TM pull doors, open into the Garage (toward the panels - the other AP doors open away); veneered 50 leaves flush with the panels, no cladding (Q5); frames to our survey (Q1, Q2). Panels {{rebated}} rebated at the back {{bu['rebate']}} over the frames, as our other AP walls.",
+     true
+    ],
+    [
+     "Safe opening to be lowered to the AV head by others (Q6).",
+     true
+    ],
+    [
+     "Red marks are open questions or TBD items. Not for production until G-002 is answered and the set is reissued.",
+     true
+    ]
+   ]
+  },
+  "page_notes": {
+   "A-1": [
+    [
+     "Wall, openings and heights per UCON site survey - they govern over the factory drawings. Wall {{dr('D02')['wall_t']}} at the Safe room, {{dr('D03')['wall_t']}} at the AV room. Openings: D02 {{ow('D02')}} x {{oh('D02')}} from {{op('D02')['s0']}}; D03 {{ow('D03')}} x {{oh('D03')}} from {{op('D03')['s0']}}.",
+     false
+    ],
+    [
+     "Q6: the Safe opening runs to the ceiling today - to be lowered to {{oh('D02')}} by others.",
+     true
+    ]
+   ],
+   "A-2:*": [
+    "Frames from {{@s['levels']['floor_gap']}} above the floor to the ceiling; tier joint {{@s['levels']['tier_joint']}}; band over the doors from the door head; a frame member behind every panel joint. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10, also to the door leaves; 10 to the floor, ceiling and wall corners. Horizontal joint {{seam('{w}')}} / {{upper('{w}')}} along the leaf tops. Numbers as TM cut list 252260 (Q7).",
+    "Panels {{rebated}} rebated at the back {{bu['rebate']}} in front of the door frames (A-501, A-503, A-701, D-sheets)."
+   ],
+   "A-5:*": [
+    [
+     "{d}: TM pull door, profile per TM DWG 'GARAGE WALL TO SAFE AND AV ROOM REV3 - DISEGNO PORTE', opening per UCON survey {{ow('{d}')}} x {{oh('{d}')}} (Q2).",
+     true
+    ],
+    [
+     "Opens into the Garage, hinges {{dr('{d}')['hinge']}} as seen from the Garage (Q4); integrated handle on the room side, push-to-open on the Garage side by TM (Q5).",
+     true
+    ]
+   ],
+   "A-701": [
+    "Panels P01..P14, numbers as TM cut list 252260. Door leaves D02 / D03 by TM with the doors - not in this list."
+   ]
+  },
+  "bubbles": {
+   "A-1:SAFE-AV": [
+    [
+     "Q6",
+     1557.5,
+     2700
+    ]
+   ],
+   "A-2:SAFE-AV": [
+    [
+     "Q8",
+     500,
+     1500
+    ]
+   ],
+   "A-3:SAFE-AV": [
+    [
+     "Q7",
+     7540,
+     900
+    ],
+    [
+     "Q1",
+     1557.5,
+     1600
+    ],
+    [
+     "Q1",
+     4687,
+     1600
+    ]
+   ]
+  },
+  "key_wall_t": 362,
+  "_key_wall_t": "the key plan draws one thickness: 362 at the Safe room (171.5 at the AV room - A-101 note)"
+ }
+}

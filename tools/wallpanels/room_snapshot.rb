@@ -54,7 +54,8 @@ module UCON
             end
             if k == 'door'
               gs = op['frame']['gap_side'].to_f
-              h['clad'] = [op['x0'] + 55.5, op['x1'] - 55.5, op['leaf']['floor_gap'], op['leaf']['floor_gap'] + op['leaf']['h']]
+              ci = (op['clad_inset'] || 55.5).to_f
+              h['clad'] = [op['x0'] + ci, op['x1'] - ci, op['leaf']['floor_gap'], op['leaf']['floor_gap'] + op['leaf']['h']]
               h['leaves'] = op['leaf']['leaves'] || 1
             end
             h
@@ -91,11 +92,12 @@ module UCON
           snap['doors'] << {
             'id' => op['id'], 'wall' => w, 'hinge' => op['hinge'] || 'both', 'leaves' => op['leaf']['leaves'] || 1,
             'open_x' => [WP.r1(ox + op['x0']), WP.r1(ox + op['x1'])], 'frame_x' => [WP.r1(ox + op['x0'] + gs), WP.r1(ox + op['x1'] - gs)],
-            'clad_x' => [WP.r1(ox + op['x0'] + 55.5), WP.r1(ox + op['x1'] - 55.5)], 'jamb_y' => [woy + f['jamb_y0'], woy + f['jamb_y1']],
+            'clad_x' => [WP.r1(ox + op['x0'] + (op['clad_inset'] || 55.5).to_f), WP.r1(ox + op['x1'] - (op['clad_inset'] || 55.5).to_f)], 'jamb_y' => [woy + f['jamb_y0'], woy + f['jamb_y1']],
             'head_z' => [hz - f['head'].to_f, hz], 'section_x' => op['section_x'] || ox + op['x0'] + (op['x1'] - op['x0']) / 4.0,
             'wall_face_y' => woy, 'wall_t' => f['wall_t'], 'plan_z' => 1000, 'handing' => op['handing'],
             'gap_side' => gs, 'gap_head' => f['gap_head'], 'jamb' => f['jamb'], 'leaf_joint' => op['leaf']['joint'] || 10,
-            'scenes' => op['scenes'], 'cams' => op['cams']
+            'scenes' => op['scenes'], 'cams' => op['cams'], 'profile' => op['profile'] || 'clad',
+            'leaf_t' => op['leaf']['t'], 'leaf_step' => op['leaf']['step']
           }
         end
         o[:holes].each do |h|
