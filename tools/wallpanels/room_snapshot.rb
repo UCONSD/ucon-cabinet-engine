@@ -7,6 +7,7 @@
 # Wall-local s = the wall's x; the model origin of each wall is its origin_model_x along +x, face toward -y.
 require 'json'
 require_relative 'wall_panels'
+require_relative 'room_extras'
 
 module UCON
   module RoomSnapshot
@@ -63,8 +64,14 @@ module UCON
           'wf' => s['wall']['wf'] || [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]],
           'plan_wf' => plan_wf((room['plan'] || {})[w], len)
         }
+        # 2026-10-19 (AP Dining v2.0): the liner slot strips B / A glued to the panel back by the factory (D-sheets)
+        pb = -s['build_up']['face'].to_f + s['build_up']['panel_t'].to_f
+        sts = UCON::RoomExtras.strips(s, o, pb).map do |b|
+          { 'panel' => b[:name][/^\S+/], 'kind' => b[:name][/strip ([AB])/, 1], 's0' => b[:x][0], 's1' => b[:x][1], 'z0' => b[:z][0], 'z1' => b[:z][1] }
+        end
+        (snap['blocks'] ||= {})[w] = o[:blocks].map { |b| b.transform_keys(&:to_s).transform_values { |v| v.is_a?(Symbol) ? v.to_s : v } }
         o[:grid][:panels].each do |p|
-          snap['panels'] << { 'wall' => w, 'id' => p[:id], 's0' => p[:x0], 's1' => p[:x1], 'z0' => p[:z0], 'z1' => p[:z1],
+          snap['panels'] << { 'strips' => sts.select { |x| x['panel'] == p[:id] }.map { |x| x.reject { |k, _| k == 'panel' } }, 'wall' => w, 'id' => p[:id], 's0' => p[:x0], 's1' => p[:x1], 'z0' => p[:z0], 'z1' => p[:z1],
                               'kind' => p[:row], 'pos' => p[:pos], 'mitre_start' => p[:mitre_start] ? true : false, 'mitre_end' => p[:mitre_end] ? true : false,
                               'rebates' => (p[:rebates] || []).map do |x0, x1, z0, z1|
                                 d = s['openings'].find { |op| op['rebate'] && x0 >= op['x0'] - 200 && x1 <= op['x1'] + 200 }

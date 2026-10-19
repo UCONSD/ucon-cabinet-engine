@@ -1,5 +1,5 @@
 {
- "_about": "Wall-panel wall spec, AP Capital main level: DINING AREA (TM 252234, DWG REV 3 2026-09-30). mm, wall-local: x along the wall from its left end as seen from the room, z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821, 2026-10-19); from TM only the panel numbering. Andriy 2026-10-19: 'as the kitchen' (inside corners as Main Kitchen D: panels 10 short; A / D run through, B / C between their panel faces; joints 10 open, panels on the stone 260.35, 10 to the ceiling); window (wall B) as the kitchen windows, the opening opposite (wall C) as the ML Foyer openings; free spans split equally; horizontal joints aligned with the window band where possible. Long wall (TM 4), no openings. Lower 2755 as TM REV 3 (Andriy 2026-10-19, option A: the wide panels no taller than TM drew them); one row joint 3015.35 / 3025.35 all round the room.",
+ "_about": "Wall-panel wall spec, AP Capital main level: DINING AREA (TM 252234, DWG REV 3 2026-09-30). mm, wall-local: x along the wall from its left end as seen from the room, z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821, 2026-10-19); from TM only the panel numbering. Andriy 2026-10-19: 'as the kitchen' (inside corners as Main Kitchen D: panels 10 short; A / D run through, B / C panels 10 from the A / D panel faces; joints 10 open, panels on the stone 260.35, 10 to the ceiling); window (wall B) as the kitchen windows, the opening opposite (wall C) as the ML Foyer openings; free spans split equally; horizontal joints aligned with the window band where possible. Long wall (TM 4), no openings. Lower 2755 as TM REV 3 (Andriy 2026-10-19, option A: the wide panels no taller than TM drew them); one row joint 3015.35 / 3025.35 all round the room.",
  "id": "AP_MF_Dining_D",
  "model": "AP_MF_Dining_Room",
  "prefix": "DIN",
@@ -34,7 +34,7 @@
    ]
   ],
   "name": "Wall D",
-  "_wf": "world (model): origin = the wall's left end on its face (B / C: the A / D panel face, 44.3 in from the wall corner), x direction, room side normal (probe 821: walls group origin [8752.5, 62.5, 0])"
+  "_wf": "world (model): origin = the wall's left end on its face x direction, room side normal (probe 821: walls group origin [8752.5, 62.5, 0])"
  },
  "levels": {
   "subfloor": 0,
@@ -200,6 +200,8 @@
   "strip": 98,
   "strip_wide": 152,
   "seam_overrun": 20,
+  "solid_below": 150,
+  "_solid_below": "v2.0 (Andriy 2026-10-19): a frame whose openings are all under 150 (or whose stiles stand under 150 apart) is one solid plywood piece, if it fits a 4 x 8 sheet (wall_panels.rb solidify, rules S1 / S2)",
   "floor_gap": 260.35,
   "tier_joint": 2694,
   "max_length": 2438,

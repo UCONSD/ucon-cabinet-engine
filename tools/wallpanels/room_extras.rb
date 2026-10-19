@@ -36,6 +36,7 @@ module UCON
         list.concat(cabinet(spec, o, ffl, face)) if o['cabinet']
       end
       list.concat(strips(spec, out, pback))
+      (out[:blocks] || []).each { |b| list << box('blocks', "#{b[:id]} joint block MDF 6 | #{b[:joint]}", b[:x0], b[:x1], -6, 0, b[:z0], b[:z1]) }
       list.concat(stone(spec, out, ffl, face))
       list
     end
@@ -142,15 +143,21 @@ module UCON
         lo.each do |o|
           x0 = o['x0'].to_f; x1 = o['x1'].to_f; h = o['h'].to_f
           ztop = [p[:z1], h + 12.7].min
-          if (p[:x1] - (x0 - 10)).abs < 0.05 && p[:z0] < h          # pier panel left of the opening
-            ls << box(t, "#{p[:id]} strip B 6x34 | #{o['id']}", p[:x1] - 42.7, p[:x1] - 8.7, pback + 6, pback + 12, p[:z0], ztop)
-            ls << box(t, "#{p[:id]} strip A 6x17 | #{o['id']}", p[:x1] - 42.7, p[:x1] - 25.7, pback, pback + 6, p[:z0], ztop)
+          # 2026-10-19 (AP Dining v2.0): the panel edge at the jamb / head = the opening edge - panel_overlap (ML Foyer -10:
+          # 10 short of the jamb; Dining window +4: 4 into the opening); the head panel at head + head_gap, or head -
+          # panel_overlap for a window-type head (Dining B: 3108 = 3112 - 4)
+          po = (o['panel_overlap'] || -10).to_f
+          hz = o['head_gap'] ? h + o['head_gap'].to_f : h - po
+          zs = o['liner']['z0'] ? [p[:z0], o['liner']['z0'].to_f].max : p[:z0]
+          if (p[:x1] - (x0 + po)).abs < 0.05 && p[:z0] < h          # pier panel left of the opening
+            ls << box(t, "#{p[:id]} strip B 6x34 | #{o['id']}", p[:x1] - 42.7, p[:x1] - 8.7, pback + 6, pback + 12, zs, ztop)
+            ls << box(t, "#{p[:id]} strip A 6x17 | #{o['id']}", p[:x1] - 42.7, p[:x1] - 25.7, pback, pback + 6, zs, ztop)
           end
-          if (p[:x0] - (x1 + 10)).abs < 0.05 && p[:z0] < h          # pier panel right of the opening
-            ls << box(t, "#{p[:id]} strip B 6x34 | #{o['id']}", p[:x0] + 8.7, p[:x0] + 42.7, pback + 6, pback + 12, p[:z0], ztop)
-            ls << box(t, "#{p[:id]} strip A 6x17 | #{o['id']}", p[:x0] + 25.7, p[:x0] + 42.7, pback, pback + 6, p[:z0], ztop)
+          if (p[:x0] - (x1 - po)).abs < 0.05 && p[:z0] < h          # pier panel right of the opening
+            ls << box(t, "#{p[:id]} strip B 6x34 | #{o['id']}", p[:x0] + 8.7, p[:x0] + 42.7, pback + 6, pback + 12, zs, ztop)
+            ls << box(t, "#{p[:id]} strip A 6x17 | #{o['id']}", p[:x0] + 25.7, p[:x0] + 42.7, pback, pback + 6, zs, ztop)
           end
-          if p[:x0] >= x0 - 0.05 && p[:x1] <= x1 + 0.05 && (p[:z0] - (h + o['head_gap'].to_f)).abs < 0.05   # over the head
+          if p[:x0] >= x0 + po - 0.05 && p[:x1] <= x1 - po + 0.05 && (p[:z0] - hz).abs < 0.05   # over the head
             ls << box(t, "#{p[:id]} strip B 6x34 | #{o['id']} head", p[:x0], p[:x1], pback + 6, pback + 12, p[:z0] + 8.7, p[:z0] + 42.7)
             ls << box(t, "#{p[:id]} strip A 6x17 | #{o['id']} head", p[:x0], p[:x1], pback, pback + 6, p[:z0] + 25.7, p[:z0] + 42.7)
           end
@@ -196,9 +203,9 @@ module UCON
     end
 
     # ------------------------------------------------------------------ SketchUp side (ARMED only)
-    TAGS = { 'doors' => '04 Doors (TM)', 'liners' => '07 Liners', 'strips' => '07 Liners - strips B / A',
+    TAGS = { 'doors' => '04 Doors (TM)', 'liners' => '07 Liners', 'strips' => '07 Liners - strips B / A', 'blocks' => '07 Liners - joint blocks MDF 6 (UCON)',
              'stone' => '05 Stone plinth - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)' }.freeze
-    COLORS = { 'doors' => [235, 225, 200], 'liners' => [250, 250, 246], 'strips' => [210, 190, 150],
+    COLORS = { 'doors' => [235, 225, 200], 'liners' => [250, 250, 246], 'strips' => [210, 190, 150], 'blocks' => [120, 120, 120],
                'stone' => [214, 208, 198], 'cabinets' => [200, 205, 215] }.freeze
 
     def build(model, pieces, prefix, origin)

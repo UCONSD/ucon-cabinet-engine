@@ -344,14 +344,17 @@ module UCON
       # the band pieces: cut at EVERY vertical panel joint (seam centre + seam_overrun), at ceiling steps, <= a sheet
       # 2026-10-19 (AP Dining C): seam_overrun_at { "<joint left edge>" => overrun } turns single band cuts the other way
       ova = sf['seam_overrun_at'] || {}
-      cuts = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + (ova[f1(s0)] || sf['seam_overrun']).to_f) }.select { |c| c > EPS && c < len - EPS }
+      # 2026-10-19 (AP Dining B / C): subframe.ends_setback [start, end] - the frames stop that far from the wall ends
+      # (an inside corner where the neighbour wall's panels stand in front of this wall's ends); default none
+      e0, e1 = (sf['ends_setback'] || [0, 0]).map(&:to_f)
+      cuts = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + (ova[f1(s0)] || sf['seam_overrun']).to_f) }.select { |c| c > e0 + EPS && c < len - e1 - EPS }
       steps = (spec['wall']['ceil'] || []).map { |c| c[1].to_f }.select { |x| x > EPS && x < len - EPS }   # ceiling steps
       cuts = cuts.reject { |c| steps.any? { |x| (c - x).abs < ww } }   # a joint by a ceiling step: cut at the step
-      edges = ([0.0] + cuts + steps + [len]).uniq.sort
+      edges = ([e0] + cuts + steps + [len - e1]).uniq.sort
       edges = edges.each_cons(2).flat_map do |fa, fb|
         n = [((fb - fa) / lmax - EPS).ceil, 1].max
         (0...n).map { |k| r1(fa + (fb - fa) * k / n) }
-      end + [len]
+      end + [len - e1]
       # band_bottom 'local' (Main Kitchen, 2026-10-17): each piece starts over the openings it touches - a liner opening
       # at head + frame_setback, any other at its head; none: the tier joint. The pier frames below reach the highest
       # piece over them. 'global' (ML Foyer v1.0): one band bottom for the wall, LINTELs below it over closets / doors.
@@ -383,14 +386,14 @@ module UCON
 
       out = []
       piers = []
-      x = 0.0; prev = nil
+      x = e0; prev = nil
       ops.each { |o| piers << [x, o['x0'].to_f, prev, o] if o['x0'] > x + EPS; x = [x, o['x1'].to_f].max; prev = o }
-      piers << [x, len, prev, nil] if len > x + EPS
+      piers << [x, len - e1, prev, nil] if len - e1 > x + EPS
       # setback per jamb: the opening's own frame_setback (liner openings: clear of the strips B / A, as Main Kitchen
       # S07 / W2-WIN - frame edge 46 behind the panel edge), else the wall's jamb_setback
       piers.each do |a, b, ol, orr|
-        a2 = a > EPS ? r1(a + sb.(ol)) : a
-        b2 = b < len - EPS ? r1(b - sb.(orr)) : b
+        a2 = ol ? r1(a + sb.(ol)) : a
+        b2 = orr ? r1(b - sb.(orr)) : b
         # 2026-10-17 (Main Kitchen): a pier with two panel columns is cut at the joint between them, as the band
         pc = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + sf['seam_overrun']) }.select { |c| c > a2 + 2 * wn && c < b2 - 2 * wn }
         ([a2] + pc + [b2]).each_cons(2) do |pa, pb|
@@ -461,6 +464,30 @@ module UCON
     end
 
     # R1: one plywood strip across a narrow pier; its width code is "S" + the width in mm
+    # 2026-10-19 (AP Dining v2.0, Andriy: "these are better made of solid plywood"): subframe.solid_below = c (mm).
+    # A frame becomes ONE solid piece of plywood when its openings are too small to be worth it:
+    #   S1  the clear width between its two stiles is under c, or
+    #   S2  every clear gap between its rails (and between a rail and the frame edge) is under c,
+    # and S3 the piece nests: short side <= 606 (two across a 4 x 8 sheet), long side <= 2438. Openings under c save little plywood and
+    # cost parts, joints and assembly; a solid piece is one CNC part, stiffer, and takes a clip anywhere.
+    SHEET_MM = [1219.2, 2438.4].freeze
+    def solidify(spec, frs)
+      c = spec['subframe']['solid_below'] or return frs
+      c = c.to_f
+      frs.map do |f|
+        next f if f[:stiles].size < 2
+        w = f[:x1] - f[:x0]; h = f[:z1] - f[:z0]
+        # S3 (draft 4, A-703: the 1252 x 660 bands of A / D took a sheet each - 16 sheets instead of 11): the short side
+        # must leave room for a second strip across the sheet (<= half the sheet width less a kerf), else it stays a frame
+        fits = [w, h].min <= SHEET_MM[0] / 2 - 3 + EPS && [w, h].max <= SHEET_MM[1] + EPS
+        cw = f[:stiles][1][0] - f[:stiles][0][1]
+        zs = [f[:z0]] + f[:rails].sort_by(&:first).flat_map { |a, b, _| [a, b] } + [f[:z1]]
+        ch = zs.each_slice(2).map { |a, b| b - a }.max
+        next f unless fits && (cw < c - EPS || ch < c - EPS)
+        f.merge(stiles: [[f[:x0], f[:x1], "S#{f1(w)}"]], rails: [], solid_rule: cw < c - EPS ? 'S1' : 'S2')
+      end
+    end
+
     def solid(a, b, z0, z1, kind)
       { kind: kind, x0: a, x1: b, z0: z0, z1: z1, stiles: [[a, b, "S#{f1(b - a)}"]], rails: [] }
     end
@@ -578,7 +605,8 @@ module UCON
         # 2026-10-19 (AP Dining P05): the clip columns snap to the stiles of a real frame before a solid strip - a solid
         # covers its whole width anyway; snapping to its centre merged two columns onto a pier stile edge
         cols = base.map do |x|
-          st = backing.flat_map { |f| members(f).first(2) }.find { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS }
+          # 2026-10-19 (AP Dining v2.0 solid pieces): a solid piece never moves a column - the clip sits on it anywhere
+          st = backing.reject { |f| f[:stiles].size == 1 }.flat_map { |f| members(f).first(2) }.find { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS }
           next r1(x) unless st
           r1([[(st[:x0] + st[:x1]) / 2.0, p[:x0] + c['edge_min']].max, p[:x1] - c['edge_min']].min)
         end.uniq
@@ -670,6 +698,12 @@ module UCON
     def cut_list(spec, frs)
       parts = Hash.new(0)
       frs.each do |f|
+        if f[:stiles].size == 1 && f[:rails].empty?
+          # a solid piece: cut as a strip of its shorter side along the sheet length (2026-10-19, Dining band 1405 x 200)
+          a, b = [r1(f[:x1] - f[:x0]), r1(f[:z1] - f[:z0])].minmax
+          parts[["S#{f1(a)}", b]] += 1
+          next
+        end
         f[:stiles].each { |_, _, w| parts[[w, r1(f[:z1] - f[:z0])]] += 1 }
         ia = f[:stiles].first[1]; ib = f[:stiles].last[0]
         f[:rails].each { |_, _, w| parts[[w, r1(ib - ia)]] += 1 }
@@ -723,19 +757,47 @@ module UCON
     # ------------------------------------------------------------------ everything for one wall
     def build(spec)
       g = grid(spec)
-      frs = frames(spec, g)
+      frs = solidify(spec, frames(spec, g))
       cl = clips(spec, g, frs)
       hs = holes(g, cl)
       cut = cut_list(spec, frs)
       st = strips(spec, cut)
       { spec: spec, grid: g, frames: frs, clips: cl, holes: hs, cut: cut, strips: st, sheets: sheets(spec, st),
-        checks: checks(spec, g, frs, cl) }
+        blocks: joint_blocks(spec, g, frs), checks: checks(spec, g, frs, cl) }
     end
 
     # Andriy 2026-10-17: no raw wall may show through a joint. Every joint between two panels (and between a closet
     # panel and the cabinet top under it) must have a frame member behind it, except where the joint lies over an
     # opening (nothing behind). -> [{ joint: 'P60|P61', x0:, x1:, z0:, z1: }] the uncovered parts, sampled at 1 mm
-    def joint_gaps(spec, g, frs)
+    # 2026-10-19 (AP Dining v2.0, Andriy): with the liner slot strips B / A (Main Kitchen v1.0) the flange ends 25.2 behind
+    # the panel edge and the frame 46 behind it - a joint across that zone shows ~20 of wall. Each such joint gets a
+    # JOINT BLOCK MDF 6 glued to the wall by UCON (wall face .. 6; strip B is 10.3 off the wall): 20 past the joint each
+    # side, from 20 under the flange to the frame edge. -> [{ id:, joint:, x0:, x1:, z0:, z1: }] (none without strips)
+    def joint_blocks(spec, g, frs)
+      return [] unless spec['openings'].any? { |o| o['liner'] && o['liner']['strips'] }
+      mem = frs.flat_map { |f| members(f) }
+      ov = ->(a0, a1, b0, b1) { a0 < b1 - EPS && b0 < a1 - EPS }
+      n = 0
+      joint_gaps(spec, g, frs, blocks: []).map do |r|
+        vert = r[:joint].include?('|')        # side by side panels: a vertical joint, the gap runs along z
+        if vert
+          x0 = r[:x0] - 20; x1 = r[:x1] + 20
+          up = mem.select { |m| ov.(m[:x0], m[:x1], x0, x1) && m[:z0] >= r[:z1] - 1 - EPS && m[:z0] <= r[:z1] + 2 + EPS }.map { |m| m[:z0] }.min
+          dn = mem.select { |m| ov.(m[:x0], m[:x1], x0, x1) && m[:z1] <= r[:z0] + 1 + EPS && m[:z1] >= r[:z0] - 2 - EPS }.map { |m| m[:z1] }.max
+          z0 = dn || r[:z0] - 20; z1 = up || r[:z1] + 20
+        else
+          z0 = r[:z0] - 20; z1 = r[:z1] + 20
+          rt = mem.select { |m| ov.(m[:z0], m[:z1], z0, z1) && m[:x0] >= r[:x1] - 1 - EPS && m[:x0] <= r[:x1] + 2 + EPS }.map { |m| m[:x0] }.min
+          lf = mem.select { |m| ov.(m[:z0], m[:z1], z0, z1) && m[:x1] <= r[:x0] + 1 + EPS && m[:x1] >= r[:x0] - 2 - EPS }.map { |m| m[:x1] }.max
+          x0 = lf || r[:x0] - 20; x1 = rt || r[:x1] + 20
+        end
+        n += 1
+        { id: format('J%02d', n), joint: r[:joint], x0: r1(x0), x1: r1(x1), z0: r1(z0), z1: r1(z1) }
+      end
+    end
+
+    def joint_gaps(spec, g, frs, blocks: nil)
+      blocks = joint_blocks(spec, g, frs) if blocks.nil?
       j = spec['panels']['joint'].to_f
       mem = frs.flat_map { |f| members(f) }
       ops = spec['openings']
@@ -750,7 +812,7 @@ module UCON
         r
       end
       # beyond the wall end (a 45° corner's long point): the adjoining wall's frame / panel is behind it
-      cov = ->(x, z) { x < -EPS || x > len + EPS || void.(x, z) || (mem + fl).any? { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS && z >= m[:z0] - EPS && z <= m[:z1] + EPS } }
+      cov = ->(x, z) { x < -EPS || x > len + EPS || void.(x, z) || (mem + fl + blocks).any? { |m| x >= m[:x0] - EPS && x <= m[:x1] + EPS && z >= m[:z0] - EPS && z <= m[:z1] + EPS } }
       rects = []
       ps = g[:panels]
       ps.each do |p|

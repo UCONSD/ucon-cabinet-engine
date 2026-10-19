@@ -210,8 +210,33 @@ dfids = []
   dfids.concat(od[:frames].map { |f| f[:id] })
 end
 check('dining: frame ids S01..S42 in sequence', dfids, (1..42).map { |i| format('S%02d', i) })
+check('dining: walls as surveyed (Andriy) - A / D 7524, B / C 4830', %w[A B C D].map { |c| WP.load(File.join(DIR, 'walls', "AP_MF_Dining_#{c}.json"))['wall']['length'] }, [7524, 4830, 4830, 7524])
 lb = UCON::RoomExtras.pieces(WP.load(File.join(DIR, 'walls', 'AP_MF_Dining_B.json')), WP.build(WP.load(File.join(DIR, 'walls', 'AP_MF_Dining_B.json')))).select { |b| b[:name] =~ /B-WIN liner [LR] leg/ }
 check('dining B: window liner legs start on the stone top (liner.z0)', lb.map { |b| (b[:z][0] - 260.35).abs < 0.06 }.uniq, [true])
+
+# v2.0 (Andriy 2026-10-19): liner flange in the slot of strips B / A on the panel back (Main Kitchen v1.0), joint blocks MDF 6
+ovl = ->(a, b) { a[:x][0] < b[:x][1] - 0.05 && b[:x][0] < a[:x][1] - 0.05 && a[:z][0] < b[:z][1] - 0.05 && b[:z][0] < a[:z][1] - 0.05 }
+nst = 0; nbl = 0
+%w[B C].each do |c|
+  sd = WP.load(File.join(DIR, 'walls', "AP_MF_Dining_#{c}.json")); od = WP.build(sd)
+  pcs = UCON::RoomExtras.pieces(sd, od)
+  sa = pcs.select { |b| b[:name] =~ /strip A/ }; sb = pcs.select { |b| b[:name] =~ /strip B/ }
+  fl = pcs.select { |b| b[:name] =~ /liner .* flange/ }; bl = pcs.select { |b| b[:tag] == 'blocks' }
+  mem = od[:frames].flat_map { |f| WP.members(f) }.map { |m| { x: [m[:x0], m[:x1]], z: [m[:z0], m[:z1]] } }
+  nst += sa.size + sb.size; nbl += bl.size
+  check("dining #{c}: no frame member on a strip", (sa + sb).select { |b| mem.any? { |m| ovl.(m, b) } }.map { |b| b[:name] }, [])
+  check("dining #{c}: no frame member on a joint block", bl.select { |b| mem.any? { |m| ovl.(m, b) } }.map { |b| b[:name] }, [])
+  check("dining #{c}: the flange clear of strip A", fl.select { |f| sa.any? { |a| ovl.(f, a) } }.map { |f| f[:name] }, [])
+  check("dining #{c}: every pier / head strip B holds a flange", sb.reject { |b| fl.any? { |f| ovl.(f, b) } }.map { |b| b[:name] }, [])
+  check("dining #{c}: joint blocks on the wall face, under strip B (6 of 10.3)", bl.map { |b| b[:y] }.uniq, [[-6.0, 0.0]])
+end
+# v2.0 (Andriy 2026-10-19): frames with openings under 150 are one solid plywood piece (subframe.solid_below, S1 / S2)
+dsol = %w[B A C D].flat_map { |c| WP.build(WP.load(File.join(DIR, 'walls', "AP_MF_Dining_#{c}.json")))[:frames] }
+check('dining: solid pieces (S1 / S2 + the narrow S09)', dsol.select { |f| f[:stiles].size == 1 }.map { |f| f[:id] },
+      %w[S01 S02 S03 S04 S05 S06 S07 S08 S09 S23 S25 S26 S27 S28 S29 S30])   # A / D bands 660 high stay frames (S3: they do not nest)
+check('dining: every solid piece nests two across a 4 x 8 sheet', dsol.select { |f| f[:stiles].size == 1 }.reject { |f| d = [f[:x1] - f[:x0], f[:z1] - f[:z0]].sort; d[0] <= 606.65 && d[1] <= 2438.45 }.map { |f| f[:id] }, [])
+check('dining: every frame left has stiles 150+ apart', dsol.reject { |f| f[:stiles].size == 1 }.map { |f| f[:stiles][1][0] - f[:stiles][0][1] >= 150 }.uniq, [true])
+check('dining: 14 panels x strips B + A, 12 joint blocks', [nst, nbl], [28, 12])
 
 puts "#{$checks} checks, #{$fails.size} failures"
 $fails.each { |f| puts "FAIL #{f}" }

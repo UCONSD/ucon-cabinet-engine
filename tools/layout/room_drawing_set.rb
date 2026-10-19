@@ -1002,6 +1002,15 @@ module UCON
         a = p['s1'] - r['s1']; b = p['s1'] - r['s0']
         rect(px.(a), pz.(r['z1'] - p['z0']), (b - a) * k, (r['z1'] - r['z0']) * k, @l_sheet, stroke: MINOR, sw: 0.25, fill: [222, 222, 222])
       end
+      # 2026-10-19 (AP Dining v2.0): liner slot strips B / A on the back, glued by the factory (A-511) - B shown, A dashed under it
+      (p['strips'] || []).sort_by { |x| x['kind'] == 'B' ? 0 : 1 }.each do |x|
+        a = p['s1'] - x['s1']; b = p['s1'] - x['s0']
+        if x['kind'] == 'B'
+          rect(px.(a), pz.(x['z1'] - p['z0']), (b - a) * k, (x['z1'] - x['z0']) * k, @l_sheet, stroke: [120, 95, 55], sw: 0.3, fill: [232, 214, 178])
+        else
+          rect(px.(a), pz.(x['z1'] - p['z0']), (b - a) * k, (x['z1'] - x['z0']) * k, @l_sheet, stroke: [120, 95, 55], sw: 0.25, dash: true)
+        end
+      end
       rect(ox, pz.(h), w * k, h * k, @l_sheet, stroke: INK, sw: 0.75)
       hs = @s['holes'].select { |x| x['panel'] == p['id'] }
       mit = p['mitre_start'] || p['mitre_end']
@@ -1028,6 +1037,7 @@ module UCON
         text(f1(z), ox - 0.16, q - 0.06, @l_sheet, size: 6, font: MONO, align: :right)
       end
       pdim(pt2(ox, oy), pt2(ox + w * k, oy), 0.55, pt2(ox + w * k / 2, oy + 5), f1(w))
+      text('strips B / A', ox + w * k / 2, oy + 0.72, @l_sheet, size: 6.5, font: MONO, c: [120, 95, 55], align: :center) unless (p['strips'] || []).empty?
       pdim(pt2(ox, oy), pt2(ox, pz.(h)), 0.62, pt2(ox - 5, oy), f1(h))
       bub(pt2(ox + w * k - 0.1, pz.(h) - 0.55), qref('mitre')) if mit
     end
@@ -1070,7 +1080,8 @@ module UCON
       end
       box_text('BACK VIEW - the panel seen from the WALL side. X from the LEFT edge as seen from the back, Z from the BOTTOM edge. ' \
                "Recesses D#{f1(cl['hole_d'])} x #{f1(cl['panel_depth'])} for the #{cl['make']} male clip, made by the factory#{qref('drill') ? " (#{qref('drill')})" : ''}. " \
-               "Coordinates also in #{@s['files']['panels_csv'].sub('{rev}', sh['tags']['Revision'])}.",
+               "Coordinates also in #{@s['files']['panels_csv'].sub('{rev}', sh['tags']['Revision'])}." \
+               "#{rows.flatten.any? { |p| !(p['strips'] || []).empty? } ? ' STRIPS B / A (tan, A dashed under B) glued to the back by the factory at the liner edges, as Main Kitchen v1.0: A MDF 6 x 17 at 25.7..42.7 from the panel edge, B MDF 6 x 34 on it at 8.7..42.7, full length of the edge (A-511, A-512).' : ''}",
                WX + 0.45, WY + WH - 0.55, WW - 0.45, 0.5, @l_sheet, size: 8, c: RED)
     end
 

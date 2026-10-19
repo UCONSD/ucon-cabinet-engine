@@ -1,27 +1,27 @@
 {
- "_about": "Wall-panel wall spec, AP Capital main level: DINING AREA (TM 252234, DWG REV 3 2026-09-30). mm, wall-local: x along the wall from its left end as seen from the room, z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821, 2026-10-19); from TM only the panel numbering. Andriy 2026-10-19: 'as the kitchen' (inside corners as Main Kitchen D: panels 10 short; A / D run through, B / C between their panel faces; joints 10 open, panels on the stone 260.35, 10 to the ceiling); window (wall B) as the kitchen windows, the opening opposite (wall C) as the ML Foyer openings; free spans split equally; horizontal joints aligned with the window band where possible. Window wall (TM 1). Room-x = 4830 - 44.3 - x (x from the wall D panel face).",
+ "_about": "Wall-panel wall spec, AP Capital main level: DINING AREA (TM 252234, DWG REV 3 2026-09-30). mm, wall-local: x along the wall from its left end as seen from the room, z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821, 2026-10-19); from TM only the panel numbering. Andriy 2026-10-19: 'as the kitchen' (inside corners as Main Kitchen D: panels 10 short; A / D run through, B / C panels 10 from the A / D panel faces; joints 10 open, panels on the stone 260.35, 10 to the ceiling); window (wall B) as the kitchen windows, the opening opposite (wall C) as the ML Foyer openings; free spans split equally; horizontal joints aligned with the window band where possible. Window wall (TM 1). Room-x = 4830 - x.",
  "id": "AP_MF_Dining_B",
  "model": "AP_MF_Dining_Room",
  "prefix": "DIN",
  "wall": {
-  "length": 4741.4,
+  "length": 4830.0,
   "height": 3354,
   "ceil": [
    [
     0,
-    4741.4,
+    4830.0,
     3354
    ]
   ],
   "thickness": null,
   "_thickness": "not surveyed (the model holds the wall faces only)",
   "ends": [
-   "inside corner: x 0 = the face of the Wall D panels (44.3 off its wall), panels 10 short",
-   "inside corner: x 4741.4 = the face of the Wall A panels, panels 10 short"
+   "inside corner: the Wall D panels stand in front of x 0..44.3 - panels from 54.3 (10 to their face), frames from 44.3",
+   "inside corner: the Wall A panels stand in front of x 4785.7..4830.0 - panels to 4775.7, frames to 4785.7"
   ],
   "wf": [
    [
-    13538.2,
+    13582.5,
     62.5
    ],
    [
@@ -34,7 +34,7 @@
    ]
   ],
   "name": "Wall B",
-  "_wf": "world (model): origin = the wall's left end on its face (B / C: the A / D panel face, 44.3 in from the wall corner), x direction, room side normal (probe 821: walls group origin [8752.5, 62.5, 0])"
+  "_wf": "world (model): origin = the wall's left end on its face x direction, room side normal (probe 821: walls group origin [8752.5, 62.5, 0])"
  },
  "levels": {
   "subfloor": 0,
@@ -49,12 +49,12 @@
   },
   "stone_runs": [
    [
-    10.0,
-    261.7
+    54.3,
+    306.0
    ],
    [
-    4486.7,
-    4731.4
+    4531.0,
+    4775.7
    ]
   ]
  },
@@ -77,8 +77,8 @@
    {
     "id": "P01",
     "row": "U",
-    "x0": 10.0,
-    "x1": 261.7,
+    "x0": 54.3,
+    "x1": 306.0,
     "z0": 3025.35,
     "z1": 3344.0,
     "mitre_start": false,
@@ -87,8 +87,8 @@
    {
     "id": "P02",
     "row": "H",
-    "x0": 271.7,
-    "x1": 1666.7,
+    "x0": 316.0,
+    "x1": 1711.0,
     "z0": 3108.0,
     "z1": 3344.0,
     "mitre_start": false,
@@ -97,8 +97,8 @@
    {
     "id": "P03",
     "row": "H",
-    "x0": 1676.7,
-    "x1": 3071.7,
+    "x0": 1721.0,
+    "x1": 3116.0,
     "z0": 3108.0,
     "z1": 3344.0,
     "mitre_start": false,
@@ -107,8 +107,8 @@
    {
     "id": "P04",
     "row": "H",
-    "x0": 3081.7,
-    "x1": 4476.7,
+    "x0": 3126.0,
+    "x1": 4521.0,
     "z0": 3108.0,
     "z1": 3344.0,
     "mitre_start": false,
@@ -117,8 +117,8 @@
    {
     "id": "P05",
     "row": "U",
-    "x0": 4486.7,
-    "x1": 4731.4,
+    "x0": 4531.0,
+    "x1": 4775.7,
     "z0": 3025.35,
     "z1": 3344.0,
     "mitre_start": false,
@@ -127,8 +127,8 @@
    {
     "id": "P06",
     "row": "L",
-    "x0": 10.0,
-    "x1": 261.7,
+    "x0": 54.3,
+    "x1": 306.0,
     "z0": 260.35,
     "z1": 3015.35,
     "mitre_start": false,
@@ -137,8 +137,8 @@
    {
     "id": "P07",
     "row": "L",
-    "x0": 4486.7,
-    "x1": 4731.4,
+    "x0": 4531.0,
+    "x1": 4775.7,
     "z0": 260.35,
     "z1": 3015.35,
     "mitre_start": false,
@@ -153,26 +153,42 @@
   {
    "kind": "window",
    "id": "B-WIN",
-   "x0": 257.7,
-   "x1": 4490.7,
+   "x0": 302.0,
+   "x1": 4535.0,
    "h": 3112.0,
-   "_": "UCON survey (probe 821): opening room-x 295..4528 to the floor, head 3112 (wall-local 257.7..4490.7). Window trim profile in the model (Group#17, probe 820 / 821, at the LEFT jamb seen from the room): 0..22 deep on the jamb line, 22..62 deep 14 into the opening, 62..104 deep 26 into the opening; right jamb and head taken the same. No sill: the window runs to the floor (Andriy: nothing below, the liner down to the stone).",
+   "_": "UCON survey (probe 821): opening room-x 295..4528 to the floor, head 3112 (wall-local 302..4535). Window trim profile in the model (Group#17, probe 820 / 821, at the LEFT jamb seen from the room): 0..22 deep on the jamb line, 22..62 deep 14 into the opening, 62..104 deep 26 into the opening; right jamb and head taken the same. No sill: the window runs to the floor (Andriy: nothing below, the liner down to the stone).",
    "label": "WINDOW (UCON survey)",
    "short": "WINDOW",
    "liner": {
     "t": 6,
     "depth": 62,
-    "flange": 33,
-    "strips": null,
+    "flange": 21.2,
+    "strips": {
+     "B": [
+      6,
+      34
+     ],
+     "A": [
+      6,
+      17
+     ],
+     "from_edge": [
+      8.7,
+      42.7
+     ],
+     "by": "factory, glued to the panel back",
+     "_": "as Main Kitchen v1.0 (A-511 v1.0, Q8): strip A 6 x 17 on the panel back 25.7..42.7 behind the panel edge, strip B 6 x 34 on it 8.7..42.7 - the liner flange slides into the 6 slot between the panel back and strip B"
+    },
     "leg": [
      14,
      20
     ],
     "z0": 260.35,
+    "_v2": "v2.0 (Andriy 2026-10-19: 'no liner fixing to the panels - as the kitchen'): as Main Kitchen v1.0 - the flange slides into the slot of strips B / A glued to the panel back; flange 14 + 21.2 = 35.2 wide, ends 25.2 behind the panel edge (0.5 to strip A)",
     "_": "as Main Kitchen W2-WIN (probe 824: leg on the 3rd trim step 23..29, 64 deep against the 4th step, flange to 33 past the jamb, no strips): here the leg on the 14 step (14..20 into the opening), 62 deep against the 26 step; flange 6 behind the panel from the leg to the backing frame; legs down to the stone top (Andriy 2026-10-19)"
    },
-   "frame_setback": 33,
-   "_frame_setback": "as Main Kitchen W2-WIN: frame edge 33 past the jamb line (37 behind the panel edge, the panel 4 into the opening)",
+   "frame_setback": 42,
+   "_frame_setback": "v2.0 as Main Kitchen v1.0: frame edge 46 behind the panel edge, clear of the strips B / A (42.7) - 42 past the jamb line, the panel 4 into the opening",
    "panel_overlap": 4,
    "_panel_overlap": "pier / head panels 4 into the opening = 10 shadow to the liner leg (kitchen: 13 / leg 23)"
   }
@@ -181,6 +197,8 @@
   "strip": 98,
   "strip_wide": 152,
   "seam_overrun": 20,
+  "solid_below": 150,
+  "_solid_below": "v2.0 (Andriy 2026-10-19): a frame whose openings are all under 150 (or whose stiles stand under 150 apart) is one solid plywood piece, if it fits a 4 x 8 sheet (wall_panels.rb solidify, rules S1 / S2)",
   "floor_gap": 260.35,
   "tier_joint": 2694,
   "max_length": 2438,
@@ -193,6 +211,11 @@
   "jamb_setback": 0,
   "first_id": 1,
   "band_bottom": "local",
+  "ends_setback": [
+   44.3,
+   44.3
+  ],
+  "_ends_setback": "inside corners (Andriy 2026-10-19): the A / D panels stand 22.3..44.3 in front of this wall's ends - its frames stop at 44.3",
   "_": "as Main Kitchen: frames from the stone top (panel level), band over the openings, pier frames"
  },
  "clips": {

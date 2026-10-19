@@ -1,5 +1,5 @@
 {
- "_about": "AP Capital main level, DINING AREA (TM 252234, DWG REV 3) - the ROOM for the drawing standard (UCON::RoomSet): wall JSONs AP_MF_Dining_B / A / C / D.json (order = TM elevations 1-4), sheet texts with {{tokens}}. v1.0 FOR REVIEW. Survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821); built by ARMED 826b (2026-10-19). From TM only the panel numbering.",
+ "_about": "AP Capital main level, DINING AREA (TM 252234, DWG REV 3) - the ROOM for the drawing standard (UCON::RoomSet): wall JSONs AP_MF_Dining_B / A / C / D.json (order = TM elevations 1-4), sheet texts with {{tokens}}. v2.0 FOR REVIEW (v1.0 issued 10.19.26; v2.0: walls B / C 4830, liner slot strips B / A + joint blocks). Survey = ~/Documents/AP_MF_Dining_Room.skp (probe 820 / 821); built by ARMED 826b (2026-10-19). From TM only the panel numbering.",
  "id": "AP_DIN",
  "model": "AP_MF_Dining_Room",
  "walls": [
@@ -23,16 +23,16 @@
    "Drafter": "AD",
    "CheckedBy": " ",
    "Issue": "For review",
-   "Revision": "1.0",
+   "Revision": "2.0",
    "IssueDate": "10.19.26",
    "Status": "FOR REVIEW",
    "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
    "Rev1": "1.0",
    "Rev1Desc": "Issued for review",
    "Rev1Date": "10.19.26",
-   "Rev2": " ",
-   "Rev2Desc": " ",
-   "Rev2Date": " ",
+   "Rev2": "2.0",
+   "Rev2Desc": "Reissued for review",
+   "Rev2Date": "10.19.26",
    "Rev3": " ",
    "Rev3Desc": " ",
    "Rev3Date": " ",
@@ -80,7 +80,7 @@
     "Q1",
     "A-301..A-304 A-701",
     "TM",
-    "Panels to the UCON survey: walls A / D {{@s['walls'][1]['L']}} x {{@s['walls'][1]['ceil'][0][2]}}, walls B / C {{@s['walls'][0]['L']}} between the A / D panel faces; joints 10; free spans split equally. Sizes per A-701 replace your REV 3 (order 260336). Numbers: P01-P07 = your elevation 1 (1-7), P08-P19 = elevation 2 (1-12), P20-P26 = elevation 3 (1-7), P27-P38 = elevation 4 (1-12). Your drawing: walls 2 / 4 1204 / 4 x 1244 / 1204, lower 2755, upper 309. Please confirm."
+    "Panels to the UCON survey: walls A / D {{@s['walls'][1]['L']}}, walls B / C {{@s['walls'][0]['L']}}, height {{@s['walls'][1]['ceil'][0][2]}}; joints 10; free spans split equally. Sizes per A-701 replace your REV 3 (order 260336). Numbers: P01-P07 = your elevation 1 (1-7), P08-P19 = elevation 2 (1-12), P20-P26 = elevation 3 (1-7), P27-P38 = elevation 4 (1-12). Your drawing: walls 2 / 4 1204 / 4 x 1244 / 1204, lower 2755, upper 309. Please confirm."
    ],
    [
     "Q2",
@@ -104,13 +104,13 @@
     "Q5",
     "A-511 A-302",
     "TM",
-    "Window (wall B), as our Main Kitchen windows: MDF {{ln('B-WIN')['t']}} L-liner, leg on the 2nd step of the window trim ({{ln('B-WIN')['leg'][0]}} into the opening, {{ln('B-WIN')['depth']}} deep), flange behind the panel to the backing frame, corners mitred 45; sides and head only - the window runs to the floor, the legs stop on the stone. Panels {{pn('P06')['s1'] - op('B-WIN')['s0']}} over the opening edge. Can you make the liners? Please comment or propose your detail."
+    "Window (wall B), as our Main Kitchen windows: MDF {{ln('B-WIN')['t']}} L-liner, leg on the 2nd step of the window trim ({{ln('B-WIN')['leg'][0]}} into the opening, {{ln('B-WIN')['depth']}} deep), flange {{ln('B-WIN')['flange'] + ln('B-WIN')['leg'][0]}} behind the panel into a slot of two MDF 6 strips glued to the panel back - B 6 x 34 + A 6 x 17, as our Main Kitchen v1.0 (CHANGED in v2.0: please glue the strips per the D-sheets), corners mitred 45; sides and head only - the window runs to the floor, the legs stop on the stone. Panels {{pn('P06')['s1'] - op('B-WIN')['s0']}} over the opening edge. Can you make the liners? Please comment or propose your detail."
    ],
    [
     "Q6",
     "A-512 A-303",
     "TM",
-    "Opening (wall C), as our ML Foyer openings: MDF {{ln('C-OPN')['t']}} L-liner against the bare reveal, {{ln('C-OPN')['depth']}} past the wall face, flange {{ln('C-OPN')['flange']}} to the backing frame, corners mitred 45; pier panels {{op('C-OPN')['s0'] - pn('P25')['s1']}} short of the jamb line, band {{z0('P22') - oh('C-OPN')}} above the head. Please confirm."
+    "Opening (wall C), as our ML Foyer openings: MDF {{ln('C-OPN')['t']}} L-liner against the bare reveal, {{ln('C-OPN')['depth']}} past the wall face, flange {{ln('C-OPN')['flange']}} behind the panel into the slot of strips B 6 x 34 + A 6 x 17 glued to the panel back by the factory (CHANGED in v2.0, D-sheets), corners mitred 45; pier panels {{op('C-OPN')['s0'] - pn('P25')['s1']}} short of the jamb line, band {{z0('P22') - oh('C-OPN')}} above the head. Please confirm."
    ],
    [
     "Q7",
@@ -135,6 +135,12 @@
     "A-511",
     "Site",
     "Window trim profile measured at the left jamb (seen from the room) and modelled on both jambs and the head (Andriy 2026-10-19). To be checked on site before the liners are cut."
+   ],
+   [
+    "Q11",
+    "A-511 A-512 D-sheets",
+    "TM",
+    "Liner fixing (NEW in v2.0): we draw strips B 6 x 34 + A 6 x 17 glued to the panel backs at the window / opening edges, the liner flange in the slot between them (as our Main Kitchen v1.0). Alternative under study: separate liner pieces fixed on site by UCON instead of the strips. Please comment which you prefer, or propose your detail."
    ]
   ],
   "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
@@ -149,11 +155,11 @@
      false
     ],
     [
-     "Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703), from the stone top {{@s['levels']['floor_gap']}}; a frame member or a liner flange behind every panel joint - no raw wall in a joint. Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses by the factory per the D-sheets (BACK VIEW), frame holes by UCON CNC.",
+     "Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703), from the stone top {{@s['levels']['floor_gap']}}; a frame member, a liner flange or a joint block MDF 6 (UCON) behind every panel joint - no raw wall in a joint. Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses by the factory per the D-sheets (BACK VIEW), frame holes by UCON CNC.",
      false
     ],
     [
-     "Window (wall B) and opening (wall C): MDF 6 L-liners as Main Kitchen / ML Foyer (A-511, A-512, Q5 - Q7).",
+     "Window (wall B) and opening (wall C): MDF 6 L-liners as Main Kitchen / ML Foyer; v2.0: the flange in a slot of strips B / A glued to the panel back by the factory, as Main Kitchen v1.0 (A-511, A-512, D-sheets, Q5 - Q7).",
      true
     ],
     [
@@ -378,7 +384,7 @@
     ],
     "notes": [
      [
-      "UCON proposal, as Main Kitchen W2-WIN (Andriy 2026-10-19): L-liner MDF {{ln('B-WIN')['t']}} lacquered, its leg on the 2nd step of the window trim ({{ln('B-WIN')['leg'][0]}} into the opening, {{ln('B-WIN')['depth']}} deep, against the next step), {{bu['face']}} out to the panel face; flange {{ln('B-WIN')['flange'] + ln('B-WIN')['leg'][0]}} wide behind the panel, from the leg to the backing frame - no raw wall in the joints, no strips on the panel back; corners mitred 45. Panel edges {{pn('P06')['s1'] - op('B-WIN')['s0']}} over the opening = shadow 10 to the leg. Sides and head only: the window runs to the floor, the legs stop on the stone top {{ln('B-WIN')['z0']}}, nothing below (Andriy). Q5.",
+      "UCON proposal, as Main Kitchen W2-WIN (Andriy 2026-10-19): L-liner MDF {{ln('B-WIN')['t']}} lacquered, its leg on the 2nd step of the window trim ({{ln('B-WIN')['leg'][0]}} into the opening, {{ln('B-WIN')['depth']}} deep, against the next step), {{bu['face']}} out to the panel face; flange {{ln('B-WIN')['flange'] + ln('B-WIN')['leg'][0]}} wide behind the panel, from the leg; CHANGED in v2.0 (Andriy 2026-10-19), as Main Kitchen v1.0: the flange slides into a 6 slot formed by two MDF 6 strips glued to the panel back by the factory - A 6 x 17 at 25.7..42.7 and B 6 x 34 at 8.7..42.7 behind the panel edge (D-sheets); the backing frame 46 behind the panel edge. Where a panel joint crosses the strip zone UCON glues a JOINT BLOCK MDF 6 to the wall - no raw wall in the joints. Corners mitred 45. Panel edges {{pn('P06')['s1'] - op('B-WIN')['s0']}} over the opening = shadow 10 to the leg. Sides and head only: the window runs to the floor, the legs stop on the stone top {{ln('B-WIN')['z0']}}, nothing below (Andriy). Q5.",
       true
      ],
      "Window trim profile from the UCON model: both jambs and the head, nothing along the floor (Q10). Drawn from the model (scenes DIN-06, DIN-09)."
@@ -552,7 +558,7 @@
     ],
     "notes": [
      [
-      "UCON proposal, as the ML Foyer openings (Andriy 2026-10-19): L-liner MDF {{ln('C-OPN')['t']}} lacquered, leg against the bare reveal, {{ln('C-OPN')['depth']}} past the wall face; flange {{ln('C-OPN')['flange']}} wide behind the panel, from the jamb line to the backing frame - no raw wall in the joints, no strips; corners mitred 45. Pier panel edges {{op('C-OPN')['s0'] - pn('P25')['s1']}} short of the jamb line; the band over the opening {{z0('P22') - oh('C-OPN')}} above the head. Q6.",
+      "UCON proposal, as the ML Foyer openings (Andriy 2026-10-19): L-liner MDF {{ln('C-OPN')['t']}} lacquered, leg against the bare reveal, {{ln('C-OPN')['depth']}} past the wall face; flange {{ln('C-OPN')['flange']}} wide behind the panel from the jamb line; CHANGED in v2.0 (Andriy 2026-10-19), as Main Kitchen v1.0: the flange slides into the slot of strips B 6 x 34 + A 6 x 17 glued to the panel back by the factory (D-sheets), the backing frame 46 behind the panel edge; JOINT BLOCKS MDF 6 by UCON on the wall where a joint crosses the strip zone. Corners mitred 45. Pier panel edges {{op('C-OPN')['s0'] - pn('P25')['s1']}} short of the jamb line; the band over the opening {{z0('P22') - oh('C-OPN')}} above the head. Q6.",
       true
      ],
      "Drawn from the model (scenes DIN-05, DIN-09)."
