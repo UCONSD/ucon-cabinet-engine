@@ -19,6 +19,16 @@ module UCON
     WP = UCON::WallPanels
     module_function
 
+    # TM back casing, U profile (REC-LAU DWG rev.3, probe 511): plan polygon relative to the opening edge xe (dir +1 = the
+    # left jamb, -1 = the right), y from the wall back face wt; extruded z0..z1 (:xy piece)
+    CASING_U = [[-35.2, 9.5], [-35.2, -0.5], [-30.2, -0.5], [-30.2, 2.5], [31.3, 2.5], [31.3, -8.7], [34.3, -8.7], [34.3, 9.5]].freeze
+    def casing_u(tag, name, xe, dir, wt, z0, z1)
+      pts = CASING_U.map { |dx, dy| [WP.r1(xe + dir * dx), WP.r1(wt + dy)] }
+      b = box(tag, name, pts.map(&:first).min, pts.map(&:first).max, pts.map(&:last).min, pts.map(&:last).max, z0, z1)
+      b[:xy] = pts
+      b
+    end
+
     def box(tag, name, x0, x1, y0, y1, z0, z1)
       { tag: tag, name: name, x: [x0, x1].minmax.map { |v| WP.r1(v) }, y: [y0, y1].minmax.map { |v| WP.r1(v) },
         z: [z0, z1].minmax.map { |v| WP.r1(v) } }
@@ -68,13 +78,20 @@ module UCON
         box(t, "#{id} frame jamb R", fb - jt, fb, jy0, jy1, ffl, hz),
         box(t, "#{id} frame head", fa, fb, jy0, jy1, hz - jt, hz),
         box(t, "#{id} head stop", fa + jt, fb - jt, -31.8, 23.2, lt, hz - jt),
-        box(t, "#{id} stop L", fa + jt, fa + jt + 32, -30.3, 13.7, ffl, lt),
-        box(t, "#{id} stop R", fb - jt - 32, fb - jt, -30.3, 13.7, ffl, lt),
-        box(t, "#{id} back casing L", x0 - 35.2, x0 + 34.3, wt - 8.7, wt + 9.5, ffl, hz + 5.1),
-        box(t, "#{id} back casing R", x1 - 34.3, x1 + 35.2, wt - 8.7, wt + 9.5, ffl, hz + 5.1),
+        # 2026-10-20 (AP Bedroom 3, Andriy: "the U-shape profile at the back of the wall, as our other drawings"): the
+        # back casings are TM's U PROFILE (REC-LAU DWG rev.3, probe 511): a cap 69.5 wide, 10 thick over the jamb end,
+        # a 5 leg on the wall back face and a 3 leg hooked over the jamb - was a plain 69.5 x 18.2 block here
+        casing_u(t, "#{id} back casing L (U profile)", x0, 1, wt, ffl, hz + 5.1),
+        casing_u(t, "#{id} back casing R (U profile)", x1, -1, wt, ffl, hz + 5.1),
         box(t, "#{id} back casing head", x0 - 35.2, x1 + 35.2, wt - 7.2, wt + 10.0, hz + 5.1, hz + 74.6)
       ]
-      la = fa + jt + 35; lb = fb - jt - 35     # leaf edges 3 clear of the stops (DK1 stop side: O - 74.3); FOYER: stops both sides
+      # stops: FOYER (double) both sides; 2026-10-20 (AP Bedroom 3, Andriy "the door is drawn wrong - look at the CAD"):
+      # opening.stops = 'hinge' - TM rev 5 / REC-LAU D01 profile (DWG rev.3, probe 511): ONE stop (hinge insert 32) on the
+      # hinge side, the leaf 3 clear of the bare jamb on the latch side
+      hs = o['stops'] == 'hinge' ? (o['hinge'] == 'left' ? [:l] : [:r]) : %i[l r]
+      ls << box(t, "#{id} stop L#{hs == [:l] ? ' (hinge insert)' : ''}", fa + jt, fa + jt + 32, -30.3, 13.7, ffl, lt) if hs.include?(:l)
+      ls << box(t, "#{id} stop R#{hs == [:r] ? ' (hinge insert)' : ''}", fb - jt - 32, fb - jt, -30.3, 13.7, ffl, lt) if hs.include?(:r)
+      la = fa + jt + (hs.include?(:l) ? 35 : 3); lb = fb - jt - (hs.include?(:r) ? 35 : 3)   # leaf edges 3 clear of the stop / the jamb
       ci = (o['clad_inset'] || 55.5).to_f; ca = x0 + ci; cb = x1 - ci
       jn = (o['leaf']['joint'] || 10).to_f / 2   # cladding joint at the centre (leaves 3 apart)
       if n == 2
@@ -218,9 +235,9 @@ module UCON
 
     # ------------------------------------------------------------------ SketchUp side (ARMED only)
     TAGS = { 'doors' => '04 Doors (TM)', 'liners' => '07 Liners', 'strips' => '07 Liners - strips B / A', 'blocks' => '07 Liners - joint blocks MDF 6 (UCON)',
-             'stone' => '05 Stone plinth - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)', 'tm' => '09 TM furniture (ref)', 'counter' => '10 Countertop - by others (ref)', 'wood' => '03 Panels - wood blocking 2x4 flat (UCON)' }.freeze
+             'stone' => '05 Stone plinth - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)', 'tm' => '09 TM furniture (ref)', 'counter' => '10 Countertop - by others (ref)', 'wood' => '03 Panels - wood blocking 2x4 flat (UCON)', 'wallref' => '00 Wall body - reference (not surveyed)' }.freeze
     COLORS = { 'doors' => [235, 225, 200], 'liners' => [250, 250, 246], 'strips' => [210, 190, 150], 'blocks' => [120, 120, 120],
-               'stone' => [214, 208, 198], 'cabinets' => [200, 205, 215], 'tm' => [205, 200, 190], 'counter' => [150, 150, 150], 'wood' => [222, 184, 135] }.freeze
+               'stone' => [214, 208, 198], 'cabinets' => [200, 205, 215], 'tm' => [205, 200, 190], 'counter' => [150, 150, 150], 'wood' => [222, 184, 135], 'wallref' => [205, 205, 205] }.freeze
     ALPHA = { 'counter' => 0.35 }.freeze   # 2026-10-19 (AP Office): the countertop by others drawn see-through
 
     def build(model, pieces, prefix, origin)
@@ -234,7 +251,11 @@ module UCON
         ps.each do |p|
           g = grp.entities.add_group; g.name = p[:name]; g.layer = tag; g.material = mat
           x0, x1 = p[:x]; y0, y1 = p[:y]; z0, z1 = p[:z]
-          if p[:yz]
+          if p[:xy]
+            f = g.entities.add_face(p[:xy].map { |a, b| Geom::Point3d.new(a.mm, b.mm, z0.mm) })
+            f.reverse! if f.normal.z < 0
+            f.pushpull((z1 - z0).mm)
+          elsif p[:yz]
             f = g.entities.add_face(p[:yz].map { |b, c| Geom::Point3d.new(x0.mm, b.mm, c.mm) })
             f.reverse! if f.normal.x < 0
             f.pushpull((x1 - x0).mm)

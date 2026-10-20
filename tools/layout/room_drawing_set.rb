@@ -814,7 +814,13 @@ module UCON
       xm = (dr['open_x'][0] + dr['open_x'][1]) / 2.0
       # a door opening TOWARD the panels (tm_pull, AP SAFE / AV 2026-10-17): centre the view so the swing fits in front
       rsw = dr['clad_x'][1] - dr['clad_x'][0]
-      yc = pull ? yw + (dr['wall_t'].to_f - bu['face'] - rsw) / 2.0 : yw + 380
+      # 2026-10-20 (AP Bedroom 3, Andriy: "the swing is not drawn on the plan section"): a door opening AWAY from the
+      # panels (DK1 / D01 profile) swings into the room behind the wall - the view is centred so that swing fits too
+      jt = dr['head_z'][1] - dr['head_z'][0]
+      hst = dr['stops'] == 'hinge' ? [dr['hinge'] == 'left' ? 'left' : 'right'] : %w[left right]   # sides with a stop (RoomExtras.door)
+      lla = dr['frame_x'][0] + jt + (hst.include?('left') ? 35 : 3); llb = dr['frame_x'][1] - jt - (hst.include?('right') ? 35 : 3)   # leaf edges
+      lback = yw + 13.7                                                     # leaf back face (RoomExtras.door: y -29.3..13.7)
+      yc = pull ? yw + (dr['wall_t'].to_f - bu['face'] - rsw) / 2.0 : (lback + (llb - lla) - bu['face']) / 2.0
       pv = cropped(skp, dr['scenes']['plan'], dr['cams']['plan'], [xm, yc, zc], qp, 6.6, 4.6, 1.0 / ps, PLAN)
       # swing on the plan (Andriy 2026-10-17): the leaf open at 90 degrees, dashed, and its arc from the latch edge;
       # pivot = the hinge edge of the leaf face; tm_pull opens into the room the panels face (-y)
@@ -826,6 +832,17 @@ module UCON
         arc = (0..18).map { |i| t = Math::PI / 2 * i / 18; pp.(hx + ux * rsw * Math.cos(t), py - rsw * Math.sin(t)) }
         arc.each_cons(2) { |m, n| line(m.x, m.y, n.x, n.y, @l_sheet, w: 0.35, c: INK2, dash: true) }
         text('SWING', a1.x + (ux.positive? ? 0.08 : -0.08), a1.y - 0.04, @l_sheet, size: 6, font: MONO, c: INK2, align: ux.positive? ? :left : :right)
+      else
+        # opens AWAY from the panels: pivot = the hinge edge of the leaf back, the leaf open at 90 degrees into +y
+        # (behind the wall), dashed, and its arc from the latch edge - the same drawing as the pull door, mirrored in y
+        rl = llb - lla
+        hx = dr['hinge'] == 'right' ? llb : lla; ux = dr['hinge'] == 'right' ? -1 : 1
+        pp = ->(x, y) { pv.model_to_paper_point(P(x, y, zc)) }
+        a0 = pp.(hx, lback); a1 = pp.(hx, lback + rl)
+        line(a0.x, a0.y, a1.x, a1.y, @l_sheet, w: 0.5, c: INK2, dash: true)
+        arc = (0..18).map { |i| t = Math::PI / 2 * i / 18; pp.(hx + ux * rl * Math.cos(t), lback + rl * Math.sin(t)) }
+        arc.each_cons(2) { |m, n| line(m.x, m.y, n.x, n.y, @l_sheet, w: 0.35, c: INK2, dash: true) }
+        text('SWING', a1.x + (ux.positive? ? 0.08 : -0.08), a1.y + 0.10, @l_sheet, size: 6, font: MONO, c: INK2, align: ux.positive? ? :left : :right)
       end
       x0 = dr['open_x'][0]; x1 = dr['open_x'][1]; yf0 = yw - bu['face']; yb = yw + dr['wall_t']
       kit = P(xc, -9000, zc)
@@ -866,7 +883,9 @@ module UCON
       x0, y0 = cells[0]; q = pt2(x0 + cw / 2, y0 + 0.15 + 1.4)
       hz = (cz1 + o['z1']) / 2
       hv = cropped(skp, dr['scenes']['section'], dr['cams']['section'], [xc, yw + 60, hz], q, cw - 1.0, 2.8, s5, SIDE)
-      sm = seam_of(w['id'])
+      # 2026-10-20 (AP Bedroom 3): a wall with full-height panels has no row seam - the joint over the door is the cladding
+      # top + the leaf joint (P06 starts there)
+      sm = seam_of(w['id']) || [cz1, cz1 + dr['leaf_joint'].to_f]
       vdim(hv, P(xc, yf0, cz1), P(xc, yf0, sm[1]), 0.30, kit.(cz1), sm[1] - cz1)
       vdim(hv, P(xc, yw + 76, dr['head_z'][1]), P(xc, yw + 76, o['z1']), 0.30, but.(o['z1']), o['z1'] - dr['head_z'][1])
       zt = hz + 120

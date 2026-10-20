@@ -108,7 +108,7 @@ module UCON
             'head_z' => [hz - f['head'].to_f, hz], 'section_x' => op['section_x'] || ox + op['x0'] + (op['x1'] - op['x0']) / 4.0,
             'wall_face_y' => woy, 'wall_t' => f['wall_t'], 'plan_z' => 1000, 'handing' => op['handing'],
             'gap_side' => gs, 'gap_head' => f['gap_head'], 'jamb' => f['jamb'], 'leaf_joint' => op['leaf']['joint'] || 10,
-            'scenes' => op['scenes'], 'cams' => op['cams'], 'profile' => op['profile'] || 'clad',
+            'scenes' => op['scenes'], 'cams' => op['cams'], 'profile' => op['profile'] || 'clad', 'stops' => op['stops'] || 'both',
             'leaf_t' => op['leaf']['t'], 'leaf_step' => op['leaf']['step']
           }
         end

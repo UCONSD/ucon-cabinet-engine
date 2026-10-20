@@ -1,0 +1,643 @@
+{
+ "_about": "AP Capital second floor, BEDROOM 3 wall to the Bathroom and the Safe (BR3) - the ROOM for the drawing standard (UCON::RoomSet): wall JSON AP_SF_Bedroom3.json (one wall), sheet texts with {{tokens}}. v1.0 FOR REVIEW. Survey = ~/Documents/AP_SF_Bedroom _V0.1.skp (probes 910b / 910c, 2026-10-20). TM order 2525258 / 252258, DWG REV 1 (Gmail 'DWG file' 2026-10-12, У2 428 836 b), PDF REV 2 (Drive). Andriy 2026-10-20: one wall, TM layout 1-8 full height, stone baseboard as the main level (G-002 Q1), safe door checked by eye.",
+ "id": "AP_SF_BR3_Room",
+ "model": "AP_SF_Bedroom _V0.1",
+ "walls": [
+  "AP_SF_Bedroom3.json"
+ ],
+ "ends": {
+  "BR3": [
+   "wall corner (panels 10 short)",
+   "wall corner (panels 10 short)"
+  ]
+ },
+ "files": {
+  "panels_csv": "AP_BR3_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_BR3_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_BR3_backing_cut_list.csv"
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 252258",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.0",
+   "IssueDate": "10.20.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.0",
+   "Rev1Desc": "Issued for review",
+   "Rev1Date": "10.20.26",
+   "Rev2": " ",
+   "Rev2Desc": " ",
+   "Rev2Date": " ",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "cover_title": "BEDROOM 3 · WALL TO BATHROOM AND SAFE · WALL PANELS, BACKING FRAMES, CLIPS, TM DOOR D01, SAFE DOOR",
+  "scenes": {
+   "cover": "BR3-07 Cover ISO",
+   "iso": "BR3-07 Cover ISO",
+   "iso_frames": "BR3-08 3D Frames ISO"
+  },
+  "existing_groups": [
+   [
+    "BR3"
+   ]
+  ],
+  "room_side": "BEDROOM 3",
+  "iso_title": "FINISHED PANELS, DOOR D01 AND SAFE DOOR",
+  "finish_by": "TM",
+  "opening_labels": {},
+  "qref": {
+   "drill": "Q9",
+   "door": "Q6",
+   "heads": null,
+   "stone": "Q1",
+   "panel_size": "Q3",
+   "mitre": null
+  },
+  "wall_t_note": " (TM door section - not surveyed, Q6)",
+  "questions": [
+   [
+    "Q1",
+    "A-101 A-301 A-701",
+    "TM",
+    "Baseboard: your DWG 252258 REV 1 has no baseboard - panels from 5 to 3193 above the floor. On site the walls are prepared for a STONE baseboard (by others), as Main Kitchen / ML Foyer / Dining: stone top {{stone}} above the subfloor (FFL {{ffl}} + 8\"). We draw the panels standing on the stone, joint 10 under the ceiling: {{h('P03')}} high (your 3188). Please confirm the panel heights."
+   ],
+   [
+    "Q2",
+    "A-101",
+    "Site",
+    "Stone baseboard by others: {{stn['t']}} thick, top {{stone}} above the subfloor, notch {{stn['notch']}} x {{stn['notch']}}, back cut {{stn['back_cut']}} in front of the door frame; none under the safe cabinet doors (they run to FFL + 10). Finished floor taken at {{ffl}} above the subfloor (as the main level) - please confirm FFL in Bedroom 3."
+   ],
+   [
+    "Q3",
+    "A-301 A-701",
+    "TM",
+    "Panel layout: your DWG REV 1 shows two layouts - 'Bedroom 3 wall to Bathroom and Safe' (horizontal joint at 2383 / 2393) and 'Bedroom 3' panels 1-8 (full height). We use 1-8, full height, sized to the UCON survey (wall {{@s['walls'][0]['L']}} x {{@s['walls'][0]['ceil'][0][2]}}; your 5781 x 3195): P01 {{w('P01')}}, P03 {{w('P03')}}, P04 {{w('P04')}}, P05 {{w('P05')}}, P07 {{w('P07')}} x {{h('P03')}}; over the safe ONE piece P02 {{w('P02')}} x {{h('P02')}} (your PDF REV 2: 'this panel should be one piece'); over the door P06 {{w('P06')}} x {{h('P06')}}. Your panel 8 (base under the safe door) is dropped - the stone runs there. Sizes per A-701 replace your cut list."
+   ],
+   [
+    "Q4",
+    "A-301 A-601",
+    "TM",
+    "Safe niche per UCON survey {{ow('SAFE')}} x {{oh('SAFE') - op('SAFE')['z0']}} from {{op('SAFE')['z0']}} above the subfloor, {{op('SAFE')['depth'] || 663}} deep. Instead of your push door on a 290 base: an ordinary TWO-DOOR cabinet WITHOUT a back panel, only two back rails to hold it together in transport (a technical cabinet, as for an oven). Carcass = niche less 3 on every side: {{ow('SAFE') - 6}} x {{oh('SAFE') - op('SAFE')['z0'] - 6}}, from {{op('SAFE')['z0'] + 3}}, 18 sides / top / bottom. Doors 22, flush with the wall panels, two leaves 3 apart, {{pn('P02')['s1'] - pn('P02')['s0']}} overall, from FFL + 10 = {{ffl + 10}} to {{pn('P02')['z0'] - 10}}, 10 joints to the panels; P02 over it in one piece. Please confirm the construction, hinges (your note: no alignment tuning on one part) and the opening hardware (push-to-open or handle)."
+   ],
+   [
+    "Q5",
+    "A-301",
+    "Client",
+    "DO NOT ORDER the safe cabinet before the safe is specified: please send the safe model, its outside dimensions, weight, door swing / hinge side and the clearance it needs to open, and how it is anchored. The cabinet and its doors will be resized to the safe if needed."
+   ],
+   [
+    "Q6",
+    "A-501 A-502",
+    "TM",
+    "Door D01 (right handed, ROVERE SBIANCATO, handle + lock ASTRID by Mandelli 1953 by the client): opening per UCON survey {{ow('D01')}} x {{oh('D01')}} above the SUBFLOOR = {{oh('D01') - ffl}} above FFL. Your frame 989 x 2476 and leaf 878 x 2390 do not fit that height. Drawn as our REC-LAU door D01 (same TM concealed frame on a 170 wall): frame {{ow('D01') - 2 * dr('D01')['gap_side']}} wide, head {{dr('D01')['head_z'][1]}}, cladding {{op('D01')['clad'][1] - op('D01')['clad'][0]}} x {{op('D01')['clad'][3] - op('D01')['clad'][2]}} from {{op('D01')['clad'][2]}}; panels {{rebated}} pass in front of the frame with the rear {{bu['rebate']}} rebate (your 'boiserie alignment panel 5 / 6 / 7'). Please issue the door to these sizes or confirm yours."
+   ],
+   [
+    "Q7",
+    "A-101 A-501",
+    "Site",
+    "Wall thickness at the door taken as {{dr('D01')['wall_t']}} (your door section) - not surveyed. Please confirm before the frame is ordered."
+   ],
+   [
+    "Q8",
+    "A-210 D-01..",
+    "TM",
+    "Panels hang on Fastmount VL-03H clips, recess mount, gap {{bu['clip_gap']}}. Please make the clip recesses in the panel backs at the factory per the D-sheets (D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}} deep). Please confirm which clip half goes into the panel (we assume male)."
+   ],
+   [
+    "Q9",
+    "D-01..",
+    "TM",
+    "All drilling coordinates are given from the panel BACK: X from the left edge as seen from the back, Z from the bottom edge. A control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."
+   ]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
+  "notes": {
+   "G-001": [
+    [
+     "Survey by UCON. All dimensions in mm, Z from the SUBFLOOR (FFL {{ffl}}). Dimensions per UCON survey govern; from the TM drawings (order 252258, DWG REV 1 / PDF REV 2) the layout 1-8 and the door profile.",
+     false
+    ],
+    [
+     "Wall panels MDF {{bu['panel_t']}}, finish per TM; joints 10; on the stone baseboard {{stone}} (by others, Q1 / Q2), 10 to the ceiling and wall corners. Panel face {{bu['face']}} from the wall = backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} + panel {{bu['panel_t']}}. Numbers P01..P07 = TM 1-7 (Q3).",
+     false
+    ],
+    [
+     "Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703), from the stone top; a frame member behind every panel joint - no raw wall in a joint. Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses by the factory per the D-sheets (BACK VIEW), frame holes by UCON CNC.",
+     false
+    ],
+    [
+     "Door D01: TM concealed frame, opens into the Bathroom (away from the panels), panel cladding; frame to our survey (Q6, Q7). Panels {{rebated}} rebated at the back {{bu['rebate']}} over the frame, as our other AP walls.",
+     true
+    ],
+    [
+     "Safe: TM two-door technical cabinet without a back in the niche (carcass = niche - 3 each side), doors 22 flush with the panels to FFL + 10, P02 over it in one piece (Q4). DO NOT ORDER the safe cabinet before the safe specification and dimensions are received (Q5).",
+     true
+    ],
+    [
+     "Red marks are open questions or TBD items. Not for production until G-002 is answered and the set is reissued.",
+     true
+    ]
+   ]
+  },
+  "page_notes": {
+   "A-1": [
+    [
+     "Wall, openings and heights per UCON site survey - they govern over the factory drawings. Wall {{@s['walls'][0]['L']}} x {{@s['walls'][0]['ceil'][0][2]}}; door D01 {{ow('D01')}} x {{oh('D01')}} from {{op('D01')['s0']}}; safe niche {{ow('SAFE')}} x {{oh('SAFE') - op('SAFE')['z0']}} from {{op('SAFE')['s0']}}, {{op('SAFE')['z0']}} above the subfloor.",
+     false
+    ],
+    [
+     "Stone baseboard by others, top {{stone}} (Q1 / Q2); none under the safe cabinet doors.",
+     true
+    ]
+   ],
+   "A-2:*": [
+    "Frames from the stone top {{@s['levels']['floor_gap']}} to the ceiling; tier joint {{@s['levels']['tier_joint']}} (a 4\" rail on the clip row); lintels over the door and the safe niche; a frame member behind every panel joint. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10; full height {{z0('P03')}}..{{z1('P03')}} on the stone; over the safe cabinet P02 one piece, over the door P06. Numbers = TM 1-7 (Q3).",
+    "Panels {{rebated}} rebated at the back {{bu['rebate']}} in front of the door frame (A-501, A-701, D-sheets).",
+    [
+     "SAFE CABINET (TM): two doors 22 to FFL + 10, no back, carcass = niche - 3 each side (Q4). DO NOT ORDER before the safe spec and dimensions are received (Q5).",
+     true
+    ]
+   ],
+   "A-5:*": [
+    [
+     "{d}: TM concealed door, profile as REC-LAU D01 (TM), opening per UCON survey {{ow('{d}')}} x {{oh('{d}')}} (Q6).",
+     true
+    ],
+    [
+     "Right handed, opens into the Bathroom; handle + lock ASTRID by Mandelli 1953 by the client.",
+     true
+    ]
+   ],
+   "A-701": [
+    "Panels P01..P07 (TM 1-7). Door D01 cladding and the safe cabinet (doors, carcass) by TM - not in this list; safe cabinet NOT to be ordered before Q5."
+   ]
+  },
+  "bubbles": {
+   "A-1:BR3": [
+    [
+     "Q2",
+     2600,
+     160
+    ],
+    [
+     "Q7",
+     4579.5,
+     1300
+    ]
+   ],
+   "A-2:BR3": [
+    [
+     "Q8",
+     2600,
+     1500
+    ]
+   ],
+   "A-3:BR3": [
+    [
+     "Q3",
+     2657.75,
+     2500
+    ],
+    [
+     "Q1",
+     1675,
+     600
+    ],
+    [
+     "Q4",
+     693.5,
+     1200
+    ],
+    [
+     "Q5",
+     693.5,
+     700
+    ],
+    [
+     "Q6",
+     4579.5,
+     1300
+    ]
+   ]
+  },
+  "key_wall_t": 170,
+  "_key_wall_t": "TM door section (not surveyed - Q6)",
+  "details": [
+   {
+    "code": "A-511",
+    "name": "SAFE JUNCTION - PLAN",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "BR3-09 SAFE — Plan Section @ +1200",
+      "cam": [
+       693.5,
+       100,
+       0
+      ],
+      "at": [
+       210,
+       -40,
+       1200
+      ],
+      "proj": "plan",
+      "title": "SAFE LEFT JAMB - PLAN SECTION AT +1200",
+      "dims": [
+       [
+        [
+         "{{pn('P01')['s1']}}",
+         -44.3,
+         1200
+        ],
+        [
+         "{{pn('P02')['s0']}}",
+         -44.3,
+         1200
+        ],
+        0.35,
+        [
+         210,
+         -90000,
+         1200
+        ]
+       ],
+       [
+        [
+         "{{op('SAFE')['s0']}}",
+         120,
+         1200
+        ],
+        [
+         "{{pn('P02')['s0']}}",
+         120,
+         1200
+        ],
+        0.35,
+        [
+         210,
+         90000,
+         1200
+        ]
+       ],
+       [
+        [
+         120,
+         -44.3,
+         1200
+        ],
+        [
+         120,
+         0,
+         1200
+        ],
+        0.3,
+        [
+         -90000,
+         0,
+         1200
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "DOOR 22 (TM), FLUSH WITH THE PANELS",
+        [
+         350,
+         -33,
+         1200
+        ],
+        false,
+        [
+         0.3,
+         0.5
+        ]
+       ],
+       [
+        "CARCASS 18 (TM), NO BACK",
+        [
+         222,
+         300,
+         1200
+        ],
+        false,
+        [
+         0.35,
+         -0.4
+        ]
+       ],
+       [
+        "P01",
+        [
+         106,
+         -33,
+         1200
+        ],
+        false,
+        [
+         -0.9,
+         0.6
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "BR3-09 SAFE — Plan Section @ +1200",
+      "cam": [
+       693.5,
+       100,
+       0
+      ],
+      "at": [
+       1177,
+       -40,
+       1200
+      ],
+      "proj": "plan",
+      "title": "SAFE RIGHT JAMB - PLAN SECTION AT +1200",
+      "dims": [
+       [
+        [
+         "{{pn('P02')['s1']}}",
+         -44.3,
+         1200
+        ],
+        [
+         "{{pn('P03')['s0']}}",
+         -44.3,
+         1200
+        ],
+        0.35,
+        [
+         1177,
+         -90000,
+         1200
+        ]
+       ],
+       [
+        [
+         "{{pn('P02')['s1']}}",
+         120,
+         1200
+        ],
+        [
+         "{{op('SAFE')['s1']}}",
+         120,
+         1200
+        ],
+        0.35,
+        [
+         1177,
+         90000,
+         1200
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "P03",
+        [
+         1260,
+         -33,
+         1200
+        ],
+        false,
+        [
+         0.3,
+         0.45
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "SAFE CABINET by TM: ordinary two-door cabinet WITHOUT a back panel, two back rails 100 for transport (a technical cabinet, as for an oven). Carcass = niche less 3 on every side ({{ow('SAFE') - 6}} x {{oh('SAFE') - op('SAFE')['z0'] - 6}}), 18 sides / top / bottom; doors 22 flush with the panel face {{bu['face']}} from the wall, joints 10 to P01 / P03, 3 between the leaves (Q4).",
+      true
+     ],
+     [
+      "DO NOT ORDER the safe cabinet before the safe specification and dimensions are received (Q5).",
+      true
+     ]
+    ],
+    "bubbles": [
+     [
+      "Q4",
+      0,
+      0.4,
+      0.4
+     ],
+     [
+      "Q5",
+      1,
+      0.4,
+      0.4
+     ]
+    ]
+   },
+   {
+    "code": "A-512",
+    "name": "SAFE JUNCTION - SECTION",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "BR3-10 SAFE — Section",
+      "cam": [
+       450,
+       60,
+       1200
+      ],
+      "at": [
+       450,
+       -40,
+       2100
+      ],
+      "proj": "side",
+      "title": "SAFE HEAD - SECTION",
+      "dims": [
+       [
+        [
+         450,
+         -44.3,
+         "{{pn('P02')['z0'] - 10}}"
+        ],
+        [
+         450,
+         -44.3,
+         "{{pn('P02')['z0']}}"
+        ],
+        0.35,
+        [
+         450,
+         -90000,
+         2100
+        ]
+       ],
+       [
+        [
+         450,
+         120,
+         "{{oh('SAFE') - 3}}"
+        ],
+        [
+         450,
+         120,
+         "{{oh('SAFE')}}"
+        ],
+        0.35,
+        [
+         450,
+         90000,
+         2100
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "P02 ONE PIECE",
+        [
+         450,
+         -33,
+         2300
+        ],
+        false,
+        [
+         0.4,
+         0
+        ]
+       ],
+       [
+        "DOOR 22 (TM)",
+        [
+         450,
+         -33,
+         1950
+        ],
+        false,
+        [
+         0.4,
+         0
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "BR3-10 SAFE — Section",
+      "cam": [
+       450,
+       60,
+       1200
+      ],
+      "at": [
+       450,
+       -40,
+       180
+      ],
+      "proj": "side",
+      "title": "SAFE BOTTOM - SECTION (DOORS TO FFL + 10)",
+      "dims": [
+       [
+        [
+         450,
+         -44.3,
+         "{{ffl}}"
+        ],
+        [
+         450,
+         -44.3,
+         "{{ffl + 10}}"
+        ],
+        0.35,
+        [
+         450,
+         -90000,
+         100
+        ]
+       ],
+       [
+        [
+         450,
+         120,
+         "{{op('SAFE')['z0']}}"
+        ],
+        [
+         450,
+         120,
+         "{{op('SAFE')['z0'] + 3}}"
+        ],
+        0.35,
+        [
+         450,
+         90000,
+         300
+        ]
+       ],
+       [
+        [
+         450,
+         -44.3,
+         "{{ffl + 10}}"
+        ],
+        [
+         450,
+         -44.3,
+         "{{op('SAFE')['z0'] + 3}}"
+        ],
+        0.8,
+        [
+         450,
+         -90000,
+         100
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "NO STONE UNDER THE SAFE DOORS",
+        [
+         450,
+         -50,
+         120
+        ],
+        true,
+        [
+         0.4,
+         0.3
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "Doors from FFL + 10 = {{ffl + 10}} to {{pn('P02')['z0'] - 10}}, 10 under P02; carcass {{op('SAFE')['z0'] + 3}}..{{oh('SAFE') - 3}} (niche {{op('SAFE')['z0']}}..{{oh('SAFE')}} less 3); behind the doors below the carcass the wall face (no stone, no frame). Hinges and opening hardware per TM (Q4).",
+      true
+     ]
+    ],
+    "bubbles": [
+     [
+      "Q4",
+      0,
+      0.4,
+      0.4
+     ]
+    ]
+   }
+  ]
+ }
+}

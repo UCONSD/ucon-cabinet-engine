@@ -1,0 +1,504 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital second floor: BEDROOM 3 wall to the Bathroom and the Safe (TM order 2525258 / 252258, DWG REV 1 2026-07-10, PDF REV 2). mm, wall-local: x along the wall from its left end as seen from the bedroom, z up from the SUBFLOOR (survey zero; FFL +57.15 as the main level - Andriy 2026-10-20), y = 0 at the wall face, negative toward the room. Geometry: UCON survey = ~/Documents/AP_SF_Bedroom _V0.1.skp (probes 910b / 910c, 2026-10-20): wall 5783 x 3215, door opening 4082..5077 x 2475, safe niche 210..1177 x 292..2090, 663 deep. Andriy 2026-10-20: panels on this one wall only; TM layout '1-8' of the DWG (full-height panels - 'if the DWG has the size, the factory can make it'); STONE BASEBOARD added as Main Kitchen / ML Foyer / Dining (the walls are prepared for a baseboard; TM drew none - G-002); safe door bottom = stone top + 10, no plinth under it; the safe push door Andriy checks by eye.",
+ "id": "AP_SF_Bedroom3",
+ "model": "AP_SF_Bedroom _V0.1",
+ "prefix": "BR3",
+ "files": {
+  "set": "AP_BR3_Drawings_v{rev}.layout",
+  "panels_csv": "AP_BR3_drilling_panels_TM.csv",
+  "frames_csv": "AP_BR3_drilling_frames_CNC_S_UCON-only.csv"
+ },
+ "wall": {
+  "length": 5783.0,
+  "height": 3215.0,
+  "ceil": [
+   [
+    0,
+    5783.0,
+    3215.0
+   ]
+  ],
+  "thickness": 170,
+  "_thickness": "not surveyed (the model holds the wall face only); 170 from the TM door section (BOISERIE / jamb 170) - G-002",
+  "ends": [
+   "inside corner (panels 10 short)",
+   "inside corner (panels 10 short)"
+  ],
+  "wf": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    -1
+   ]
+  ],
+  "_wf": "model: wall face on y = 0 along +x from x = 0, room toward -y (probe 910c)",
+  "name": "BR3",
+  "_wall_body": "Andriy 2026-10-20: the plan / jamb sections must show the wall and the TM U-profile casing on its back face (as REC-LAU / Main Kitchen) - the survey holds the wall FACE only, so a reference body 170 (TM door section, Q7) is drawn on tag '00 Wall body - reference (not surveyed)'; the survey group is not touched"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "Andriy 2026-10-20: as the main level, FFL 57.15 above the subfloor (survey zero) - G-002",
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5,
+   "_": "by others, as Main Kitchen / ML Foyer / Dining: 20 thick, notch 10 x 10, back cut 9.5 in front of the door frame; top 260.35 = FFL + 8 in (Passione BASE 8 in)"
+  },
+  "stone_runs": [
+   [
+    10.0,
+    203.0
+   ],
+   [
+    1184.0,
+    4082.0
+   ],
+   [
+    5077.0,
+    5773.0
+   ]
+  ],
+  "_stone_runs": "no stone under the safe cabinet doors (doors to FFL + 10)"
+ },
+ "build_up": {
+  "frame_t": 19.05,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3,
+  "_face": "frame 3/4 in + Fastmount VL-03H recess gap 3.3 + panel MDF 22, as the other AP walls"
+ },
+ "panels": {
+  "joint": 10,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "width_step": 0.1,
+  "explicit": [
+   {
+    "id": "P01",
+    "row": "L",
+    "x0": 10.0,
+    "x1": 203.0,
+    "z0": 260.35,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P02",
+    "row": "U",
+    "x0": 213.0,
+    "x1": 1174.0,
+    "z0": 2110.0,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P03",
+    "row": "L",
+    "x0": 1184.0,
+    "x1": 2161.0,
+    "z0": 260.35,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P04",
+    "row": "L",
+    "x0": 2171.0,
+    "x1": 3144.5,
+    "z0": 260.35,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P05",
+    "row": "L",
+    "x0": 3154.5,
+    "x1": 4127.5,
+    "z0": 260.35,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P06",
+    "row": "U",
+    "x0": 4137.5,
+    "x1": 5021.5,
+    "z0": 2394.0,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P07",
+    "row": "L",
+    "x0": 5031.5,
+    "x1": 5773.0,
+    "z0": 260.35,
+    "z1": 3205.0,
+    "mitre_start": false,
+    "mitre_end": false
+   }
+  ],
+  "_explicit": "UCON layout v1 (Andriy 2026-10-20 OK): TM DWG REV 1 view 'Bedroom 3' panels 1-8 - columns 233 / 951 / 982 / 983.5 / 982 / 900 / 749.5 (joint centres 233, 1184, 2166, 3149.5, 4131.5, 5031.5), full height on the stone 260.35 .. 10 under the ceiling 3205; over the safe ONE piece (P02, TM 2 'should be one piece'), over the door P06 = the cladding width; P05 / P07 pass in front of the door frame (TM 'boiserie alignment panel 5 / 7'), rear 10 rebate. P08 = the TM safe push door (tm_boxes, by TM). Numbers = TM 1-8 (TM 8 = the base under the safe door - dropped, the stone runs there). SAFE CABINET (Andriy 2026-10-20): the safe niche gets a TM two-door technical cabinet without a back; carcass = niche - 3 each side (213..1174 x 295..2087); doors 22 flush with the panels over the carcass width, FFL + 10 .. 2100 - so the column over the safe is the carcass width: P01 10..203, P02 213..1174, P03 from 1184 (TM lower 977 again).",
+  "tm_ref": "TM 252258 DWG REV 1, view 'Bedroom 3' 1-8; TM 1 233, 2 951 x 1138, 3 982, 4 983.5, 5 982, 6 900 x 715, 7 749.5, 8 951 x 290; height 3193",
+  "material": "MDF 22, finish per TM (ROVERE SBIANCATO - TM)"
+ },
+ "openings": [
+  {
+   "id": "SAFE",
+   "kind": "opening",
+   "x0": 210.0,
+   "x1": 1177.0,
+   "sill": 292.0,
+   "h": 2090.0,
+   "depth": 663.0,
+   "label": "SAFE NICHE - TWO-DOOR TECHNICAL CABINET BY TM (no back) - DO NOT ORDER before the safe spec",
+   "short": "SAFE\nTM CABINET",
+   "_": "UCON survey (probe 910c): niche 967 x 1798 from 292, 663 deep. Andriy 2026-10-20: an ordinary TM two-door cabinet without a back panel, only rails to hold it together for transport (a technical cabinet, as for the ovens); carcass = niche - 3 on every side; doors 22 down to FFL + 10; NOT ordered until the safe specification and its dimensions are received (G-002).",
+   "sill_setback": 40,
+   "_sill_setback": "no frame under the safe niche (32 between the stone top and the niche sill; 40 > that, so the SILL frame is skipped): the stone runs under the TM safe door"
+  },
+  {
+   "id": "D01",
+   "kind": "door",
+   "x0": 4082.0,
+   "x1": 5077.0,
+   "h": 2475.0,
+   "leaf": {
+    "w": 884.0,
+    "h": 2316.85,
+    "floor_gap": 67.15,
+    "t": 12,
+    "_": "cladding = opening - 2 x 55.5 (DK1 / REC-LAU D01 profile) = 884 (TM leaf 878); FFL + 10 = 67.15 .. 2384 = leaf top 2396 - 12 (as REC-LAU 2414 / 2426); TM leaf 2390 x 878 from the floor, frame 2476 - G-002"
+   },
+   "rebate": {
+    "inset": 2.5,
+    "depth": 10,
+    "_": "panels passing in front of the door frame lose their rear 10 mm inside x0+2.5 .. x1-2.5, z < h (probe 538)"
+   },
+   "frame": {
+    "gap_head": 9,
+    "gap_side": 4.3,
+    "gap_floor": 0,
+    "face": 51.2,
+    "head": 35,
+    "jamb": 201.8,
+    "jamb_y0": -32.3,
+    "jamb_y1": 169.5,
+    "wall_t": 170
+   },
+   "handing": "Right-handed (TM 'BEDROOM 3 DOOR (RIGHT HANDED)'), opens into the Bathroom (away from the panels), concealed hinges; handle + lock by client (ASTRID by Mandelli 1953)",
+   "hinge": "right",
+   "label": "D01 - BEDROOM 3 DOOR BY TM (ROVERE SBIANCATO)",
+   "short": "D01\nTM DOOR",
+   "section_x": 4579.5,
+   "scenes": {
+    "plan": "BR3-05 D01 — Plan Section",
+    "section": "BR3-06 D01 — Section"
+   },
+   "cams": {
+    "plan": [
+     4579.5,
+     400,
+     0
+    ],
+    "section": [
+     4579.5,
+     60,
+     1500
+    ]
+   },
+   "stops": "hinge",
+   "_stops": "Andriy 2026-10-20 ('the door is drawn wrong - see the CAD'): TM 252258 DWG / REC-LAU D01 (same TM frame, DWG rev.3): one stop = hinge insert 32 on the hinge side (right), the leaf 3 clear of the bare jamb on the latch side; back casings = TM U profile on the wall back face"
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 260.35,
+  "tier_joint": 2522.1,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 1,
+  "band_bottom": "local",
+  "_": "as Dining / Office: frames from the stone top (panel level), band to the ceiling from 2522.1 = the bottom 4 in rail centred on the clip row 2571.1 of the full-height panels (the door head 2475 would put the rail across that row); a LINTEL over the door 2475..2522.1, piers below; S numbered from 1 (UCON only)"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ },
+ "tm_boxes": [
+  {
+   "name": "SAFE cabinet side L 18 (TM)",
+   "tag": "cabinets",
+   "x": [
+    213.0,
+    231.0
+   ],
+   "y": [
+    -19.3,
+    660.0
+   ],
+   "z": [
+    295.0,
+    2087.0
+   ]
+  },
+  {
+   "name": "SAFE cabinet side R 18 (TM)",
+   "tag": "cabinets",
+   "x": [
+    1156.0,
+    1174.0
+   ],
+   "y": [
+    -19.3,
+    660.0
+   ],
+   "z": [
+    295.0,
+    2087.0
+   ]
+  },
+  {
+   "name": "SAFE cabinet top 18 (TM)",
+   "tag": "cabinets",
+   "x": [
+    231.0,
+    1156.0
+   ],
+   "y": [
+    -19.3,
+    660.0
+   ],
+   "z": [
+    2069.0,
+    2087.0
+   ]
+  },
+  {
+   "name": "SAFE cabinet bottom 18 (TM)",
+   "tag": "cabinets",
+   "x": [
+    231.0,
+    1156.0
+   ],
+   "y": [
+    -19.3,
+    660.0
+   ],
+   "z": [
+    295.0,
+    313.0
+   ]
+  },
+  {
+   "name": "SAFE cabinet back rail top 100 (TM, transport)",
+   "tag": "cabinets",
+   "x": [
+    231.0,
+    1156.0
+   ],
+   "y": [
+    642.0,
+    660.0
+   ],
+   "z": [
+    1969.0,
+    2069.0
+   ]
+  },
+  {
+   "name": "SAFE cabinet back rail bottom 100 (TM, transport)",
+   "tag": "cabinets",
+   "x": [
+    231.0,
+    1156.0
+   ],
+   "y": [
+    642.0,
+    660.0
+   ],
+   "z": [
+    313.0,
+    413.0
+   ]
+  },
+  {
+   "name": "SAFE door L 22 (TM)",
+   "tag": "cabinets",
+   "x": [
+    213.0,
+    692.0
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    2100.0
+   ]
+  },
+  {
+   "name": "SAFE door R 22 (TM)",
+   "tag": "cabinets",
+   "x": [
+    695.0,
+    1174.0
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    2100.0
+   ]
+  },
+  {
+   "name": "wall body left of the niche (reference 170, not surveyed - Q7)",
+   "tag": "wallref",
+   "x": [
+    0.0,
+    210.0
+   ],
+   "y": [
+    0.0,
+    170.0
+   ],
+   "z": [
+    0.0,
+    3215.0
+   ]
+  },
+  {
+   "name": "wall body under the niche (reference 170, not surveyed - Q7)",
+   "tag": "wallref",
+   "x": [
+    210.0,
+    1177.0
+   ],
+   "y": [
+    0.0,
+    170.0
+   ],
+   "z": [
+    0.0,
+    292.0
+   ]
+  },
+  {
+   "name": "wall body over the niche (reference 170, not surveyed - Q7)",
+   "tag": "wallref",
+   "x": [
+    210.0,
+    1177.0
+   ],
+   "y": [
+    0.0,
+    170.0
+   ],
+   "z": [
+    2090.0,
+    3215.0
+   ]
+  },
+  {
+   "name": "wall body niche to door (reference 170, not surveyed - Q7)",
+   "tag": "wallref",
+   "x": [
+    1177.0,
+    4082.0
+   ],
+   "y": [
+    0.0,
+    170.0
+   ],
+   "z": [
+    0.0,
+    3215.0
+   ]
+  },
+  {
+   "name": "wall body over the door (reference 170, not surveyed - Q7)",
+   "tag": "wallref",
+   "x": [
+    4082.0,
+    5077.0
+   ],
+   "y": [
+    0.0,
+    170.0
+   ],
+   "z": [
+    2475.0,
+    3215.0
+   ]
+  },
+  {
+   "name": "wall body right of the door (reference 170, not surveyed - Q7)",
+   "tag": "wallref",
+   "x": [
+    5077.0,
+    5783.0
+   ],
+   "y": [
+    0.0,
+    170.0
+   ],
+   "z": [
+    0.0,
+    3215.0
+   ]
+  }
+ ],
+ "safe_cabinet": {
+  "x": [
+   213.0,
+   1174.0
+  ],
+  "z": [
+   295.0,
+   2087.0
+  ],
+  "y": [
+   -19.3,
+   660.0
+  ],
+  "t": 18,
+  "_": "carcass envelope = niche 210..1177 x 292..2090 - 3 each side; 18 sides / top / bottom, no back, two rails 100 at the back (transport); front 3 behind the doors (-22.3 - 3 = -19.3 is the carcass front... y -19.3), back 3 short of the niche back 663; doors 22 at the panel face, 2 leaves 3 apart, FFL + 10 = 67.15 .. 2100 (10 under P02)"
+ }
+}
