@@ -405,6 +405,8 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `handoff-2026-10-16-ap-ml-foyer-drawings.md` - AP Capital ML Foyer wall panels: walls B + A, TM numbering, band frames, door / liners / stone / closet cabinets, LayOut set FoyerSet
   - `handoff-2026-10-17-ap-mk-v1.1-standard.md` - AP Capital Main Kitchen on the generator (six wall JSONs, widened liners, S01-S61); MK v1.1 + ML v1.1 released from UCON::RoomSet; REC-LAU v1.2 into the standard
   - `handoff-2026-10-19-ap-dining-v1.0.md` - AP Capital Dining Area (TM 252234): four wall JSONs, inside corners, lower 2755 as TM, window as MK / opening as ML; DIN v1.0 FOR REVIEW released
+  - `handoff-2026-10-19-ap-dining-v2.0.md` - AP Capital Dining Area (TM 252234) v2.0: liner slot strips, joint blocks, solid plywood pieces, B / C 4830; DIN v2.0 FOR REVIEW released beside v1.0
+  - `handoff-2026-10-17-ap-safe-av-v1.0-draft.md` - AP Capital Garage wall to SAFE / AV rooms (SAFE-AV): wall JSON + room file, TM door profile, v1.0 DRAFT 2 (19 sheets) waits for Andriy's review, not released
   - `handoff-2026-10-16-sinks-for-tom.md` - core 1.9.31 sinks: what Tom does in the 7612 models (6 bath washbasins, kitchen / laundry after the client decides)
   - `handoff-2026-10-14-7612-baths-drawings-v0.3.md` - client approval set v0.3, baths + laundry, 14 sheets;
     `tools/layout/bath_drawing_set.rb` (bath elevation / plan, two sheets per room).
