@@ -41,6 +41,9 @@ module UCON
       MARK_TAG      = 'UCON — Sink marks'
       LIFT_MM       = 1.0   # Andriy's spec: 1 mm above the stone, so nothing z-fights
       CLIENT_KEY    = 'client_sink'
+      # core 1.9.31: the workmanship a client's undermount sink costs on a Cesar top
+      # (Linear Elements printed p.41, column FSP - read 2026-10-16).
+      CLIENT_CUTOUT_CODE = 'FSP'
 
       # ---- THE SIZES COME FROM THE PAGE, NOT FROM MEMORY ------------------
       #
@@ -142,9 +145,10 @@ module UCON
           'label' => bowl['label'],
           'value' => if bowl['key'] == CLIENT_KEY
                        "#{bowl['w_mm'].round} × #{bowl['d_mm'].round} mm over #{over_code} - " \
-                       "THE CLIENT'S OWN: Cesar charges nothing for it, and the CUTOUT it " \
-                       'needs is a workmanship on the table at printed p.172, which is unread ' \
-                       'and unpriced.'
+                       "THE CLIENT'S OWN: Cesar charges nothing for the sink; the CUTOUT is the " \
+                       "workmanship #{CLIENT_CUTOUT_CODE} 'Cutout for undercounter sink' on THIS top - " \
+                       'table of workmanships on tops, Linear Elements printed p.41 (read 2026-10-16; ' \
+                       'until then this said p.172, unread).'
                      else
                        "#{bowl['key']} over #{over_code} - a surcharge on THIS top, printed " \
                        'p.110, priced each. The plug is a separate line if it is wanted.'

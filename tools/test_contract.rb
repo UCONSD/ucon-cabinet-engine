@@ -268,7 +268,7 @@ Registry  = UCON::CabinetEngine::Registry
 Export    = UCON::CabinetEngine::Export
 Generator = UCON::CabinetEngine::Generator
 
-check('registry loads and holds 1658 codes (46 open units + 39 open end units + 490 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops + 22 mirrors)') do
+check('registry loads and holds 1670 codes (46 open units + 39 open end units + 490 base + 74 sink + 12 appliance + 304 wall + 15 glass wall + 22 USA tall + 427 tall + 18 fillers + 124 end panels + 44 panel sheets + 8 Horizontal Thin + 9 shelves + 2 ceramic tops + 22 mirrors + 12 washbasins)') do
   # 2026-09-30, glass wall H.72 / H.84: +6 - printed p.313-314, the 7612 sink wall.
   # 2026-09-28, open units: +46 - printed p.455-456 whole but the base H.60 row
   # (12 base, 14 wall, 20 tall), each joining its height family.
@@ -314,7 +314,8 @@ check('registry loads and holds 1658 codes (46 open units + 39 open end units + 
   n = Registry.codes.length
   # 1562 -> 1636 2026-10-14: the THIRD BOOK, Bathroom Collection p.85 and p.90-91 (74 base-class codes, 7612 bathrooms)
   # 1636 -> 1658 2026-10-14 (core 1.9.30): Bathroom Collection mirrors p.182-185, 22 UCON keys (no code is printed)
-  raise "got #{n}" unless n == 1658
+  # 1658 -> 1670 2026-10-16 (core 1.9.31): Bathroom Collection integrated washbasins p.132, LVBP04 + LVBF05
+  raise "got #{n}" unless n == 1670
 end
 check('B80601 resolves to the frozen-baseline dimensions') do
   u = Registry.lookup('B80601')
@@ -507,9 +508,9 @@ check('gola profile body recorded in registry: 30 / 57 / 27') do
                          b['profile_depth_mm'] == 27
 end
 
-check('registry catalog: 1658 rows, each with code/dims/description/source') do
+check('registry catalog: 1670 rows, each with code/dims/description/source') do
   cat = Registry.catalog
-  raise cat.length.to_s unless cat.length == 1658 # +22 2026-10-14 mirrors; +74 2026-10-14 Bathroom Collection
+  raise cat.length.to_s unless cat.length == 1670 # +12 2026-10-16 washbasins p.132; +22 2026-10-14 mirrors; +74 2026-10-14 Bathroom Collection
   # THREE ways to be dimensioned, not one. A corner row carries corner_geometry
   # instead of a width; a filler carries the RANGE the catalog prints instead
   # of the width it never prints. A depth is required of anything we offer to
@@ -631,6 +632,7 @@ check('split storage: every catalog row is stamped with its section and class') 
                                              'Hide & Seek tall units H. 210',
                                              'Hide & Seek tall units H. 222',
                                              'Hide & Seek tall units H. 234',
+                                             'Integrated washbasins | Bathroom Collection',
                                              'Mirrors | Bathroom Collection',
                                              'Open base, wall and tall units, from 15 to 45 cm wide, 2.2 cm thick',
                                              'Open base, wall and tall units, from 45 to 90 cm wide th. 2.2',
@@ -695,7 +697,7 @@ check('split storage: every catalog row is stamped with its section and class') 
   # order picks one.
   raise cat.map { |c| c['class'] }.uniq.sort.inspect unless
     cat.map { |c| c['class'] }.uniq.sort ==
-      %w[base end_panel filler mirror open_unit panel_sheet shelf tall wall worktop]
+      %w[base end_panel filler mirror open_unit panel_sheet shelf tall wall washbasin worktop]
 end
 
 puts "\nsink base units H. 78 (printed p.44 / PDF 46)"
@@ -5207,7 +5209,9 @@ check('EVERY held code is asked whether it may be cut, and the answer is stable'
                  # curved sideboard; the straight spice rack joins the allowed.
                  'curved units, whose width is an arc' => 6,
                  # 2026-10-14 (core 1.9.30): the 22 Bathroom Collection mirrors - printed sizes only.
-                 'mirrors, sold only in their printed sizes' => 22 } && allowed == 848 # +18 2026-10-14 Bathroom Collection doors (p.85, p.90); +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
+                 'mirrors, sold only in their printed sizes' => 22,
+                 # 2026-10-16 (core 1.9.31): the 12 integrated washbasins of p.132 - printed sizes only.
+                 'washbasins, sold only in their printed sizes' => 12 } && allowed == 848 # +18 2026-10-14 Bathroom Collection doors (p.85, p.90); +13 2026-10-04 batch 4 H.36 compounds; +51 2026-10-04 batch 3 Hide & Seek H.198 / 210 / 234; +15 2026-10-04 batch 2 (base H.48 doors 6, top H.48 9); +34 2026-10-04 group 1 door and oven-door columns; +4 broom, fridge H.222; +39 2026-10-03 open end units W.20 (p.450-452)
   # 2026-09-26, later: Maxima H.84, 61 codes - 3 pull-out and 36 jumbo refused,
   # the laundry basket and the door units (22) allowed.
   # 2026-09-28: sink bases H.84, 18 codes - the 8 jumbo-drawer sinks refused,
@@ -9422,11 +9426,11 @@ check("A SINK OF THE CLIENT'S OWN CARRIES NO POINTS AND SAYS WHY") do
     raise e.message unless e.message.include?('still has a size')
   end
 
-  # AND THE UNPRICED CUTOUT IS NAMED ON THE ORDER LINE. Cesar charges nothing
-  # for the sink; the HOLE is a workmanship on the unread table at printed
-  # p.172, and an order that mentions neither reads as complete.
+  # AND THE CUTOUT IS NAMED ON THE ORDER LINE. Cesar charges nothing for the
+  # sink; the HOLE is a workmanship - FSP on the table at Linear Elements printed
+  # p.41 (read 2026-10-16; before that this line named p.172, unread).
   v = Sink.variants_with({}, c, 'B81087').first
-  raise v.inspect unless v['value'].include?('p.172') && v['value'].include?('unread')
+  raise v.inspect unless v['value'].include?('FSP') && v['value'].include?('p.41')
 end
 
 check('THE BOWL HAS TO FIT THE STONE, and a tight fit is remarked not refused') do
@@ -11686,6 +11690,64 @@ check('1.9.30: the placeholders refuse to build and say why') do
     raise c unless u['buildable'] == false && u['not_buildable_reason'].to_s.include?('PLACEHOLDER')
   end
   raise 'Riflesso has a frame' unless Generator.mirror_frames(Registry.lookup('UCON-MIR-RIF-D070')).empty?
+end
+
+puts "\nintegrated washbasins - Bathroom Collection printed p.132 (core 1.9.31)"
+check('1.9.31: 12 washbasins held with their printed codes, all buildable; slot drain is LVBF05') do
+  rows = Registry.catalog.select { |c| c['class'] == 'washbasin' }
+  raise rows.size.to_s unless rows.size == 12
+  raise rows.map { |c| c['code'] }.inspect unless rows.map { |c| c['code'] }.sort ==
+    (1..6).map { |i| format('LVBF05.%03d', i) } + (1..6).map { |i| format('LVBP04.%03d', i) }
+  raise 'a washbasin is held unbuildable' unless rows.all? { |c| c['buildable'] }
+  u = Registry.lookup('LVBF05.003') # the p.193 arrangement: 70x28, slot drain
+  raise u.inspect unless u['width_mm'] == 700 && u['depth_mm'] == 280 && u['height_mm'] == 100 &&
+                         u['accessory_kind'] == 'washbasin' && u['washbasin']['drain'] == 'slot' &&
+                         u['washbasin']['for_unit_depth_mm'] == 470
+  c = Registry.lookup('LVBP04.006')
+  raise c.inspect unless c['depth_mm'] == 380 && c['washbasin']['drain'] == 'central' && c['washbasin']['for_unit_depth_mm'] == 620
+  raise 'width' unless Registry.width_modification_refusal(u).to_s.include?('printed sizes')
+  raise 'height' unless Registry.height_modification_refusal(u).to_s.include?('printed sizes')
+end
+check('1.9.31: the waste is a COMPANION article (central waste only), never a variant, never priced') do
+  u = Registry.lookup('LVBP04.003')
+  raise Generator.washbasin_default_waste(u).to_s unless Generator.washbasin_default_waste(u) == 'PLT008IX'
+  l = Generator.washbasin_companions(u, 'PLT008')
+  raise l.inspect unless l == [{ 'code' => 'PLT008', 'qty' => 1, 'um' => 'PZ', 'origin' => 'chosen', 'source_ref' => u['source_ref'] }]
+  raise 'none' unless Generator.washbasin_companions(u, 'none').empty?
+  raise 'a waste the page does not print was accepted' unless
+    (begin; Generator.washbasin_companions(u, 'PLT009'); false; rescue ArgumentError; true; end)
+  slot = Registry.lookup('LVBF05.003')
+  raise 'the slot drain prints no waste' unless Generator.washbasin_wastes(slot).empty? && Generator.washbasin_default_waste(slot).nil?
+  raise 'slot note' unless slot['washbasin']['waste_note'].to_s.include?('BL-23')
+  a = Generator.washbasin_attributes(u, l, 850, 500, true)
+  Contract.validate!(a)
+  raise a.inspect unless a['mount_bottom_mm'] == 750 && a['mounting'] == 'wall_hung' && a['opening'] == 'none' &&
+                         !a.key?('opening_method') && !a.key?('variants')
+  raise 'a points figure reached the object' if a.to_s.include?('1156') || a.to_s.include?('178')
+  raise Generator.washbasin_choice(a).inspect unless Generator.washbasin_choice(a) == { 'waste' => 'PLT008' }
+  b = Generator.washbasin_attributes(slot, [], 850, 500, false)
+  Contract.validate!(b)
+  raise 'no top found must be said' unless b['notes'].include?('NO TOP FOUND') && !b.key?('companion_refs')
+  rows = Export.rows([a])
+  raise rows.map { |r| [r['level'], r['code']] }.inspect unless rows.map { |r| [r['level'], r['code']] } == [[0, 'LVBP04.003'], [1, 'PLT008']] ||
+                                                               rows.map { |r| r['code'] } == ['LVBP04.003', 'PLT008']
+end
+check('1.9.31: the bowl sits where p.132 draws it, and refuses the wrong unit') do
+  u = Registry.lookup('LVBP04.003')
+  r = Generator.washbasin_rect(u, 500)
+  raise r.inspect unless r['y_front'] == -420.0 && r['y_back'] == -140.0 && r['x1'] == 700.0
+  raise 'a 360 top took a 280 bowl 80 behind its edge' unless
+    (begin; Generator.washbasin_rect(u, 360); false; rescue ArgumentError => e; e.message.include?('into the wall'); end)
+  raise 'fits a 120 unit D.47' unless Generator.washbasin_refusal(u, 470, 1200).nil?
+  raise 'D.62 accepted for a x28 row' unless Generator.washbasin_refusal(u, 620, 1200).to_s.include?('D.62')
+  raise '70 accepted in a 60 unit' unless Generator.washbasin_refusal(u, 470, 600).to_s.include?('either side')
+  raise '50 refused in a 60 unit' unless Generator.washbasin_refusal(Registry.lookup('LVBP04.002'), 470, 600).nil?
+end
+check('1.9.31: the workmanship table is read, and the client sink names its cutout') do
+  raw = JSON.parse(File.read(File.join(Registry.registry_dir, 'tops_ceramic_linear_elements.json')))
+  w = raw['workmanships']['rows']
+  raise w.keys.inspect unless %w[FST FFT FSP FAN FRU].all? { |k| w.key?(k) } && w['FSP']['points'] == 465
+  raise 'the surcharge note still calls the table unread' if raw['surcharges']['note'].include?('which is UNREAD')
 end
 
 puts "\n#{$checks} checks, #{$failures} failure(s)\n\n"

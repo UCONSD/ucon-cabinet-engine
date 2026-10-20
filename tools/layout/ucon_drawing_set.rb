@@ -37,7 +37,7 @@ module UCON
     # ---------------------------------------------------------------- model facts
     def collect(model)
       ce = UCON::CabinetEngine
-      @boxes = []; @tops = []
+      @boxes = []; @tops = []; @sinks = []
       walk = lambda do |ents, depth|
         ents.each do |e|
           if e.is_a?(Sketchup::ComponentInstance)
@@ -50,6 +50,13 @@ module UCON
               walk.(e.definition.entities, depth + 1)
             end
           elsif e.is_a?(Sketchup::Group)
+            # a SINK MARK (core 64_sink_mark): a kitchen / laundry bowl or a client's sink, drawn as a group, not an
+            # orderable body - kept apart so the order rows keep their numbers; MEP reads it (core 1.9.31)
+            if e.name.to_s.start_with?('UCON sink mark')
+              b = e.bounds
+              @sinks << { name: e.name, x0: mm(b.min.x), x1: mm(b.max.x), y0: mm(b.min.y), y1: mm(b.max.y), z0: mm(b.min.z), z1: mm(b.max.z) }
+              next
+            end
             if e.layer.name =~ /Worktop/
               b = e.bounds
               @tops << { ent: e, name: e.name, x0: mm(b.min.x), x1: mm(b.max.x), y0: mm(b.min.y), y1: mm(b.max.y), z0: mm(b.min.z), z1: mm(b.max.z) }

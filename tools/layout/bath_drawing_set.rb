@@ -85,7 +85,8 @@ module UCON
       @cur_vp = vp
       amin = room[:x0].to_f; amax = room[:x1].to_f
       cabs = objs.select { |b| %w[cabinet filler].include?(b[:cls]) }
-      mirrors = objs.select { |b| b[:cls] == 'accessory' }
+      # mirrors only: an engine washbasin (core 1.9.31, LVB...) is an accessory too and sits IN the top
+      mirrors = objs.select { |b| b[:cls] == 'accessory' && b[:code].to_s.start_with?('UCON-MIR') }
       hung = cabs.select { |b| b[:z0] > 100 }
       floor = cabs - hung
       mode = ->(vals) { vals.empty? ? nil : vals.map(&:round).group_by { |v| v }.max_by { |_, v| v.size }.first.to_f }

@@ -1,0 +1,183 @@
+{
+  "section": "Integrated washbasins | Bathroom Collection",
+  "class": "washbasin",
+  "family": "Bath Integrated Washbasin",
+  "source_pdf": "CESAR - Bathroom Collection.pdf",
+  "source_pages": "printed p.132 / PDF 134",
+  "extraction_note": "2026-10-16, 7612 Hillside Dr bathrooms (Andriy: the sinks are integrated, do it in the engine). Printed p.132 whole: integrated washbasins for 1.2 / 2.2 cm MDi and ceramic tops - LVBP04 (central waste) and LVBF05 (slot drain), 40 / 50 / 70 wide, x28 on D.47 units and x38 on D.62. All 12 buildable: every size the page prints is fully stated. The other washbasin pages (p.128 Fenix / Unicolor, p.139 / 141 stone, p.145-148 Cristalplant countertop, p.151-152 Betacryl) are NOT extracted - see the manifest. Points held for reference only, never written to an object. See claude/recon-2026-10-16-sinks-integrated.md.",
+  "family_naming_note": "'Bath Integrated Washbasin' - the 'Bath ' prefix tells the book check this family lives in the Bathroom Collection; not 'Bath Washbasin H.58.5', which is the washbasin UNITS (cabinets) of p.85.",
+  "data": {
+    "washbasin_front_setback_mm": 80,
+    "washbasin_tap_hole_from_back_mm": 60,
+    "washbasin_dims_note": "Read off the p.132 plan and section: bowl W x D as printed, 10 cm deep (section), front edge 8 cm behind the top's front edge, tap hole 6 cm from the back edge. The drawing places the bowl by those three numbers; the page prints no tolerance.",
+    "wastes": [
+      {
+        "code": "PLT008IX",
+        "label": "Waste, Inox",
+        "finish": "Inox",
+        "points": 68,
+        "default": true
+      },
+      {
+        "code": "PLT008",
+        "label": "Matching finish waste and waste plug",
+        "finish": "matching finish",
+        "points": 178
+      }
+    ],
+    "unit_types": {
+      "washbasin_mdi_central": {
+        "object_class": "accessory",
+        "accessory_kind": "washbasin",
+        "opening": "none",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.132 / PDF 134",
+        "top_materials": [
+          "MDi Inalco",
+          "Ceramic"
+        ],
+        "top_thickness_cm": [
+          1.2,
+          2.2
+        ],
+        "drain": "central",
+        "description": "Integrated washbasin in MDi / ceramic, central waste, inclined base",
+        "waste_note": "Printed 'Excluding waste': the waste is its own article - PLT008IX (Inox) or PLT008 (matching finish, with plug).",
+        "codes": [
+          {
+            "code": "LVBP04.001",
+            "width_mm": 400,
+            "depth_mm": 280,
+            "height_mm": 100,
+            "printed_size": "40 x 28",
+            "for_unit_depth_mm": 470,
+            "points": 1156
+          },
+          {
+            "code": "LVBP04.002",
+            "width_mm": 500,
+            "depth_mm": 280,
+            "height_mm": 100,
+            "printed_size": "50 x 28",
+            "for_unit_depth_mm": 470,
+            "points": 1156
+          },
+          {
+            "code": "LVBP04.003",
+            "width_mm": 700,
+            "depth_mm": 280,
+            "height_mm": 100,
+            "printed_size": "70 x 28",
+            "for_unit_depth_mm": 470,
+            "points": 1156
+          },
+          {
+            "code": "LVBP04.004",
+            "width_mm": 400,
+            "depth_mm": 380,
+            "height_mm": 100,
+            "printed_size": "40 x 38",
+            "for_unit_depth_mm": 620,
+            "points": 1156
+          },
+          {
+            "code": "LVBP04.005",
+            "width_mm": 500,
+            "depth_mm": 380,
+            "height_mm": 100,
+            "printed_size": "50 x 38",
+            "for_unit_depth_mm": 620,
+            "points": 1156
+          },
+          {
+            "code": "LVBP04.006",
+            "width_mm": 700,
+            "depth_mm": 380,
+            "height_mm": 100,
+            "printed_size": "70 x 38",
+            "for_unit_depth_mm": 620,
+            "points": 1156
+          }
+        ],
+        "notes": "Held and BUILDABLE, all six printed sizes."
+      },
+      "washbasin_mdi_slot": {
+        "object_class": "accessory",
+        "accessory_kind": "washbasin",
+        "opening": "none",
+        "handed": false,
+        "interior_confirmed": [],
+        "source_ref": "printed p.132 / PDF 134",
+        "top_materials": [
+          "MDi Inalco",
+          "Ceramic"
+        ],
+        "top_thickness_cm": [
+          1.2,
+          2.2
+        ],
+        "drain": "slot",
+        "description": "Integrated washbasin in MDi / ceramic, slot drain",
+        "waste_note": "The page prints no waste and no 'Excluding waste' for the slot-drain basin - whether its drain is included is ASKED (Elda BL-23). No waste line is written.",
+        "codes": [
+          {
+            "code": "LVBF05.001",
+            "width_mm": 400,
+            "depth_mm": 280,
+            "height_mm": 100,
+            "printed_size": "40 x 28",
+            "for_unit_depth_mm": 470,
+            "points": 941
+          },
+          {
+            "code": "LVBF05.002",
+            "width_mm": 500,
+            "depth_mm": 280,
+            "height_mm": 100,
+            "printed_size": "50 x 28",
+            "for_unit_depth_mm": 470,
+            "points": 941
+          },
+          {
+            "code": "LVBF05.003",
+            "width_mm": 700,
+            "depth_mm": 280,
+            "height_mm": 100,
+            "printed_size": "70 x 28",
+            "for_unit_depth_mm": 470,
+            "points": 941
+          },
+          {
+            "code": "LVBF05.004",
+            "width_mm": 400,
+            "depth_mm": 380,
+            "height_mm": 100,
+            "printed_size": "40 x 38",
+            "for_unit_depth_mm": 620,
+            "points": 941
+          },
+          {
+            "code": "LVBF05.005",
+            "width_mm": 500,
+            "depth_mm": 380,
+            "height_mm": 100,
+            "printed_size": "50 x 38",
+            "for_unit_depth_mm": 620,
+            "points": 941
+          },
+          {
+            "code": "LVBF05.006",
+            "width_mm": 700,
+            "depth_mm": 380,
+            "height_mm": 100,
+            "printed_size": "70 x 38",
+            "for_unit_depth_mm": 620,
+            "points": 941
+          }
+        ],
+        "notes": "Held and BUILDABLE, all six printed sizes. The p.193 arrangement (Version 1, '70x28 integrated washbasin with slot drain') is LVBF05.003."
+      }
+    }
+  }
+}

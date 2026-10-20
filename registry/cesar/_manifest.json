@@ -2353,6 +2353,27 @@
       "extracted_on": "2026-10-14"
      }
     ]
+   },
+   {
+    "class": "washbasin",
+    "family": "Bath Integrated Washbasin",
+    "book": "CESAR - Bathroom Collection.pdf",
+    "section": "Integrated washbasins | Bathroom Collection",
+    "printed_pages": "132",
+    "status": "extracted",
+    "extracted_on": "2026-10-16",
+    "note": "Integrated washbasins for 1.2 / 2.2 cm MDi and ceramic tops: LVBP04 (central waste, 6) and LVBF05 (slot drain, 6), wastes PLT008IX / PLT008 - registry/cesar/bath_washbasins_integrated.json. NOT extracted: p.128 (Fenix / Unicolor LVB01-03), p.139 / 141 (stone LVB06 / 07), p.145-148 (Cristalplant countertop LVB019), p.151-152 (Betacryl LVB020).",
+    "pages": [
+     {
+      "printed": 132,
+      "status": "extracted",
+      "types": [
+       "Integrated washbasin MDi / ceramic, central waste (LVBP04, 6)",
+       "Integrated washbasin MDi / ceramic, slot drain (LVBF05, 6)"
+      ],
+      "extracted_on": "2026-10-16"
+     }
+    ]
    }
   ]
  },

@@ -294,6 +294,19 @@ module UCON
                                        'versions'  => unit_type['versions'] || [],
                                        'light'     => unit_type['light'],
                                        'code_note' => unit_type['code_note'] } : nil),
+            # AN INTEGRATED WASHBASIN (core 1.9.31, 7612 bathrooms, 2026-10-16):
+            # an accessory with no carcass that sits IN a top, drawn by
+            # Generator.draw_washbasin. Printed p.132: the bowl W x D is the row,
+            # its depth and where it sits in the top are read off the page's
+            # plan and section (family), the drain and the wastes are the type's.
+            'washbasin'          => (unit_type['accessory_kind'] == 'washbasin' ?
+                                     { 'drain'             => unit_type['drain'],
+                                       'front_setback_mm'  => family['washbasin_front_setback_mm'],
+                                       'tap_hole_from_back_mm' => family['washbasin_tap_hole_from_back_mm'],
+                                       'for_unit_depth_mm' => row['for_unit_depth_mm'],
+                                       'wastes'            => (unit_type['drain'] == 'central' ? (family['wastes'] || []) : []),
+                                       'waste_note'        => unit_type['waste_note'],
+                                       'top_materials'     => unit_type['top_materials'] || [] } : nil),
             'buildable'          => unit_type.fetch('buildable', true),
             'not_buildable_reason' => unit_type['not_buildable_reason'],
             # THE GUARD Generator.wall_hung_available? READS. It was written on
@@ -479,6 +492,8 @@ module UCON
         # A MIRROR IS SOLD IN ITS PRINTED SIZES, 2026-10-14. The book prints a
         # fixed list of W x H per model and no modification of any kind.
         return 'mirrors, sold only in their printed sizes' if unit['accessory_kind'].to_s == 'mirror'
+        # core 1.9.31: a washbasin is a moulded bowl - its printed W x D or none.
+        return 'washbasins, sold only in their printed sizes' if unit['accessory_kind'].to_s == 'washbasin'
 
         WIDTH_MOD_FORBIDDEN.each { |why, test| return why if test.call(unit) }
         nil
@@ -663,6 +678,7 @@ module UCON
       # is ours rather than the page's.
       def height_modification_refusal(unit)
         return 'mirrors, sold only in their printed sizes' if unit['accessory_kind'].to_s == 'mirror'
+        return 'washbasins, sold only in their printed sizes' if unit['accessory_kind'].to_s == 'washbasin'
 
         return 'an appliance housing takes its opening height from the appliance, ' \
                'not from the carcass - change the appliance, not the box' if

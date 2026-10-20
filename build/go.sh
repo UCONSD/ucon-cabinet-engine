@@ -87,18 +87,31 @@ echo "===== 2. stage, BY NAME ====="
 # predicted. The tall_h210.json pull-out PILOT of 2026-10-05 is still parked in
 # build/parked/ and NOT in this commit.
 # 2026-10-14 core 1.9.30 mirrors pushed (91fd27f).
-# 2026-10-14: 7612 baths + laundry client approval set v0.3 - the bath sheet writer,
-# the handoff, the README line, the rooms log. 5 files predicted. (Not run - folded into v0.4.)
-# 2026-10-14: set v0.4 rides along - ceilings in every elevation, the L-BA2 shower,
-# the M-MST pouf and scale figures drawn in LayOut (scale_figures.json from the
-# LayOut People scrapbook), the after-elevation hook in ucon_drawing_set.rb.
-# 7 files predicted; the list must print 7.
-git add tools/layout/bath_drawing_set.rb \
+# 2026-10-14: 7612 baths + laundry set v0.3 + v0.4 - pushed (d4f1db3).
+# 2026-10-16, core 1.9.31: integrated washbasins (Bathroom Collection p.132) as
+# engine objects with their codes, the workmanship table p.41, the plumbing of
+# a sink role following the sink, recon + handoff for Tom, Elda BL-20..23.
+# 22 files predicted; the list must print 22.
+git add claude/README.md \
+        claude/recon-2026-10-16-sinks-integrated.md \
+        claude/handoff-2026-10-16-sinks-for-tom.md \
+        docs/Elda_Questions_7612_Baths_Laundry_v0.1.md \
+        registry/cesar/_manifest.json \
+        registry/cesar/bath_washbasins_integrated.json \
+        registry/cesar/tops_ceramic_linear_elements.json \
+        src/ucon_cabinet_engine/core/00_version.rb \
+        src/ucon_cabinet_engine/core/50_registry.rb \
+        src/ucon_cabinet_engine/core/60_generator.rb \
+        src/ucon_cabinet_engine/core/64_sink_mark.rb \
+        src/ucon_cabinet_engine/core/80_panel.rb \
+        src/ucon_cabinet_engine/core/90_palette.rb \
+        tools/layout/bath_drawing_set.rb \
+        tools/layout/mep_drawing_set.rb \
         tools/layout/ucon_drawing_set.rb \
-        tools/layout/scale_figures.json \
-        claude/handoff-2026-10-14-7612-baths-drawings-v0.3.md \
-        claude/README.md \
-        claude/recon-2026-10-14-7612-baths-laundry.md \
+        tools/mep/mep_points.rb \
+        tools/mep/roles.json \
+        tools/test_contract.rb \
+        tools/test_mep.rb \
         build/go.sh
 
 echo

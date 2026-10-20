@@ -399,6 +399,7 @@ module UCON
         @dialog.add_action_callback('apply')  { |_, json| apply(JSON.parse(json)) }
         @dialog.add_action_callback('apply_tangram') { |_, json| apply_tangram(JSON.parse(json)) }
         @dialog.add_action_callback('apply_mirror') { |_, json| apply_mirror(JSON.parse(json)) }
+        @dialog.add_action_callback('apply_washbasin') { |_, json| apply_washbasin(JSON.parse(json)) }
         @dialog.show
         install_observer
         nil
@@ -517,6 +518,11 @@ module UCON
         unit  = attrs ? (Registry.lookup(attrs['code']) rescue nil) : nil
         if unit && unit['accessory_kind'].to_s == 'mirror'
           state = mirror_state(unit, attrs)
+          state['core_version'] = core_version
+          return @dialog.execute_script("render(#{state.to_json})")
+        end
+        if unit && unit['accessory_kind'].to_s == 'washbasin'
+          state = washbasin_state(unit, attrs)
           state['core_version'] = core_version
           return @dialog.execute_script("render(#{state.to_json})")
         end
@@ -737,6 +743,46 @@ module UCON
         rescue StandardError => e
           model.abort_operation
           UI.messagebox("Mirror: nothing was changed.\n\n#{e.class}: #{e.message}")
+        end
+        push_selection
+      end
+
+      # ---- an integrated washbasin: its own short form (core 1.9.31) ---------
+      # The one choice the order needs beyond the code: the waste, which is an
+      # article of its own (companion). PURE: the suite reads it.
+      def washbasin_state(unit, attrs)
+        wb = unit['washbasin'] || {}
+        { 'washbasin' => {
+            'code' => attrs['code'], 'desc' => unit['description'],
+            'dims' => "#{unit['width_mm'] / 10}×#{unit['depth_mm'] / 10} cm, #{unit['height_mm'] / 10} deep",
+            'drain' => wb['drain'],
+            'wastes' => Generator.washbasin_wastes(unit).map { |w| { 'code' => w['code'], 'label' => w['label'] } },
+            'waste' => Generator.washbasin_choice(attrs)['waste'],
+            'waste_note' => wb['waste_note'],
+            'top_z_mm' => attrs['mount_bottom_mm'].to_i + unit['height_mm'].to_i,
+            'status' => "#{attrs['code_status']} / #{attrs['status']}" } }
+      end
+
+      def apply_washbasin(payload)
+        inst = selected_unit_instance
+        return UI.messagebox('Select a washbasin first.') unless inst
+        attrs = Contract.read(inst.definition)
+        unit = Registry.lookup(attrs['code'])
+        return UI.messagebox('This is not a washbasin.') unless unit['accessory_kind'].to_s == 'washbasin'
+
+        model = Sketchup.active_model
+        model.start_operation('UCON: apply washbasin properties', true)
+        begin
+          companions = Generator.washbasin_companions(unit, payload['waste'].to_s)
+          kept = Array(attrs['companion_refs']).reject { |l| l['code'].to_s.start_with?('PLT') }
+          out = attrs.merge('companion_refs' => kept + companions)
+          out.delete('companion_refs') if out['companion_refs'].empty?
+          make_instance_unique!(inst)
+          Contract.write!(inst.definition, out)
+          model.commit_operation
+        rescue StandardError => e
+          model.abort_operation
+          UI.messagebox("Washbasin: nothing was changed.\n\n#{e.class}: #{e.message}")
         end
         push_selection
       end
@@ -1071,6 +1117,14 @@ module UCON
             </fieldset>
             <button onclick="applyMirror()">Apply</button>
           </div>
+          <div id="wbForm" style="display:none">
+            <h3 id="wbCode"></h3><div class="muted" id="wbDesc"></div>
+            <div class="flag" id="wbNote" style="margin:3px 0"></div>
+            <fieldset id="wbWasteFs"><legend>Waste</legend>
+              <select id="wbWaste"></select>
+            </fieldset>
+            <button id="wbApply" onclick="applyWashbasin()">Apply</button>
+          </div>
           <div id="tgForm" style="display:none">
             <h3 id="tgCode"></h3><div class="muted" id="tgDesc"></div>
             <!-- THE SAME FORM AS A BOX UNIT, 2026-09-27 (Andriy): door height,
@@ -1192,6 +1246,13 @@ module UCON
                   'markup and its callbacks at open, so Apply here is still the '+
                   'old one. Close this panel and open it again.';
               }
+              var wb=st.washbasin||null;
+              document.getElementById('wbForm').style.display=wb?'':'none';
+              if(wb){ document.getElementById('empty').style.display='none';
+                      document.getElementById('form').style.display='none';
+                      document.getElementById('tgForm').style.display='none';
+                      document.getElementById('mrForm').style.display='none';
+                      renderWashbasin(st); return; }
               var mr=st.mirror||null;
               document.getElementById('mrForm').style.display=mr?'':'none';
               if(mr){ document.getElementById('empty').style.display='none';
@@ -1387,6 +1448,22 @@ module UCON
                 light:document.getElementById('mrLight').value,
                 anti_fog:document.getElementById('mrFog').checked,
                 bottom_mm:document.getElementById('mrBottom').value}));
+            }
+            // ---- Integrated washbasin: the waste (core 1.9.31) ----
+            function renderWashbasin(st){
+              var w=st.washbasin;
+              document.getElementById('wbCode').textContent=w.code+'  ('+w.dims+')';
+              document.getElementById('wbDesc').textContent=(w.desc||'')+' \u00b7 top at '+w.top_z_mm+' mm \u00b7 '+w.status;
+              document.getElementById('wbNote').textContent=w.waste_note||'';
+              var s=document.getElementById('wbWaste'); s.innerHTML='';
+              var has=(w.wastes||[]).length>0;
+              (w.wastes||[]).forEach(function(x){var o=document.createElement('option');o.value=x.code;o.textContent=x.code+' - '+x.label;s.appendChild(o);});
+              if(has){var o=document.createElement('option');o.value='none';o.textContent='No waste line';s.appendChild(o); s.value=w.waste||'none';}
+              document.getElementById('wbWasteFs').style.display=has?'':'none';
+              document.getElementById('wbApply').style.display=has?'':'none';
+            }
+            function applyWashbasin(){
+              sketchup.apply_washbasin(JSON.stringify({waste:document.getElementById('wbWaste').value}));
             }
             window.onload=function(){sketchup.ready();};
           </script></body></html>

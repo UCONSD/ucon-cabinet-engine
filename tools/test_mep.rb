@@ -66,6 +66,22 @@ check('the oven column takes no water: no point of the MEDMC301WS but E1', pts.s
 check('tails: 10 ft at E1 E2 E3, 5 ft at E4 E5 E13, none elsewhere', pts.select { |p| p['tail_ft'] }.map { |p| [p['id'], p['tail_ft']] }.sort == [['E1', 10], ['E13', 5], ['E2', 10], ['E3', 10], ['E4', 5], ['E5', 5]], pts.select { |p| p['tail_ft'] }.map { |p| [p['id'], p['tail_ft']] }.inspect)
 check('tail written into the requirement', by['E1']['req'].include?('10 ft electrical tail') && by['E4']['req'].include?('5 ft electrical tail'))
 check('labels unchanged by the tail', by['E1']['short'] == 'J-BOX 208/240V 50A' && by['E4']['short'] == 'REC 120V 15A')
+# core 1.9.31 (2026-10-16): sinks are engine objects - the plumbing follows the sink, the receptacle stays on the cabinet
+lproj = MEP.load_json(File.join(__dir__, 'mep', 'projects', '7612_laundry.json'))
+lbox = { 'code' => 'BL0603', 'x0' => 22.0, 'x1' => 622.0, 'y0' => -645.0, 'y1' => 0.0, 'z0' => 0.0, 'z1' => 900.0 }
+mark = { 'code' => 'SINK-MARK', 'cls' => 'sink', 'x0' => 72.0, 'x1' => 472.0, 'y0' => -500.0, 'y1' => -100.0, 'z0' => 900.0, 'z1' => 901.0 }
+l0 = MEP.points([lbox], lproj).map { |p| [p['id'], p] }.to_h
+l1 = MEP.points([lbox, mark], lproj).map { |p| [p['id'], p] }.to_h
+dr0 = l0.values.find { |p| p['sym'] == 'DR' && p['x'] }
+dr1 = l1.values.find { |p| p['sym'] == 'DR' && p['x'] }
+check('1.9.31: the laundry drain follows a sink mark off the cabinet centre (322 -> 272)', dr0 && dr1 && (dr0['x'] - 322).abs < 1 && (dr1['x'] - 272).abs < 1, [dr0 && dr0['x'], dr1 && dr1['x']].inspect)
+e0 = l0.values.select { |p| p['sys'] == 'E' && p['x'] }.map { |p| [p['id'], p['x']] }
+e1 = l1.values.select { |p| p['sys'] == 'E' && p['x'] }.map { |p| [p['id'], p['x']] }
+check('1.9.31: electrical points do not move with the sink', e0 == e1, [e0, e1].inspect)
+wb = { 'code' => 'LVBP04.003', 'cls' => 'accessory', 'x0' => 250.0, 'x1' => 950.0, 'y0' => -420.0, 'y1' => -140.0, 'z0' => 750.0, 'z1' => 851.0 }
+check('1.9.31: an engine washbasin counts as a sink', MEP.sink_box?(wb) && !MEP.sink_box?(wb.merge('code' => 'UCON-MIR-RMU-120x070')))
+mir = { 'code' => 'UCON-MIR-RMU-120x070', 'cls' => 'accessory', 'x0' => 0.0, 'x1' => 1200.0, 'y0' => -35.0, 'y1' => 0.0, 'z0' => 1250.0, 'z1' => 1950.0 }
+check('1.9.31: a washbasin is never a blocking zone; the mirror still is', MEP.blocking([wb.merge('y1' => 0.0), mir], along: 'x', face: 'y1', wall_at: 0).size == 1)
 puts "#{$checks} checks, #{$fails.size} failures"
 $fails.each { |f| puts "  FAIL #{f}" }
 exit($fails.empty? ? 0 : 1)

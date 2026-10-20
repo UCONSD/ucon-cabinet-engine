@@ -44,6 +44,21 @@ module UCON
       { mm: d.round, text: "#{d.round} #{side} #{r['text']}" }
     end
 
+    # A SINK in the boxes (core 1.9.31): an engine washbasin (code LVB..., accessory) or a sink mark the
+    # model export hands over as cls 'sink'. Never a mirror, never a blocking zone.
+    def sink_box?(b)
+      b['cls'].to_s == 'sink' || (b['cls'].to_s == 'accessory' && b['code'].to_s.start_with?('LVB'))
+    end
+
+    # The sink over an anchor: its centre inside the anchor's plan box. nil when there is none.
+    def sink_over(boxes, b)
+      boxes.find do |s|
+        next false unless sink_box?(s)
+        cx = (s['x0'] + s['x1']) / 2.0; cy = (s['y0'] + s['y1']) / 2.0
+        cx.between?([b['x0'], b['x1']].min, [b['x0'], b['x1']].max) && cy.between?([b['y0'], b['y1']].min - 50, [b['y0'], b['y1']].max + 50)
+      end
+    end
+
     def points(boxes, project)
       out = []
       project['anchors'].each_with_index do |a, ai|
@@ -52,6 +67,11 @@ module UCON
         back = back_of(b, a)
         v = a['v'].to_f
         cu = a['axis'] == 'x' ? (b['x0'] + b['x1']) / 2.0 : (b['y0'] + b['y1']) / 2.0
+        # THE PLUMBING FOLLOWS THE SINK, NOT THE CABINET (core 1.9.31, Andriy 2026-10-16: sinks are engine objects
+        # now). A role with center_on 'sink' takes its P points from the centre of the sink over the anchor, when
+        # one is drawn; electrical points stay on the cabinet. No sink drawn = the cabinet centre, as before.
+        sink = rule['center_on'] == 'sink' ? sink_over(boxes, b) : nil
+        cu_p = sink ? (a['axis'] == 'x' ? (sink['x0'] + sink['x1']) / 2.0 : (sink['y0'] + sink['y1']) / 2.0) : cu
         # v goes INTO the room from the back face: away from the anchor's far side
         far = a['axis'] == 'x' ? (back == b['y0'] ? b['y1'] : b['y0']) : (back == b['x0'] ? b['x1'] : b['x0'])
         dir = far > back ? 1 : -1
@@ -69,7 +89,7 @@ module UCON
           p['group'] = "#{a['role']}-#{ai}"
           p['lab'] = a['lab'] if a['lab'] && !r['lab'] # a point may carry its own label side
           if r.key?('u')
-            u = cu + r['u'].to_f
+            u = (p['sys'] == 'P' ? cu_p : cu) + r['u'].to_f
             w = back + dir * v
             p['x'], p['y'] = a['axis'] == 'x' ? [u, w] : [w, u]
             p['z'] = r['z'] == 'center' ? (b['z0'] + b['z1']) / 2.0 : r['z'].to_f
@@ -163,6 +183,7 @@ module UCON
       toward = { 'y1' => 'y+', 'y0' => 'y-', 'x1' => 'x+', 'x0' => 'x-' }[face]
       on = boxes.select do |b|
         (b[face].to_f - wall_at).abs <= 60 && (b['z0'].to_f > 100 || b['z1'].to_f > 2000) &&
+          !sink_box?(b) &&
           (b['cls'].to_s == 'accessory' || (b['cls'].to_s == 'cabinet' && (b['back'].nil? || b['back'] == toward)))
       end
       groups = on.group_by { |b| [b['cls'] == 'accessory' ? 'mirror' : 'cab', (b['z1'].to_f / 10).round] }

@@ -23,7 +23,7 @@ module UCON
     # model given: 'back' = world direction of the carcass back ('x+' 'x-' 'y+' 'y-'), the instance's local +y (the
     # engine builds y = 0 at the front, depth along +y; probe 746). Blocking goes only where a back is on the wall.
     def mep_boxes(model = nil)
-      @boxes.map do |b|
+      out = @boxes.map do |b|
         h = { 'code' => b[:code], 'cls' => b[:cls], 'x0' => b[:x0], 'x1' => b[:x1], 'y0' => b[:y0], 'y1' => b[:y1], 'z0' => b[:z0], 'z1' => b[:z1] }
         if model && (e = model.find_entity_by_id(b[:id]))
           v = e.transformation.yaxis
@@ -31,6 +31,11 @@ module UCON
         end
         h
       end
+      # sink marks (core 1.9.31): the plumbing of a sink role follows them
+      sinks = Array(@sinks).map do |s|
+        { 'code' => 'SINK-MARK', 'cls' => 'sink', 'x0' => s[:x0], 'x1' => s[:x1], 'y0' => s[:y0], 'y1' => s[:y1], 'z0' => s[:z0], 'z1' => s[:z1] }
+      end
+      out + sinks
     end
 
     # ---------------------------------------------------------------- units

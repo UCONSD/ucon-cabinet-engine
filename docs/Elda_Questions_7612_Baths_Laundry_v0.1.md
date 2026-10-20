@@ -83,3 +83,21 @@ Under the 1035 MDi make-up table (BL-17) we want one drawer, front 100 or 120 hi
 ### BL-19 — Mirror article codes and dimensions
 Bathroom Collection printed p.182–185 (Round / Rectangular / Oval Make Up, Riflesso) print "specchiera" in the Code column — no article codes. (1) What are the order codes for each size and version (frame White/Black/Champagne, front light / front + backlight), and how is anti-fog ordered? (2) Mirror depth, frame width, wall fixing and the distance from the wall — for our drawings. For 7612 we plan Rectangular Make Up, black frame, front light: 70×70 ×1, 120×70 ×5.
 Коды зеркал (в прайсе вместо кода слово «specchiera»), глубина/рама/крепление.
+
+## Добавлено 2026-10-16 — раковины (разведка `claude/recon-2026-10-16-sinks-integrated.md`)
+
+### BL-20 — Integrated bowl in a Dekton 2 cm top (kitchen / laundry): overflow and waste
+Linear Elements printed p.104 / 107 / 110: "Integrated bowl 40x40x19 / 50x40x19 / 70x40x19" and "Ceramic plug for integrated bowl". The page draws no bowl. (1) Does the integrated bowl have an OVERFLOW? (2) What is the drain outlet - diameter and thread - and does it take a standard 3½" (89 mm) US basket strainer and a US garbage disposal flange? (3) Is the ceramic plug a cover over a standard strainer, or part of a Cesar-specific waste kit that must be used? A drawing or data sheet of the bowl would answer all three.
+Есть ли у встроенной чаши в Dekton перелив; диаметр/резьба слива; подходит ли американский стрейнер 3½" и измельчитель; керамическая пробка — крышка над обычным сливом или своя система. Решение Андрея (2026-10-16): есть перелив → нужна их дренажная система, плохо совместима с американской → кухня и прачечная остаются с раковиной клиента; перелива нет → ставим встроенную чашу Cesar.
+
+### BL-21 — p.193 arrangement washbasin = LVBF05.003
+p.193 Version 1 reads "70x28 integrated washbasin with slot drain". On p.132 the slot-drain basin is LVBF05 (LVBP04 is the central waste). Please confirm LVBF05 for all 7612 bathrooms: LVBF05.003 (70×28) under the 120 units, LVBF05.002 (50×28) under the 90 units, LVBF05.001 (40×28) under the 60 unit - on a 1.2 or 2.2 MDi top (see BL-13).
+Подтвердить LVBF05 (щелевой слив) во всех ванных — решение Андрея 2026-10-16; размеры по тумбам.
+
+### BL-22 — Tap holes in a 2 cm Dekton top
+Workmanship table, Linear Elements printed p.41-42: tap hole cutout (FRU, 51) on MDi / Dekton is marked "(3) check with Cesar for feasibility". Kitchen 7612: three 35 mm (1⅜") deck holes - faucet, soap dispenser, disposal air switch - in the 2 cm Dekton top. Possible at the factory, and at what minimum distance from the sink cutout and the back edge?
+Отверстия 35 мм в Dekton 2 см на фабрике — можно ли, минимальные отступы.
+
+### BL-23 — Waste for the slot-drain washbasin LVBF05
+p.132 prints wastes PLT008IX / PLT008 ("Excluding waste") only for LVBP04. For LVBF05 (slot drain) no waste is printed. Is the slot drain supplied complete with its waste, or which article must be ordered with it?
+Слив для LVBF05 — в комплекте или отдельный артикул.

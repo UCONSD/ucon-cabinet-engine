@@ -324,6 +324,206 @@ module UCON
         end
       end
 
+      # ---- integrated washbasins (core 1.9.31, 7612 bathrooms, Andriy 2026-10-16)
+      #
+      # Bathroom Collection printed p.132: LVBP04 (central waste) and LVBF05 (slot
+      # drain), integrated in a 1.2 / 2.2 cm MDi or ceramic top. UNLIKE A MIRROR
+      # THE BOWL HAS A REAL CODE, so it is a numbered row of its own; the waste of
+      # the central-waste basin is a second article (PLT008IX / PLT008, 'Excluding
+      # waste') and rides as a COMPANION line, chosen, never a variant.
+      #
+      # Where it sits is read off the page: front edge 80 behind the top's front,
+      # 100 deep. It is drawn INSIDE the stone and the stone is NOT cut (decision
+      # 2026-08-28: cutting Andriy's geometry is not this engine's business) - so
+      # what the drawings read is the rim, one millimetre above the top, and the
+      # drain; the bowl body is there for a section and for the MEP points.
+      WASHBASIN_LIFT_MM   = 1.0
+      WASHBASIN_DRAIN_MM  = 40.0   # drawing only: the waste is not dimensioned on p.132
+      WASHBASIN_SIDE_MIN_MM = 30.0 # stone or carcass left either side of the bowl
+      WASHBASIN_TOP_T_MM  = 22.0   # assumed when no top is found over the unit (7612: 828 -> 850)
+      WASHBASIN_NO_WASTE  = 'none'
+
+      def washbasin_wastes(unit)
+        Array((unit['washbasin'] || {})['wastes'])
+      end
+
+      def washbasin_default_waste(unit)
+        w = washbasin_wastes(unit)
+        (w.find { |x| x['default'] } || w.first || {})['code']
+      end
+
+      # The waste as a companion line. PURE, so the suite can hold it.
+      def washbasin_companions(unit, waste_code)
+        return [] if waste_code.nil? || waste_code.to_s.empty? || waste_code.to_s == WASHBASIN_NO_WASTE
+
+        w = washbasin_wastes(unit).find { |x| x['code'] == waste_code }
+        unless w
+          printed = washbasin_wastes(unit).map { |x| x['code'] }
+          raise ArgumentError,
+                "Waste #{waste_code.inspect}: #{printed.empty? ? 'this basin prints no waste of its own' : "this basin is printed with #{printed.join(' / ')}"}"
+        end
+        [{ 'code' => w['code'], 'qty' => 1, 'um' => 'PZ', 'origin' => 'chosen', 'source_ref' => unit['source_ref'] }]
+      end
+
+      def washbasin_choice(attrs)
+        line = Array((attrs || {})['companion_refs']).find { |l| l['code'].to_s.start_with?('PLT') }
+        { 'waste' => line ? line['code'] : WASHBASIN_NO_WASTE }
+      end
+
+      # Does this bowl belong in that unit? A row is printed for ONE carcass depth
+      # (x28 for D.47, x38 for D.62) and has to leave carcass either side. PURE:
+      # nil when it fits, else the reason.
+      def washbasin_refusal(unit, unit_depth_mm, unit_width_mm)
+        wb = unit['washbasin'] || {}
+        want = wb['for_unit_depth_mm'].to_f
+        if want.positive? && unit_depth_mm.to_f.positive? && (unit_depth_mm.to_f - want).abs > 20
+          return "#{unit['code']} is printed for D.#{(want / 10).round} units and this unit is " \
+                 "#{unit_depth_mm.round} deep - take the D.#{(unit_depth_mm.to_f / 10).round} row of the same width"
+        end
+        if unit_width_mm.to_f.positive? && unit['width_mm'].to_f + 2 * WASHBASIN_SIDE_MIN_MM > unit_width_mm.to_f
+          return "#{unit['code']} is #{unit['width_mm']} wide and the unit #{unit_width_mm.round} - " \
+                 "less than #{WASHBASIN_SIDE_MIN_MM.round} mm would be left either side"
+        end
+        nil
+      end
+
+      # The bowl in the basin's own frame: y 0 = the back of the top (the wall),
+      # toward -y the front. PURE.
+      def washbasin_rect(unit, top_depth_mm)
+        wb = unit['washbasin'] || {}
+        d = unit['depth_mm'].to_f
+        y_front = -(top_depth_mm.to_f - (wb['front_setback_mm'] || 80).to_f)
+        y_back = y_front + d
+        if y_back > -10.0
+          raise ArgumentError,
+                "#{unit['code']} is #{d.round} deep with its front #{(wb['front_setback_mm'] || 80)} behind the " \
+                "top's edge, and the top is only #{top_depth_mm.round} deep - the bowl would run into the wall"
+        end
+        { 'x0' => 0.0, 'x1' => unit['width_mm'].to_f, 'y_front' => y_front, 'y_back' => y_back }
+      end
+
+      def washbasin_attributes(unit, companions, top_z_mm, top_depth_mm, found_top)
+        a = attributes_for(unit)
+        a.delete('opening_method')
+        a.delete('front_height_mm')
+        a['opening']         = 'none'
+        a['mounting']        = 'wall_hung'
+        a['mount_bottom_mm'] = (top_z_mm.to_f - unit['height_mm'].to_f).round
+        if companions.empty? then a.delete('companion_refs') else a['companion_refs'] = companions end
+        wb = unit['washbasin'] || {}
+        where = "Integrated in the top: top surface #{top_z_mm.round} mm, top #{top_depth_mm.round} deep, " \
+                "bowl front #{(wb['front_setback_mm'] || 80)} behind the top's front edge" \
+                "#{found_top ? '' : ' (NO TOP FOUND over the unit - top level and depth assumed)'}."
+        a['notes'] = [a['notes'], where, wb['waste_note']].compact.reject(&:empty?).join(' ')
+        a
+      end
+
+      def draw_washbasin(model, definition, unit, top_depth_mm, top_z_mm)
+        e = definition.entities
+        e.erase_entities(e.to_a) unless e.length.zero?
+        r = washbasin_rect(unit, top_depth_mm)
+        w = unit['width_mm'].to_f; d = unit['depth_mm'].to_f; h = unit['height_mm'].to_f
+        z_top = top_z_mm.to_f
+        black = Geometry.material(model, 'UCON_Edge_Black', [0, 0, 0])
+        white = Geometry.material(model, 'UCON CAD White', [255, 255, 255])
+        # the body stops 1 mm under the stone surface, so nothing z-fights
+        g = Geometry.box(e, 'WASHBASIN_BOWL', 0, r['y_front'], z_top - h, w, d, h - 1.0, white)
+        g.entities.grep(Sketchup::Edge).each { |x| x.material = black }
+        rim = e.add_group; rim.name = 'WASHBASIN_RIM'
+        z = (z_top + WASHBASIN_LIFT_MM).mm
+        pts = [[0, r['y_front']], [w, r['y_front']], [w, r['y_back']], [0, r['y_back']]].map { |x, y| Geom::Point3d.new(x.mm, y.mm, z) }
+        rim.entities.add_edges(pts + [pts.first])
+        if (unit['washbasin'] || {})['drain'].to_s == 'slot'
+          ys = (r['y_front'] + 15.0).mm
+          rim.entities.add_line(Geom::Point3d.new(25.mm, ys, z), Geom::Point3d.new((w - 25).mm, ys, z))
+        else
+          c = Geom::Point3d.new((w / 2).mm, ((r['y_front'] + r['y_back']) / 2).mm, z)
+          rim.entities.add_circle(c, Z_AXIS, (WASHBASIN_DRAIN_MM / 2).mm, 24)
+        end
+        rim.entities.grep(Sketchup::Edge).each { |x| x.material = black }
+        definition
+      end
+
+      # The cabinet the basin goes in: one selected unit, a cabinet.
+      def selected_vanity(model)
+        model.selection.grep(Sketchup::ComponentInstance).find do |i|
+          a = (Contract.read(i.definition) rescue nil)
+          a && a['code'] && %w[cabinet corner_unit].include?(a['object_class'].to_s)
+        end
+      end
+
+      # The top over a unit: a stamped worktop first (SinkMark's rule), else any
+      # group on a Worktop tag (the bathroom tops are drawn, not stamped). Its
+      # plan must hold the unit's centre and it must start at or above the
+      # carcass top. nil when there is none.
+      def top_over(model, inst)
+        c = inst.bounds.center
+        zmin = inst.bounds.max.z - 5.mm
+        over = lambda do |e|
+          b = e.bounds
+          b.min.x <= c.x && c.x <= b.max.x && b.min.y <= c.y && c.y <= b.max.y && b.min.z >= zmin
+        end
+        ents = model.active_entities.select { |e| e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance) }
+        stamped = ents.select do |e|
+          a = (Contract.read(e) rescue nil)
+          a = (Contract.read(e.definition) rescue nil) if a.nil? || a['object_class'].nil?
+          a && a['object_class'].to_s == 'worktop' && over.call(e)
+        end
+        tagged = ents.select { |e| e.layer.name =~ /worktop/i && over.call(e) }
+        (stamped.empty? ? tagged : stamped).min_by { |e| e.bounds.min.z }
+      end
+
+      # Placement over the selected unit, centred on its carcass, back on its
+      # back face; and the top's level and depth in that frame.
+      def washbasin_placement(model, unit)
+        sel = selected_vanity(model)
+        raise ArgumentError, 'Select the vanity unit the basin sits in, then build the basin - it is centred on that unit.' unless sel
+
+        cg = sel.definition.entities.grep(Sketchup::Group).find { |g| g.name == 'CARCASS' }
+        b = cg ? cg.bounds : sel.definition.bounds
+        sattr = Contract.read(sel.definition)
+        # the unit's own stated size, not its carcass box (the box leaves out the front)
+        why = washbasin_refusal(unit, (sattr['depth_mm'] || (b.max.y - b.min.y).to_mm).to_f,
+                                (sattr['width_mm'] || (b.max.x - b.min.x).to_mm).to_f)
+        raise ArgumentError, why if why
+
+        inv = sel.transformation.inverse
+        top = top_over(model, sel)
+        if top
+          tb = top.bounds
+          corners = (0..7).map { |i| tb.corner(i).transform(inv) }
+          top_z = corners.map(&:z).max.to_mm
+          top_front = corners.map(&:y).min.to_mm
+        else
+          top_z = b.max.z.to_mm + WASHBASIN_TOP_T_MM
+          top_front = b.min.y.to_mm - 30.0
+        end
+        top_depth = b.max.y.to_mm - top_front
+        xc = (b.min.x + b.max.x) / 2.0
+        tr = sel.transformation * Geom::Transformation.translation(Geom::Vector3d.new(xc - unit['width_mm'].mm / 2.0, b.max.y, 0))
+        { tr: tr, top_z: top_z, top_depth: top_depth, found_top: !top.nil?, over: sattr['code'] }
+      end
+
+      def build_washbasin(model, code, unit)
+        pl = washbasin_placement(model, unit)
+        companions = washbasin_companions(unit, washbasin_default_waste(unit))
+        model.start_operation("UCON: build #{code}", true)
+        begin
+          definition = model.definitions.add("CESAR_#{code}_#{Time.now.strftime('%Y%m%d_%H%M%S')}")
+          draw_washbasin(model, definition, unit, pl[:top_depth], pl[:top_z])
+          Contract.write!(definition, washbasin_attributes(unit, companions, pl[:top_z], pl[:top_depth], pl[:found_top]))
+          instance = model.active_entities.add_instance(definition, pl[:tr])
+          instance.name = "Cesar #{code} — #{unit['description']} (in #{pl[:over]})"
+          model.selection.clear
+          model.selection.add(instance)
+          model.commit_operation
+          instance
+        rescue StandardError
+          model.abort_operation
+          raise
+        end
+      end
+
       def selected_unit(model)
         model.selection.grep(Sketchup::ComponentInstance).find do |i|
           # a Tangram F has no code (none is printed) and is a unit all the same
@@ -952,6 +1152,8 @@ module UCON
         # A MIRROR HAS NO CARCASS (core 1.9.30). Everything below this line is
         # a box builder - plinth, carcass, fronts - so a mirror leaves here.
         return build_mirror(model, code, unit) if unit['accessory_kind'].to_s == 'mirror'
+        # core 1.9.31: an integrated washbasin - no carcass either; it sits in a top.
+        return build_washbasin(model, code, unit) if unit['accessory_kind'].to_s == 'washbasin'
 
         s    = Standards
         # DRAWN, not ordered - see drawn_width_mm. For everything except a

@@ -2,6 +2,7 @@
   "about": "MEP point rules by ROLE of an object. Offsets from the anchor: u along the run from the anchor CENTRE (+ = + run axis), z above the floor (centre of box / stub), v from the anchor BACK face into the room. A project file maps roles to objects. status: SOURCE = manufacturer document (source names it), PLANNING = our default until a document or a decision, DECISION = Andriy. Points without a position (schedule only) have no u/z. Island (Andriy 2026-10-15): every utility of the cooktop inside the cooktop cabinet, on its back panel, on one line.",
   "roles": {
     "sink_base": {
+      "center_on": "sink",
       "points": [
         {
           "id": "P1",
@@ -179,6 +180,7 @@
       ]
     },
     "basin_wall_faucet": {
+      "center_on": "sink",
       "points": [
         {
           "id": "HW",
@@ -231,6 +233,7 @@
       ]
     },
     "laundry_sink": {
+      "center_on": "sink",
       "points": [
         {
           "id": "HW",

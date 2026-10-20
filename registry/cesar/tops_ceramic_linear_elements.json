@@ -97,7 +97,7 @@
       "points": 118,
       "um": "per m2"
     },
-    "note": "printed p.110. The cutouts for a hob or an undercounter sink are NOT here - printed p.172 points at a separate 'table of workmanships on tops' which is UNREAD. Any cutout this kitchen needs is therefore not yet priced."
+    "note": "printed p.110. The cutouts for a hob or a sink are NOT here: they are workmanships - see 'workmanships' below, Linear Elements printed p.41 (read 2026-10-16; until then this note said the table, which p.172 points at, was unread)."
   },
   "data": {
     "unit_types": {
@@ -107,9 +107,7 @@
         "opening": null,
         "handed": false,
         "handed_note": "A top has no hand. It is cut to the run it covers.",
-        "interior_confirmed": [
-
-        ],
+        "interior_confirmed": [],
         "source_ref": "printed p.110 / PDF 112",
         "priced_by": "linear_metre",
         "depth_bands_mm": [
@@ -319,5 +317,62 @@
     "the_eight_bands_are_this_table": "EVERY ONE of depth_bands_mm - 380 650 700 750 800 1030 1080 1300 - is a printed STANDARD top depth from this table, all eight, no leftovers on either side. The price page and the planning page are the same list seen twice.",
     "a_printed_exception_to_the_closed_list": "RECORDED AND NOT IMPLEMENTED. Printed p.40 Notes map every diamond/palmier depth onto the standard band it is priced at - \"For 65.7 cm deep tops refer to the price of the 65 cm deep top\", and so for all eight. So a 657 top IS orderable and IS priced at band 650, while TopStamp.verify refuses any piece deeper than its band - correctly, on what it knows. Acting on this needs the EDGE PROFILE, an order axis this registry does not hold, so it is a decision and not a patch. The flush depths (375 645 695 745 795 1020 1070 1290) are the mirror case and need nothing: shallower than the band is already allowed, and already remarked on as stone cut down from a wider band.",
     "projecting_tops": "SEPARATE AND STRICTER, printed p.38. A top that projects BEYOND the cabinets - a breakfast bar - needs feasibility and a quotation FROM CESAR BEFORE THE ORDER IS SENT. Side panels and specific supports are recommended, and the strengthening panel under it must be 10 cm SHORTER than the depth of the projecting part. There is a fixing-hardware line for it at printed p.58. None of the three depth tables covers this case."
+  },
+  "workmanships": {
+    "source_ref": "Linear Elements printed p.41-42 / PDF 43-44, 'Table of workmanships on tops Maxima / Intarsio'",
+    "applies_to": "MDi Inalco, Dekton ceramic and Iris ceramic tops - one row of the table",
+    "um": "each",
+    "rows": {
+      "FST": {
+        "label": "Cutout for countertop hob or sink",
+        "points": 127,
+        "condition": "(7) min. 6 cm between the cutout and the edge"
+      },
+      "FFT": {
+        "label": "Cutout for hob or sink flush-fitted with top",
+        "points": 303,
+        "condition": "(3) check with Cesar for feasibility; (8) max. recess 0.5 cm on 1.2 cm tops; (7)"
+      },
+      "FSP": {
+        "label": "Cutout for undercounter sink (including preparation for fixing sleeve anchors)",
+        "points": 465,
+        "condition": "(7) min. 6 cm between the cutout and the edge"
+      },
+      "FAN": {
+        "label": "Corner cutout for countertop hob or sink",
+        "points": 254,
+        "condition": "(1) ceramic: a single 105x105 piece, priced as top lm + the external cutout"
+      },
+      "TES": {
+        "label": "External / internal cutout, unfinished",
+        "points": 35
+      },
+      "TIN": {
+        "label": "External / internal cutout finished where visible",
+        "points": 35
+      },
+      "TFS": {
+        "label": "Out of square cutout",
+        "points": 35
+      },
+      "FRU": {
+        "label": "Tap hole cutout",
+        "points": 51,
+        "condition": "(3) check with Cesar for feasibility (Elda BL-22)"
+      },
+      "TST": {
+        "label": "Angled or rounded double end",
+        "points": 266
+      },
+      "SDI": {
+        "label": "Shaped to drawing",
+        "points": 262
+      },
+      "BST": {
+        "label": "Angled or rounded edge / end",
+        "points": 133
+      }
+    },
+    "note": "(2) Standard cutouts have black edges; cutouts in tops for integrated sink bowls have matching-coloured edges. Points for reference only - never written to an object (Contract SS1.2)."
   }
 }
