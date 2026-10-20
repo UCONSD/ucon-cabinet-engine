@@ -1,0 +1,307 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital second floor: MASTER BEDROOM (TM 260326, DWG 'rev 2' 2026-07-08 = PDF rev 3/4 without Andriy's red survey marks). mm, wall-local: x along the wall from its left end as seen from the room (pier reveals: as seen from the opening), z up from the SUBFLOOR (survey zero; FFL +57.15 as the other AP rooms), y = 0 at the wall face, negative toward the room. UCON survey = ~/Documents/AP_SF_Master_Bedroom_V0.1.skp (probe 930, 2026-10-20): room 8790 x 7888, ceiling 3152 everywhere. Andriy 2026-10-20: our survey governs, TM numbers only to compare (G-002); panel numbers = TM 1-21; STONE BASEBOARD as Bedroom 3 (Passione sheet 25: 8\" stone base with riglet) - panels on the stone 260.35, 10 to the ceiling, joints 10; doors her / his as Bedroom 3 D01 (TM concealed frame, one stop on the hinge side, U casing, swing on A-501), openings to the ceiling (no lintels); Wall 4 runs through both corners; built-in cabinets in the Wall 2 / Wall 3 corner (700, TM).",
+ "id": "AP_SF_MB_W1",
+ "model": "AP_SF_Master_Bedroom_V0.1",
+ "prefix": "MB",
+ "wall": {
+  "length": 7888.0,
+  "height": 3152.0,
+  "ceil": [
+   [
+    0,
+    7888.0,
+    3152.0
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "corner with Wall 4 (Wall 4 runs through; the stone by the client meets the Wall 4 panel face)",
+   "corner with Wall 2 (Wall 2 runs through)"
+  ],
+  "wf": [
+   [
+    8790.0,
+    0.0
+   ],
+   [
+    0,
+    -1
+   ],
+   [
+    -1,
+    0
+   ]
+  ],
+  "name": "Wall 1",
+  "kind": "wall",
+  "_wf": "model: [origin = the left end on the face], [x direction], [room-side normal] (probe 930)"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "as Bedroom 3 / main level - G-002",
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5,
+   "continuous": true,
+   "_": "by others, as Bedroom 3 / Main Kitchen: 20 thick, notch 10 x 10, back cut 9.5 in front of the door frame; top 260.35 = FFL + 8 in (Passione 8 in stone base); Andriy 2026-10-20: ONE piece per run (stone_runs), not split under every panel"
+  },
+  "stone_runs": [
+   [
+    44.3,
+    717.5
+   ],
+   [
+    1776.5,
+    7843.7
+   ]
+  ]
+ },
+ "build_up": {
+  "frame_t": 19.05,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3,
+  "_face": "frame 3/4 in + Fastmount VL-03H recess gap 3.3 + panel MDF 22, as the other AP walls"
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "width_step": 0.1,
+  "explicit": [
+   {
+    "id": "P01",
+    "row": "U",
+    "x0": 3176.0,
+    "x1": 4376.0,
+    "z0": 260.4,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P02",
+    "row": "U",
+    "x0": 5875.0,
+    "x1": 7075.0,
+    "z0": 260.4,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P22",
+    "row": "H",
+    "x0": 727.5,
+    "x1": 1766.5,
+    "z0": 3071.0,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   }
+  ],
+  "material": "MDF 22, finish per TM (METAL LACQUERED GLOSSY VM100SW Perla Grana Media Super White - TM)"
+ },
+ "openings": [
+  {
+   "id": "ST1",
+   "kind": "opening",
+   "x0": 0.0,
+   "x1": 672.0,
+   "h": 3152.0,
+   "label": "STONE BY OTHERS",
+   "short": "STONE",
+   "_": "marble slab by others (Passione sheet 25: MARBLE SLAB) - no frames, no panels; at the door the slab passes 45.5 in front of the frame, joint 10 to the cladding (as the panels of wall 3, Andriy 2026-10-20)"
+  },
+  {
+   "id": "D01",
+   "kind": "door",
+   "x0": 672.0,
+   "x1": 1822.0,
+   "h": 3152.0,
+   "leaf": {
+    "w": 1039.0,
+    "h": 2993.8,
+    "floor_gap": 67.2,
+    "t": 12,
+    "_": "cladding = opening - 2 x 55.5 (as Bedroom 3 D01 / REC-LAU); FFL + 10 .. leaf top - 12 (opening to the ceiling, frame head 9 under it); TM leaf 1039 x 3002, frame 3114 / 3171 - G-002"
+   },
+   "rebate": {
+    "inset": 2.5,
+    "depth": 10,
+    "_": "panels passing in front of the door frame lose their rear 10 inside x0+2.5 .. x1-2.5"
+   },
+   "frame": {
+    "gap_head": 9,
+    "gap_side": 4.3,
+    "gap_floor": 0,
+    "face": 51.2,
+    "head": 35,
+    "jamb": 381.8,
+    "jamb_y0": -32.3,
+    "jamb_y1": 349.5,
+    "wall_t": 350,
+    "_": "as Bedroom 3 D01; wall 350 from the TM door section (BOISERIE 350 / 353) - not surveyed, G-002"
+   },
+   "handing": "Left-handed (TM 'MASTER BEDROOM TO HER MASTER BATH (LEFT HANDED)'), white pearl, push to open, self-closing, no handle / lock; opens into her bath",
+   "hinge": "left",
+   "stops": "hinge",
+   "label": "D01 - DOOR TO HER BATH BY TM (WHITE PEARL)",
+   "short": "D01\nTM DOOR",
+   "section_x": 1247.0,
+   "scenes": {
+    "plan": "MB-05 D01 — Plan Section",
+    "section": "MB-06 D01 — Section"
+   },
+   "cams": {
+    "plan": [
+     1247.0,
+     400,
+     0
+    ],
+    "section": [
+     1247.0,
+     60,
+     1500
+    ]
+   },
+   "_head": "Andriy 2026-10-20: UCON recommends the factory makes the door WITHOUT a head (no top frame member / lintel) - frame and leaf straight to the ceiling; to discuss with the client (G-002 Q9)",
+   "_stops": "as Bedroom 3 D01: one stop (hinge insert 32) on the hinge side, the leaf 3 clear of the bare jamb on the latch side; back casings = TM U profile"
+  },
+  {
+   "id": "ST2",
+   "kind": "opening",
+   "x0": 1822.0,
+   "x1": 3166.0,
+   "h": 3152.0,
+   "label": "STONE BY OTHERS",
+   "short": "STONE",
+   "_": "marble slab by others"
+  },
+  {
+   "id": "ST3",
+   "kind": "opening",
+   "x0": 4386.0,
+   "x1": 5865.0,
+   "h": 3152.0,
+   "label": "STONE BY OTHERS",
+   "short": "STONE",
+   "_": "marble slab by others"
+  },
+  {
+   "id": "ST4",
+   "kind": "opening",
+   "x0": 7085.0,
+   "x1": 7888.0,
+   "h": 3152.0,
+   "label": "STONE BY OTHERS",
+   "short": "STONE",
+   "_": "marble slab by others"
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 260.35,
+  "tier_joint": 2471.6,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 1,
+  "band_bottom": "local",
+  "_": "as Bedroom 3: frames from the stone top, tier joint = a 4 in rail centred on a clip row of the full-height panels, band to the ceiling; nothing over the openings that run to the ceiling"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ },
+ "tm_boxes": [
+  {
+   "name": "STONE BY OTHERS - marble slab 44.3..717.5 (ref, 20 assumed, face = panel face - G-002)",
+   "tag": "stonewall",
+   "x": [
+    44.3,
+    717.5
+   ],
+   "y": [
+    -44.3,
+    -24.299999999999997
+   ],
+   "z": [
+    260.35,
+    3142.0
+   ]
+  },
+  {
+   "name": "STONE BY OTHERS - marble slab 1776.5..3166 (ref, 20 assumed, face = panel face - G-002)",
+   "tag": "stonewall",
+   "x": [
+    1776.5,
+    3166.0
+   ],
+   "y": [
+    -44.3,
+    -24.299999999999997
+   ],
+   "z": [
+    260.35,
+    3142.0
+   ]
+  },
+  {
+   "name": "STONE BY OTHERS - marble slab 4386..5865 (ref, 20 assumed, face = panel face - G-002)",
+   "tag": "stonewall",
+   "x": [
+    4386.0,
+    5865.0
+   ],
+   "y": [
+    -44.3,
+    -24.299999999999997
+   ],
+   "z": [
+    260.35,
+    3142.0
+   ]
+  },
+  {
+   "name": "STONE BY OTHERS - marble slab 7085..7843.7 (ref, 20 assumed, face = panel face - G-002)",
+   "tag": "stonewall",
+   "x": [
+    7085.0,
+    7843.7
+   ],
+   "y": [
+    -44.3,
+    -24.299999999999997
+   ],
+   "z": [
+    260.35,
+    3142.0
+   ]
+  }
+ ],
+ "_panels": "Andriy 2026-10-20: stone | door | stone | panel | stone | panel | stone; P01 / P02 1200 at the TM DWG places measured from the door (TM 1354 / 4053 from the door edge) - not surveyed, G-002. The stone zones are full-height 'openings' so no frame runs behind the stone."
+}

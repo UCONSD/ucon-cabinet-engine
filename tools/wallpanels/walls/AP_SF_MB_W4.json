@@ -1,0 +1,215 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital second floor: MASTER BEDROOM (TM 260326, DWG 'rev 2' 2026-07-08 = PDF rev 3/4 without Andriy's red survey marks). mm, wall-local: x along the wall from its left end as seen from the room (pier reveals: as seen from the opening), z up from the SUBFLOOR (survey zero; FFL +57.15 as the other AP rooms), y = 0 at the wall face, negative toward the room. UCON survey = ~/Documents/AP_SF_Master_Bedroom_V0.1.skp (probe 930, 2026-10-20): room 8790 x 7888, ceiling 3152 everywhere. Andriy 2026-10-20: our survey governs, TM numbers only to compare (G-002); panel numbers = TM 1-21; STONE BASEBOARD as Bedroom 3 (Passione sheet 25: 8\" stone base with riglet) - panels on the stone 260.35, 10 to the ceiling, joints 10; doors her / his as Bedroom 3 D01 (TM concealed frame, one stop on the hinge side, U casing, swing on A-501), openings to the ceiling (no lintels); Wall 4 runs through both corners; built-in cabinets in the Wall 2 / Wall 3 corner (700, TM).",
+ "id": "AP_SF_MB_W4",
+ "model": "AP_SF_Master_Bedroom_V0.1",
+ "prefix": "MB",
+ "wall": {
+  "length": 8790.0,
+  "height": 3152.0,
+  "ceil": [
+   [
+    0,
+    8790.0,
+    3152.0
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "inside corner with Wall 3, runs through (panels 10 short)",
+   "corner with Wall 1, runs through (panels 10 short; the stone meets the panel face)"
+  ],
+  "wf": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    -1
+   ]
+  ],
+  "name": "Wall 4",
+  "kind": "wall",
+  "_wf": "model: [origin = the left end on the face], [x direction], [room-side normal] (probe 930)"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "as Bedroom 3 / main level - G-002",
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5,
+   "continuous": true,
+   "_": "by others, as Bedroom 3 / Main Kitchen: 20 thick, notch 10 x 10, back cut 9.5 in front of the door frame; top 260.35 = FFL + 8 in (Passione 8 in stone base); Andriy 2026-10-20: ONE piece per run (stone_runs), not split under every panel"
+  },
+  "stone_runs": [
+   [
+    10.0,
+    995.0
+   ],
+   [
+    7797.0,
+    8780.0
+   ]
+  ]
+ },
+ "build_up": {
+  "frame_t": 19.05,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3,
+  "_face": "frame 3/4 in + Fastmount VL-03H recess gap 3.3 + panel MDF 22, as the other AP walls"
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "width_step": 0.1,
+  "explicit": [
+   {
+    "id": "P16",
+    "row": "U",
+    "x0": 10.0,
+    "x1": 995.0,
+    "z0": 260.4,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P17",
+    "row": "H",
+    "x0": 1005.0,
+    "x1": 2700.0,
+    "z0": 2527.0,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P18",
+    "row": "H",
+    "x0": 2710.0,
+    "x1": 4375.0,
+    "z0": 2527.0,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P19",
+    "row": "H",
+    "x0": 4385.0,
+    "x1": 6050.0,
+    "z0": 2527.0,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P20",
+    "row": "H",
+    "x0": 6060.0,
+    "x1": 7787.0,
+    "z0": 2527.0,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P21",
+    "row": "U",
+    "x0": 7797.0,
+    "x1": 8780.0,
+    "z0": 260.4,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false
+   }
+  ],
+  "material": "MDF 22, finish per TM (METAL LACQUERED GLOSSY VM100SW Perla Grana Media Super White - TM)"
+ },
+ "openings": [
+  {
+   "id": "W-WIN",
+   "kind": "window",
+   "x0": 1005.0,
+   "x1": 7787.0,
+   "h": 2517.0,
+   "label": "WINDOW (UCON survey)",
+   "short": "WINDOW",
+   "_": "UCON survey (probe 930): 1005..7787 to the floor, head 2517. Reveal / window frame NOT surveyed - liner as the ML Foyer / Dining C openings (leg against the bare reveal), G-002.",
+   "panel_overlap": -10,
+   "head_gap": 10,
+   "liner": {
+    "t": 6,
+    "depth": 64,
+    "flange": 35.2,
+    "leg": [
+     0,
+     6
+    ],
+    "z0": 67.2,
+    "strips": {
+     "B": [
+      6,
+      34
+     ],
+     "A": [
+      6,
+      17
+     ],
+     "from_edge": [
+      8.7,
+      42.7
+     ],
+     "by": "factory, glued to the panel back"
+    },
+    "_check": "Andriy 2026-10-20: CHECK ON SITE the window / panel junction through our L-liner (reveal depth, window frame, trim) before the liners are made - G-002",
+    "_": "Andriy 2026-10-20: L-liner as Main Kitchen; reveal not surveyed - leg against the bare reveal, 64 past the wall face, flange 35.2 into the slot of strips B / A (Dining v2.0); legs to FFL + 10 (the window runs to the floor)"
+   },
+   "frame_setback": 56
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 260.35,
+  "tier_joint": 2471.6,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 31,
+  "band_bottom": "local",
+  "_": "as Bedroom 3: frames from the stone top, tier joint = a 4 in rail centred on a clip row of the full-height panels, band to the ceiling; nothing over the openings that run to the ceiling"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ },
+ "_panels": "Andriy 2026-10-20: band joints at his survey 1688 / 1665 / 1665 / 1720 (window mullions); 6782 - 6738 - 30 = 14 split 7 / 7 onto the end panels -> 1695 / 1665 / 1665 / 1727; band 2527..3142 (TM 639)."
+}

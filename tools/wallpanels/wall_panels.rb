@@ -459,6 +459,9 @@ module UCON
         # (Main Kitchen niche 3125 > 3088); it ends at the ceiling over it (Wall 2 soffit step)
         pz0 = pbot.(fa, fb)
         pz1 = ceil_at(spec, fa, fb)
+        # 2026-10-20 (AP Master Bedroom): over an opening that runs to the ceiling (a door / stone zone / cabinet with no
+        # lintel) the piece has no height - there is no band there
+        next if pz1 - pz0 < EPS
         out << if fb - fa < wn + ww - EPS
                  solid(fa, fb, pz0, pz1, 'BAND')
                else

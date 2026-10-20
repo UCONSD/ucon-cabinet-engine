@@ -36,7 +36,16 @@ module UCON
     def self.f1(v) = fmt(v)
     def self.f2(v) = format('%.2f', v).sub(/\.?0+\z/, '')   # levels: 57.15, 82.15, 67.15 must not round
     def self.pt2(x, y) = Geom::Point2d.new(x, y)
-    def self.P(x, y, z) = Geom::Point3d.new(x * MM, y * MM, z * MM)
+    # 2026-10-20 (AP Master Bedroom): on the door pages of a door whose wall does not run along +x the points are
+    # DOOR-LOCAL (snapshot doors[].tf = [origin, t, n]: x along the wall, y = 0 at its face, negative into the room) and
+    # are mapped to the model here; @dtf is set only while such a door's pages are drawn
+    def self.P(x, y, z)
+      if @dtf
+        (ox, oy), (tx, ty), (nx, ny) = @dtf['o'], @dtf['t'], @dtf['n']
+        return Geom::Point3d.new((ox + x * tx - y * nx) * MM, (oy + x * ty - y * ny) * MM, z * MM)
+      end
+      Geom::Point3d.new(x * MM, y * MM, z * MM)
+    end
     def self.wall(id) = @s['walls'].find { |w| w['id'] == id }
     def self.panels_of(id) = @s['panels'].select { |p| p['wall'] == id }
     def self.top_of(w) = w['ceil'].map { |a| a[2] }.max
@@ -396,8 +405,20 @@ module UCON
     end
 
     # question bubbles of a wall page: [label, s, z] from the JSON (sheets.bubbles."A-1|A-2|A-3:<wall id>")
-    def self.wall_bubbles(kind, w, px, pz)
-      (sh['bubbles']["#{kind}:#{w['id']}"] || []).each { |l, s, z| bub(pt2(px.(s), pz.(z)), l) }
+    # 2026-10-20 (AP Master Bedroom, Andriy: "circle this place in red and add it to the questions"): an entry
+    # [label, s0, z0, s1, z1] draws a RED RECTANGLE around s0..s1 x z0..z1 (wall-local mm) with the bubble at its top
+    # right corner; [label, s, z] stays a bubble only. Also used on the door elevations ("A-5:<door id>").
+    def self.wall_bubbles(kind, w, px, pz, key = nil)
+      (sh['bubbles'][key || "#{kind}:#{w['id']}"] || []).each do |l, s, z, s1, z1|
+        if s1
+          a, b = [px.(s), px.(s1)].minmax; c, d = [pz.(z), pz.(z1)].minmax
+          @l_q ||= @doc.layers.add('Bubbles', false)
+          rect(a - 0.04, c - 0.04, b - a + 0.08, d - c + 0.08, @l_q, stroke: RED, sw: 1.25)
+          bub(pt2(b + 0.10, c - 0.12), l)
+        else
+          bub(pt2(px.(s), pz.(z)), l)
+        end
+      end
     end
 
     # ------------------------------------------------------------------ wall pages
@@ -661,18 +682,24 @@ module UCON
 
     def self.page_g002(code, name)
       next_page(name); header((sh['tags']['Status'] || 'FOR REVIEW').upcase); sheet_code(code)
-      cols = [['NO.', 0.45], ['SHEET', 1.05], ['TO', 0.45], ['QUESTION', 6.9], ['ANSWER (FACTORY / SITE)', 3.0], ['DATE', 0.6]]
+      cols = [['NO.', 0.45], ['SHEET', 1.05], ['TO', 0.65], ['QUESTION', 6.7], ['ANSWER (FACTORY / SITE)', 3.0], ['DATE', 0.6]]
       ws, xs = cols_x(WX, WW, cols)
       y = WY
       cols.each_with_index { |(h, _), i| text(h, xs[i] + 0.04, y + 0.02, @l_sheet, size: 7, font: MONO, c: HEAD) }
       y += 0.22; line(WX, y, WX + WW, y, @l_sheet, w: 1.0)
-      sh['questions'].each do |no, shc, to, q|
-        lines = (q.size / 112.0).ceil
-        rh = [0.145 * lines + 0.14, 0.36].max
-        text(no, xs[0] + 0.04, y + 0.06, @l_sheet, size: 8, font: MONO, c: RED)
-        box_text(shc, xs[1] + 0.04, y + 0.06, ws[1] - 0.08, rh - 0.08, @l_sheet, size: 6.5, font: MONO, c: INK2)
-        text(to, xs[2] + 0.04, y + 0.06, @l_sheet, size: 7, font: MONO)
-        box_text(q, xs[3] + 0.04, y + 0.06, ws[3] - 0.10, rh - 0.06, @l_sheet, size: 7, c: RED)
+      # 2026-10-20 (AP Master Bedroom, 14 questions ran past the sheet frame): row heights from the line count, tightened
+      # until the table + the note fit the drawing area; 'TO' wraps ('TM / Client' ran into the question)
+      rows = sh['questions'].map { |r| (r[3].size / 112.0).ceil }
+      room = WH - 0.22 - 0.55
+      lh, pad, mn = [[0.145, 0.14, 0.36], [0.135, 0.10, 0.32], [0.125, 0.07, 0.28], [0.118, 0.05, 0.26]].find do |a, b, c|
+        rows.sum { |n| [a * n + b, c].max } <= room
+      end || [0.118, 0.05, 0.26]
+      sh['questions'].each_with_index do |(no, shc, to, q), i|
+        rh = [lh * rows[i] + pad, mn].max
+        text(no, xs[0] + 0.04, y + 0.05, @l_sheet, size: 8, font: MONO, c: RED)
+        box_text(shc, xs[1] + 0.04, y + 0.05, ws[1] - 0.08, rh - 0.06, @l_sheet, size: 6.5, font: MONO, c: INK2)
+        box_text(to.sub(' / ', "/\n"), xs[2] + 0.04, y + 0.05, ws[2] - 0.06, rh - 0.06, @l_sheet, size: 6.5, font: MONO)
+        box_text(q, xs[3] + 0.04, y + 0.05, ws[3] - 0.10, rh - 0.05, @l_sheet, size: 7, c: RED)
         y += rh
         line(WX, y, WX + WW, y, @l_sheet, w: 0.5, c: ROWLINE)
       end
@@ -754,6 +781,7 @@ module UCON
 
     # A-501 / A-503: elevation 1:20 (vector) + plan section 1:10 (scene)
     def self.page_door(skp, code, name, dr)
+      @dtf = dr['tf']
       # scales picked by size (Main Kitchen DK1 1:20 / 1:10; ML Foyer OB2, 2219 wide on a 4000 wall, 1:30 / 1:20)
       es = [20, 25, 30, 40].find { |s| top_of(wall(dr['wall'])) / s * MM <= 5.3 } || 40
       ps = [10, 20, 25].find { |s| (dr['open_x'][1] - dr['open_x'][0] + 600) / s * MM <= 6.4 } || 25
@@ -797,6 +825,13 @@ module UCON
       # chains: top = panel edges + cladding, bottom = opening, left = levels, right = opening height
       lp = near.select { |p| p['s1'] <= ca + 1 && p['z0'] < 1000 }.map { |p| p['s1'] }.max
       rp = near.select { |p| p['s0'] >= cb - 1 && p['z0'] < 1000 }.map { |p| p['s0'] }.min
+      # 2026-10-20 (AP Master Bedroom D01 in the stone wall): no panel beside the door - the neighbour is the stone by
+      # others (tm box tag 'stonewall'); the joints are given to it
+      sw = (w['tm'] || []).select { |b| b['tag'] == 'stonewall' }
+      pl, pr = lp, rp
+      lp = ([lp] + sw.select { |b| b['s1'] <= ca + 1 }.map { |b| b['s1'] }).compact.max   # the NEAREST of panel / stone
+      rp = ([rp] + sw.select { |b| b['s0'] >= cb - 1 }.map { |b| b['s0'] }).compact.min
+      nbk = lp == pl && rp == pr ? 'panels' : 'stone'
       hchain([lp, ca, cb, rp].compact, px, pz.(ztop), 0.30, pz.(ztop) - 3)
       hchain([o['s0'], o['s1']], px, pz.(0), 0.30, pz.(0) + 3)
       hchain(leaves.flat_map { |a, b, _| [a, b] }, px, pz.(0), 0.60, pz.(0) + 3)
@@ -805,6 +840,7 @@ module UCON
       vchain(([0, lev['ffl'], cz0, cz1] + above).uniq.sort, pz, px.(lo), 0.35, px.(lo) - 3)
       vchain([0, o['z1']], pz, px.(hi), 0.30, px.(hi) + 3)
       bub(pt2(px.(cm), pz.(1300)), qref('door'))
+      wall_bubbles('A-5', w, px, pz, "A-5:#{dr['id']}")
       bub(pt2(px.(o['s0']) - 0.05, pz.(o['z1']) - 0.25), qref('heads'))
       bub(pt2(px.(lo + 150), pz.(lev['stone_top']) - 0.25), qref('stone')) if lev['stone_top']
       vlabel(WX, yf + 1.15, 4.6, 1, code, "#{dr['id']} ELEVATION — FROM #{sh['room_side'] || 'THE ROOM'}", "1:#{es}")   # below the 3 chains
@@ -859,17 +895,20 @@ module UCON
         *pnotes("A-5:#{dr['id']}"),
         if pull
           st = dr['leaf_step'] || {}
-          ["Leaf #{f1(cb - ca)} x #{f1(cz1 - cz0)} x #{f1(dr['leaf_t'])} (face #{f1(dr['leaf_t'].to_f - st['t'].to_f)} + back step #{f1(st['t'])} x #{f1(st['inset'])}), veneered, no applied panel, face = panel face; #{f1(cz0 - lev['ffl'])} above FFL, top #{f1(cz1)}; joints to the panels #{f1(ca - lp)} / #{f1(rp - cb)}. Opens toward the panels.", false]
+          ["Leaf #{f1(cb - ca)} x #{f1(cz1 - cz0)} x #{f1(dr['leaf_t'])} (face #{f1(dr['leaf_t'].to_f - st['t'].to_f)} + back step #{f1(st['t'])} x #{f1(st['inset'])}), veneered, no applied panel, face = panel face; #{f1(cz0 - lev['ffl'])} above FFL, top #{f1(cz1)}; joints to the #{nbk} #{lp ? f1(ca - lp) : '-'} / #{rp ? f1(rp - cb) : '-'}. Opens toward the panels.", false]
         else
-          [(leaves.size > 1 ? "#{leaves.size} claddings " : 'Cladding ') + "#{leaves.map { |a, b, _| f1(b - a) }.uniq.join(' / ')} x #{f1(cz1 - cz0)}#{leaves.size > 1 ? ", joint #{f1(dr['leaf_joint'])}" : ''}, #{f1(cz0 - lev['ffl'])} above FFL, top at the panel joint #{f1(cz1)}; joints to the panels #{f1(ca - lp)} / #{f1(rp - cb)}.", false]
+          [(leaves.size > 1 ? "#{leaves.size} claddings " : 'Cladding ') + "#{leaves.map { |a, b, _| f1(b - a) }.uniq.join(' / ')} x #{f1(cz1 - cz0)}#{leaves.size > 1 ? ", joint #{f1(dr['leaf_joint'])}" : ''}, #{f1(cz0 - lev['ffl'])} above FFL, top at the panel joint #{f1(cz1)}; joints to the #{nbk} #{lp ? f1(ca - lp) : '-'} / #{rp ? f1(rp - cb) : '-'}.", false]
         end,
         ["Door face = panel face #{f1(bu['face'])} from the wall; wall #{f1(dr['wall_t'])}#{sh['wall_t_note'] || ' (not surveyed)'}, jamb #{f1(dr['jamb_y'][1] - dr['jamb_y'][0])}. Panels in front of the frame rebated #{f1(bu['rebate'])} at the back (A-701, D-sheets).", true],
         'Details 1:5 on the next sheet.'
       ], size: 7, step: 0.165)
+    ensure
+      @dtf = nil
     end
 
     # A-502 / A-504: head + floor (vertical section), both jambs (plan section), 1:5
     def self.page_door_details(skp, code, name, dr)
+      @dtf = dr['tf']
       next_page(name); header('SCALE 1:5 · DIMENSIONS IN MM'); sheet_code(code)
       w = wall(dr['wall']); o = opening(w, dr['id'])
       cw = (WW - GUT) / 2; chh = (WH - GUT) / 2
@@ -911,10 +950,13 @@ module UCON
       x_open = dr['open_x']; fx = dr['frame_x']
       lp = panels_of(w['id']).select { |p| p['s1'] <= ca + 1 && p['z0'] < 1000 }.map { |p| p['s1'] }.max
       rp = panels_of(w['id']).select { |p| p['s0'] >= cb - 1 && p['z0'] < 1000 }.map { |p| p['s0'] }.min
+      sw = (w['tm'] || []).select { |b| b['tag'] == 'stonewall' }   # 2026-10-20 (AP Master Bedroom): stone beside the door
+      lp = ([lp] + sw.select { |b| b['s1'] <= ca + 1 }.map { |b| b['s1'] }).compact.max   # the NEAREST of panel / stone
+      rp = ([rp] + sw.select { |b| b['s0'] >= cb - 1 }.map { |b| b['s0'] }).compact.min
       s2x = ->(s) { dr['clad_x'][0] + (s - ca) }   # Wall 2 runs along +x
       both = dr['hinge'] == 'both'
-      [[2, x_open[0] + 50, hinge_r && !both ? 'LATCH' : 'HINGE', [[x_open[0], fx[0], yw + 76], [s2x.(lp), dr['clad_x'][0], yf0]], -1],
-       [3, x_open[1] - 50, hinge_r || both ? 'HINGE' : 'LATCH', [[fx[1], x_open[1], yw + 76], [dr['clad_x'][1], s2x.(rp), yf0]], 1]].each do |ci, xj, side, gaps, sg|
+      [[2, x_open[0] + 50, hinge_r && !both ? 'LATCH' : 'HINGE', [[x_open[0], fx[0], yw + 76], lp && [s2x.(lp), dr['clad_x'][0], yf0]].compact, -1],
+       [3, x_open[1] - 50, hinge_r || both ? 'HINGE' : 'LATCH', [[fx[1], x_open[1], yw + 76], rp && [dr['clad_x'][1], s2x.(rp), yf0]].compact, 1]].each do |ci, xj, side, gaps, sg|
         x0, y0 = cells[ci]; q = pt2(x0 + cw / 2, y0 + 0.15 + 1.4)
         jv = cropped(skp, dr['scenes']['plan'], dr['cams']['plan'], [xj, yw + 80, zc], q, cw - 1.0, 2.8, s5, PLAN)
         gaps.each { |a, b, yy| vdim(jv, P(a, yy, zc), P(b, yy, zc), 0.30, P((a + b) / 2, -90_000, zc), b - a) }
@@ -924,6 +966,8 @@ module UCON
         bub(jv.model_to_paper_point(P(xj, yw + 260, zc)), qref('door'))
         vlabel(x0, y0 + chh - LABEL_H, cw, ci + 1, code, "#{dr['id']} JAMB #{sg.negative? ? 'LEFT' : 'RIGHT'} (#{side} SIDE) — PLAN SECTION", '1:5')
       end
+    ensure
+      @dtf = nil
     end
 
     # ------------------------------------------------------------------ A-511.. details (images, for approval)

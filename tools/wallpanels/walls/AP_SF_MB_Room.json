@@ -1,0 +1,769 @@
+{
+ "_about": "AP Capital second floor, MASTER BEDROOM (MB) - the ROOM for the drawing standard (UCON::RoomSet): 11 wall JSONs AP_SF_MB_*.json (Wall 1, Wall 2 left / right with the two entrance piers wrapped on three faces, Wall 3, Wall 4), written by ~/dev/_claude/ap/mb/mk_walls.py; this file by mk_room.py. Survey = ~/Documents/AP_SF_Master_Bedroom_V0.1.skp (probe 930, 2026-10-20); built by ARMED 932 / 933. TM order 260326, DWG 'rev 2' 2026-07-08 (Gmail 'DWG file' 2026-10-12, У2 1 946 428 b), PDF rev 4 (Drive). v1.0 FOR REVIEW.",
+ "id": "AP_SF_MB_Room",
+ "model": "AP_SF_Master_Bedroom_V0.1",
+ "walls": [
+  "AP_SF_MB_W1.json",
+  "AP_SF_MB_W2L.json",
+  "AP_SF_MB_PAS.json",
+  "AP_SF_MB_PAF.json",
+  "AP_SF_MB_PAR.json",
+  "AP_SF_MB_PBR.json",
+  "AP_SF_MB_PBF.json",
+  "AP_SF_MB_PBS.json",
+  "AP_SF_MB_W2R.json",
+  "AP_SF_MB_W3.json",
+  "AP_SF_MB_W4.json"
+ ],
+ "files": {
+  "panels_csv": "AP_MB_drilling_panels_TM_v{rev}.csv",
+  "frames_csv": "AP_MB_drilling_frames_CNC_S_v{rev}_UCON-only.csv",
+  "cut_list": "AP_MB_backing_cut_list.csv"
+ },
+ "sheets": {
+  "tags": {
+   "ProjectName": "AP Capital",
+   "ProjectAddress": "29 Waves End\nNewport Coast, CA 92657\nUnited States",
+   "ProjectNumber": "TM 260326",
+   "ClientName": "AP Capital",
+   "Designer": "AD",
+   "Drafter": "AD",
+   "CheckedBy": " ",
+   "Issue": "For review",
+   "Revision": "1.0",
+   "IssueDate": "10.20.26",
+   "Status": "FOR REVIEW",
+   "StatusDesc": "Dimensions per UCON site survey. Not for production until the open questions are answered and the drawings are reissued.",
+   "Rev1": "1.0",
+   "Rev1Desc": "Issued for review",
+   "Rev1Date": "10.20.26",
+   "Rev2": " ",
+   "Rev2Desc": " ",
+   "Rev2Date": " ",
+   "Rev3": " ",
+   "Rev3Desc": " ",
+   "Rev3Date": " ",
+   "Rev4": " ",
+   "Rev4Desc": " ",
+   "Rev4Date": " "
+  },
+  "cover_title": "MASTER BEDROOM · WALL PANELS, BACKING FRAMES, CLIPS, ENTRANCE PIERS, WINDOW LINER, TM DOORS D01 / D02",
+  "scenes": {
+   "cover": "MB-07 Cover ISO",
+   "iso": "MB-07 Cover ISO",
+   "iso_frames": "MB-08 3D Frames ISO"
+  },
+  "cover_scale": 75,
+  "iso_scale": 100,
+  "existing_groups": [
+   [
+    "Wall 1"
+   ],
+   [
+    "Wall 2 left",
+    "Pier A side",
+    "Pier A front",
+    "Pier A reveal"
+   ],
+   [
+    "Pier B reveal",
+    "Pier B front",
+    "Pier B side",
+    "Wall 2 right"
+   ],
+   [
+    "Wall 3"
+   ],
+   [
+    "Wall 4"
+   ]
+  ],
+  "sheet_groups": [
+   [
+    "Wall 1"
+   ],
+   [
+    "Wall 2 left",
+    "Pier A side",
+    "Pier A front",
+    "Pier A reveal"
+   ],
+   [
+    "Pier B reveal",
+    "Pier B front",
+    "Pier B side",
+    "Wall 2 right"
+   ],
+   [
+    "Wall 3"
+   ],
+   [
+    "Wall 4"
+   ]
+  ],
+  "group_names": {
+   "Wall 2 left": "WALL 2 LEFT + PIER A",
+   "Pier B reveal": "PIER B + WALL 2 RIGHT"
+  },
+  "room_side": "THE MASTER BEDROOM",
+  "iso_title": "FINISHED PANELS, STONE BY OTHERS, DOORS D01 / D02, WINDOW LINER",
+  "finish_by": "TM",
+  "opening_labels": {},
+  "wall_t_note": " (TM door section - not surveyed, Q11)",
+  "key_wall_t": 170,
+  "qref": {
+   "drill": "Q14",
+   "door": "Q9",
+   "heads": null,
+   "stone": "Q1",
+   "panel_size": "Q3",
+   "mitre": "Q5"
+  },
+  "questions": [
+   [
+    "Q1",
+    "A-301..A-304 A-701",
+    "TM",
+    "Heights: your DWG (260326 rev 2) has the panels from the floor to {{3147}} - no baseboard. On site the walls get a STONE baseboard by others (Passione sheet 25: 8\" stone base with riglet), as our other AP rooms: stone top {{stone}} above the subfloor (FFL {{ffl}} + 8\"); the panels stand on it and stop 10 under the ceiling: {{h('P03')}} high. Please confirm the panel heights."
+   ],
+   [
+    "Q2",
+    "A-101",
+    "Site",
+    "Stone baseboard by others: {{stn['t']}} thick, face = panel face, top {{stone}} above the subfloor, notch {{stn['notch']}} x {{stn['notch']}}; one piece per run, cut only at the doors. Finished floor taken at {{ffl}} above the subfloor (as the other AP rooms) - please confirm FFL in the Master Bedroom."
+   ],
+   [
+    "Q3",
+    "A-301..A-304 A-701",
+    "TM",
+    "Panel sizes to the UCON survey (room 8790 x 7888, ceiling {{@s['walls'][0]['ceil'][0][2]}}). Your DWG 'rev 2' is the drawing of your PDF rev 3 / rev 4 WITHOUT our red survey marks (6785, 1145, 505, 677, 670, 1688 / 1665 / 1665 / 1720). Sizes per A-701 replace your cut list: wall 2 left P03-P05 {{w('P03')}} (yours 1056 / 1051 / 1078.5), wall 2 right P12 / P13 {{w('P12')}} (yours 1265), P14 {{w('P14')}} (538.5), P15 {{w('P15')}} (674), P16 / P21 {{w('P16')}} / {{w('P21')}} (955), band over the window P17-P20 {{w('P17')}} / {{w('P18')}} / {{w('P19')}} / {{w('P20')}} x {{h('P17')}} (yours 1689 / 1681.5 / 1649.5 / 1721 x 639) - joints at the window mullions per our survey. Numbers P01-P21 = your 1-21. Please confirm, or send the DWG updated to rev 4."
+   ],
+   [
+    "Q4",
+    "A-301 A-101",
+    "TM / Site",
+    "Wall 1 (bed wall) is MARBLE SLAB BY OTHERS with two wood panels P01 / P02 {{w('P01')}} x {{h('P01')}}, placed as your DWG: {{z0('P01') * 0 + pn('P01')['s0'] - op('D01')['s1']}} and {{pn('P02')['s0'] - op('D01')['s1']}} from the door opening edge (positions not surveyed). Joints 10 to the stone. At door D01 the slabs pass 45.5 in front of the door frame with a joint 10 to the cladding, as the panels at D02 - the stone needs the same rear rebate over the frame. We draw the slabs 20 thick with the face = panel face - please confirm the slab thickness and whether the panel face is flush with the stone."
+   ],
+   [
+    "Q5",
+    "A-511 A-302",
+    "TM",
+    "Entrance piers (wall 2): wrapped on all three faces, outside corners MITRED 45 (long point on the face): sides P06 / P11 {{w('P06')}}, fronts P07 {{w('P07')}} / P10 {{w('P10')}}, reveals P08 / P09 {{w('P08')}} to the hall face; clear width between the reveal panels {{1871 - 2 * @s['walls'][4]['build_up']['face']}}. All pier frames stand on 2 mm SHIMS (panel face {{@s['walls'][3]['build_up']['face']}}): the fronts are 4 wider - room to adjust on a pier that is not straight. Your 45 'edge' pieces 6 / 8 and 9 / 11 are replaced by the mitres; the wall 2 panels run through the inside corners, the side panels stop 10 in front of them. Please confirm."
+   ],
+   [
+    "Q6",
+    "A-101 A-302",
+    "Site",
+    "Pier B reveal (toward wall 3) surveyed only to the wall plane (473); taken as pier A, 650 to the hall face (Andriy). Please confirm on site."
+   ],
+   [
+    "Q7",
+    "A-512 A-304",
+    "TM",
+    "Window (wall 4): MDF {{ln('W-WIN')['t']}} L-liner, leg against the bare reveal, {{ln('W-WIN')['depth']}} past the wall face, flange {{ln('W-WIN')['flange']}} behind the panels into the slot of strips B 6 x 34 + A 6 x 17 glued to the panel back by the factory (D-sheets), corners mitred 45; legs to FFL + 10 (the window runs to the floor). Side panels P16 / P21 10 short of the jamb line, band P17-P20 {{z0('P17') - oh('W-WIN')}} above the head. Replaces your 'edge coverings 45 joints'. Please confirm."
+   ],
+   [
+    "Q8",
+    "A-512 A-101",
+    "Site",
+    "CHECK ON SITE the window / panel junction through our L-liner before the liners are made: reveal depth, window frame and trim were NOT surveyed (the liner is drawn against a bare reveal)."
+   ],
+   [
+    "Q9",
+    "A-501..A-504",
+    "TM / Client",
+    "Doors D01 (her bath, left handed, white pearl) and D02 (his bath, right handed, white metal) drawn as our Bedroom 3 / REC-LAU D01 (TM concealed frame, one stop on the hinge side, U profile casings): openings per UCON survey {{ow('D01')}} / {{ow('D02')}} wide, TO THE CEILING ({{oh('D01')}} above the subfloor, no lintel); cladding {{op('D01')['clad'][1] - op('D01')['clad'][0]}} / {{op('D02')['clad'][1] - op('D02')['clad'][0]}} x {{op('D01')['clad'][3] - op('D01')['clad'][2]}} from {{op('D01')['clad'][2]}}; frame head {{dr('D01')['head_z'][1]}}. Your drawing: rough opening 3123 (a lintel ~31), frame 3114 / 3171, leaf 1039 x 3002, 'to be cut on site'. UCON RECOMMENDS the doors WITHOUT a head (no top frame member / lintel) - frame and leaf straight to the ceiling; to be discussed with the client. Panels {{rebated}} pass in front of the frame with the rear {{bu['rebate']}} rebate. Over each door a FILLER P22 / P23 - see Q15. Please issue the doors to these sizes or confirm yours."
+   ],
+   [
+    "Q10",
+    "A-503",
+    "Client / TM",
+    "D02 (his bath): Passione sheet 25 shows a LEATHER UPHOLSTERED POCKET DOOR sliding left; your drawing a hinged right-handed door with a closer. We draw yours. Which one is ordered?"
+   ],
+   [
+    "Q11",
+    "A-101 A-501 A-503",
+    "Site",
+    "Wall thickness at both doors taken as {{dr('D01')['wall_t']}} (your door section 350 / 353) - not surveyed. Please confirm before the frames are ordered."
+   ],
+   [
+    "Q12",
+    "A-302 A-303",
+    "TM",
+    "Built-in cabinets in the wall 2 / wall 3 corner: survey {{ow('CAB')}} along wall 3 (yours 2321), depth taken as yours 700 - P13 stops 10 short of the cabinet side. Please confirm the cabinet depth, height and the junction with P13."
+   ],
+   [
+    "Q13",
+    "A-210 D-01..",
+    "TM",
+    "Panels hang on Fastmount VL-03H clips, recess mount, gap {{bu['clip_gap']}}. Please make the clip recesses in the panel backs at the factory per the D-sheets (D{{@s['clips']['hole_d']}} x {{@s['clips']['panel_depth']}} deep). Please confirm which clip half goes into the panel (we assume male)."
+   ],
+   [
+    "Q14",
+    "D-01..",
+    "TM",
+    "All drilling coordinates are given from the panel BACK: X from the left edge as seen from the back, Z from the bottom edge. A control column gives X from the face. Please confirm before drilling - mirrored drilling is the main risk."
+   ],
+   [
+    "Q15",
+    "A-301 A-304 A-501 A-503",
+    "TM / Client",
+    "DOOR HEAD (D01 / D02, red frame on A-301 / A-304 / A-501 / A-503): the openings run to the ceiling with no lintel; drawn now, the cladding stops at {{op('D01')['clad'][3]}} and a FILLER P22 / P23 {{w('P22')}} / {{w('P23')}} x {{h('P22')}} closes the gap (joint 10 over the cladding, 10 under the ceiling) - too low for a clip (glued), and it looks poor. Option A: door to the ceiling WITHOUT a head - frame without the top member, leaf to ceiling - 10, no filler: the doors read as panels (hidden doors), the designer's intent - is it technically possible with your concealed frame, closer and push-to-open at this height? Option B: lower the door to a standard height with a head panel over it on the panel grid - reads more naturally as a door. Please advise / recommend; to be decided with the client."
+   ]
+  ],
+  "questions_note": "Red number = open question, marked with the same red bubble on the sheet it belongs to. Answers to be written in the ANSWER column and returned; the drawings are reissued after the answers.",
+  "notes": {
+   "G-001": [
+    [
+     "Survey by UCON. All dimensions in mm, Z from the SUBFLOOR (FFL {{ffl}}). Dimensions per UCON survey govern; from the TM drawings (order 260326, DWG 'rev 2' / PDF rev 4) the numbering 1-21 and the door profile.",
+     false
+    ],
+    [
+     "Wall panels MDF {{bu['panel_t']}}, finish per TM (METAL LACQUERED GLOSSY VM100SW Perla Grana Media Super White); joints 10; on the stone baseboard {{stone}} (by others, Q1 / Q2), 10 to the ceiling and to the wall corners. Panel face {{bu['face']}} from the wall = backing frame {{bu['frame_t']}} + clip gap {{bu['clip_gap']}} + panel {{bu['panel_t']}}. Numbers P01..P21 = TM 1-21 (Q3).",
+     false
+    ],
+    [
+     "Backing frames S01..S{{format('%02d', @s['frames'].values.sum { |f| f['frames'].size })}}: plywood 3/4\", made, drilled and fixed by UCON (A-20x, A-702, A-703), from the stone top; a frame member behind every panel joint - no raw wall in a joint. Clips Fastmount VL-03H, recess mount, {{@s['holes'].size}} pcs: panel recesses by the factory per the D-sheets (BACK VIEW), frame holes by UCON CNC.",
+     false
+    ],
+    [
+     "STONE BY OTHERS: the marble slabs of wall 1 (bed wall) and the stone baseboard - drawn for reference only (Q2, Q4). Fireplace / TV wall (wall 3, ivory onyx) by others.",
+     true
+    ],
+    [
+     "Entrance piers wrapped on three faces, outside corners mitred 45 (A-511, Q5). Window wall 4: L-liner (A-512, Q7) - CHECK ON SITE the window / panel junction through our L-liner before the liners are made (Q8).",
+     true
+    ],
+    [
+     "Doors D01 / D02: TM concealed frames, openings to the ceiling, panel cladding; frames to our survey (Q9, Q11). UCON recommends the factory makes the doors WITHOUT a head - straight to the ceiling; to discuss with the client (Q9). D02: pocket door per Passione? (Q10).",
+     true
+    ],
+    [
+     "Red marks are open questions or TBD items. Not for production until G-002 is answered and the set is reissued.",
+     true
+    ]
+   ]
+  },
+  "page_notes": {
+   "A-1": [
+    [
+     "Walls, openings and heights per UCON site survey - they govern over the factory drawings. Room 8790 x 7888, ceiling {{@s['walls'][0]['ceil'][0][2]}}; door openings D01 {{ow('D01')}} / D02 {{ow('D02')}} and the entrance to the ceiling; window {{ow('W-WIN')}} x {{oh('W-WIN')}} to the floor. Pier walls drawn as seen from the room / from the entrance.",
+     false
+    ],
+    [
+     "Stone (wall 1 slabs, baseboard) and the fireplace wall by others; built-in cabinets by TM (Q12).",
+     true
+    ]
+   ],
+   "A-2:*": [
+    "Frames from the stone top {{@s['levels']['floor_gap']}} to the ceiling; tier joint {{@s['levels']['tier_joint']}} (a 4\" rail on the clip row); no frame behind the stone, the cabinets, the fireplace or over the openings that run to the ceiling; a frame member behind every panel joint. Built and fixed by UCON."
+   ],
+   "A-3:*": [
+    "Panels MDF {{bu['panel_t']}}, finish per TM; joints 10; full height {{z0('P03')}}..{{z1('P03')}} on the stone; over the window P17-P20 from {{z0('P17')}}. Numbers = TM 1-21 (Q3).",
+    "Panels {{rebated}} rebated at the back {{bu['rebate']}} in front of the door frames (A-501, A-503, A-701, D-sheets)."
+   ],
+   "A-3:Wall 1": [
+    [
+     "MARBLE SLAB - STONE BY OTHERS between P01 / P02 and around D01 (reference, 20 assumed, Q4).",
+     true
+    ]
+   ],
+   "A-3:Wall 4": [
+    [
+     "CHECK ON SITE the window / panel junction through our L-liner (reveal, window frame, trim not surveyed) - Q8.",
+     true
+    ]
+   ],
+   "A-5:*": [
+    [
+     "{d}: TM concealed door, profile as Bedroom 3 / REC-LAU D01 (TM), opening per UCON survey {{ow('{d}')}} wide, to the ceiling (Q9).",
+     true
+    ],
+    [
+     "UCON RECOMMENDATION: door WITHOUT a head (no top frame member / lintel), frame and leaf straight to the ceiling - to discuss with the client (Q9).",
+     true
+    ],
+    [
+     "D01 left handed (her bath, white pearl), D02 right handed (his bath, white metal); push to open / self-closing, no handles or locks (TM). D02: pocket door per Passione? (Q10).",
+     true
+    ]
+   ],
+   "A-701": [
+    "Panels P01..P21 (TM 1-21); P22 / P23 = fillers over the doors D01 / D02 (glued, no clips, Q9). Door claddings D01 / D02 by TM - not in this list."
+   ]
+  },
+  "bubbles": {
+   "A-3:Wall 4": [
+    [
+     "Q3",
+     4395,
+     2830
+    ],
+    [
+     "Q7",
+     1005,
+     1500
+    ],
+    [
+     "Q8",
+     7787,
+     1500
+    ]
+   ],
+   "A-3:Wall 3": [
+    [
+     "Q12",
+     1157,
+     1500
+    ],
+    [
+     "Q10",
+     6632,
+     1800
+    ],
+    [
+     "Q15",
+     6014,
+     2960,
+     7250,
+     3152
+    ]
+   ],
+   "A-3:Wall 1": [
+    [
+     "Q4",
+     4975,
+     1500
+    ],
+    [
+     "Q15",
+     627,
+     2960,
+     1867,
+     3152
+    ]
+   ],
+   "A-5:D01": [
+    [
+     "Q15",
+     627,
+     2960,
+     1867,
+     3152
+    ]
+   ],
+   "A-5:D02": [
+    [
+     "Q15",
+     6014,
+     2960,
+     7250,
+     3152
+    ]
+   ],
+   "A-1:Wall 3": [
+    [
+     "Q11",
+     6632,
+     1300
+    ]
+   ],
+   "A-1:Wall 1": [
+    [
+     "Q2",
+     4000,
+     160
+    ]
+   ]
+  },
+  "details": [
+   {
+    "code": "A-511",
+    "name": "ENTRANCE PIERS - MITRES 45 - PLAN",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "MB-11 Plan Section @ +1500",
+      "cam": [
+       4395,
+       -7500,
+       1500
+      ],
+      "at": [
+       5422,
+       -7600,
+       1500
+      ],
+      "proj": "plan",
+      "title": "PIER A (WALL 1 SIDE) - PLAN SECTION AT +1500",
+      "dims": [
+       [
+        [
+         5514,
+         -7300,
+         1500
+        ],
+        [
+         5330,
+         -7300,
+         1500
+        ],
+        0.35,
+        [
+         5422,
+         90000,
+         1500
+        ]
+       ],
+       [
+        [
+         5560.3,
+         -7250,
+         1500
+        ],
+        [
+         5283.7,
+         -7250,
+         1500
+        ],
+        0.65,
+        [
+         5422,
+         90000,
+         1500
+        ]
+       ],
+       [
+        [
+         5620,
+         -7888,
+         1500
+        ],
+        [
+         5620,
+         -7415,
+         1500
+        ],
+        0.35,
+        [
+         90000,
+         -7650,
+         1500
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "P07 MITRED 45 BOTH EDGES",
+        [
+         5422,
+         -7381,
+         1500
+        ],
+        false,
+        [
+         0.3,
+         0.6
+        ]
+       ],
+       [
+        "P06",
+        [
+         5547,
+         -7600,
+         1500
+        ],
+        false,
+        [
+         0.5,
+         0.2
+        ]
+       ],
+       [
+        "P08",
+        [
+         5296,
+         -7700,
+         1500
+        ],
+        false,
+        [
+         -0.6,
+         0.2
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "MB-11 Plan Section @ +1500",
+      "cam": [
+       4395,
+       -7500,
+       1500
+      ],
+      "at": [
+       3373,
+       -7600,
+       1500
+      ],
+      "proj": "plan",
+      "title": "PIER B (WALL 3 SIDE) - PLAN SECTION AT +1500",
+      "dims": [
+       [
+        [
+         3459,
+         -7300,
+         1500
+        ],
+        [
+         3287,
+         -7300,
+         1500
+        ],
+        0.35,
+        [
+         3373,
+         90000,
+         1500
+        ]
+       ],
+       [
+        [
+         3505.3,
+         -7250,
+         1500
+        ],
+        [
+         3240.7,
+         -7250,
+         1500
+        ],
+        0.65,
+        [
+         3373,
+         90000,
+         1500
+        ]
+       ],
+       [
+        [
+         3180,
+         -7888,
+         1500
+        ],
+        [
+         3180,
+         -7415,
+         1500
+        ],
+        0.35,
+        [
+         -90000,
+         -7650,
+         1500
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "P10 MITRED 45 BOTH EDGES",
+        [
+         3373,
+         -7381,
+         1500
+        ],
+        false,
+        [
+         0.3,
+         0.6
+        ]
+       ],
+       [
+        "P09",
+        [
+         3492,
+         -7700,
+         1500
+        ],
+        false,
+        [
+         0.5,
+         0.2
+        ]
+       ],
+       [
+        "P11",
+        [
+         3254,
+         -7600,
+         1500
+        ],
+        false,
+        [
+         -0.6,
+         0.2
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "UCON proposal: each entrance pier is lined on its side, front and reveal; outside corners MITRED 45 (long point on the face), the wall 2 panels run through the inside corners, the side panels stop 10 in front of them; reveal panels to the hall face. Frames 19 on 2 mm SHIMS on every pier face (panel face 46.3, fronts 4 wider - room to adjust on a pier that is not straight), solid strips on the fronts. Q5, Q6.",
+      true
+     ],
+     "Drawn from the model (scene MB-11)."
+    ]
+   },
+   {
+    "code": "A-512",
+    "name": "WINDOW (WALL 4) - L-LINER",
+    "kind": "sections",
+    "cells": [
+     {
+      "scene": "MB-13 W4 Window Jamb — Plan @ +1500",
+      "cam": [
+       1005,
+       -200,
+       1500
+      ],
+      "at": [
+       1005,
+       -60,
+       1500
+      ],
+      "proj": "plan",
+      "title": "LEFT JAMB - PLAN SECTION AT +1500",
+      "dims": [
+       [
+        [
+         995,
+         -80,
+         1500
+        ],
+        [
+         1005,
+         -80,
+         1500
+        ],
+        0.35,
+        [
+         1000,
+         -90000,
+         1500
+        ]
+       ],
+       [
+        [
+         920,
+         -44.3,
+         1500
+        ],
+        [
+         920,
+         0,
+         1500
+        ],
+        0.3,
+        [
+         -90000,
+         -22,
+         1500
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "L-LINER MDF 6 (UCON PROPOSAL)",
+        [
+         1015,
+         -40,
+         1500
+        ],
+        false,
+        [
+         0.4,
+         -0.5
+        ]
+       ],
+       [
+        "P16",
+        [
+         950,
+         -33,
+         1500
+        ],
+        false,
+        [
+         -0.6,
+         0.5
+        ]
+       ]
+      ]
+     },
+     {
+      "scene": "MB-12 W4 Window — Section",
+      "cam": [
+       4000,
+       60,
+       2600
+      ],
+      "at": [
+       4000,
+       -40,
+       2560
+      ],
+      "proj": "side",
+      "title": "HEAD - SECTION AT X 4000",
+      "dims": [
+       [
+        [
+         4000,
+         -44.3,
+         2517
+        ],
+        [
+         4000,
+         -44.3,
+         2527
+        ],
+        0.35,
+        [
+         4000,
+         -90000,
+         2522
+        ]
+       ]
+      ],
+      "labels": [
+       [
+        "P18",
+        [
+         4000,
+         -33,
+         2700
+        ],
+        false,
+        [
+         -0.6,
+         0.4
+        ]
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     [
+      "L-liner MDF 6 against the bare reveal, flange into the slot of strips B / A on the panel back (as Dining v2.0); legs to FFL + 10. Q7.",
+      true
+     ],
+     [
+      "CHECK ON SITE the window / panel junction through our L-liner before the liners are made: reveal depth, window frame and trim were not surveyed (Andriy 2026-10-20). Q8.",
+      true
+     ],
+     "Drawn from the model (scenes MB-13, MB-12)."
+    ]
+   }
+  ]
+ }
+}

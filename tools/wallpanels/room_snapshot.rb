@@ -98,8 +98,14 @@ module UCON
         # running along +x, face toward -y (ML Foyer B, Main Kitchen Wall 2) - the door pages cut along x
         (wox, woy), wt, wn = s['wall']['wf'] || [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]]
         ox = wox.to_f
+        # 2026-10-20 (AP Master Bedroom, doors on walls running along y): a door on any other wall is written in DOOR-LOCAL
+        # coordinates - the wall's own x, y = 0 at its face, negative into the room (as a +x wall at the origin) - plus
+        # 'tf' = the wall frame [origin, t, n]; the door pages map their points to the model through it (RoomSet.P)
+        xwall = wt == [1, 0] && wn == [0, -1]
+        unless xwall
+          ox = 0.0; tf = { 'o' => [wox.to_f, woy.to_f], 't' => wt.map(&:to_f), 'n' => wn.map(&:to_f) }; woy = 0.0
+        end
         s['openings'].select { |op| op['kind'] == 'door' }.each do |op|
-          raise "door #{op['id']}: wall #{w} does not run along +x" unless wt == [1, 0] && wn == [0, -1]
           f = op['frame']; gs = f['gap_side'].to_f; hz = op['h'].to_f - f['gap_head'].to_f
           snap['doors'] << {
             'id' => op['id'], 'wall' => w, 'hinge' => op['hinge'] || 'both', 'leaves' => op['leaf']['leaves'] || 1,
@@ -111,6 +117,7 @@ module UCON
             'scenes' => op['scenes'], 'cams' => op['cams'], 'profile' => op['profile'] || 'clad', 'stops' => op['stops'] || 'both',
             'leaf_t' => op['leaf']['t'], 'leaf_step' => op['leaf']['step']
           }
+          snap['doors'].last['tf'] = tf unless xwall
         end
         o[:holes].each do |h|
           snap['holes'] << { 'id' => h[:id], 'panel' => h[:panel], 'wall' => w, 's' => h[:x], 'z' => h[:z],

@@ -1,0 +1,125 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital second floor: MASTER BEDROOM (TM 260326, DWG 'rev 2' 2026-07-08 = PDF rev 3/4 without Andriy's red survey marks). mm, wall-local: x along the wall from its left end as seen from the room (pier reveals: as seen from the opening), z up from the SUBFLOOR (survey zero; FFL +57.15 as the other AP rooms), y = 0 at the wall face, negative toward the room. UCON survey = ~/Documents/AP_SF_Master_Bedroom_V0.1.skp (probe 930, 2026-10-20): room 8790 x 7888, ceiling 3152 everywhere. Andriy 2026-10-20: our survey governs, TM numbers only to compare (G-002); panel numbers = TM 1-21; STONE BASEBOARD as Bedroom 3 (Passione sheet 25: 8\" stone base with riglet) - panels on the stone 260.35, 10 to the ceiling, joints 10; doors her / his as Bedroom 3 D01 (TM concealed frame, one stop on the hinge side, U casing, swing on A-501), openings to the ceiling (no lintels); Wall 4 runs through both corners; built-in cabinets in the Wall 2 / Wall 3 corner (700, TM).",
+ "id": "AP_SF_MB_PBF",
+ "model": "AP_SF_Master_Bedroom_V0.1",
+ "prefix": "MB",
+ "wall": {
+  "length": 172.0,
+  "height": 3152.0,
+  "ceil": [
+   [
+    0,
+    172.0,
+    3152.0
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "outside corner with the pier B reveal - mitred 45",
+   "outside corner with the pier B side - mitred 45"
+  ],
+  "wf": [
+   [
+    3459.0,
+    -7415.0
+   ],
+   [
+    -1,
+    0
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "name": "Pier B front",
+  "kind": "niche_side",
+  "_wf": "model: [origin = the left end on the face], [x direction], [room-side normal] (probe 930)"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "as Bedroom 3 / main level - G-002",
+  "stone_top": 260.35,
+  "stone": {
+   "t": 20,
+   "notch": 10,
+   "back_cut": 9.5,
+   "continuous": true,
+   "_": "by others, as Bedroom 3 / Main Kitchen: 20 thick, notch 10 x 10, back cut 9.5 in front of the door frame; top 260.35 = FFL + 8 in (Passione 8 in stone base); Andriy 2026-10-20: ONE piece per run (stone_runs), not split under every panel"
+  },
+  "stone_runs": [
+   [
+    -46.3,
+    218.3
+   ]
+  ]
+ },
+ "build_up": {
+  "frame_t": 19.05,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 46.3,
+  "_face": "frame 3/4 in + Fastmount VL-03H recess gap 3.3 + panel MDF 22, as the other AP walls",
+  "recess": -2.0,
+  "_shim": "Andriy 2026-10-20: the pier fronts P07 / P10 4 wider (2 each side) - room to manoeuvre on a not-quite-straight pier: every pier frame sits on 2 mm shims (recess -2: frame back 2 off the wall), panel face 46.3; side / reveal panels follow"
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 260.35,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "width_step": 0.1,
+  "explicit": [
+   {
+    "id": "P10",
+    "row": "U",
+    "x0": -46.3,
+    "x1": 218.3,
+    "z0": 260.4,
+    "z1": 3142.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "mitres": {
+     "x0": "out",
+     "x1": "out"
+    }
+   }
+  ],
+  "material": "MDF 22, finish per TM (METAL LACQUERED GLOSSY VM100SW Perla Grana Media Super White - TM)"
+ },
+ "openings": [],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 260.35,
+  "tier_joint": 2471.6,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 19,
+  "band_bottom": "local",
+  "_": "as Bedroom 3: frames from the stone top, tier joint = a 4 in rail centred on a clip row of the full-height panels, band to the ceiling; nothing over the openings that run to the ceiling"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ }
+}

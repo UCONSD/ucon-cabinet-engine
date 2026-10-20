@@ -200,7 +200,14 @@ module UCON
       sd = spec['levels']['stone'] || {}
       th = (sd['t'] || 20).to_f; nt = (sd['notch'] || 10).to_f; bc = (sd['back_cut'] || 9.5).to_f
       cuts = spec['openings'].select { |o| o['kind'] == 'door' }.map { |d| [d['x0'] + 1.8, d['x1'] - 1.8] }
-      out[:grid][:panels].select { |p| (p[:z0] - st).abs < 0.05 }.each do |p|
+      # 2026-10-20 (AP Master Bedroom, Andriy: "do not split the stone baseboard"): levels.stone.continuous - one stone piece
+      # per levels.stone_runs [x0, x1] (cut only at the doors), not one under every panel; the runs stand in for panels
+      segs = if sd['continuous'] && spec['levels']['stone_runs']
+               spec['levels']['stone_runs'].each_with_index.map { |(a, b), i| { id: "run #{i + 1}", x0: a.to_f, x1: b.to_f, mitre_start: false, mitre_end: false } }
+             else
+               out[:grid][:panels].select { |p| (p[:z0] - st).abs < 0.05 }
+             end
+      segs.each do |p|
         # 2026-10-19 (AP Office niche mouths): under a mitred end the stone stops at the panel's short (back) point - the
         # long point runs a panel thickness past the reveal, where the niche side panel comes down
         # (levels.stone.stop_at_mitre; Main Kitchen's 45° wall corners keep the stone to the long point)
@@ -235,9 +242,9 @@ module UCON
 
     # ------------------------------------------------------------------ SketchUp side (ARMED only)
     TAGS = { 'doors' => '04 Doors (TM)', 'liners' => '07 Liners', 'strips' => '07 Liners - strips B / A', 'blocks' => '07 Liners - joint blocks MDF 6 (UCON)',
-             'stone' => '05 Stone plinth - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)', 'tm' => '09 TM furniture (ref)', 'counter' => '10 Countertop - by others (ref)', 'wood' => '03 Panels - wood blocking 2x4 flat (UCON)', 'wallref' => '00 Wall body - reference (not surveyed)' }.freeze
+             'stone' => '05 Stone plinth - by others (ref)', 'stonewall' => '05 Stone cladding - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)', 'tm' => '09 TM furniture (ref)', 'counter' => '10 Countertop - by others (ref)', 'wood' => '03 Panels - wood blocking 2x4 flat (UCON)', 'wallref' => '00 Wall body - reference (not surveyed)' }.freeze
     COLORS = { 'doors' => [235, 225, 200], 'liners' => [250, 250, 246], 'strips' => [210, 190, 150], 'blocks' => [120, 120, 120],
-               'stone' => [214, 208, 198], 'cabinets' => [200, 205, 215], 'tm' => [205, 200, 190], 'counter' => [150, 150, 150], 'wood' => [222, 184, 135], 'wallref' => [205, 205, 205] }.freeze
+               'stone' => [214, 208, 198], 'stonewall' => [228, 224, 216], 'cabinets' => [200, 205, 215], 'tm' => [205, 200, 190], 'counter' => [150, 150, 150], 'wood' => [222, 184, 135], 'wallref' => [205, 205, 205] }.freeze
     ALPHA = { 'counter' => 0.35 }.freeze   # 2026-10-19 (AP Office): the countertop by others drawn see-through
 
     def build(model, pieces, prefix, origin)
