@@ -1,0 +1,3365 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital main level: OFFICE (TM 252137 rev 2, PDF 2026-02-24 - no DWG). mm, wall-local: x along the wall from its left end as seen from the room (niche walls: as seen from inside the niche), z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Survey = ~/Documents/AP_MF_Office_v1.0.skp (probe 862 / 863). Andriy 2026-10-19: panels on walls A and B only, 'as the kitchen' (heights from the subfloor, FFL +57.15; NO stone plinth - panels 10 above FFL; 10 to the ceiling, joints 10 open, inside corners: the long wall runs through), TM design kept and fitted to the survey; the three niches of wall A lined with 4 panels each (2 sides, back, soffit); niche sides MDF 22 glued without a frame so the TM bases 450 fit (515 - 2 x 22 = 471). Wall B = TM wall B: the TM bookcase (open shelves, LED) stands in front - these panels are its visible back (TM: 'back panel not by TM'). Bookcase per Andriy 2026-10-19: left and right of the door 3 TM base cabinets 670, the TM veneer counter on them, the outer sides 30 split at the counter top, the two inner uprights 30 on the counter (on the cabinet joints); end fillers 47.7 / 28 (TM 100). Backs P14-P20 = part of the TM bookcase: MDF 22 at the wall, bay to bay between the uprights, counter top to the roof board, no gaps, no frames on wall B; bookcase 442 deep from the wall (TM).",
+ "id": "AP_MF_Office_B",
+ "model": "AP_MF_Office_v1.0",
+ "prefix": "OFF",
+ "wall": {
+  "length": 5160.0,
+  "height": 3700.0,
+  "ceil": [
+   [
+    0,
+    5160.0,
+    3700.0
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "inside corner: the Wall A panels stand in front of x 0..44.3 - panels from 54.3, frames from 44.3",
+   "inside corner with the return wall (no panels): runs through (panels 10 short)"
+  ],
+  "wf": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    0,
+    -1
+   ]
+  ],
+  "name": "Wall B",
+  "kind": "wall"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "survey from the subfloor; finished floor +57.15 as Main Kitchen (Andriy 2026-10-19)",
+  "stone_top": null,
+  "_stone": "Andriy 2026-10-19: NO stone plinth in the office - the panels start 10 above the finished floor (FFL + 10)",
+  "counter_top": 997.15,
+  "_counter_top": "niche countertops 60 BY OTHERS (Andriy 2026-10-19) on the TM bases (legs 100 + 780); the niche backs stand on them",
+  "stone_runs": []
+ },
+ "build_up": {
+  "frame_t": 0,
+  "clip_gap": 0,
+  "panel_t": 22,
+  "face": 22,
+  "_": "Andriy 2026-10-19: the backs are part of the TM bookcase - MDF 22 at the wall face, no frame, no clips"
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 999.15,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "explicit": [
+   {
+    "id": "P14",
+    "row": "U",
+    "x0": 122.5,
+    "x1": 776.5,
+    "z0": 999.15,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   },
+   {
+    "id": "P15",
+    "row": "U",
+    "x0": 807.5,
+    "x1": 1446.5,
+    "z0": 999.15,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   },
+   {
+    "id": "P16",
+    "row": "U",
+    "x0": 1477.5,
+    "x1": 2131.5,
+    "z0": 999.15,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   },
+   {
+    "id": "P17",
+    "row": "U",
+    "x0": 3092.5,
+    "x1": 3746.5,
+    "z0": 999.15,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   },
+   {
+    "id": "P18",
+    "row": "U",
+    "x0": 3777.5,
+    "x1": 4416.5,
+    "z0": 999.15,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   },
+   {
+    "id": "P19",
+    "row": "U",
+    "x0": 4447.5,
+    "x1": 5101.5,
+    "z0": 999.15,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   },
+   {
+    "id": "P20",
+    "row": "U",
+    "x0": 2162.5,
+    "x1": 3061.5,
+    "z0": 2834.0,
+    "z1": 3660.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "glued": true
+   }
+  ],
+  "tm_ref": "TM 252137 rev 2 sheet 4 (bookcase 2159 / door 889 / 2101)",
+  "material": "MDF 22, finish per TM (ROVERE SBIANCATO RIGATINO)"
+ },
+ "openings": [
+  {
+   "id": "B-DOOR",
+   "kind": "opening",
+   "x0": 2162.0,
+   "x1": 3062.0,
+   "h": 2824.0,
+   "label": "DOOR BY TM IN THE BOOKCASE (900 x 2746.85 x 442)",
+   "short": "DOOR\nBY TM",
+   "head_gap": 10,
+   "_": "UCON survey (probe 863): opening 900 x 2824 to the floor. TM door unit 2771 x 889 x 442 reworked to the opening (Andriy 2026-10-19): 900 wide, 2766 from FFL. Panels to the jambs; the TM door frame / bookcase sides cover them."
+  }
+ ],
+ "subframe": {
+  "none": true,
+  "_": "Andriy 2026-10-19: no frames on wall B - the backs are part of the TM bookcase"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ },
+ "tm_boxes": [
+  {
+   "name": "bookcase filler 47.7 (TM 100, cut on site) - lower FFL..2440.7",
+   "x": [
+    44.3,
+    92.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    57.15,
+    2440.7
+   ]
+  },
+  {
+   "name": "bookcase filler 47.7 (TM 100, cut on site) - upper 2450.7..top",
+   "x": [
+    44.3,
+    92.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    2450.7,
+    3690.0
+   ]
+  },
+  {
+   "name": "bookcase filler 28 (TM 100, cut on site) - lower FFL..2440.7",
+   "x": [
+    5132.0,
+    5160.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    57.15,
+    2440.7
+   ]
+  },
+  {
+   "name": "bookcase filler 28 (TM 100, cut on site) - upper 2450.7..top",
+   "x": [
+    5132.0,
+    5160.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    2450.7,
+    3690.0
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 92 - lower FFL..counter top",
+   "x": [
+    92.0,
+    122.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    57.15,
+    999.15
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 92 - upper counter top..roof (= inner uprights)",
+   "x": [
+    92.0,
+    122.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 2132 - lower FFL..counter top",
+   "x": [
+    2132.0,
+    2162.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    57.15,
+    999.15
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 2132 - upper counter top..roof (= inner uprights)",
+   "x": [
+    2132.0,
+    2162.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - carcass (TM base 780 with door, on legs 102)",
+   "x": [
+    122.0,
+    792.0
+   ],
+   "y": [
+    -420.0,
+    0.0
+   ],
+   "z": [
+    159.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - door 667 x 842.00 (TM, gola top, to the panel level FFL + 10) hinge L",
+   "x": [
+    123.5,
+    790.5
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    909.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - gola channel top (TM)",
+   "x": [
+    122.0,
+    792.0
+   ],
+   "y": [
+    -425.0,
+    -403.0
+   ],
+   "z": [
+    909.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - carcass (TM base 780 with door, on legs 102)",
+   "x": [
+    792.0,
+    1462.0
+   ],
+   "y": [
+    -420.0,
+    0.0
+   ],
+   "z": [
+    159.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - door 667 x 842.00 (TM, gola top, to the panel level FFL + 10) hinge L",
+   "x": [
+    793.5,
+    1460.5
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    909.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - gola channel top (TM)",
+   "x": [
+    792.0,
+    1462.0
+   ],
+   "y": [
+    -425.0,
+    -403.0
+   ],
+   "z": [
+    909.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - carcass (TM base 780 with door, on legs 102)",
+   "x": [
+    1462.0,
+    2132.0
+   ],
+   "y": [
+    -420.0,
+    0.0
+   ],
+   "z": [
+    159.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - door 667 x 842.00 (TM, gola top, to the panel level FFL + 10) hinge R",
+   "x": [
+    1463.5,
+    2130.5
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    909.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - gola channel top (TM)",
+   "x": [
+    1462.0,
+    2132.0
+   ],
+   "y": [
+    -425.0,
+    -403.0
+   ],
+   "z": [
+    909.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase veneer counter 60 (TM)",
+   "x": [
+    122.0,
+    2132.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    939.15,
+    999.15
+   ]
+  },
+  {
+   "name": "bookcase inner upright 30 at 792 - counter top..roof",
+   "x": [
+    777.0,
+    807.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase inner upright 30 at 1462 - counter top..roof",
+   "x": [
+    1447.0,
+    1477.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 3062 - lower FFL..counter top",
+   "x": [
+    3062.0,
+    3092.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    57.15,
+    999.15
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 3062 - upper counter top..roof (= inner uprights)",
+   "x": [
+    3062.0,
+    3092.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 5102 - lower FFL..counter top",
+   "x": [
+    5102.0,
+    5132.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    57.15,
+    999.15
+   ]
+  },
+  {
+   "name": "bookcase outer side 30 at 5102 - upper counter top..roof (= inner uprights)",
+   "x": [
+    5102.0,
+    5132.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - carcass (TM base 780 with door, on legs 102)",
+   "x": [
+    3092.0,
+    3762.0
+   ],
+   "y": [
+    -420.0,
+    0.0
+   ],
+   "z": [
+    159.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - door 667 x 842.00 (TM, gola top, to the panel level FFL + 10) hinge L",
+   "x": [
+    3093.5,
+    3760.5
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    909.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - gola channel top (TM)",
+   "x": [
+    3092.0,
+    3762.0
+   ],
+   "y": [
+    -425.0,
+    -403.0
+   ],
+   "z": [
+    909.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - carcass (TM base 780 with door, on legs 102)",
+   "x": [
+    3762.0,
+    4432.0
+   ],
+   "y": [
+    -420.0,
+    0.0
+   ],
+   "z": [
+    159.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - door 667 x 842.00 (TM, gola top, to the panel level FFL + 10) hinge R",
+   "x": [
+    3763.5,
+    4430.5
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    909.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - gola channel top (TM)",
+   "x": [
+    3762.0,
+    4432.0
+   ],
+   "y": [
+    -425.0,
+    -403.0
+   ],
+   "z": [
+    909.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - carcass (TM base 780 with door, on legs 102)",
+   "x": [
+    4432.0,
+    5102.0
+   ],
+   "y": [
+    -420.0,
+    0.0
+   ],
+   "z": [
+    159.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - door 667 x 842.00 (TM, gola top, to the panel level FFL + 10) hinge R",
+   "x": [
+    4433.5,
+    5100.5
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    909.15
+   ]
+  },
+  {
+   "name": "bookcase base cabinet 670 - gola channel top (TM)",
+   "x": [
+    4432.0,
+    5102.0
+   ],
+   "y": [
+    -425.0,
+    -403.0
+   ],
+   "z": [
+    909.15,
+    939.15
+   ]
+  },
+  {
+   "name": "bookcase veneer counter 60 (TM)",
+   "x": [
+    3092.0,
+    5102.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    939.15,
+    999.15
+   ]
+  },
+  {
+   "name": "bookcase inner upright 30 at 3762 - counter top..roof",
+   "x": [
+    3747.0,
+    3777.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase inner upright 30 at 4432 - counter top..roof",
+   "x": [
+    4417.0,
+    4447.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    999.15,
+    3660.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    122.5,
+    776.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1332.0,
+    1362.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1362.0
+    ],
+    [
+     -442.0,
+     1362.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1332.0,
+    1342.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    122.5,
+    776.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1700.0,
+    1730.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1730.0
+    ],
+    [
+     -442.0,
+     1730.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1700.0,
+    1710.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    122.5,
+    776.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2068.0,
+    2098.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2098.0
+    ],
+    [
+     -442.0,
+     2098.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2068.0,
+    2078.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    122.5,
+    776.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2436.0,
+    2466.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2466.0
+    ],
+    [
+     -442.0,
+     2466.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2436.0,
+    2446.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    122.5,
+    776.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2834.0
+    ],
+    [
+     -442.0,
+     2834.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2804.0,
+    2814.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    122.5,
+    776.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    807.5,
+    1446.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1332.0,
+    1362.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1362.0
+    ],
+    [
+     -442.0,
+     1362.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1332.0,
+    1342.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    807.5,
+    1446.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1700.0,
+    1730.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1730.0
+    ],
+    [
+     -442.0,
+     1730.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1700.0,
+    1710.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    807.5,
+    1446.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2068.0,
+    2098.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2098.0
+    ],
+    [
+     -442.0,
+     2098.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2068.0,
+    2078.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    807.5,
+    1446.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2436.0,
+    2466.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2466.0
+    ],
+    [
+     -442.0,
+     2466.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2436.0,
+    2446.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    807.5,
+    1446.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2834.0
+    ],
+    [
+     -442.0,
+     2834.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2804.0,
+    2814.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    807.5,
+    1446.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    1477.5,
+    2131.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1332.0,
+    1362.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1362.0
+    ],
+    [
+     -442.0,
+     1362.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1332.0,
+    1342.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    1477.5,
+    2131.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1700.0,
+    1730.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1730.0
+    ],
+    [
+     -442.0,
+     1730.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1700.0,
+    1710.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    1477.5,
+    2131.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2068.0,
+    2098.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2098.0
+    ],
+    [
+     -442.0,
+     2098.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2068.0,
+    2078.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    1477.5,
+    2131.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2436.0,
+    2466.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2466.0
+    ],
+    [
+     -442.0,
+     2466.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2436.0,
+    2446.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    1477.5,
+    2131.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2834.0
+    ],
+    [
+     -442.0,
+     2834.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2804.0,
+    2814.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    1477.5,
+    2131.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3092.5,
+    3746.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1332.0,
+    1362.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1362.0
+    ],
+    [
+     -442.0,
+     1362.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1332.0,
+    1342.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3092.5,
+    3746.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1700.0,
+    1730.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1730.0
+    ],
+    [
+     -442.0,
+     1730.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1700.0,
+    1710.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3092.5,
+    3746.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2068.0,
+    2098.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2098.0
+    ],
+    [
+     -442.0,
+     2098.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2068.0,
+    2078.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3092.5,
+    3746.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2436.0,
+    2466.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2466.0
+    ],
+    [
+     -442.0,
+     2466.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2436.0,
+    2446.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3092.5,
+    3746.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2834.0
+    ],
+    [
+     -442.0,
+     2834.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2804.0,
+    2814.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3092.5,
+    3746.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3777.5,
+    4416.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1332.0,
+    1362.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1362.0
+    ],
+    [
+     -442.0,
+     1362.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1332.0,
+    1342.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3777.5,
+    4416.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1700.0,
+    1730.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1730.0
+    ],
+    [
+     -442.0,
+     1730.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1700.0,
+    1710.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3777.5,
+    4416.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2068.0,
+    2098.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2098.0
+    ],
+    [
+     -442.0,
+     2098.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2068.0,
+    2078.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3777.5,
+    4416.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2436.0,
+    2466.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2466.0
+    ],
+    [
+     -442.0,
+     2466.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2436.0,
+    2446.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3777.5,
+    4416.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2834.0
+    ],
+    [
+     -442.0,
+     2834.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2804.0,
+    2814.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    3777.5,
+    4416.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    4447.5,
+    5101.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1332.0,
+    1362.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1332.0
+    ],
+    [
+     -422.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1342.0
+    ],
+    [
+     -407.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1332.0
+    ],
+    [
+     -22.0,
+     1362.0
+    ],
+    [
+     -442.0,
+     1362.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1332.0,
+    1342.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    4447.5,
+    5101.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    1700.0,
+    1730.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1700.0
+    ],
+    [
+     -422.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1710.0
+    ],
+    [
+     -407.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1700.0
+    ],
+    [
+     -22.0,
+     1730.0
+    ],
+    [
+     -442.0,
+     1730.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    1700.0,
+    1710.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    4447.5,
+    5101.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2068.0,
+    2098.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2068.0
+    ],
+    [
+     -422.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2078.0
+    ],
+    [
+     -407.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2068.0
+    ],
+    [
+     -22.0,
+     2098.0
+    ],
+    [
+     -442.0,
+     2098.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2068.0,
+    2078.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    4447.5,
+    5101.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2436.0,
+    2466.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2436.0
+    ],
+    [
+     -422.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2446.0
+    ],
+    [
+     -407.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2436.0
+    ],
+    [
+     -22.0,
+     2466.0
+    ],
+    [
+     -442.0,
+     2466.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2436.0,
+    2446.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    4447.5,
+    5101.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2804.0
+    ],
+    [
+     -422.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2814.0
+    ],
+    [
+     -407.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2804.0
+    ],
+    [
+     -22.0,
+     2834.0
+    ],
+    [
+     -442.0,
+     2834.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    2804.0,
+    2814.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 (TM) - bay less 1 (paint allowance), LED groove",
+   "x": [
+    4447.5,
+    5101.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 over the door = module bottom (TM) - less 1 (paint allowance)",
+   "x": [
+    2162.5,
+    3061.5
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    2804.0,
+    2834.0
+   ]
+  },
+  {
+   "name": "bookcase shelf 30 over the door (TM) - less 1 (paint allowance), LED groove",
+   "x": [
+    2162.5,
+    3061.5
+   ],
+   "y": [
+    -442.0,
+    -22.0
+   ],
+   "z": [
+    3212.0,
+    3242.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3212.0
+    ],
+    [
+     -422.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3222.0
+    ],
+    [
+     -407.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3212.0
+    ],
+    [
+     -22.0,
+     3242.0
+    ],
+    [
+     -442.0,
+     3242.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    2182.0,
+    3042.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3212.0,
+    3222.0
+   ]
+  },
+  {
+   "name": "bookcase roof board 30 (TM) - left bookcase 2070, LED groove",
+   "x": [
+    92.0,
+    2162.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    3660.0,
+    3690.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3660.0
+    ],
+    [
+     -422.0,
+     3660.0
+    ],
+    [
+     -422.0,
+     3670.0
+    ],
+    [
+     -407.0,
+     3670.0
+    ],
+    [
+     -407.0,
+     3660.0
+    ],
+    [
+     0.0,
+     3660.0
+    ],
+    [
+     0.0,
+     3690.0
+    ],
+    [
+     -442.0,
+     3690.0
+    ]
+   ]
+  },
+  {
+   "name": "bookcase roof board 30 (TM) - over the door 900, LED groove",
+   "x": [
+    2162.0,
+    3062.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    3660.0,
+    3690.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3660.0
+    ],
+    [
+     -422.0,
+     3660.0
+    ],
+    [
+     -422.0,
+     3670.0
+    ],
+    [
+     -407.0,
+     3670.0
+    ],
+    [
+     -407.0,
+     3660.0
+    ],
+    [
+     0.0,
+     3660.0
+    ],
+    [
+     0.0,
+     3690.0
+    ],
+    [
+     -442.0,
+     3690.0
+    ]
+   ]
+  },
+  {
+   "name": "bookcase roof board 30 (TM) - right bookcase 2070, LED groove",
+   "x": [
+    3062.0,
+    5132.0
+   ],
+   "y": [
+    -442.0,
+    0.0
+   ],
+   "z": [
+    3660.0,
+    3690.0
+   ],
+   "yz": [
+    [
+     -442.0,
+     3660.0
+    ],
+    [
+     -422.0,
+     3660.0
+    ],
+    [
+     -422.0,
+     3670.0
+    ],
+    [
+     -407.0,
+     3670.0
+    ],
+    [
+     -407.0,
+     3660.0
+    ],
+    [
+     0.0,
+     3660.0
+    ],
+    [
+     0.0,
+     3690.0
+    ],
+    [
+     -442.0,
+     3690.0
+    ]
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    142.0,
+    757.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    827.0,
+    1427.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    1497.0,
+    2112.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3112.0,
+    3727.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    3797.0,
+    4397.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    4467.0,
+    5082.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "LED 3000 K recessed in the shelf, profile 15 x 10 flush with the shelf bottom (TM)",
+   "x": [
+    2182.0,
+    3042.0
+   ],
+   "y": [
+    -422.0,
+    -407.0
+   ],
+   "z": [
+    3660.0,
+    3670.0
+   ]
+  },
+  {
+   "name": "door unit 900 x 2746.85 x 442 (TM, reworked) - leaf, push to open hinge L",
+   "x": [
+    2162.0,
+    3062.0
+   ],
+   "y": [
+    -442.0,
+    -420.0
+   ],
+   "z": [
+    67.15,
+    2804.0
+   ]
+  }
+ ]
+}

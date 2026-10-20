@@ -42,6 +42,8 @@ module UCON
     def self.top_of(w) = w['ceil'].map { |a| a[2] }.max
     def self.lev = @s['levels']
     def self.sh = @s['sheets']
+    # 2026-10-19 (AP Office): sheets.group_names {first wall id => short name} for multi-wall sheet titles (NICHE N1)
+    def self.gname(ids) = (sh['group_names'] || {})[ids.first] || ids.map(&:upcase).join(', ')
     def self.bu = @s['build_up']
     def self.cl = @s['clips']
     def self.all_frames = @s['frames'].flat_map { |wid, v| v['frames'].map { |f| f.merge('wall' => wid) } }
@@ -197,11 +199,23 @@ module UCON
     end
     SIDE = ->(d) { [d[1], -d[2]] }   # looking -x: y right, z up
     PLAN = ->(d) { [d[0], -d[1]] }   # from above, up = +y
+    FRONT = ->(d) { [d[0], -d[2]] }  # 2026-10-19 (AP Office): looking +y: x right, z up
+    SIDE_PX = ->(d) { [-d[1], -d[2]] }   # looking +x: -y right, z up
+    PROJ = { 'plan' => PLAN, 'side' => SIDE, 'front' => FRONT, 'side_px' => SIDE_PX }.freeze
 
     # ------------------------------------------------------------------ the elevation frame of a wall on paper
     # scale: the largest of 1:20 / 25 / 30 / 40 / 50 / 60 / 75 that fits 10.6 x 5.0 in (room for the dimension chains)
     def self.escale(w)
       [20, 25, 30, 40, 50, 60, 75].find { |s| (w['L'] + 200) / s * MM <= 10.6 && top_of(w) / s * MM <= 5.0 } || 75
+    end
+
+    # 2026-10-19 (AP Office): one scale for a GROUP of walls drawn side by side (the whole row must fit the drawing area)
+    GROUP_GAP = 1.5
+    def self.gscale(ws)
+      return escale(ws[0]) if ws.size == 1
+      [20, 25, 30, 40, 50, 60, 75].find do |s|
+        (ws.sum { |w| w['L'] } + 200) / s * MM + GROUP_GAP * (ws.size - 1) <= WW - 0.6 && ws.map { |w| top_of(w) }.max / s * MM <= 5.0
+      end || 75
     end
 
     def self.frame_of(w, y_floor, s: nil, ox: nil)
@@ -210,12 +224,19 @@ module UCON
       [->(v) { ox + v * k }, ->(z) { y_floor - z * k }, k, s]
     end
 
+    def self.soffit?(w) = w['kind'] == 'soffit'
+
     def self.draw_wall(w, px, pz, k)
       lv = lev
       pts = [[px.(0), pz.(0)]]
       w['ceil'].each { |a, b, h| pts << [px.(a), pz.(h)] << [px.(b), pz.(h)] }
       pts << [px.(w['L']), pz.(0)]
       poly(pts, @l_sheet, stroke: MINOR, sw: 0.5)
+      # 2026-10-19 (AP Office): a niche soffit is drawn as seen from below - its z is the depth from the wall A face, no floor
+      if soffit?(w)
+        text('WALL A FACE', px.(-130), pz.(0) - 0.02, @l_sheet, size: 6, font: MONO, c: INK2, align: :right)
+        return
+      end
       line(px.(-120), pz.(0), px.(w['L'] + 120), pz.(0), @l_sheet, w: 0.75, c: INK)
       line(px.(-120), pz.(lv['ffl']), px.(w['L'] + 120), pz.(lv['ffl']), @l_sheet, w: 0.5, c: INK, dash: true)
       if lv['ffl'].to_f.zero?   # REC-LAU: the survey is from the finished floor - no subfloor line
@@ -301,6 +322,32 @@ module UCON
       end
     end
 
+    # 2026-10-19 (AP Office): TM furniture and the countertop by others (wall JSON tm_boxes) - thin SOLID outlines over the
+    # elevation (Andriy: no dashed outlines); the opening of every hinged door DASHED, European convention: the triangle's
+    # base on the hinge side, its apex at the handle side (name '... hinge L' / '... hinge R'). Carcasses, LEDs, gola hidden.
+    def self.draw_tm(w, px, pz, k)
+      bs = (w['tm'] || [])
+      return if bs.empty?
+      bs.each do |b|
+        next if b['name'] =~ /carcass|LED|gola channel/
+        col = b['tag'] == 'counter' ? [120, 120, 120] : [150, 110, 70]
+        poly([[px.(b['s0']), pz.(b['z0'])], [px.(b['s1']), pz.(b['z0'])], [px.(b['s1']), pz.(b['z1'])], [px.(b['s0']), pz.(b['z1'])]],
+             @l_sheet, stroke: col, sw: 0.3)
+        if b['name'] =~ /drawer/ && b['name'] =~ /front/   # a drawer: one dashed diagonal (Andriy 2026-10-19)
+          line(px.(b['s0']), pz.(b['z0']), px.(b['s1']), pz.(b['z1']), @l_sheet, w: 0.3, c: INK2, dash: true)
+          next
+        end
+        hg = b['name'][/hinge ([LR])/, 1] or next
+        hx, ax = hg == 'L' ? [b['s0'], b['s1']] : [b['s1'], b['s0']]
+        poly([[px.(hx), pz.(b['z0'])], [px.(ax), pz.((b['z0'] + b['z1']) / 2)], [px.(hx), pz.(b['z1'])]], @l_sheet, stroke: INK2, sw: 0.3, dash: true)
+      end
+      bs.select { |b| b['tag'] == 'counter' }.each { |b| text('COUNTERTOP 60 BY OTHERS', px.((b['s0'] + b['s1']) / 2), pz.(b['z1']) - 0.05, @l_sheet, size: 5.5, font: MONO, c: [120, 120, 120], align: :center) }
+      bs.select { |b| b['name'] =~ /front|door unit|- door / }.group_by { |b| b['z0'].round }.each_value do |g|
+        b = g.first
+        text('TM', px.((b['s0'] + b['s1']) / 2), pz.((b['z0'] + b['z1']) / 2) + 0.12, @l_sheet, size: 6, font: MONO, c: [150, 110, 70], align: :center)
+      end
+    end
+
     def self.draw_panels(w, px, pz, k, ids: true, fill: PAN_FILL, sw: 0.75)
       panels_of(w['id']).each do |p|
         rect(px.(p['s0']), pz.(p['z1']), (p['s1'] - p['s0']) * k, (p['z1'] - p['z0']) * k, @l_sheet, stroke: INK, sw: sw, fill: fill)
@@ -359,8 +406,8 @@ module UCON
       ws = [ws] unless ws.is_a?(Array)
       next_page(name); sheet_code(code)
       yf = WY + 5.75
-      s = ws.map { |w| escale(w) }.max; k = MM / s
-      gap = 2.2
+      s = gscale(ws); k = MM / s
+      gap = ws.size > 1 ? GROUP_GAP : 2.2
       total = ws.sum { |w| w['L'] * k } + gap * (ws.size - 1)
       x0 = WX + WW / 2 - total / 2
       header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
@@ -372,7 +419,7 @@ module UCON
         hchain(w['ceil'].flat_map { |a, b, _| [a, b] }.uniq, px, pz.(top), 0.28, pz.(top) - 3) if w['ceil'].size > 1
         xs = ([0, w['L']] + w['openings'].flat_map { |o| [o['s0'], o['s1']] }).uniq.sort
         hchain(xs, px, pz.(0), 0.40, pz.(0) + 3) if xs.size > 2
-        vchain([0, lev['ffl'], lev['stone_top'], top].compact.uniq, pz, px.(0), 0.75, px.(0) - 3)
+        vchain(soffit?(w) ? [0, top] : [0, lev['ffl'], lev['stone_top'], top].compact.uniq, pz, px.(0), 0.75, px.(0) - 3)
         w['openings'].each do |o|
           x = px.(o['s1'])
           vchain(o['kind'] == 'window' ? [0, o['z0'], o['z1']] : [0, o['z1']], pz, x, 0.22, x + 3)
@@ -383,62 +430,95 @@ module UCON
         x0 += w['L'] * k + gap
       end
       ids = ws.map { |w| w['id'].upcase }
-      vlabel(WX, yf + 0.95, WW, 1, code, "ELEVATION#{ws.size > 1 ? 'S' : ''} #{ids.join(', ')} — FROM THE ROOM", "SCALE 1:#{s}")
+      vlabel(WX, yf + 0.95, WW, 1, code, "ELEVATION#{ws.size > 1 ? 'S' : ''} #{gname(ws.map { |w| w['id'] })} — FROM THE ROOM", "SCALE 1:#{s}")
       notes(WX, yf + 1.55, WW, pnotes('A-1') + [ws.map { |w| "#{w['id']}: left #{w['ends'][0]}, right #{w['ends'][1]}" }.join('; ') + '.'])
     end
 
-    def self.page_frames(code, name, w)
-      next_page(name); sheet_code(code)
-      yf = WY + 5.75
-      px, pz, k, s = frame_of(w, yf)
-      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
-      draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k, label: false)
-      draw_panels(w, px, pz, k, ids: false, fill: nil, sw: 0.25)
-      fr = draw_frames(w, px, pz, k); draw_clips(w, px, pz, k)
-      fr.each { |f| bub(pt2(px.((f['x0'] + f['x1']) / 2), pz.((f['z0'] + f['z1']) / 2)), f['id'], red: false, d: 0.30, size: 6) }
-      top = top_of(w)
-      ups = fr.reject { |f| f['kind'] == 'LOW' }.flat_map { |f| [f['x0'], f['x1']] }.uniq.sort
-      lows = fr.select { |f| f['kind'] == 'LOW' }.flat_map { |f| [f['x0'], f['x1']] }.uniq.sort
-      hchain(ups, px, pz.(top), 0.30, pz.(top) - 3) if ups.size > 1
-      hchain(lows, px, pz.(0), 0.40, pz.(0) + 3) if lows.size > 1
-      vchain([lev['floor_gap'] || lev['stone_top'], lev['tier_joint'], (fr.any? { |f| f['kind'] == 'BAND' } ? fr.select { |f| f['kind'] == 'BAND' }.map { |f| f['z0'] }.min : nil), top].compact.uniq.sort, pz, px.(0), 0.60, px.(0) - 3)
-      nc = @s['frames'][w['id']]['clips'].size
-      vlabel(WX, yf + 0.95, WW, 1, code, "BACKING FRAMES + #{nc} CLIPS #{w['id'].upcase} — FROM THE ROOM, PANELS OUTLINED", "SCALE 1:#{s}")
-      notes(WX, yf + 1.55, WW, [
-        "Plywood 3/4\" (#{f1(bu['frame_t'])}), strips 4\" = 98 (light) and 6\" = 152 (dark) on the wall face; clip gap #{f1(bu['clip_gap'])}; panel #{f1(bu['panel_t'])} -> panel face #{f1(bu['face'])} from the wall. Schedule A-702, cut list A-703.",
-        *pnotes("A-2:#{w['id']}"),
-        "Dots = #{cl['make']} clips (#{nc} on this wall): frame holes D#{f1(cl['hole_d'])} x #{f1(cl['frame_depth'])} by UCON CNC, panel recesses D#{f1(cl['hole_d'])} x #{f1(cl['panel_depth'])} by the factory (D-sheets). Detail A-210."
-      ])
+    # 2026-10-19 (AP Office): the frame / panel pages take one wall OR a group of walls side by side at one scale (the
+    # niche linings: two returns, back, soffit); a single wall is laid out exactly as before
+    def self.each_in_row(ws, yf)
+      s = gscale(ws); k = MM / s
+      gap = ws.size > 1 ? GROUP_GAP : 2.2
+      total = ws.sum { |w| w['L'] * k } + gap * (ws.size - 1)
+      x0 = WX + WW / 2 - total / 2
+      ws.each do |w|
+        px, pz, = frame_of(w, yf, s: s, ox: x0)
+        yield w, px, pz, k
+        text(w['name'].upcase, px.(w['L'] / 2), pz.(0) + 0.62, @l_sheet, size: 9, font: SANS_MED, align: :center) if ws.size > 1
+        x0 += w['L'] * k + gap
+      end
+      s
     end
 
-    def self.page_panels(code, name, w)
+    def self.page_frames(code, name, ws)
+      ws = [ws] unless ws.is_a?(Array)
       next_page(name); sheet_code(code)
       yf = WY + 5.75
-      px, pz, k, s = frame_of(w, yf)
+      s = gscale(ws)
       header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
-      draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k, label: false)
-      draw_panels(w, px, pz, k); draw_liners(w, px, pz, k); draw_cabinets(w, px, pz, k)
-      top = top_of(w)
-      ps = panels_of(w['id'])
-      upper = ps.select { |p| p['z1'] > 3000 }.flat_map { |p| [p['s0'], p['s1']] }.uniq.sort
-      lower = ps.select { |p| p['z0'] < 400 }.flat_map { |p| [p['s0'], p['s1']] }.uniq.sort
-      hchain(upper, px, pz.(top), 0.30, pz.(top) - 3)
-      hchain([upper.first, upper.last], px, pz.(top), 0.60, pz.(top) - 3) if upper.size > 2
-      hchain(lower, px, pz.(0), 0.40, pz.(0) + 3)
-      s_first = ps.map { |p| p['s0'] }.min
-      zl = ps.select { |p| (p['s0'] - s_first).abs < 1 }.flat_map { |p| [p['z0'], p['z1']] }.uniq.sort
-      vchain(zl, pz, px.(s_first), 0.60, px.(s_first) - 3)
-      lo = ps.select { |p| p['kind'] == 'L' }.min_by { |p| p['s0'] }
-      vchain([0, lev['ffl'], lo['z0'], lo['z1']], pz, px.(lo['s0']), 0.45, px.(lo['s0']) - 3) if lo && (lo['s0'] - s_first).abs > 1
-      w['openings'].each do |o|
-        col = ps.select { |p| p['s0'] > o['s0'] - 30 && p['s1'] < o['s1'] + 30 }
-        next if col.empty? || o['kind'] != 'window'
-        x = px.(o['s1'] + 120)
-        vchain(col.flat_map { |p| [p['z0'], p['z1']] }.uniq.sort, pz, x, 0.05, x + 3)
+      nc = 0; glued = []
+      each_in_row(ws, yf) do |w, px, pz, k|
+        draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k, label: false)
+        draw_panels(w, px, pz, k, ids: false, fill: nil, sw: 0.25)
+        fr = draw_frames(w, px, pz, k); draw_clips(w, px, pz, k)
+        glued << w['name'] if fr.empty?
+        text('NO BACKING FRAME - PANELS GLUED / PART OF THE TM UNIT', px.(w['L'] / 2), pz.(top_of(w) / 2), @l_sheet, size: 6.5, font: MONO, c: RED, align: :center) if fr.empty?
+        fr.each { |f| bub(pt2(px.((f['x0'] + f['x1']) / 2), pz.((f['z0'] + f['z1']) / 2)), f['id'], red: false, d: 0.30, size: 6) }
+        top = top_of(w)
+        ups = fr.reject { |f| f['kind'] == 'LOW' }.flat_map { |f| [f['x0'], f['x1']] }.uniq.sort
+        lows = fr.select { |f| f['kind'] == 'LOW' }.flat_map { |f| [f['x0'], f['x1']] }.uniq.sort
+        hchain(ups, px, pz.(top), 0.30, pz.(top) - 3) if ups.size > 1
+        hchain(lows, px, pz.(0), 0.40, pz.(0) + 3) if lows.size > 1
+        zs = fr.flat_map { |f| [f['z0'], f['z1']] }
+        vchain(([fr.empty? ? nil : (lev['floor_gap'] || lev['stone_top']), lev['tier_joint'], (fr.any? { |f| f['kind'] == 'BAND' } ? fr.select { |f| f['kind'] == 'BAND' }.map { |f| f['z0'] }.min : nil), top].compact.select { |z| zs.empty? || (z >= zs.min - 0.05 && z <= [zs.max, top].max + 0.05) } + (zs.empty? ? [] : [zs.min])).uniq.sort, pz, px.(0), 0.60, px.(0) - 3) unless fr.empty?
+        nc += @s['frames'][w['id']]['clips'].size
       end
-      wall_bubbles('A-3', w, px, pz)
-      vlabel(WX, yf + 0.95, WW, 1, code, "PANEL LAYOUT #{w['id'].upcase} — FROM THE ROOM", "SCALE 1:#{s}")
-      notes(WX, yf + 1.55, WW, pnotes("A-3:#{w['id']}"))
+      ids = ws.map { |w| w['name'].upcase }
+      vlabel(WX, yf + 0.95, WW, 1, code, "BACKING FRAMES + #{nc} CLIPS #{gname(ws.map { |w| w['id'] })} — FROM THE ROOM, PANELS OUTLINED", "SCALE 1:#{s}")
+      bus = ws.reject { |w| @s['frames'][w['id']]['frames'].empty? }.map { |w| w['build_up'] || bu }.uniq
+      bnote = bus.map { |b| "frame #{f1(b['frame_t'])}#{b['recess'].to_f > 0 ? " (sunk #{f1(b['recess'])} into the wall - the installer removes the drywall there or fixes on the drywall)" : ''} + clip gap #{f1(b['clip_gap'])} + panel #{f1(b['panel_t'])} -> panel face #{f1(b['face'])} from the wall" }.join('; ')
+      notes(WX, yf + 1.55, WW, [
+        "Plywood 3/4\" strips 4\" = 98 (light) and 6\" = 152 (dark) on the wall face; #{bnote}. Schedule A-702, cut list A-703.",
+        *ws.flat_map { |w| pnotes("A-2:#{w['id']}") },
+        *(glued.empty? ? [] : [["#{glued.join(', ')}: no backing frame - see the panel sheet.", true]]),
+        "Dots = #{cl['make']} clips (#{nc} on this sheet): frame holes D#{f1(cl['hole_d'])} x #{f1(cl['frame_depth'])} by UCON CNC, panel recesses D#{f1(cl['hole_d'])} x #{f1(cl['panel_depth'])} by the factory (D-sheets). Detail A-210."
+      ].uniq)
+    end
+
+    def self.page_panels(code, name, ws)
+      ws = [ws] unless ws.is_a?(Array)
+      next_page(name); sheet_code(code)
+      yf = WY + 5.75
+      s = gscale(ws)
+      header("SCALE 1:#{s} · DIMENSIONS IN MM · Z FROM #{zfrom == 'TOP OF THE SUBFLOOR' ? 'T.O. SUBFLOOR' : zfrom}")
+      each_in_row(ws, yf) do |w, px, pz, k|
+        draw_wall(w, px, pz, k); draw_stone(w, px, pz, k); draw_openings(w, px, pz, k, label: false)
+        draw_panels(w, px, pz, k); draw_liners(w, px, pz, k); draw_cabinets(w, px, pz, k); draw_tm(w, px, pz, k)
+        top = top_of(w)
+        ps = panels_of(w['id'])
+        next if ps.empty?
+        hi = ps.map { |p| p['z1'] }.max; lo_z = ps.map { |p| p['z0'] }.min
+        upper = ps.select { |p| p['z1'] > [3000, hi - 1].min }.flat_map { |p| [p['s0'], p['s1']] }.uniq.sort
+        lower = ps.select { |p| p['z0'] < [400, lo_z + 1].max }.flat_map { |p| [p['s0'], p['s1']] }.uniq.sort
+        hchain(upper, px, pz.(top), 0.30, pz.(top) - 3)
+        hchain([upper.first, upper.last], px, pz.(top), 0.60, pz.(top) - 3) if upper.size > 2
+        hchain(lower, px, pz.(0), 0.40, pz.(0) + 3) unless lower == upper && ws.size > 1
+        s_first = ps.map { |p| p['s0'] }.min
+        zl = ps.select { |p| (p['s0'] - s_first).abs < 1 }.flat_map { |p| [p['z0'], p['z1']] }.uniq.sort
+        vchain(zl, pz, px.(s_first), 0.60, px.(s_first) - 3)
+        lo = ps.select { |p| p['kind'] == 'L' }.min_by { |p| p['s0'] }
+        vchain([0, lev['ffl'], lo['z0'], lo['z1']], pz, px.(lo['s0']), 0.45, px.(lo['s0']) - 3) if lo && (lo['s0'] - s_first).abs > 1 && !soffit?(w)
+        w['openings'].each do |o|
+          col = ps.select { |p| p['s0'] > o['s0'] - 30 && p['s1'] < o['s1'] + 30 }
+          next if col.empty? || o['kind'] != 'window'
+          x = px.(o['s1'] + 120)
+          vchain(col.flat_map { |p| [p['z0'], p['z1']] }.uniq.sort, pz, x, 0.05, x + 3)
+        end
+        wall_bubbles('A-3', w, px, pz)
+      end
+      ids = ws.map { |w| w['name'].upcase }
+      vlabel(WX, yf + 0.95, WW, 1, code, "PANEL LAYOUT #{gname(ws.map { |w| w['id'] })} — #{ws.any? { |w| soffit?(w) } ? 'FROM THE ROOM / SOFFIT FROM BELOW' : 'FROM THE ROOM'}", "SCALE 1:#{s}")
+      notes(WX, yf + 1.55, WW, ws.flat_map { |w| pnotes("A-3:#{w['id']}") }.uniq)
     end
 
     # ------------------------------------------------------------------ key plan, cover, 3D
@@ -461,7 +541,8 @@ module UCON
         (ox, oy), (tx, ty), (nx, ny) = w['plan_wf'] || w['wf']
         [ox + s_ * tx + d * nx, oy + s_ * ty + d * ny]
       end
-      pts = @s['walls'].flat_map { |w| [0, w['L']].product([-wt - 1400, fc + 1400]).map { |s_, d| xy.(w, s_, d) } }
+      kw = @s['walls'].reject { |w| soffit?(w) }   # 2026-10-19 (AP Office): a niche soffit is not a wall in plan
+      pts = kw.flat_map { |w| [0, w['L']].product([-wt - 1400, fc + 1400]).map { |s_, d| xy.(w, s_, d) } }
       x0, x1 = pts.map(&:first).minmax; y0, y1 = pts.map(&:last).minmax
       img = @s['files'] && @s['files']['key_plan'] && File.join(@data_dir, @s['files']['key_plan'])
       img = nil unless img && File.exist?(img)
@@ -473,14 +554,21 @@ module UCON
       pp = ->(x, y) { [ox + (x - x0) * k, oy + (y1 - y) * k] }
       q = ->(w, s_, d) { pp.(*xy.(w, s_, d)) }
       quad = ->(w, a, b, d0, d1) { [q.(w, a, d0), q.(w, b, d0), q.(w, b, d1), q.(w, a, d1)] }
-      @s['walls'].each do |w|
-        poly(quad.(w, 0, w['L'], -wt, 0), @l_sheet, stroke: INK, sw: 0.5, fill: STC['wall_plan'])
+      # 2026-10-19 (AP Office): sheets.key_outline = the existing walls as ONE plan polygon (world mm: every surveyed face with the
+      # wall wt behind it, niches as pockets) - drawn instead of one slab per wall, which overlapped at the niches
+      ko = sh['key_outline']
+      poly(ko.map { |x, y| pp.(x.to_f, y.to_f) }, @l_sheet, stroke: INK, sw: 0.5, fill: STC['wall_plan']) if ko
+      kw.each do |w|
+        poly(quad.(w, 0, w['L'], -wt, 0), @l_sheet, stroke: INK, sw: 0.5, fill: STC['wall_plan']) unless ko
         w['openings'].each do |o|
+          next if ko && o['kind'] == 'niche'   # the pocket is already in the outline
           poly(quad.(w, o['s0'], o['s1'], -wt, 0), @l_sheet, stroke: INK, sw: 0.35, fill: o['kind'] == 'window' ? GLASS : [255, 255, 255])
         end
-        panels_of(w['id']).select { |p| p['z0'] < 400 }.each do |p|
-          poly(quad.(w, p['s0'], p['s1'], 0, fc), @l_sheet, stroke: INK2, sw: 0.25, fill: PAN_FILL)
+        wfc = (w['build_up'] || bu)['face'].to_f
+        panels_of(w['id']).select { |p| p['z0'] < 400 || w['kind'] == 'wall' && p['z0'] < 1100 }.each do |p|
+          poly(quad.(w, p['s0'], p['s1'], wfc - bu['panel_t'].to_f, wfc), @l_sheet, stroke: INK2, sw: 0.25, fill: PAN_FILL)
         end
+        next if w['kind'] && w['kind'] != 'wall'   # 2026-10-19 (AP Office): niche linings drawn, not dimensioned / labelled
         a = pt2(*q.(w, 0, -wt)); b = pt2(*q.(w, w['L'], -wt)); t = pt2(*q.(w, w['L'] / 2, -5000))
         xs = ([0, w['L']] + w['openings'].flat_map { |o| [o['s0'], o['s1']] }).uniq.sort
         xs.each_cons(2) { |s0, s1| pdim(pt2(*q.(w, s0, -wt)), pt2(*q.(w, s1, -wt)), 0.22, t, f1(s1 - s0)) } if xs.size > 2
@@ -634,8 +722,13 @@ module UCON
       end
       n = all_clips.size
       rows << ['TOTAL', n.to_s, all_frames.size.to_s, all_clips.map { |x| x['panel'] }.uniq.size.to_s, all_clips.count { |x| !x['ok'] }.to_s]
-      table(WX, yy, 6.0, cols, rows, row_h: 0.25)
       tx0 = WX + 6.45; tw = WX + WW - tx0
+      # 2026-10-19 (AP Office, 14 walls): a long per-wall table goes to the right column under the catalogue data
+      if rows.size > 10
+        table(tx0, WY + 0.27 + 8 * 0.30 + 0.45, tw, cols, rows, row_h: 0.22)
+      else
+        table(WX, yy, 6.0, cols, rows, row_h: 0.25)
+      end
       label("#{cl['make'].upcase} - CATALOGUE DATA AND ORDER", tx0, WY, @l_sheet)
       line(tx0, WY + 0.17, tx0 + tw, WY + 0.17, @l_sheet, w: 1.0)
       order = ((n * (1 + FASTMOUNT['spare'])) / 5.0).ceil * 5
@@ -844,11 +937,26 @@ module UCON
         q = pt2(x0 + cw / 2, WY + ch / 2)
         begin
           fl = ->(a) { a && a.map { |v| Float(v) } }  # tokens resolve to strings
-          vp = cropped(skp, c['scene'], fl.(c['cam']), fl.(c['at']), q, cw - 0.2, ch - 0.1, 1.0 / 5, c['proj'] == 'plan' ? PLAN : SIDE)
+          vp = cropped(skp, c['scene'], fl.(c['cam']), fl.(c['at']), q, cw - 0.2, ch - 0.1, 1.0 / 5, PROJ[c['proj']] || SIDE)
           # dims [a, b, offset, toward] - model mm points, resolved from the snapshot ({{tokens}}); value = |b - a|
           (c['dims'] || []).each do |da, db, off, tw|
             fa = da.map { |v| Float(v) }; fb = db.map { |v| Float(v) }; ft = tw.map { |v| Float(v) }
             vdim(vp, P(*fa), P(*fb), off.to_f, P(*ft), Math.sqrt(fa.zip(fb).sum { |m, n| (n - m)**2 }))
+          end
+          # 2026-10-19 (AP Office): callouts [text, [x, y, z] model mm, red?, [dx, dy] paper inches of the text from the point]
+          # - drawn ABOVE the viewports (Dimensions mm layer), the text on a white box, a leader from the point to the box
+          (c['labels'] || []).each do |t, pnt, red, off|
+            @l_dm ||= @doc.layers.add('Dimensions mm', false)
+            q3 = vp.model_to_paper_point(P(*pnt.map { |v| Float(v) }))
+            dx, dy = (off || [0.45, 0]).map { |v| Float(v) }
+            bw = 2.0; lines = [(t.size * 0.052 / bw).ceil, 1].max; bh = 0.04 + lines * 0.115
+            tx = [[q3.x + dx, x0 + 0.08].max, x0 + cw - bw - 0.08].min; ty = q3.y + dy - bh / 2
+            col = red ? RED : INK
+            ex = tx + bw / 2 < q3.x ? tx + bw : tx
+            line(q3.x, q3.y, ex, ty + bh / 2, @l_dm, w: 0.5, c: col)
+            circle(q3.x, q3.y, 0.05, @l_dm, sw: 0.75)
+            rect(tx, ty, bw, bh, @l_dm, stroke: col, sw: 0.4, fill: [255, 255, 255])
+            box_text(t, tx + 0.04, ty + 0.02, bw - 0.08, bh, @l_dm, size: 6.5, c: col)
           end
         rescue StandardError => e
           @log << "#{code} #{c['scene']}: #{e.class}: #{e.message}"
@@ -1109,13 +1217,26 @@ module UCON
       @sheet_of = {}
       groups.each_with_index do |ids, gi|
         gw = ids.map { |i| wall(i) }
-        c = "A-10#{gi + 1}"; n = title('existing', s: ids.size > 1 ? 'S' : '', ids: ids.map(&:upcase).join(', '))
+        c = "A-10#{gi + 1}"; n = title('existing', s: ids.size > 1 ? 'S' : '', ids: gname(ids))
         ids.each { |i| @sheet_of[i] = "#{c} / A-20#{@wall_no[i]} / A-30#{@wall_no[i]}" }
         plan << [c, n, -> { page_existing(c, n, gw) }]
       end
-      ws.each { |w| c = "A-20#{@wall_no[w['id']]}"; n = title('frames', id: w['id'].upcase); plan << [c, n, -> { page_frames(c, n, w) }] }
-      plan << ['A-210', title('A-210'), -> { page_clips('A-210', title('A-210')) }]
-      ws.each { |w| c = "A-30#{@wall_no[w['id']]}"; n = title('panels', id: w['id'].upcase); plan << [c, n, -> { page_panels(c, n, w) }] }
+      if sh['sheet_groups']
+        # 2026-10-19 (AP Office): A-20x / A-30x per GROUP of walls (sheets.sheet_groups); a group with no frames has no A-20x
+        sg = sh['sheet_groups']
+        sg.each_with_index do |ids, gi|
+          gw = ids.map { |i| wall(i) }
+          ids.each { |i| @sheet_of[i] = "A-10#{(groups.index { |g| g.include?(i) } || gi) + 1} / #{gw.any? { |w| !@s['frames'][w['id']]['frames'].empty? } ? "A-20#{gi + 1} / " : ''}A-30#{gi + 1}" }
+          next if gw.all? { |w| @s['frames'][w['id']]['frames'].empty? }
+          c = "A-20#{gi + 1}"; n = title('frames', id: gname(ids)); plan << [c, n, -> { page_frames(c, n, gw) }]
+        end
+        plan << ['A-210', title('A-210'), -> { page_clips('A-210', title('A-210')) }]
+        sg.each_with_index { |ids, gi| gw = ids.map { |i| wall(i) }; c = "A-30#{gi + 1}"; n = title('panels', id: gname(ids)); plan << [c, n, -> { page_panels(c, n, gw) }] }
+      else
+        ws.each { |w| c = "A-20#{@wall_no[w['id']]}"; n = title('frames', id: w['id'].upcase); plan << [c, n, -> { page_frames(c, n, w) }] }
+        plan << ['A-210', title('A-210'), -> { page_clips('A-210', title('A-210')) }]
+        ws.each { |w| c = "A-30#{@wall_no[w['id']]}"; n = title('panels', id: w['id'].upcase); plan << [c, n, -> { page_panels(c, n, w) }] }
+      end
       @s['doors'].each_with_index do |dr, i|
         c1 = format('A-5%02d', 2 * i + 1); c2 = format('A-5%02d', 2 * i + 2)
         plan << [c1, title('door', id: dr['id']), -> { page_door(skp, c1, title('door', id: dr['id']), dr) }]

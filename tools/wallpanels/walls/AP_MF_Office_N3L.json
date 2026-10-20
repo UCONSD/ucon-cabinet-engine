@@ -1,0 +1,114 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital main level: OFFICE (TM 252137 rev 2, PDF 2026-02-24 - no DWG). mm, wall-local: x along the wall from its left end as seen from the room (niche walls: as seen from inside the niche), z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Survey = ~/Documents/AP_MF_Office_v1.0.skp (probe 862 / 863). Andriy 2026-10-19: panels on walls A and B only, 'as the kitchen' (heights from the subfloor, FFL +57.15; NO stone plinth - panels 10 above FFL; 10 to the ceiling, joints 10 open, inside corners: the long wall runs through), TM design kept and fitted to the survey; the three niches of wall A lined with 4 panels each (2 sides, back, soffit); niche sides MDF 22 glued without a frame so the TM bases 450 fit (515 - 2 x 22 = 471). Niche N3 left RETURN: x from the mouth into the niche, MDF 22 mitred with the front panels at the TM base edge and with the soffit.",
+ "id": "AP_MF_Office_N3L",
+ "model": "AP_MF_Office_v1.0",
+ "prefix": "OFF",
+ "wall": {
+  "length": 706.0,
+  "height": 2472.7,
+  "ceil": [
+   [
+    0,
+    706.0,
+    2472.7
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "niche mouth: OUTSIDE corner with the front panels - mitred 45 (panel to -44.3, the Wall A panel face)",
+   "inside corner with the niche back"
+  ],
+  "wf": [
+   [
+    0,
+    -1299.0
+   ],
+   [
+    -1,
+    0
+   ],
+   [
+    0,
+    1
+   ]
+  ],
+  "name": "N3 left return",
+  "kind": "niche_side"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "survey from the subfloor; finished floor +57.15 as Main Kitchen (Andriy 2026-10-19)",
+  "stone_top": null,
+  "_stone": "Andriy 2026-10-19: NO stone plinth in the office - the panels start 10 above the finished floor (FFL + 10)",
+  "counter_top": 997.15,
+  "_counter_top": "niche countertops 60 BY OTHERS (Andriy 2026-10-19) on the TM bases (legs 100 + 780); the niche backs stand on them",
+  "stone_runs": []
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 33.0,
+  "recess": 11.3,
+  "_": "N3 returns: panel face at the TM base edge = 33.0 from the niche wall; frame 19 sunk 11.3 into the wall - the installer removes the drywall there or fixes the frame on the drywall"
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 67.15,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "explicit": [
+   {
+    "id": "P29",
+    "row": "U",
+    "x0": -44.3,
+    "x1": 696.0,
+    "z0": 67.15,
+    "z1": 2472.7,
+    "mitre_start": false,
+    "mitre_end": false,
+    "mitres": {
+     "x0": "out",
+     "z1": "in"
+    }
+   }
+  ],
+  "tm_ref": "",
+  "material": "MDF 22, finish per TM (ROVERE SBIANCATO RIGATINO)"
+ },
+ "openings": [],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 67.15,
+  "tier_joint": 67.15,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 22,
+  "band_bottom": "local",
+  "_drywall": "installer: remove the drywall under the frame (frame back 11.3 behind the wall face) or fix the frame directly on the drywall"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ }
+}

@@ -145,6 +145,26 @@ module UCON
         raise "#{p[:id]}: #{p[:rebates].size} rebates - one per panel is drawn" if p[:rebates].size > 1
         g = pg.entities.add_group; g.layer = tp
         g.name = format('%s %s | %.1f x %.1f x %s', p[:id], p[:pos], p[:w], p[:h], WP.f1(t))
+        # 2026-10-19 (AP Office): per-edge mitres ('out' / 'in', see WallPanels.grid_explicit) - a hexahedron: face and back
+        # rectangles, each edge of the back (out) or of the face (in) set in by the panel thickness; x0..z1 = the long points
+        if p[:mitres] && !p[:mitres].empty? && p[:rebates].empty?
+          mt = p[:mitres]; yb = face + t
+          ins = ->(e, side) { (mt[e] == 'out' && side == :back) || (mt[e] == 'in' && side == :face) ? t : 0 }
+          ring = lambda do |y, side|
+            a0 = p[:x0] + ins.('x0', side); a1 = p[:x1] - ins.('x1', side); c0 = p[:z0] + ins.('z0', side); c1 = p[:z1] - ins.('z1', side)
+            [[a0, c0], [a1, c0], [a1, c1], [a0, c1]].map { |x, z| Geom::Point3d.new(mm(x), mm(y), mm(z)) }
+          end
+          fr = ring.(face, :face); bk = ring.(yb, :back)
+          quads = [fr, bk.reverse] + (0..3).map { |i| [fr[i], bk[i], bk[(i + 1) % 4], fr[(i + 1) % 4]] }
+          cen = Geom::Point3d.new(*(0..2).map { |k| (fr + bk).sum { |q| q.to_a[k] } / 8.0 })
+          quads.each do |q|
+            fc = g.entities.add_face(q)
+            mid = Geom::Point3d.new(*(0..2).map { |k| q.sum { |v| v.to_a[k] } / 4.0 })
+            fc.reverse! if (mid - cen).dot(fc.normal) < 0
+          end
+          raise "#{g.name} not solid (mitres #{mt.inspect})" unless g.manifold?
+          next
+        end
         # 2026-10-19 (AP Dining): a panel at a 45° corner is drawn mitred - long point on the face, short point on the
         # back (x0 / x1 run past the wall end by the face depth); plan profile pushed up z0..z1. Only without a rebate.
         if (p[:mitre_start] || p[:mitre_end]) && p[:rebates].empty?
@@ -178,14 +198,29 @@ module UCON
 
     def build_frames(model, spec, out, prefix: spec['prefix'], origin: IDENTITY)
       ft = spec['build_up']['frame_t'].to_f
+      # 2026-10-19 (AP Office N1 / N3 returns): build_up.recess - the frame back sits that far BEHIND the surveyed wall face
+      # (the installer removes the drywall there); default 0 = the frame on the wall face
+      rc = (spec['build_up']['recess'] || 0).to_f
       tp = tag(model, :frames)
       m4 = material(model, 'backing ply', [200, 200, 196]); m6 = material(model, 'backing ply 6in', [165, 165, 160])
       out[:frames].map do |f|
         dfn = model.definitions.add("#{prefix} subframe #{f[:id]}")
         WP.members(f).each do |mb|
-          g = slab(dfn.entities, [[mb[:x0], mb[:z0]], [mb[:x1], mb[:z0]], [mb[:x1], mb[:z1]], [mb[:x0], mb[:z1]]], -ft, ft, mb[:name])
+          g = slab(dfn.entities, [[mb[:x0], mb[:z0]], [mb[:x1], mb[:z0]], [mb[:x1], mb[:z1]], [mb[:x0], mb[:z1]]], -ft + rc, ft, mb[:name])
           g.material = mb[:w] == '6' ? m6 : m4
           raise "#{mb[:name]} not solid" unless g.manifold?
+          # 2026-10-19 (AP Office N2 returns): build_up.blocking {t, w} - the frame stands OFF the wall (recess < 0) on wood
+          # blocks: one continuous 2x4 laid flat behind every VERTICAL member, centred on it, wall face to the frame back
+          bl = spec['build_up']['blocking']
+          next unless bl && (mb[:z1] - mb[:z0]) > (mb[:x1] - mb[:x0])
+          # a member wider than two blocks (N2: one solid stile 331) gets a block under EACH edge, else one centred
+          bw = bl['w'].to_f; cx = (mb[:x0] + mb[:x1]) / 2.0
+          xs = (mb[:x1] - mb[:x0]) > 2 * bw ? [[mb[:x0], mb[:x0] + bw], [mb[:x1] - bw, mb[:x1]]] : [[cx - bw / 2, cx + bw / 2]]
+          xs.each_with_index do |(a, b), k|
+            wb = slab(dfn.entities, [[a, mb[:z0]], [b, mb[:z0]], [b, mb[:z1]], [a, mb[:z1]]], -bl['t'].to_f, bl['t'].to_f, "#{mb[:name]} BLOCK 2x4 flat #{k + 1}")
+            wb.material = material(model, 'wood blocking 2x4', [222, 184, 135])
+            raise "#{mb[:name]} block not solid" unless wb.manifold?
+          end
         end
         inst = model.entities.add_instance(dfn, origin)
         inst.name = "#{prefix} | backing #{f[:id]} | #{(f[:x1] - f[:x0]).round} x #{(f[:z1] - f[:z0]).round}"
@@ -214,7 +249,7 @@ module UCON
 
     def build_holes(model, spec, out, prefix: spec['prefix'], origin: IDENTITY)
       bu = spec['build_up']; c = spec['clips']
-      back = -(bu['face'] - bu['panel_t']); ft = bu['frame_t'].to_f; r = c['hole_d'] / 2.0
+      back = -(bu['face'] - bu['panel_t']); ft = bu['frame_t'].to_f - (bu['recess'] || 0).to_f; r = c['hole_d'] / 2.0   # frame front = -(frame_t - recess)
       t = tag(model, :drilling)
       mt = material(model, "drill hole D#{WP.f1(c['hole_d'])}", [200, 0, 0])
       gg = model.entities.add_group; gg.layer = t

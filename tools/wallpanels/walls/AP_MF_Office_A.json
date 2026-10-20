@@ -1,0 +1,654 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital main level: OFFICE (TM 252137 rev 2, PDF 2026-02-24 - no DWG). mm, wall-local: x along the wall from its left end as seen from the room (niche walls: as seen from inside the niche), z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Survey = ~/Documents/AP_MF_Office_v1.0.skp (probe 862 / 863). Andriy 2026-10-19: panels on walls A and B only, 'as the kitchen' (heights from the subfloor, FFL +57.15; NO stone plinth - panels 10 above FFL; 10 to the ceiling, joints 10 open, inside corners: the long wall runs through), TM design kept and fitted to the survey; the three niches of wall A lined with 4 panels each (2 sides, back, soffit); niche sides MDF 22 glued without a frame so the TM bases 450 fit (515 - 2 x 22 = 471). Wall A = TM wall A (panels 1-13): TM grid kept, widths from the survey (TM 6010.5, survey 6052); upper row = TM 1246 less 6.7 (bottom at the niche soffit face, one joint all round 2440.7 / 2450.7).",
+ "id": "AP_MF_Office_A",
+ "model": "AP_MF_Office_v1.0",
+ "prefix": "OFF",
+ "wall": {
+  "length": 6052.0,
+  "height": 3700.0,
+  "ceil": [
+   [
+    0,
+    6052.0,
+    3700.0
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "inside corner, runs through (panels 10 short)",
+   "inside corner with Wall B, runs through (panels 10 short)"
+  ],
+  "wf": [
+   [
+    0,
+    -6052
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "name": "Wall A",
+  "kind": "wall"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "survey from the subfloor; finished floor +57.15 as Main Kitchen (Andriy 2026-10-19)",
+  "stone_top": null,
+  "_stone": "Andriy 2026-10-19: NO stone plinth in the office - the panels start 10 above the finished floor (FFL + 10)",
+  "counter_top": 997.15,
+  "_counter_top": "niche countertops 60 BY OTHERS (Andriy 2026-10-19) on the TM bases (legs 100 + 780); the niche backs stand on them",
+  "stone_runs": []
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 67.15,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "explicit": [
+   {
+    "id": "P01",
+    "row": "U",
+    "x0": 10,
+    "x1": 801.9,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P02",
+    "row": "U",
+    "x0": 811.9,
+    "x1": 1640.5,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": false,
+    "mitre_end": true
+   },
+   {
+    "id": "P03",
+    "row": "U",
+    "x0": 1650.5,
+    "x1": 2080.5,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "mitres": {
+     "z0": "out"
+    }
+   },
+   {
+    "id": "P04",
+    "row": "U",
+    "x0": 2090.5,
+    "x1": 2387.5,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": true,
+    "mitre_end": true
+   },
+   {
+    "id": "P05",
+    "row": "U",
+    "x0": 2397.5,
+    "x1": 4477.5,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "mitres": {
+     "z0": "out"
+    }
+   },
+   {
+    "id": "P06",
+    "row": "U",
+    "x0": 4487.5,
+    "x1": 4786.0,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": true,
+    "mitre_end": true
+   },
+   {
+    "id": "P07",
+    "row": "U",
+    "x0": 4796.0,
+    "x1": 5226.0,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": false,
+    "mitre_end": false,
+    "mitres": {
+     "z0": "out"
+    }
+   },
+   {
+    "id": "P08",
+    "row": "U",
+    "x0": 5236.0,
+    "x1": 6042.0,
+    "z0": 2450.7,
+    "z1": 3690.0,
+    "mitre_start": true,
+    "mitre_end": false
+   },
+   {
+    "id": "P09",
+    "row": "L",
+    "x0": 10,
+    "x1": 801.9,
+    "z0": 67.15,
+    "z1": 2440.7,
+    "mitre_start": false,
+    "mitre_end": false
+   },
+   {
+    "id": "P10",
+    "row": "L",
+    "x0": 811.9,
+    "x1": 1640.5,
+    "z0": 67.15,
+    "z1": 2440.7,
+    "mitre_start": false,
+    "mitre_end": true
+   },
+   {
+    "id": "P11",
+    "row": "L",
+    "x0": 2090.5,
+    "x1": 2387.5,
+    "z0": 67.15,
+    "z1": 2440.7,
+    "mitre_start": true,
+    "mitre_end": true,
+    "clip_cols": [
+     2176,
+     2252
+    ]
+   },
+   {
+    "id": "P12",
+    "row": "L",
+    "x0": 4487.5,
+    "x1": 4786.0,
+    "z0": 67.15,
+    "z1": 2440.7,
+    "mitre_start": true,
+    "mitre_end": true,
+    "clip_cols": [
+     4623,
+     4700
+    ]
+   },
+   {
+    "id": "P13",
+    "row": "L",
+    "x0": 5236.0,
+    "x1": 6042.0,
+    "z0": 67.15,
+    "z1": 2440.7,
+    "mitre_start": true,
+    "mitre_end": false
+   }
+  ],
+  "tm_ref": "TM 252137 rev 2 sheet 2: 1-8 upper (791.9 / 807.6 / 435 / 232 / 2186 / 222 / 455.3 / 802.6, h 1246), 9-13 lower (791.9 / 849.1 / 232 / 232 / 816.6, h 2390-2400)",
+  "material": "MDF 22, finish per TM (ROVERE SBIANCATO RIGATINO)",
+  "row_seam": {
+   "z": 2440.7
+  }
+ },
+ "openings": [
+  {
+   "id": "N1",
+   "kind": "niche",
+   "x0": 1608.0,
+   "x1": 2123.0,
+   "h": 2495.0,
+   "depth": 706.0,
+   "label": "NICHE N1 - LINED (4 PANELS), TM BASES BELOW",
+   "short": "NICHE N1",
+   "lined": "AP_MF_Office_N1L / N1B / N1R / N1H",
+   "_": "UCON survey (probe 863): niche 515 wide, 706 deep, to the floor, head 2495. Lined (Andriy 2026-10-19): side panels MDF 22 glued (faces 1630 / 2101), back and soffit on frames; the pier panels meet the side panels MITRED at the niche mouth (outside corner, as Main Kitchen). The upper row (from 2450.7) runs over the mouth, its bottom flush with the soffit face."
+  },
+  {
+   "id": "N2",
+   "kind": "niche",
+   "x0": 2305.0,
+   "x1": 4570.0,
+   "h": 2495.0,
+   "depth": 331.0,
+   "label": "NICHE N2 - LINED (4 PANELS), TM BASES BELOW",
+   "short": "NICHE N2",
+   "lined": "AP_MF_Office_N2L / N2B / N2R / N2H",
+   "_": "UCON survey (probe 863): niche 2265 wide, 331 deep, to the floor, head 2495. Lined (Andriy 2026-10-19): side panels MDF 22 glued (faces 2327 / 4548), back and soffit on frames; the pier panels meet the side panels MITRED at the niche mouth (outside corner, as Main Kitchen). The upper row (from 2450.7) runs over the mouth, its bottom flush with the soffit face."
+  },
+  {
+   "id": "N3",
+   "kind": "niche",
+   "x0": 4753.0,
+   "x1": 5269.0,
+   "h": 2495.0,
+   "depth": 706.0,
+   "label": "NICHE N3 - LINED (4 PANELS), TM BASES BELOW",
+   "short": "NICHE N3",
+   "lined": "AP_MF_Office_N3L / N3B / N3R / N3H",
+   "_": "UCON survey (probe 863): niche 516 wide, 706 deep, to the floor, head 2495. Lined (Andriy 2026-10-19): side panels MDF 22 glued (faces 4775 / 5247), back and soffit on frames; the pier panels meet the side panels MITRED at the niche mouth (outside corner, as Main Kitchen). The upper row (from 2450.7) runs over the mouth, its bottom flush with the soffit face."
+  }
+ ],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 67.15,
+  "tier_joint": 2495.0,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 1,
+  "band_bottom": "local"
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ },
+ "tm_boxes": [
+  {
+   "name": "N1 base TM 450 - 2 jumbo drawers + int. drawer - carcass 450 x 670 x 780 on plinth 100 (engine B90557)",
+   "x": [
+    1640.5,
+    2090.5
+   ],
+   "y": [
+    -19.3,
+    650.7
+   ],
+   "z": [
+    157.15,
+    937.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N1 base TM 450 - 2 jumbo drawers + int. drawer - carcass plinth 100 set back 45 (engine)",
+   "x": [
+    1640.5,
+    2090.5
+   ],
+   "y": [
+    25.7,
+    43.7
+   ],
+   "z": [
+    57.15,
+    157.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N1 base TM 450 - 2 jumbo drawers + int. drawer - front drawer 450 x 450 (custom: 10 short of the floor, covers the plinth)",
+   "x": [
+    1640.5,
+    2090.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    517.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N1 base TM 450 - 2 jumbo drawers + int. drawer - front drawer 450 x 360",
+   "x": [
+    1640.5,
+    2090.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    547.15,
+    907.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N1 countertop 60 - BY OTHERS (ref, see-through)",
+   "tag": "counter",
+   "x": [
+    1640.5,
+    2090.5
+   ],
+   "y": [
+    -44.3,
+    661.7
+   ],
+   "z": [
+    937.15,
+    997.15
+   ]
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - carcass 450 x 350 x 780 on plinth 100 (engine B70557)",
+   "x": [
+    2387.5,
+    2837.5
+   ],
+   "y": [
+    -19.3,
+    330.7
+   ],
+   "z": [
+    157.15,
+    937.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - carcass plinth 100 set back 45 (engine)",
+   "x": [
+    2387.5,
+    2837.5
+   ],
+   "y": [
+    25.7,
+    43.7
+   ],
+   "z": [
+    57.15,
+    157.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - front drawer 450 x 450 (custom: 10 short of the floor, covers the plinth)",
+   "x": [
+    2387.5,
+    2837.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    517.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - front drawer 450 x 360",
+   "x": [
+    2387.5,
+    2837.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    547.15,
+    907.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 1200 - 2 jumbo drawers (+ internal drawer) - carcass 1200 x 350 x 780 on plinth 100 (engine B71257)",
+   "x": [
+    2837.5,
+    4037.5
+   ],
+   "y": [
+    -19.3,
+    330.7
+   ],
+   "z": [
+    157.15,
+    937.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 1200 - 2 jumbo drawers (+ internal drawer) - carcass plinth 100 set back 45 (engine)",
+   "x": [
+    2837.5,
+    4037.5
+   ],
+   "y": [
+    25.7,
+    43.7
+   ],
+   "z": [
+    57.15,
+    157.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 1200 - 2 jumbo drawers (+ internal drawer) - front drawer 1200 x 450 (custom: 10 short of the floor, covers the plinth)",
+   "x": [
+    2837.5,
+    4037.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    517.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 1200 - 2 jumbo drawers (+ internal drawer) - front drawer 1200 x 360",
+   "x": [
+    2837.5,
+    4037.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    547.15,
+    907.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - carcass 450 x 350 x 780 on plinth 100 (engine B70557)",
+   "x": [
+    4037.5,
+    4487.5
+   ],
+   "y": [
+    -19.3,
+    330.7
+   ],
+   "z": [
+    157.15,
+    937.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - carcass plinth 100 set back 45 (engine)",
+   "x": [
+    4037.5,
+    4487.5
+   ],
+   "y": [
+    25.7,
+    43.7
+   ],
+   "z": [
+    57.15,
+    157.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - front drawer 450 x 450 (custom: 10 short of the floor, covers the plinth)",
+   "x": [
+    4037.5,
+    4487.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    517.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 base TM 450 - 2 jumbo drawers - front drawer 450 x 360",
+   "x": [
+    4037.5,
+    4487.5
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    547.15,
+    907.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N2 countertop 60 - BY OTHERS (ref, see-through)",
+   "tag": "counter",
+   "x": [
+    2387.5,
+    4487.5
+   ],
+   "y": [
+    -44.3,
+    286.7
+   ],
+   "z": [
+    937.15,
+    997.15
+   ]
+  },
+  {
+   "name": "N3 base TM 450 - 2 jumbo drawers + int. drawer - carcass 450 x 670 x 780 on plinth 100 (engine B90557)",
+   "x": [
+    4786.0,
+    5236.0
+   ],
+   "y": [
+    -19.3,
+    650.7
+   ],
+   "z": [
+    157.15,
+    937.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N3 base TM 450 - 2 jumbo drawers + int. drawer - carcass plinth 100 set back 45 (engine)",
+   "x": [
+    4786.0,
+    5236.0
+   ],
+   "y": [
+    25.7,
+    43.7
+   ],
+   "z": [
+    57.15,
+    157.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N3 base TM 450 - 2 jumbo drawers + int. drawer - front drawer 450 x 450 (custom: 10 short of the floor, covers the plinth)",
+   "x": [
+    4786.0,
+    5236.0
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    67.15,
+    517.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N3 base TM 450 - 2 jumbo drawers + int. drawer - front drawer 450 x 360",
+   "x": [
+    4786.0,
+    5236.0
+   ],
+   "y": [
+    -44.3,
+    -22.3
+   ],
+   "z": [
+    547.15,
+    907.15
+   ],
+   "ref_only": true
+  },
+  {
+   "name": "N3 countertop 60 - BY OTHERS (ref, see-through)",
+   "tag": "counter",
+   "x": [
+    4786.0,
+    5236.0
+   ],
+   "y": [
+    -44.3,
+    661.7
+   ],
+   "z": [
+    937.15,
+    997.15
+   ]
+  }
+ ]
+}

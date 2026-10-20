@@ -1,0 +1,111 @@
+{
+ "_about": "Wall-panel wall spec, AP Capital main level: OFFICE (TM 252137 rev 2, PDF 2026-02-24 - no DWG). mm, wall-local: x along the wall from its left end as seen from the room (niche walls: as seen from inside the niche), z up from the SUBFLOOR (survey zero), y = 0 at the wall face, negative toward the room. Survey = ~/Documents/AP_MF_Office_v1.0.skp (probe 862 / 863). Andriy 2026-10-19: panels on walls A and B only, 'as the kitchen' (heights from the subfloor, FFL +57.15; NO stone plinth - panels 10 above FFL; 10 to the ceiling, joints 10 open, inside corners: the long wall runs through), TM design kept and fitted to the survey; the three niches of wall A lined with 4 panels each (2 sides, back, soffit); niche sides MDF 22 glued without a frame so the TM bases 450 fit (515 - 2 x 22 = 471). Niche N3 back, standing on the countertop by others (top 997.15); frames from the counter to the soffit face 2450.7. Below the counter the TM base runs to the wall.",
+ "id": "AP_MF_Office_N3B",
+ "model": "AP_MF_Office_v1.0",
+ "prefix": "OFF",
+ "wall": {
+  "length": 516.0,
+  "height": 2450.7,
+  "ceil": [
+   [
+    0,
+    516.0,
+    2450.7
+   ]
+  ],
+  "thickness": null,
+  "_thickness": "not surveyed (the model holds the wall faces only)",
+  "ends": [
+   "inside corner between the side panels (10 short of their faces)",
+   "inside corner between the side panels (10 short of their faces)"
+  ],
+  "wf": [
+   [
+    -706.0,
+    -1299.0
+   ],
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "name": "N3 back",
+  "kind": "niche_back"
+ },
+ "levels": {
+  "subfloor": 0,
+  "ffl": 57.15,
+  "_ffl": "survey from the subfloor; finished floor +57.15 as Main Kitchen (Andriy 2026-10-19)",
+  "stone_top": null,
+  "_stone": "Andriy 2026-10-19: NO stone plinth in the office - the panels start 10 above the finished floor (FFL + 10)",
+  "counter_top": 997.15,
+  "_counter_top": "niche countertops 60 BY OTHERS (Andriy 2026-10-19) on the TM bases (legs 100 + 780); the niche backs stand on them",
+  "stone_runs": []
+ },
+ "build_up": {
+  "frame_t": 19,
+  "clip_gap": 3.3,
+  "panel_t": 22,
+  "face": 44.3
+ },
+ "panels": {
+  "joint": 10.0,
+  "no_wall_in_joints": true,
+  "margin_floor": 997.15,
+  "margin_ceiling": 10,
+  "margin_ends": 10,
+  "explicit": [
+   {
+    "id": "P30",
+    "row": "U",
+    "x0": 43.0,
+    "x1": 473.0,
+    "z0": 997.15,
+    "z1": 2440.7,
+    "mitre_start": false,
+    "mitre_end": false
+   }
+  ],
+  "tm_ref": "",
+  "material": "MDF 22, finish per TM (ROVERE SBIANCATO RIGATINO)"
+ },
+ "openings": [],
+ "subframe": {
+  "strip": 98,
+  "strip_wide": 152,
+  "seam_overrun": 20,
+  "solid_below": 150,
+  "floor_gap": 997.15,
+  "tier_joint": 997.15,
+  "max_length": 2438,
+  "sheet": {
+   "w": 1219.2,
+   "l": 2438.4,
+   "kerf": 3.2
+  },
+  "layout": "band",
+  "jamb_setback": 0,
+  "first_id": 23,
+  "band_bottom": "local",
+  "ends_setback": [
+   33.0,
+   33.0
+  ]
+ },
+ "clips": {
+  "make": "Fastmount VL-03H",
+  "mount": "recess",
+  "edge": 75,
+  "edge_min": 40,
+  "row_max": 600,
+  "wide_panel": 900,
+  "hole_d": 25,
+  "panel_depth": 7,
+  "frame_depth": 8,
+  "narrow_panel": 200
+ }
+}

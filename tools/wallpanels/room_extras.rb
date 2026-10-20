@@ -38,6 +38,15 @@ module UCON
       list.concat(strips(spec, out, pback))
       (out[:blocks] || []).each { |b| list << box('blocks', "#{b[:id]} joint block MDF 6 | #{b[:joint]}", b[:x0], b[:x1], -6, 0, b[:z0], b[:z1]) }
       list.concat(stone(spec, out, ffl, face))
+      # 2026-10-19 (AP Office): TM furniture as reference boxes, wall-local, straight from the wall JSON (bases in the
+      # niches, the bookcase on wall B) - drawn for position only, made by TM
+      (spec['tm_boxes'] || []).each do |b|
+        next if b['ref_only']   # 2026-10-19 (AP Office): drawn on the sheets only - the model holds the engine-built unit instead
+        bx = box(b['tag'] || 'tm', b['name'], b['x'][0], b['x'][1], b['y'][0], b['y'][1], b['z'][0], b['z'][1])
+        # 2026-10-19 (AP Office wall B fronts): 'yz' = a side profile [[y, z], ...] extruded over x0..x1 (a chamfered front edge)
+        bx[:yz] = b['yz'].map { |y, z| [y.to_f, z.to_f] } if b['yz']
+        list << bx
+      end
       list
     end
 
@@ -175,7 +184,12 @@ module UCON
       th = (sd['t'] || 20).to_f; nt = (sd['notch'] || 10).to_f; bc = (sd['back_cut'] || 9.5).to_f
       cuts = spec['openings'].select { |o| o['kind'] == 'door' }.map { |d| [d['x0'] + 1.8, d['x1'] - 1.8] }
       out[:grid][:panels].select { |p| (p[:z0] - st).abs < 0.05 }.each do |p|
-        edges = ([p[:x0], p[:x1]] + cuts.flatten.select { |x| x > p[:x0] && x < p[:x1] }).sort
+        # 2026-10-19 (AP Office niche mouths): under a mitred end the stone stops at the panel's short (back) point - the
+        # long point runs a panel thickness past the reveal, where the niche side panel comes down
+        # (levels.stone.stop_at_mitre; Main Kitchen's 45° wall corners keep the stone to the long point)
+        sm = sd['stop_at_mitre'] ? spec['build_up']['panel_t'].to_f : 0
+        pa = p[:x0] + (p[:mitre_start] ? sm : 0); pb = p[:x1] - (p[:mitre_end] ? sm : 0)
+        edges = ([pa, pb] + cuts.flatten.select { |x| x > pa && x < pb }).sort
         edges.each_cons(2) do |a, b|
           mid = (a + b) / 2.0
           if cuts.any? { |c0, c1| mid > c0 && mid < c1 }
@@ -204,9 +218,10 @@ module UCON
 
     # ------------------------------------------------------------------ SketchUp side (ARMED only)
     TAGS = { 'doors' => '04 Doors (TM)', 'liners' => '07 Liners', 'strips' => '07 Liners - strips B / A', 'blocks' => '07 Liners - joint blocks MDF 6 (UCON)',
-             'stone' => '05 Stone plinth - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)' }.freeze
+             'stone' => '05 Stone plinth - by others (ref)', 'cabinets' => '09 Closet cabinets (TM, ref)', 'tm' => '09 TM furniture (ref)', 'counter' => '10 Countertop - by others (ref)', 'wood' => '03 Panels - wood blocking 2x4 flat (UCON)' }.freeze
     COLORS = { 'doors' => [235, 225, 200], 'liners' => [250, 250, 246], 'strips' => [210, 190, 150], 'blocks' => [120, 120, 120],
-               'stone' => [214, 208, 198], 'cabinets' => [200, 205, 215] }.freeze
+               'stone' => [214, 208, 198], 'cabinets' => [200, 205, 215], 'tm' => [205, 200, 190], 'counter' => [150, 150, 150], 'wood' => [222, 184, 135] }.freeze
+    ALPHA = { 'counter' => 0.35 }.freeze   # 2026-10-19 (AP Office): the countertop by others drawn see-through
 
     def build(model, pieces, prefix, origin)
       groups = {}
@@ -214,13 +229,20 @@ module UCON
         tag = model.layers[TAGS[tg]] || model.layers.add(TAGS[tg])
         mat = model.materials["FOY #{tg}"] || model.materials.add("FOY #{tg}")
         mat.color = Sketchup::Color.new(*COLORS[tg])
+        mat.alpha = ALPHA[tg] if ALPHA[tg]
         grp = model.entities.add_group; grp.name = "#{prefix} | #{TAGS[tg]}"; grp.layer = tag
         ps.each do |p|
           g = grp.entities.add_group; g.name = p[:name]; g.layer = tag; g.material = mat
           x0, x1 = p[:x]; y0, y1 = p[:y]; z0, z1 = p[:z]
-          f = g.entities.add_face([[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]].map { |a, b, c| Geom::Point3d.new(a.mm, b.mm, c.mm) })
-          f.reverse! if f.normal.z < 0
-          f.pushpull((z1 - z0).mm)
+          if p[:yz]
+            f = g.entities.add_face(p[:yz].map { |b, c| Geom::Point3d.new(x0.mm, b.mm, c.mm) })
+            f.reverse! if f.normal.x < 0
+            f.pushpull((x1 - x0).mm)
+          else
+            f = g.entities.add_face([[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]].map { |a, b, c| Geom::Point3d.new(a.mm, b.mm, c.mm) })
+            f.reverse! if f.normal.z < 0
+            f.pushpull((z1 - z0).mm)
+          end
           raise "#{p[:name]} not solid" unless g.manifold?
         end
         grp.transform!(origin)

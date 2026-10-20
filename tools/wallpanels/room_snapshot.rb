@@ -62,7 +62,11 @@ module UCON
             h
           end,
           'wf' => s['wall']['wf'] || [[s['origin_model_x'].to_f, 0], [1, 0], [0, -1]],
-          'plan_wf' => plan_wf((room['plan'] || {})[w], len)
+          'plan_wf' => plan_wf((room['plan'] || {})[w], len),
+          # 2026-10-19 (AP Office): wall kind (wall / niche_side / soffit), no-frame walls, TM furniture boxes for the elevations
+          'kind' => s['wall']['kind'] || 'wall', 'name' => s['wall']['name'] || w,
+          'no_frames' => s['subframe']['none'] ? true : false, 'build_up' => s['build_up'],
+          'tm' => (s['tm_boxes'] || []).map { |b| { 'name' => b['name'], 'tag' => b['tag'] || 'tm', 's0' => b['x'][0], 's1' => b['x'][1], 'y0' => b['y'][0], 'y1' => b['y'][1], 'z0' => b['z'][0], 'z1' => b['z'][1] } }
         }
         # 2026-10-19 (AP Dining v2.0): the liner slot strips B / A glued to the panel back by the factory (D-sheets)
         pb = -s['build_up']['face'].to_f + s['build_up']['panel_t'].to_f
@@ -73,6 +77,7 @@ module UCON
         o[:grid][:panels].each do |p|
           snap['panels'] << { 'strips' => sts.select { |x| x['panel'] == p[:id] }.map { |x| x.reject { |k, _| k == 'panel' } }, 'wall' => w, 'id' => p[:id], 's0' => p[:x0], 's1' => p[:x1], 'z0' => p[:z0], 'z1' => p[:z1],
                               'kind' => p[:row], 'pos' => p[:pos], 'mitre_start' => p[:mitre_start] ? true : false, 'mitre_end' => p[:mitre_end] ? true : false,
+                              'mitres' => p[:mitres] || {}, 'glued' => p[:glued] ? true : false,
                               'rebates' => (p[:rebates] || []).map do |x0, x1, z0, z1|
                                 d = s['openings'].find { |op| op['rebate'] && x0 >= op['x0'] - 200 && x1 <= op['x1'] + 200 }
                                 { 'door' => d && d['id'], 's0' => x0, 's1' => x1, 'z0' => z0, 'z1' => z1 }

@@ -170,7 +170,11 @@ module UCON
       pr = spec['panels']; j = pr['joint'].to_f
       panels = pr['explicit'].map do |e|
         p = { id: e['id'], row: e['row'], x0: e['x0'].to_f, x1: e['x1'].to_f, z0: e['z0'].to_f, z1: e['z1'].to_f,
-              mitre_start: e['mitre_start'] ? true : false, mitre_end: e['mitre_end'] ? true : false, glued: e['glued'] ? true : false }
+              mitre_start: e['mitre_start'] ? true : false, mitre_end: e['mitre_end'] ? true : false, glued: e['glued'] ? true : false,
+              clip_cols: e['clip_cols'] && e['clip_cols'].map(&:to_f),   # 2026-10-19 (AP Office P11 / P12): clip columns given (over the pier only)
+              # 2026-10-19 (AP Office N2 portal): per-edge 45 deg mitres { 'x0' | 'x1' | 'z0' | 'z1' => 'out' | 'in' } - 'out': the
+              # face reaches the edge, the back is a panel thickness short (outside corner); 'in': the back reaches it, the face is short
+              mitres: e['mitres'] || {} }
         p.merge!(w: r1(p[:x1] - p[:x0]), h: r1(p[:z1] - p[:z0]), pos: "#{e['row']}-#{e['id']}")
         p[:rebates] = rebates(spec, p)
         p
@@ -397,7 +401,10 @@ module UCON
         # 2026-10-17 (Main Kitchen): a pier with two panel columns is cut at the joint between them, as the band
         pc = vseams.map { |s0, s1| r1((s0 + s1) / 2.0 + sf['seam_overrun']) }.select { |c| c > a2 + 2 * wn && c < b2 - 2 * wn }
         ([a2] + pc + [b2]).each_cons(2) do |pa, pb|
-          [[sf['floor_gap'].to_f, sf['tier_joint'].to_f, 'LOW'], [sf['tier_joint'].to_f, ptop.(pa, pb), 'PIER']].each do |z0, z1, kind|
+          # 2026-10-19 (AP Office wall B, Andriy): subframe.floor_at [[x0, x1, z]] - a pier piece whose middle lies in x0..x1
+          # starts at z instead of floor_gap (the end panels run to the floor, the ones between them start on the TM counter)
+          fz = ((sf['floor_at'] || []).find { |x0, x1, _| (pa + pb) / 2.0 > x0 && (pa + pb) / 2.0 < x1 } || [nil, nil, sf['floor_gap']])[2].to_f
+          [[fz, sf['tier_joint'].to_f, 'LOW'], [sf['tier_joint'].to_f, ptop.(pa, pb), 'PIER']].each do |z0, z1, kind|
             next if z1 - z0 < EPS
             out << if pb - pa < 2 * wn - EPS
                      solid(pa, pb, z0, z1, kind)
@@ -600,6 +607,7 @@ module UCON
         base.insert(1, (p[:x0] + p[:x1]) / 2.0) if p[:w] > c['wide_panel']
         # a panel too narrow for two columns a clip apart (AP ML Foyer 170 / 180 piers): one column at its centre
         base = [(p[:x0] + p[:x1]) / 2.0] if c['narrow_panel'] && p[:w] < c['narrow_panel']
+        base = p[:clip_cols] if p[:clip_cols]
         backing = frs.select { |f| overlap(f[:x0], f[:x1], p[:x0], p[:x1]) > EPS && overlap(f[:z0], f[:z1], p[:z0], p[:z1]) > EPS }
                      .sort_by { |f| [f[:stiles].size == 1 ? 1 : 0, -overlap(f[:z0], f[:z1], p[:z0], p[:z1])] }
         # 2026-10-19 (AP Dining P05): the clip columns snap to the stiles of a real frame before a solid strip - a solid
@@ -757,6 +765,13 @@ module UCON
     # ------------------------------------------------------------------ everything for one wall
     def build(spec)
       g = grid(spec)
+      # 2026-10-19 (AP Office niche sides, Andriy): subframe.none - every panel glued straight to the wall, no backing
+      # frame, no clips, no drilling (build_up face = panel_t); the wall carries panels only
+      if spec['subframe']['none']
+        bad = g[:panels].reject { |p| p[:glued] }.map { |p| "#{p[:id]}: a wall without frames must have glued panels only" }
+        return { spec: spec, grid: g, frames: [], clips: [], holes: [], cut: [], strips: { '4' => { pieces: 0, metres: 0.0, strips: 0 }, '6' => { pieces: 0, metres: 0.0, strips: 0 } },
+                 sheets: [], blocks: [], checks: bad }
+      end
       frs = solidify(spec, frames(spec, g))
       cl = clips(spec, g, frs)
       hs = holes(g, cl)
