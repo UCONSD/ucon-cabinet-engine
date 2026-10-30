@@ -1,0 +1,15 @@
+{
+  "room": "7612-BA3",
+  "source": "7612_Hillside_Dr_Bath_3_Codes_v0.1.pdf (A-105, A-205, S-105)",
+  "estimate": "T_00019",
+  "base": "../T_00019_s_samples.rit",
+  "items": [
+    {"id": 1, "kind": "unit", "code": "BA60557", "src": {"struct": 1}, "x": 7, "y": 243, "hung": true},
+    {"id": 2, "kind": "unit", "code": "BA60687", "src": {"struct": 2}, "x": 457, "y": 243, "hung": true},
+    {"id": 5, "kind": "unit", "code": "BA60557", "src": {"struct": 1}, "x": 1057, "y": 243, "hung": true},
+    {"id": 4, "kind": "unit", "code": "SPECCHIERA", "src": {"struct": 4}, "x": 157, "y": 1250},
+    {"id": 6, "kind": "panel", "code": "PAN018", "src": {"file": "../T_00016_v2.rit", "code": "PAN018"}, "pos": [7, 243, 0, 270], "X": 470, "Y": 585},
+    {"id": 7, "kind": "panel", "code": "PAN018", "src": {"file": "../T_00016_v2.rit", "code": "PAN018"}, "pos": [1525, 243, 0, 270], "X": 470, "Y": 585},
+    {"id": 3, "kind": "top", "code": "TOPDRBA", "src": {"struct": 3}, "units": [1, 5], "sx": 7, "dx": 7, "borsx": "BOR002", "bordx": "BOR002", "sink": "LVBF05.002"}
+  ]
+}

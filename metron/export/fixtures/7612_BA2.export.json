@@ -1,0 +1,70 @@
+{
+  "room": "7612-BA2",
+  "revision": "R01",
+  "estimate": "T_00018",
+  "items": [
+    {
+      "ref": "u1",
+      "kind": "unit",
+      "code": "BA61287",
+      "x": 18,
+      "y": 243,
+      "hung": true
+    },
+    {
+      "ref": "u2",
+      "kind": "unit",
+      "code": "BA60957",
+      "x": 1218,
+      "y": 243,
+      "hung": true
+    },
+    {
+      "ref": "m1",
+      "kind": "unit",
+      "code": "SPECCHIERA",
+      "x": 18,
+      "y": 1250
+    },
+    {
+      "ref": "p1",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        18,
+        243,
+        0,
+        270
+      ],
+      "X": 470,
+      "Y": 585
+    },
+    {
+      "ref": "p2",
+      "kind": "panel",
+      "code": "PAN022",
+      "pos": [
+        2140,
+        243,
+        0,
+        270
+      ],
+      "X": 470,
+      "Y": 585
+    },
+    {
+      "ref": "t1",
+      "kind": "top",
+      "code": "TOPDRBA",
+      "units": [
+        "u1",
+        "u2"
+      ],
+      "sx": 18,
+      "dx": 22,
+      "borsx": "BOR002",
+      "bordx": "BOR001",
+      "sink": "LVBF05.003"
+    }
+  ]
+}

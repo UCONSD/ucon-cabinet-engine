@@ -1,0 +1,14 @@
+{
+  "room": "7612-BA2",
+  "source": "7612_Hillside_Dr_Bath_2_Codes_v0.1.pdf (A-104, A-204, S-104)",
+  "estimate": "T_00018",
+  "base": "../T_00018_s_samples.rit",
+  "items": [
+    {"id": 302, "kind": "unit", "code": "BA61287", "src": {"struct": 302}, "x": 18, "y": 243, "hung": true},
+    {"id": 303, "kind": "unit", "code": "BA60957", "src": {"struct": 303}, "x": 1218, "y": 243, "hung": true},
+    {"id": 305, "kind": "unit", "code": "SPECCHIERA", "src": {"struct": 305}, "x": 18, "y": 1250},
+    {"id": 306, "kind": "panel", "code": "PAN022", "src": {"file": "../T_00016_v2.rit", "code": "PAN022"}, "pos": [2140, 243, 0, 270], "X": 470, "Y": 585},
+    {"id": 307, "kind": "panel", "code": "PAN018", "src": {"file": "../T_00016_v2.rit", "code": "PAN018"}, "pos": [18, 243, 0, 270], "X": 470, "Y": 585},
+    {"id": 304, "kind": "top", "code": "TOPDRBA", "src": {"struct": 304}, "units": [302, 303], "sx": 18, "dx": 22, "borsx": "BOR002", "bordx": "BOR001", "sink": "LVBF05.003"}
+  ]
+}

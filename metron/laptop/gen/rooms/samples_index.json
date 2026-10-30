@@ -1,0 +1,285 @@
+{
+ "note": "blocks verified in Metron (estimate files already in the database); 2026-10-29",
+ "codes": {
+  "BA60987": [
+   {
+    "file": "../T_00015_v3_bronze.rit",
+    "struct": 1
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 2
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 6
+   }
+  ],
+  "BA60957": [
+   {
+    "file": "../T_00015_v3_bronze.rit",
+    "struct": 2
+   },
+   {
+    "file": "../T_00018_v1.rit",
+    "struct": 303
+   }
+  ],
+  "SPECCHIERA": [
+   {
+    "file": "../T_00015_v3_bronze.rit",
+    "struct": 4
+   },
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 6
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 4
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 8
+   },
+   {
+    "file": "../T_00018_v1.rit",
+    "struct": 305
+   },
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 4
+   }
+  ],
+  "TOPDRBA": [
+   {
+    "file": "../T_00015_v3_bronze.rit",
+    "struct": 3
+   },
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 5
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 3
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 7
+   },
+   {
+    "file": "../T_00018_v1.rit",
+    "struct": 304
+   },
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 3
+   }
+  ],
+  "BA61287": [
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 1
+   },
+   {
+    "file": "../T_00018_v1.rit",
+    "struct": 302
+   }
+  ],
+  "BA60752": [
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 2
+   }
+  ],
+  "C91230": [
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 3
+   }
+  ],
+  "C00151": [
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 4
+   }
+  ],
+  "PAN022": [
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 191
+   },
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 193
+   },
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 194
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 9
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 10
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 14
+   },
+   {
+    "file": "../T_00018_v1.rit",
+    "struct": 306
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 47
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 48
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 49
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 50
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 51
+   }
+  ],
+  "PAN018": [
+   {
+    "file": "../T_00016_v2.rit",
+    "struct": 192
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 11
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 12
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 15
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 16
+   },
+   {
+    "file": "../T_00018_v1.rit",
+    "struct": 307
+   },
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 6
+   },
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 7
+   }
+  ],
+  "BA60757": [
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 1
+   },
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 5
+   }
+  ],
+  "TOPDR": [
+   {
+    "file": "../T_00017_v3.rit",
+    "struct": 17
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 41
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 45
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 46
+   }
+  ],
+  "BA60557": [
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 1
+   },
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 5
+   }
+  ],
+  "BA60687": [
+   {
+    "file": "../T_00019_v2.rit",
+    "struct": 2
+   }
+  ],
+  "BL0603": [
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 35
+   }
+  ],
+  "BL0100": [
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 36
+   }
+  ],
+  "BL0614": [
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 37
+   }
+  ],
+  "PF0151": [
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 39
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 44
+   }
+  ],
+  "PF0930": [
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 38
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 42
+   },
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 43
+   }
+  ],
+  "RO_aggiunti_tutti": [
+   {
+    "file": "../T_00014_v4_vert.rit",
+    "struct": 40
+   }
+  ]
+ }
+}
