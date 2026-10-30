@@ -98,36 +98,22 @@ echo "===== 2. stage, BY NAME ====="
 # engine objects with their codes, the workmanship table p.41, the plumbing of
 # a sink role following the sink, recon + handoff for Tom, Elda BL-20..23.
 # 22 files predicted; the list must print 22.
-# 2026-10-29, core 1.9.32: SketchUp -> Metron stage 2, the pure half. core/87_metron.rb (one room of the
-# model -> room export), its suite, the laptop package of stage 1 (rit_build.py, room JSONs, samples, the two
-# expected .rit) and room_from_skp.py + its test. No palette button yet, the model is not touched.
-# 26 files predicted (go.sh itself included); the list must print 26.
-git add src/ucon_cabinet_engine/core/00_version.rb \
+# 2026-10-29, core 1.9.32: SketchUp -> Metron stage 2, pure half - pushed (2973a0b).
+# 2026-10-29, core 1.9.33: stage 2 closed. core/89_metron_run.rb (glue) + the palette button "Export to Metron";
+# 87_metron: a top is found by its UPPER face (the basin hangs below), coded bodies with no mapping are LISTED
+# (not_exported); panels 495 flush with the fronts (Andriy); the first real export of L-BA3 from the model
+# (metron/export/7612/7612_BA3.export.json, = the fixture; -> .rit differs from T_00019_v2 only in the 2 panel X).
+# .gitignore: __pycache__/. 11 files predicted; the list must print 11.
+git add .gitignore \
+        src/ucon_cabinet_engine/core/00_version.rb \
         src/ucon_cabinet_engine/core/87_metron.rb \
+        src/ucon_cabinet_engine/core/89_metron_run.rb \
+        src/ucon_cabinet_engine/core/90_palette.rb \
         tools/test_metron.rb \
         metron/export/fixtures/7612_BA2.export.json \
         metron/export/fixtures/7612_BA3.export.json \
-        metron/laptop/gen/rit_build.py \
-        metron/laptop/gen/room_from_skp.py \
+        metron/export/7612/7612_BA3.export.json \
         metron/laptop/gen/test_room_from_skp.py \
-        metron/laptop/gen/rooms/room_7612_BA2.json \
-        metron/laptop/gen/rooms/room_7612_BA3.json \
-        metron/laptop/gen/rooms/samples_index.json \
-        metron/laptop/gen/T_00014_v4_vert.rit \
-        metron/laptop/gen/T_00015_v3_bronze.rit \
-        metron/laptop/gen/T_00016_v2.rit \
-        metron/laptop/gen/T_00017_v3.rit \
-        metron/laptop/gen/T_00018_s_samples.rit \
-        metron/laptop/gen/T_00018_v1.rit \
-        metron/laptop/gen/T_00019_s_samples.rit \
-        metron/laptop/gen/T_00019_v2.rit \
-        metron/laptop/gen/expected/T_00018_v1.rit \
-        metron/laptop/gen/expected/T_00019_v2.rit \
-        metron/laptop/sync/metron_order.py \
-        metron/laptop/sync/7612_BA1_R01_metron_order.json \
-        metron/laptop/sync/7612_BA3_R01_metron_order.json \
-        metron/laptop/sync/7612_MST_R01_metron_order.json \
-        metron/laptop/sync/7612_PWD_R01_metron_order.json \
         build/go.sh
 
 echo

@@ -69,7 +69,9 @@ module UCON
       end
 
       def top_item(b, code, units)
-        under = units.select { |u| u[:x0] >= b[:x0] - TOL && u[:x1] <= b[:x1] + TOL && u[:z1] <= b[:z0] + TOL }
+        # 'under' = within the top's length and below its UPPER face. Not below its lower face: a top with an integrated
+        # basin measures z 708..850 in the 7612 model (probe 910) - the bowl hangs 120 below the slab and the units' 828.
+        under = units.select { |u| u[:x0] >= b[:x0] - TOL && u[:x1] <= b[:x1] + TOL && u[:z1] <= b[:z1] + TOL }
                      .sort_by { |u| u[:x0] }
         raise ArgumentError, "#{b[:ref]}: top #{code} has no unit under it" if under.empty?
         mt = b[:metron] || {}
@@ -94,8 +96,15 @@ module UCON
         typed.select { |t| t[0] == 'top' }.sort_by { |_, _, b| b[:x0].to_f }.each { |_, c, b| items << top_item(b, c, unit_b) }
         refs = items.map { |i| i['ref'] }
         raise ArgumentError, "duplicate refs #{refs.inspect}" unless refs.uniq.size == refs.size
-        { 'room' => room['room'], 'revision' => room['revision'], 'estimate' => room['estimate'],
-          'source' => room['source'], 'items' => items }.reject { |_, v| v.nil? }
+        # NEVER A SILENT DELETION (Contract v2 SS4.2 rule 4, the same promise 85_export keeps): a body that carries an
+        # engine code and reaches no Metron item is LISTED, so a filler or a tall unit nobody mapped yet cannot fall
+        # out of the order without the file saying so. kind=skip is a decision and is not listed.
+        missed = bodies.select { |b| classify(b).nil? && !b[:code].to_s.empty? && (b[:metron] || {})['kind'] != 'skip' }
+                       .map { |b| { 'ref' => b[:ref], 'code' => b[:code], 'object_class' => b[:object_class] } }
+        out = { 'room' => room['room'], 'revision' => room['revision'], 'estimate' => room['estimate'],
+                'source' => room['source'], 'items' => items }.reject { |_, v| v.nil? }
+        out['not_exported'] = missed unless missed.empty?
+        out
       end
     end
   end

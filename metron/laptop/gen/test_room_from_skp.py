@@ -4,8 +4,10 @@
   python3 metron/laptop/gen/test_room_from_skp.py      (from the repository root or anywhere)
 
 For Bath 3 and Bath 2:
-  1. room_from_skp(export, base, --prev hand JSON) == hand JSON (all fields but `source`)  -> the revision path
-  2. that room JSON through rit_build.py == expected/<estimate>.rit byte for byte          -> T_00019_v2 / T_00018_v1
+  1. room_from_skp(export, base, --prev hand JSON) == hand JSON with the panels 495 deep (all fields but `source`)
+  2. that room JSON through rit_build.py == the hand JSON (panels 495) through rit_build.py, byte for byte; and THAT
+     differs from expected/<estimate>.rit (T_00019_v2 / T_00018_v1, the R01 in the database) in exactly one line per
+     panel - its X - because Andriy 2026-10-29: side panels flush with the fronts, 495, not the 470 of Metron R01.
   3. without --prev: the same items with the same src; the order and the new ids follow the default rule. For Bath 3
      the default rule IS the hand order (byte-equal too); for Bath 2 the two panels were placed right-then-left by
      hand, so only the set is compared - Metron reads blocks in any order.
@@ -44,7 +46,17 @@ with tempfile.TemporaryDirectory() as tmp:
     for name, est, base, expected, default_is_hand in CASES:
         exp = json.load(open(os.path.join(FIX, name + '.export.json')))
         hand = json.load(open(os.path.join(G, 'rooms', 'room_%s.json' % name)))
-        want = hashlib.md5(open(os.path.join(G, 'expected', expected), 'rb').read()).hexdigest()
+        r01 = open(os.path.join(G, 'expected', expected), 'rb').read().split(b'\r\n')
+        npanels = 0
+        for i in hand['items']:
+            if i['kind'] == 'panel':
+                i['X'] = 495; npanels += 1
+        want = build(hand, tmp, name + '_hand495')
+        got_lines = open(os.path.join(tmp, name + '_hand495.rit'), 'rb').read().split(b'\r\n')
+        diff = [(a, b) for a, b in zip(r01, got_lines) if a != b]
+        checks += 1
+        if len(r01) != len(got_lines) or len(diff) != npanels or not all(b' X=470' in a and b' X=495' in b and a.replace(b' X=470', b' X=495') == b for a, b in diff):
+            fails.append('%s: R01 -> 495 is not exactly %d X lines (%d lines differ)' % (name, npanels, len(diff)))
         out_json = os.path.join(G, 'rooms', 'x.json')
         r1 = R.resolve(exp, os.path.join(G, base), out_json, prev=hand, index=os.path.join(G, 'rooms', 'samples_index.json'))
         checks += 1

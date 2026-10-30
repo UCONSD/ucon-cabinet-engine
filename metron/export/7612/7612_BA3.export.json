@@ -1,0 +1,79 @@
+{
+  "room": "7612-BA3",
+  "revision": "R01",
+  "estimate": "T_00019",
+  "items": [
+    {
+      "ref": "53737",
+      "kind": "unit",
+      "code": "BA60557",
+      "x": 7,
+      "y": 243,
+      "hung": true
+    },
+    {
+      "ref": "54041",
+      "kind": "unit",
+      "code": "BA60687",
+      "x": 457,
+      "y": 243,
+      "hung": true
+    },
+    {
+      "ref": "54345",
+      "kind": "unit",
+      "code": "BA60557",
+      "x": 1057,
+      "y": 243,
+      "hung": true
+    },
+    {
+      "ref": "56357",
+      "kind": "unit",
+      "code": "SPECCHIERA",
+      "x": 157,
+      "y": 1250
+    },
+    {
+      "ref": "56758",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        7,
+        243,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585
+    },
+    {
+      "ref": "56790",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        1525,
+        243,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585
+    },
+    {
+      "ref": "54591",
+      "kind": "top",
+      "code": "TOPDRBA",
+      "units": [
+        "53737",
+        "54345"
+      ],
+      "sx": 7,
+      "dx": 7,
+      "borsx": "BOR002",
+      "bordx": "BOR002",
+      "sink": "LVBF05.002"
+    }
+  ],
+  "source": "7612_Hillside_Dr_Bathrooms_v0.1.skp / L-BA3 Bath 3"
+}
