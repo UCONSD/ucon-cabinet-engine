@@ -1,0 +1,106 @@
+{
+  "room": "7612-PWD",
+  "revision": "R02",
+  "estimate": "T_00015",
+  "master": "INTBA",
+  "finishes": {
+    "front": "RI14 Intarsio Rovere Sbiancato",
+    "gola": "AL08 Bronzo",
+    "frame": "AL08 Bronzo",
+    "carcass": "MS51 Grigio Fumo",
+    "drawers": "Legrabox Inox",
+    "mounting": "Sospeso",
+    "top": "Dekton CE26 Marmorio 20",
+    "panels": "RR14 Rovere Sbiancato",
+    "basin": "LVB019.003 Minima 58x37 matt white"
+  },
+  "items": [
+    {
+      "ref": "45405",
+      "kind": "unit",
+      "code": "BA60987",
+      "x": 18,
+      "y": 153,
+      "hung": true
+    },
+    {
+      "ref": "45709",
+      "kind": "unit",
+      "code": "BA60957",
+      "x": 918,
+      "y": 153,
+      "hung": true
+    },
+    {
+      "ref": "59156",
+      "kind": "unit",
+      "code": "LAVABO",
+      "x": 178,
+      "y": 758,
+      "article": "LVB019.003"
+    },
+    {
+      "ref": "55982",
+      "kind": "unit",
+      "code": "SPECCHIERA",
+      "x": 118,
+      "y": 1250
+    },
+    {
+      "ref": "45891",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        18,
+        153,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585,
+      "finish": "RR14"
+    },
+    {
+      "ref": "45925",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        1836,
+        153,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585,
+      "finish": "RR14"
+    },
+    {
+      "ref": "45957",
+      "kind": "top",
+      "code": "TOPDRBA",
+      "units": [
+        "45405",
+        "45709"
+      ],
+      "sx": 18,
+      "dx": 19,
+      "borsx": "BOR002",
+      "bordx": "BOR002",
+      "sink": "FOG1.SP",
+      "th": 20,
+      "finish": "CE26"
+    },
+    {
+      "ref": "60406",
+      "kind": "upstand",
+      "code": "ALZATINA",
+      "top": "45957",
+      "x": 0,
+      "L": 1837,
+      "h": 100,
+      "th": 20,
+      "finish": "CE26"
+    }
+  ],
+  "source": "7612_Hillside_Dr_Bathrooms_v0.1.skp / M-PWD Powder Room"
+}

@@ -407,8 +407,11 @@ USA p.422/427). Blocked on one decision: the perimeter is H.78 by 2026-09-25.
   - `handoff-2026-10-19-ap-dining-v1.0.md` - AP Capital Dining Area (TM 252234): four wall JSONs, inside corners, lower 2755 as TM, window as MK / opening as ML; DIN v1.0 FOR REVIEW released
   - `handoff-2026-10-19-ap-dining-v2.0.md` - AP Capital Dining Area (TM 252234) v2.0: liner slot strips, joint blocks, solid plywood pieces, B / C 4830; DIN v2.0 FOR REVIEW released beside v1.0
   - `handoff-2026-10-20-ap-bedroom3-v1.0.md` - AP Capital Bedroom 3 (TM 252258): one wall, TM layout 1-8 full height on a stone baseboard, safe two-door cabinet, door D01 as REC-LAU (U casing, hinge-side stop); BR3 v1.0 FOR REVIEW released
+  - `handoff-2026-10-20-ap-master-bedroom-v1.0.md` - AP Capital Master Bedroom: 11 walls (stone bed wall, entrance piers on shims, window liner, doors to the ceiling); room set v1.0 FOR REVIEW released (c749153)
   - `handoff-2026-10-17-ap-safe-av-v1.0-draft.md` - AP Capital Garage wall to SAFE / AV rooms (SAFE-AV): wall JSON + room file, TM door profile, v1.0 DRAFT 2 (19 sheets) waits for Andriy's review, not released
   - `handoff-2026-10-16-sinks-for-tom.md` - core 1.9.31 sinks: what Tom does in the 7612 models (6 bath washbasins, kitchen / laundry after the client decides)
+  - `findings-2026-11-02-7612-baths-r02-model.md` - R02: Powder / Guest / Bath 2 / Bath 3 brought to the designer's selection (ARMED 41, 44), exporter core 1.9.34 (LAVABO, finishes, fixed fronts, MAX2.2), the four exports; scenes hide per object
+  - `findings-2026-10-23-cesar-db-vs-registry.md` - the registry against the Cesar database snapshot (read only, CONTROL): 129 codes not in the base, the bath line absent as a whole
   - `handoff-2026-10-14-7612-baths-drawings-v0.3.md` - client approval set v0.3, baths + laundry, 14 sheets;
     `tools/layout/bath_drawing_set.rb` (bath elevation / plan, two sheets per room).
 

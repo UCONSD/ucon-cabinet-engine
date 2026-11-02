@@ -95,6 +95,77 @@ check('an unknown kind is refused') do
     raise e.message unless e.message.include?('not one of')
   end
 end
+# ---- R02 of the 7612 baths (2026-11-02): countertop basin, stated finishes, fixed fronts, a second collection ----
+R02_TOP = { ref: 't1', metron: { 'kind' => 'top', 'code' => 'TOPDRBA', 'sink' => 'FOG1.SP', 'finish' => 'CE26', 'th' => 20 },
+            x0: 0, x1: 1514, y0: -500, y1: 0, z0: 738, z1: 758, rot_deg: 0 }.freeze
+R02_BASIN = { ref: 'b1', object_class: nil, metron: { 'kind' => 'unit', 'code' => 'LAVABO', 'article' => 'LVB019.003' },
+              x0: 467, x1: 1047, y0: -435, y1: -65, z0: 758, z1: 888, rot_deg: 0 }.freeze
+r02 = M.room([cab('u1', 'BA60557', 7, 457, 153, 738), cab('u2', 'BA60687', 457, 1057, 153, 738), MIRROR.merge(ref: 'm1', x0: 157, x1: 1357),
+              R02_BASIN, R02_TOP],
+             { 'room' => '7612-BA3', 'revision' => 'R02', 'estimate' => 'T_00019', 'master' => 'INTBA',
+               'finishes' => '{"front":"RI14 Intarsio Rovere Sbiancato"}' })
+check('R02: the basin is a unit with its article, not hung, after the cabinets and before the mirror') do
+  b = r02['items'].find { |i| i['ref'] == 'b1' }
+  raise b.inspect unless b == { 'ref' => 'b1', 'kind' => 'unit', 'code' => 'LAVABO', 'x' => 467, 'y' => 758, 'article' => 'LVB019.003' }
+  raise r02['items'].map { |i| i['ref'] }.inspect unless r02['items'].map { |i| i['ref'] } == %w[u1 u2 b1 m1 t1]
+end
+check('R02: the basin is never one of the units under the top') do
+  t = r02['items'].find { |i| i['ref'] == 't1' }
+  raise t.inspect unless t['units'] == %w[u1 u2] && t['sink'] == 'FOG1.SP' && t['finish'] == 'CE26' && t['th'] == 20
+end
+check('R02: room master and finishes are passed through, finishes parsed') do
+  raise r02.inspect unless r02['master'] == 'INTBA' && r02['finishes'] == { 'front' => 'RI14 Intarsio Rovere Sbiancato' }
+end
+check('R02: a LAVABO with no article is refused') do
+  begin
+    M.room([R02_BASIN.merge(metron: { 'kind' => 'unit', 'code' => 'LAVABO' })], {})
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('no article')
+  end
+end
+check('R02: a stated top thickness that the body does not measure is refused') do
+  begin
+    M.room([cab('u1', 'BA60557', 7, 457), R02_TOP.merge(z0: 828, z1: 850)], {})
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('states th 20')
+  end
+end
+check('R02: fixed fronts and a unit master are emitted; an unknown fronts value is refused') do
+  u = M.room([cab('u1', 'BA60957', 18, 918).merge(metron: { 'fronts' => 'fixed' }),
+              { ref: 'f', code: 'C00151', object_class: 'filler', metron: { 'kind' => 'unit', 'code' => 'C00151', 'master' => 'MAX2.2' },
+                x0: 0, x1: 72, y0: -645, y1: -557, z0: 0, z1: 2440 }], {})['items']
+  raise u.inspect unless u.find { |i| i['ref'] == 'u1' }['fronts'] == 'fixed' && u.find { |i| i['ref'] == 'f' }['master'] == 'MAX2.2'
+  begin
+    M.room([cab('u1', 'BA60957', 18, 918).merge(metron: { 'fronts' => 'dummy' })], {})
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('not one of fixed')
+  end
+end
+check('R02: a panel carries its stated finish') do
+  p = M.room([panel('p1', 'PAN018', -11, 7).tap { |h| h[:metron] = h[:metron].merge('finish' => 'RR14') }], {})['items'].first
+  raise p.inspect unless p['finish'] == 'RR14'
+end
+check('R02: an upstand stands on its top and lies along the wall; one on no top is refused') do
+  up = { ref: 'a1', metron: { 'kind' => 'upstand', 'code' => 'ALZATINA', 'finish' => 'CE26' }, x0: 0, x1: 1514, y0: -20, y1: 0, z0: 758, z1: 858 }
+  out = M.room([cab('u1', 'BA60557', 7, 457, 153, 738), R02_TOP, up], {})['items']
+  a = out.find { |i| i['ref'] == 'a1' }
+  raise a.inspect unless a == { 'ref' => 'a1', 'kind' => 'upstand', 'code' => 'ALZATINA', 'top' => 't1', 'x' => 0, 'L' => 1514, 'h' => 100, 'th' => 20, 'finish' => 'CE26' }
+  raise 'order' unless out.last['ref'] == 'a1'
+  begin
+    M.room([up.merge(z0: 900, z1: 1000)], {})
+    raise 'accepted'
+  rescue ArgumentError => e
+    raise e.message unless e.message.include?('stands on no top')
+  end
+end
+check('R02: a panel MARKED along the wall is emitted with its distance from the wall; unmarked it is still refused') do
+  p = { ref: 'p', metron: { 'kind' => 'panel', 'code' => 'PAN022', 'orient' => 'along', 'finish' => 'LM51' }, x0: 1990, x1: 3262, y0: -645, y1: -623, z0: 2440, z1: 2716 }
+  i = M.room([p], {})['items'].first
+  raise i.inspect unless i['orient'] == 'along' && i['pos'] == [1990, 2440, 0, 0] && i['X'] == 1272 && i['Y'] == 276 && i['th'] == 22 && i['from_wall'] == 623
+end
 check('87_metron has no SketchUp in it') do
   src = File.read(File.expand_path('../src/ucon_cabinet_engine/core/87_metron.rb', __dir__))
   raise 'Sketchup referenced' if src =~ /Sketchup::|Geom::|\.mm\b/

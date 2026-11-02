@@ -104,16 +104,25 @@ echo "===== 2. stage, BY NAME ====="
 # (not_exported); panels 495 flush with the fronts (Andriy); the first real export of L-BA3 from the model
 # (metron/export/7612/7612_BA3.export.json, = the fixture; -> .rit differs from T_00019_v2 only in the 2 panel X).
 # .gitignore: __pycache__/. 11 files predicted; the list must print 11.
-git add .gitignore \
-        src/ucon_cabinet_engine/core/00_version.rb \
+# 2026-11-02, core 1.9.34: 7612 baths R02 - the exporter learns the designer's selection (countertop basin LAVABO +
+# article, FOG1.SP, top finish / th checked, room master + finishes, unit master MAX2.2, fixed fronts), the four R02
+# exports from the model (ARMED 41 + 44 on the office Mac), room_from_skp.py carries the new keys, the finding, and
+# two README lines the suite asked for (the AP Master Bedroom handoff of c749153 and the 2026-10-23 Cesar-DB finding,
+# which rides along - it was untracked since 2026-10-23). The four MEP files in the tree are NOT in this commit.
+# R02b the same day (ARMED 48): upstand (10 cm backsplash, ALZATINA), a panel marked along the wall, the Bath 2 mirror
+# back. Same 12 files.
+# 12 files predicted; the list must print 12.
+git add src/ucon_cabinet_engine/core/00_version.rb \
         src/ucon_cabinet_engine/core/87_metron.rb \
-        src/ucon_cabinet_engine/core/89_metron_run.rb \
-        src/ucon_cabinet_engine/core/90_palette.rb \
         tools/test_metron.rb \
-        metron/export/fixtures/7612_BA2.export.json \
-        metron/export/fixtures/7612_BA3.export.json \
+        metron/laptop/gen/room_from_skp.py \
+        metron/export/7612/7612_PWD.export.json \
+        metron/export/7612/7612_BA1.export.json \
+        metron/export/7612/7612_BA2.export.json \
         metron/export/7612/7612_BA3.export.json \
-        metron/laptop/gen/test_room_from_skp.py \
+        claude/README.md \
+        claude/findings-2026-11-02-7612-baths-r02-model.md \
+        claude/findings-2026-10-23-cesar-db-vs-registry.md \
         build/go.sh
 
 echo

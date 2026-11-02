@@ -1,0 +1,153 @@
+{
+  "room": "7612-BA1",
+  "revision": "R02",
+  "estimate": "T_00016",
+  "master": "MAXBA",
+  "finishes": {
+    "front": "LM51 Grigio Fumo (Maxima melamine)",
+    "gola": "AL08 Bronzo",
+    "frame": "AL08 Bronzo",
+    "carcass": "MS51 Grigio Fumo",
+    "drawers": "Legrabox Inox",
+    "mounting": "Sospeso",
+    "top": "Dekton CE26 Marmorio 20",
+    "panels": "LM51 Grigio Fumo",
+    "basin": "LVB019.003 Minima 58x37 matt white"
+  },
+  "items": [
+    {
+      "ref": "46566",
+      "kind": "unit",
+      "code": "BA61287",
+      "x": 18,
+      "y": 153,
+      "hung": true
+    },
+    {
+      "ref": "49475",
+      "kind": "unit",
+      "code": "BA60752",
+      "x": 1218,
+      "y": 153,
+      "hung": true
+    },
+    {
+      "ref": "48909",
+      "kind": "unit",
+      "code": "C91230",
+      "x": 1990,
+      "y": 0,
+      "master": "MAX2.2"
+    },
+    {
+      "ref": "49679",
+      "kind": "unit",
+      "code": "C00151",
+      "x": 3190,
+      "y": 0,
+      "master": "MAX2.2"
+    },
+    {
+      "ref": "59444",
+      "kind": "unit",
+      "code": "LAVABO",
+      "x": 328,
+      "y": 758,
+      "article": "LVB019.003"
+    },
+    {
+      "ref": "56107",
+      "kind": "unit",
+      "code": "SPECCHIERA",
+      "x": 18,
+      "y": 1250
+    },
+    {
+      "ref": "47151",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        18,
+        153,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585,
+      "finish": "LM51"
+    },
+    {
+      "ref": "49872",
+      "kind": "panel",
+      "code": "PAN022",
+      "pos": [
+        1990,
+        0,
+        0,
+        270
+      ],
+      "X": 645,
+      "Y": 2440,
+      "finish": "LM51"
+    },
+    {
+      "ref": "49904",
+      "kind": "panel",
+      "code": "PAN022",
+      "pos": [
+        1990,
+        2440,
+        0,
+        270
+      ],
+      "X": 645,
+      "Y": 276,
+      "finish": "LM51"
+    },
+    {
+      "ref": "49713",
+      "kind": "panel",
+      "code": "PAN022",
+      "orient": "along",
+      "pos": [
+        1990,
+        2440,
+        0,
+        0
+      ],
+      "X": 1272,
+      "Y": 276,
+      "th": 22,
+      "from_wall": 623,
+      "finish": "LM51"
+    },
+    {
+      "ref": "49745",
+      "kind": "top",
+      "code": "TOPDRBA",
+      "units": [
+        "46566",
+        "49475"
+      ],
+      "sx": 18,
+      "dx": 0,
+      "borsx": "BOR002",
+      "bordx": "BOR002",
+      "sink": "FOG1.SP",
+      "th": 20,
+      "finish": "CE26"
+    },
+    {
+      "ref": "60438",
+      "kind": "upstand",
+      "code": "ALZATINA",
+      "top": "49745",
+      "x": 0,
+      "L": 1968,
+      "h": 100,
+      "th": 20,
+      "finish": "CE26"
+    }
+  ],
+  "source": "7612_Hillside_Dr_Bathrooms_v0.1.skp / M-BA1 Guest Bath"
+}

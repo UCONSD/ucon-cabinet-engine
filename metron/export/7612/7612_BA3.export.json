@@ -1,14 +1,26 @@
 {
   "room": "7612-BA3",
-  "revision": "R01",
+  "revision": "R02",
   "estimate": "T_00019",
+  "master": "INTBA",
+  "finishes": {
+    "front": "RI14 Intarsio Rovere Sbiancato",
+    "gola": "AL08 Bronzo",
+    "frame": "AL08 Bronzo",
+    "carcass": "MS51 Grigio Fumo",
+    "drawers": "Legrabox Inox",
+    "mounting": "Sospeso",
+    "top": "Dekton CE26 Marmorio 20",
+    "panels": "RR14 Rovere Sbiancato",
+    "basin": "LVB019.003 Minima 58x37 matt white"
+  },
   "items": [
     {
       "ref": "53737",
       "kind": "unit",
       "code": "BA60557",
       "x": 7,
-      "y": 243,
+      "y": 153,
       "hung": true
     },
     {
@@ -16,7 +28,7 @@
       "kind": "unit",
       "code": "BA60687",
       "x": 457,
-      "y": 243,
+      "y": 153,
       "hung": true
     },
     {
@@ -24,8 +36,16 @@
       "kind": "unit",
       "code": "BA60557",
       "x": 1057,
-      "y": 243,
+      "y": 153,
       "hung": true
+    },
+    {
+      "ref": "60020",
+      "kind": "unit",
+      "code": "LAVABO",
+      "x": 467,
+      "y": 758,
+      "article": "LVB019.003"
     },
     {
       "ref": "56357",
@@ -40,12 +60,13 @@
       "code": "PAN018",
       "pos": [
         7,
-        243,
+        153,
         0,
         270
       ],
       "X": 495,
-      "Y": 585
+      "Y": 585,
+      "finish": "RR14"
     },
     {
       "ref": "56790",
@@ -53,12 +74,13 @@
       "code": "PAN018",
       "pos": [
         1525,
-        243,
+        153,
         0,
         270
       ],
       "X": 495,
-      "Y": 585
+      "Y": 585,
+      "finish": "RR14"
     },
     {
       "ref": "54591",
@@ -72,7 +94,20 @@
       "dx": 7,
       "borsx": "BOR002",
       "bordx": "BOR002",
-      "sink": "LVBF05.002"
+      "sink": "FOG1.SP",
+      "th": 20,
+      "finish": "CE26"
+    },
+    {
+      "ref": "60502",
+      "kind": "upstand",
+      "code": "ALZATINA",
+      "top": "54591",
+      "x": 0,
+      "L": 1514,
+      "h": 100,
+      "th": 20,
+      "finish": "CE26"
     }
   ],
   "source": "7612_Hillside_Dr_Bathrooms_v0.1.skp / L-BA3 Bath 3"

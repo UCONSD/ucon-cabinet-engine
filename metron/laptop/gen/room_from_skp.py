@@ -32,6 +32,8 @@ def where(it):
         return tuple(it['pos'][:2])
     if it['kind'] == 'top':
         return (it.get('sx'), it.get('dx'))
+    if it['kind'] == 'upstand':
+        return (it['x'], it['L'])
     return (it['x'], it['y'])
 
 def same(a, b):
@@ -57,6 +59,8 @@ def resolve(exp, base_path, out_path, prev=None, index=None):
                 errors.append('%s %s: no sample in %s - place one in Metron and SUSPEND' % (it['kind'], it['code'], os.path.basename(base_path)))
                 continue
             it['src'] = {'struct': s[0]}
+        elif it['kind'] == 'upstand':
+            it['src'] = {}   # no sample: its Metron form is not decided (R02, 2026-11-02)
         elif it['kind'] == 'panel':
             e = (idx.get(it['code']) or [None])[0]
             if not e:
@@ -91,12 +95,20 @@ def resolve(exp, base_path, out_path, prev=None, index=None):
         if it['kind'] == 'top':
             assert it['id'] == it['src']['struct'], 'top %s: a second top of one code needs a second sample' % it['code']
             it['units'] = [ref_id[r] for r in it['units']]
-    keys = ['id', 'kind', 'code', 'src', 'x', 'y', 'hung', 'pos', 'X', 'Y', 'units', 'sx', 'dx', 'borsx', 'bordx', 'sink']
+        if it['kind'] == 'upstand':   # R02: no Metron form yet - the top it stands on, by id; rit_build.py decides
+            it['top'] = ref_id[it['top']]
+    # R02 (2026-11-02): article (LAVABO basin), master (unit in another collection), fronts (fixed), finish, th are
+    # carried through from the export; rit_build.py does not use them yet - writing them is the laptop's next step.
+    keys = ['id', 'kind', 'code', 'src', 'x', 'y', 'hung', 'pos', 'X', 'Y', 'units', 'sx', 'dx', 'borsx', 'bordx', 'sink',
+            'article', 'master', 'fronts', 'finish', 'th', 'orient', 'from_wall', 'top', 'L', 'h']
     room = {'room': exp['room'], 'source': exp.get('source', 'SketchUp export'), 'estimate': exp['estimate'],
             'base': rel(base_path, out_dir),
             'items': [{k: it[k] for k in keys if k in it} for it in ordered]}
     if exp.get('revision'):
         room['revision'] = exp['revision']
+    for k in ('master', 'finishes'):
+        if exp.get(k):
+            room[k] = exp[k]
     return room
 
 if __name__ == '__main__':

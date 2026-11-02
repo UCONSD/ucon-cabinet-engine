@@ -1,0 +1,107 @@
+{
+  "room": "7612-BA2",
+  "revision": "R02",
+  "estimate": "T_00018",
+  "master": "INTBA",
+  "finishes": {
+    "front": "RI14 Intarsio Rovere Sbiancato",
+    "gola": "AL08 Bronzo",
+    "frame": "AL08 Bronzo",
+    "carcass": "MS51 Grigio Fumo",
+    "drawers": "Legrabox Inox",
+    "mounting": "Sospeso",
+    "top": "Dekton CE26 Marmorio 20",
+    "panels": "RR14 Rovere Sbiancato",
+    "basin": "LVB019.003 Minima 58x37 matt white"
+  },
+  "items": [
+    {
+      "ref": "52890",
+      "kind": "unit",
+      "code": "BA60957",
+      "x": 18,
+      "y": 153,
+      "hung": true,
+      "fronts": "fixed"
+    },
+    {
+      "ref": "52586",
+      "kind": "unit",
+      "code": "BA61287",
+      "x": 918,
+      "y": 153,
+      "hung": true
+    },
+    {
+      "ref": "59732",
+      "kind": "unit",
+      "code": "LAVABO",
+      "x": 1228,
+      "y": 758,
+      "article": "LVB019.003"
+    },
+    {
+      "ref": "56232",
+      "kind": "unit",
+      "code": "SPECCHIERA",
+      "x": 18,
+      "y": 1250
+    },
+    {
+      "ref": "53072",
+      "kind": "panel",
+      "code": "PAN018",
+      "pos": [
+        18,
+        153,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585,
+      "finish": "RR14"
+    },
+    {
+      "ref": "53104",
+      "kind": "panel",
+      "code": "PAN022",
+      "pos": [
+        2140,
+        153,
+        0,
+        270
+      ],
+      "X": 495,
+      "Y": 585,
+      "finish": "RR14"
+    },
+    {
+      "ref": "53136",
+      "kind": "top",
+      "code": "TOPDRBA",
+      "units": [
+        "52890",
+        "52586"
+      ],
+      "sx": 18,
+      "dx": 22,
+      "borsx": "BOR002",
+      "bordx": "BOR001",
+      "sink": "FOG1.SP",
+      "th": 20,
+      "finish": "CE26"
+    },
+    {
+      "ref": "60470",
+      "kind": "upstand",
+      "code": "ALZATINA",
+      "top": "53136",
+      "x": 0,
+      "L": 2140,
+      "h": 100,
+      "th": 20,
+      "finish": "CE26"
+    }
+  ],
+  "source": "7612_Hillside_Dr_Bathrooms_v0.1.skp / L-BA2 Bath 2"
+}
