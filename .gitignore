@@ -59,3 +59,6 @@ tools/probe_log.txt
 # of deliverables (the durable ones live in the claude.ai Project and in claude/),
 # not source - and as an untracked folder they made every status look dirty.
 Claude outputs/
+
+# --- Python bytecode (metron/laptop/gen tests import room_from_skp, 2026-10-29) ---
+__pycache__/

@@ -37,6 +37,8 @@ module UCON
         # JavaScript, and sketchup.export() is the kind of thing that works
         # until a browser engine decides it should not.
         @dialog.add_action_callback('export_order') { |_| ExportRun.run }
+        # SketchUp -> Metron, stage 2 (2026-10-29): one room JSON per room group carrying UCON_METRON. core/89_metron_run.
+        @dialog.add_action_callback('export_metron') { |_| MetronRun.run }
         # B6. The span between two cabinets where a freestanding machine stands.
         # The list comes from the appliance module when it is installed, because
         # nobody should have to type a model number the other tree already
@@ -1577,6 +1579,7 @@ module UCON
             <button onclick="sketchup.place()">Place selected unit…</button>
             <button onclick="sketchup.panel()">Unit Properties panel</button>
             <button onclick="sketchup.export_order()">Order schedule (CSV)…</button>
+            <button onclick="sketchup.export_metron()">Export to Metron</button>
             <button onclick="sketchup.reserve_run_gap()">Reserve run gap…</button>
             <button onclick="sketchup.reserve_wall()">Reserve wall volume (hood)…</button>
             <button onclick="sketchup.worktop()">Stamp article on drawn top…</button>

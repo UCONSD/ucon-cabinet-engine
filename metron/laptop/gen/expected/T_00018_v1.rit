@@ -1,0 +1,654 @@
+//Ver 1.5 NewNum <C:\tesy\Cesar2X\rec\2026_C2X01_243864_T_00018.rit>
+LOGMSG ->Saved : 28/10/2026 21:22:58
+//Locale : en-US.1252
+//M4_VERSION__ = 4.11.357.2503
+//MOTORE_VERSION__ = 4.11.356.1612
+//M4ADDON_VERSION__ = 1.11.350.27
+//WMI_ComputerSystemProduct = 960XGL;CE999580-4FC8-11EF-9E88-934EF4AC1B01;6MDF9FCX800440T;
+//WMI_Processor = Intel(R) Core(TM) Ultra 9 185H;BFEBFBFF000A06A4;
+//WMI_BIOS = P06ALX.350.240527.04;6MDF9FCX800440T;
+//WMI_DiskDrive1 = \\.\PHYSICALDRIVE0;SAMSUNG MZVL21T0HCLR-00B;0025_38B2_41BC_1246.;
+//WMI_NetworkAdapter0 = Intel(R) Wi-Fi 6E AX211 160MHz;D0:65:78:81:14:51;{D5F07FBA-9559-4605-9CC3-01B848866313};
+//WMI_LogicalDisk0 = C:;E64B24FD;
+//WMI_LogicalDisk1 = D:;40F69897;
+//WMI_LogicalDisk2 = E:;104245FF;
+//WMI_BaseBoard = Base Board;123490EN400015;
+//WMI_OperatingSystem = Microsoft Windows 11 Home|C:\WINDOWS|\Device\Harddisk0\Partition3;00342-21259-81406-AAOEM;
+//WMI_ComputerSystem = JULIAIAPTOP;WORKGROUP;
+//WMI_Locale = en-US.1252
+PATH 1
+COLLEZIONE Cesar2019
+VAR_SET$ $TST_UTENTE_LastSave="C2X01_243864"
+VAR_SET$ $Riferimento="7612-BA2-R01 ------ 7612 HILLSIDE BATH 2"
+VAR_SET$ $Desc1="UCON CONTEMPORARY INTERIORS"
+VAR_SET$ $CodiceCliente="243864"
+VAR_SET$ $DataCaricamento="28102026"
+VAR_SET$ $IndirizzoCliente="7965 SILVERSTONE AVE, UNIT 1304"
+VAR_SET$ $CapCliente="92126"
+VAR_SET$ $TST_citta="SAN DIEGO"
+VAR_SET$ $Provincia="*"
+VAR_SET$ $Nazione="USA"
+VAR_SET$ $Tipo_Chiusura="SALVAESCI"
+VAR_SET$ $Num_Rif_Dis_PROGRESSIVO=40
+VAR_SET$ $VAR_Versione_CAM_inc_New_Order="260930A"
+VAR_SET$ $LISTINO="9"
+VAR_SET$ $TST_OrdineSostituzione="0"
+VAR_SET$ $TST_CodCorrCliente=""
+VAR_SET$ $TST_DesCorrCliente=""
+VAR_SET$ $MTOG_VERSIONE="7.5.91.66"
+VAR_SET$ $TST_INFO="Ordine N. 2026_C2X01_243864_T_00018  2026 | Data: 28/10/2026 | Cliente: UCON CONTEMPORARY INTERIORS"
+VAR_SET$ $TST_Marchio="CESAR"
+VAR_SET$ $reclamo=0
+VAR_SET$ $lung=8
+VAR_SET$ $ccc=9
+VAR_SET$ $ModificaPrezzi=1
+VAR_SET$ $modalita="RIV"
+VAR_SET$ $M2G_DLGVAR_VER="4.11.355.157"
+VAR_SET$ $TST_DATALIST="28102026"
+VAR_SET$ $ORDINE_AGENTE=0
+VAR_SET$ $Anno="2026"
+VAR_SET$ $TipoNum=""
+VAR_SET$ $Data="28102026"
+VAR_SET$ $DataConsegna="27112026"
+VAR_SET$ $TelefonoCliente="               "
+VAR_SET$ $TST_CodRiv="2"
+VAR_SET$ $TST_DescRiv="UCON CONTEMPORARY INTERIORS                               "
+VAR_SET$ $TST_IndRiv="7965 SILVERSTONE AVE, UNIT 1304, "
+VAR_SET$ $TST_CittaRiv="SAN DIEGO"
+VAR_SET$ $TST_CapRiv="92126"
+VAR_SET$ $TST_ProvRiv=""
+VAR_SET$ $TST_TelRiv=""
+VAR_SET$ $TST_FaxTel=""
+VAR_SET$ $TST_Valuta="EUR"
+VAR_SET$ $TST_AreaListino="025"
+VAR_SET$ $CodOperatore=""
+VAR_SET$ $TST_CODICEALL="1"
+VAR_SET$ $GEST_MOD="INTBA"
+VAR_SET$ $DescModello="INTARSIO BAGNO"
+VAR_SET$ $GEST_FAM="F01"
+VAR_SET$ $DesFamiglia="MOBILI COMPONIBILI MODERNO"
+VAR_SET$ $Allestimento="A01"
+VAR_SET$ $DescAll="ALLESTIMENTO 01"
+VAR_SET$ $TST_Griglia="ALL001"
+VAR_SET$ $TST_ALLTECNE="1"
+VAR_SET$ $TST_ALLNOGRL="0"
+VAR_SET$ $TST_SCOLLGEMO="0"
+VAR_SET$ $TST_DaGest="0"
+VAR_SET$ $TST_AMBIENTE=""
+VAR_SET$ $GEST_FFRN="LE08"
+VAR_SET$ $GEST_FINCFRN=""
+VAR_SET$ $GEST_PRSA="P00001"
+VAR_SET$ $GEST_FNGOL="AL08"
+VAR_SET$ $GEST_MANG="PRS001"
+VAR_SET$ $GEST_MANGS=""
+VAR_SET$ $GEST_COLMAN="AL08"
+VAR_SET$ $GEST_FSTR="MS51"
+VAR_SET$ $GEST_FINCSTR=""
+VAR_SET$ $GEST_TSPN="LGB"
+VAR_SET$ $GEST_FCAS="LBIN"
+VAR_SET$ $GEST_TSPNCAS="LGBX"
+VAR_SET$ $GEST_TIP001="TE0S1"
+VAR_SET$ $GEST_PIE01="SFORI"
+VAR_SET$ $GEST_ALIMEN=""
+VAR_SET$ $M2G_CVISIONE=0
+VAR_SET$ $M2G_CVISIONE_ANNO="0"
+VAR_SET$ $M2G_CVISIONE_NUM=""
+VAR_SET$ $M2G_CVISIONE_ORD="0"
+VAR_SET$ $MAX_ID__=307
+VAR_SET$ $nome_cmp="TOPDRBA"
+VAR_SET$ $Camera_Up=[0,1,0]
+VAR_SET$ $Camera_Eye=[1722.5,1077,10811.2]
+VAR_SET$ $Camera_Target=[1722.5,1077,363.649]
+VAR_SET$ $Camera_Perspective=1
+VAR_SET$ $Camera_PerspectiveAngle=22
+VAR_SET$ $Camera_Error=0
+VAR_SET$ $Nr_ColliUnione=0
+VAR_SET$ $DlgSTP_MP_PiantaImposta=1
+VAR_SET$ $TAggiorna_UpdateDate="2026-10-26 22:19:07.939"
+VAR_SET$ $TAggiorna_UpdateDate_Days=2
+VAR_SET$ $TAggiorna_CheckDate="2026-10-28 08:46:57.562"
+VAR_SET$ $TAggiorna_CheckDate_Days=0
+VAR_SET$ $TAggiorna_AvailDate=""
+VAR_SET$ $TAggiorna_AvailDate_Days=-1
+VAR_SET$ $TAggiorna_AvailDiscarded="0"
+VAR_SET$ $TAggiorna_UpdateEnabled="0"
+VAR_SET$ $TAggiorna_CustomerCode="C2X01_243864"
+VAR_SET$ $TAggiorna_RivenditFile="rivendit.ini"
+VAR_SET$ $TAggiorna_AppPath="C:\tesy\Cesar2X\"
+VAR_SET$ $TAggiorna_Major="2"
+VAR_SET$ $TAggiorna_Minor="75"
+VAR_SET$ $TAggiorna_MajorAvail="2"
+VAR_SET$ $TAggiorna_MinorAvail="75"
+VAR_SET$ $TAggiorna_TesyTxe_UpdateDate=""
+VAR_SET$ $TAggiorna_TesyTxe_UpdateDate_Days=-1
+VAR_SET$ $TAggiorna_TesyTxe_CheckDate="2026-10-28 08:48:14.198"
+VAR_SET$ $TAggiorna_TesyTxe_CheckDate_Days=0
+VAR_SET$ $TAggiorna_TesyTxe_AvailDate="2026-10-25 09:38:38.630"
+VAR_SET$ $TAggiorna_TesyTxe_AvailDate_Days=3
+VAR_SET$ $TAggiorna_TesyTxe_AvailDiscarded="2"
+VAR_SET$ $TAggiorna_TesyTxe_UpdateEnabled="1"
+VAR_SET$ $TAggiorna_TesyTxe_CustomerCode="33644.001"
+VAR_SET$ $TAggiorna_TesyTxe_RivenditFile="rivendit.ini"
+VAR_SET$ $TAggiorna_TesyTxe_AppPath="C:\Tesy\Txe\"
+VAR_SET$ $TAggiorna_TesyTxe_Major="2"
+VAR_SET$ $TAggiorna_TesyTxe_Minor="48"
+VAR_SET$ $TAggiorna_TesyTxe_MajorAvail="2"
+VAR_SET$ $TAggiorna_TesyTxe_MinorAvail="65"
+VAR_SET$ $TAggiorna_TesyTCompl_UpdateDate=""
+VAR_SET$ $TAggiorna_TesyTCompl_UpdateDate_Days=-1
+VAR_SET$ $TAggiorna_TesyTCompl_CheckDate="2026-10-28 08:48:10.310"
+VAR_SET$ $TAggiorna_TesyTCompl_CheckDate_Days=0
+VAR_SET$ $TAggiorna_TesyTCompl_AvailDate="2026-10-25 09:38:33.101"
+VAR_SET$ $TAggiorna_TesyTCompl_AvailDate_Days=3
+VAR_SET$ $TAggiorna_TesyTCompl_AvailDiscarded="2"
+VAR_SET$ $TAggiorna_TesyTCompl_UpdateEnabled="1"
+VAR_SET$ $TAggiorna_TesyTCompl_CustomerCode="33644.001"
+VAR_SET$ $TAggiorna_TesyTCompl_RivenditFile="rivendit.ini"
+VAR_SET$ $TAggiorna_TesyTCompl_AppPath="C:\Tesy\TesyTCompl\"
+VAR_SET$ $TAggiorna_TesyTCompl_Major="1"
+VAR_SET$ $TAggiorna_TesyTCompl_Minor="118"
+VAR_SET$ $TAggiorna_TesyTCompl_MajorAvail="1"
+VAR_SET$ $TAggiorna_TesyTCompl_MinorAvail="119"
+VAR_SET$ $TAggiorna_Cesar_UpdateDate="2026-10-26 22:19:07.939"
+VAR_SET$ $TAggiorna_Cesar_UpdateDate_Days=2
+VAR_SET$ $TAggiorna_Cesar_CheckDate="2026-10-28 08:46:57.562"
+VAR_SET$ $TAggiorna_Cesar_CheckDate_Days=0
+VAR_SET$ $TAggiorna_Cesar_AvailDate=""
+VAR_SET$ $TAggiorna_Cesar_AvailDate_Days=-1
+VAR_SET$ $TAggiorna_Cesar_AvailDiscarded="0"
+VAR_SET$ $TAggiorna_Cesar_UpdateEnabled="0"
+VAR_SET$ $TAggiorna_Cesar_CustomerCode="C2X01_243864"
+VAR_SET$ $TAggiorna_Cesar_RivenditFile="rivendit.ini"
+VAR_SET$ $TAggiorna_Cesar_AppPath="C:\tesy\Cesar2X\"
+VAR_SET$ $TAggiorna_Cesar_Major="2"
+VAR_SET$ $TAggiorna_Cesar_Minor="75"
+VAR_SET$ $TAggiorna_Cesar_MajorAvail="2"
+VAR_SET$ $TAggiorna_Cesar_MinorAvail="75"
+VAR_SET$ $BDM_tab_testi_nota_testo="3. Order fulfillment is subject to formal acceptance by Cesar and governed by the current General Terms and Conditions of Sale."
+VAR_SET$ $i=1
+VAR_SET$ $e=1
+VAR_SET$ $ind=2
+VAR_SET$ $DisMaxDim=4695
+VAR_SET$ $id=2
+VAR_SET$ $ok=1
+VAR_SET$ $nome_var="BDM_wallextid_3_pnt"
+VAR_SET$ $val_var=4
+VAR_SET$ $mur_pnt=[-140,0,1000]
+VAR_SET$ $j=5
+VAR_SET$ $P0=[6.12323e-14,0,1000]
+VAR_SET$ $MP_VD_Complementi=1
+VAR_SET$ $MP_VD_Sanitari=1
+VAR_SET$ $MP_VD_SpeccGen=1
+VAR_SET$ $MP_VD_Spalla=1
+VAR_SET$ $SV_Stanza_Aperta=1
+VAR_SET$ $MP_VD_Specchiere=1
+VAR_SET$ $MP_VD_Schienali=1
+VAR_SET$ $M2G_FILTRO_STATIVAL="0;"
+VAR_SET$ $TGeo_clienti_cliente_id="2"
+VAR_SET$ $TGeo_clienti_cliente_codice="243864"
+VAR_SET$ $TGeo_clienti_cliente_stato=""
+VAR_SET$ $TGeo_clienti_ragione_sociale="UCON CONTEMPORARY INTERIORS                               "
+VAR_SET$ $TGeo_clienti_cognome=""
+VAR_SET$ $TGeo_clienti_nome=""
+VAR_SET$ $TGeo_clienti_professione=""
+VAR_SET$ $TGeo_clienti_data_nascita=""
+VAR_SET$ $TGeo_clienti_email=""
+VAR_SET$ $TGeo_clienti_telefono_casa=""
+VAR_SET$ $TGeo_clienti_telefono_ufficio=""
+VAR_SET$ $TGeo_clienti_telefono_cellulare=""
+VAR_SET$ $TGeo_clienti_fax=""
+VAR_SET$ $TGeo_clienti_codice_fiscale=""
+VAR_SET$ $TGeo_clienti_partita_iva=""
+VAR_SET$ $TGeo_clienti_sito_web=""
+VAR_SET$ $TGeo_clienti_indirizzo_via="7965 SILVERSTONE AVE, UNIT 1304"
+VAR_SET$ $TGeo_clienti_indirizzo_civico=""
+VAR_SET$ $TGeo_clienti_indirizzo_cap="92126"
+VAR_SET$ $TGeo_clienti_indirizzo_citta="SAN DIEGO"
+VAR_SET$ $TGeo_clienti_indirizzo_provincia="*"
+VAR_SET$ $TGeo_clienti_indirizzo_nazione="USA"
+VAR_SET$ $TGeo_clienti_indirizzo_ztl="False"
+VAR_SET$ $TGeo_clienti_indirizzo_parcheggio="False"
+VAR_SET$ $TGeo_clienti_indirizzo_scala_agibile="False"
+VAR_SET$ $TGeo_clienti_indirizzo_ascensore="False"
+VAR_SET$ $TGeo_clienti_indirizzo_piano=""
+VAR_SET$ $TGeo_clienti_indirizzo_portineria="False"
+VAR_SET$ $TGeo_clienti_altro_ragione_sociale=""
+VAR_SET$ $TGeo_clienti_altro_cognome=""
+VAR_SET$ $TGeo_clienti_altro_nome=""
+VAR_SET$ $TGeo_clienti_altro_telefono=""
+VAR_SET$ $TGeo_clienti_numero_aiutanti=""
+VAR_SET$ $TGeo_clienti_prenotare_piattaforma="False"
+VAR_SET$ $TGeo_clienti_scarico_via=""
+VAR_SET$ $TGeo_clienti_scarico_civico=""
+VAR_SET$ $TGeo_clienti_scarico_cap=""
+VAR_SET$ $TGeo_clienti_scarico_citta=""
+VAR_SET$ $TGeo_clienti_scarico_provincia=""
+VAR_SET$ $TGeo_clienti_scarico_nazione=""
+VAR_SET$ $TGeo_clienti_fiscale_via=""
+VAR_SET$ $TGeo_clienti_fiscale_civico=""
+VAR_SET$ $TGeo_clienti_fiscale_cap=""
+VAR_SET$ $TGeo_clienti_fiscale_citta=""
+VAR_SET$ $TGeo_clienti_fiscale_provincia=""
+VAR_SET$ $TGeo_clienti_fiscale_nazione=""
+VAR_SET$ $TGeo_clienti_nota_logistica=""
+VAR_SET$ $TGeo_clienti_nota_fiscale=""
+VAR_SET$ $TGeo_clienti_responsabile_zona=""
+VAR_SET$ $TGeo_clienti_orari_consegna=""
+VAR_SET$ $TGeo_clienti_consegna_lunedi="False"
+VAR_SET$ $TGeo_clienti_orari_lunedi=""
+VAR_SET$ $TGeo_clienti_nota_lunedi=""
+VAR_SET$ $TGeo_clienti_consegna_martedi="False"
+VAR_SET$ $TGeo_clienti_orari_martedi=""
+VAR_SET$ $TGeo_clienti_nota_martedi=""
+VAR_SET$ $TGeo_clienti_consegna_mercoledi="False"
+VAR_SET$ $TGeo_clienti_orari_mercoledi=""
+VAR_SET$ $TGeo_clienti_nota_mercoledi=""
+VAR_SET$ $TGeo_clienti_consegna_giovedi="False"
+VAR_SET$ $TGeo_clienti_orari_giovedi=""
+VAR_SET$ $TGeo_clienti_nota_giovedi=""
+VAR_SET$ $TGeo_clienti_consegna_venerdi="False"
+VAR_SET$ $TGeo_clienti_orari_venerdi=""
+VAR_SET$ $TGeo_clienti_nota_venerdi=""
+VAR_SET$ $TGeo_clienti_consegna_sabato="False"
+VAR_SET$ $TGeo_clienti_orari_sabato=""
+VAR_SET$ $TGeo_clienti_nota_sabato=""
+VAR_SET$ $TGeo_clienti_dato1=""
+VAR_SET$ $TGeo_clienti_dato2=""
+VAR_SET$ $TGeo_clienti_dato3=""
+VAR_SET$ $TGeo_clienti_dato4=""
+VAR_SET$ $TGeo_clienti_dato5=""
+VAR_SET$ $TGeo_clienti_trattamento_dati="False"
+VAR_SET$ $TGeo_clienti_contatto=""
+VAR_SET$ $TGeo_clienti_codCliSort=""
+VAR_SET$ $TGeo_clienti_registro_di_stato=""
+VAR_SET$ $TGeo_clienti_registro_generale=""
+VAR_SET$ $TGeo_clienti_indirizzo_quartiere=""
+VAR_SET$ $TGeo_clienti_indirizzo_tipologia=""
+VAR_SET$ $TGeo_clienti_fiscale_quartiere=""
+VAR_SET$ $TGeo_clienti_fiscale_tipologia=""
+VAR_SET$ $TGeo_clienti_scarico_quartiere=""
+VAR_SET$ $TGeo_clienti_scarico_tipologia=""
+VAR_SET$ $TGeo_clienti_codice_listino=""
+VAR_SET$ $TGeo_clienti_nome_ambiente="Cesar2X"
+VAR_SET$ $TGeo_clienti_ambientiTotali=""
+VAR_SET$ $TGeo_preventivi_venditore_id=""
+VAR_SET$ $TGeo_preventivi_preventivo_id="2026_C2X01_243864_T_00018"
+VAR_SET$ $TGeo_preventivi_postazione_id="C2X01_243864"
+VAR_SET$ $TGeo_preventivi_cliente_id="2"
+VAR_SET$ $TGeo_preventivi_ordine_id=""
+VAR_SET$ $TGeo_preventivi_graficato="False"
+VAR_SET$ $TGeo_preventivi_data_inserimento="28/10/2026"
+VAR_SET$ $TGeo_preventivi_data_consegna_richiesta="27/11/2026"
+VAR_SET$ $TGeo_preventivi_data_richiamo=""
+VAR_SET$ $TGeo_preventivi_data_invio=""
+VAR_SET$ $TGeo_preventivi_stato="Da rivedere"
+VAR_SET$ $TGeo_preventivi_utente_creatore="JULIAIAPTOP\andre"
+VAR_SET$ $TGeo_preventivi_riferimento="7612-BA2-R01 ------ 7612 HILLSIDE BATH 2"
+VAR_SET$ $TGeo_preventivi_tipo=""
+VAR_SET$ $TGeo_preventivi_modalita_pagamento=""
+VAR_SET$ $TGeo_preventivi_valuta_pagamento=""
+VAR_SET$ $TGeo_preventivi_condizioni_particolari=""
+VAR_SET$ $TGeo_preventivi_info=""
+VAR_SET$ $TGeo_preventivi_campo01=""
+VAR_SET$ $TGeo_preventivi_campo02=""
+VAR_SET$ $TGeo_preventivi_campo03=""
+VAR_SET$ $TGeo_preventivi_cartella_id="14"
+VAR_SET$ $TGeo_preventivi_note_aperte="14"
+VAR_SET$ $TGeo_preventivi_bloccato="True"
+VAR_SET$ $TGeo_preventivi_contatto="True"
+VAR_SET$ $TGeo_preventivi_scarico_via=""
+VAR_SET$ $TGeo_preventivi_scarico_civico=""
+VAR_SET$ $TGeo_preventivi_scarico_citta=""
+VAR_SET$ $TGeo_preventivi_scarico_cap=""
+VAR_SET$ $TGeo_preventivi_scarico_provincia=""
+VAR_SET$ $TGeo_preventivi_scarico_nazione=""
+VAR_SET$ $TGeo_preventivi_cliente_codice=""
+VAR_SET$ $TGeo_preventivi_priorita="STA"
+VAR_SET$ $TGeo_preventivi_data_stacco_ordine=""
+VAR_SET$ $TGeo_preventivi_data_protocollo=""
+VAR_SET$ $TGeo_preventivi_data_preventivo=""
+VAR_SET$ $TGeo_preventivi_testata_modificata="True"
+VAR_SET$ $TGeo_preventivi_codice_azienda=""
+VAR_SET$ $TGeo_preventivi_descrizione_azienda=""
+VAR_SET$ $TGeo_preventivi_codice_modello=""
+VAR_SET$ $TGeo_preventivi_descrizione_modello=""
+VAR_SET$ $TGeo_preventivi_codice_collezione=""
+VAR_SET$ $TGeo_preventivi_descrizione_collezione=""
+VAR_SET$ $TGeo_preventivi_data_consegna_prevista=""
+VAR_SET$ $TGeo_preventivi_in_verifica="False"
+VAR_SET$ $TGeo_preventivi_codice_tipo_invio=""
+VAR_SET$ $TGeo_preventivi_descrizione_tipo_invio=""
+VAR_SET$ $TGeo_preventivi_codice_tipo=""
+VAR_SET$ $TGeo_preventivi_codice_indirizzo=""
+VAR_SET$ $TGeo_preventivi_codice_puntovendita=""
+VAR_SET$ $TGeo_preventivi_descrizione_puntovendita=""
+VAR_SET$ $TGeo_preventivi_data_invio_massimo=""
+VAR_SET$ $TGeo_preventivi_info_consegna=""
+VAR_SET$ $TGeo_preventivi_progetto_preventivo_id="52b4e8d8-1b01-49be-9bf7-7f2f39d6ce80"
+VAR_SET$ $TGeo_preventivi_progetto_postazione_id="8527c3a7-2757-4ff3-9033-bfde8fe37e6b"
+VAR_SET$ $TGeo_preventivi_progetto="False"
+VAR_SET$ $TGeo_preventivi_vettore=""
+VAR_SET$ $TGeo_preventivi_alternativa_attiva="False"
+VAR_SET$ $TGeo_preventivi_non_inviabile="False"
+VAR_SET$ $TGeo_preventivi_expo=""
+VAR_SET$ $TGeo_preventivi_data_scarico_ordine=""
+VAR_SET$ $TGeo_preventivi_scarico_quartiere=""
+VAR_SET$ $TGeo_preventivi_scarico_tipologia=""
+VAR_SET$ $TGeo_preventivi_stato_avanzamento=""
+VAR_SET$ $TGeo_preventivi_data_conferma_ordine=""
+VAR_SET$ $TGeo_preventivi_descrizione_stato_azienda=""
+VAR_SET$ $TGeo_preventivi_conferma_produzione="False"
+VAR_SET$ $TGeo_preventivi_stanza=""
+VAR_SET$ $TGeo_preventivi_codice_marchio=""
+VAR_SET$ $TGeo_preventivi_codice_listino=""
+VAR_SET$ $TGeo_preventivi_codice_valuta=""
+VAR_SET$ $TGeo_preventivi_codice_area_listino=""
+VAR_SET$ $TGeo_preventivi_owner="Cesar2X"
+VAR_SET$ $TGeo_preventivi_alternativa=""
+VAR_SET$ $TGeo_preventivi_cospedizione=""
+VAR_SET$ $TGeo_preventivi_prec_preventivo_id=""
+VAR_SET$ $TGeo_preventivi_prec_postazione_id=""
+VAR_SET$ $TGeo_preventivi_prec_ordine_id=""
+VAR_SET$ $TGeo_preventivi_id_reclamo=""
+VAR_SET$ $TGeo_preventivi_flag_sost_compl="False"
+VAR_SET$ $TGeo_preventivi_DataInvioTransito=""
+VAR_SET$ $TGeo_preventivi_priorita_progetto="0"
+VAR_SET$ $TGeo_preventivi_guid_cospedizione=""
+VAR_SET$ $TGeo_preventivi_da_rivedere="False"
+VAR_SET$ $TGeo_preventivi_RiferimentoProgetto="7612 BATH 2"
+VAR_SET$ $TGeo_preventivi_NPrevInProgetto="0"
+VAR_SET$ $TGeo_progetto_ordine_id=""
+VAR_SET$ $TGeo_progetto_riferimento="7612 BATH 2"
+VAR_SET$ $TGeo_rivenditore_nome="Andriy"
+VAR_SET$ $TGeo_rivenditore_cognome="Demko"
+VAR_SET$ $TGeo_rivenditore_ragione_sociale="UCON Design and Build dba UCON Contemporary Interiors"
+VAR_SET$ $TGeo_rivenditore_telefono="(858) 432-6444"
+VAR_SET$ $TGeo_rivenditore_email="andrew@ucon.us"
+VAR_SET$ $TGeo_rivenditore_fax=""
+VAR_SET$ $TGeo_rivenditore_codice_fiscale="EIN 84-1966873"
+VAR_SET$ $TGeo_rivenditore_partita_iva=""
+VAR_SET$ $TGeo_rivenditore_via="Silverton Ave"
+VAR_SET$ $TGeo_rivenditore_numero_civico="7965, Suite 1304"
+VAR_SET$ $TGeo_rivenditore_cap="92126"
+VAR_SET$ $TGeo_rivenditore_citta="San Diego"
+VAR_SET$ $TGeo_rivenditore_provincia="CA"
+VAR_SET$ $TGeo_rivenditore_nazione="United States"
+VAR_SET$ $TGeo_rivenditore_quartiere=""
+VAR_SET$ $TGeo_rivenditore_tipologia=""
+VAR_SET$ $TGeo_rivenditore_orario_apertura="Mon–Fri 8:00–17:00 PT"
+VAR_SET$ $TGeo_rivenditore_note=""
+VAR_SET$ $TGeo_settings_gruppo_commerciale=""
+VAR_SET$ $TGeo_MetronOne="1"
+VAR_SET$ $M2G_VER_RIFRIGA=1
+VAR_SET$ $TST_PROMO_OLD=""
+VAR_SET$ $nOrdineTGeo="2026_C2X01_243864_T_00018"
+VAR_SET$ $nOrdine="2026_C2X01_243864_T_00018"
+VAR_SET$ $File="2026_C2X01_243864_T_00018"
+VAR_SET$ $TST_nota=""
+VAR_SET$ $categorie="FFRN;FINCFRN;PRSA;FNGOL;MANG;MANGS;COLMAN;FSTR;FINCSTR;TSPN;FCAS;TSPNCAS;TIP001;PIE01;ALIMEN"
+VAR_SET$ $cat_forzate="FFRN;PRSA;FNGOL;MANG;COLMAN;FSTR;FCAS;TIP001"
+VAR_SET$ $TST_AnnoRif=""
+VAR_SET$ $TST_TipoNumRif=""
+VAR_SET$ $TST_nOrdineRif=""
+VAR_SET$ $ORDER_GUID__="b196fda3-d34f-11f1-8479-d06578811455"
+VAR_SET$ $BDM_DV_New_Order="261028-211747-20250117B"
+9000 INTERIORS -99 2 1
+9000 INTERIORS -1 140 4000 6000 4000 3000 45 0
+9000 INTERIORS -2 14218225  0 0 "_NEW_Spatolato02.jpg" ""
+9000 INTERIORS -3 6  1000 90 90 0 0
+9000 INTERIORS 0 3445 1000 2055  16777215 "_NEW_Legno04.jpg" ""
+9000 INTERIORS 999 END
+ELEMENTO BA61287
+STRUTTURA 302
+VAR_FIX M4_FIX_Y=243 z_ins="261028-261021A" QUE_ORD=10 ORD_PPCODE="1" MTOG_CODICEALL="1"
+VAR_FIX M2G_BCKVESTIZIONE="FFRN=LE08(0)|TIPFRO=TF01(1)|PRSA=P00001(0)|MANG=PRS001(0)|COLMAN=AL08(0)|FSTR=MS51(0)|TIPSCH=SENZA(1)|TIP001=TE0M1(0)|ATTAC=ATTC03(1)|PIE01=SFORI(0)|BLVSS1=SENZA(0)|TSPN=LGB(1)|FCAS=LBIN(0)|TSPNCAS=LGBX(0)|SLTFSC=0(0)"
+VAR_FIX g_TIPSCH_save="SENZA" DLL_VALIDATO=1
+var_change 0 \0 VAR_posVert1_Intarsio=-1 VAR_posVert2_Intarsio=-1 Alt_Zoc=0 ConSplTerm_a_sx=0 ConSplTerm_a_dx=0 ConSplTermGola_a_sx=0 ConSplTermGola_a_dx=0 PerGola=1 Sospesa=1 MantieniVanoIntPerCass=1 VAR_BasePens_gola_verticale=0 Mobile_Falegnameria=0 H_div_ServoDrive=0 fia_disallineati_TelaioUNIT=-1 posTerm_Intarsio=1 flag_GolaTangram=0 N_scassi_gola=2 gola_sottotop_presente=1 pos_y_scs_gola_1=525 pos_y_scs_gola_2=802.5
+var_change 0 \0\fb\fd1r ConProfiloManiglia=0
+var_change 0 \0\fb\fdLvl GCode="ACVL01"
+var_change 0 \0\fb\DSerC Sposta_DivColonnaGolaO=0 DivGioRimovibile=0 Mio_Numero_Rif=0 assegnato=0
+var_change 0 \0\fbbl\fd1r ConProfiloManiglia=0
+var_change 0 \0\fbbl\fdLvl GCode="ACVL01"
+var_change 0 \0\fbbl\DSerC Sposta_DivColonnaGolaO=0 DivGioRimovibile=0 Mio_Numero_Rif=0 assegnato=0
+POSIZIONA M4W 0 18 243 0 0
+VAR_CHANGE 3 \302\fb M2G_BCKVESTIZIONE="TIP001=TE0M1(0)|PRSA=P00001(0)|FSTR=MS51(0)|TIPSCH=SENZA(1)|ATTAC=ATTC03(0)|PIE01=SFORI(0)"
+var_change 0 \302\fb\fd1r ConProfiloManiglia=0
+var_change 0 \302\fb\fdLvl GCode="ACVL01"
+var_change 0 \302\fb\DSerC Sposta_DivColonnaGolaO=0 DivGioRimovibile=0 Mio_Numero_Rif=0 assegnato=0
+VAR_CHANGE 3 \302\fb\fsx Vic_ColSwing="" GEST_FAM="*" M2G_BCKVESTIZIONE="FSTR=MS51(0)|TIPSCH=SENZA(0)|LAV003=LF020(0)|ATTAC=ATTC03(0)|VERCOS=SX(0)"
+VAR_CHANGE 3 \302\fb\fdx Vic_ColSwing="" GEST_FAM="*" M2G_BCKVESTIZIONE="FSTR=MS51(0)|TIPSCH=SENZA(0)|LAV003=LF020(0)|ATTAC=ATTC03(0)|VERCOS=DX(0)"
+VAR_CHANGE 3 \302\fb\fd1r GEST_FAM="*" M2G_BCKVESTIZIONE="TIPFND=FND02(0)|FSTR=MS51(0)|TIPSCH=SENZA(0)|LAV003=LF020(0)"
+var_change 0 \302\fb\fd1r ConProfiloManiglia=0
+var_change 0 \302\fb\fdLvl GCode="ACVL01"
+var_change 0 \302\fb\DSerC Sposta_DivColonnaGolaO=0 DivGioRimovibile=0 Mio_Numero_Rif=0 assegnato=0
+VAR_CHANGE 3 \302\fb\cpas GEST_FAM="*" M2G_BCKVESTIZIONE="TIPCAT=POST(0)"
+VAR_CHANGE 3 \302\fb\cpas2 GEST_FAM="*" M2G_BCKVESTIZIONE="TIPCAT=POST(0)"
+VAR_CHANGE 3 \302\fb\fslvbg M2G_BCKVESTIZIONE="FSTR=MS51(0)|LAVGEN=L0060(1)|ATTAC=ATTC03(0)"
+VAR_CHANGE 3 \302\fb\casn GEST_FAM="*" M2G_BCKVESTIZIONE="TIPCAT=ANT(0)|FSTR=MS51(0)"
+VAR_CHANGE 3 \302\fb\caSR GEST_FAM="*" M2G_BCKVESTIZIONE="TIPCAT=ANT(0)|FSTR=MS51(0)"
+var_change 0 \302\fbbl\fd1r ConProfiloManiglia=0
+var_change 0 \302\fbbl\fdLvl GCode="ACVL01"
+var_change 0 \302\fbbl\DSerC Sposta_DivColonnaGolaO=0 DivGioRimovibile=0 Mio_Numero_Rif=0 assegnato=0
+var_change 0 \302\fbbl\fd1r ConProfiloManiglia=0
+var_change 0 \302\fbbl\fdLvl GCode="ACVL01"
+var_change 0 \302\fbbl\DSerC Sposta_DivColonnaGolaO=0 DivGioRimovibile=0 Mio_Numero_Rif=0 assegnato=0
+var_change 0 \302\@v1 Anta_a_Terra=0 Anta_su_Fondo=1 Anta_su_Coperchio=0 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0
+var_change 0 \302\@v1\fro Anta_a_Terra=0 Anta_su_Fondo=1 Anta_su_Coperchio=0 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=2 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=897
+VAR_CHANGE 3 \302\@v1\fro Progressivo_Frontale=2 flag_CatAntAlta_Cass_N_Elle=0
+VAR_CHANGE 3 \302\@v1\fro M2G_BCKVESTIZIONE="FFRN=LE08(0)|TIPFRO=TF01(0)|PRSA=P00001(0)|TPAPE=CAS(0)|MANG=PRS001(0)|COLMAN=AL08(0)|TSPN=LGB(0)|FCAS=LBIN(0)|TSPNCAS=LGBX(0)|TSTRCAS=C09(0)|ALCAS=18(0)|LACAS=120(0)|PRCAS=40(0)|TGUI=GU01(0)|FFCAS=MF01(0)|LAF300=LAF301(1)|LAF100=LAF101(1)|LAF200=LAF201(1)|LAF400=LAF401(1)|SLTFSC=0(0)"
+var_change 0 \302\@v1\fro Anta_a_Terra=0 Anta_su_Fondo=1 Anta_su_Coperchio=0 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=2 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=897
+var_change 0 \302\@v2 Anta_a_Terra=0 Anta_su_Fondo=0 Anta_su_Coperchio=1 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0
+var_change 0 \302\@v2\fro Anta_a_Terra=0 Anta_su_Fondo=0 Anta_su_Coperchio=1 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=1 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=897
+VAR_CHANGE 3 \302\@v2\fro Progressivo_Frontale=1 flag_CatAntAlta_Cass_N_Elle=0
+VAR_CHANGE 3 \302\@v2\fro M2G_BCKVESTIZIONE="FFRN=LE08(0)|TIPFRO=TF01(0)|PRSA=P00001(0)|TPAPE=CAS(0)|MANG=PRS001(0)|COLMAN=AL08(0)|TSPN=LGB(0)|FCAS=LBIN(0)|TSPNCAS=LGBX(0)|TSTRCAS=C10(0)|ALCAS=9(0)|LACAS=120(0)|PRCAS=40(0)|TGUI=GU01(0)|FFCAS=MF01(0)|LAF300=LAF301(1)|LAF100=LAF101(1)|LAF200=LAF201(1)|LAF400=LAF401(1)|SLTFSC=0(0)"
+var_change 0 \302\@v2\fro Anta_a_Terra=0 Anta_su_Fondo=0 Anta_su_Coperchio=1 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=1 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=897
+ELEMENTO BA60957
+STRUTTURA 303
+VAR_FIX z_ins="261028-261021A" QUE_ORD=20 ORD_PPCODE="2" MTOG_CODICEALL="1"
+VAR_FIX M2G_BCKVESTIZIONE="FFRN=LE08(0)|TIPFRO=TF01(1)|PRSA=P00001(0)|MANG=PRS001(0)|COLMAN=AL08(0)|FSTR=MS51(0)|ATTAC=ATTC03(1)|PIE01=SFORI(0)|TIPSCH=SPSCH06(1)|TSPN=LGB(1)|FCAS=LBIN(0)|TSPNCAS=LGBX(0)|SLTFSC=0(0)" DLL_VALIDATO=1
+var_change 0 \0 VAR_posVert1_Intarsio=1 VAR_posVert2_Intarsio=-1 Alt_Zoc=0 ConSplTerm_a_sx=0 ConSplTerm_a_dx=0 ConSplTermGola_a_sx=0 ConSplTermGola_a_dx=0 PerPianoCottura=0 PerGola=1 Sospesa=1 MantieniVanoIntPerCass=1 VAR_BasePens_gola_verticale=0 Mobile_Falegnameria=0 H_Profilo_ServoDrive=0 fia_disallineati_TelaioUNIT=-1 posTerm_Intarsio=1 flag_GolaTangram=0 N_scassi_gola=2 gola_sottotop_presente=1 pos_y_scs_gola_1=525 pos_y_scs_gola_2=802.5
+var_change 0 \0\fb\fd1r ConProfiloManiglia=0
+POSIZIONA M4W 0 1218 243 0 0
+VAR_CHANGE 3 \303\fb M2G_BCKVESTIZIONE="TIP001=TE0S1(0)|PRSA=P00001(0)|FSTR=MS51(0)|PIE01=SFORI(0)|TIPSCH=SPSCH06(1)|ATTAC=ATTC03(0)"
+var_change 0 \303\fb\fd1r ConProfiloManiglia=0
+VAR_CHANGE 3 \303\fb\fsx Vic_ColSwing="" GEST_FAM="*" M2G_BCKVESTIZIONE="FSTR=MS51(0)|TIPSCH=SPSCH06(0)|LAV003=LF019(1)|ATTAC=ATTC03(0)|VERCOS=SX(0)"
+VAR_CHANGE 3 \303\fb\fdx Vic_ColSwing="" GEST_FAM="*" M2G_BCKVESTIZIONE="FSTR=MS51(0)|TIPSCH=SPSCH06(0)|LAV003=LF019(1)|ATTAC=ATTC03(0)|VERCOS=DX(0)"
+VAR_CHANGE 3 \303\fb\fd1r GEST_FAM="*" M2G_BCKVESTIZIONE="FSTR=MS51(0)|TIPSCH=SPSCH06(0)|LAV003=LF019(1)"
+var_change 0 \303\fb\fd1r ConProfiloManiglia=0
+VAR_CHANGE 3 \303\fb\sch1r GEST_FAM="*" M2G_BCKVESTIZIONE="FSTR=MS51(0)|TIPSCH=SPSCH06(1)|ATTAC=ATTC03(0)"
+VAR_CHANGE 3 \303\fb\cpas GEST_FAM="*" M2G_BCKVESTIZIONE="TIPCAT=POST(0)"
+VAR_CHANGE 3 \303\fb\casn GEST_FAM="*" M2G_BCKVESTIZIONE="TIPCAT=ANT(0)|FSTR=MS51(0)"
+var_change 0 \303\@v1 Anta_a_Terra=0 Anta_su_Fondo=1 Anta_su_Coperchio=0 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0
+var_change 0 \303\@v1\fro Anta_a_Terra=0 Anta_su_Fondo=1 Anta_su_Coperchio=0 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=2 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=597
+VAR_CHANGE 3 \303\@v1\fro Progressivo_Frontale=2 flag_CatAntAlta_Cass_N_Elle=0
+VAR_CHANGE 3 \303\@v1\fro M2G_BCKVESTIZIONE="FFRN=LE08(0)|TIPFRO=TF01(0)|PRSA=P00001(0)|TPAPE=CAS(0)|MANG=PRS001(0)|COLMAN=AL08(0)|TSPN=LGB(0)|FCAS=LBIN(0)|TSPNCAS=LGBX(0)|TSTRCAS=C01(0)|ALCAS=18(0)|LACAS=90(0)|PRCAS=40(0)|TGUI=GU01(0)|FFCAS=MF01(0)|LAF300=LAF301(1)|LAF100=LAF101(1)|LAF200=LAF201(1)|LAF400=LAF401(1)|SLTFSC=0(0)"
+var_change 0 \303\@v1\fro Anta_a_Terra=0 Anta_su_Fondo=1 Anta_su_Coperchio=0 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=2 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=597
+var_change 0 \303\@v2 Anta_a_Terra=0 Anta_su_Fondo=0 Anta_su_Coperchio=1 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0
+var_change 0 \303\@v2\fro Anta_a_Terra=0 Anta_su_Fondo=0 Anta_su_Coperchio=1 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=1 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=597
+VAR_CHANGE 3 \303\@v2\fro Progressivo_Frontale=1 flag_CatAntAlta_Cass_N_Elle=0
+VAR_CHANGE 3 \303\@v2\fro M2G_BCKVESTIZIONE="FFRN=LE08(0)|TIPFRO=TF01(0)|PRSA=P00001(0)|TPAPE=CAS(0)|MANG=PRS001(0)|COLMAN=AL08(0)|TSPN=LGB(0)|FCAS=LBIN(0)|TSPNCAS=LGBX(0)|TSTRCAS=C01(0)|ALCAS=18(0)|LACAS=90(0)|PRCAS=40(0)|TGUI=GU01(0)|FFCAS=MF01(0)|LAF300=LAF301(1)|LAF100=LAF101(1)|LAF200=LAF201(1)|LAF400=LAF401(1)|SLTFSC=0(0)"
+var_change 0 \303\@v2\fro Anta_a_Terra=0 Anta_su_Fondo=0 Anta_su_Coperchio=1 Anta_su_CoperchioDivisorio=0 Anta_su_VanoSup=0 PosManPers_PosX=0 PosManPers_PosX_offset=0 PosManPers_PosY=0 PosManPers_PosY_offset=0 PosManPers_PosX_Srvz=0 PosManPers_PosX_offset_Srvz=0 PosManPers_PosY_Srvz=0 PosManPers_PosY_offset_Srvz=0 ConGolaO=1 PosGolaO=0 ConFrontInfPosGolaO=0 ConFrontSupNoGolaO=0 flag_RAD_tgUpDw=0 flag_RAD_tgSxDx=0 Lar_pannVert_Intarsio=300 Lar_pannOriz_Intarsio=597
+ELEMENTO SPECCHIERA
+STRUTTURA 305
+VAR_FIX MTOG_CODICEALL="1" z_ins="261028-261021A" GEST_TIPMIR="MIR001" VarsUser__="GEST_TIPMIR;GEST_FORMA;GEST_DIM001;GEST_DIM002;GEST_FNPRF;GEST_ILLUM;GEST_ANTAPP" GEST_FORMA="FOR002" GEST_DIM001="120" GEST_DIM002="70" GEST_FNPRF="AL05"
+VAR_FIX GEST_ILLUM="ILL007" GEST_ANTAPP="NO" M2G_BCKVESTIZIONE="TIPMIR=MIR001(0)|FORMA=FOR002(0)|DIM001=120(0)|DIM002=70(0)|FNPRF=AL05(0)|ILLUM=ILL007(0)|ANTAPP=NO(0)" DLL_VALIDATO=1 M4_FIX_Y=1250
+var_change 0 \0 X=1200 Y=700 FileM4s="MIR001_FOR002_120_70.m4s" VAR_BasePens_gola_verticale=0 Mobile_Falegnameria=0
+var_change 0 \0\1m4s m4s_pnt_posa=[0,0,0]
+POSIZIONA M4W 0 18 1250 0 0
+var_change 0 \305\1m4s m4s_pnt_posa=[0,0,0]
+ELEMENTO PAN022
+STRUTTURA 306
+VAR_FIX MTOG_CODICEALL="1" z_ins="261028-261021A" orientamento_edit=1 VarsUser__="orientamento_edit;GEST_FSTR;Y;X" QUE_ORD=70 ORD_PPCODE="7" GEST_FSTR="LE08"
+VAR_FIX M2G_BCKVESTIZIONE="FSTR=LE08(0)|LATVIS=2LATI(0)|BORFRO=BOR001(1)|BORRET=BOR001(1)|BORSX=BOR001(1)|BORDX=BOR001(1)" DLL_VALIDATO=1 RADICE="PNLE00200022" Y=585 GEST_FAM="*" X=470 Z=22
+var_change 0 \0 val_Xmin=30 val_XMAX=1200 val_Ymin=30 val_YMAX=3000 codice_da_BDM=1 vers230518=1 VAR_ConPiedini=0 ZFia=620 ZFiaR=0 ZIngAnta=25 ZIngAntaR=0 vers240220=1 PosFianco="SX" SeiIsola=0
+POSIZIONA 2140 243 0 270
+ELEMENTO PAN018
+STRUTTURA 307
+VAR_FIX MTOG_CODICEALL="1" z_ins="261028-261021A" orientamento_edit=1 VarsUser__="orientamento_edit;GEST_FSTR;Y;X" GEST_FSTR="LE08" QUE_ORD=80 ORD_PPCODE="8" M2G_BCKVESTIZIONE="FSTR=LE08(1)|LATVIS=2LATI(0)|BORFRO=BOR001(1)|BORRET=BOR001(1)|BORSX=BOR001(1)|BORDX=BOR001(1)"
+VAR_FIX DLL_VALIDATO=1 RADICE="PNLE00200018" Y=585 GEST_FAM="*" X=470 Z=18
+var_change 0 \0 val_Xmin=23 val_XMAX=1800 val_Ymin=23 val_YMAX=3700 codice_da_BDM=1 vers230518=1 VAR_ConPiedini=0 ZFia=620 ZFiaR=0 ZIngAnta=25 ZIngAntaR=0 vers240220=1 PosFianco="SX" SeiIsola=0
+POSIZIONA 18 243 0 270
+ELEMENTO_S TOPDRBA
+STRUTTURA_S 304
+VAR_FIX zTop_250116A=1 z_ins="261028-261021A" Flag_LPI_PAN=0 Flag_LPI_PIA=0 QUE_ORD=30 ORD_PPCODE="3" MTOG_CODICEALL="1" GEST_FNPS="CE13" VarsUser__="GEST_FNPS;GEST_SPPS;GEST_BORSX;GEST_BORDX;GEST_LAVINC;AA_SBORDO_SX;AA_SBORDO_DX" GEST_SPPS="SP022" GEST_BORSX="BOR002" GEST_BORDX="BOR001" GEST_LAVINC="LVBF05.003" AA_SBORDO_SX=18 AA_SBORDO_DX=22
+VAR_FIX M2G_BCKVESTIZIONE="FNPS=CE13(0)|SPPS=SP022(0)|PRFTOP=PR0500(0)|ANGSX=ANG001(0)|ANGDX=ANG001(0)|LAVPIA=LPI017(1)|LAVINC=LVBF05.003(1)|LATVIS=2LATI(0)|ACCOSX=ACC000(0)|ACCODX=ACC000(0)|BORSX=BOR002(1)|BORDX=BOR001(1)" DLL_VALIDATO=1 RADICE="DRBACR00SP022"
+VAR_FIX LavorazioniTop_Eseguita=1
+var_change 0 \0 Y=22 Z=500 codice_da_BDM=1 SeiTopDS=0 Rie_BasiTop=30 AA_TAGLIO_SX="08-NN" AA_TAGLIO_DX="08-NN" AA_TAGLIO_FS_SX="08-NN" AA_TAGLIO_FS_DX="08-NN" tag_dx=8 tag_sx=8 Innesto_ted=10 spLastra=0 Con_Telaio45=0 su_GolaTangram=0 tag_prof_mas_sx=0 tag_prof_mas_dx=0 sbordo_FS_sx=0 sbordo_FS_dx=0 Rid_dx=0 Rid_sx=0 Rid_sx_FS_retro=0 Rid_dx_FS_retro=0 aum_bdm_sx=0 aum_bdm_dx=0 aum_bdm_rt=0 zsotto=500 zsotto_sx=500 zsotto_dx=500 RieMin_Foro_Fro=70 RieMin_Foro_Ret=70 RieMin_Foro_Lat=60 ang_a_dx=90 ang_a_sx=90 sopra_gola_profilo=1 Quanti_BlocchettoT=0 Limiti_Sbloccati=0
+STENDI2 0 \302 0 \303
+PATH 0
+9000 LIGHTS 0
+9000 LIGHTS 1 0 "Environment" 16777215 0.88 1
+9000 LIGHTS 1 2 "Default" 16777215 0.5 1 1722.5 1935 500
+9000 LIGHTS 99
+//Metron2Gemo=7.5.91.66;Interfacce=9.01.34.02;DB=9.01.34.02;Metron=4.11.357.2503;Motore=4.11.356.1612;BDM=;Promozioni=4.5.5.0;PC=JULIAIAPTOP;WinUser=andre
+9000 ORD_S 302|0|COD=BA61287|0|DES=2 JUMBO DRAWERS SINK HOLDER BASE UNIT BATHROOM|0|CODGRIGLIA=BAL003|1|X=1200.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=1051.0000|1|YMIN=481.0000|1|ZMIN=470.0000|1|XMAX=1200.0000|1|YMAX=585.0000|1|ZMAX=470.0000|
+9000 ORD_S 302|0|GRUPPO_RICERCA=BAS|0|CAT_PREF=*|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FFRN;TIPFRO;PRSA;MANG;COLMAN;FSTR;TIPSCH;TIP001;ATTAC;PIE01;BLVSS1;TSPN;FCAS;TSPNCAS;LAV001;RID02;RID01;RID03;SLTFSC;POSSCC;INFOPRD|0|CATVEST_HIDE=SLTFSC;POSSCC;INFOPRD|
+9000 ORD_S 302|0|VARIANTI=FAM;MOD;FFRN;TIPFRO;PRSA;MANG;COLMAN;FSTR;TIPSCH;TIP001;ATTAC;PIE01;BLVSS1;TSPN;FCAS;TSPNCAS;SLTFSC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|BA61287|2 JUMBO DRAWERS SINK HOLDER BASE UNIT|BATHROOM||BAL003|0|1|2||0||||0|1|1|*|BAS|0|MB|0|0|
+9000 M2G_TART 4|F01;INTBA;8=0,9=0|F01;MAXBA;8=0,9=0|F01;MAXGBA;8=0,9=0|F01;MAXSBA;8=0,9=0|F01;MAXT60;9=0|
+9000 M2G_TART 5||BAGNO|*|*|*|*|*|*|*|*|*|MM|PZ|1200.000000|585.000000|470.000000|1|1|1|0|1|2|LAR|ALT|PRF|ARCHB01|*|1051.000000|481.000000|470.000000|1200.000000|585.000000|470.000000|0|1989358||0|0|0|
+9000 ORD_S 302\fb|0|COD=SBCL014L3|0|DES=SCOCCA BASE LAVABO L1200 H585 P620 |0|CODGRIGLIA=SCC003|1|X=1200.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=1200.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=S01|
+9000 ORD_S 302\fb|0|CAT_PREF=*|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIP001;PRSA;FSTR;TIPSCH;SCHFLR;ATTAC;PIE01;POSPIE;LAV001|0|CATVEST_HIDE=TIP001;PRSA;FSTR;TIPSCH;SCHFLR;PIE01;POSPIE;LAV001|0|VARIANTI=FAM;MOD;TIP001;PRSA;FSTR;TIPSCH;ATTAC;PIE01|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|SBCL014L3|SCOCCA BASE LAVABO L1200 H585 P620|||SCC003|2|1|2|SBCL01|0||||0|0|1|*|S01|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|1200.000000|585.000000|470.000000|0|0|0|0|1|2|LAR|ALT|PRF||*|0.000000|0.000000|0.000000|2147483647.000000|2147483647.000000|2147483647.000000|0|1990326||0|0|0|
+9000 ORD_S 302\fb\fsx|0|COD=FNC105850470|0|DES=SIDE PANEL |0|CODGRIGLIA=FIA006|1|X=18.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=481.0000|1|ZMIN=351.0000|1|XMAX=18.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=GEM|0|CAT_PREF=FSTRE|
+9000 ORD_S 302\fb\fsx|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FSTRE;FINCFNC;FCMPSTRE;FSTR;FINCSTR;TIPSCH;SCHFLR;LAV003;ATTAC;LAV005;PIE01;NSCGOLA;SCGOLA;AMSD;VERCOS;LAVTAG;LAVINC;LAVM2X;TACC;LAV001|0|CATVEST_HIDE=FINCSTR|
+9000 ORD_S 302\fb\fsx|0|VARIANTI=FAM;MOD;FSTR;TIPSCH;LAV003;ATTAC;VERCOS|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FNC105850470|SIDE PANEL|||FIA006|2|1|0|FNC00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|18.000000|585.000000|470.000000|0|1|1|0|1|2|SPE|ALT|PRF|FNC18D01|*|0.000000|481.000000|351.000000|2147483647.000000|585.000000|470.000000|0|538||0|0|0|
+9000 ORD_S 302\fb\fdx|0|COD=FNC105850470|0|DES=SIDE PANEL |0|CODGRIGLIA=FIA006|1|X=18.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=481.0000|1|ZMIN=351.0000|1|XMAX=18.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=GEM|0|CAT_PREF=FSTRE|
+9000 ORD_S 302\fb\fdx|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FSTRE;FINCFNC;FCMPSTRE;FSTR;FINCSTR;TIPSCH;SCHFLR;LAV003;ATTAC;LAV005;PIE01;NSCGOLA;SCGOLA;AMSD;VERCOS;LAVTAG;LAVINC;LAVM2X;TACC;LAV001|0|CATVEST_HIDE=FINCSTR|
+9000 ORD_S 302\fb\fdx|0|VARIANTI=FAM;MOD;FSTR;TIPSCH;LAV003;ATTAC;VERCOS|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FNC105850470|SIDE PANEL|||FIA006|2|1|0|FNC00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|18.000000|585.000000|470.000000|0|1|1|0|1|2|SPE|ALT|PRF|FNC18D01|*|0.000000|481.000000|351.000000|2147483647.000000|585.000000|470.000000|0|538||0|0|0|
+9000 ORD_S 302\fb\fd1r|0|COD=FND111630469|0|DES=FONDO GAP P.470|0|CODGRIGLIA=FON005|1|X=1163.5000|1|Y=18.0000|1|Z=469.5000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=1163.5000|1|YMAX=18.0000|1|ZMAX=469.5000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 302\fb\fd1r|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPFND;FSTR;FINCSTR;FSTRE;FCMPSTRE;TIPSCH;LAV003;SVEN;SCHFLR;LAV005;TCAP2;TCAPP;PIE01;AMSD;LAVTAG;TACC;LAVM2X;LAV001;INFOPRD|0|CATVEST_HIDE=FINCSTR;INFOPRD|0|VARIANTI=FAM;MOD;TIPFND;FSTR;TIPSCH;LAV003|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FND111630469|FONDO GAP|P.470||FON005|2|1|0|FND00|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 5||P.470|*|*|*|*|*|*|*|*|*|MM|PZ|1163.500000|18.000000|469.500000|0|0|0|0|1|2|LAR|SPE|PRF|FND18D01|*|0.000000|0.000000|0.000000|2147483647.000000|2147483647.000000|2147483647.000000|0|1970998||0|0|0|
+9000 ORD_S 302\fb\cpas|0|COD=CTN200511163|0|DES=REAR STRENGTHENING TABLE |0|CODGRIGLIA=CAT001|1|X=1163.5000|1|Y=51.0000|1|Z=19.0000|1|RID=0.0000|1|XMIN=1030.6000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=1163.5000|1|YMAX=51.0000|1|ZMAX=19.0000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 302\fb\cpas|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPCAT;FINCSTR|0|CATVEST_HIDE=FINCSTR|0|VARIANTI=FAM;MOD;TIPCAT|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|CTN200511163|REAR STRENGTHENING TABLE|||CAT001|2|1|0|CAT00RT|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|1163.500000|51.000000|19.000000|1|0|0|0|1|2|LAR|ALT|SPE|CTN51D01|*|1030.600000|0.000000|0.000000|1163.500000|2147483647.000000|2147483647.000000|0|1067058||0|0|0|
+9000 ORD_S 302\fb\cpas2|0|COD=CTN200511163|0|DES=REAR STRENGTHENING TABLE |0|CODGRIGLIA=CAT001|1|X=1163.5000|1|Y=51.0000|1|Z=19.0000|1|RID=0.0000|1|XMIN=1030.6000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=1163.5000|1|YMAX=51.0000|1|ZMAX=19.0000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 302\fb\cpas2|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPCAT;FINCSTR|0|CATVEST_HIDE=FINCSTR|0|VARIANTI=FAM;MOD;TIPCAT|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|CTN200511163|REAR STRENGTHENING TABLE|||CAT001|2|1|0|CAT00RT|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|1163.500000|51.000000|19.000000|1|0|0|0|1|2|LAR|ALT|SPE|CTN51D01|*|1030.600000|0.000000|0.000000|1163.500000|2147483647.000000|2147483647.000000|0|1067058||0|0|0|
+9000 ORD_S 302\fb\fslvbg|0|COD=SCH208651173|0|DES=PANNELLO USO SCHIENA IN LUCE BAGNO  SP.18|0|CODGRIGLIA=ELV018|1|X=1973.0000|1|Y=851.0000|1|Z=18.0000|1|RID=3.0000|1|XMIN=50.0000|1|YMIN=50.0000|1|ZMIN=18.0000|1|XMAX=1973.0000|1|YMAX=851.0000|1|ZMAX=18.0000|0|GRUPPO_RICERCA=*|
+9000 ORD_S 302\fb\fslvbg|0|CAT_PREF=*|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FSTR;SVEN;AMSD;LAVGEN;LAVTAG;ATTAC|0|VARIANTI=FAM;MOD;FSTR;LAVGEN;ATTAC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|SCH208651173|PANNELLO USO SCHIENA IN LUCE BAGNO| SP.18||ELV018|2|1|0|SCHMQ18|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 5|| SP.18|*|*|*|*|*|*|*|*|*|MM|PZ|1973.000000|851.000000|18.000000|1|1|0|0|1|2|LAR|ALT|SPE|SCH18D04|*|50.000000|50.000000|18.000000|1973.000000|851.000000|18.000000|0|1990419||0|0|0|
+9000 ORD_S 302\fb\casn|0|COD=CTN100361163|0|DES=FRONT STRENGTHENING BAR |0|CODGRIGLIA=CAT001|1|X=1163.5000|1|Y=36.0000|1|Z=14.0000|1|RID=0.0000|1|XMIN=1013.6000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=1163.5000|1|YMAX=36.0000|1|ZMAX=14.0000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 302\fb\casn|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPCAT;FSTR;FINCSTR;LAV001|0|CATVEST_HIDE=FINCSTR|0|VARIANTI=FAM;MOD;TIPCAT;FSTR|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|CTN100361163|FRONT STRENGTHENING BAR|||CAT001|2|1|0|CAT00FR|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|1163.500000|36.000000|14.000000|1|0|0|0|1|2|LAR|ALT|SPE|CTN36D01|*|1013.600000|0.000000|0.000000|1163.500000|2147483647.000000|2147483647.000000|0|501||0|0|0|
+9000 ORD_S 302\fb\caSR|0|VARIANTI=FAM;MOD;TIPCAT;FSTR|0|COD=CTN100361163|0|DES=FRONT STRENGTHENING BAR |0|CODGRIGLIA=CAT001|1|X=1163.5000|1|Y=36.0000|1|Z=14.0000|1|RID=0.0000|1|XMIN=1013.6000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=1163.5000|1|YMAX=36.0000|1|ZMAX=14.0000|
+9000 ORD_S 302\fb\caSR|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPCAT;FSTR;FINCSTR;LAV001|0|CATVEST_HIDE=FINCSTR|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|CTN100361163|FRONT STRENGTHENING BAR|||CAT001|2|1|0|CAT00FR|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|1163.500000|36.000000|14.000000|1|0|0|0|1|2|LAR|ALT|SPE|CTN36D01|*|1013.600000|0.000000|0.000000|1163.500000|2147483647.000000|2147483647.000000|0|501||0|0|0|
+9000 ORD_S 302\@v1\fro|0|COD=FRN003271197|0|DES=FRONT H.327 W.1197 22CM THICK|0|CODGRIGLIA=FRN001|1|X=1217.0000|1|Y=327.0000|1|Z=22.0000|1|RID=3.0000|1|XMIN=1048.0000|1|YMIN=238.0000|1|ZMIN=0.0000|1|XMAX=1217.0000|1|YMAX=327.0000|1|ZMAX=22.0000|0|GRUPPO_RICERCA=GEM|
+9000 ORD_S 302\@v1\fro|0|CAT_PREF=FFRN|0|VARS_METRON=LVANCX;LVANDX;LVANSX|
+9000 ORD_S 302\@v1\fro|0|CATVEST=FFRN;TIPFRO;PRSA;GOLOR;MECC;TPAPE;VESTIZIONE;MANG;POSINT;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAV001;HBAS;LAF300;LAF100;LAF200;LAF400;SLTFSC;LVANDX;LVANSX;RID04;LAVTAG;LAVFR;INFOPRD;KITFER;LAVM2X|
+9000 ORD_S 302\@v1\fro|0|CATVEST_HIDE=SLTFSC;INFOPRD;KITFER|0|VARIANTI=FAM;MOD;FFRN;TIPFRO;PRSA;TPAPE;MANG;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAF300;LAF100;LAF200;LAF400;SLTFSC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FRN003271197|FRONT H.327 W.1197|22CM THICK||FRN001|0|0|2|FRN00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|F01;GAP;8=0,9=0|F01;INTARS;8=0,9=0|F01;INTBA;8=0,9=0|F01;MAX2.2;8=0,9=0|F01;MAXBA;8=0,9=0|F01;MAXCNT;8=0,9=0|F01;MAXGBA;8=0,9=0|F01;MAXGRV;8=0,9=0|F01;MAXSBA;8=0,9=0|F01;MAXSKR;8=0,9=0|F01;MAXT60;8=0,9=0|F01;N_ELLE;8=0,9=0|F01;SKRCNT;8=0,9=0|
+9000 M2G_TART 4|F01;UNIT;8=0,9=0|F01;UNITBA;8=0,9=0|F01;UNITSK;8=0,9=0|F01;UNSKBA;8=0,9=0|
+9000 M2G_TART 5||SP.22|*|*|*|*|*|*|*|*|*|MM|PZ|1217.000000|327.000000|22.000000|1|1|0|0|1|2|LAR|ALT|SPE|FRN22D01|*|1048.000000|238.000000|0.000000|1217.000000|327.000000|2147483647.000000|0|1207638||0|0|0|
+9000 ORD_S 302\@v2\fro|0|COD=FRN003271197|0|DES=FRONT H.327 W.1197 22CM THICK|0|CODGRIGLIA=FRN001|1|X=1217.0000|1|Y=327.0000|1|Z=22.0000|1|RID=3.0000|1|XMIN=1048.0000|1|YMIN=238.0000|1|ZMIN=0.0000|1|XMAX=1217.0000|1|YMAX=327.0000|1|ZMAX=22.0000|0|GRUPPO_RICERCA=GEM|
+9000 ORD_S 302\@v2\fro|0|CAT_PREF=FFRN|0|VARS_METRON=LVANCX;LVANDX;LVANSX|
+9000 ORD_S 302\@v2\fro|0|CATVEST=FFRN;TIPFRO;PRSA;GOLOR;MECC;TPAPE;VESTIZIONE;MANG;POSINT;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAV001;HBAS;LAF300;LAF100;LAF200;LAF400;SLTFSC;LVANDX;LVANSX;RID04;LAVTAG;LAVFR;KITFER;LAVM2X|0|CATVEST_HIDE=SLTFSC;KITFER|
+9000 ORD_S 302\@v2\fro|0|VARIANTI=FAM;MOD;FFRN;TIPFRO;PRSA;TPAPE;MANG;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAF300;LAF100;LAF200;LAF400;SLTFSC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FRN003271197|FRONT H.327 W.1197|22CM THICK||FRN001|0|0|2|FRN00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|F01;GAP;8=0,9=0|F01;INTARS;8=0,9=0|F01;INTBA;8=0,9=0|F01;MAX2.2;8=0,9=0|F01;MAXBA;8=0,9=0|F01;MAXCNT;8=0,9=0|F01;MAXGBA;8=0,9=0|F01;MAXGRV;8=0,9=0|F01;MAXSBA;8=0,9=0|F01;MAXSKR;8=0,9=0|F01;MAXT60;8=0,9=0|F01;N_ELLE;8=0,9=0|F01;SKRCNT;8=0,9=0|
+9000 M2G_TART 4|F01;UNIT;8=0,9=0|F01;UNITBA;8=0,9=0|F01;UNITSK;8=0,9=0|F01;UNSKBA;8=0,9=0|
+9000 M2G_TART 5||SP.22|*|*|*|*|*|*|*|*|*|MM|PZ|1217.000000|327.000000|22.000000|1|1|0|0|1|2|LAR|ALT|SPE|FRN22D01|*|1048.000000|238.000000|0.000000|1217.000000|327.000000|2147483647.000000|0|1207638||0|0|0|
+9000 ORD_S 303|0|COD=BA60957|0|DES=2 JUMBO DRAWERS BASE UNIT BATHROOM|0|CODGRIGLIA=BAS010|1|X=900.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=751.0000|1|YMIN=481.0000|1|ZMIN=350.0000|1|XMAX=900.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=BAS|
+9000 ORD_S 303|0|CAT_PREF=*|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FFRN;TIPFRO;PRSA;MANG;COLMAN;FSTR;ATTAC;PIE01;TIPSCH;TSPN;FCAS;TSPNCAS;LAV001;RID02;RID01;RID03;SLTFSC;POSSCC;INFOPRD|0|CATVEST_HIDE=SLTFSC;POSSCC;INFOPRD|
+9000 ORD_S 303|0|VARIANTI=FAM;MOD;FFRN;TIPFRO;PRSA;MANG;COLMAN;FSTR;ATTAC;PIE01;TIPSCH;TSPN;FCAS;TSPNCAS;SLTFSC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|BA60957|2 JUMBO DRAWERS BASE UNIT|BATHROOM||BAS010|0|1|2||0||||0|1|1|*|BAS|0|MB|0|0|
+9000 M2G_TART 4|F01;INTBA;8=0,9=0|F01;MAXBA;8=0,9=0|F01;MAXGBA;8=0,9=0|F01;MAXSBA;8=0,9=0|F01;MAXT60;9=0|
+9000 M2G_TART 5||BAGNO|*|*|*|*|*|*|*|*|*|MM|PZ|900.000000|585.000000|470.000000|1|1|1|0|1|2|LAR|ALT|PRF|ARCHB01|*|751.000000|481.000000|350.000000|900.000000|585.000000|470.000000|0|1989490||0|0|0|
+9000 ORD_S 303\fb|0|COD=SBCN014H3|0|DES=SCOCCA BASE BATHROOM L900 H585 P470 |0|CODGRIGLIA=SCC001|1|X=900.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=900.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=S01|
+9000 ORD_S 303\fb|0|CAT_PREF=*|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIP001;PRSA;FSTR;PIE01;TIPSCH;SCHFLR;ATTAC;POSPIE;FNVIT;LAV001;IMPG|0|CATVEST_HIDE=TIP001;PRSA;FSTR;PIE01;TIPSCH;SCHFLR;POSPIE;FNVIT;LAV001;IMPG|
+9000 ORD_S 303\fb|0|VARIANTI=FAM;MOD;TIP001;PRSA;FSTR;PIE01;TIPSCH;ATTAC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|SBCN014H3|SCOCCA BASE BATHROOM L900 H585 P470|||SCC001|2|1|2|SBCN01|0||||0|0|1|*|S01|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|900.000000|585.000000|470.000000|0|0|0|0|1|2|LAR|ALT|PRF||*|0.000000|0.000000|0.000000|2147483647.000000|2147483647.000000|2147483647.000000|0|1990366||0|0|0|
+9000 ORD_S 303\fb\fsx|0|COD=FNC105850470|0|DES=SIDE PANEL |0|CODGRIGLIA=FIA006|1|X=18.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=481.0000|1|ZMIN=351.0000|1|XMAX=18.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=GEM|0|CAT_PREF=FSTRE|
+9000 ORD_S 303\fb\fsx|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FSTRE;FINCFNC;FCMPSTRE;FSTR;FINCSTR;TIPSCH;SCHFLR;LAV003;ATTAC;LAV005;PIE01;NSCGOLA;SCGOLA;AMSD;VERCOS;LAVTAG;LAVINC;LAVM2X;TACC;LAV001|0|CATVEST_HIDE=FINCSTR|
+9000 ORD_S 303\fb\fsx|0|VARIANTI=FAM;MOD;FSTR;TIPSCH;LAV003;ATTAC;VERCOS|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FNC105850470|SIDE PANEL|||FIA006|2|1|0|FNC00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|18.000000|585.000000|470.000000|0|1|1|0|1|2|SPE|ALT|PRF|FNC18D01|*|0.000000|481.000000|351.000000|2147483647.000000|585.000000|470.000000|0|538||0|0|0|
+9000 ORD_S 303\fb\fdx|0|COD=FNC105850470|0|DES=SIDE PANEL |0|CODGRIGLIA=FIA006|1|X=18.0000|1|Y=585.0000|1|Z=470.0000|1|RID=0.0000|1|XMIN=0.0000|1|YMIN=481.0000|1|ZMIN=351.0000|1|XMAX=18.0000|1|YMAX=585.0000|1|ZMAX=470.0000|0|GRUPPO_RICERCA=GEM|0|CAT_PREF=FSTRE|
+9000 ORD_S 303\fb\fdx|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FSTRE;FINCFNC;FCMPSTRE;FSTR;FINCSTR;TIPSCH;SCHFLR;LAV003;ATTAC;LAV005;PIE01;NSCGOLA;SCGOLA;AMSD;VERCOS;LAVTAG;LAVINC;LAVM2X;TACC;LAV001|0|CATVEST_HIDE=FINCSTR|
+9000 ORD_S 303\fb\fdx|0|VARIANTI=FAM;MOD;FSTR;TIPSCH;LAV003;ATTAC;VERCOS|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FNC105850470|SIDE PANEL|||FIA006|2|1|0|FNC00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|18.000000|585.000000|470.000000|0|1|1|0|1|2|SPE|ALT|PRF|FNC18D01|*|0.000000|481.000000|351.000000|2147483647.000000|585.000000|470.000000|0|538||0|0|0|
+9000 ORD_S 303\fb\fd1r|0|COD=FND108630520|0|DES=BOTTOM PANEL |0|CODGRIGLIA=FON005|1|X=863.5000|1|Y=18.0000|1|Z=520.5000|1|RID=4.0000|1|XMIN=713.6000|1|YMIN=0.0000|1|ZMIN=435.0000|1|XMAX=863.5000|1|YMAX=18.0000|1|ZMAX=520.5000|0|GRUPPO_RICERCA=*|0|CAT_PREF=FSTRE|
+9000 ORD_S 303\fb\fd1r|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPFND;FSTR;FINCSTR;FSTRE;FCMPSTRE;TIPSCH;LAV003;SVEN;SCHFLR;LAV005;TCAP2;TCAPP;PIE01;AMSD;LAVTAG;TACC;LAVM2X;LAV001;INFOPRD|0|CATVEST_HIDE=FINCSTR;INFOPRD|0|VARIANTI=FAM;MOD;FSTR;TIPSCH;LAV003|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FND108630520|BOTTOM PANEL|||FON005|2|1|0|FND00|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|863.500000|18.000000|520.500000|1|0|1|0|1|2|LAR|SPE|PRF|FND18D01|*|713.600000|0.000000|435.000000|863.500000|2147483647.000000|520.500000|0|1208229||0|0|0|
+9000 ORD_S 303\fb\sch1r|0|COD=SCH105580873|0|DES=6 MM THICK BACK PANEL |0|CODGRIGLIA=SCH001|1|X=873.0000|1|Y=558.0000|1|Z=6.0000|1|RID=0.0000|1|XMIN=724.0000|1|YMIN=454.0000|1|ZMIN=0.0000|1|XMAX=873.0000|1|YMAX=558.0000|1|ZMAX=6.0000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 303\fb\sch1r|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FSTR;FINCSTR;TIPSCH;LAV004;LAV005;ATTAC;LAVTAG;VERCOS;LAVM2X|0|CATVEST_HIDE=FINCSTR|0|VARIANTI=FAM;MOD;FSTR;TIPSCH;ATTAC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|SCH105580873|6 MM THICK BACK PANEL|||SCH001|2|1|0|SCH0006|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|873.000000|558.000000|6.000000|1|1|0|0|1|2|LAR|ALT|SPE|SCH06D01|*|724.000000|454.000000|0.000000|873.000000|558.000000|2147483647.000000|0|690||0|0|0|
+9000 ORD_S 303\fb\cpas|0|COD=CTN200510863|0|DES=REAR STRENGTHENING TABLE |0|CODGRIGLIA=CAT001|1|X=863.5000|1|Y=51.0000|1|Z=19.0000|1|RID=0.0000|1|XMIN=725.6000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=863.5000|1|YMAX=51.0000|1|ZMAX=19.0000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 303\fb\cpas|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPCAT;FINCSTR|0|CATVEST_HIDE=FINCSTR|0|VARIANTI=FAM;MOD;TIPCAT|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|CTN200510863|REAR STRENGTHENING TABLE|||CAT001|2|1|0|CAT00RT|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|863.500000|51.000000|19.000000|1|0|0|0|1|2|LAR|ALT|SPE|CTN51D01|*|725.600000|0.000000|0.000000|863.500000|2147483647.000000|2147483647.000000|0|1067052||0|0|0|
+9000 ORD_S 303\fb\casn|0|COD=CTN100360863|0|DES=FRONT STRENGTHENING BAR |0|CODGRIGLIA=CAT001|1|X=863.5000|1|Y=36.0000|1|Z=14.0000|1|RID=0.0000|1|XMIN=713.6000|1|YMIN=0.0000|1|ZMIN=0.0000|1|XMAX=863.5000|1|YMAX=36.0000|1|ZMAX=14.0000|0|GRUPPO_RICERCA=*|0|CAT_PREF=*|
+9000 ORD_S 303\fb\casn|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPCAT;FSTR;FINCSTR;LAV001|0|CATVEST_HIDE=FINCSTR|0|VARIANTI=FAM;MOD;TIPCAT;FSTR|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|CTN100360863|FRONT STRENGTHENING BAR|||CAT001|2|1|0|CAT00FR|0||||0|1|1|*|*|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|863.500000|36.000000|14.000000|1|0|0|0|1|2|LAR|ALT|SPE|CTN36D01|*|713.600000|0.000000|0.000000|863.500000|2147483647.000000|2147483647.000000|0|499||0|0|0|
+9000 ORD_S 303\@v1\fro|0|COD=FRN003270897|0|DES=FRONT H.327 W.897 22CM THICK|0|CODGRIGLIA=FRN001|1|X=897.0000|1|Y=327.0000|1|Z=22.0000|1|RID=2.0000|1|XMIN=748.0000|1|YMIN=238.0000|1|ZMIN=0.0000|1|XMAX=897.0000|1|YMAX=327.0000|1|ZMAX=22.0000|0|GRUPPO_RICERCA=GEM|
+9000 ORD_S 303\@v1\fro|0|CAT_PREF=FFRN|0|VARS_METRON=LVANCX;LVANDX;LVANSX|
+9000 ORD_S 303\@v1\fro|0|CATVEST=FFRN;TIPFRO;PRSA;GOLOR;MECC;TPAPE;VESTIZIONE;MANG;POSINT;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAV001;HBAS;LAF300;LAF100;LAF200;LAF400;AMSD;SLTFSC;LVANDX;LVANSX;RID04;LAVTAG;LAVFR;INFOPRD;KITFER;LAVM2X|
+9000 ORD_S 303\@v1\fro|0|CATVEST_HIDE=SLTFSC;INFOPRD;KITFER|0|VARIANTI=FAM;MOD;FFRN;TIPFRO;PRSA;TPAPE;MANG;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAF300;LAF100;LAF200;LAF400;SLTFSC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FRN003270897|FRONT H.327 W.897|22CM THICK||FRN001|0|0|2|FRN00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|F01;GAP;8=0,9=0|F01;INTARS;8=0,9=0|F01;INTBA;8=0,9=0|F01;MAX2.2;8=0,9=0|F01;MAXBA;8=0,9=0|F01;MAXCNT;8=0,9=0|F01;MAXGBA;8=0,9=0|F01;MAXGRV;8=0,9=0|F01;MAXSBA;8=0,9=0|F01;MAXSKR;8=0,9=0|F01;MAXT60;8=0,9=0|F01;N_ELLE;8=0,9=0|F01;SKRCNT;8=0,9=0|
+9000 M2G_TART 4|F01;UNIT;8=0,9=0|F01;UNITBA;8=0,9=0|F01;UNITSK;8=0,9=0|F01;UNSKBA;8=0,9=0|
+9000 M2G_TART 5||SP.22|*|*|*|*|*|*|*|*|*|MM|PZ|897.000000|327.000000|22.000000|1|1|0|0|1|2|LAR|ALT|SPE|FRN22D01|*|748.000000|238.000000|0.000000|897.000000|327.000000|2147483647.000000|0|1207636||0|0|0|
+9000 ORD_S 303\@v2\fro|0|COD=FRN003270897|0|DES=FRONT H.327 W.897 22CM THICK|0|CODGRIGLIA=FRN001|1|X=897.0000|1|Y=327.0000|1|Z=22.0000|1|RID=2.0000|1|XMIN=748.0000|1|YMIN=238.0000|1|ZMIN=0.0000|1|XMAX=897.0000|1|YMAX=327.0000|1|ZMAX=22.0000|0|GRUPPO_RICERCA=GEM|
+9000 ORD_S 303\@v2\fro|0|CAT_PREF=FFRN|0|VARS_METRON=LVANCX;LVANDX;LVANSX|
+9000 ORD_S 303\@v2\fro|0|CATVEST=FFRN;TIPFRO;PRSA;GOLOR;MECC;TPAPE;VESTIZIONE;MANG;POSINT;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAV001;HBAS;LAF300;LAF100;LAF200;LAF400;AMSD;SLTFSC;LVANDX;LVANSX;RID04;LAVTAG;LAVFR;INFOPRD;KITFER;LAVM2X|
+9000 ORD_S 303\@v2\fro|0|CATVEST_HIDE=SLTFSC;INFOPRD;KITFER|0|VARIANTI=FAM;MOD;FFRN;TIPFRO;PRSA;TPAPE;MANG;COLMAN;TSPN;FCAS;TSPNCAS;TSTRCAS;ALCAS;LACAS;PRCAS;TGUI;FFCAS;LAF300;LAF100;LAF200;LAF400;SLTFSC|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|FRN003270897|FRONT H.327 W.897|22CM THICK||FRN001|0|0|2|FRN00|0||||0|1|1|*|GEM|0|MB|0|0|
+9000 M2G_TART 4|F01;GAP;8=0,9=0|F01;INTARS;8=0,9=0|F01;INTBA;8=0,9=0|F01;MAX2.2;8=0,9=0|F01;MAXBA;8=0,9=0|F01;MAXCNT;8=0,9=0|F01;MAXGBA;8=0,9=0|F01;MAXGRV;8=0,9=0|F01;MAXSBA;8=0,9=0|F01;MAXSKR;8=0,9=0|F01;MAXT60;8=0,9=0|F01;N_ELLE;8=0,9=0|F01;SKRCNT;8=0,9=0|
+9000 M2G_TART 4|F01;UNIT;8=0,9=0|F01;UNITBA;8=0,9=0|F01;UNITSK;8=0,9=0|F01;UNSKBA;8=0,9=0|
+9000 M2G_TART 5||SP.22|*|*|*|*|*|*|*|*|*|MM|PZ|897.000000|327.000000|22.000000|1|1|0|0|1|2|LAR|ALT|SPE|FRN22D01|*|748.000000|238.000000|0.000000|897.000000|327.000000|2147483647.000000|0|1207636||0|0|0|
+9000 ORD_S 304|0|COD=TOPBA008022|0|DES=WORKTOP CERAMICA THICK2,2 |0|CODGRIGLIA=TOP008|1|X=3190.0000|1|Y=22.0000|1|Z=650.0000|1|RID=5.0000|1|XMIN=50.0000|1|YMIN=22.0000|1|ZMIN=50.0000|1|XMAX=3190.0000|1|YMAX=22.0000|1|ZMAX=650.0000|0|GRUPPO_RICERCA=TOP|0|CAT_PREF=FNPS|
+9000 ORD_S 304|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=FNPS;FCMPLST;SPPS;PRFTOP;ANGSX;ANGDX;LAVPIA;LAVINC;LATVIS;ACCOSX;ACCODX;BORSX;BORDX;LAVTAG|0|CATVEST_HIDE=PRFTOP;ANGSX;ANGDX;LAVINC;LAVTAG|
+9000 ORD_S 304|0|VARIANTI=FAM;MOD;FNPS;SPPS;PRFTOP;ANGSX;ANGDX;LAVPIA;LATVIS;ACCOSX;ACCODX;BORSX;BORDX|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|TOPBA008022|WORKTOP CERAMICA THICK2,2|||TOP008|2|0|0|DRBACR00SP022|0||||0|1|1|MB|TOP|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|3190.000000|22.000000|650.000000|1|0|1|0|1|2|LAR|SPE|PRF||*|50.000000|22.000000|50.000000|3190.000000|22.000000|650.000000|0|1989580||0|0|0|
+9000 ORD_S 305|0|COD=SPECCHIERA|0|DES=SPECCHIERA |0|CODGRIGLIA=MIR001|1|X=0.0000|1|Y=0.0000|1|Z=0.0000|1|RID=7.0000|1|XMIN=1.0000|1|YMIN=1.0000|1|ZMIN=0.0000|1|XMAX=99999.0000|1|YMAX=99999.0000|1|ZMAX=0.0000|0|GRUPPO_RICERCA=ACC|0|CAT_PREF=*|
+9000 ORD_S 305|0|VARS_METRON=LVANCX;LVANDX;LVANSX|0|CATVEST=TIPMIR;FORMA;DIM001;DIM002;FNPRF;ILLUM;ANTAPP|0|VARIANTI=FAM;MOD;TIPMIR;FORMA;DIM001;DIM002;FNPRF;ILLUM;ANTAPP|0|LAST_PRZ=0.0000|
+9000 M2G_TART 1|SPECCHIERA|SPECCHIERA|||MIR001|2|1|2||0||||0|1|1|*|ACC|0|MB|0|0|
+9000 M2G_TART 4|*;*;8=0,9=0|
+9000 M2G_TART 5|||*|*|*|*|*|*|*|*|*|MM|PZ|0.000000|0.000000|0.000000|1|1|0|0|1|2|LAR|ALT|PRF||*|1.000000|1.000000|0.000000|99999.000000|99999.000000|2147483647.000000|0|1988829||0|0|0|
+9000 M2GALLVER 2
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|*|*|0|1|0|__|0
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|FFRN|LE08|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|PRSA|P00001|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|FNGOL|AL08|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|MANG|PRS001|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|COLMAN|AL08|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|FSTR|MS51|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|TSPN|LGB|0|1|0|__|0
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|FCAS|LBIN|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|TSPNCAS|LGBX|0|1|0|__|0
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|TIP001|TE0S1|0|1|0|__|1
+9000 M2G2 1|INTARSIO BAGNO|0|A01|INTBA|PIE01|SFORI|0|1|0|__|0

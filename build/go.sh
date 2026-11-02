@@ -20,6 +20,10 @@ printf 'test_contract        '; /usr/bin/ruby tools/test_contract.rb      | grep
 printf 'test_appliances      '; /usr/bin/ruby tools/test_appliances.rb    | grep 'checks,' | tail -1
 printf 'test_appliance_seam  '; /usr/bin/ruby tools/test_appliance_seam.rb | grep 'checks,' | tail -1
 printf 'test_wallpanels      '; /usr/bin/ruby tools/test_wallpanels.rb    | grep 'checks,' | tail -1
+# 2026-10-29, SketchUp -> Metron stage 2: the Ruby half (core/87_metron.rb) and the laptop half
+# (room_from_skp.py + rit_build.py, byte for byte against the two .rit already in the Metron database).
+printf 'test_metron          '; /usr/bin/ruby tools/test_metron.rb        | grep 'checks,' | tail -1
+printf 'test_room_from_skp   '; python3 metron/laptop/gen/test_room_from_skp.py | grep 'checks,' | tail -1
 
 # AND THE SUMMARY LINES ABOVE ARE NOT THE CHECK. A tail cannot fail a build:
 # the pipe swallows the exit status, so the suites are RUN AGAIN for their
@@ -28,6 +32,8 @@ printf 'test_wallpanels      '; /usr/bin/ruby tools/test_wallpanels.rb    | grep
 /usr/bin/ruby tools/test_appliances.rb    > /dev/null
 /usr/bin/ruby tools/test_appliance_seam.rb > /dev/null
 /usr/bin/ruby tools/test_wallpanels.rb    > /dev/null
+/usr/bin/ruby tools/test_metron.rb        > /dev/null
+python3 metron/laptop/gen/test_room_from_skp.py > /dev/null
 
 echo
 echo "===== 2. stage, BY NAME ====="
@@ -92,26 +98,22 @@ echo "===== 2. stage, BY NAME ====="
 # engine objects with their codes, the workmanship table p.41, the plumbing of
 # a sink role following the sink, recon + handoff for Tom, Elda BL-20..23.
 # 22 files predicted; the list must print 22.
-git add claude/README.md \
-        claude/recon-2026-10-16-sinks-integrated.md \
-        claude/handoff-2026-10-16-sinks-for-tom.md \
-        docs/Elda_Questions_7612_Baths_Laundry_v0.1.md \
-        registry/cesar/_manifest.json \
-        registry/cesar/bath_washbasins_integrated.json \
-        registry/cesar/tops_ceramic_linear_elements.json \
+# 2026-10-29, core 1.9.32: SketchUp -> Metron stage 2, pure half - pushed (2973a0b).
+# 2026-10-29, core 1.9.33: stage 2 closed. core/89_metron_run.rb (glue) + the palette button "Export to Metron";
+# 87_metron: a top is found by its UPPER face (the basin hangs below), coded bodies with no mapping are LISTED
+# (not_exported); panels 495 flush with the fronts (Andriy); the first real export of L-BA3 from the model
+# (metron/export/7612/7612_BA3.export.json, = the fixture; -> .rit differs from T_00019_v2 only in the 2 panel X).
+# .gitignore: __pycache__/. 11 files predicted; the list must print 11.
+git add .gitignore \
         src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/50_registry.rb \
-        src/ucon_cabinet_engine/core/60_generator.rb \
-        src/ucon_cabinet_engine/core/64_sink_mark.rb \
-        src/ucon_cabinet_engine/core/80_panel.rb \
+        src/ucon_cabinet_engine/core/87_metron.rb \
+        src/ucon_cabinet_engine/core/89_metron_run.rb \
         src/ucon_cabinet_engine/core/90_palette.rb \
-        tools/layout/bath_drawing_set.rb \
-        tools/layout/mep_drawing_set.rb \
-        tools/layout/ucon_drawing_set.rb \
-        tools/mep/mep_points.rb \
-        tools/mep/roles.json \
-        tools/test_contract.rb \
-        tools/test_mep.rb \
+        tools/test_metron.rb \
+        metron/export/fixtures/7612_BA2.export.json \
+        metron/export/fixtures/7612_BA3.export.json \
+        metron/export/7612/7612_BA3.export.json \
+        metron/laptop/gen/test_room_from_skp.py \
         build/go.sh
 
 echo
