@@ -6,6 +6,7 @@
 require 'json'
 load File.join(__dir__, 'ucon_drawing_set.rb')
 load File.join(__dir__, '..', 'mep', 'mep_points.rb')
+load File.join(__dir__, 'details', 'blocking_2x6.rb')
 
 module UCON
   module DrawingSet
@@ -402,6 +403,10 @@ module UCON
       zx, zy, zw, zh = zone
       vp = viewport(skp, c[:scene], zx, zy, zw, zh, scale: 1.0 / 24, render: :raster)
       @cur_vp = vp
+      # CABINETS IN FRONT OF THE BLOCKING (Andriy 2026-11-04, 1791 v0.6): with @blk_under_view the bands go on a layer
+      # UNDER the view and the view has no background, so the cabinet lines (wireframe scene) sit on top of the bands.
+      vp.display_background = false if @blk_under_view
+      lb = @blk_under_view && @l_blk ? @l_blk : nil
       a0 = c[:a0].to_f; a1 = c[:a1].to_f; zmax = c[:zmax].to_f
       pa = vp.model_to_paper_point(p3.(a0, 0)); pb = vp.model_to_paper_point(p3.(a1, zmax))
       right_end = vp.model_to_paper_point(p3.(a1, 0)).x > pa.x ? a1 : a0
@@ -426,10 +431,34 @@ module UCON
       # blocking bands
       c[:blocks].each do |b|
         u = vp.model_to_paper_point(p3.(b['a0'], b['cl'] + b['h'] / 2.0)); v = vp.model_to_paper_point(p3.(b['a1'], b['cl'] - b['h'] / 2.0))
-        x = [u.x, v.x].min; y = [u.y, v.y].min
-        rect(x, y, (u.x - v.x).abs, (u.y - v.y).abs, l, stroke: INK2, sw: 0.5, fill: [0xE4, 0xE4, 0xE0])
-        line(x, y + (u.y - v.y).abs / 2, x + (u.x - v.x).abs, y + (u.y - v.y).abs / 2, l, w: 0.35, c: INK2, dash: true)
-        text("#{b['id']}  2x6 BLOCKING  CL #{mep_len(b['cl'])}", x + (u.x - v.x).abs - 0.04, y - 0.13, l, size: 6.5, font: MONO, c: INK2, align: :right)
+        x = [u.x, v.x].min; y = [u.y, v.y].min; w = (u.x - v.x).abs; h = (u.y - v.y).abs
+        rect(x, y, w, h, lb || l, stroke: INK2, sw: 0.5, fill: [0xE4, 0xE4, 0xE0])
+        line(x, y + h / 2, x + w, y + h / 2, lb || l, w: 0.35, c: INK2, dash: true)
+        # to the next stud past each end (Andriy 2026-10-26): dashed, no fill - the GC lands it on the real studs
+        if b['ext'].to_i > 0
+          e = (vp.model_to_paper_point(p3.(b['a0'] + b['ext'], 0)).x - vp.model_to_paper_point(p3.(b['a0'], 0)).x).abs
+          rect(x - e, y, e, h, lb || l, stroke: INK2, sw: 0.5, dash: true)
+          rect(x + w, y, e, h, lb || l, stroke: INK2, sw: 0.5, dash: true)
+        end
+        # ONLY THE ID on the band, inside its left extension (1791 v0.2c): a full label lands on the points above the
+        # vanity or on the height column at the right. What it is goes into one note per elevation, its height into
+        # the height column ("B1 CL").
+        ex = b['ext'].to_i > 0 ? (vp.model_to_paper_point(p3.(b['a0'] + b['ext'], 0)).x - vp.model_to_paper_point(p3.(b['a0'], 0)).x).abs : 0
+        text(b['id'], ex > 0 ? x - ex / 2 : x + 0.12, y + h / 2 - 0.06, l, size: 6.5, font: MONO, c: INK, align: :center)
+      end
+      unless c[:blocks].empty?
+        q = vp.model_to_paper_point(p3.(a0 + (a1 - a0) * 0.3, zmax - 250))
+        note_text("#{c[:blocks].map { |b| b['id'] }.join(' / ')}: 2x6 BLOCKING, FLAT IN THE STUD WALL - SEE #{@detail_code || 'D-501'}\n" \
+                  "SOLID = BEHIND THE CABINET, DASHED = TO THE NEXT STUD", q.x, q.y)
+      end
+      # CABINET OUTLINE ON TOP OF THE BANDS (Andriy 2026-11-04, 1791 v0.4 M-201): the grey bands hid the top and bottom
+      # edges of the vanity, so the axis line read as the cabinet edge. outlines: [{ a0:, a1:, z0:, z1:, label: }] are
+      # drawn after the bands, dashed accent, as on D-501 - the band axis then visibly sits ON the cabinet edge.
+      Array(c[:outlines]).each do |o|
+        u = vp.model_to_paper_point(p3.(o[:a0], o[:z1])); v = vp.model_to_paper_point(p3.(o[:a1], o[:z0]))
+        x = [u.x, v.x].min; y = [u.y, v.y].min; w = (u.x - v.x).abs; h = (u.y - v.y).abs
+        rect(x, y, w, h, l, stroke: ACCENT, sw: 0.9, dash: true)
+        text(o[:label].to_s, x + 0.05, y + h / 2 - 0.05, l, size: 6, font: MONO, c: ACCENT) if o[:label]
       end
       # other blocking shown for information, by others (Andriy 2026-10-15: the anti-tip 2x4 over the tall wall stays
       # on our drawings, marked BY CABINET INSTALLERS): { id:, a0:, a1:, z0:, z1:, label:, hidden: } - dashed when it

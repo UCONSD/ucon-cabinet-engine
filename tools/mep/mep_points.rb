@@ -175,7 +175,21 @@ module UCON
     # the face of the body that touches that wall.
     BLOCK_BELOW_TOP = 50
     BLOCK_H = 140 # 2x6 actual 5 1/2"
-    def blocking(boxes, along:, face:, wall_at:, prefix: 'B', start: 1, extra: [])
+    # EXTENSION (Andriy 2026-10-26): every run of blocking goes on to the NEXT stud past each end of the cabinet - one bay,
+    # 16" o.c. = 406 - so its ends always land on studs whatever the stud layout. Drawn dashed beyond the solid part.
+    # BOTTOM ROW (Andriy 2026-10-26, 1791 Leicht vanity): a wall-hung cabinet whose maker asks for fixing at the top AND
+    # the bottom gets a second 2x6, axis 50 above its bottom edge. A project switch, not a global rule: 7612 has one row.
+    BLOCK_EXT = 406
+    BLOCK_ABOVE_BOTTOM = 50
+    # AXIS ON THE EDGE (Andriy 2026-11-04, 1791): the 2x6 axis sits ON the cabinet top edge (and the bottom row ON the bottom
+    # edge), so the 5 1/2" band covers +-70 around the edge and the cabinet can still move up or down on site; the hanging
+    # rail (50 below the top) stays inside the band. Pass below_top: 0, above_bottom: 0 (project switch blocking.edge_axis).
+    # CEILING (Andriy 2026-11-04): a run whose band would reach the framing top plate (cabinets up to the ceiling) goes
+    # right UNDER the plate: band top = ceiling - TOP_PLATE (1 1/2"), axis 70 lower. ceiling: nil = no check.
+    # BOTTOM ROW only for Leicht cabinets (Andriy 2026-11-04): the project sets bottom_row from its brand.
+    TOP_PLATE = 38
+    def blocking(boxes, along:, face:, wall_at:, prefix: 'B', start: 1, extra: [], bottom_row: false, ext: BLOCK_EXT,
+                 below_top: BLOCK_BELOW_TOP, above_bottom: BLOCK_ABOVE_BOTTOM, ceiling: nil, top_plate: TOP_PLATE)
       a0, a1 = along == 'x' ? %w[x0 x1] : %w[y0 y1]
       # ONLY BEHIND CABINET BACKS (Andriy 2026-10-15, after v0.8): fillers and panels make no zone, and a cabinet
       # counts only when its BACK is on that wall ('back' = world direction of the carcass back, from mep_boxes; the
@@ -192,18 +206,37 @@ module UCON
         bs.sort_by { |b| b[a0] }.each do |b|
           last = zones.reverse.find { |z| z[:kind] == kind && z[:top] == b['z1'].round }
           if last && b[a0] - last[:a1] <= 60
-            last[:a1] = [last[:a1], b[a1]].max; last[:codes] << b['code']
+            last[:a1] = [last[:a1], b[a1]].max; last[:codes] << b['code']; last[:bot] = [last[:bot], b['z0'].round].min
           else
-            zones << { kind: kind, a0: b[a0].to_f, a1: b[a1].to_f, top: b['z1'].round, codes: [b['code']] }
+            zones << { kind: kind, a0: b[a0].to_f, a1: b[a1].to_f, top: b['z1'].round, bot: b['z0'].round, codes: [b['code']] }
           end
         end
       end
       zones.reject! { |z| z[:a1] - z[:a0] < 150 } # end panels and top fillers on edge are not a zone
       zones.concat(extra)
-      zones.sort_by { |z| [-z[:top], z[:a0]] }.each_with_index.map do |z, i|
-        { 'id' => "#{prefix}#{start + i}", 'sys' => 'B', 'a0' => z[:a0].round, 'a1' => z[:a1].round, 'cl' => z[:top] - BLOCK_BELOW_TOP,
-          'h' => BLOCK_H, 'item' => "2x6 blocking, CL #{z[:top] - BLOCK_BELOW_TOP} AFF (#{z[:kind] == 'mirror' ? 'mirror' : 'top of ' + z[:codes].uniq.join(' ')} at #{z[:top]})",
-          'status' => 'DECISION', 'src' => 'Andriy 2026-10-15: 2x6, axis 50 below the top edge, on the hanging rail axis' }
+      rows = zones.map do |z|
+        cl = z[:top] - below_top
+        if ceiling && cl + BLOCK_H / 2.0 > ceiling - top_plate
+          cl = (ceiling - top_plate - BLOCK_H / 2.0).round
+          next { z: z, cl: cl, what: "top of #{z[:codes].uniq.join(' ')} at #{z[:top]}, under the ceiling #{ceiling.round} - top plate #{top_plate}",
+                 src: 'Andriy 2026-11-04: cabinet up to the ceiling - 2x6 right under the 1 1/2" top plate' }
+        end
+        { z: z, cl: cl,
+          what: "#{z[:kind] == 'mirror' ? 'mirror' : 'top of ' + z[:codes].uniq.join(' ')} at #{z[:top]}",
+          src: below_top.zero? ? 'Andriy 2026-11-04: 2x6 axis ON the top edge of the cabinet' : 'Andriy 2026-10-15: 2x6, axis 50 below the top edge, on the hanging rail axis' }
+      end
+      if bottom_row
+        zones.select { |z| z[:kind] == 'cab' && z[:bot].to_i > 100 }.each do |z|
+          rows << { z: z, cl: z[:bot] + above_bottom, what: "bottom of #{z[:codes].uniq.join(' ')} at #{z[:bot]}",
+                    src: above_bottom.zero? ? 'Andriy 2026-11-04: wall-hung cabinet fixed top and bottom, bottom-row axis ON the bottom edge' : 'Andriy 2026-10-26: wall-hung cabinet fixed top and bottom, axis 50 above the bottom edge' }
+        end
+      end
+      rows.sort_by { |r| [-r[:cl], r[:z][:a0]] }.each_with_index.map do |r, i|
+        z = r[:z]
+        ex = ext.to_i > 0 ? "; extend to the next stud past each end (#{ext} at 16\" o.c.)" : ''
+        { 'id' => "#{prefix}#{start + i}", 'sys' => 'B', 'a0' => z[:a0].round, 'a1' => z[:a1].round, 'cl' => r[:cl],
+          'h' => BLOCK_H, 'ext' => ext.to_i, 'item' => "2x6 blocking, CL #{r[:cl]} AFF (#{r[:what]})#{ex}",
+          'status' => 'DECISION', 'src' => r[:src] }
       end
     end
   end

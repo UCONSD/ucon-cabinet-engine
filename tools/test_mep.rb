@@ -82,6 +82,26 @@ wb = { 'code' => 'LVBP04.003', 'cls' => 'accessory', 'x0' => 250.0, 'x1' => 950.
 check('1.9.31: an engine washbasin counts as a sink', MEP.sink_box?(wb) && !MEP.sink_box?(wb.merge('code' => 'UCON-MIR-RMU-120x070')))
 mir = { 'code' => 'UCON-MIR-RMU-120x070', 'cls' => 'accessory', 'x0' => 0.0, 'x1' => 1200.0, 'y0' => -35.0, 'y1' => 0.0, 'z0' => 1250.0, 'z1' => 1950.0 }
 check('1.9.31: a washbasin is never a blocking zone; the mirror still is', MEP.blocking([wb.merge('y1' => 0.0), mir], along: 'x', face: 'y1', wall_at: 0).size == 1)
+# 2026-10-26 (1791 ADU, Andriy): runs extend to the next stud (406 each side, 16" o.c.); a wall-hung cabinet may take a
+# second row 50 above its bottom edge - a project switch (bottom_row:), off by default so 7612 keeps one row
+van = { 'code' => 'VANITY', 'cls' => 'cabinet', 'back' => 'y+', 'x0' => 930, 'x1' => 2186, 'y0' => 1000, 'y1' => 1600, 'z0' => 254, 'z1' => 825 }
+b1 = MEP.blocking([van], along: 'x', face: 'y1', wall_at: 1600)
+check('blocking default: one row at CL 775, extension 406', b1.map { |b| [b['id'], b['cl'], b['ext']] } == [['B1', 775, 406]], b1.map { |b| [b['id'], b['cl'], b['ext']] }.inspect)
+b2 = MEP.blocking([van], along: 'x', face: 'y1', wall_at: 1600, bottom_row: true)
+check('bottom_row: B1 top CL 775, B2 bottom CL 304, same run', b2.map { |b| [b['id'], b['cl'], b['a0'], b['a1']] } == [['B1', 775, 930, 2186], ['B2', 304, 930, 2186]], b2.map { |b| [b['id'], b['cl']] }.inspect)
+flo = van.merge('z0' => 100, 'z1' => 2300)
+check('bottom_row: no bottom row for a floor-standing tall', MEP.blocking([flo], along: 'x', face: 'y1', wall_at: 1600, bottom_row: true).size == 1)
+check('item text names the extension', b1[0]['item'].include?('next stud'))
+# axis ON the edge (Andriy 2026-11-04, 1791): top row on the top edge, bottom row on the bottom edge
+b3 = MEP.blocking([van], along: 'x', face: 'y1', wall_at: 1600, bottom_row: true, below_top: 0, above_bottom: 0)
+check('edge axis: B1 CL 825 = top edge, B2 CL 254 = bottom edge', b3.map { |b| [b['id'], b['cl']] } == [['B1', 825], ['B2', 254]], b3.map { |b| [b['id'], b['cl']] }.inspect)
+check('edge axis: source names the 2026-11-04 rule', b3.all? { |b| b['src'].include?('2026-11-04') })
+# ceiling (Andriy 2026-11-04): a tall run up to the ceiling 2421 - band right under the 1 1/2" (38) top plate
+tall = van.merge('z0' => 900, 'z1' => 2421)
+b4 = MEP.blocking([tall], along: 'x', face: 'y1', wall_at: 1600, below_top: 0, ceiling: 2421)
+check('ceiling: CL = 2421 - 38 - 70 = 2313', b4.map { |b| b['cl'] } == [2313], b4.map { |b| b['cl'] }.inspect)
+b5 = MEP.blocking([van], along: 'x', face: 'y1', wall_at: 1600, below_top: 0, ceiling: 2421)
+check('ceiling: a vanity far below the ceiling keeps its edge axis 825', b5.map { |b| b['cl'] } == [825], b5.map { |b| b['cl'] }.inspect)
 puts "#{$checks} checks, #{$fails.size} failures"
 $fails.each { |f| puts "  FAIL #{f}" }
 exit($fails.empty? ? 0 : 1)

@@ -336,6 +336,70 @@
           "src": "washer model TBD (LG-class 27\")"
         }
       ]
+    },
+    "vanity_basin_deck": {
+      "center_on": "sink",
+      "points": [
+        {
+          "id": "HW",
+          "sys": "P",
+          "sym": "HW",
+          "u": -100,
+          "z": 560,
+          "item": "Hot water stub-out, deck faucet",
+          "req": "1/2\" HW stub-out with angle stop, inside the wall-hung vanity behind the sink drawer cut-out. Height and spread to fit the drawer cut-out of the vanity (dealer drawing).",
+          "status": "PLANNING",
+          "src": "1791 pilot 2026-10-26: our default; vanity drawer cut-out not on the dealer sheets"
+        },
+        {
+          "id": "CW",
+          "sys": "P",
+          "sym": "CW",
+          "u": 100,
+          "z": 560,
+          "item": "Cold water stub-out, deck faucet",
+          "req": "1/2\" CW stub-out with angle stop, same zone as HW.",
+          "status": "PLANNING",
+          "src": "1791 pilot 2026-10-26: our default"
+        },
+        {
+          "id": "DR",
+          "sys": "P",
+          "sym": "DR",
+          "u": 0,
+          "z": 500,
+          "item": "Basin drain / trap arm",
+          "req": "1 1/2\" waste stub-out inside the wall-hung vanity, above the lower drawer, inside the sink drawer cut-out zone. Height to confirm with the vanity manufacturer (siphon zone).",
+          "status": "PLANNING",
+          "src": "1791 pilot 2026-10-26: same default as basin_wall_faucet DR 500"
+        }
+      ]
+    },
+    "wc_wall_hung": {
+      "points": [
+        {
+          "id": "DR",
+          "sys": "P",
+          "sym": "DR",
+          "u": 0,
+          "z": 229,
+          "item": "WC drain, in-wall carrier",
+          "req": "3\" / 4\" waste per the in-wall carrier (BY OTHERS). Outlet height and carrier frame per the carrier manual; wall depth to suit the carrier.",
+          "status": "PLANNING",
+          "src": "1791 pilot 2026-10-26: typical in-wall carrier outlet ~9\" (229) AFF - carrier model TBD"
+        },
+        {
+          "id": "CW",
+          "sys": "P",
+          "sym": "CW",
+          "u": 0,
+          "z": 1100,
+          "item": "WC water supply, in-wall carrier",
+          "req": "1/2\" CW to the cistern valve of the in-wall carrier (BY OTHERS), position per the carrier manual.",
+          "status": "PLANNING",
+          "src": "1791 pilot 2026-10-26: carrier model TBD"
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,130 @@
+{
+  "project": "1791 - ADU bathroom (MEP pilot, third-party design)",
+  "model": "1791_ADU_MEP_v0.1 (probes 1791_01..03, Mac Mini, 2026-10-26)",
+  "source": "KPS designstudio / Lusso Inc., 1791_ADU_installation.pdf, 26.09.2026 (Leicht 238 METURO) - geometry only, no MEP on it",
+  "room": "ADU BATH",
+  "frame": "origin = inner corner of wall 4 (left) and wall 1 (back); X along wall 1; wall 1 inner face at Y = 1600; mm",
+  "refs": {
+    "W4": {
+      "axis": "x",
+      "at": 0,
+      "text": "wall 4 face"
+    }
+  },
+  "anchors": [
+    {
+      "role": "vanity_basin_deck",
+      "box": {
+        "code": "VANITY",
+        "cls": "cabinet",
+        "back": "y+",
+        "x0": 930,
+        "x1": 2186,
+        "y0": 1000,
+        "y1": 1600,
+        "z0": 254,
+        "z1": 825
+      },
+      "axis": "x",
+      "back": "y1",
+      "v": 0,
+      "ref": "W4",
+      "lab": "S",
+      "item": "Wall-hung vanity Leicht METURO 1256, sink CL 1558 (KPS)",
+      "where": "ADU BATH, wall 1, inside the vanity",
+      "ids": {
+        "HW": "P1",
+        "CW": "P2",
+        "DR": "P3"
+      }
+    },
+    {
+      "role": "wc_wall_hung",
+      "box": {
+        "code": "WC",
+        "cls": "fixture",
+        "x0": 277,
+        "x1": 637,
+        "y0": 1060,
+        "y1": 1600,
+        "z0": 230,
+        "z1": 420
+      },
+      "axis": "x",
+      "back": "y1",
+      "v": 0,
+      "ref": "W4",
+      "lab": "S",
+      "item": "Wall-hung WC on an in-wall carrier (BY OTHERS), CL 457 by scale",
+      "where": "ADU BATH, wall 1, in the carrier",
+      "note": "WC CL by scale from the KPS sheets (not dimensioned) - confirm.",
+      "ids": {
+        "DR": "P4",
+        "CW": "P5"
+      }
+    }
+  ],
+  "placed": [
+    {
+      "id": "E1",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 1000,
+      "y": 1600,
+      "z": 1100,
+      "ref": "W4",
+      "lab": "S",
+      "item": "Bathroom receptacle",
+      "req": "120 V 20 A GFCI, bathroom circuit, within 36\" of the basin (CEC 210.52(D)). Left of the mirror, above the top; final location with the client.",
+      "where": "ADU BATH, wall 1, left of the mirror",
+      "status": "PLANNING",
+      "src": "CEC 210.52(D); location ours"
+    },
+    {
+      "id": "E2",
+      "sys": "E",
+      "sym": "J",
+      "item": "Mirror (round, CL 1558) - lit or not?",
+      "req": "IF the mirror is lit: 120 V J-box behind the mirror on CL 1558, height per the mirror fixing. Not lit: no point.",
+      "where": "ADU BATH, behind the mirror",
+      "status": "DECISION",
+      "src": "KPS sheets show the mirror only - dealer / client question"
+    },
+    {
+      "id": "E3",
+      "sys": "E",
+      "item": "Exhaust fan",
+      "req": "Ceiling exhaust fan, ducted to the outside, humidity control (CALGreen 4.506.1 - bathroom with a shower). Location and size by the GC / electrician.",
+      "where": "ADU BATH, ceiling",
+      "status": "PLANNING",
+      "src": "CALGreen 4.506.1; not on the KPS sheets"
+    },
+    {
+      "id": "E4",
+      "sys": "E",
+      "item": "Lighting",
+      "req": "Ceiling / vanity lighting not on the KPS sheets - lighting plan by others.",
+      "where": "ADU BATH",
+      "status": "PLANNING",
+      "src": "not on the KPS sheets"
+    },
+    {
+      "id": "P6",
+      "sys": "P",
+      "item": "Shower valve, head, drain (BY OTHERS)",
+      "req": "Walk-in shower x 2325..3207 (glass panel at ~2315 by scale). Valve, head and drain (linear / point) not on the KPS sheets - by others, coordinate with the glass panel.",
+      "where": "ADU BATH, shower zone",
+      "status": "PLANNING",
+      "src": "KPS sheets: glass panel only"
+    }
+  ],
+  "notes": [
+    "Geometry from the dealer sheets (KPS, 26.09.2026). Points are rough-in coordination, not engineered; code compliance by the GC and the AHJ.",
+    "WC, shower valve / head / drain, exhaust fan, lighting: BY OTHERS.",
+    "Vanity points P1-P3 are our defaults until the dealer gives the drawer cut-out / siphon zone of the METURO sink unit."
+  ],
+  "blocking": {
+    "bottom_row": true,
+    "why": "Andriy 2026-10-26: this vanity brand (Leicht) is fixed top and bottom"
+  }
+}
