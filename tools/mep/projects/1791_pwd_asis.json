@@ -1,0 +1,159 @@
+{
+  "project": "1791 - Powder bath, AS-IS rough-ins (site survey 2026-10-29, DISTO 2026-11-04)",
+  "model": "1791_PWD_MEP_v0.1 (probe 1791_41: niche 918 x 667, Leicht vanity per KPS, as-is markers)",
+  "source": "UCON site survey: Leica DISTO IMG_4678 (918 niche, 505 R-wall to R stub, 1146 stub height, 556 R-wall to drain, 644 drain height) + photos IMG_4395 / IMG_4407; cabinets from KPS / Lusso 1791_Powder 26.09.2026 (Leicht 716 IDEA-C)",
+  "room": "POWDER",
+  "frame": "origin = inner corner of the left niche wall and the back wall; X along the back wall; back wall face at Y = 667; mm",
+  "refs": {
+    "WL": {
+      "axis": "x",
+      "at": 0,
+      "text": "left niche wall"
+    },
+    "WB": {
+      "axis": "y",
+      "at": 667,
+      "text": "back wall"
+    }
+  },
+  "blocking_boxes": [
+    {
+      "code": "VANITY",
+      "cls": "cabinet",
+      "back": "y+",
+      "x0": 0,
+      "x1": 918,
+      "y0": 179,
+      "y1": 667,
+      "z0": 457,
+      "z1": 762
+    }
+  ],
+  "anchors": [],
+  "placed": [
+    {
+      "id": "P1",
+      "sys": "P",
+      "sym": "DR",
+      "x": 362,
+      "y": 667,
+      "z": 644,
+      "ref": "WL",
+      "group": "vanity",
+      "item": "Vanity drain - AS-IS",
+      "req": "Waste stub-out in the wall, installed. Inside the sink drawer unit 27..687 (KPS sink CL 357): drawer needs the siphon U-cut.",
+      "where": "POWDER, back wall, behind the vanity",
+      "status": "AS-IS",
+      "src": "DISTO: 556 from the right wall (918 - 556 = 362), 644 AFF"
+    },
+    {
+      "id": "P2",
+      "sys": "P",
+      "sym": "W",
+      "x": 413,
+      "y": 667,
+      "z": 1146,
+      "ref": "WL",
+      "short": "SPOUT CL",
+      "item": "Wall faucet SPOUT - AS-IS",
+      "req": "Exact point, no zone (Andriy 2026-11-04): the spout CL must be ON the sink cabinet CL 357 (unit 27..687). As-is 413 = 56 off - to be moved.",
+      "where": "POWDER, back wall, above the vessel",
+      "status": "AS-IS / CONFIRM",
+      "src": "DISTO: 505 from the right wall (918 - 505 = 413), 1146 AFF",
+      "flag": true
+    },
+    {
+      "id": "P3",
+      "sys": "P",
+      "sym": "W",
+      "x": 305,
+      "y": 667,
+      "z": 1146,
+      "ref": "WL",
+      "short": "FAUCET L",
+      "item": "Wall faucet handle / valve stub - AS-IS",
+      "req": "Second faucet stub. Which stub is the spout: confirm with the faucet model - the SPOUT must land on the sink CL 357.",
+      "where": "POWDER, back wall, above the vessel",
+      "status": "AS-IS / APPROX",
+      "src": "X from photo IMG_4395 +-10; Z = P2 - VERIFY WITH GC",
+      "flag": true,
+      "scope": "out",
+      "scope_why": "faucet handle / valve: its position does not matter, only the spout (Andriy 2026-11-04)"
+    },
+    {
+      "id": "P4",
+      "sys": "P",
+      "x": 517,
+      "y": 667,
+      "z": 650,
+      "ref": "WL",
+      "lab": "S",
+      "short": "TEST LINE - CUT",
+      "item": "Copper test line (capped) - AS-IS",
+      "req": "Capped copper line used for the system test, runs ~540..755 AFF inside the sink drawer zone. GC to CUT IT BACK before the vanity is installed (Andriy 2026-11-04).",
+      "where": "POWDER, back wall, behind the vanity",
+      "status": "TO BE REMOVED",
+      "src": "photo +-50; GC per Andriy 2026-11-04",
+      "flag": true
+    },
+    {
+      "id": "E1",
+      "sys": "E",
+      "sym": "J",
+      "x": 918,
+      "y": 587,
+      "z": 950,
+      "ref": "WB",
+      "refaxis": "y",
+      "lab": "S",
+      "short": "OPENING ?",
+      "item": "Opening in the right niche wall - AS-IS, function?",
+      "req": "Box opening ~80 from the back wall, centre ~950 AFF: a 4\" box bottom ~900 is only ~35 above the top (864). Must clear the countertop and any splash. Confirm function and final height.",
+      "where": "POWDER, right niche wall, above the top",
+      "status": "AS-IS / APPROX",
+      "src": "photo +-80 - VERIFY WITH GC",
+      "flag": true
+    }
+  ],
+  "notes": [
+    "Site survey (UCON): horizontal positions and the drain / faucet heights measured with Leica DISTO are AS-IS. Others from the photo - VERIFY WITH GC.",
+    "Cabinets from KPS / Lusso 1791_Powder 26.09.2026 (Leicht 716 IDEA-C): wall-hung 457..762 AFF, top 102 -> 864, vessel sink, wall-mount faucet."
+  ],
+  "blocking": {
+    "bottom_row": true,
+    "edge_axis": true,
+    "ext": 0,
+    "why": "Leicht: fixed top and bottom, axis ON the edges (Andriy 2026-11-04). Niche: the run goes wall to wall (918), no extension - the niche walls are the ends."
+  },
+  "scope_rule": "Andriy 2026-11-04: sheets show only what touches UCON cabinetry. Faucet stubs ARE shown here: the spout must sit on the CL of the vessel on our top (Andriy 2026-11-04). Wall-mount faucet: no plumbing zone; only the exact SPOUT CL, on the sink cabinet CL; the handle may be left or right (Andriy 2026-11-04).",
+  "brand": "Leicht",
+  "ceiling_mm": null,
+  "vanity": {
+    "x0": 27,
+    "sink_unit": [
+      27,
+      687
+    ],
+    "side_unit": [
+      687,
+      887
+    ],
+    "panel_r": [
+      887,
+      918
+    ],
+    "filler_l": [
+      0,
+      27
+    ],
+    "z0": 457,
+    "z1": 762,
+    "depth": 488,
+    "top_depth": 508,
+    "top_th": 102,
+    "sink_cl": 357,
+    "vessel_d": 520,
+    "vessel_h": 150,
+    "vessel_y_from_wall": 297
+  }
+}

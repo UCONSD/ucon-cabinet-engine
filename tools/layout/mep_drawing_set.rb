@@ -40,13 +40,14 @@ module UCON
     end
 
     # ---------------------------------------------------------------- units
-    # Inches to the nearest 1/4" (Andriy 2026-10-15, kitchen); 12" and up as feet-inches, as a US contractor reads them.
+    # Inches to the nearest 1/4" (Andriy 2026-10-15, kitchen). INCHES ONLY, never feet-inches (Andriy 2026-11-04, 1791
+    # Powder: 49 1/4", not 4'-1 1/4") - replaces the feet-inches form of 2026-10-15. Scale notes (1" = 1'-0") stay as they are.
     def in_q(mmv)
       q = (mmv.to_f / 25.4 * 4).round
       neg = q.negative?; q = q.abs
       whole = q / 4; frac = q % 4
       fr = { 0 => '', 1 => ' 1/4', 2 => ' 1/2', 3 => ' 3/4' }[frac]
-      t = if whole >= 12 then "#{whole / 12}'-#{whole % 12}#{fr}\"" else "#{whole}#{fr}\"" end
+      t = "#{whole}#{fr}\""
       t = t.sub(/\A0 /, '') if whole.zero? && !fr.empty?
       neg ? "-#{t}" : t
     end
@@ -143,7 +144,7 @@ module UCON
     # base: Point2d on the base line at the reference; u: unit along the base; n: unit normal away from the drawing
     # (the text side); feats: [[Point2d feature, mm, tag]] - an extension line runs from the feature to the base unless
     # ext: false; zero: [Point2d, tag] - the reference itself.
-    MEP_ORD_GAP = 0.105  # in, min. distance between two texts along the base
+    MEP_ORD_GAP = 0.13   # in, min. distance between two texts along the base (0.105 -> 0.13, 1791 Powder 2026-11-04: P2 / PZ touched)
     MEP_ORD_SIZE = 6.5
 
     def mep_ord_text(str, x, y, n, layer)
@@ -371,21 +372,22 @@ module UCON
       @l_dims = keep if keep
     end
 
-    def mep_page_plan(skp, code, title, scene, extent, pts, notes, render: :vector, dims: nil, after: nil)
+    def mep_page_plan(skp, code, title, scene, extent, pts, notes, render: :vector, dims: nil, after: nil, scale: nil, view_key: :half)
       next_page(title); header(@mep_scale || SCALE_HALF); sheet_code(code)
       zx, zy, zw, zh = work_zone
       xa, xb, ya, yb = extent
-      vp = viewport(skp, scene, zx, zy, zw, zh, scale: 1.0 / 24, render: render)
+      # scale: (1791 Powder 2026-11-04) a small room reads better at 1" = 1'-0"; default 1/2"
+      vp = viewport(skp, scene, zx, zy, zw, zh, scale: scale || 1.0 / 24, render: render)
       a = vp.model_to_paper_point(P.(xa, ya)); b = vp.model_to_paper_point(P.(xb, yb))
       w = (b.x - a.x).abs; h = (b.y - a.y).abs
-      raise "STOP: MEP plan does not fit at 1/2\": #{w.round(2)} x #{h.round(2)} in, window #{zw.round(2)} x #{zh.round(2)}" if w > zw || h > zh
+      raise "STOP: MEP plan does not fit at #{scale ? "1/#{(1 / scale).round}" : '1/2"'}: #{w.round(2)} x #{h.round(2)} in, window #{zw.round(2)} x #{zh.round(2)}" if w > zw || h > zh
       vp.transform!(Geom::Transformation2d.new([1, 0, 0, 1, zx + (zw - w) / 2 - [a.x, b.x].min, zy + (zh - h) / 2 - [a.y, b.y].min]))
       vp.render if vp.render_needed?
       n = mep_plan_marks(vp, pts)
       mep_plan_dims(vp, dims[:groups], dims[:locate]) if dims
       after.call(vp) if after
       notes.each { |txt, x, y| q = vp.model_to_paper_point(P.(x, y)); note_text(txt, q.x, q.y) }
-      view(WX, WY, WW, WH, 1, code, title, :half, placeholder: false)
+      view(WX, WY, WW, WH, 1, code, title, view_key, placeholder: false)
       @index << [code, title]
       @log << "#{code}: #{n} symbols, #{notes.size} notes, plan #{w.round(2)} x #{h.round(2)} in"
     end
@@ -401,7 +403,8 @@ module UCON
         axis == :x ? Geom::Point3d.new(am / 25.4, depth / 25.4, zm / 25.4) : Geom::Point3d.new(depth / 25.4, am / 25.4, zm / 25.4)
       end
       zx, zy, zw, zh = zone
-      vp = viewport(skp, c[:scene], zx, zy, zw, zh, scale: 1.0 / 24, render: :raster)
+      # c[:scale] (1791 Powder 2026-11-04): a narrow wall reads better at 1" = 1'-0"; default 1/2"
+      vp = viewport(skp, c[:scene], zx, zy, zw, zh, scale: c[:scale] || 1.0 / 24, render: :raster)
       @cur_vp = vp
       # CABINETS IN FRONT OF THE BLOCKING (Andriy 2026-11-04, 1791 v0.6): with @blk_under_view the bands go on a layer
       # UNDER the view and the view has no background, so the cabinet lines (wireframe scene) sit on top of the bands.
@@ -412,10 +415,11 @@ module UCON
       right_end = vp.model_to_paper_point(p3.(a1, 0)).x > pa.x ? a1 : a0
       cw = (pb.x - pa.x).abs; ch = (pb.y - pa.y).abs
       need_w = cw + 3 * ROW + 2 * TEXT_ROOM + 0.6
-      need_h = ch + 3 * ROW + 2 * TEXT_ROOM
-      raise "STOP: #{c[:scene]} does not fit at 1/2\": #{need_w.round(2)} x #{need_h.round(2)} in, window #{zw.round(2)} x #{zh.round(2)}" if need_w > zw || need_h > zh
+      top_x = c[:top_from] ? ROW + 0.75 : 0 # room for the top ordinate row (1791 Powder)
+      need_h = ch + 3 * ROW + 2 * TEXT_ROOM + top_x
+      raise "STOP: #{c[:scene]} does not fit at #{c[:scale] ? "1/#{(1 / c[:scale]).round}" : "1/2\""}: #{need_w.round(2)} x #{need_h.round(2)} in, window #{zw.round(2)} x #{zh.round(2)}" if need_w > zw || need_h > zh
       left = [pa.x, pb.x].min; top = [pa.y, pb.y].min
-      vp.transform!(Geom::Transformation2d.new([1, 0, 0, 1, zx + (zw - need_w) / 2 + TEXT_ROOM + 0.3 - left, zy + (zh - need_h) / 2 + TEXT_ROOM - top]))
+      vp.transform!(Geom::Transformation2d.new([1, 0, 0, 1, zx + (zw - need_w) / 2 + TEXT_ROOM + 0.3 - left, zy + (zh - need_h) / 2 + TEXT_ROOM + top_x - top]))
       q1 = vp.model_to_paper_point(p3.(a0 - 60, (c[:zmin] || 0) - 20)); q2 = vp.model_to_paper_point(p3.(a1 + 60, zmax + 60))
       vp.clip_mask = Layout::Rectangle.new(Geom::Bounds2d.new([q1.x, q2.x].min, [q1.y, q2.y].min, (q2.x - q1.x).abs, (q2.y - q1.y).abs))
       vp.render if vp.render_needed?
@@ -447,9 +451,10 @@ module UCON
         text(b['id'], ex > 0 ? x - ex / 2 : x + 0.12, y + h / 2 - 0.06, l, size: 6.5, font: MONO, c: INK, align: :center)
       end
       unless c[:blocks].empty?
-        q = vp.model_to_paper_point(p3.(a0 + (a1 - a0) * 0.3, zmax - 250))
-        note_text("#{c[:blocks].map { |b| b['id'] }.join(' / ')}: 2x6 BLOCKING, FLAT IN THE STUD WALL - SEE #{@detail_code || 'D-501'}\n" \
-                  "SOLID = BEHIND THE CABINET, DASHED = TO THE NEXT STUD", q.x, q.y)
+        bn = c[:blk_note_at] || [a0 + (a1 - a0) * 0.3, zmax - 250] # [along, z]: a cell may move it off the points
+        q = vp.model_to_paper_point(p3.(bn[0], bn[1]))
+        tail = c[:blocks].any? { |b| b['ext'].to_i > 0 } ? 'SOLID = BEHIND THE CABINET, DASHED = TO THE NEXT STUD' : 'WALL TO WALL (NICHE) - NO EXTENSION'
+        note_text("#{c[:blocks].map { |b| b['id'] }.join(' / ')}: 2x6 BLOCKING, FLAT IN THE STUD WALL - SEE #{@detail_code || 'D-501'}\n#{tail}", q.x, q.y)
       end
       # CABINET OUTLINE ON TOP OF THE BANDS (Andriy 2026-11-04, 1791 v0.4 M-201): the grey bands hid the top and bottom
       # edges of the vanity, so the axis line read as the cabinet edge. outlines: [{ a0:, a1:, z0:, z1:, label: }] are
@@ -526,8 +531,33 @@ module UCON
       zones.each do |zn|
         (axis == :x ? [zn['x0'], zn['x1']] : [zn['y0'], zn['y1']]).each { |za| hf << [vp.model_to_paper_point(p3.(za, zn['z0'])), za - ra, 'PZ'] }
       end
+      # SPLIT BY HEIGHT (Andriy 2026-11-04, 1791 Powder): with c[:top_from] (mm AFF, e.g. the countertop) every free point at
+      # or above it is dimensioned on a second ordinate ABOVE the elevation (faucet spout, wall boxes over the top); the
+      # bottom row keeps what sits under it (drain, zone, test line). Same zero, the reference line.
+      top_ids = c[:top_from] ? free.select { |p| p['z'].to_f >= c[:top_from].to_f }.map { |p| p['id'] } : []
+      hf_top = hf.select { |_, _, id| top_ids.include?(id) }
+      hf -= hf_top
       nh = mep_ordinate(Geom::Point2d.new(o.x, o.y + ROW), u, [0.0, 1.0], hf,
                         zero: [vp.model_to_paper_point(p3.(ra, 0)), c[:ref] ? c[:ref][:text].upcase : nil])
+      unless hf_top.empty?
+        ot = vp.model_to_paper_point(p3.(ra, zmax))
+        hf_top = hf_top.map { |q, v, id| [Geom::Point2d.new(q.x, q.y - MEP_SYM_D), v, id] }
+        nh += mep_ordinate(Geom::Point2d.new(ot.x, ot.y - ROW), u, [0.0, -1.0], hf_top, zero: [ot, nil])
+      end
+      # CONFLICT DIMENSIONS (Andriy 2026-11-04): an important mismatch gets its own RED dimension AT the point, not a place
+      # in the ordinate row. conflicts: [{ a0:, a1:, z:, label:, t0:, t1: }] - a0 / a1 along the wall (t0 / t1 = names of
+      # the two lines, e.g. CAB CL / SPOUT CL), z the height of the dimension line.
+      Array(c[:conflicts]).each do |cf|
+        pa = vp.model_to_paper_point(p3.(cf[:a0], cf[:z])); pb = vp.model_to_paper_point(p3.(cf[:a1], cf[:z]))
+        [[pa, cf[:t0]], [pb, cf[:t1]]].each_with_index do |(pp, tt), i|
+          line(pp.x, pp.y - 0.22, pp.x, pp.y + 0.10, l, w: 0.5, c: RED, dash: true)
+          text(tt.to_s, pp.x + (i.zero? ? -0.04 : 0.04), pp.y + 0.14, l, size: 6, font: MONO, c: RED, align: i.zero? ? :right : :left) if tt
+        end
+        line(pa.x, pa.y, pb.x, pb.y, l, w: 0.6, c: RED)
+        [pa, pb].each { |pp| line(pp.x - 0.035, pp.y + 0.035, pp.x + 0.035, pp.y - 0.035, l, w: 0.8, c: RED) }
+        str = "#{in_q((cf[:a1] - cf[:a0]).abs)}#{cf[:label] ? '  ' + cf[:label] : ''}"
+        text(str, [pa.x, pb.x].max + 0.08, pa.y - 0.06, l, size: 7, font: MONO, c: RED)
+      end
       re = vp.model_to_paper_point(p3.(right_end, 0))
       uv = mep_unit(re, vp.model_to_paper_point(p3.(right_end, 1000)))
       vf = free.reject { |p| p['sys'] == 'M' }.map { |p| [vp.model_to_paper_point(p3.(right_end, p['z'])), p['z'], p['id']] }
@@ -550,7 +580,7 @@ module UCON
           text(e.message, x + w / 2, y + h / 2, @l_sheet, size: 9, font: MONO, c: ACCENT, align: :center)
           @log << e.message; @stops << e.message
         end
-        view(x, y, w, h, i + 1, code, vtitle, :half, placeholder: false)
+        view(x, y, w, h, i + 1, code, vtitle, c[:view_key] || :half, placeholder: false)
       end
       @index << [code, title]
     end
@@ -653,6 +683,20 @@ module UCON
         line(x, y - 0.03, x + w, y - 0.03, @l_sheet, w: 0.5, c: ROWLINE)
       end
       @index << [code, title]
+    end
+  end
+end
+
+# PROBE OVERRIDES RESET (2026-11-04, 1791 Powder): probes redefine sheet methods on DrawingSet's singleton
+# (define_singleton_method: label_view, place, note_text, view ...). They live for the whole SketchUp session, so a
+# second probe found the first one's versions - an alias of `view` then pointed at the probe's own view: endless
+# recursion, SystemStackError, the bridge timer died ("bridge stalls"). Every probe loads this file first, so here
+# every singleton method defined in a probe_inbox file is removed and the engine versions are back.
+module UCON
+  module DrawingSet
+    singleton_class.instance_methods(false).each do |mn|
+      loc = singleton_class.instance_method(mn).source_location
+      singleton_class.send(:remove_method, mn) if loc && loc[0].to_s.include?('probe_inbox')
     end
   end
 end

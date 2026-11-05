@@ -348,7 +348,7 @@ module UCON
       text(name, nx, ly + 0.10, @l_sheet, size: 13.5, font: SANS_MED)
       line(nx, ly + d, x + w, ly + d, @l_sheet, w: 1.5)
       bar_w = scale_bar(x + w, ly + 0.07, scale)
-      sc = scale == :half ? %(1/2" = 1'-0") : scale == :one_half ? %(1 1/2" = 1'-0") : 'NTS'
+      sc = { half: %(1/2" = 1'-0"), one_half: %(1 1/2" = 1'-0"), one: %(1" = 1'-0"), three_q: %(3/4" = 1'-0") }[scale] || 'NTS'
       # a narrow view (details 3 across) has no room for name + scale text + bar: the sheet header states the scale
       return if w < 5.0 && bar_w.positive?
       text(sc, x + w - bar_w - (bar_w.positive? ? 0.18 : 0), ly + 0.13, @l_sheet, size: 8, font: MONO, c: INK2, align: :right)
@@ -359,6 +359,9 @@ module UCON
       case scale
       when :half then segs = [0.25, 0.25, 0.5, 0.5, 0.5]; labels = [[0, '0'], [0.5, %(1')], [1.0, %(2')], [2.0, %(4')]]
       when :one_half then segs = [0.375, 0.375, 0.375, 0.375]; labels = [[0, '0'], [0.375, %(3")], [0.75, %(6")], [1.5, %(1')]]
+      # :one / :three_q (2026-11-04, 1791 Powder) - so probes need no override of view (an override + alias hung SketchUp)
+      when :one then segs = [0.5, 0.5, 1.0, 1.0]; labels = [[0, '0'], [1.0, %(1')], [2.0, %(2')], [3.0, %(3')]]
+      when :three_q then segs = [0.375, 0.375, 0.75, 0.75]; labels = [[0, '0'], [0.75, %(1')], [1.5, %(2')], [2.25, %(3')]]
       else return 0
       end
       w = segs.sum; x0 = x_right - w - 0.09; hgt = 0.055 # 0.09: the end label is centred on the last tick
