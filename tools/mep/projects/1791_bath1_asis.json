@@ -1,0 +1,160 @@
+{
+  "project": "1791 - Bath 1, AS-IS rough-ins (site survey 2026-10-29, DISTO IMG_4679)",
+  "model": "1791_BATH1_MEP (probe 1791_62: room 2743 x 1575, Leicht vanity per KPS, as-is markers)",
+  "source": "UCON site survey 2026-10-29: Leica DISTO IMG_4679 (1400 WC carrier CL, 734 faucet stub L, 632 drain, 603 drain height, 1006 faucet stub height) + photos IMG_4392 / 4393 / 4406; cabinets from KPS / Lusso 1791_Bath 1 26.09.2026 (Leicht 226 IOS-M)",
+  "room": "BATH 1",
+  "frame": "origin = inner corner of wall 4 (left, door wall) and wall 1 (back); X along wall 1; wall 1 inner face at Y = 1575; mm",
+  "refs": {
+    "W4": {
+      "axis": "x",
+      "at": 0,
+      "text": "wall 4 face"
+    }
+  },
+  "blocking_boxes": [
+    {
+      "code": "VANITY",
+      "cls": "cabinet",
+      "back": "y+",
+      "x0": 0,
+      "x1": 958,
+      "y0": 1016,
+      "y1": 1575,
+      "z0": 254,
+      "z1": 762
+    }
+  ],
+  "anchors": [],
+  "placed": [
+    {
+      "id": "P1",
+      "sys": "P",
+      "sym": "DR",
+      "x": 632,
+      "y": 1575,
+      "z": 603,
+      "ref": "W4",
+      "group": "vanity",
+      "item": "Vanity drain - AS-IS",
+      "req": "1 1/2\" waste stub-out in the wall, installed, on the sink CL 632 (sink unit 330..930). Inside the 10\" upper drawer (508..762): drawer needs the trap cut-out. At cabinet install: capped stub only.",
+      "where": "BATH 1, wall 1, behind the vanity",
+      "status": "AS-IS",
+      "src": "DISTO IMG_4679: 632 from wall 4, 603 above today's floor (slab or finished - FC-M6)"
+    },
+    {
+      "id": "P2",
+      "sys": "P",
+      "sym": "W",
+      "x": 734,
+      "y": 1575,
+      "z": 1006,
+      "ref": "W4",
+      "short": "SPOUT CL ?",
+      "item": "Wall faucet stub L (spout assumed) - AS-IS",
+      "req": "Wall-mount faucet rough-in (capped). Round drain: the SPOUT must be exactly on the sink CL 632. Slot drain: spout + drain block within 1/2\" of the sink CL, more = client decision. As-is 734 = 4\" off. Which stub is the spout: confirm.",
+      "where": "BATH 1, wall 1, above the top",
+      "status": "AS-IS / CONFIRM",
+      "src": "DISTO 734 from wall 4; height 1006 (DISTO, same level)",
+      "flag": true
+    },
+    {
+      "id": "P3",
+      "sys": "P",
+      "sym": "W",
+      "x": 800,
+      "y": 1575,
+      "z": 1006,
+      "ref": "W4",
+      "short": "FAUCET R",
+      "item": "Wall faucet stub R (handle assumed) - AS-IS",
+      "req": "Second faucet stub, ~65 right of P2 (photo). Handle may be left or right.",
+      "where": "BATH 1, wall 1, above the top",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4392",
+      "scope": "out",
+      "scope_why": "handle - by others (Andriy 2026-11-04 rule)"
+    },
+    {
+      "id": "P4",
+      "sys": "P",
+      "x": 705,
+      "y": 1575,
+      "z": 640,
+      "ref": "W4",
+      "lab": "S",
+      "short": "TEST LOOP - CUT",
+      "item": "Copper test loop - AS-IS",
+      "req": "Copper U-loop used for the system test, inside the upper drawer zone. GC to CUT IT before the vanity is installed (Andriy 2026-11-06).",
+      "where": "BATH 1, wall 1, behind the vanity",
+      "status": "TO BE REMOVED",
+      "src": "photo IMG_4393",
+      "flag": true
+    },
+    {
+      "id": "E1",
+      "sys": "E",
+      "sym": "J",
+      "x": 1000,
+      "y": 1575,
+      "z": 150,
+      "ref": "W4",
+      "lab": "S",
+      "short": "BOX ?",
+      "item": "Low electrical box - AS-IS, function?",
+      "req": "Box ~6\" AFF just right of the vanity edge (958). Below the vanity bottom (254): no clash, but visible. Locate (x, z) and confirm function.",
+      "where": "BATH 1, wall 1",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4392, NOT measured",
+      "flag": true
+    }
+  ],
+  "notes": [
+    "Site survey 2026-10-29 (UCON): DISTO positions and heights are AS-IS from today's floor; floor reference to confirm (FC-M6).",
+    "Cabinets from KPS / Lusso 1791_Bath 1 26.09.2026 (Leicht 226 IOS-M): 30 | 300 | 600 | 28 = 958, wall-hung 254..762, depth 559, top solid stone 102 -> 864."
+  ],
+  "blocking": {
+    "bottom_row": true,
+    "edge_axis": true,
+    "why": "Leicht: fixed top and bottom, axis ON the edges (Andriy 2026-11-04)."
+  },
+  "scope_rule": "Andriy 2026-11-04: sheets show only what touches UCON cabinetry. Wall-mount faucet: only the SPOUT CL (no zone); handle scope out. Drain type rule 2026-11-06: round = spout exactly on the sink CL; slot = within 1/2\", more = client decision.",
+  "brand": "Leicht",
+  "ceiling_mm": null,
+  "wc": {
+    "cl_x": 1400,
+    "wall_y": 1575,
+    "symbol": "wc_plan",
+    "depth_mm": 560,
+    "note": "wall-hung WC on a carrier, CL 1400 (DISTO, Andriy 2026-11-06); 2D symbol in LayOut"
+  },
+  "vanity": {
+    "filler_l": [
+      0,
+      30
+    ],
+    "unit_300": [
+      30,
+      330
+    ],
+    "sink_unit": [
+      330,
+      930
+    ],
+    "panel_r": [
+      930,
+      958
+    ],
+    "z0": 254,
+    "z1": 762,
+    "depth": 559,
+    "top_th": 102,
+    "top": 864,
+    "upper_drawer": [
+      508,
+      762
+    ],
+    "sink_cl": 632,
+    "sink_type": "UNKNOWN (FC-M7)"
+  },
+  "requirements_at_install": "Test lines cut; no stops / valves installed - capped stubs only (Andriy 2026-11-06)."
+}

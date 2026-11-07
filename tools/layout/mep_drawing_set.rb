@@ -454,6 +454,7 @@ module UCON
         bn = c[:blk_note_at] || [a0 + (a1 - a0) * 0.3, zmax - 250] # [along, z]: a cell may move it off the points
         q = vp.model_to_paper_point(p3.(bn[0], bn[1]))
         tail = c[:blocks].any? { |b| b['ext'].to_i > 0 } ? 'SOLID = BEHIND THE CABINET, DASHED = TO THE NEXT STUD' : 'WALL TO WALL (NICHE) - NO EXTENSION'
+        tail = c[:blk_tail] if c[:blk_tail] # a cell may say its own end rule (Bath 1: from wall 4, extend right only)
         note_text("#{c[:blocks].map { |b| b['id'] }.join(' / ')}: 2x6 BLOCKING, FLAT IN THE STUD WALL - SEE #{@detail_code || 'D-501'}\n#{tail}", q.x, q.y)
       end
       # CABINET OUTLINE ON TOP OF THE BANDS (Andriy 2026-11-04, 1791 v0.4 M-201): the grey bands hid the top and bottom
