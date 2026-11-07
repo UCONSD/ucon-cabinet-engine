@@ -32,15 +32,15 @@
       "sym": "DR",
       "x": 1558,
       "y": 1600,
-      "z": 555,
+      "z": 568,
       "ref": "W4",
       "group": "vanity",
       "item": "Vanity drain - AS-IS",
       "req": "1 1/2\" waste stub-out in the wall, installed. Inside the Leicht METURO sink unit 1258..1858 (sink CL 1558).",
       "where": "ADU BATH, wall 1, behind the vanity",
-      "status": "AS-IS / Z APPROX",
-      "src": "X: DISTO a2 1558. Z: from photo +-2\" - VERIFY WITH GC",
-      "flag": true
+      "status": "AS-IS / MEASURED",
+      "src": "X: DISTO a2 1558. Z: GC tape 11.06.26 (M. Martinez, IMG_9430): 23\" on slab - 5/8\" floor = 22 3/8\" AFF",
+      "flag": false
     },
     {
       "id": "P2",
@@ -48,15 +48,15 @@
       "sym": "HW",
       "x": 1445,
       "y": 1600,
-      "z": 607,
+      "z": 610,
       "ref": "W4",
       "group": "vanity",
       "item": "Vanity supply L - AS-IS",
       "req": "1/2\" supply stub-out, installed (hot assumed on the left).",
       "where": "ADU BATH, wall 1, behind the vanity",
-      "status": "AS-IS / APPROX",
-      "src": "X and Z from photo +-2\" - VERIFY WITH GC",
-      "flag": true
+      "status": "AS-IS / Z MEASURED",
+      "src": "X from photo +-2\". Z: GC tape 11.06.26 (M. Martinez, IMG_9428/9429): 24 5/8\" on slab - 5/8\" floor = 24\" AFF",
+      "flag": false
     },
     {
       "id": "P3",
@@ -64,15 +64,15 @@
       "sym": "CW",
       "x": 1670,
       "y": 1600,
-      "z": 607,
+      "z": 610,
       "ref": "W4",
       "group": "vanity",
       "item": "Vanity supply R - AS-IS",
       "req": "1/2\" supply stub-out, installed.",
       "where": "ADU BATH, wall 1, behind the vanity",
-      "status": "AS-IS / APPROX",
-      "src": "X and Z from photo +-2\" - VERIFY WITH GC",
-      "flag": true
+      "status": "AS-IS / Z MEASURED",
+      "src": "X from photo +-2\". Z: GC tape 11.06.26 (M. Martinez, IMG_9428/9429): 24 5/8\" on slab - 5/8\" floor = 24\" AFF",
+      "flag": false
     },
     {
       "id": "P4",
@@ -224,5 +224,12 @@
     "symbol": "wc_plan",
     "depth_mm": 711,
     "note": "2D symbol in LayOut (Andriy 2026-11-04); no 3D body in the model"
+  },
+  "floor": {
+    "finish_mm": 16,
+    "note": "GC 11.06.26: tape heights on slab; finished floor = 30x30 tile 8.5 mm + thinset ~5/8\" (16 mm). Model heights are AFF (finished floor)."
+  },
+  "stubs_out_mm": {
+    "note": "GC 11.06.26 photos IMG_9431..9433: stubs project ~5\" (supplies) and ~5 1/2\" (drain with test cap) from the wall face"
   }
 }
