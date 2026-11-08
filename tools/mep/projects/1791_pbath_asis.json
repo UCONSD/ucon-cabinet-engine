@@ -179,7 +179,7 @@
   "blocking": {
     "bottom_row": true,
     "edge_axis": true,
-    "why": "Leicht: fixed top and bottom, axis ON the edges (Andriy 2026-11-04). Two bottom levels: 153 (right sink + drawers) and 432 (left sink unit, open below). Plus one row under the open shelf (pos. 60), axis at the shelf mid-height (Andriy 2026-11-08)."
+    "why": "Leicht: fixed top and bottom, axis ON the edges (Andriy 2026-11-04). Two bottom levels: 153 (right sink + drawers) and 432 (left sink unit, open below). Open shelf (pos. 60): no own row - it falls inside the B3 band, B3 extended under it (Andriy 2026-11-08)."
   },
   "scope_rule": "Andriy 2026-11-04: sheets show only what touches UCON cabinetry. Deck faucets: no spout point. Receptacles above the top, mirror / sconce boxes: scope out.",
   "brand": "Leicht",
@@ -221,18 +221,11 @@
     "faucet": "deck"
   },
   "requirements_at_install": "Test lines cut; no stops / valves installed - capped stubs only (Andriy 2026-11-06).",
-  "blocking_extra": [
+  "blocking_extend": [
     {
-      "id": "B4",
-      "sys": "B",
+      "cl": 153,
       "a0": 3128,
-      "a1": 3874,
-      "cl": 188,
-      "h": 140,
-      "ext": 0,
-      "item": "2x6 blocking, CL 188 AFF (open shelf pos. 60 under the left sink unit, shelf ~160..215 scaled from KPS)",
-      "status": "DECISION / VERIFY",
-      "src": "Andriy 2026-11-08: blocking under the shelf too; shelf height and thickness scaled from KPS - Lusso to confirm"
+      "why": "Andriy 2026-11-08: the open shelf (pos. 60, mid ~188) sits inside the B3 band (153 +- 70): extend B3 under the shelf instead of a second row 35 mm above - two near axes look dirty; the 2x6 band gives room to set the shelf a little higher or lower."
     }
   ]
 }

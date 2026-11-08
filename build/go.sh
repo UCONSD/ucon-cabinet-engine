@@ -116,8 +116,13 @@ echo "===== 2. stage, BY NAME ====="
 # 12 files predicted; the list must print 12.
 # 2026-11-08, laptop: 1791 Bath 1 v0.2 data - pushed (0b1bb2d).
 # 2026-11-08, laptop: 1791 Primary Bath as-is data (set v0.1) - pushed (8692b9d).
-# 2026-11-08, laptop: 1791 Primary Bath v0.2 - B4 blocking under the open shelf. 2 files predicted; the list must print 2.
-git add tools/mep/projects/1791_pbath_asis.json \
+# 2026-11-08, laptop: 1791 Primary Bath v0.2 - B4 blocking under the open shelf - pushed (705a71c).
+# 2026-11-08, laptop: 1791 Family Room Bar v0.1 + v0.2 and Primary Bath v0.3 - a shelf inside the band of an existing
+# blocking row extends that row (blocking_extend), no second axis next to it. Bar v0.4: electrical zones in the
+# engine (zone label / tag / color; boxes inside drawn without leader or dimension). 4 files predicted; the list must print 4.
+git add tools/mep/projects/1791_bar_asis.json \
+        tools/mep/projects/1791_pbath_asis.json \
+        tools/layout/mep_drawing_set.rb \
         build/go.sh
 
 echo

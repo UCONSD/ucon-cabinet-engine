@@ -485,14 +485,17 @@ module UCON
           text(ro[:label], (u.x + v.x) / 2 + 0.05, (u.y + v.y) / 2 - 0.12, l, size: 5.5, font: MONO, c: ro[:c])
         end
       end
-      # plumbing zones
+      # plumbing zones - and, since 2026-11-08 (Andriy, 1791 Bar), ELECTRICAL zones: the boxes inside a sink base are
+      # mostly not ours (builder / client needs) and their exact place does not matter to us, so one rectangle with its
+      # four edges dimensioned replaces a dimension per box. A zone may carry 'label' / 'tag' / 'color'; default = plumbing.
       zones = Array(c[:zones])
       zones.each do |zn|
         za0 = axis == :x ? zn['x0'] : zn['y0']; za1 = axis == :x ? zn['x1'] : zn['y1']
         u = vp.model_to_paper_point(p3.(za0, zn['z1'])); v = vp.model_to_paper_point(p3.(za1, zn['z0']))
         x = [u.x, v.x].min; y = [u.y, v.y].min
-        rect(x, y, (u.x - v.x).abs, (u.y - v.y).abs, l, stroke: [0x1F, 0x5F, 0x9E], sw: 0.75, dash: true)
-        text('PLUMBING ZONE', x + 0.03, y + (u.y - v.y).abs + 0.02, l, size: 5.5, font: MONO, c: [0x1F, 0x5F, 0x9E])
+        zc = zn['color'] || [0x1F, 0x5F, 0x9E]
+        rect(x, y, (u.x - v.x).abs, (u.y - v.y).abs, l, stroke: zc, sw: 0.75, dash: true)
+        text(zn['label'] || 'PLUMBING ZONE', x + 0.03, y + (u.y - v.y).abs + 0.02, l, size: 5.5, font: MONO, c: zc)
       end
       # reference line
       if (r = c[:ref])
@@ -505,9 +508,15 @@ module UCON
       # points: symbol, then ID + type / power above it (two lines), stepped up when they would collide
       placed = []
       pts = c[:pts].select { |p| p['x'] }
+      ez_ids = zones.select { |zn| zn['tag'] }.flat_map { |zn| zn['ids'] } # electrical zones (Andriy 2026-11-08)
       pts.each do |p|
         q = vp.model_to_paper_point(p3.(am_of.(p), p['z']))
         mep_symbol(p['sys'], q.x, q.y, sym: p['sym'], dir: [0, -1])
+        # a box inside an electrical zone: the symbol and its ID beside it - no leader, no type line, no dimension
+        if ez_ids.include?(p['id'])
+          text(p['id'], q.x + MEP_SYM_D / 2 + 0.03, q.y - 0.05, l, size: 5.5, font: MONO, c: INK2)
+          next
+        end
         off = 0.27; lx = q.x; ly = nil
         8.times do
           ly = q.y - off
@@ -530,7 +539,7 @@ module UCON
       u = mep_unit(o, vp.model_to_paper_point(p3.(ra + 1000, zb)))
       hf = free.map { |p| q = vp.model_to_paper_point(p3.(am_of.(p), p['z'])); [Geom::Point2d.new(q.x, q.y + MEP_SYM_D / 2), am_of.(p) - ra, p['id']] }
       zones.each do |zn|
-        (axis == :x ? [zn['x0'], zn['x1']] : [zn['y0'], zn['y1']]).each { |za| hf << [vp.model_to_paper_point(p3.(za, zn['z0'])), za - ra, 'PZ'] }
+        (axis == :x ? [zn['x0'], zn['x1']] : [zn['y0'], zn['y1']]).each { |za| hf << [vp.model_to_paper_point(p3.(za, zn['z0'])), za - ra, zn['tag'] || 'PZ'] }
       end
       # SPLIT BY HEIGHT (Andriy 2026-11-04, 1791 Powder): with c[:top_from] (mm AFF, e.g. the countertop) every free point at
       # or above it is dimensioned on a second ordinate ABOVE the elevation (faucet spout, wall boxes over the top); the
@@ -562,7 +571,7 @@ module UCON
       re = vp.model_to_paper_point(p3.(right_end, 0))
       uv = mep_unit(re, vp.model_to_paper_point(p3.(right_end, 1000)))
       vf = free.reject { |p| p['sys'] == 'M' }.map { |p| [vp.model_to_paper_point(p3.(right_end, p['z'])), p['z'], p['id']] }
-      zones.each { |zn| [zn['z0'], zn['z1']].each { |zz| vf << [vp.model_to_paper_point(p3.(right_end, zz)), zz, 'PZ'] } }
+      zones.each { |zn| [zn['z0'], zn['z1']].each { |zz| vf << [vp.model_to_paper_point(p3.(right_end, zz)), zz, zn['tag'] || 'PZ'] } }
       c[:blocks].each { |b| vf << [vp.model_to_paper_point(p3.(right_end, b['cl'])), b['cl'], "#{b['id']} CL"] }
       Array(c[:bars]).each { |br| zc = (br[:z0] + br[:z1]) / 2.0; vf << [vp.model_to_paper_point(p3.(right_end, zc)), zc, "#{br[:id]} CL"] }
       nv = mep_ordinate(Geom::Point2d.new(re.x + ROW, re.y), uv, [1.0, 0.0], vf, zero: [re, 'FIN. FLOOR'])

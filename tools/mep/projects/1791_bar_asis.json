@@ -1,0 +1,380 @@
+{
+  "project": "1791 - Family Room Bar, AS-IS rough-ins (site survey 2026-10-29, DISTO IMG_4680 / 4681)",
+  "model": "1791_BAR_MEP (probe 1791_80: niche 2058 x 695 x 2388 AFF, Leicht bar per KPS, as-is markers)",
+  "source": "UCON site survey 2026-10-29: Leica DISTO IMG_4681 (niche 2058 wide, 2407 high, 694 / 696 deep) and IMG_4680 (drain 332 / 458, boxes 705 / 382 and 517 / 522) + photos IMG_4391 / 4404 / 4405; cabinets from KPS / Lusso 1791_Family Room 26.09.2026 (Leicht 244 BOSSA)",
+  "room": "FAMILY ROOM BAR",
+  "frame": "origin = inner corner of the left niche wall and the back wall; X along the back wall to the right, right niche wall at X = 2058; back wall face at Y = 695; mm",
+  "refs": {
+    "WR": {
+      "axis": "x",
+      "at": 2058,
+      "text": "right niche wall"
+    },
+    "WB": {
+      "axis": "y",
+      "at": 695,
+      "text": "back wall"
+    }
+  },
+  "blocking_boxes": [
+    {
+      "code": "WALL-UNITS",
+      "cls": "cabinet",
+      "back": "y+",
+      "x0": 816,
+      "x1": 2058,
+      "y0": 333,
+      "y1": 695,
+      "z0": 1458,
+      "z1": 2385
+    }
+  ],
+  "blocking_extra": [
+    {
+      "id": "B3",
+      "sys": "B",
+      "a0": 0,
+      "a1": 816,
+      "cl": 1853,
+      "h": 140,
+      "ext": 0,
+      "item": "2x6 blocking, CL 1853 AFF (open shelf pos. 70 - upper, scaled from KPS)",
+      "status": "DECISION / VERIFY",
+      "src": "Andriy 2026-11-08: blocking under open shelves, axis at the shelf mid-height; shelf scaled from KPS - Lusso to confirm"
+    }
+  ],
+  "anchors": [],
+  "placed": [
+    {
+      "id": "P1",
+      "sys": "P",
+      "sym": "DR",
+      "x": 1726,
+      "y": 695,
+      "z": 439,
+      "ref": "WR",
+      "item": "Bar sink drain - AS-IS",
+      "req": "1 1/2\" waste stub-out, installed. Bar sink CL 325 from the right wall (KPS): drain 7 (1/4\") off - OK. Inside the sink base unit (floor-standing on a 100 plinth). At cabinet install: capped stub only, test lines cut.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS",
+      "src": "DISTO IMG_4680: 332 from the right wall, 458 above today's floor -> 439 AFF (floor 3/4\" assumed, Andriy 2026-11-08)",
+      "group": "sink"
+    },
+    {
+      "id": "P2",
+      "sys": "P",
+      "sym": "HW",
+      "x": 1683,
+      "y": 695,
+      "z": 405,
+      "ref": "WR",
+      "item": "Bar sink supply HW - AS-IS",
+      "req": "Supply stub-out (capped), inside the sink base unit.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4405 scaled from the DISTO dims, NOT measured",
+      "flag": true,
+      "group": "sink"
+    },
+    {
+      "id": "P3",
+      "sys": "P",
+      "sym": "CW",
+      "x": 1825,
+      "y": 695,
+      "z": 405,
+      "ref": "WR",
+      "item": "Bar sink supply CW - AS-IS",
+      "req": "Supply stub-out (capped), inside the sink base unit.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4405 scaled from the DISTO dims, NOT measured",
+      "flag": true,
+      "group": "sink"
+    },
+    {
+      "id": "E1",
+      "sys": "E",
+      "sym": "J",
+      "x": 1353,
+      "y": 695,
+      "z": 363,
+      "ref": "WR",
+      "item": "Cooler receptacle - AS-IS box behind the cooler",
+      "req": "Zephyr Presrv PRB24C01CPG (24\" panel-ready beverage cooler): 115 V 1.5 A, dedicated, NOT switched; cord 72\" from the back right; 1\" (25) clear behind the unit for the plug; depth 23 3/4\" (603) incl. 3/4\" panel. Box is in the cooler opening, 3\" from its right edge. OPTION 1: keep it behind the unit per the Zephyr guide - recessed (in-wall) box so the plug stays inside the 1\" clearance. OPTION 2: new receptacle E8 in the sink base (cord reaches), E1 capped / blank cover.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / DECISION",
+      "src": "DISTO IMG_4680: 705 from the right wall, 382 -> 363 AFF",
+      "flag": true
+    },
+    {
+      "id": "E2",
+      "sys": "E",
+      "sym": "J",
+      "x": 1541,
+      "y": 695,
+      "z": 503,
+      "ref": "WR",
+      "item": "Box in the sink base - upper - PROPOSED LED driver receptacle",
+      "req": "Proposed: receptacle for the LED driver(s), switched by S1 (UCON rule: LED receptacle inside the sink base). GC to confirm function. Must clear the sink trap and the unit's fronts.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / CONFIRM",
+      "src": "DISTO IMG_4680: 517 from the right wall, 522 -> 503 AFF",
+      "flag": true
+    },
+    {
+      "id": "E3",
+      "sys": "E",
+      "sym": "J",
+      "x": 1541,
+      "y": 695,
+      "z": 336,
+      "ref": "WR",
+      "item": "Box in the sink base - lower - AS-IS, function?",
+      "req": "Second box under E2, inside the sink base unit. Function?",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4405, NOT measured",
+      "flag": true
+    },
+    {
+      "id": "E4",
+      "sys": "E",
+      "sym": "J",
+      "x": 1881,
+      "y": 695,
+      "z": 541,
+      "ref": "WR",
+      "item": "Box at the right of the drain - AS-IS, function?",
+      "req": "Box with a labelled cable, inside the sink base unit. Function?",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4405, NOT measured",
+      "flag": true
+    },
+    {
+      "id": "E5",
+      "sys": "E",
+      "sym": "J",
+      "x": 1749,
+      "y": 695,
+      "z": 270,
+      "ref": "WR",
+      "item": "Round box under the drain - AS-IS, function?",
+      "req": "Round box inside the sink base unit, below the trap. Function?",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4405, NOT measured",
+      "flag": true
+    },
+    {
+      "id": "E6",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 1045,
+      "y": 695,
+      "z": 1086,
+      "ref": "WR",
+      "item": "Countertop receptacle - MOVE above the top / VERIFY",
+      "req": "Box seen at about the countertop line (photo only, NOT measured - the niche photo is in perspective, the reading can be off). Countertop receptacle must be ABOVE the top 34 3/4\"-36 3/4\" (895-934) and inside the stone backsplash: shown at the recommended centre 6\" above the top = 42 3/4\" AFF. CEC 210.52(C): not more than 20\" above the countertop; GFCI (CEC 210.8). GC to verify the height and relocate if needed.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "PLANNING / VERIFY",
+      "src": "photo IMG_4391 (perspective, NOT measured); height per CEC 210.52(C) + UCON default 6\" above the top (Andriy 2026-11-08)",
+      "flag": true
+    },
+    {
+      "id": "E7",
+      "sys": "E",
+      "sym": "GFCI",
+      "x": 331,
+      "y": 695,
+      "z": 1086,
+      "ref": "WR",
+      "item": "Countertop receptacle - MOVE above the top / VERIFY",
+      "req": "Box seen at about the countertop line (photo only, NOT measured - the niche photo is in perspective, the reading can be off). Countertop receptacle must be ABOVE the top 34 3/4\"-36 3/4\" (895-934) and inside the stone backsplash: shown at the recommended centre 6\" above the top = 42 3/4\" AFF. CEC 210.52(C): not more than 20\" above the countertop; GFCI (CEC 210.8). GC to verify the height and relocate if needed.",
+      "where": "FAMILY ROOM BAR, back wall of the niche",
+      "status": "PLANNING / VERIFY",
+      "src": "photo IMG_4391 (perspective, NOT measured); height per CEC 210.52(C) + UCON default 6\" above the top (Andriy 2026-11-08)",
+      "flag": true
+    },
+    {
+      "id": "E8",
+      "sys": "E",
+      "sym": "DUP",
+      "x": 1498,
+      "y": 695,
+      "z": 250,
+      "ref": "WR",
+      "item": "Cooler receptacle in the sink base - OPTION 2",
+      "req": "OPTION 2 for the cooler: 115 V receptacle, dedicated, NOT switched, low in the sink base near its left side (next to the cooler); the cooler cord (72\") runs through the side panel. E1 then capped.",
+      "where": "FAMILY ROOM BAR, back wall, inside the sink base",
+      "status": "OPTION 2 / PLANNING",
+      "src": "UCON 2026-11-08 from the Zephyr PRB24C01CPG manual (cord back right, 72\")",
+      "flag": true
+    },
+    {
+      "id": "S1",
+      "sys": "E",
+      "sym": "S",
+      "x": 2058,
+      "y": 150,
+      "z": 1005,
+      "ref": "WB",
+      "item": "Switch on the right niche wall - AS-IS (LED?)",
+      "req": "Box on the right niche wall near its front edge - likely the switch for the bar LED (wall units, shelves). GC to confirm; it switches the LED driver receptacle E2.",
+      "where": "FAMILY ROOM BAR, right niche wall",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4391, NOT measured",
+      "flag": true
+    },
+    {
+      "id": "LV1",
+      "sys": "E",
+      "sym": "LV",
+      "x": 1400,
+      "y": 695,
+      "z": 1490,
+      "ref": "WR",
+      "item": "LV cable to the glass wall units - PLANNING",
+      "req": "Low-voltage (Class 2) cable from the driver in the sink base, in the wall, out just above the wall-unit bottom (1458), behind the left glass unit near the joint; 24\" spare coiled. Feeds the cabinet lighting.",
+      "where": "FAMILY ROOM BAR, back wall, behind the wall units",
+      "status": "PLANNING",
+      "src": "UCON LED rule (Andriy 2026-11-08)"
+    },
+    {
+      "id": "LV2",
+      "sys": "E",
+      "sym": "LV",
+      "x": 760,
+      "y": 695,
+      "z": 1455,
+      "ref": "WR",
+      "item": "LV cable to the lower shelf - PLANNING",
+      "req": "LV cable out behind the lower open shelf (pos. 100), above the stone backsplash (1442), near the shelf's right end; feeds the LED profile under / in the shelf.",
+      "where": "FAMILY ROOM BAR, back wall, behind the lower shelf",
+      "status": "PLANNING",
+      "src": "UCON LED rule (Andriy 2026-11-08); shelf height scaled - VERIFY"
+    },
+    {
+      "id": "LV3",
+      "sys": "E",
+      "sym": "LV",
+      "x": 760,
+      "y": 695,
+      "z": 1825,
+      "ref": "WR",
+      "item": "LV cable to the upper shelf - PLANNING",
+      "req": "LV cable out just under the upper open shelf (pos. 70), near its right end; feeds the LED profile under the shelf.",
+      "where": "FAMILY ROOM BAR, back wall, under the upper shelf",
+      "status": "PLANNING",
+      "src": "UCON LED rule (Andriy 2026-11-08); shelf height scaled - VERIFY"
+    }
+  ],
+  "notes": [
+    "Site survey 2026-10-29 (UCON): DISTO from today's floor; AFF = DISTO - 19 (wood floor 3/4\" assumed, Andriy 2026-11-08) - to confirm with GC (FC-M6). Niche walls finished (drywall closed).",
+    "Cabinets from KPS / Lusso 1791_Family Room 26.09.2026 (Leicht 244 BOSSA), niche 2064 per KPS (site 2058): base on a 100 plinth, carcass 100..895, top 39 -> 934; filler 27 | unit 800 | cooler PRB24C01CPG 610 | sink unit 600 | filler 26. Backsplash stone 934..1442. Wall units glass 600 + 600 (+ panel 16, filler 26) 1458..2385, depth 362, fascia 54 to 2439; open shelves 822 on the left (pos. 70 / 100).",
+    "Base units floor-standing: no blocking (Andriy 2026-11-08). Bar sink deck faucet (KPS)."
+  ],
+  "floor": {
+    "finish_mm": 19,
+    "note": "Andriy 2026-11-08: wood floor 3/4\" assumed; DISTO read from today's floor. To confirm with GC."
+  },
+  "blocking": {
+    "bottom_row": true,
+    "edge_axis": true,
+    "why": "Leicht wall units: fixed top and bottom, axis ON the edges (Andriy 2026-11-04); top row under the niche soffit top plate. Open shelves: lower shelf on the extended B2 row (inside its band), upper shelf its own row B3 at mid-height (Andriy 2026-11-08). Base units on a plinth: none (Andriy 2026-11-08)."
+  },
+  "scope_rule": "Andriy 2026-11-04: sheets show only what touches UCON cabinetry: rough-ins inside the base units, boxes at the countertop line, appliance (cooler) feed, blocking.",
+  "brand": "Leicht",
+  "ceiling_mm": 2388,
+  "niche": {
+    "w": 2058,
+    "d_left": 696,
+    "d_right": 694,
+    "h_disto": 2407,
+    "h_aff": 2388,
+    "kps_w": 2064,
+    "kps_stack_top": 2439
+  },
+  "requirements_at_install": "Test lines cut; no stops / valves installed - capped stubs only (Andriy 2026-11-06).",
+  "blocking_extend": [
+    {
+      "cl": 1458,
+      "a0": 0,
+      "why": "Andriy 2026-11-08: the lower open shelf (pos. 100, ~1450) sits inside the B2 band (1458 +- 70): extend B2 wall to wall instead of a second row 8 mm lower."
+    }
+  ],
+  "led": {
+    "driver_receptacle": "E2 (proposed, switched by S1)",
+    "rule": "Andriy 2026-11-08: LED receptacle inside the sink base; if no sink base or it is far - behind any base cabinet at the plinth, horizontal on the bottom plate; switched. LV cable in the wall from the driver to each LED run.",
+    "route": [
+      [
+        1541,
+        503
+      ],
+      [
+        1541,
+        1200
+      ],
+      [
+        760,
+        1200
+      ],
+      [
+        760,
+        1825
+      ]
+    ],
+    "route2": [
+      [
+        1400,
+        1200
+      ],
+      [
+        1400,
+        1490
+      ]
+    ]
+  },
+  "appliances": [
+    {
+      "id": "cooler",
+      "model": "Zephyr Presrv PRB24C01CPG",
+      "type": "24\" single-zone panel-ready beverage cooler",
+      "w_in": "23 7/8",
+      "h_in": "33 7/8 - 34 7/8",
+      "d_in": "23 3/4 incl. 3/4 panel",
+      "opening_in": "24 W x 34 H (+1/8 H if flush)",
+      "rear_clearance_in": 1,
+      "power": "115 V 60 Hz 1.5 A, dedicated, not switched",
+      "cord": "72\" from the back right",
+      "source": "Zephyr PRB24C01CPG owner's manual rev AUG25.0501 + spec sheet (AJ Madison)"
+    }
+  ],
+  "electrical_zones": [
+    {
+      "id": "EZ1",
+      "label": "ELECTRICAL ZONE EZ1",
+      "tag": "EZ",
+      "color": [
+        178,
+        74,
+        26
+      ],
+      "x0": 1482,
+      "x1": 1982,
+      "y0": 645,
+      "y1": 745,
+      "z0": 150,
+      "z1": 610,
+      "ids": [
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E8"
+      ],
+      "why": "Andriy 2026-11-08: boxes in the sink base are mostly not ours (builder / client needs) - one dimensioned rectangle instead of a dimension per box: back of the sink base, 2\" in from its sides, 6\" to 24\" AFF."
+    }
+  ]
+}
