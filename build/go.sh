@@ -24,6 +24,7 @@ printf 'test_wallpanels      '; /usr/bin/ruby tools/test_wallpanels.rb    | grep
 # (room_from_skp.py + rit_build.py, byte for byte against the two .rit already in the Metron database).
 printf 'test_metron          '; /usr/bin/ruby tools/test_metron.rb        | grep 'checks,' | tail -1
 printf 'test_room_from_skp   '; python3 metron/laptop/gen/test_room_from_skp.py | grep 'checks,' | tail -1
+printf 'test_mep             '; /usr/bin/ruby tools/test_mep.rb           | grep 'checks,' | tail -1
 
 # AND THE SUMMARY LINES ABOVE ARE NOT THE CHECK. A tail cannot fail a build:
 # the pipe swallows the exit status, so the suites are RUN AGAIN for their
@@ -34,6 +35,7 @@ printf 'test_room_from_skp   '; python3 metron/laptop/gen/test_room_from_skp.py 
 /usr/bin/ruby tools/test_wallpanels.rb    > /dev/null
 /usr/bin/ruby tools/test_metron.rb        > /dev/null
 python3 metron/laptop/gen/test_room_from_skp.py > /dev/null
+/usr/bin/ruby tools/test_mep.rb           > /dev/null
 
 echo
 echo "===== 2. stage, BY NAME ====="
@@ -112,17 +114,9 @@ echo "===== 2. stage, BY NAME ====="
 # R02b the same day (ARMED 48): upstand (10 cm backsplash, ALZATINA), a panel marked along the wall, the Bath 2 mirror
 # back. Same 12 files.
 # 12 files predicted; the list must print 12.
-git add src/ucon_cabinet_engine/core/00_version.rb \
-        src/ucon_cabinet_engine/core/87_metron.rb \
-        tools/test_metron.rb \
-        metron/laptop/gen/room_from_skp.py \
-        metron/export/7612/7612_PWD.export.json \
-        metron/export/7612/7612_BA1.export.json \
-        metron/export/7612/7612_BA2.export.json \
-        metron/export/7612/7612_BA3.export.json \
-        claude/README.md \
-        claude/findings-2026-11-02-7612-baths-r02-model.md \
-        claude/findings-2026-10-23-cesar-db-vs-registry.md \
+# 2026-11-08, laptop: 1791 Bath 1 v0.2 data - spout = left stub (move to sink CL), floor 5/8" as ADU, E1 to GC.
+# 2 files predicted; the list must print 2.
+git add tools/mep/projects/1791_bath1_asis.json \
         build/go.sh
 
 echo

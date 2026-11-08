@@ -32,14 +32,14 @@
       "sym": "DR",
       "x": 632,
       "y": 1575,
-      "z": 603,
+      "z": 587,
       "ref": "W4",
       "group": "vanity",
       "item": "Vanity drain - AS-IS",
       "req": "1 1/2\" waste stub-out in the wall, installed, on the sink CL 632 (sink unit 330..930). Inside the 10\" upper drawer (508..762): drawer needs the trap cut-out. At cabinet install: capped stub only.",
       "where": "BATH 1, wall 1, behind the vanity",
       "status": "AS-IS",
-      "src": "DISTO IMG_4679: 632 from wall 4, 603 above today's floor (slab or finished - FC-M6)"
+      "src": "DISTO IMG_4679: 632 from wall 4, 603 above slab -> 587 AFF (floor build-up 16, as ADU; Andriy 2026-11-08)"
     },
     {
       "id": "P2",
@@ -47,14 +47,14 @@
       "sym": "W",
       "x": 734,
       "y": 1575,
-      "z": 1006,
+      "z": 990,
       "ref": "W4",
-      "short": "SPOUT CL ?",
-      "item": "Wall faucet stub L (spout assumed) - AS-IS",
-      "req": "Wall-mount faucet rough-in (capped). Round drain: the SPOUT must be exactly on the sink CL 632. Slot drain: spout + drain block within 1/2\" of the sink CL, more = client decision. As-is 734 = 4\" off. Which stub is the spout: confirm.",
+      "short": "SPOUT -> 632",
+      "item": "Wall faucet SPOUT stub - AS-IS 734, MOVE to sink CL 632",
+      "req": "Left stub = SPOUT (Andriy 2026-11-08). As-is 734 from wall 4 = 102 (4\") right of the sink CL 632. GC to move the spout rough-in 4\" left, onto the sink CL 632, before drywall. Round drain: spout exactly on CL; slot drain: within 1/2\".",
       "where": "BATH 1, wall 1, above the top",
-      "status": "AS-IS / CONFIRM",
-      "src": "DISTO 734 from wall 4; height 1006 (DISTO, same level)",
+      "status": "AS-IS / MOVE",
+      "src": "DISTO 734 from wall 4; height 1006 above slab -> 990 AFF",
       "flag": true
     },
     {
@@ -63,11 +63,11 @@
       "sym": "W",
       "x": 800,
       "y": 1575,
-      "z": 1006,
+      "z": 990,
       "ref": "W4",
       "short": "FAUCET R",
-      "item": "Wall faucet stub R (handle assumed) - AS-IS",
-      "req": "Second faucet stub, ~65 right of P2 (photo). Handle may be left or right.",
+      "item": "Wall faucet stub R (handle) - AS-IS",
+      "req": "Second faucet stub ~65 right of the spout (photo). Handle - by others.",
       "where": "BATH 1, wall 1, above the top",
       "status": "AS-IS / APPROX",
       "src": "photo IMG_4392",
@@ -99,17 +99,17 @@
       "z": 150,
       "ref": "W4",
       "lab": "S",
-      "short": "BOX ?",
+      "short": "BOX ? - GC",
       "item": "Low electrical box - AS-IS, function?",
-      "req": "Box ~6\" AFF just right of the vanity edge (958). Below the vanity bottom (254): no clash, but visible. Locate (x, z) and confirm function.",
+      "req": "Box ~6\" AFF just right of the vanity edge (958); below the vanity bottom (254), no clash. GC: confirm function and exact position (x from wall 4, height AFF). Approximate on the sheet.",
       "where": "BATH 1, wall 1",
-      "status": "AS-IS / APPROX",
+      "status": "AS-IS / APPROX / ASK GC",
       "src": "photo IMG_4392, NOT measured",
       "flag": true
     }
   ],
   "notes": [
-    "Site survey 2026-10-29 (UCON): DISTO positions and heights are AS-IS from today's floor; floor reference to confirm (FC-M6).",
+    "Site survey 2026-10-29 (UCON): DISTO heights read from slab; converted to AFF with floor build-up 16 mm (as ADU, Andriy 2026-11-08) - to confirm with GC (FC-M6).",
     "Cabinets from KPS / Lusso 1791_Bath 1 26.09.2026 (Leicht 226 IOS-M): 30 | 300 | 600 | 28 = 958, wall-hung 254..762, depth 559, top solid stone 102 -> 864."
   ],
   "blocking": {
@@ -156,5 +156,9 @@
     "sink_cl": 632,
     "sink_type": "UNKNOWN (FC-M7)"
   },
-  "requirements_at_install": "Test lines cut; no stops / valves installed - capped stubs only (Andriy 2026-11-06)."
+  "requirements_at_install": "Test lines cut; no stops / valves installed - capped stubs only (Andriy 2026-11-06).",
+  "floor": {
+    "finish_mm": 16,
+    "note": "Andriy 2026-11-08: same floor build-up as ADU (GC 11.06.26: tile 8.5 mm + thinset ~5/8\" = 16). DISTO 2026-10-29 read from slab; model heights AFF (finished floor) = DISTO - 16. To confirm with GC."
+  }
 }
