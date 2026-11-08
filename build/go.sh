@@ -120,9 +120,10 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-11-08, laptop: 1791 Family Room Bar v0.1 + v0.2 and Primary Bath v0.3 - a shelf inside the band of an existing
 # blocking row extends that row (blocking_extend), no second axis next to it. Bar v0.4: electrical zones in the
 # engine (zone label / tag / color; boxes inside drawn without leader or dimension). 4 files predicted; the list must print 4.
-git add tools/mep/projects/1791_bar_asis.json \
-        tools/mep/projects/1791_pbath_asis.json \
-        tools/layout/mep_drawing_set.rb \
+# 2026-11-08, laptop: 1728 Kitchen set v0.1-v0.3 - project JSON (manufacturer zones vs AS-IS) and the blocking detail
+# option bottom: false (wall units under 500 mm deep: top row only). 3 files predicted; the list must print 3.
+git add tools/mep/projects/1728_kit_asis.json \
+        tools/layout/details/blocking_2x6.rb \
         build/go.sh
 
 echo

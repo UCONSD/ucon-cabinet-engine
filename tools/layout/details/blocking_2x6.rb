@@ -40,7 +40,9 @@ module UCON
 
     # off: the 2x6 axis from the cabinet edge, inches - 2 (2026-10-15/26: on the hanging rail) or 0 (Andriy 2026-11-04,
     # 1791: axis ON the top / bottom edge, so the cabinet can move up or down and still land on the band)
-    def mep_page_detail_blocking(code = 'D-501', off: 2.0)
+    # bottom: false (Andriy 2026-11-08, 1728 kitchen): wall units under 500 mm deep with another fixing - TOP row only,
+    # no bottom row, no supports; the detail then shows one row and says so in note 3.
+    def mep_page_detail_blocking(code = 'D-501', off: 2.0, bottom: true)
       @detail_code = code
       edge = off.zero?
       next_page('BLOCKING DETAIL'); header(NTS); sheet_code(code)
@@ -64,6 +66,7 @@ module UCON
       cab = [20.0, 56.0, 10.0, 32.5] # a wall-hung cabinet, x0 x1 z0 z1 (inches) - an example, not a project
       rows = edge ? [[cab[3], 'TOP ROW - CL ON THE CABINET TOP EDGE'], [cab[2], 'BOTTOM ROW - CL ON THE CABINET BOTTOM EDGE']] :
                    [[cab[3] - off, 'TOP ROW - CL 2" BELOW CABINET TOP (HANGING RAIL)'], [cab[2] + off, 'BOTTOM ROW - CL 2" ABOVE CABINET BOTTOM']]
+      rows = rows.first(1) unless bottom
       rows.each do |cl, _|
         studs.each_cons(2) do |a, b|
           solid = b > cab[0] && a < cab[1]
@@ -79,7 +82,7 @@ module UCON
       line(xr.(8), zr.(rows[0][0]), xr.(30), zr.(66), l, w: 0.35, c: INK2)
       det_lead(xr.(72), zr.(rows[0][0]), xr.(30), zr.(66), 'DASHED = EXTEND TO NEXT STUD EACH SIDE', l)
       det_lead(xr.(40), zr.(rows[0][0]), xr.(30), zr.(60), rows[0][1], l)
-      det_lead(xr.(40), zr.(rows[1][0]), xr.(30), zr.(-11), rows[1][1], l)
+      det_lead(xr.(40), zr.(rows[1][0]), xr.(30), zr.(-11), rows[1][1], l) if rows[1]
       # 16" o.c. under the floor, the band height inside the last solid bay
       [[0, 16], [16, 32], [32, 48]].each { |a, b| det_dim(xr.(a), zr.(0), xr.(b), zr.(0), 0.2, '16" O.C.') }
       det_dim(xr.(60), zr.(rows[0][0] + 2.75), xr.(60), zr.(rows[0][0] - 2.75), 0.0, '5 1/2"')
@@ -95,7 +98,7 @@ module UCON
       rect(face, zs.(44), 0.5 * s, 44 * s, l, stroke: DET_INK, sw: 0.5, fill: DET_GYP)
       line(wx - 0.3, zs.(0), face + 0.5 * s + 0.95, zs.(0), l, w: 1.0)
       cab = [10.0, 32.5]
-      [cab[1] - off, cab[0] + off].each do |cl|
+      (bottom ? [cab[1] - off, cab[0] + off] : [cab[1] - off]).each do |cl|
         rect(face - 1.5 * s, zs.(cl + 2.75), 1.5 * s, 5.5 * s, l, stroke: DET_INK, sw: 0.75, fill: DET_WOOD)
         line(face - 1.5 * s, zs.(cl + 2.75), face, zs.(cl - 2.75), l, w: 0.3, c: INK2)
         line(face - 1.5 * s, zs.(cl - 2.75), face, zs.(cl + 2.75), l, w: 0.3, c: INK2)
@@ -110,7 +113,7 @@ module UCON
       det_lead(wx + 1.0 * s, zs.(cab[1] - 9), wx - 0.25, zs.(cab[1] - 12), "2\" CLEAR BEHIND\nFOR PIPE / CABLE", l, align: :right)
       det_lead(face + 0.25 * s, zs.(42), wx - 0.25, zs.(47), '1/2" DRYWALL', l, align: :right)
       det_lead(cx + 0.06, zs.(cab[1] - 0.8), wx - 0.25, zs.(38.5), "HANGING RAIL\n(CABINET MFR)", l, align: :right)
-      det_lead(face + 0.5 * s + 0.3, zs.(cab[0] + off), wx - 0.25, zs.(cab[0] - 4), "SCREWS THROUGH\nCABINET BACK", l, align: :right)
+      det_lead(face + 0.5 * s + 0.3, zs.(bottom ? cab[0] + off : cab[1] - off), wx - 0.25, zs.(cab[0] - 4), "SCREWS THROUGH\nCABINET BACK", l, align: :right)
       det_dim(wx, zs.(44), face, zs.(44), -0.22, '3 1/2"')
       det_dim(face - 1.5 * s, zs.(-1), face, zs.(-1), 0.3, '1 1/2"')
       view(x2, WY, w2, WH, 2, code, 'SECTION', :nts, placeholder: false)
@@ -155,8 +158,9 @@ module UCON
       notes = ['2x6 laid FLAT between studs, its face flush with the room face of the studs - the drywall stays flat.',
                edge ? 'Axis ON the cabinet top edge: the 5 1/2" band covers 2 3/4" up and down, so the cabinet can be set a little higher or lower and still land on it (hanging rail inside the band). Heights and lengths per the MEP elevations.' :
                       'Axis 2" (50 mm) below the cabinet top, on the hanging rail; heights and lengths per the MEP elevations.',
-               edge ? 'Wall-hung cabinets fixed top AND bottom (cabinet maker): second row, axis ON the cabinet bottom edge.' :
-                      'Wall-hung cabinets fixed top AND bottom (cabinet maker): second row, axis 2" above the cabinet bottom.',
+               if !bottom then 'TOP ROW ONLY: these wall-hung cabinets are under 20" (500 mm) deep and fixed at the top (cabinet maker) - no bottom row, no supports.'
+               elsif edge then 'Wall-hung cabinets fixed top AND bottom (cabinet maker): second row, axis ON the cabinet bottom edge.'
+               else 'Wall-hung cabinets fixed top AND bottom (cabinet maker): second row, axis 2" above the cabinet bottom.' end,
                'Run each row to the next stud past each end of the cabinet (one more bay) - dashed on the elevations.',
                'Studs assumed 16" o.c. - verify in the field. Fasten each end by A, B or C.']
       notes.each_with_index do |n, i|
@@ -164,7 +168,7 @@ module UCON
         box_text(n, x1 + 0.25, ny + 0.32 + i * 0.36, w1 - 0.5, 0.34, l, size: 7.5)
       end
       @index << [code, 'BLOCKING DETAIL']
-      @log << "#{code}: blocking detail (universal, axis #{edge ? 'ON the edge' : "#{off}\" from the edge"})"
+      @log << "#{code}: blocking detail (universal, axis #{edge ? 'ON the edge' : "#{off}\" from the edge"}#{bottom ? '' : ', TOP ROW ONLY'})"
     end
   end
 end
