@@ -137,10 +137,10 @@
       "y": 0,
       "z": 408,
       "ref": "W2",
-      "item": "Sink 2 drain - AS-IS, OUTSIDE the sink unit",
-      "req": "Sink 2 unit (27 1/2\") is 164 1/4\" - 191 3/4\" from wall 2. The drain is 60 1/4\" from wall 4 = 157 1/2\" from wall 2: 6 1/2\" left of the unit, behind the 300 unit. Rule (Andriy): offset from the sink CL is fine, but the drain must be INSIDE the sink unit. GC to move it into SZ2.",
+      "item": "Sink 2 drain - AS-IS, left of the sink unit - ROUTE ALONG THE WALL",
+      "req": "Sink 2 unit (27 1/2\") is 164 1/4\" - 191 3/4\" from wall 2; the drain is 157 1/2\" from wall 2 (60 1/4\" from wall 4), 6 1/2\" left of the unit, behind unit 300. Andriy 2026-11-08: no need to move it - there is about 2\" clear behind the base units and the stub is angled, so the plumber runs the drain line along the wall in that gap into the sink unit. Plumber to confirm the gap against the pipe and fittings (1 1/2\" DWV pipe is 1.9\" OD); if it does not fit, move the stub into SZ2.",
       "where": "KITCHEN, wall 3 (range wall)",
-      "status": "AS-IS / CONFLICT",
+      "status": "AS-IS / ROUTE",
       "src": "DISTO IMG_4683: 1531 from wall 4, 408 AFF",
       "flag": true
     },
@@ -676,6 +676,8 @@
     "Boxes ~2050 on wall 3 = LED receptacles in the wall units.",
     "Trash pull-out motor receptacle inside the sink 1 unit.",
     "Gas shutoff behind unit 300: cabinet installer fits a 6x9 plastic access panel; GC rotates the valve if it interferes.",
-    "Wall units / hood box < 500 mm deep: top blocking row only, no bottom row, no supports (v0.2)."
+    "Wall units / hood box < 500 mm deep: top blocking row only, no bottom row, no supports (v0.2).",
+    "Sink 2 drain P1 stays: ~2\" clear behind the base units, the drain line runs along the wall into the sink unit (v0.4).",
+    "Lusso: no depth question; what is expected from them is the SketchUp files - then UCON measures itself."
   ]
 }

@@ -121,9 +121,9 @@ echo "===== 2. stage, BY NAME ====="
 # blocking row extends that row (blocking_extend), no second axis next to it. Bar v0.4: electrical zones in the
 # engine (zone label / tag / color; boxes inside drawn without leader or dimension). 4 files predicted; the list must print 4.
 # 2026-11-08, laptop: 1728 Kitchen set v0.1-v0.3 - project JSON (manufacturer zones vs AS-IS) and the blocking detail
-# option bottom: false (wall units under 500 mm deep: top row only). 3 files predicted; the list must print 3.
+# option bottom: false (wall units under 500 mm deep: top row only). 3 files predicted; the list printed 3 - pushed (9e8f813).
+# 2026-11-08, laptop: 1728 Kitchen v0.4 - sink 2 drain routed along the wall, not moved. 2 files predicted; the list must print 2.
 git add tools/mep/projects/1728_kit_asis.json \
-        tools/layout/details/blocking_2x6.rb \
         build/go.sh
 
 echo
