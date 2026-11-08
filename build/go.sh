@@ -114,9 +114,9 @@ echo "===== 2. stage, BY NAME ====="
 # R02b the same day (ARMED 48): upstand (10 cm backsplash, ALZATINA), a panel marked along the wall, the Bath 2 mirror
 # back. Same 12 files.
 # 12 files predicted; the list must print 12.
-# 2026-11-08, laptop: 1791 Bath 1 v0.2 data - spout = left stub (move to sink CL), floor 5/8" as ADU, E1 to GC.
-# 2 files predicted; the list must print 2.
-git add tools/mep/projects/1791_bath1_asis.json \
+# 2026-11-08, laptop: 1791 Bath 1 v0.2 data - pushed (0b1bb2d).
+# 2026-11-08, laptop: 1791 Primary Bath as-is data (set v0.1). 2 files predicted; the list must print 2.
+git add tools/mep/projects/1791_pbath_asis.json \
         build/go.sh
 
 echo

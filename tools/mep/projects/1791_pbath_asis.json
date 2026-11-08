@@ -1,0 +1,224 @@
+{
+  "project": "1791 - Primary Bath, AS-IS rough-ins (site survey 2026-10-29, DISTO IMG_4677)",
+  "model": "1791_PBATH_MEP (probe 1791_70: wall 1 5334, room depth ~2020 scaled, Leicht double vanity per KPS, as-is markers)",
+  "source": "UCON site survey 2026-10-29: Leica DISTO IMG_4677 (416 right drain from wall 2, 1812 left drain from wall 2, 606 right drain height) + photos IMG_4396 / 4408; cabinets from KPS / Lusso 1791_p.bATH 26.09.2026 (Leicht 238 METURO)",
+  "room": "PRIMARY BATH",
+  "frame": "origin = left end of wall 1 (KPS 5334 run) at the wall 1 face; X along wall 1 to the right, wall 2 (right) face at X = 5334; wall 1 inner face at Y = 2020 (room depth scaled from the KPS plan); mm",
+  "refs": {
+    "W2": {
+      "axis": "x",
+      "at": 5334,
+      "text": "wall 2 face"
+    }
+  },
+  "blocking_boxes": [
+    {
+      "code": "VANITY-L",
+      "cls": "cabinet",
+      "back": "y+",
+      "x0": 3128,
+      "x1": 3874,
+      "y0": 1461,
+      "y1": 2020,
+      "z0": 432,
+      "z1": 788
+    },
+    {
+      "code": "VANITY-MR",
+      "cls": "cabinet",
+      "back": "y+",
+      "x0": 3874,
+      "x1": 5334,
+      "y0": 1461,
+      "y1": 2020,
+      "z0": 153,
+      "z1": 788
+    }
+  ],
+  "anchors": [],
+  "placed": [
+    {
+      "id": "P1",
+      "sys": "P",
+      "sym": "DR",
+      "x": 3522,
+      "y": 2020,
+      "z": 590,
+      "ref": "W2",
+      "group": "left sink",
+      "item": "Left sink drain - AS-IS",
+      "req": "1 1/2\" waste stub-out, installed. Left sink CL 1826 from wall 2 (KPS): drain 14 (9/16\") right of the CL - OK for a drain. Inside the 14\" upper drawer (432..788) of the left sink unit: the trap must fit under the bowl (FC-M4). At cabinet install: capped stub only, test lines cut.",
+      "where": "PRIMARY BATH, wall 1, behind the left sink unit",
+      "status": "AS-IS / Z APPROX",
+      "src": "DISTO IMG_4677: 1812 from wall 2; height NOT measured - taken equal to the right drain (photo)",
+      "flag": true
+    },
+    {
+      "id": "P2",
+      "sys": "P",
+      "sym": "HW",
+      "x": 3402,
+      "y": 2020,
+      "z": 624,
+      "ref": "W2",
+      "group": "left sink",
+      "item": "Left sink supply HW - AS-IS",
+      "req": "Supply stub-out (capped), inside the left sink unit upper drawer. Stops / valves by the plumber after the vanity is set.",
+      "where": "PRIMARY BATH, wall 1, behind the left sink unit",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4408 (~120 left of the drain, ~1 1/2\" above it), NOT measured",
+      "flag": true
+    },
+    {
+      "id": "P3",
+      "sys": "P",
+      "sym": "CW",
+      "x": 3642,
+      "y": 2020,
+      "z": 624,
+      "ref": "W2",
+      "group": "left sink",
+      "item": "Left sink supply CW - AS-IS",
+      "req": "Supply stub-out (capped), inside the left sink unit upper drawer.",
+      "where": "PRIMARY BATH, wall 1, behind the left sink unit",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4408 (~120 right of the drain), NOT measured",
+      "flag": true
+    },
+    {
+      "id": "P4",
+      "sys": "P",
+      "sym": "DR",
+      "x": 4918,
+      "y": 2020,
+      "z": 590,
+      "ref": "W2",
+      "group": "right sink",
+      "item": "Right sink drain - AS-IS",
+      "req": "1 1/2\" waste stub-out, installed. Right sink CL 422 from wall 2 (KPS): drain 6 (1/4\") right of the CL - OK. Inside the 14\" upper drawer (432..788): the trap must fit under the bowl (FC-M4). At cabinet install: capped stub only, test lines cut.",
+      "where": "PRIMARY BATH, wall 1, behind the right sink unit",
+      "status": "AS-IS",
+      "src": "DISTO IMG_4677: 416 from wall 2, 606 above today's floor -> 590 AFF (floor build-up 16 assumed, as ADU; Andriy 2026-11-08)"
+    },
+    {
+      "id": "P5",
+      "sys": "P",
+      "sym": "HW",
+      "x": 4808,
+      "y": 2020,
+      "z": 594,
+      "ref": "W2",
+      "group": "right sink",
+      "item": "Right sink supply HW - AS-IS",
+      "req": "Supply stub-out (capped), inside the right sink unit upper drawer.",
+      "where": "PRIMARY BATH, wall 1, behind the right sink unit",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4408 (~110 left of the drain, at the drain level), NOT measured",
+      "flag": true
+    },
+    {
+      "id": "P6",
+      "sys": "P",
+      "sym": "CW",
+      "x": 5028,
+      "y": 2020,
+      "z": 594,
+      "ref": "W2",
+      "group": "right sink",
+      "item": "Right sink supply CW - AS-IS",
+      "req": "Supply stub-out (capped), inside the right sink unit upper drawer.",
+      "where": "PRIMARY BATH, wall 1, behind the right sink unit",
+      "status": "AS-IS / APPROX",
+      "src": "photo IMG_4408 (~110 right of the drain), NOT measured",
+      "flag": true
+    },
+    {
+      "id": "E1",
+      "sys": "E",
+      "sym": "DUP",
+      "x": 3990,
+      "y": 2020,
+      "z": 1150,
+      "ref": "W2",
+      "lab": "N",
+      "item": "Receptacle box above the top - AS-IS",
+      "req": "Above the countertop.",
+      "where": "PRIMARY BATH, wall 1",
+      "status": "AS-IS / APPROX",
+      "src": "photo",
+      "scope": "out",
+      "scope_why": "receptacles above the countertop - by others (Andriy 2026-11-04 rule)"
+    },
+    {
+      "id": "E2",
+      "sys": "E",
+      "sym": "DUP",
+      "x": 4290,
+      "y": 2020,
+      "z": 1150,
+      "ref": "W2",
+      "lab": "N",
+      "item": "Receptacle box above the top - AS-IS",
+      "req": "Above the countertop.",
+      "where": "PRIMARY BATH, wall 1",
+      "status": "AS-IS / APPROX",
+      "src": "photo",
+      "scope": "out",
+      "scope_why": "receptacles above the countertop - by others (Andriy 2026-11-04 rule)"
+    }
+  ],
+  "notes": [
+    "Site survey 2026-10-29 (UCON): DISTO from today's floor; AFF = DISTO - 16 (floor build-up assumed as ADU, Andriy 2026-11-08) - to confirm with GC (FC-M6). Only the right drain height is measured.",
+    "Cabinets from KPS / Lusso 1791_p.bATH 26.09.2026 (Leicht 238 METURO), from wall 2: filler 57 | sink unit 730 (two drawers 279 / 356, 153..788) | drawers 673 (153 / 203 / 280, 153..788) | sink unit 730 (one drawer 356, 432..788, open below with shelf) | side panel 16 = 2206 (KPS overall 2211). Depth 559. Top ~76 scaled -> ~864 (VERIFY).",
+    "Faucets: deck-mounted on the top (KPS elevation; no wall rough-in on site) - Andriy 2026-11-08."
+  ],
+  "floor": {
+    "finish_mm": 16,
+    "note": "Andriy 2026-11-08: floor build-up assumed 16 (5/8\") as ADU / Bath 1; DISTO read from today's floor. To confirm with GC."
+  },
+  "blocking": {
+    "bottom_row": true,
+    "edge_axis": true,
+    "why": "Leicht: fixed top and bottom, axis ON the edges (Andriy 2026-11-04). Two bottom levels: 153 (right sink + drawers) and 432 (left sink unit, open below)."
+  },
+  "scope_rule": "Andriy 2026-11-04: sheets show only what touches UCON cabinetry. Deck faucets: no spout point. Receptacles above the top, mirror / sconce boxes: scope out.",
+  "brand": "Leicht",
+  "ceiling_mm": 2438,
+  "vanity": {
+    "filler_r": [
+      5277,
+      5334
+    ],
+    "sink_r": [
+      4547,
+      5277
+    ],
+    "drawers": [
+      3874,
+      4547
+    ],
+    "sink_l": [
+      3144,
+      3874
+    ],
+    "panel_l": [
+      3128,
+      3144
+    ],
+    "z0_r": 153,
+    "z0_l": 432,
+    "z1": 788,
+    "depth": 559,
+    "top_th": 76,
+    "top": 864,
+    "upper_drawer": [
+      432,
+      788
+    ],
+    "sink_cl_l": 3508,
+    "sink_cl_r": 4912,
+    "sink_type": "UNKNOWN round, undermount assumed (FC-M7)",
+    "faucet": "deck"
+  },
+  "requirements_at_install": "Test lines cut; no stops / valves installed - capped stubs only (Andriy 2026-11-06)."
+}
