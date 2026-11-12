@@ -106,6 +106,8 @@
 module UCON
   module ProbeBridge
     POLL_S = 2
+    WATCHDOG_S = 30
+    FRONT_ONLY = true
     # The model a probe gets when it names none. A probe names one with a
     # "# UCON-MODEL: <fragment>" line in its own first 4 KB.
     DEFAULT_TARGET = '545_Avenida'
@@ -141,7 +143,14 @@ module UCON
         FileUtils_mkdir(DONE)
         @runs ||= 0
         @armed = false
+        @want_on = true
+        @last_tick = Time.now
         @timer = UI.start_timer(POLL_S, true) { tick }
+        # WATCHDOG (2026-11-11, 1791): the poll timer died silently twice with probes waiting in the inbox and Andriy
+        # had to type start by hand. A second, trivial timer restarts the poll timer when it has not ticked for
+        # WATCHDOG_S. A deliberate stop clears @want_on, so the watchdog leaves a stopped bridge alone.
+        UI.stop_timer(@watchdog) if @watchdog
+        @watchdog = UI.start_timer(WATCHDOG_S, true) { watchdog }
         Sketchup.status_text = 'UCON probe bridge: ON'
         puts "UCON probe bridge ON - watching #{DIR} every #{POLL_S}s"
         puts '  stop with UCON::ProbeBridge.stop'
@@ -149,6 +158,7 @@ module UCON
       end
 
       def stop
+        @want_on = false
         UI.stop_timer(@timer) if @timer
         @timer = nil
         Sketchup.status_text = 'UCON probe bridge: off'
@@ -187,6 +197,17 @@ module UCON
       # means - this returns the list rather than picking.
       def resolve(fragment)
         rx = Regexp.new(Regexp.escape(fragment.to_s), Regexp::IGNORECASE)
+        # FRONT DOCUMENT ONLY (2026-11-11, 1791): on the Mac, ObjectSpace keeps Model objects of documents that are
+        # already closed (or were never really opened by Sketchup.open_file); a probe that wrote to one of them
+        # crashed SketchUp 2026 three times. A probe now runs only on the active (front) document.
+        if FRONT_ONLY
+          am = begin
+            Sketchup.active_model
+          rescue StandardError
+            nil
+          end
+          return(am && am.title.to_s =~ rx ? [am] : [])
+        end
         found = []
         ObjectSpace.each_object(Sketchup::Model) do |mm|
           found << mm if mm.title.to_s =~ rx
@@ -226,13 +247,32 @@ module UCON
         puts "UCON probe bridge: REFUSED #{name} -> #{OUT}"
       end
 
+      def watchdog
+        return unless @want_on
+        return if @last_tick && Time.now - @last_tick < WATCHDOG_S
+
+        begin
+          UI.stop_timer(@timer) if @timer
+        rescue StandardError
+          nil
+        end
+        @last_tick = Time.now
+        @timer = UI.start_timer(POLL_S, true) { tick }
+        File.open(LOG, 'a') { |f| f.puts "WATCHDOG #{Time.now.strftime('%Y-%m-%d %H:%M:%S')}: poll timer silent, restarted" }
+        Sketchup.status_text = 'UCON probe bridge: ON (restarted by watchdog)'
+      rescue StandardError
+        nil
+      end
+
       def tick
         return unless @timer
 
+        @last_tick = Time.now
         pending = Dir.glob(File.join(DIR, '*.rb')).sort_by { |f| File.mtime(f) }
         return if pending.empty?
 
         pending.each { |f| run_one(f) }
+        @last_tick = Time.now
       rescue StandardError => e
         # A raise inside a SketchUp timer kills the timer without a word, so it
         # is caught here and written down instead.
