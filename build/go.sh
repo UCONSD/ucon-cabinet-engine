@@ -126,21 +126,16 @@ echo "===== 2. stage, BY NAME ====="
 # 2026-11-11, Mac Mini: 1791 sinks from the client's fixture order under a 2 cm slab - Primary Bath v0.6/v0.7, ADU v0.11,
 # Bath 1 v0.3, Bar v0.6 (probes 95..102, shared P-trap page, open_front). probe_bridge.rb: watchdog + front document only.
 # 16 files predicted; the list must print 16.
-git add tools/probe_bridge.rb \
-        tools/mep/probes/1791/1791_95_pbath_lacava_model.rb \
-        tools/mep/probes/1791/1791_95c_pbath_section_fix.rb \
-        tools/mep/probes/1791/1791_95d_pbath_scene_planes.rb \
-        tools/mep/probes/1791/1791_95e_pbath_slab.rb \
-        tools/mep/probes/1791/1791_96_pbath_set_v06.rb \
-        tools/mep/probes/1791/1791_97_pbath_set_v07.rb \
-        tools/mep/probes/1791/1791_99_ptrap_model_body.rb \
-        tools/mep/probes/1791/1791_99a_bath1_ptrap_model.rb \
-        tools/mep/probes/1791/1791_99b_adu_ptrap_model.rb \
-        tools/mep/probes/1791/1791_100_adu_set_v011.rb \
-        tools/mep/probes/1791/1791_101_bath1_set_v03.rb \
-        tools/mep/probes/1791/1791_102_bar_set_v06.rb \
-        tools/mep/probes/1791/1791_ptrap_page.rb \
-        tools/mep/probes/1791/1791_open_front.rb \
+# 2026-11-11, Mac Mini: commit 6ea48c5 (16 files above) pushed.
+# 2026-11-11, Mac Mini: 1791 Primary Bath v0.8 (study, +3/4", not released) and v0.9 - back to the KPS height,
+# drains stay (left drain measured by Andriy = right, 23 1/4"), sink drain bodies modelled and centred on the trap.
+# 7 files predicted; the list must print 7.
+git add tools/mep/probes/1791/1791_105_pbath_raise.rb \
+        tools/mep/probes/1791/1791_106_pbath_set_v08.rb \
+        tools/mep/probes/1791/1791_107_pbath_back_to_kps.rb \
+        tools/mep/probes/1791/1791_107b_center_drain.rb \
+        tools/mep/probes/1791/1791_108_pbath_set_v09.rb \
+        tools/mep/projects/1791_pbath_asis.json \
         build/go.sh
 
 echo

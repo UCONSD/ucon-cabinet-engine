@@ -49,9 +49,8 @@
       "item": "Left sink drain - AS-IS",
       "req": "1 1/2\" waste stub-out, installed. Left sink CL 1826 from wall 2 (KPS): drain 14 (9/16\") right of the CL - OK for a drain. Inside the 14\" upper drawer (432..788) of the left sink unit: the trap must fit under the bowl (FC-M4). At cabinet install: capped stub only, test lines cut.",
       "where": "PRIMARY BATH, wall 1, behind the left sink unit",
-      "status": "AS-IS / Z APPROX",
-      "src": "DISTO IMG_4677: 1812 from wall 2; height NOT measured - taken equal to the right drain (photo)",
-      "flag": true
+      "status": "AS-IS",
+      "src": "DISTO IMG_4677: 1812 from wall 2; height measured by Andriy (11.11.26): same as the right drain, 590 AFF"
     },
     {
       "id": "P2",
